@@ -1,0 +1,36 @@
+{
+  "name": "@internal/build-config",
+  "version": "0.0.0",
+  "description": "common bundler configuration including dev-server and all related plugins",
+	"type": "module",
+  "private": true,
+  "keywords": [
+    "configuration",
+    "build",
+    "bundle",
+    "runtime",
+    "plugin"
+  ],
+  "author": "isoldpower <lapinnr_personal@proton.me>",
+  "homepage": "https://github.com/isoldpower/power-drive#readme",
+  "license": "ISC",
+  "main": "./src/index.js",
+	"typings": "./src/index.d.ts",
+	"module": "./src/index.js",
+  "directories": {
+    "src": "src",
+    "test": "__tests__"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isoldpower/power-drive.git"
+  },
+  "scripts": {
+    "build": "tsc",
+		"watch": "tsc --watch --outDir ./dist",
+    "test": "node ./__tests__/build-config.test.js"
+  },
+  "bugs": {
+    "url": "https://github.com/isoldpower/power-drive/issues"
+  }
+}

@@ -1,10 +1,22 @@
 # Builds and compiled files
 /tmp
 /out-tsc
-dist/
+dist
+dist-ssr
+cache
+
+# Debug files
+.lerna-debug.log
+.pnpm-debug.log
+.npm-debug.log
+logs
+*.log
+pnpm-debug.log*
+lerna-debug.log*
 
 # Compiled output modules and files
-/node_modules
+node_modules
+*.local
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -12,6 +24,12 @@ yarn-error.log*
 .pnp.js
 
 # IDE and editor cache files and configurations
+!.vscode/extensions.json
 .vscode
 .idea
 .DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

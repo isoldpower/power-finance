@@ -4,11 +4,17 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+		"run": "lerna run dev --scope=@drive/shell"
   },
   "dependencies": {},
   "devDependencies": {
+    "lerna": "^8.2.2",
     "typescript": "^5.5.3"
   },
+	"workspaces": [
+		"services/*",
+		"packages/*",
+		"examples/*"
+	],
   "private": true
 }
