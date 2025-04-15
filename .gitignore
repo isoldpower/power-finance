@@ -1,0 +1,17 @@
+# Builds and compiled files
+/tmp
+/out-tsc
+dist/
+
+# Compiled output modules and files
+/node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/.pnp
+.pnp.js
+
+# IDE and editor cache files and configurations
+.vscode
+.idea
+.DS_Store
