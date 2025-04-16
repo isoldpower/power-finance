@@ -15,6 +15,7 @@ export const buildPaths = (
 			"@widget": `${config.paths.src}/widgets`,
 			"@shared": `${config.paths.src}/shared`,
 			"@process": `${config.paths.src}/processes`,
+			"@page": `${config.paths.src}/pages`,
 		}
 	};
 };

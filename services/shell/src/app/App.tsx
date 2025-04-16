@@ -5,7 +5,7 @@ import reactLogo from '/react.svg'
 import viteLogo from '/vite.svg'
 
 import './App.css'
-import {AnalyticsPage} from "../pages/analytics";
+import {AnalyticsPage} from "@page/analytics";
 
 function App() {
   const [count, setCount] = useState(0)

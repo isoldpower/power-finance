@@ -6,6 +6,8 @@ export interface TargetPaths {
 }
 
 export interface ViteConfigOptions {
+	// vite server and preview ports
+	port?: number
 	// internal module names that should be tracked in devServer
 	internal?: string[]
 	// paths of the target application
@@ -13,6 +15,8 @@ export interface ViteConfigOptions {
 }
 
 export interface ViteConfigResolved {
+	// vite server and preview ports
+	port: number
 	// internal module names that should be tracked in devServer
 	internal: string[]
 	// development mode

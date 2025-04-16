@@ -7,6 +7,7 @@ import { buildFederationRemote } from "./config/federation.js";
 
 export default (env: ConfigEnv) => {
 	const options: ViteConfigOptions = {
+		port: 3001,
 		paths: {
 			root: __dirname,
 			src: resolve(__dirname, 'src'),

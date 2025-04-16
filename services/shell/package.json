@@ -6,7 +6,8 @@
     "dev": "nx serve",
     "build": "tsc -b && nx vite:build",
     "lint": "nx eslint:lint",
-    "preview": "nx vite:preview"
+    "preview": "nx vite:preview",
+		"clean": "rm -rf node_modules dist .__mf__temp cache"
   },
   "dependencies": {
     "react": "catalog:",

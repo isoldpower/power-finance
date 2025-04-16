@@ -11,5 +11,6 @@ export const resolveConfigOptions = (
 	],
 	dev: env.mode === 'development',
 	prod: env.mode === 'production',
-	paths: overrides.paths
+	paths: overrides.paths,
+	port: overrides.port || 3000
 })

@@ -7,6 +7,7 @@ import {buildFederationHost} from "./config/federation.ts";
 
 export default (env: ConfigEnv) => {
 	const options: ViteConfigOptions = {
+		port: 3000,
 		paths: {
 			root: __dirname,
 			src: resolve(__dirname, 'src'),
@@ -17,7 +18,6 @@ export default (env: ConfigEnv) => {
 
 	return buildViteConfig({
 		plugins: [ buildFederationHost({ name: 'shell' }) ],
-		server: { port: 3000 },
 		build: { target: 'chrome89' }
 	}, options)(env);
 }

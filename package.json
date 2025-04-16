@@ -6,7 +6,17 @@
   "scripts": {
     "dev:analytics": "nx run @drive/analytics:dev",
     "dev:shell": "nx run @drive/shell:dev",
-    "dev": "nx run-many -t dev"
+    "dev": "nx run-many -t dev",
+		"build:analytics": "nx run @drive/analytics:build",
+		"build:shell": "nx run @drive/shell:build",
+		"build": "nx run-many -t build",
+		"lint:analytics": "nx run @drive/analytics:lint",
+		"lint:shell": "nx run @drive/shell:lint",
+		"lint": "nx run-many -t lint",
+		"preview:analytics": "pnpm run build:analytics && nx run @drive/analytics:preview",
+		"preview:shell": "pnpm run build:shell && nx run @drive/shell:preview",
+		"preview": "nx run-many -t build && nx run-many -t preview",
+		"clean": "rm -rf dist .__mf__temp cache lerna-debug.log && nx run-many -t clean"
   },
   "devDependencies": {
     "@nx/eslint": "20.8.0",
@@ -21,11 +31,6 @@
     "vite": "^6.0.0",
     "vitest": "^3.0.0"
   },
-  "workspaces": [
-    "services/*",
-    "packages/*",
-    "examples/*"
-  ],
   "private": true,
   "dependencies": {}
 }
