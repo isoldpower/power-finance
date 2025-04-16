@@ -1,11 +1,10 @@
 import './styles/index.css'
 
-import {useState} from 'react'
+import { useState } from 'react'
 import reactLogo from '/react.svg'
 import viteLogo from '/vite.svg'
 
 import './App.css'
-import {AnalyticsPage} from "../pages/analytics";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -34,10 +33,6 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-	  <div>
-		<h2>Remote MFE</h2>
-			<AnalyticsPage />
-	  </div>
     </>
   )
 }

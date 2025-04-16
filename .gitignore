@@ -4,6 +4,8 @@
 dist
 dist-ssr
 cache
+.__mf__temp/
+.nx
 
 # Debug files
 .lerna-debug.log
@@ -33,3 +35,10 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+
+
+.nx/cache
+.nx/workspace-data
+vite.config.*.timestamp*
+vitest.config.*.timestamp*

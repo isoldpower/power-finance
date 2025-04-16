@@ -4,17 +4,28 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-		"run": "lerna run dev --scope=@drive/shell"
+    "dev:analytics": "nx run @drive/analytics:dev",
+    "dev:shell": "nx run @drive/shell:dev",
+    "dev": "nx run-many -t dev"
   },
-  "dependencies": {},
   "devDependencies": {
+    "@nx/eslint": "20.8.0",
+    "@nx/vite": "20.8.0",
+    "@nx/web": "20.8.0",
+    "@vitest/ui": "^3.0.0",
+    "eslint": "~8.57.0",
+    "jiti": "2.4.2",
     "lerna": "^8.2.2",
-    "typescript": "^5.5.3"
+    "nx": "20.8.0",
+    "typescript": "^5.5.3",
+    "vite": "^6.0.0",
+    "vitest": "^3.0.0"
   },
-	"workspaces": [
-		"services/*",
-		"packages/*",
-		"examples/*"
-	],
-  "private": true
+  "workspaces": [
+    "services/*",
+    "packages/*",
+    "examples/*"
+  ],
+  "private": true,
+  "dependencies": {}
 }

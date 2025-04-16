@@ -1,24 +1,23 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-import inspect from 'vite-plugin-inspect'
-import restart from 'vite-plugin-restart';
-import { compression } from 'vite-plugin-compression2'
+import type {ViteConfigOptions} from "@internal/config";
+import {buildViteConfig} from "@internal/config";
+import type {ConfigEnv} from "vite";
+import {resolve} from "path";
 
-const internalNodeModules = [
-	'node_modules/@internal/**',
-	'node_modules/@drive/**'
-]
+import {buildFederationHost} from "./config/federation.ts";
 
-export default defineConfig({
-  plugins: [react(), compression(), inspect(), restart({
-		restart: internalNodeModules
-	})],
-	resolve: {
-		preserveSymlinks: true
-	},
-	server: {
-		watch: {
-			ignored: internalNodeModules.map((module) => ['!**', module].join('/'))
-		},
-	},
-})
+export default (env: ConfigEnv) => {
+	const options: ViteConfigOptions = {
+		paths: {
+			root: __dirname,
+			src: resolve(__dirname, 'src'),
+			output: resolve(__dirname, 'dist'),
+			public: resolve(__dirname, 'public')
+		}
+	}
+
+	return buildViteConfig({
+		plugins: [ buildFederationHost({ name: 'shell' }) ],
+		server: { port: 3000 },
+		build: { target: 'chrome89' }
+	}, options)(env);
+}

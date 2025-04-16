@@ -1,0 +1,32 @@
+{
+	"compilerOptions": {
+		"module": "ESNext",
+		"skipLibCheck": true,
+
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"isolatedModules": true,
+		"moduleDetection": "force",
+		"noEmit": true,
+
+		/* Linting */
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedSideEffectImports": true,
+
+		/* Linking */
+		"baseUrl": "..",
+		"paths": {
+			"@src/*": [ "./src/*" ],
+			"@feature/*": [ "./src/features/*" ],
+			"@app/*": [ "./src/app/*" ],
+			"@entity/*": [ "./src/entities/*" ],
+			"@widget/*": [ "./src/widgets/*" ],
+			"@shared/*": [ "./src/shared/*" ],
+			"@process/*": [ "./src/processes/*" ]
+		}
+	}
+}
