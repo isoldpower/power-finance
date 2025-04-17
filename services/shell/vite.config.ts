@@ -1,3 +1,4 @@
+import {TanStackRouterVite} from '@tanstack/router-plugin/vite'
 import type {ViteConfigOptions} from "@internal/config";
 import {buildViteConfig} from "@internal/config";
 import type {ConfigEnv} from "vite";
@@ -17,7 +18,15 @@ export default (env: ConfigEnv) => {
 	}
 
 	return buildViteConfig({
-		plugins: [ buildFederationHost({ name: 'shell' }) ],
+		plugins: [
+			buildFederationHost({ name: 'shell' }),
+			TanStackRouterVite({
+				target: 'react',
+				autoCodeSplitting: true,
+				routesDirectory: resolve(options.paths.src, 'app', 'routes'),
+				generatedRouteTree: resolve(options.paths.src, 'app', 'routeTree.ts'),
+			})
+		],
 		build: { target: 'chrome89' }
 	}, options)(env);
 }
