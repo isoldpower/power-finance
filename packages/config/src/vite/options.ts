@@ -7,7 +7,7 @@ export const resolveConfigOptions = (
 ): ViteConfigResolved => ({
 	internal: overrides.internal || [
 		'node_modules/@internal/**',
-		'node_modules/@drive/**'
+		'node_modules/@power/**'
 	],
 	dev: env.mode === 'development',
 	prod: env.mode === 'production',
