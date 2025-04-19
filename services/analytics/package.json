@@ -16,8 +16,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@module-federation/vite": "catalog:",
+		"vite": "catalog:",
     "@internal/config": "workspace:^",
-    "@module-federation/vite": "^1.2.6",
+		"@internal/shared": "workspace:^",
     "@types/node": "^22.14.1",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",

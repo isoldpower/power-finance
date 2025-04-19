@@ -16,20 +16,17 @@
 		"preview:analytics": "pnpm run build:analytics && nx run @power/analytics:preview",
 		"preview:shell": "pnpm run build:shell && nx run @power/shell:preview",
 		"preview": "nx run-many -t build && nx run-many -t preview",
-		"clean": "rm -rf dist .__mf__temp cache lerna-debug.log && nx run-many -t clean"
+		"clean": "nx run-many -t clean && rm -rf dist .__mf__temp cache lerna-debug.log node_modules"
   },
   "devDependencies": {
     "@nx/eslint": "20.8.0",
     "@nx/vite": "20.8.0",
     "@nx/web": "20.8.0",
-    "@vitest/ui": "^3.0.0",
     "eslint": "~8.57.0",
     "jiti": "2.4.2",
     "lerna": "^8.2.2",
     "nx": "20.8.0",
-    "typescript": "^5.5.3",
-    "vite": "^6.0.0",
-    "vitest": "^3.0.0"
+    "typescript": "^5.5.3"
   },
   "private": true,
   "dependencies": {}

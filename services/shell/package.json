@@ -10,16 +10,16 @@
     "clean": "rm -rf node_modules dist .__mf__temp cache"
   },
   "dependencies": {
-    "@tanstack/react-router": "^1.116.0",
-    "@tanstack/react-router-devtools": "^1.116.0",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "react-error-boundary": "^5.0.0"
+    "react-error-boundary": "^5.0.0",
+    "@tanstack/react-router": "^1.116.0"
   },
   "devDependencies": {
+    "@tanstack/react-router-devtools": "^1.116.0",
     "@eslint/js": "^9.21.0",
     "@internal/config": "workspace:^",
-    "@module-federation/vite": "^1.2.6",
+		"@internal/shared": "workspace:^",
     "@tanstack/router-plugin": "^1.116.1",
     "@types/node": "^22.14.1",
     "@types/react": "^19.0.10",
@@ -29,6 +29,8 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "typescript": "~5.7.2",
-    "typescript-eslint": "^8.24.1"
+    "typescript-eslint": "^8.24.1",
+    "@module-federation/vite": "catalog:",
+		"vite": "catalog:"
   }
 }
