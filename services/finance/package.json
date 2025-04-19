@@ -7,30 +7,36 @@
     "build": "tsc -b && nx vite:build",
     "lint": "nx eslint:lint",
     "preview": "nx vite:preview",
-		"chore": "rm -rf .__mf__temp cache",
-		"clean": "rm -rf node_modules dist && pnpm chore",
-		"reset": "pnpm clean && pnpm install",
-		"reset:hard": "pnpm clean && rm -rf pnpm-lock.yaml && pnpm install"
+    "chore": "rm -rf .__mf__temp cache",
+    "clean": "rm -rf node_modules dist && pnpm chore",
+    "reset": "pnpm clean && pnpm install",
+    "reset:hard": "pnpm clean && rm -rf pnpm-lock.yaml && pnpm install"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.28.2",
+    "@tanstack/react-router": "^1.116.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-error-boundary": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
-    "@module-federation/vite": "catalog:",
-		"vite": "catalog:",
     "@internal/config": "workspace:^",
-		"@internal/shared": "workspace:^",
+    "@internal/shared": "workspace:^",
+    "@module-federation/vite": "catalog:",
+    "@tanstack/react-router-devtools": "^1.116.0",
+    "@tanstack/router-plugin": "^1.116.1",
     "@types/node": "^22.14.1",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "eslint": "^9.21.0",
+    "eslint-plugin-react-dom": "^1.48.4",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
+    "eslint-plugin-react-x": "^1.48.4",
     "globals": "^15.15.0",
     "typescript": "~5.7.2",
-    "typescript-eslint": "^8.24.1"
+    "typescript-eslint": "^8.24.1",
+    "vite": "catalog:"
   }
 }

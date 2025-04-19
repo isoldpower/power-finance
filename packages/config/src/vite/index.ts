@@ -17,8 +17,8 @@ export const buildViteConfig = (
 
 	return {
 		plugins: [
-			...buildPlugins(config),
-			...(plugins ?? [])
+			...(plugins ?? []),
+			...buildPlugins(config)
 		],
 		resolve: Object.assign(
 			buildPaths(config),

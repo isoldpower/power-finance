@@ -18,14 +18,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
-
-		/* Linking */
-		"baseUrl": ".",
-		"paths": {
-			"@lib/*": ["lib/*"],
-			"@src/*": ["src/*"],
-		}
+    "noUncheckedSideEffectImports": true
   },
   "include": ["vite.config.ts"]
 }

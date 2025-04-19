@@ -1,3 +1,6 @@
+# Secret files
+.env
+
 # Builds and compiled files
 /tmp
 /out-tsc
@@ -6,6 +9,10 @@ dist-ssr
 cache
 .__mf__temp/
 .nx
+.nx/cache
+.nx/workspace-data
+vite.config.*.timestamp*
+vitest.config.*.timestamp*
 
 # Debug files
 .lerna-debug.log
@@ -35,10 +42,3 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
-
-
-
-.nx/cache
-.nx/workspace-data
-vite.config.*.timestamp*
-vitest.config.*.timestamp*

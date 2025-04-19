@@ -1,18 +1,29 @@
 import './styles/index.css'
-import './App.css'
 
-import {SettingsProvider} from "@internal/shared";
-import {lazy, Suspense} from "react";
+import { getFinanceRoute, SettingsProvider } from "@internal/shared";
+import { lazy, Suspense } from "react";
+import { ClerkProvider } from '@clerk/clerk-react'
 
 const AppContentsLazy = lazy(() => import('./AppContent.tsx'));
 
-function App() {
+interface AppProps {
+	env: ImportMetaEnv
+}
+
+function App({ env }: AppProps) {
 	return (
-		<SettingsProvider>
-			<Suspense fallback={<div>Loading...</div>}>
-				<AppContentsLazy />
-			</Suspense>
-		</SettingsProvider>
+		<ClerkProvider
+			publishableKey={env.CLIENT_CLERK_PUBLIC_KEY}
+			afterSignOutUrl={getFinanceRoute('overview')}
+			signInFallbackRedirectUrl={getFinanceRoute('overview')}
+			signUpFallbackRedirectUrl={getFinanceRoute('overview')}
+		>
+			<SettingsProvider>
+				<Suspense fallback={<div>Loading...</div>}>
+					<AppContentsLazy />
+				</Suspense>
+			</SettingsProvider>
+		</ClerkProvider>
 	)
 }
 
