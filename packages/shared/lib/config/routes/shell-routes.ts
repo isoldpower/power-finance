@@ -8,6 +8,11 @@ import {joinRouteSegments} from "../../helpers";
 interface ShellRoutes {
 	root: string
 	landing: string
+	auth: {
+		login: string
+		recovery: string
+		signup: string
+	}
 	analyticsPrefix: string
 	financePrefix: string
 }
@@ -19,9 +24,16 @@ const shellRoutes: ShellRoutes = {
 	landing: `${SHELL_ROOT}/landing`,
 	analyticsPrefix: `${SHELL_ROOT}/analytics`,
 	financePrefix: `${SHELL_ROOT}/finance`,
+	auth: {
+		login: `${SHELL_ROOT}/auth/login`,
+		recovery: `${SHELL_ROOT}/auth/recovery`,
+		signup: `${SHELL_ROOT}/auth/signup`,
+	},
 }
 
-const getShellRoute = (route: keyof ShellRoutes): string => {
+const getShellRoute = <T extends keyof ShellRoutes>(
+	route: T
+): ShellRoutes[T] => {
 	return shellRoutes[route];
 }
 

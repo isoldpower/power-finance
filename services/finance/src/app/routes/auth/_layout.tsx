@@ -1,27 +1,34 @@
-import {createFileRoute, Outlet, redirect, useLocation} from '@tanstack/react-router'
-import {BreadcrumbsHeader} from "@shared/components/BreadcrumbsHeader.tsx";
-import {useEffect} from "react";
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/auth/_layout')({
-	component: RouteComponent
+	pendingComponent: AuthLayoutPending,
+	component: AuthLayout
 })
 
-function RouteComponent() {
-	const { pathname } = useLocation();
-	useEffect(() => {
-		console.log(pathname);
-		if (pathname === '/auth') {
-			redirect({
-				to: '/auth/login',
-				replace: true
-			});
-		}
-	}, [pathname]);
-
+function AuthLayoutPending() {
 	return (
-		<>
-			<BreadcrumbsHeader />
+		<div style={{
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
+			width: '100dvw',
+			minHeight: '100dvh'
+		}}>
+			Mounting Layout...
+		</div>
+	)
+}
+
+function AuthLayout() {
+	return (
+		<div style={{
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
+			width: '100dvw',
+			minHeight: '100dvh'
+		}}>
 			<Outlet />
-		</>
+		</div>
 	)
 }

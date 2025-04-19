@@ -1,5 +1,4 @@
-import {createFileRoute, Outlet, useLocation, useNavigate} from '@tanstack/react-router'
-import {BreadcrumbsHeader} from "@shared/components/BreadcrumbsHeader.tsx";
+import {createFileRoute, Outlet, useLocation, useNavigate} from '@tanstack/react-router';
 import {useEffect} from "react";
 
 export const Route = createFileRoute('/auth/')({
@@ -19,7 +18,6 @@ function RouteComponent() {
 
 	return (
 		<>
-			<BreadcrumbsHeader />
 			<Outlet />
 		</>
 	)

@@ -22,4 +22,10 @@ function joinRouteSegments(...segments: (string | number)[]): string {
 		.replace(/([^:])\/+/g, '$1/');
 }
 
-export { joinRouteSegments };
+function useRouteWithOrigin(
+	route: string
+): string {
+	return joinRouteSegments(window.origin, route);
+}
+
+export { joinRouteSegments, useRouteWithOrigin };

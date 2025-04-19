@@ -3,7 +3,7 @@ const checkEnvVariables = (
 ): ImportMetaEnv => {
 	const envDictionary: Record<keyof ImportMetaEnv, ImportMetaEnv[keyof ImportMetaEnv] | undefined> = {
 		...import.meta.env,
-		CLIENT_CLERK_PUBLIC_KEY: import.meta.env.CLIENT_CLERK_PUBLIC_KEY ?? defaults.CLIENT_CLERK_PUBLIC_KEY,
+		CLIENT_CLERK_PUBLIC_KEY: import.meta.env.CLIENT_CLERK_PUBLIC_KEY ?? defaults.CLIENT_CLERK_PUBLIC_KEY
 	};
 	const undefinedEntries = Object.entries(envDictionary).filter(([, value]) => value === undefined);
 	const receivedEntries = Object.entries(envDictionary).filter(([, value]) => value !== undefined);

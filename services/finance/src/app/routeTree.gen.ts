@@ -18,6 +18,8 @@ import { Route as OverviewIndexImport } from './routes/overview/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
 import { Route as OverviewProtectedImport } from './routes/overview/protected'
 import { Route as AuthLayoutImport } from './routes/auth/_layout'
+import { Route as AuthLayoutSignupImport } from './routes/auth/_layout.signup'
+import { Route as AuthLayoutRecoveryImport } from './routes/auth/_layout.recovery'
 import { Route as AuthLayoutLoginImport } from './routes/auth/_layout.login'
 
 // Create Virtual Routes
@@ -59,6 +61,18 @@ const OverviewProtectedRoute = OverviewProtectedImport.update({
 const AuthLayoutRoute = AuthLayoutImport.update({
   id: '/_layout',
   getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthLayoutSignupRoute = AuthLayoutSignupImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthLayoutRecoveryRoute = AuthLayoutRecoveryImport.update({
+  id: '/recovery',
+  path: '/recovery',
+  getParentRoute: () => AuthLayoutRoute,
 } as any)
 
 const AuthLayoutLoginRoute = AuthLayoutLoginImport.update({
@@ -120,6 +134,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutLoginImport
       parentRoute: typeof AuthLayoutImport
     }
+    '/auth/_layout/recovery': {
+      id: '/auth/_layout/recovery'
+      path: '/recovery'
+      fullPath: '/auth/recovery'
+      preLoaderRoute: typeof AuthLayoutRecoveryImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/auth/_layout/signup': {
+      id: '/auth/_layout/signup'
+      path: '/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthLayoutSignupImport
+      parentRoute: typeof AuthLayoutImport
+    }
   }
 }
 
@@ -141,10 +169,14 @@ const OverviewRouteRouteWithChildren = OverviewRouteRoute._addFileChildren(
 
 interface AuthLayoutRouteChildren {
   AuthLayoutLoginRoute: typeof AuthLayoutLoginRoute
+  AuthLayoutRecoveryRoute: typeof AuthLayoutRecoveryRoute
+  AuthLayoutSignupRoute: typeof AuthLayoutSignupRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthLayoutLoginRoute: AuthLayoutLoginRoute,
+  AuthLayoutRecoveryRoute: AuthLayoutRecoveryRoute,
+  AuthLayoutSignupRoute: AuthLayoutSignupRoute,
 }
 
 const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
@@ -170,6 +202,8 @@ export interface FileRoutesByFullPath {
   '/auth/': typeof AuthIndexRoute
   '/overview/': typeof OverviewIndexRoute
   '/auth/login': typeof AuthLayoutLoginRoute
+  '/auth/recovery': typeof AuthLayoutRecoveryRoute
+  '/auth/signup': typeof AuthLayoutSignupRoute
 }
 
 export interface FileRoutesByTo {
@@ -177,6 +211,8 @@ export interface FileRoutesByTo {
   '/overview/protected': typeof OverviewProtectedRoute
   '/overview': typeof OverviewIndexRoute
   '/auth/login': typeof AuthLayoutLoginRoute
+  '/auth/recovery': typeof AuthLayoutRecoveryRoute
+  '/auth/signup': typeof AuthLayoutSignupRoute
 }
 
 export interface FileRoutesById {
@@ -188,6 +224,8 @@ export interface FileRoutesById {
   '/auth/': typeof AuthIndexRoute
   '/overview/': typeof OverviewIndexRoute
   '/auth/_layout/login': typeof AuthLayoutLoginRoute
+  '/auth/_layout/recovery': typeof AuthLayoutRecoveryRoute
+  '/auth/_layout/signup': typeof AuthLayoutSignupRoute
 }
 
 export interface FileRouteTypes {
@@ -199,8 +237,16 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/overview/'
     | '/auth/login'
+    | '/auth/recovery'
+    | '/auth/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth' | '/overview/protected' | '/overview' | '/auth/login'
+  to:
+    | '/auth'
+    | '/overview/protected'
+    | '/overview'
+    | '/auth/login'
+    | '/auth/recovery'
+    | '/auth/signup'
   id:
     | '__root__'
     | '/overview'
@@ -210,6 +256,8 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/overview/'
     | '/auth/_layout/login'
+    | '/auth/_layout/recovery'
+    | '/auth/_layout/signup'
   fileRoutesById: FileRoutesById
 }
 
@@ -255,7 +303,9 @@ export const routeTree = rootRoute
       "filePath": "auth/_layout.tsx",
       "parent": "/auth",
       "children": [
-        "/auth/_layout/login"
+        "/auth/_layout/login",
+        "/auth/_layout/recovery",
+        "/auth/_layout/signup"
       ]
     },
     "/overview/protected": {
@@ -272,6 +322,14 @@ export const routeTree = rootRoute
     },
     "/auth/_layout/login": {
       "filePath": "auth/_layout.login.tsx",
+      "parent": "/auth/_layout"
+    },
+    "/auth/_layout/recovery": {
+      "filePath": "auth/_layout.recovery.tsx",
+      "parent": "/auth/_layout"
+    },
+    "/auth/_layout/signup": {
+      "filePath": "auth/_layout.signup.tsx",
       "parent": "/auth/_layout"
     }
   }

@@ -1,4 +1,4 @@
-const FINANCE_ROOT = '/';
+const FINANCE_ROOT = '';
 
 interface FinanceRoutes {
 	root: string
@@ -6,8 +6,8 @@ interface FinanceRoutes {
 }
 
 const financeRoutes: FinanceRoutes = {
-	root: FINANCE_ROOT,
-	overview: `${FINANCE_ROOT}/overview`
+	root: `/${FINANCE_ROOT}`,
+	overview: `/${FINANCE_ROOT}/overview`
 }
 
 const getFinanceRoute = (route: keyof FinanceRoutes): string => {
