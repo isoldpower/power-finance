@@ -27,6 +27,5 @@ export default (env: ConfigEnv) => {
 				generatedRouteTree: resolve(options.paths.src, 'app', 'routeTree.ts'),
 			})
 		],
-		build: { target: 'chrome89' }
 	}, options)(env);
 }

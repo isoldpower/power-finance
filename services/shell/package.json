@@ -7,7 +7,10 @@
     "build": "tsc -b && nx vite:build",
     "lint": "nx eslint:lint",
     "preview": "nx vite:preview",
-    "clean": "rm -rf node_modules dist .__mf__temp cache"
+		"chore": "rm -rf .__mf__temp cache",
+		"clean": "rm -rf node_modules dist && pnpm chore",
+		"reset": "pnpm clean && pnpm install",
+		"reset:hard": "pnpm clean && rm -rf pnpm-lock.yaml && pnpm install"
   },
   "dependencies": {
     "react": "catalog:",

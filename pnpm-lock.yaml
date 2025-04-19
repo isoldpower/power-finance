@@ -167,6 +167,61 @@ importers:
         specifier: 'catalog:'
         version: 6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)(yaml@2.7.1)
 
+  services/finance:
+    dependencies:
+      react:
+        specifier: 'catalog:'
+        version: 19.1.0
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.1.0(react@19.1.0)
+      react-error-boundary:
+        specifier: ^5.0.0
+        version: 5.0.0(react@19.1.0)
+    devDependencies:
+      '@eslint/js':
+        specifier: ^9.21.0
+        version: 9.24.0
+      '@internal/config':
+        specifier: workspace:^
+        version: link:../../packages/config
+      '@internal/shared':
+        specifier: workspace:^
+        version: link:../../packages/shared
+      '@module-federation/vite':
+        specifier: 'catalog:'
+        version: 1.2.6(rollup@4.40.0)
+      '@types/node':
+        specifier: ^22.14.1
+        version: 22.14.1
+      '@types/react':
+        specifier: ^19.0.10
+        version: 19.1.2
+      '@types/react-dom':
+        specifier: ^19.0.4
+        version: 19.1.2(@types/react@19.1.2)
+      eslint:
+        specifier: ^9.21.0
+        version: 9.24.0(jiti@2.4.2)
+      eslint-plugin-react-hooks:
+        specifier: ^5.1.0
+        version: 5.2.0(eslint@9.24.0(jiti@2.4.2))
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.19
+        version: 0.4.19(eslint@9.24.0(jiti@2.4.2))
+      globals:
+        specifier: ^15.15.0
+        version: 15.15.0
+      typescript:
+        specifier: ~5.7.2
+        version: 5.7.3
+      typescript-eslint:
+        specifier: ^8.24.1
+        version: 8.30.1(eslint@9.24.0(jiti@2.4.2))(typescript@5.7.3)
+      vite:
+        specifier: 'catalog:'
+        version: 6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)(yaml@2.7.1)
+
   services/shell:
     dependencies:
       '@tanstack/react-router':
