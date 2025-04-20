@@ -2,6 +2,7 @@ import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import {SettingsProvider} from "@internal/shared";
 import {AuthProvider} from "@feature/auth";
+import {getTanStackPageFx} from "@shared/components";
 
 export const Route = createRootRoute({
 	component: () => (
@@ -11,5 +12,6 @@ export const Route = createRootRoute({
 				<TanStackRouterDevtools/>
 			</SettingsProvider>
 		</AuthProvider>
-	)
+	),
+	...getTanStackPageFx('default-page')
 })

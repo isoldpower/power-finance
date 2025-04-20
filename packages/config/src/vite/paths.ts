@@ -8,6 +8,7 @@ export const buildPaths = (
 		preserveSymlinks: true,
 		dedupe: ['react', 'react-dom', '@internal/shared'],
 		alias: {
+			"@": `${config.paths.src}`,
 			"@src": `${config.paths.src}`,
 			"@feature": `${config.paths.src}/features`,
 			"@app": `${config.paths.src}/app`,

@@ -13,7 +13,7 @@
     "reset:hard": "pnpm clean && rm -rf pnpm-lock.yaml && pnpm install"
   },
   "dependencies": {
-    "@clerk/clerk-react": "^5.28.2",
+    "@clerk/clerk-react": "catalog:",
     "@clerk/themes": "^2.2.34",
     "@tanstack/react-router": "^1.116.0",
     "react": "catalog:",

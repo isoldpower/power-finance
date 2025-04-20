@@ -1,23 +1,20 @@
 import {createRouter, RouterProvider} from "@tanstack/react-router";
-import {routeTree} from "./routeTree";
-import {useEffect} from "react";
-import {useSettingsContext} from "@internal/shared";
+import {routeTree} from "./routeTree.gen.ts";
+import {ClerkProvider} from "@clerk/clerk-react";
+import {checkEnvVariables} from "@app/env/checkEnv.ts";
+import {SidebarProvider} from "@shared/components";
 
 const router = createRouter({ routeTree })
-function AppContents() {
-	const { onUpdateField, theme } = useSettingsContext();
 
-	useEffect(() => {
-		console.log('shell', theme);
-	}, [theme]);
+function AppContents() {
+	const envVariables = checkEnvVariables()
 
 	return (
-		<>
-			<RouterProvider router={router} />
-			<button onClick={() => onUpdateField('theme', theme === 'dark' ? 'light' : 'dark')}>
-				Switch (current: {theme})
-			</button>
-		</>
+		<ClerkProvider publishableKey={envVariables.CLIENT_CLERK_PUBLIC_KEY}>
+			<SidebarProvider>
+				<RouterProvider router={router} />
+			</SidebarProvider>
+		</ClerkProvider>
 	)
 }
 

@@ -2,6 +2,8 @@ type ThemeType = 'dark' | 'light';
 
 interface SettingsState {
   theme: ThemeType
+	sidebarOpen: boolean
+	mobileSidebarOpen: boolean
 }
 
 interface SettingsContextValue extends SettingsState {

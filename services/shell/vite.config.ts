@@ -18,13 +18,14 @@ export default (env: ConfigEnv) => {
 	}
 
 	return buildViteConfig({
+		envPrefix: 'CLIENT_',
 		plugins: [
 			buildFederationHost({ name: 'shell' }),
 			TanStackRouterVite({
 				target: 'react',
 				autoCodeSplitting: true,
 				routesDirectory: resolve(options.paths.src, 'app', 'routes'),
-				generatedRouteTree: resolve(options.paths.src, 'app', 'routeTree.ts'),
+				generatedRouteTree: resolve(options.paths.src, 'app', 'routeTree.gen.ts'),
 			})
 		],
 	}, options)(env);

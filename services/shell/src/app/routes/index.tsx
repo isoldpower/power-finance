@@ -1,4 +1,4 @@
-import {createFileRoute, Outlet} from '@tanstack/react-router'
+import {createFileRoute, useNavigate} from '@tanstack/react-router'
 import {BrandAppLoader} from "@widget/core";
 
 export const Route = createFileRoute('/')({
@@ -7,10 +7,8 @@ export const Route = createFileRoute('/')({
 })
 
 function HomePage() {
-	return (
-		<div className="p-2">
-			<h3>Index Page</h3>
-			<Outlet />
-		</div>
-	)
+	const navigate = useNavigate();
+	navigate({ to: '/landing', replace: true });
+
+	return null;
 }

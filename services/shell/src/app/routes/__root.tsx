@@ -1,14 +1,20 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import {LayoutContainer} from "@entity/core";
+import { BrandAppLoader } from "@widget/core";
+import {AppSidebar} from "@shared/components";
+import {ThemeHandler} from "@feature/settings";
 
 export const Route = createRootRoute({
-	component: () => (
-		<>
-			<LayoutContainer title='Root Container'>
-				<Outlet />
-			</LayoutContainer>
-			<TanStackRouterDevtools />
-		</>
-	),
+	pendingComponent: BrandAppLoader,
+	component: () => {
+		return (
+			<ThemeHandler>
+				<AppSidebar />
+				<div className='relative'>
+					<Outlet/>
+				</div>
+				<TanStackRouterDevtools position="bottom-right"/>
+			</ThemeHandler>
+		)
+	},
 })
