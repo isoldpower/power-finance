@@ -3,7 +3,7 @@ import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
 import { PanelLeftIcon } from "lucide-react"
 
-import { useIsMobile } from "@/shared/lib/hooks/use-mobile"
+import { useIsMobile } from "@shared/lib/hooks/useMobile.ts"
 import { cn } from "@/shared/lib/utils"
 import { Button } from "@/shared/components/shadcn-core/button"
 import { Input } from "@/shared/components/shadcn-core/input"

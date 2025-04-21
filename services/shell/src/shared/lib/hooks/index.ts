@@ -1,2 +1,3 @@
-export { useIsMobile } from './use-mobile.ts';
-export { useLinkActive } from './use-link-active.ts';
+export { useColorVarToHex } from './useColorVarToHex.ts';
+export { useIsMobile } from './useMobile.ts';
+export { useLinkActive } from './useLinkActive.ts';

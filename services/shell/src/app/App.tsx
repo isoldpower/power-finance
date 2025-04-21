@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrandAppLoader } from "@widget/core";
+import { BrandAppLoader } from "@widget/settings";
 
 import './styles/base.css'
 import {SettingsProvider} from "@internal/shared";

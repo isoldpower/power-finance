@@ -1,6 +1,6 @@
-import {FC} from "react";
-import {RedirectToSignIn, SignedIn, SignedOut} from "@clerk/clerk-react";
-import {useLocation} from "@tanstack/react-router";
+import type { FC } from "react";
+import { ClerkLoaded, RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
+import { useLocation } from "@tanstack/react-router";
 
 interface AuthGuardProps {
 	children: React.ReactNode;
@@ -10,14 +10,14 @@ const AuthGuard: FC<AuthGuardProps> = ({ children }) => {
 	const { pathname } = useLocation();
 
 	return (
-		<>
+		<ClerkLoaded>
 			<SignedOut>
-				<RedirectToSignIn signInFallbackRedirectUrl={pathname} />
+				<RedirectToSignIn signInFallbackRedirectUrl={pathname}/>
 			</SignedOut>
 			<SignedIn>
 				{children}
 			</SignedIn>
-		</>
+		</ClerkLoaded>
 	)
 }
 

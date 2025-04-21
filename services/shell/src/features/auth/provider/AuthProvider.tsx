@@ -1,26 +1,26 @@
-import {FC, ReactNode} from "react";
-import {getFinanceRoute, getShellRoute, useRouteWithOrigin} from "@internal/shared";
+import type {FC, ReactNode} from "react";
+import {getFinanceRoute, useRouteWithOrigin} from "@internal/shared";
 import {ClerkProvider} from "@clerk/clerk-react";
 import {useRouter} from "@tanstack/react-router";
+import {useClerkTheme} from "@feature/auth";
 
 interface AuthProviderProps {
 	children: ReactNode;
-	publicKey: string
+	env: ImportMetaEnv;
 }
 
-const AuthProvider: FC<AuthProviderProps> = ({ publicKey, children }) => {
-	const routes = getShellRoute('auth');
+const AuthProvider: FC<AuthProviderProps> = ({ env, children }) => {
 	const overviewRoute = getFinanceRoute('overview');
 	const router = useRouter();
+	const theme = useClerkTheme();
 
 	return (
 		<ClerkProvider
+			publishableKey={env.CLIENT_CLERK_PUBLIC_KEY}
 			routerPush={(to: string) => router.navigate({ to })}
 			routerReplace={(to: string) => router.navigate({ to, replace: true })}
-			publishableKey={publicKey}
 			afterSignOutUrl={useRouteWithOrigin(overviewRoute)}
-			signUpUrl={routes.signup}
-			signInUrl={routes.login}
+			appearance={theme}
 		>
 			{children}
 		</ClerkProvider>

@@ -8,34 +8,22 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LandingImport } from './routes/landing'
-import { Route as AnalyticsImport } from './routes/analytics'
+import { Route as AuthRouteImport } from './routes/auth/route'
+import { Route as AnalyticsRouteImport } from './routes/analytics/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
 import { Route as AnalyticsIndexImport } from './routes/analytics/index'
-import { Route as AuthLayoutImport } from './routes/auth/_layout'
+import { Route as AuthSignupImport } from './routes/auth/signup'
+import { Route as AuthRecoveryImport } from './routes/auth/recovery'
+import { Route as AuthProfileImport } from './routes/auth/profile'
+import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AnalyticsIdImport } from './routes/analytics/$id'
-import { Route as AuthLayoutSignupImport } from './routes/auth/_layout.signup'
-import { Route as AuthLayoutRecoveryImport } from './routes/auth/_layout.recovery'
-import { Route as AuthLayoutProfileImport } from './routes/auth/_layout.profile'
-import { Route as AuthLayoutLoginImport } from './routes/auth/_layout.login'
-
-// Create Virtual Routes
-
-const AuthImport = createFileRoute('/auth')()
 
 // Create/Update Routes
-
-const AuthRoute = AuthImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const LandingRoute = LandingImport.update({
   id: '/landing',
@@ -43,7 +31,13 @@ const LandingRoute = LandingImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AnalyticsRoute = AnalyticsImport.update({
+const AuthRouteRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AnalyticsRouteRoute = AnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
   getParentRoute: () => rootRoute,
@@ -58,48 +52,43 @@ const IndexRoute = IndexImport.update({
 const AuthIndexRoute = AuthIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AuthRoute,
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 const AnalyticsIndexRoute = AnalyticsIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AnalyticsRoute,
+  getParentRoute: () => AnalyticsRouteRoute,
 } as any)
 
-const AuthLayoutRoute = AuthLayoutImport.update({
-  id: '/_layout',
-  getParentRoute: () => AuthRoute,
+const AuthSignupRoute = AuthSignupImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+
+const AuthRecoveryRoute = AuthRecoveryImport.update({
+  id: '/recovery',
+  path: '/recovery',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+
+const AuthProfileRoute = AuthProfileImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+
+const AuthLoginRoute = AuthLoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 const AnalyticsIdRoute = AnalyticsIdImport.update({
   id: '/$id',
   path: '/$id',
-  getParentRoute: () => AnalyticsRoute,
-} as any)
-
-const AuthLayoutSignupRoute = AuthLayoutSignupImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => AuthLayoutRoute,
-} as any)
-
-const AuthLayoutRecoveryRoute = AuthLayoutRecoveryImport.update({
-  id: '/recovery',
-  path: '/recovery',
-  getParentRoute: () => AuthLayoutRoute,
-} as any)
-
-const AuthLayoutProfileRoute = AuthLayoutProfileImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => AuthLayoutRoute,
-} as any)
-
-const AuthLayoutLoginRoute = AuthLayoutLoginImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => AuthLayoutRoute,
+  getParentRoute: () => AnalyticsRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -117,7 +106,14 @@ declare module '@tanstack/react-router' {
       id: '/analytics'
       path: '/analytics'
       fullPath: '/analytics'
-      preLoaderRoute: typeof AnalyticsImport
+      preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRoute
     }
     '/landing': {
@@ -132,153 +128,128 @@ declare module '@tanstack/react-router' {
       path: '/$id'
       fullPath: '/analytics/$id'
       preLoaderRoute: typeof AnalyticsIdImport
-      parentRoute: typeof AnalyticsImport
+      parentRoute: typeof AnalyticsRouteImport
     }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthImport
-      parentRoute: typeof rootRoute
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginImport
+      parentRoute: typeof AuthRouteImport
     }
-    '/auth/_layout': {
-      id: '/auth/_layout'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthLayoutImport
-      parentRoute: typeof AuthRoute
+    '/auth/profile': {
+      id: '/auth/profile'
+      path: '/profile'
+      fullPath: '/auth/profile'
+      preLoaderRoute: typeof AuthProfileImport
+      parentRoute: typeof AuthRouteImport
+    }
+    '/auth/recovery': {
+      id: '/auth/recovery'
+      path: '/recovery'
+      fullPath: '/auth/recovery'
+      preLoaderRoute: typeof AuthRecoveryImport
+      parentRoute: typeof AuthRouteImport
+    }
+    '/auth/signup': {
+      id: '/auth/signup'
+      path: '/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthSignupImport
+      parentRoute: typeof AuthRouteImport
     }
     '/analytics/': {
       id: '/analytics/'
       path: '/'
       fullPath: '/analytics/'
       preLoaderRoute: typeof AnalyticsIndexImport
-      parentRoute: typeof AnalyticsImport
+      parentRoute: typeof AnalyticsRouteImport
     }
     '/auth/': {
       id: '/auth/'
       path: '/'
       fullPath: '/auth/'
       preLoaderRoute: typeof AuthIndexImport
-      parentRoute: typeof AuthImport
-    }
-    '/auth/_layout/login': {
-      id: '/auth/_layout/login'
-      path: '/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLayoutLoginImport
-      parentRoute: typeof AuthLayoutImport
-    }
-    '/auth/_layout/profile': {
-      id: '/auth/_layout/profile'
-      path: '/profile'
-      fullPath: '/auth/profile'
-      preLoaderRoute: typeof AuthLayoutProfileImport
-      parentRoute: typeof AuthLayoutImport
-    }
-    '/auth/_layout/recovery': {
-      id: '/auth/_layout/recovery'
-      path: '/recovery'
-      fullPath: '/auth/recovery'
-      preLoaderRoute: typeof AuthLayoutRecoveryImport
-      parentRoute: typeof AuthLayoutImport
-    }
-    '/auth/_layout/signup': {
-      id: '/auth/_layout/signup'
-      path: '/signup'
-      fullPath: '/auth/signup'
-      preLoaderRoute: typeof AuthLayoutSignupImport
-      parentRoute: typeof AuthLayoutImport
+      parentRoute: typeof AuthRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface AnalyticsRouteChildren {
+interface AnalyticsRouteRouteChildren {
   AnalyticsIdRoute: typeof AnalyticsIdRoute
   AnalyticsIndexRoute: typeof AnalyticsIndexRoute
 }
 
-const AnalyticsRouteChildren: AnalyticsRouteChildren = {
+const AnalyticsRouteRouteChildren: AnalyticsRouteRouteChildren = {
   AnalyticsIdRoute: AnalyticsIdRoute,
   AnalyticsIndexRoute: AnalyticsIndexRoute,
 }
 
-const AnalyticsRouteWithChildren = AnalyticsRoute._addFileChildren(
-  AnalyticsRouteChildren,
+const AnalyticsRouteRouteWithChildren = AnalyticsRouteRoute._addFileChildren(
+  AnalyticsRouteRouteChildren,
 )
 
-interface AuthLayoutRouteChildren {
-  AuthLayoutLoginRoute: typeof AuthLayoutLoginRoute
-  AuthLayoutProfileRoute: typeof AuthLayoutProfileRoute
-  AuthLayoutRecoveryRoute: typeof AuthLayoutRecoveryRoute
-  AuthLayoutSignupRoute: typeof AuthLayoutSignupRoute
-}
-
-const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
-  AuthLayoutLoginRoute: AuthLayoutLoginRoute,
-  AuthLayoutProfileRoute: AuthLayoutProfileRoute,
-  AuthLayoutRecoveryRoute: AuthLayoutRecoveryRoute,
-  AuthLayoutSignupRoute: AuthLayoutSignupRoute,
-}
-
-const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
-  AuthLayoutRouteChildren,
-)
-
-interface AuthRouteChildren {
-  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
+interface AuthRouteRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthProfileRoute: typeof AuthProfileRoute
+  AuthRecoveryRoute: typeof AuthRecoveryRoute
+  AuthSignupRoute: typeof AuthSignupRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
-const AuthRouteChildren: AuthRouteChildren = {
-  AuthLayoutRoute: AuthLayoutRouteWithChildren,
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+  AuthProfileRoute: AuthProfileRoute,
+  AuthRecoveryRoute: AuthRecoveryRoute,
+  AuthSignupRoute: AuthSignupRoute,
   AuthIndexRoute: AuthIndexRoute,
 }
 
-const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/analytics': typeof AnalyticsRouteWithChildren
+  '/analytics': typeof AnalyticsRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
   '/landing': typeof LandingRoute
   '/analytics/$id': typeof AnalyticsIdRoute
-  '/auth': typeof AuthLayoutRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/profile': typeof AuthProfileRoute
+  '/auth/recovery': typeof AuthRecoveryRoute
+  '/auth/signup': typeof AuthSignupRoute
   '/analytics/': typeof AnalyticsIndexRoute
   '/auth/': typeof AuthIndexRoute
-  '/auth/login': typeof AuthLayoutLoginRoute
-  '/auth/profile': typeof AuthLayoutProfileRoute
-  '/auth/recovery': typeof AuthLayoutRecoveryRoute
-  '/auth/signup': typeof AuthLayoutSignupRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/landing': typeof LandingRoute
   '/analytics/$id': typeof AnalyticsIdRoute
-  '/auth': typeof AuthIndexRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/profile': typeof AuthProfileRoute
+  '/auth/recovery': typeof AuthRecoveryRoute
+  '/auth/signup': typeof AuthSignupRoute
   '/analytics': typeof AnalyticsIndexRoute
-  '/auth/login': typeof AuthLayoutLoginRoute
-  '/auth/profile': typeof AuthLayoutProfileRoute
-  '/auth/recovery': typeof AuthLayoutRecoveryRoute
-  '/auth/signup': typeof AuthLayoutSignupRoute
+  '/auth': typeof AuthIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/analytics': typeof AnalyticsRouteWithChildren
+  '/analytics': typeof AnalyticsRouteRouteWithChildren
+  '/auth': typeof AuthRouteRouteWithChildren
   '/landing': typeof LandingRoute
   '/analytics/$id': typeof AnalyticsIdRoute
-  '/auth': typeof AuthRouteWithChildren
-  '/auth/_layout': typeof AuthLayoutRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/profile': typeof AuthProfileRoute
+  '/auth/recovery': typeof AuthRecoveryRoute
+  '/auth/signup': typeof AuthSignupRoute
   '/analytics/': typeof AnalyticsIndexRoute
   '/auth/': typeof AuthIndexRoute
-  '/auth/_layout/login': typeof AuthLayoutLoginRoute
-  '/auth/_layout/profile': typeof AuthLayoutProfileRoute
-  '/auth/_layout/recovery': typeof AuthLayoutRecoveryRoute
-  '/auth/_layout/signup': typeof AuthLayoutSignupRoute
 }
 
 export interface FileRouteTypes {
@@ -286,55 +257,54 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/analytics'
+    | '/auth'
     | '/landing'
     | '/analytics/$id'
-    | '/auth'
-    | '/analytics/'
-    | '/auth/'
     | '/auth/login'
     | '/auth/profile'
     | '/auth/recovery'
     | '/auth/signup'
+    | '/analytics/'
+    | '/auth/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/landing'
     | '/analytics/$id'
-    | '/auth'
-    | '/analytics'
     | '/auth/login'
     | '/auth/profile'
     | '/auth/recovery'
     | '/auth/signup'
+    | '/analytics'
+    | '/auth'
   id:
     | '__root__'
     | '/'
     | '/analytics'
+    | '/auth'
     | '/landing'
     | '/analytics/$id'
-    | '/auth'
-    | '/auth/_layout'
+    | '/auth/login'
+    | '/auth/profile'
+    | '/auth/recovery'
+    | '/auth/signup'
     | '/analytics/'
     | '/auth/'
-    | '/auth/_layout/login'
-    | '/auth/_layout/profile'
-    | '/auth/_layout/recovery'
-    | '/auth/_layout/signup'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AnalyticsRoute: typeof AnalyticsRouteWithChildren
+  AnalyticsRouteRoute: typeof AnalyticsRouteRouteWithChildren
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   LandingRoute: typeof LandingRoute
-  AuthRoute: typeof AuthRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AnalyticsRoute: AnalyticsRouteWithChildren,
+  AnalyticsRouteRoute: AnalyticsRouteRouteWithChildren,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
   LandingRoute: LandingRoute,
-  AuthRoute: AuthRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -349,18 +319,28 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/analytics",
-        "/landing",
-        "/auth"
+        "/auth",
+        "/landing"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
     "/analytics": {
-      "filePath": "analytics.tsx",
+      "filePath": "analytics/route.tsx",
       "children": [
         "/analytics/$id",
         "/analytics/"
+      ]
+    },
+    "/auth": {
+      "filePath": "auth/route.tsx",
+      "children": [
+        "/auth/login",
+        "/auth/profile",
+        "/auth/recovery",
+        "/auth/signup",
+        "/auth/"
       ]
     },
     "/landing": {
@@ -370,22 +350,21 @@ export const routeTree = rootRoute
       "filePath": "analytics/$id.tsx",
       "parent": "/analytics"
     },
-    "/auth": {
-      "filePath": "auth",
-      "children": [
-        "/auth/_layout",
-        "/auth/"
-      ]
+    "/auth/login": {
+      "filePath": "auth/login.tsx",
+      "parent": "/auth"
     },
-    "/auth/_layout": {
-      "filePath": "auth/_layout.tsx",
-      "parent": "/auth",
-      "children": [
-        "/auth/_layout/login",
-        "/auth/_layout/profile",
-        "/auth/_layout/recovery",
-        "/auth/_layout/signup"
-      ]
+    "/auth/profile": {
+      "filePath": "auth/profile.tsx",
+      "parent": "/auth"
+    },
+    "/auth/recovery": {
+      "filePath": "auth/recovery.tsx",
+      "parent": "/auth"
+    },
+    "/auth/signup": {
+      "filePath": "auth/signup.tsx",
+      "parent": "/auth"
     },
     "/analytics/": {
       "filePath": "analytics/index.tsx",
@@ -394,22 +373,6 @@ export const routeTree = rootRoute
     "/auth/": {
       "filePath": "auth/index.tsx",
       "parent": "/auth"
-    },
-    "/auth/_layout/login": {
-      "filePath": "auth/_layout.login.tsx",
-      "parent": "/auth/_layout"
-    },
-    "/auth/_layout/profile": {
-      "filePath": "auth/_layout.profile.tsx",
-      "parent": "/auth/_layout"
-    },
-    "/auth/_layout/recovery": {
-      "filePath": "auth/_layout.recovery.tsx",
-      "parent": "/auth/_layout"
-    },
-    "/auth/_layout/signup": {
-      "filePath": "auth/_layout.signup.tsx",
-      "parent": "/auth/_layout"
     }
   }
 }

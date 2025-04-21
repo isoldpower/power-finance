@@ -1,5 +1,5 @@
 import {createFileRoute, useNavigate} from '@tanstack/react-router'
-import {BrandAppLoader} from "@widget/core";
+import {BrandAppLoader} from "@widget/settings";
 
 export const Route = createFileRoute('/')({
 	pendingComponent: BrandAppLoader,
@@ -12,3 +12,4 @@ function HomePage() {
 
 	return null;
 }
+

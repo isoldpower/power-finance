@@ -6,13 +6,14 @@ export const Route = createFileRoute('/auth/')({
 })
 
 function RouteComponent() {
-	const { pathname } = useLocation();
+	const { pathname, ...params } = useLocation();
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		navigate({
 			to: '/auth/login',
-			replace: true
+			replace: true,
+			...params
 		});
 	}, [pathname]);
 

@@ -37,7 +37,8 @@
 		"chore": "pnpm run chore:sub && pnpm run chore:root",
 		"clean": "pnpm run clean:sub && pnpm run clean:root",
 		"reset": "pnpm run reset:sub && pnpm run reset:root",
-		"reset:hard": "pnpm run reset:sub:hard && pnpm run reset:root:hard"
+		"reset:hard": "pnpm run reset:sub:hard && pnpm run reset:root:hard",
+		"reset:fix": "rm -rf **/node_modules && pnpm install"
   },
   "devDependencies": {
     "@nx/eslint": "20.8.0",

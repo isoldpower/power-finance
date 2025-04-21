@@ -1,3 +1,3 @@
-export { HeaderAuthentication } from './header-auth/HeaderAuthentication.tsx';
+export { SidebarAuthentication } from './sidebar-auth/SidebarAuthentication.tsx';
 
-export type { HeaderAuthenticationProps } from './header-auth/HeaderAuthentication.tsx';
+export type { SidebarAuthenticationProps } from './sidebar-auth/SidebarAuthentication.tsx';

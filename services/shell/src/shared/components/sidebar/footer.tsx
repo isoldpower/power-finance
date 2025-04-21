@@ -1,6 +1,7 @@
 import type { ComponentProps, FC } from "react";
 import {Separator, SidebarFooter, useSidebar} from "@shared/components"
-import { LabeledThemeSwitch } from "@widget/core";
+import { LabeledThemeSwitch } from "@widget/settings";
+import {SidebarAuthentication} from "@widget/auth/sidebar-auth/SidebarAuthentication.tsx";
 
 const AppSidebarFooter: FC<ComponentProps<typeof SidebarFooter>> = ({
 	...props
@@ -15,6 +16,7 @@ const AppSidebarFooter: FC<ComponentProps<typeof SidebarFooter>> = ({
 					{open ? 'Dark Mode' : 'Dark'}
 				</span>
 			</LabeledThemeSwitch>
+			<SidebarAuthentication/>
 		</SidebarFooter>
 	)
 }
