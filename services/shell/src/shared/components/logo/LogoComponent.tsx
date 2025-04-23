@@ -9,8 +9,9 @@ const LogoComponent: FC<LogoComponentProps> = ({ withText }) => {
   return (
 	<div className='flex items-center gap-2'>
 	  <img
-		className='w-8 h-8'
-		src={Logo}/>
+			alt="Company logo"
+			className='w-8 h-8'
+			src={Logo} />
 		{withText && (
 			<span>Company</span>
 		)}

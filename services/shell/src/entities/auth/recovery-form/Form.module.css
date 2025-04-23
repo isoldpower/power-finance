@@ -1,0 +1,63 @@
+.recoveryForm__container {
+	box-sizing: border-box;
+	display: flex;
+	flex-flow: column;
+	-webkit-box-align: stretch;
+	align-items: stretch;
+	-webkit-box-pack: start;
+	justify-content: flex-start;
+	isolation: isolate;
+	max-width: calc(-2.5rem + 100vw);
+	width: 25rem;
+	border-style: solid;
+	border-color: rgba(248, 250, 252, 0.07);
+	border-radius: 0.75rem;
+	color: var(--sidebar-accent-foreground);
+	position: relative;
+	overflow: hidden;
+	border-width: 0;
+	box-shadow: rgba(0, 0, 0, 0.08) 0 5px 15px 0,
+		rgba(25, 28, 33, 0.2) 0 15px 35px -5px,
+		rgba(248, 250, 252, 0.07) 0 0 0 1px;
+}
+
+.recoveryForm__paper {
+	box-sizing: border-box;
+	display: flex;
+	flex-flow: column;
+	-webkit-box-align: stretch;
+	align-items: stretch;
+	gap: 2rem;
+	background-color: var(--sidebar-accent);
+	transition-property: background-color, background, border-color, color, fill, stroke, opacity, box-shadow, transform;
+	transition-duration: 200ms;
+	text-align: center;
+	z-index: 10;
+	border-style: solid;
+	border-color: rgba(248, 250, 252, 0.03);
+	border-radius: 0.5rem;
+	position: relative;
+	padding: 2rem 2.5rem;
+	-webkit-box-pack: center;
+	place-content: center;
+	border-width: 0;
+	box-shadow: rgba(0, 0, 0, 0.08) 0 0 2px 0,
+		rgba(25, 28, 33, 0.06) 0 1px 2px 0,
+		rgba(248, 250, 252, 0.03) 0 0 0 1px;
+}
+
+.recoveryForm__button {
+	border-radius: 0.375rem;
+	font-size: 0.8125rem;
+	font-weight: 500;
+	line-height: 1.4;
+	background-color: var(--sidebar-primary);
+	box-shadow: var(--sidebar-primary) 0 0 0 1px,
+		rgba(255, 255, 255, 0.07) 0 1px 1px 0 inset,
+		rgba(34, 42, 53, 0.2) 0 2px 3px 0,
+		rgba(0, 0, 0, 0.24) 0 1px 1px 0;
+
+	/*&:hover {*/
+	/*	background-color: hsla(225, 83%, 59%, 1);*/
+	/*}*/
+}

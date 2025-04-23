@@ -9,6 +9,7 @@ interface ShellRoutes {
 	root: string
 	landing: string
 	auth: {
+		root: string
 		login: string
 		recovery: string
 		signup: string
@@ -26,6 +27,7 @@ const shellRoutes: ShellRoutes = {
 	analyticsPrefix: `${SHELL_ROOT}/analytics`,
 	financePrefix: `${SHELL_ROOT}/finance`,
 	auth: {
+		root: `/auth`,
 		login: `${SHELL_ROOT}/auth/login`,
 		recovery: `${SHELL_ROOT}/auth/recovery`,
 		signup: `${SHELL_ROOT}/auth/signup`,

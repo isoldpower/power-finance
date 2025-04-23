@@ -1,8 +1,11 @@
 import type {FC, ReactNode} from "react";
+
+import {useMemo} from "react";
 import {getFinanceRoute, useRouteWithOrigin} from "@internal/shared";
 import {ClerkProvider} from "@clerk/clerk-react";
-import {useRouter} from "@tanstack/react-router";
+import {useNavigate} from "@tanstack/react-router";
 import {useClerkTheme} from "@feature/auth";
+import {useClerkDarkTheme, useClerkLightTheme} from "@entity/auth";
 
 interface AuthProviderProps {
 	children: ReactNode;
@@ -11,14 +14,22 @@ interface AuthProviderProps {
 
 const AuthProvider: FC<AuthProviderProps> = ({ env, children }) => {
 	const overviewRoute = getFinanceRoute('overview');
-	const router = useRouter();
-	const theme = useClerkTheme();
+	const navigate = useNavigate();
+
+	const lightTheme = useClerkLightTheme();
+	const darkTheme = useClerkDarkTheme();
+	const clerkThemes = useMemo(() => ({
+		'light': lightTheme,
+		'dark': darkTheme,
+	}), [darkTheme, lightTheme]);
+
+	const theme = useClerkTheme(clerkThemes);
 
 	return (
 		<ClerkProvider
 			publishableKey={env.CLIENT_CLERK_PUBLIC_KEY}
-			routerPush={(to: string) => router.navigate({ to })}
-			routerReplace={(to: string) => router.navigate({ to, replace: true })}
+			routerPush={(to: string) => navigate({ to })}
+			routerReplace={(to: string) => navigate({ to, replace: true })}
 			afterSignOutUrl={useRouteWithOrigin(overviewRoute)}
 			appearance={theme}
 		>

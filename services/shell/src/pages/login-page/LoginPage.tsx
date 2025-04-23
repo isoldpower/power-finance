@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { SignIn } from "@clerk/clerk-react";
 import { getFinanceRoute, getShellRoute, useRouteWithOrigin } from "@internal/shared";
-import { Link } from "@tanstack/react-router";
+import { getLoginPaperAppearance } from "@entity/auth";
 
 interface LoginPageProps {}
 
@@ -10,17 +10,16 @@ const LoginPage: FC<LoginPageProps> = () => {
 	const overviewRoute = getFinanceRoute('overview');
 
 	return (
-		<div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-			<div style={{ display: 'flex', justifyContent: 'end' }}>
-				<Link to={routes.recovery}>Forgot password?</Link>
-			</div>
-			<SignIn
-				signUpUrl={useRouteWithOrigin(routes.signup)}
-				fallbackRedirectUrl={useRouteWithOrigin(overviewRoute)}
-				transferable={false}
-				withSignUp={false}
-				appearance={{ layout: { logoLinkUrl: useRouteWithOrigin(overviewRoute) } }} />
-		</div>
+		<SignIn
+			signUpUrl={useRouteWithOrigin(routes.signup)}
+			fallbackRedirectUrl={useRouteWithOrigin(overviewRoute)}
+			transferable={false}
+			withSignUp={false}
+			appearance={getLoginPaperAppearance({
+				layout: {
+					logoLinkUrl: useRouteWithOrigin(overviewRoute)
+				}
+			})} />
 	);
 };
 

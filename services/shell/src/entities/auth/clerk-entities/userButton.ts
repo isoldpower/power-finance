@@ -3,16 +3,13 @@ import type {Theme} from "@clerk/types";
 const getUserButtonAppearance = (
 	overrides: Theme = {}
 ): Theme => {
-	const { elements, layout, ...rest } = overrides;
+	const { layout, ...rest } = overrides;
 
 	return Object.assign({
 		elements: {
-			userButtonPopoverCard: 'transform-[translateY(-5px)]!',
-			rootBox: 'w-full!',
-			userButtonTrigger: 'p-1! w-full! justify-start! focus:shadow-none! focus:outline-none!',
-			userButtonBox: 'flex flex-row-reverse!',
-			userButtonPopoverFooter: 'hidden!',
-			...elements
+			rootBox: 'w-full! justify-start!',
+			userButtonTrigger: 'shadow-none! w-full! justify-start!',
+			userButtonBox: 'flex-row-reverse!'
 		},
 		layout: {
 			unsafe_disableDevelopmentModeWarnings: true,

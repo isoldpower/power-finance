@@ -2,6 +2,7 @@ import { FC } from "react";
 import { UserProfile } from "@clerk/clerk-react";
 import { getProfilePaperAppearance } from "@entity/auth";
 import { getFinanceRoute, useRouteWithOrigin } from "@internal/shared";
+import {ArrowLeftCircleIcon} from "lucide-react";
 
 interface UserProfilePageProps {}
 
@@ -14,7 +15,7 @@ const UserProfilePage: FC<UserProfilePageProps> = () => {
 				<UserProfile.Link
 					label="Homepage"
 					url={useRouteWithOrigin(overviewRoute)}
-					labelIcon={<div>arrow</div>} />
+					labelIcon={<ArrowLeftCircleIcon width={16} height={16} />} />
 			</UserProfile>
 		</div>
 	);

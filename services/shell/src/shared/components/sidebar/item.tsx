@@ -24,11 +24,11 @@ const AppSidebarItem: FC<AppSidebarItemProps> = ({
 			<SidebarMenuButton asChild isActive={active}>
 				{children ?? (
 					<Link to={to} className={`flex gap-2 items-center text-sm${!open ? ' w-[3rem] justify-center' : ''}`}>
-						<div className="bg-[var(--color-sidebar-accent)] text-[var(--color-sidebar-foreground)] rounded p-[2px] h-6 w-6">
+						<div className="flex items-center justify-center bg-sidebar-accent text-sidebar-foreground/60 rounded p-[2px] h-6 w-6">
 							{icon && cloneElement(icon, {
 								...icon.props,
-								height: '1.25rem',
-								width: '1.25rem',
+								height: '1rem',
+								width: '1rem',
 							})}
 						</div>
 						{open && title}

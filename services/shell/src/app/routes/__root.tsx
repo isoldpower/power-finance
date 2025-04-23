@@ -1,13 +1,21 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { BrandAppLoader } from "@widget/settings";
-import {ThemeHandler} from "@feature/settings";
-import {AppSidebar, HideOnRoute} from "@shared/components";
+import { ThemeHandler } from "@feature/settings";
+import { AppSidebar, HideOnRoute } from "@shared/components";
+import { checkEnvVariables } from "@app/env/checkEnv.ts";
+import { AuthProvider } from "@widget/auth";
 
 export const Route = createRootRoute({
 	pendingComponent: BrandAppLoader,
-	component: () => {
-		return (
+	component: RootComponent
+})
+
+function RootComponent() {
+	const envVariables = checkEnvVariables()
+
+	return (
+		<AuthProvider env={envVariables}>
 			<ThemeHandler>
 				<HideOnRoute routes={['/auth']}>
 					<AppSidebar />
@@ -17,6 +25,6 @@ export const Route = createRootRoute({
 				</div>
 				<TanStackRouterDevtools position="bottom-right"/>
 			</ThemeHandler>
-		)
-	},
-})
+		</AuthProvider>
+	)
+}

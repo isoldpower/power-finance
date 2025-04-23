@@ -1,6 +1,6 @@
 import type {FC, HTMLAttributes} from "react";
-import {Label} from "@shared/components";
-import {ChooseTheme} from "@feature/settings/choose-theme/ChooseTheme.tsx";
+import { Label } from "@shared/components";
+import { ChooseTheme } from "@feature/settings";
 
 interface LabeledThemeSwitchProps extends HTMLAttributes<HTMLDivElement> {
 }

@@ -3,9 +3,17 @@ import type {Theme} from "@clerk/types";
 const getProfilePaperAppearance = (
 	overrides: Theme = {}
 ): Theme => {
-	const { elements, layout, ...rest } = overrides;
+	const { layout, ...rest } = overrides;
 
-	return Object.assign({}, rest);
+	return Object.assign({
+		layout: {
+			unsafe_disableDevelopmentModeWarnings: true,
+			...layout || {}
+		},
+		elements: {
+			providerIcon: "w-[1.25rem]! rounded! bg-white/80! p-[2px]!"
+		}
+	}, rest);
 };
 
 export { getProfilePaperAppearance };

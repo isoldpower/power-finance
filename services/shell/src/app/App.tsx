@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrandAppLoader } from "@widget/settings";
 
-import './styles/base.css'
+import './styles/_index.css'
 import {SettingsProvider} from "@internal/shared";
 
 const AppContentsLazy = lazy(() => import("./AppContent.tsx"));

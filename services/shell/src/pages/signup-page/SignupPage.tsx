@@ -1,7 +1,7 @@
-import {FC} from "react";
-import {SignUp} from "@clerk/clerk-react";
-import { dark } from "@clerk/themes";
-import {getFinanceRoute, getShellRoute, useRouteWithOrigin} from "@internal/shared";
+import type { FC } from "react";
+import { SignUp } from "@clerk/clerk-react";
+import { getFinanceRoute, getShellRoute, useRouteWithOrigin } from "@internal/shared";
+import { getSignupPaperAppearance } from "@entity/auth";
 
 interface SignupPageProps {}
 
@@ -12,15 +12,11 @@ const SignupPage: FC<SignupPageProps> = () => {
 	return (
 		<SignUp
 			signInUrl={useRouteWithOrigin(routes.login)}
-			appearance={{
-				baseTheme: dark,
+			appearance={getSignupPaperAppearance({
 				layout: {
-					logoLinkUrl: useRouteWithOrigin(overviewRoute),
-					unsafe_disableDevelopmentModeWarnings: true,
-					socialButtonsPlacement: 'bottom',
-					socialButtonsVariant: 'blockButton'
+					logoLinkUrl: useRouteWithOrigin(overviewRoute)
 				}
-			}}
+			})}
 		/>
 	);
 };
