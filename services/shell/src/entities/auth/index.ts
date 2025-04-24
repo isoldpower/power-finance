@@ -11,9 +11,6 @@ export { getUserButtonAppearance } from './clerk-entities/userButton.ts';
 export { getLoginPaperAppearance } from './clerk-entities/loginPaper.ts';
 export { getSignupPaperAppearance } from './clerk-entities/signupPaper.ts';
 export { getProfilePaperAppearance } from './clerk-entities/profilePaper.ts';
-export { useClerkLightTheme } from './clerk-themes/light.ts';
-export { useClerkDarkTheme } from './clerk-themes/dark.ts';
-export type { UseClerkSpecificThemeReturn } from './clerk-themes/types.ts';
 
 /* Recovery form */
 export { FormButton } from './recovery-form/FormButton.tsx';

@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
-import {useSettingsContext} from "@internal/shared";
+import {useSettingsContext} from "../../main.ts";
 
 import type {Theme} from "@clerk/types";
-import type {ThemeType} from "@internal/shared";
-import type {UseClerkSpecificThemeReturn} from "@entity/auth";
+import type {ThemeType} from "../../main.ts";
+import type {UseClerkSpecificThemeReturn} from "../types.ts";
 
 type UseClerkThemeOptions = Record<ThemeType, UseClerkSpecificThemeReturn>
 type UseClerkThemeReturn = Theme | undefined;
@@ -25,4 +25,4 @@ const useClerkTheme = (dictionary: UseClerkThemeOptions): UseClerkThemeReturn =>
 }
 
 export { useClerkTheme };
-export type { UseClerkThemeReturn };
+export type { UseClerkThemeReturn, UseClerkThemeOptions };

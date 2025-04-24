@@ -119,6 +119,55 @@ importers:
         specifier: ^4.5.3
         version: 4.5.3(@types/node@22.14.1)(rollup@4.40.0)(typescript@5.7.3)(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)(yaml@2.7.1))
 
+  packages/ui-library:
+    dependencies:
+      react:
+        specifier: 'catalog:'
+        version: 19.1.0
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.1.0(react@19.1.0)
+    devDependencies:
+      '@eslint/js':
+        specifier: ^9.22.0
+        version: 9.24.0
+      '@internal/shared':
+        specifier: workspace:^
+        version: link:../shared
+      '@types/react':
+        specifier: ^19.0.10
+        version: 19.1.2
+      '@types/react-dom':
+        specifier: ^19.0.4
+        version: 19.1.2(@types/react@19.1.2)
+      '@vitejs/plugin-react-swc':
+        specifier: ^3.8.0
+        version: 3.9.0(@swc/helpers@0.5.17)(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)(yaml@2.7.1))
+      eslint:
+        specifier: ^9.22.0
+        version: 9.24.0(jiti@2.4.2)
+      eslint-plugin-react-hooks:
+        specifier: ^5.2.0
+        version: 5.2.0(eslint@9.24.0(jiti@2.4.2))
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.19
+        version: 0.4.19(eslint@9.24.0(jiti@2.4.2))
+      globals:
+        specifier: ^16.0.0
+        version: 16.0.0
+      typescript:
+        specifier: ~5.7.2
+        version: 5.7.3
+      typescript-eslint:
+        specifier: ^8.26.1
+        version: 8.30.1(eslint@9.24.0(jiti@2.4.2))(typescript@5.7.3)
+      vite:
+        specifier: 'catalog:'
+        version: 6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)(yaml@2.7.1)
+      vite-plugin-dts:
+        specifier: ^4.5.3
+        version: 4.5.3(@types/node@22.14.1)(rollup@4.40.0)(typescript@5.7.3)(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)(yaml@2.7.1))
+
   services/analytics:
     dependencies:
       react:
@@ -176,12 +225,6 @@ importers:
 
   services/finance:
     dependencies:
-      '@clerk/clerk-react':
-        specifier: 'catalog:'
-        version: 5.28.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@clerk/themes':
-        specifier: ^2.2.34
-        version: 2.2.34
       '@tanstack/react-router':
         specifier: ^1.116.0
         version: 1.116.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -334,6 +377,9 @@ importers:
       '@internal/shared':
         specifier: workspace:^
         version: link:../../packages/shared
+      '@internal/ui-library':
+        specifier: workspace:^
+        version: link:../../packages/ui-library
       '@module-federation/vite':
         specifier: 'catalog:'
         version: 1.2.6(rollup@4.40.0)

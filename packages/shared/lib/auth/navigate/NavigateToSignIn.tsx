@@ -1,7 +1,9 @@
 import type { FC } from "react";
-import {Link, LinkProps, useLocation} from "@tanstack/react-router";
-import {getShellRoute} from "@internal/shared";
-import {getCleanPath} from "@shared/lib/utils/path.ts";
+import type { LinkProps } from "@tanstack/react-router";
+
+import { Link, useLocation } from "@tanstack/react-router";
+import { getShellRoute } from "../../config";
+import { getCleanPath } from "../../utils";
 
 interface NavigateToSignInProps extends Omit<LinkProps, 'to'> {
 	className?: string;

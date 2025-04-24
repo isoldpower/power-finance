@@ -1,0 +1,43 @@
+{
+	"name": "@internal/ui-library",
+  "version": "0.0.0",
+	"description": "shared library of utilities and common elements",
+	"type": "module",
+  "private": true,
+	"author": "isoldpower <lapinnr_personal@proton.me>",
+	"homepage": "https://github.com/isoldpower/power-drive#readme",
+	"license": "ISC",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/isoldpower/power-drive.git"
+	},
+	"bugs": {
+		"url": "https://github.com/isoldpower/power-drive/issues"
+	},
+	"main": "./lib/main.js",
+	"module": "./lib/main.js",
+	"types": "./lib/main.d.ts",
+  "scripts": {
+    "build": "tsc -b && vite build",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+		"@internal/shared": "workspace:^",
+    "@eslint/js": "^9.22.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react-swc": "^3.8.0",
+    "eslint": "^9.22.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.26.1",
+    "vite": "catalog:",
+		"vite-plugin-dts": "^4.5.3"
+  }
+}

@@ -1,0 +1,1 @@
+export { getCleanPath } from './path.ts';

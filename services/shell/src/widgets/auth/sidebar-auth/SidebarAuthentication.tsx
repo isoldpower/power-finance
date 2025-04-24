@@ -1,9 +1,9 @@
 import type {FC, ReactNode} from "react";
 import {useRef, Suspense} from "react";
 import {SignedIn, SignedOut, UserButton} from "@clerk/clerk-react";
-import {getFinanceRoute, getShellRoute, useSettingsContext} from "@internal/shared";
+import {getFinanceRoute, getShellRoute, NavigateToSignIn, useSettingsContext} from "@internal/shared";
 import {getUserButtonAppearance, SidebarBox, SidebarError, SidebarSkeleton, SignInButton} from "@entity/auth";
-import {AuthSidebarFx, NavigateToSignIn} from "@feature/auth";
+import {AuthSidebarFx} from "@feature/auth";
 
 interface SidebarAuthenticationProps {}
 

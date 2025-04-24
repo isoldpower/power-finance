@@ -4,7 +4,8 @@ import { BrandAppLoader } from "@widget/settings";
 import { ThemeHandler } from "@feature/settings";
 import { AppSidebar, HideOnRoute } from "@shared/components";
 import { checkEnvVariables } from "@app/env/checkEnv.ts";
-import { AuthProvider } from "@widget/auth";
+import {AuthProvider} from "@internal/shared";
+import {useClerkDarkTheme, useClerkLightTheme} from "@internal/ui-library";
 
 export const Route = createRootRoute({
 	pendingComponent: BrandAppLoader,
@@ -13,9 +14,16 @@ export const Route = createRootRoute({
 
 function RootComponent() {
 	const envVariables = checkEnvVariables()
+	const themeDictionary = {
+		light: useClerkLightTheme(),
+		dark: useClerkDarkTheme(),
+	}
 
 	return (
-		<AuthProvider env={envVariables}>
+		<AuthProvider
+			publicKey={envVariables.CLIENT_CLERK_PUBLIC_KEY}
+			clerkThemes={themeDictionary}
+		>
 			<ThemeHandler>
 				<HideOnRoute routes={['/auth']}>
 					<AppSidebar />

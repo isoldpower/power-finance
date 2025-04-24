@@ -1,9 +1,9 @@
 import type {FC} from "react";
 import {FloatingBar} from "@entity/auth";
 import {ArrowLeft} from "lucide-react";
-import {NavigateToLanding, NavigateToRecovery, NavigateToSignIn} from "@feature/auth";
+import {NavigateToLanding} from "@feature/auth";
 import {HideOnRoute} from "@shared/components";
-import {getShellRoute} from "@internal/shared";
+import {getShellRoute, NavigateToRecovery, NavigateToSignIn} from "@internal/shared";
 
 interface ExternalNavigationBarProps {
 }

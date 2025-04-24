@@ -1,6 +1,7 @@
-import {FC, ReactNode, useMemo} from "react";
+import type {FC, ReactNode} from "react";
+import {useMemo} from "react";
 import {useLocation} from "@tanstack/react-router";
-import {getCleanPath} from "@shared/lib/utils/path.ts";
+import {getCleanPath} from "@internal/shared";
 
 interface HideOnRouteProps {
 	routes: string[];

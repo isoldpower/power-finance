@@ -3,8 +3,8 @@ import type { LinkProps } from "@tanstack/react-router";
 
 import { useLocation } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { getShellRoute } from "@internal/shared";
-import {getCleanPath} from "@shared/lib/utils/path.ts";
+import { getShellRoute } from "../../config";
+import { getCleanPath } from "../../utils";
 
 interface NavigateToRecoveryProps extends Omit<LinkProps, 'to'> {
 	className?: string;

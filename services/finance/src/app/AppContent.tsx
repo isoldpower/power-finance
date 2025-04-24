@@ -1,11 +1,15 @@
-import {createRouter, RouterProvider} from "@tanstack/react-router";
-import {routeTree} from "./routeTree.gen.ts";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { SettingsProvider } from "@internal/shared";
+
+import { routeTree } from "./routeTree.gen.ts";
 
 const router = createRouter({ routeTree })
 
 function AppContents() {
 	return (
-		<RouterProvider router={router} />
+		<SettingsProvider>
+			<RouterProvider router={router} />
+		</SettingsProvider>
 	)
 }
 

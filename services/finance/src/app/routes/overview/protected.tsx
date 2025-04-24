@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { AuthGuard } from "@feature/auth";
+import { AuthGuard } from "@internal/shared";
 
 export const Route = createFileRoute('/overview/protected')({
 	component: Index,
