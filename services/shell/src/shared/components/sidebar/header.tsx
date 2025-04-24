@@ -1,6 +1,5 @@
+import { LogoComponent, SidebarHeader, useSidebar } from "@internal/ui-library";
 import type { ComponentProps, FC } from "react";
-import { SidebarHeader, useSidebar } from "@shared/components"
-import { LogoComponent } from "@shared/components";
 
 const AppSidebarHeader: FC<ComponentProps<typeof SidebarHeader>> = ({
 	...props

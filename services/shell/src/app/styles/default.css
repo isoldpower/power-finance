@@ -1,4 +1,17 @@
+#root {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	width: 100%;
+}
+
 body {
 	background-color: var(--background);
 	color: var(--foreground);
+}
+
+button:hover, .button:hover {
+	display: inline-flex;
+	text-align: center;
+	cursor: pointer;
 }

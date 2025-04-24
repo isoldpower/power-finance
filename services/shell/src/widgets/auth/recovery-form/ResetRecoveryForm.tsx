@@ -13,7 +13,7 @@ import {
 	InputOTPSlot,
 	PasswordInput,
 	FormWizardBack
-} from "@shared/components";
+} from "@internal/ui-library";
 import { z } from "zod";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { FormButton } from "@entity/auth";

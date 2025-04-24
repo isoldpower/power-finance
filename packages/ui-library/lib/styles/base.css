@@ -1,0 +1,23 @@
+@custom-variant dark (&:is(.dark *));
+
+#root {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	width: 100%;
+}
+
+button:hover, .button:hover {
+	display: inline-flex;
+	text-align: center;
+	cursor: pointer;
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+}

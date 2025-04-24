@@ -1,6 +1,6 @@
 import type {FC, ReactNode} from "react";
-import {Button} from "@shared/components";
 import {LogIn} from "lucide-react";
+import { Button } from "@internal/ui-library";
 
 interface SignInButtonProps {
 	children: ReactNode;

@@ -1,10 +1,11 @@
-import {TanStackRouterVite} from '@tanstack/router-plugin/vite'
-import type {ViteConfigOptions} from "@internal/config";
-import {buildViteConfig} from "@internal/config";
-import type {ConfigEnv} from "vite";
-import {resolve} from "path";
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import type { ViteConfigOptions } from "@internal/config";
+import { buildViteConfig } from "@internal/config";
+import type { ConfigEnv } from "vite";
+import { resolve } from "path";
 
-import {buildFederationHost} from "./config/federation.ts";
+import { buildFederationHost } from "./config/federation.ts";
+
 
 export default (env: ConfigEnv) => {
 	const options: ViteConfigOptions = {

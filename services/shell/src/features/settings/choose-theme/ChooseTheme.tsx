@@ -2,8 +2,8 @@ import type {FC} from "react";
 import type {SwitchProps} from "@radix-ui/react-switch";
 
 import {useCallback, useMemo} from "react";
-import {Switch} from "@shared/components";
 import {useSettingsContext} from "@internal/shared";
+import { Switch } from "@internal/ui-library";
 
 interface ChooseThemeProps extends Omit<SwitchProps, 'checked' | 'defaultChecked'> {
 }

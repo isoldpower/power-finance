@@ -2,7 +2,7 @@ import {FC, useCallback} from "react";
 
 import { z } from "zod";
 import { ArrowRight } from "lucide-react";
-import { FormControl, FormItem, FormLabel, FormMessage, FormWizard, Input } from "@shared/components";
+import { FormControl, FormItem, FormLabel, FormMessage, FormWizard, Input } from "@internal/ui-library";
 import { useRecoveryCode } from "@feature/auth";
 import { FormButton } from "@entity/auth";
 

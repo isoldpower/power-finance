@@ -6,8 +6,9 @@ import {
 	SidebarGroupContent,
 	SidebarGroupLabel,
 	SidebarMenu,
-	SidebarRail, useSidebar,
-} from "@shared/components"
+	SidebarRail,
+	useSidebar
+} from "@internal/ui-library";
 
 import {data, NavigationGroup, NavigationItem} from "./config.ts";
 import { AppSidebarHeader } from "./header.tsx";
@@ -37,10 +38,10 @@ function AppSidebarRecursiveItem({
 				item.items
 					? <AppSidebarGroup item={item} />
 					: <AppSidebarItem
-						className={first ? 'px-2' : ''}
-						title={item.title}
-						to={item.url}
-						icon={item.icon && <item.icon/>}/>
+							className={first ? 'px-2' : ''}
+							title={item.title}
+							to={item.url}
+							icon={item.icon && <item.icon/>}/>
 			))}
 		</>
 	)

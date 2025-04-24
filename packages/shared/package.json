@@ -21,11 +21,13 @@
     "build": "tsc -b && vite build",
     "lint": "eslint ."
   },
-  "dependencies": {
-    "react": "catalog:",
-    "react-dom": "catalog:"
-  },
+	"peerDependencies": {
+		"react": "catalog:",
+		"react-dom": "catalog:"
+	},
   "devDependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:",
     "@eslint/js": "^9.22.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",

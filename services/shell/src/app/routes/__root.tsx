@@ -1,6 +1,6 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import { BrandAppLoader } from "@widget/settings";
+import { AppLoader } from "@widget/settings";
 import { ThemeHandler } from "@feature/settings";
 import { AppSidebar, HideOnRoute } from "@shared/components";
 import { checkEnvVariables } from "@app/env/checkEnv.ts";
@@ -8,7 +8,7 @@ import {AuthProvider} from "@internal/shared";
 import {useClerkDarkTheme, useClerkLightTheme} from "@internal/ui-library";
 
 export const Route = createRootRoute({
-	pendingComponent: BrandAppLoader,
+	pendingComponent: AppLoader,
 	component: RootComponent
 })
 

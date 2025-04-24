@@ -1,7 +1,7 @@
 import type { ComponentProps, FC } from "react";
-import {Separator, SidebarFooter, useSidebar} from "@shared/components"
+import { Separator, SidebarFooter, useSidebar } from "@internal/ui-library"
 import { LabeledThemeSwitch } from "@widget/settings";
-import {SidebarAuthentication} from "@widget/auth/sidebar-auth/SidebarAuthentication.tsx";
+import { SidebarAuthentication } from "@widget/auth";
 
 const AppSidebarFooter: FC<ComponentProps<typeof SidebarFooter>> = ({
 	...props

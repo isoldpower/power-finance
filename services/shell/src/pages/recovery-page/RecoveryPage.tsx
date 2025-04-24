@@ -1,13 +1,13 @@
 import type { FC } from "react";
 
 import { InitialRecoveryForm } from "@widget/auth";
-import { FormWizard } from "@shared/components";
 import {FormPaper} from "@entity/auth/recovery-form/FormPaper.tsx";
 import {FormHead} from "@entity/auth/recovery-form/FormHead.tsx";
 import {FormLogo} from "@entity/auth/recovery-form/FormLogo.tsx";
 import {FormTitle} from "@entity/auth/recovery-form/FormTitle.tsx";
 import {FormParagraph} from "@entity/auth/recovery-form/FormParagraph.tsx";
 import {ResetRecoveryForm} from "@widget/auth/recovery-form/ResetRecoveryForm.tsx";
+import { FormWizard } from "@internal/ui-library";
 
 interface RecoveryPageProps {}
 

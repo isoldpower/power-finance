@@ -1,7 +1,9 @@
-import {cloneElement, ComponentProps, FC, ReactElement} from "react";
-import {SidebarMenuButton, SidebarMenuItem, useSidebar} from "@shared/components"
-import {useLinkActive} from "@shared/lib";
-import {Link} from "@tanstack/react-router";
+import type { ComponentProps, FC, ReactElement } from "react";
+
+import { cloneElement} from "react";
+import { useLinkActive } from "@shared/lib";
+import { Link } from "@tanstack/react-router";
+import { SidebarMenuButton, SidebarMenuItem, useSidebar } from "@internal/ui-library";
 
 interface AppSidebarItemProps extends ComponentProps<typeof SidebarMenuItem> {
 	title: string;

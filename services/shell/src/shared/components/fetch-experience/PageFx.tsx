@@ -1,10 +1,10 @@
 import type { FC } from "react";
-import {BrandAppLoader} from "../brand-app-loader/BrandAppLoader.tsx";
+import { AppLoader } from "@internal/ui-library";
 
 const PagePending: FC = () => {
 	return (
 		<div className="flex h-screen w-screen items-center justify-center">
-			<BrandAppLoader />
+			<AppLoader />
 		</div>
 	)
 }

@@ -3,13 +3,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-#root {
-	display: flex;
-	flex-direction: column;
-	align-items: stretch;
-	width: 100%;
-}
-
 @theme inline {
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
@@ -116,13 +109,6 @@
 	--sidebar-border: oklch(1 0 0 / 10%);
 	--sidebar-ring: oklch(0.551 0.027 264.364);
 }
-
-button:hover, .button:hover {
-	display: inline-flex;
-	text-align: center;
-	cursor: pointer;
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;

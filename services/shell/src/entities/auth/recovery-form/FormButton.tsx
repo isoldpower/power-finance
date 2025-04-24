@@ -1,7 +1,7 @@
 import type { ComponentProps, FC, ReactNode } from "react";
 import classes from './Form.module.css';
-import { Button } from "@shared/components";
 import { cn } from "@shared/lib";
+import { Button } from "@internal/ui-library";
 
 interface FormButtonProps extends ComponentProps<typeof Button> {
 	children: ReactNode;

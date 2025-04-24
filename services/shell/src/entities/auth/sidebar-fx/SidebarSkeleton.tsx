@@ -1,5 +1,5 @@
+import { Skeleton } from "@internal/ui-library";
 import {FC} from "react";
-import {Skeleton} from "@shared/components";
 
 interface SidebarSkeletonProps {
 	withName?: boolean
