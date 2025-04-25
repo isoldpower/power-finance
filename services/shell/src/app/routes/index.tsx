@@ -1,5 +1,5 @@
 import {createFileRoute, useNavigate} from '@tanstack/react-router'
-import {AppLoader} from "@widget/settings";
+import {AppLoader} from "@internal/ui-library";
 
 export const Route = createFileRoute('/')({
 	pendingComponent: AppLoader,

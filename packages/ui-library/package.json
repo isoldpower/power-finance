@@ -17,6 +17,14 @@
   "main": "./dist/main.js",
   "module": "./dist/main.umd.cjs",
   "types": "./dist/main.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/main.d.ts",
+			"import": "./dist/main.js",
+			"require": "./dist/main.umd.cjs"
+		},
+		"./css": "./dist/ui-library.css"
+	},
   "scripts": {
 		"watch:build": "vite build --watch",
 		"watch:types": "tsc -p tsconfig.build.json --watch",

@@ -1,3 +1,4 @@
-@import "./base.css";
-@import "./default.css";
-@import "./vendor.css";
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@import "./tailwind.css";

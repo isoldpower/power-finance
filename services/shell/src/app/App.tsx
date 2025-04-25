@@ -1,10 +1,10 @@
 import { lazy, Suspense } from "react";
-import { AppLoader } from "@widget/settings";
 
 import './styles/_index.css';
-import '@internal/ui-library/dist/ui-library.css';
+import '@internal/ui-library/css';
 
 import { SettingsProvider } from "@internal/shared";
+import { AppLoader } from "@internal/ui-library";
 
 const AppContentsLazy = lazy(() => import("./AppContent.tsx"));
 

@@ -1,3 +1,5 @@
+import './styles/_index.css';
+
 export * from './themes';
 export * from './utils';
 export * from './components';
