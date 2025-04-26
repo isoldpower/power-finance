@@ -12,16 +12,16 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LandingImport } from './routes/landing'
+import { Route as FinanceRouteImport } from './routes/finance/route'
 import { Route as AuthRouteImport } from './routes/auth/route'
-import { Route as AnalyticsRouteImport } from './routes/analytics/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
-import { Route as AnalyticsIndexImport } from './routes/analytics/index'
+import { Route as FinanceSplatImport } from './routes/finance/$'
 import { Route as AuthSignupImport } from './routes/auth/signup'
 import { Route as AuthRecoveryImport } from './routes/auth/recovery'
 import { Route as AuthProfileImport } from './routes/auth/profile'
 import { Route as AuthLoginImport } from './routes/auth/login'
-import { Route as AnalyticsIdImport } from './routes/analytics/$id'
+import { Route as AnalyticsSplatImport } from './routes/analytics/$'
 
 // Create/Update Routes
 
@@ -31,15 +31,15 @@ const LandingRoute = LandingImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthRouteRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const FinanceRouteRoute = FinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AnalyticsRouteRoute = AnalyticsRouteImport.update({
-  id: '/analytics',
-  path: '/analytics',
+const AuthRouteRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -55,10 +55,10 @@ const AuthIndexRoute = AuthIndexImport.update({
   getParentRoute: () => AuthRouteRoute,
 } as any)
 
-const AnalyticsIndexRoute = AnalyticsIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AnalyticsRouteRoute,
+const FinanceSplatRoute = FinanceSplatImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => FinanceRouteRoute,
 } as any)
 
 const AuthSignupRoute = AuthSignupImport.update({
@@ -85,10 +85,10 @@ const AuthLoginRoute = AuthLoginImport.update({
   getParentRoute: () => AuthRouteRoute,
 } as any)
 
-const AnalyticsIdRoute = AnalyticsIdImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AnalyticsRouteRoute,
+const AnalyticsSplatRoute = AnalyticsSplatImport.update({
+  id: '/analytics/$',
+  path: '/analytics/$',
+  getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -102,18 +102,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/analytics': {
-      id: '/analytics'
-      path: '/analytics'
-      fullPath: '/analytics'
-      preLoaderRoute: typeof AnalyticsRouteImport
-      parentRoute: typeof rootRoute
-    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/finance': {
+      id: '/finance'
+      path: '/finance'
+      fullPath: '/finance'
+      preLoaderRoute: typeof FinanceRouteImport
       parentRoute: typeof rootRoute
     }
     '/landing': {
@@ -123,12 +123,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LandingImport
       parentRoute: typeof rootRoute
     }
-    '/analytics/$id': {
-      id: '/analytics/$id'
-      path: '/$id'
-      fullPath: '/analytics/$id'
-      preLoaderRoute: typeof AnalyticsIdImport
-      parentRoute: typeof AnalyticsRouteImport
+    '/analytics/$': {
+      id: '/analytics/$'
+      path: '/analytics/$'
+      fullPath: '/analytics/$'
+      preLoaderRoute: typeof AnalyticsSplatImport
+      parentRoute: typeof rootRoute
     }
     '/auth/login': {
       id: '/auth/login'
@@ -158,12 +158,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupImport
       parentRoute: typeof AuthRouteImport
     }
-    '/analytics/': {
-      id: '/analytics/'
-      path: '/'
-      fullPath: '/analytics/'
-      preLoaderRoute: typeof AnalyticsIndexImport
-      parentRoute: typeof AnalyticsRouteImport
+    '/finance/$': {
+      id: '/finance/$'
+      path: '/$'
+      fullPath: '/finance/$'
+      preLoaderRoute: typeof FinanceSplatImport
+      parentRoute: typeof FinanceRouteImport
     }
     '/auth/': {
       id: '/auth/'
@@ -176,20 +176,6 @@ declare module '@tanstack/react-router' {
 }
 
 // Create and export the route tree
-
-interface AnalyticsRouteRouteChildren {
-  AnalyticsIdRoute: typeof AnalyticsIdRoute
-  AnalyticsIndexRoute: typeof AnalyticsIndexRoute
-}
-
-const AnalyticsRouteRouteChildren: AnalyticsRouteRouteChildren = {
-  AnalyticsIdRoute: AnalyticsIdRoute,
-  AnalyticsIndexRoute: AnalyticsIndexRoute,
-}
-
-const AnalyticsRouteRouteWithChildren = AnalyticsRouteRoute._addFileChildren(
-  AnalyticsRouteRouteChildren,
-)
 
 interface AuthRouteRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
@@ -211,44 +197,57 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface FinanceRouteRouteChildren {
+  FinanceSplatRoute: typeof FinanceSplatRoute
+}
+
+const FinanceRouteRouteChildren: FinanceRouteRouteChildren = {
+  FinanceSplatRoute: FinanceSplatRoute,
+}
+
+const FinanceRouteRouteWithChildren = FinanceRouteRoute._addFileChildren(
+  FinanceRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/analytics': typeof AnalyticsRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
+  '/finance': typeof FinanceRouteRouteWithChildren
   '/landing': typeof LandingRoute
-  '/analytics/$id': typeof AnalyticsIdRoute
+  '/analytics/$': typeof AnalyticsSplatRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile': typeof AuthProfileRoute
   '/auth/recovery': typeof AuthRecoveryRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/analytics/': typeof AnalyticsIndexRoute
+  '/finance/$': typeof FinanceSplatRoute
   '/auth/': typeof AuthIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/finance': typeof FinanceRouteRouteWithChildren
   '/landing': typeof LandingRoute
-  '/analytics/$id': typeof AnalyticsIdRoute
+  '/analytics/$': typeof AnalyticsSplatRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile': typeof AuthProfileRoute
   '/auth/recovery': typeof AuthRecoveryRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/analytics': typeof AnalyticsIndexRoute
+  '/finance/$': typeof FinanceSplatRoute
   '/auth': typeof AuthIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/analytics': typeof AnalyticsRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
+  '/finance': typeof FinanceRouteRouteWithChildren
   '/landing': typeof LandingRoute
-  '/analytics/$id': typeof AnalyticsIdRoute
+  '/analytics/$': typeof AnalyticsSplatRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile': typeof AuthProfileRoute
   '/auth/recovery': typeof AuthRecoveryRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/analytics/': typeof AnalyticsIndexRoute
+  '/finance/$': typeof FinanceSplatRoute
   '/auth/': typeof AuthIndexRoute
 }
 
@@ -256,55 +255,58 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/analytics'
     | '/auth'
+    | '/finance'
     | '/landing'
-    | '/analytics/$id'
+    | '/analytics/$'
     | '/auth/login'
     | '/auth/profile'
     | '/auth/recovery'
     | '/auth/signup'
-    | '/analytics/'
+    | '/finance/$'
     | '/auth/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/finance'
     | '/landing'
-    | '/analytics/$id'
+    | '/analytics/$'
     | '/auth/login'
     | '/auth/profile'
     | '/auth/recovery'
     | '/auth/signup'
-    | '/analytics'
+    | '/finance/$'
     | '/auth'
   id:
     | '__root__'
     | '/'
-    | '/analytics'
     | '/auth'
+    | '/finance'
     | '/landing'
-    | '/analytics/$id'
+    | '/analytics/$'
     | '/auth/login'
     | '/auth/profile'
     | '/auth/recovery'
     | '/auth/signup'
-    | '/analytics/'
+    | '/finance/$'
     | '/auth/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AnalyticsRouteRoute: typeof AnalyticsRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  FinanceRouteRoute: typeof FinanceRouteRouteWithChildren
   LandingRoute: typeof LandingRoute
+  AnalyticsSplatRoute: typeof AnalyticsSplatRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AnalyticsRouteRoute: AnalyticsRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  FinanceRouteRoute: FinanceRouteRouteWithChildren,
   LandingRoute: LandingRoute,
+  AnalyticsSplatRoute: AnalyticsSplatRoute,
 }
 
 export const routeTree = rootRoute
@@ -318,20 +320,14 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/analytics",
         "/auth",
-        "/landing"
+        "/finance",
+        "/landing",
+        "/analytics/$"
       ]
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/analytics": {
-      "filePath": "analytics/route.tsx",
-      "children": [
-        "/analytics/$id",
-        "/analytics/"
-      ]
     },
     "/auth": {
       "filePath": "auth/route.tsx",
@@ -343,12 +339,17 @@ export const routeTree = rootRoute
         "/auth/"
       ]
     },
+    "/finance": {
+      "filePath": "finance/route.tsx",
+      "children": [
+        "/finance/$"
+      ]
+    },
     "/landing": {
       "filePath": "landing.tsx"
     },
-    "/analytics/$id": {
-      "filePath": "analytics/$id.tsx",
-      "parent": "/analytics"
+    "/analytics/$": {
+      "filePath": "analytics/$.tsx"
     },
     "/auth/login": {
       "filePath": "auth/login.tsx",
@@ -366,9 +367,9 @@ export const routeTree = rootRoute
       "filePath": "auth/signup.tsx",
       "parent": "/auth"
     },
-    "/analytics/": {
-      "filePath": "analytics/index.tsx",
-      "parent": "/analytics"
+    "/finance/$": {
+      "filePath": "finance/$.tsx",
+      "parent": "/finance"
     },
     "/auth/": {
       "filePath": "auth/index.tsx",

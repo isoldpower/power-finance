@@ -11,107 +11,117 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as OverviewRouteImport } from './routes/overview/route'
-import { Route as OverviewIndexImport } from './routes/overview/index'
-import { Route as OverviewProtectedImport } from './routes/overview/protected'
+import { Route as OverviewImport } from './routes/overview'
+import { Route as IndexImport } from './routes/index'
+import { Route as FinanceIndexImport } from './routes/finance/index'
+import { Route as FinanceOverviewImport } from './routes/finance/overview'
 
 // Create/Update Routes
 
-const OverviewRouteRoute = OverviewRouteImport.update({
+const OverviewRoute = OverviewImport.update({
   id: '/overview',
   path: '/overview',
   getParentRoute: () => rootRoute,
 } as any)
 
-const OverviewIndexRoute = OverviewIndexImport.update({
+const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => OverviewRouteRoute,
+  getParentRoute: () => rootRoute,
 } as any)
 
-const OverviewProtectedRoute = OverviewProtectedImport.update({
-  id: '/protected',
-  path: '/protected',
-  getParentRoute: () => OverviewRouteRoute,
+const FinanceIndexRoute = FinanceIndexImport.update({
+  id: '/finance/',
+  path: '/finance/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const FinanceOverviewRoute = FinanceOverviewImport.update({
+  id: '/finance/overview',
+  path: '/finance/overview',
+  getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
     '/overview': {
       id: '/overview'
       path: '/overview'
       fullPath: '/overview'
-      preLoaderRoute: typeof OverviewRouteImport
+      preLoaderRoute: typeof OverviewImport
       parentRoute: typeof rootRoute
     }
-    '/overview/protected': {
-      id: '/overview/protected'
-      path: '/protected'
-      fullPath: '/overview/protected'
-      preLoaderRoute: typeof OverviewProtectedImport
-      parentRoute: typeof OverviewRouteImport
+    '/finance/overview': {
+      id: '/finance/overview'
+      path: '/finance/overview'
+      fullPath: '/finance/overview'
+      preLoaderRoute: typeof FinanceOverviewImport
+      parentRoute: typeof rootRoute
     }
-    '/overview/': {
-      id: '/overview/'
-      path: '/'
-      fullPath: '/overview/'
-      preLoaderRoute: typeof OverviewIndexImport
-      parentRoute: typeof OverviewRouteImport
+    '/finance/': {
+      id: '/finance/'
+      path: '/finance'
+      fullPath: '/finance'
+      preLoaderRoute: typeof FinanceIndexImport
+      parentRoute: typeof rootRoute
     }
   }
 }
 
 // Create and export the route tree
 
-interface OverviewRouteRouteChildren {
-  OverviewProtectedRoute: typeof OverviewProtectedRoute
-  OverviewIndexRoute: typeof OverviewIndexRoute
-}
-
-const OverviewRouteRouteChildren: OverviewRouteRouteChildren = {
-  OverviewProtectedRoute: OverviewProtectedRoute,
-  OverviewIndexRoute: OverviewIndexRoute,
-}
-
-const OverviewRouteRouteWithChildren = OverviewRouteRoute._addFileChildren(
-  OverviewRouteRouteChildren,
-)
-
 export interface FileRoutesByFullPath {
-  '/overview': typeof OverviewRouteRouteWithChildren
-  '/overview/protected': typeof OverviewProtectedRoute
-  '/overview/': typeof OverviewIndexRoute
+  '/': typeof IndexRoute
+  '/overview': typeof OverviewRoute
+  '/finance/overview': typeof FinanceOverviewRoute
+  '/finance': typeof FinanceIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/overview/protected': typeof OverviewProtectedRoute
-  '/overview': typeof OverviewIndexRoute
+  '/': typeof IndexRoute
+  '/overview': typeof OverviewRoute
+  '/finance/overview': typeof FinanceOverviewRoute
+  '/finance': typeof FinanceIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/overview': typeof OverviewRouteRouteWithChildren
-  '/overview/protected': typeof OverviewProtectedRoute
-  '/overview/': typeof OverviewIndexRoute
+  '/': typeof IndexRoute
+  '/overview': typeof OverviewRoute
+  '/finance/overview': typeof FinanceOverviewRoute
+  '/finance/': typeof FinanceIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/overview' | '/overview/protected' | '/overview/'
+  fullPaths: '/' | '/overview' | '/finance/overview' | '/finance'
   fileRoutesByTo: FileRoutesByTo
-  to: '/overview/protected' | '/overview'
-  id: '__root__' | '/overview' | '/overview/protected' | '/overview/'
+  to: '/' | '/overview' | '/finance/overview' | '/finance'
+  id: '__root__' | '/' | '/overview' | '/finance/overview' | '/finance/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  OverviewRouteRoute: typeof OverviewRouteRouteWithChildren
+  IndexRoute: typeof IndexRoute
+  OverviewRoute: typeof OverviewRoute
+  FinanceOverviewRoute: typeof FinanceOverviewRoute
+  FinanceIndexRoute: typeof FinanceIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  OverviewRouteRoute: OverviewRouteRouteWithChildren,
+  IndexRoute: IndexRoute,
+  OverviewRoute: OverviewRoute,
+  FinanceOverviewRoute: FinanceOverviewRoute,
+  FinanceIndexRoute: FinanceIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -124,23 +134,23 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/overview"
+        "/",
+        "/overview",
+        "/finance/overview",
+        "/finance/"
       ]
+    },
+    "/": {
+      "filePath": "index.tsx"
     },
     "/overview": {
-      "filePath": "overview/route.tsx",
-      "children": [
-        "/overview/protected",
-        "/overview/"
-      ]
+      "filePath": "overview.tsx"
     },
-    "/overview/protected": {
-      "filePath": "overview/protected.tsx",
-      "parent": "/overview"
+    "/finance/overview": {
+      "filePath": "finance/overview.tsx"
     },
-    "/overview/": {
-      "filePath": "overview/index.tsx",
-      "parent": "/overview"
+    "/finance/": {
+      "filePath": "finance/index.tsx"
     }
   }
 }

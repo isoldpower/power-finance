@@ -3,7 +3,7 @@ import {cloneElement} from "react";
 
 import {useCallback, useMemo} from "react";
 import {useSettingsContext} from "@internal/shared";
-import {useIsMobile} from "@shared/lib";
+import {useIsMobile} from "@internal/ui-library";
 
 interface SwitchSidebarProps {
 	children: ReactElement<{ onClick: () => void }, any>;

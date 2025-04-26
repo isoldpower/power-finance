@@ -7,7 +7,7 @@ interface FinanceRoutes {
 
 const financeRoutes: FinanceRoutes = {
 	root: `/${FINANCE_ROOT}`,
-	overview: `/${FINANCE_ROOT}/overview`
+	overview: `${FINANCE_ROOT}/overview`
 }
 
 const getFinanceRoute = (route: keyof FinanceRoutes): string => {

@@ -46,7 +46,7 @@ const getShellAnalyticsRoute = (route: keyof AnalyticsRoutes): string => {
 }
 
 const getShellFinanceRoute = (route: keyof FinanceRoutes): string => {
-	return joinRouteSegments(shellRoutes.analyticsPrefix, getFinanceRoute(route));
+	return joinRouteSegments(shellRoutes.financePrefix, getFinanceRoute(route));
 }
 
 export { getShellRoute, getShellFinanceRoute, getShellAnalyticsRoute, };

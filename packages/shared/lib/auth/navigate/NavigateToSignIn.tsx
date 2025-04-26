@@ -19,7 +19,7 @@ const NavigateToSignIn: FC<NavigateToSignInProps> = ({
 	const { pathname } = useLocation();
 
 	return getCleanPath(pathname) === getCleanPath(loginPath) && hideOnActive ? null : (
-		<Link to={loginPath} {...props}>
+		<Link to={loginPath} search={{ 'redirect_url': pathname }} {...props}>
 			{children || 'Sign In'}
 		</Link>
 	)

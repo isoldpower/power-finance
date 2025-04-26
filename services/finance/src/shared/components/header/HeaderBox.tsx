@@ -7,16 +7,10 @@ interface HeaderBoxProps {
 
 const HeaderBox: FC<HeaderBoxProps> = ({ children }) => {
 	return (
-		<header style={{
-			position: 'fixed',
-			top: 0,
-			height: `${HEADER_HEIGHT}px`,
-			width: '100%',
-			backgroundColor: '#f5f5f5',
-			display: 'flex',
-			padding: '8px 24px',
-			zIndex: 1000,
-		}}>
+		<header
+			className="sticky top-0 left-0 right-0 w-full flex py-2 pr-6 pl-16 z-2 border-b bg-sidebar"
+			style={{ height: HEADER_HEIGHT }}
+		>
 			{children}
 		</header>
 	)

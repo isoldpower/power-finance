@@ -2,6 +2,7 @@ export { HeaderBox } from './header/HeaderBox.tsx';
 export { HeaderBoxOffset } from './header/HeaderBoxOffset.tsx';
 export { List } from './list/List.tsx';
 export { getTanStackPageFx } from './fx/getter.ts';
+export { GlobalLayout } from './global-layout/GlobalLayout.tsx';
 
 export type { HeaderBoxProps } from './header/HeaderBox.tsx';
 export type { HeaderBoxOffsetProps } from './header/HeaderBoxOffset.tsx';

@@ -1,5 +1,5 @@
-import {ModuleTitle} from "@entity/analytics";
-import {AnalyticsMFModule} from "@widget/analytics";
+import {AnalyticsMFModule} from "@widget/remotes";
+import {ErrorBoundary} from "react-error-boundary";
 
 function AnalyticsPage() {
 	return (
@@ -12,13 +12,9 @@ function AnalyticsPage() {
 				minHeight: "100dvh"
 			}}
 		>
-			<ModuleTitle>
-				<ModuleTitle.Highlight addSpace>
-					Analytics
-				</ModuleTitle.Highlight>
-				Micro-Frontend Remote
-			</ModuleTitle>
-			<AnalyticsMFModule />
+			<ErrorBoundary fallback={<div>Failed loading analytics module</div>}>
+				<AnalyticsMFModule />
+			</ErrorBoundary>
 		</div>
 	)
 }

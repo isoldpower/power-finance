@@ -1,32 +1,23 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import { AuthProvider, SettingsProvider } from "@internal/shared";
-import { useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
+import { createRootRoute } from '@tanstack/react-router'
+import { lazy } from "react";
+import { AppError, AppLoader } from "@internal/ui-library";
 
-import { getTanStackPageFx } from "@shared/components";
-import { checkEnvVariables } from "../env/checkEnv.ts";
+import { getTanStackPageFx, GlobalLayout } from "@shared/components";
+
 
 export const Route = createRootRoute({
-	component: RootComponent,
+	pendingComponent: AppLoader,
+	errorComponent: AppError,
+	component: RootLayout,
 	...getTanStackPageFx('default-page')
 })
 
-function RootComponent() {
-	const envVariables = checkEnvVariables()
-	const themeDictionary = {
-		light: useClerkLightTheme(),
-		dark: useClerkDarkTheme(),
-	}
+const RootComponent = lazy(() => import('../RootComponent.tsx'));
 
+function RootLayout () {
 	return (
-		<AuthProvider
-			publicKey={envVariables.CLIENT_CLERK_PUBLIC_KEY}
-			clerkThemes={themeDictionary}
-		>
-			<SettingsProvider>
-				<Outlet/>
-				<TanStackRouterDevtools/>
-			</SettingsProvider>
-		</AuthProvider>
+		<GlobalLayout>
+			<RootComponent />
+		</GlobalLayout>
 	)
 }

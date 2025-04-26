@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { useColorVarToHex } from "../utils/useColorVarToHex.ts";
+import { useColorVarToHex } from "../utils/hooks/useColorVarToHex.ts";
 
 import type { UseClerkSpecificThemeReturn } from "@internal/shared";
 

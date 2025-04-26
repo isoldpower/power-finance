@@ -3,6 +3,7 @@ export { GuestGuard } from './guard/guest-guard.tsx';
 export { NavigateToRecovery } from './navigate/NavigateToRecovery.tsx';
 export { NavigateToSignIn } from './navigate/NavigateToSignIn.tsx'
 export { AuthProvider } from './auth-provider/AuthProvider.tsx';
+export * from '@clerk/clerk-react';
 
 export type { AuthGuardProps } from './guard/auth-guard.tsx';
 export type { GuestGuardProps } from './guard/guest-guard.tsx';

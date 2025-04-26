@@ -7,3 +7,4 @@ declare module '*/css';
 
 // Declare Module Federation remotes' exposed modules
 declare module 'analytics/remote-app';
+declare module 'finance/remote-app';

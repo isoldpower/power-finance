@@ -1,24 +1,23 @@
-import './styles/index.css'
+import { Suspense } from "react";
+import { AppLoader } from '@internal/ui-library';
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { lazy, Suspense } from "react";
+import './styles/_index.css'
+import '@internal/ui-library/css';
 
-const AppContentsLazy = lazy(() => import('./AppContent.tsx'));
+import { routeTree } from "./routeTree.gen.ts";
 
-interface AppProps {
-	env: ImportMetaEnv
-}
 
-function App({}: AppProps) {
+const router = createRouter({ routeTree });
+const queryClient = new QueryClient();
+
+function App() {
 	return (
-		<Suspense fallback={
-			<div style={{
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				width: '100dvw',
-				minHeight: '100dvh'
-			}}>Loading App...</div>}>
-			<AppContentsLazy />
+		<Suspense fallback={<AppLoader />}>
+			<QueryClientProvider client={queryClient}>
+				<RouterProvider router={router} />
+			</QueryClientProvider>
 		</Suspense>
 	)
 }

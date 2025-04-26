@@ -1,0 +1,1 @@
+export type { Wallet } from './model.ts';

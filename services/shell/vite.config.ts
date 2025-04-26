@@ -3,9 +3,10 @@ import type { ViteConfigOptions } from "@internal/config";
 import { buildViteConfig } from "@internal/config";
 import type { ConfigEnv } from "vite";
 import { resolve } from "path";
+import { env as processEnv } from "node:process";
 
 import { buildFederationHost } from "./config/federation.ts";
-
+import type { FederationRemoteOptions } from "./config/types.ts";
 
 export default (env: ConfigEnv) => {
 	const options: ViteConfigOptions = {
@@ -21,7 +22,13 @@ export default (env: ConfigEnv) => {
 	return buildViteConfig({
 		envPrefix: 'CLIENT_',
 		plugins: [
-			buildFederationHost({ name: 'shell' }),
+			buildFederationHost({
+				name: 'shell',
+				remotes: [
+					processEnv.CLIENT_FINANCE_APP_URL && { name: 'finance', url: processEnv.CLIENT_FINANCE_APP_URL },
+					processEnv.CLIENT_ANALYTICS_APP_URL && { name: 'analytics', url: processEnv.CLIENT_ANALYTICS_APP_URL },
+				].filter(Boolean) as FederationRemoteOptions['remotes']
+			}),
 			TanStackRouterVite({
 				target: 'react',
 				autoCodeSplitting: true,

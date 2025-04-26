@@ -1,57 +1,15 @@
-export { Button } from './button.tsx';
-export { Input } from './input.tsx';
-export { Separator } from './separator.tsx';
-export {
-	Sheet,
-	SheetClose,
-	SheetContent,
-	SheetDescription,
-	SheetFooter,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger
-} from './sheet.tsx';
-export {
-	Sidebar,
-	SidebarContent,
-	SidebarFooter,
-	SidebarGroupContent,
-	SidebarGroup,
-	SidebarGroupAction,
-	SidebarGroupLabel,
-	SidebarHeader,
-	SidebarInput,
-	SidebarMenuAction,
-	SidebarMenu,
-	SidebarMenuBadge,
-	SidebarMenuButton,
-	SidebarMenuItem,
-	SidebarMenuSkeleton,
-	SidebarMenuSub,
-	SidebarMenuSubButton,
-	SidebarMenuSubItem,
-	SidebarInset,
-	SidebarProvider,
-	SidebarRail,
-	SidebarSeparator,
-	SidebarTrigger,
-	useSidebar
-} from './sidebar.tsx';
-export { Skeleton } from './skeleton.tsx';
-export { Label } from './label.tsx';
-export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip.tsx';
-export { Switch } from './switch.tsx';
-export {
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-	Form,
-	FormDescription,
-	useFormField
-} from './form.tsx';
-export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from './input-otp.tsx';
+export * from './button.tsx';
+export * from './input.tsx';
+export * from './separator.tsx';
+export * from './sheet.tsx';
+export * from './sidebar.tsx';
+export * from './skeleton.tsx';
+export * from './label.tsx';
+export * from './tooltip.tsx';
+export * from './switch.tsx';
+export * from './form.tsx';
+export * from './input-otp.tsx';
+export * from './select.tsx';
 
 export type * from './button.tsx';
 export type * from './form.tsx';
@@ -64,3 +22,4 @@ export type * from './sidebar.tsx';
 export type * from './skeleton.tsx';
 export type * from './switch.tsx';
 export type * from './tooltip.tsx';
+export type * from './select.tsx';

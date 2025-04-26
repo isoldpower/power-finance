@@ -1,1 +1,0 @@
-export { GlobalLayout } from './GlobalLayout.tsx';

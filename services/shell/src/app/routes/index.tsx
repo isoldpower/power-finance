@@ -1,5 +1,5 @@
-import {createFileRoute, useNavigate} from '@tanstack/react-router'
-import {AppLoader} from "@internal/ui-library";
+import { createFileRoute, Navigate } from '@tanstack/react-router'
+import { AppLoader } from "@internal/ui-library";
 
 export const Route = createFileRoute('/')({
 	pendingComponent: AppLoader,
@@ -7,9 +7,8 @@ export const Route = createFileRoute('/')({
 })
 
 function HomePage() {
-	const navigate = useNavigate();
-	navigate({ to: '/landing', replace: true });
-
-	return null;
+	return (
+		<Navigate to='/landing' replace />
+	);
 }
 

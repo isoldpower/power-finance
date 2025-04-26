@@ -5,7 +5,7 @@ import {useClerkDarkTheme, useClerkLightTheme} from "@internal/ui-library";
 import {AppLoader} from "@internal/ui-library";
 
 import { ThemeHandler } from "@feature/settings";
-import { AppSidebar, HideOnRoute } from "@shared/components";
+import { AppSidebar, SidebarFloatingTrigger, HideOnRoute } from "@shared/components";
 import { checkEnvVariables } from "@app/env/checkEnv.ts";
 
 export const Route = createRootRoute({
@@ -28,8 +28,9 @@ function RootComponent() {
 			<ThemeHandler>
 				<HideOnRoute routes={['/auth']}>
 					<AppSidebar />
+					<SidebarFloatingTrigger />
 				</HideOnRoute>
-				<div className='relative'>
+				<div className='relative flex-grow'>
 					<Outlet/>
 				</div>
 				<TanStackRouterDevtools position="bottom-right"/>
