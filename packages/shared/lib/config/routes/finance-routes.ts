@@ -2,12 +2,12 @@ const FINANCE_ROOT = '';
 
 interface FinanceRoutes {
 	root: string
-	overview: string
+	dashboard: string
 }
 
 const financeRoutes: FinanceRoutes = {
 	root: `/${FINANCE_ROOT}`,
-	overview: `${FINANCE_ROOT}/overview`
+	dashboard: `${FINANCE_ROOT}/dashboard`
 }
 
 const getFinanceRoute = (route: keyof FinanceRoutes): string => {

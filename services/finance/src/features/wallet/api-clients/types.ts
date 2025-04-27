@@ -2,6 +2,7 @@ interface WalletValuableFields {
 	name: string
 	currency: string
 	balance: number
+	reversed: boolean
 }
 
 interface WalletMeta {
@@ -15,6 +16,7 @@ interface WalletDetailed {
 	name: string
 	balance: number
 	currency: string
+	reversed: boolean
 	meta: WalletMeta
 }
 
@@ -23,6 +25,7 @@ interface WalletPreview {
 	name: string
 	balance: number
 	currency: string
+	reversed: boolean
 }
 
 type WalletMinimalPayload = WalletValuableFields;

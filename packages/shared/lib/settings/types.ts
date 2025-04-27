@@ -4,6 +4,8 @@ interface SettingsState {
   theme: ThemeType
 	sidebarOpen: boolean
 	mobileSidebarOpen: boolean
+	mainCurrency: string
+	locale: string
 }
 
 interface SettingsContextValue extends SettingsState {

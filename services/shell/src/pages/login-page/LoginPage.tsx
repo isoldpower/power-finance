@@ -7,7 +7,7 @@ interface LoginPageProps {}
 
 const LoginPage: FC<LoginPageProps> = () => {
 	const routes = getShellRoute('auth');
-	const overviewRoute = getFinanceRoute('overview');
+	const overviewRoute = getFinanceRoute('dashboard');
 
 	return (
 		<SignIn

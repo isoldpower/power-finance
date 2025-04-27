@@ -7,7 +7,7 @@ interface SignupPageProps {}
 
 const SignupPage: FC<SignupPageProps> = () => {
 	const routes = getShellRoute('auth');
-	const overviewRoute = getFinanceRoute('overview');
+	const overviewRoute = getFinanceRoute('dashboard');
 
 	return (
 		<SignUp

@@ -11,16 +11,16 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as OverviewImport } from './routes/overview'
+import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
 import { Route as FinanceIndexImport } from './routes/finance/index'
 import { Route as FinanceOverviewImport } from './routes/finance/overview'
 
 // Create/Update Routes
 
-const OverviewRoute = OverviewImport.update({
-  id: '/overview',
-  path: '/overview',
+const DashboardRoute = DashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,11 +53,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/overview': {
-      id: '/overview'
-      path: '/overview'
-      fullPath: '/overview'
-      preLoaderRoute: typeof OverviewImport
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardImport
       parentRoute: typeof rootRoute
     }
     '/finance/overview': {
@@ -81,14 +81,14 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/overview': typeof OverviewRoute
+  '/dashboard': typeof DashboardRoute
   '/finance/overview': typeof FinanceOverviewRoute
   '/finance': typeof FinanceIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/overview': typeof OverviewRoute
+  '/dashboard': typeof DashboardRoute
   '/finance/overview': typeof FinanceOverviewRoute
   '/finance': typeof FinanceIndexRoute
 }
@@ -96,30 +96,30 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/overview': typeof OverviewRoute
+  '/dashboard': typeof DashboardRoute
   '/finance/overview': typeof FinanceOverviewRoute
   '/finance/': typeof FinanceIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/overview' | '/finance/overview' | '/finance'
+  fullPaths: '/' | '/dashboard' | '/finance/overview' | '/finance'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/overview' | '/finance/overview' | '/finance'
-  id: '__root__' | '/' | '/overview' | '/finance/overview' | '/finance/'
+  to: '/' | '/dashboard' | '/finance/overview' | '/finance'
+  id: '__root__' | '/' | '/dashboard' | '/finance/overview' | '/finance/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  OverviewRoute: typeof OverviewRoute
+  DashboardRoute: typeof DashboardRoute
   FinanceOverviewRoute: typeof FinanceOverviewRoute
   FinanceIndexRoute: typeof FinanceIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  OverviewRoute: OverviewRoute,
+  DashboardRoute: DashboardRoute,
   FinanceOverviewRoute: FinanceOverviewRoute,
   FinanceIndexRoute: FinanceIndexRoute,
 }
@@ -135,7 +135,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/overview",
+        "/dashboard",
         "/finance/overview",
         "/finance/"
       ]
@@ -143,8 +143,8 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
-    "/overview": {
-      "filePath": "overview.tsx"
+    "/dashboard": {
+      "filePath": "dashboard.tsx"
     },
     "/finance/overview": {
       "filePath": "finance/overview.tsx"

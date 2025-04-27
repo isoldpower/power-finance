@@ -7,6 +7,6 @@ export const Route = createFileRoute('/')({
 
 function Redirect() {
   return (
-		<Navigate to={getFinanceRoute('overview')} />
+		<Navigate to={getFinanceRoute('dashboard')} />
 	)
 }

@@ -1,6 +1,7 @@
 import { createRootRoute } from '@tanstack/react-router'
 import { lazy } from "react";
 import { AppError, AppLoader } from "@internal/ui-library";
+import { SettingsProvider } from "@internal/shared";
 
 import { getTanStackPageFx, GlobalLayout } from "@shared/components";
 
@@ -16,8 +17,10 @@ const RootComponent = lazy(() => import('../RootComponent.tsx'));
 
 function RootLayout () {
 	return (
-		<GlobalLayout>
-			<RootComponent />
-		</GlobalLayout>
+		<SettingsProvider>
+			<GlobalLayout>
+				<RootComponent />
+			</GlobalLayout>
+		</SettingsProvider>
 	)
 }

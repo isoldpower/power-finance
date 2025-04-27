@@ -61,7 +61,8 @@ const OverviewWalletsList: FC<OverviewWalletsListProps> = () => {
 			data: {
 				name: values.name,
 				currency: values.currency,
-				balance: 0
+				balance: 0,
+				reversed: false
 			}
 		});
 	}

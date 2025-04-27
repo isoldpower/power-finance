@@ -9,7 +9,11 @@ import tailwindcss from "@tailwindcss/vite"
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
-	plugins: [ react(), tailwindcss(), dts({ tsconfigPath: './tsconfig.app.json' }) ],
+	plugins: [
+		react(),
+		tailwindcss(),
+		dts({ tsconfigPath: './tsconfig.app.json' })
+	],
 	resolve: {
 		alias: {
 			"@": resolve(__dirname, "./lib"),

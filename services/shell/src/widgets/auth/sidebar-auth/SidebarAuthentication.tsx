@@ -24,7 +24,7 @@ const SidebarAuthentication: FC<SidebarAuthenticationProps> = () => {
 					<SidebarBox>
 						<UserButton
 							fallback={<SidebarSkeleton withName={sidebarOpen} />}
-							afterSwitchSessionUrl={getFinanceRoute('overview')}
+							afterSwitchSessionUrl={getFinanceRoute('dashboard')}
 							userProfileMode='navigation'
 							userProfileUrl={getShellRoute('auth').profile}
 							showName={sidebarOpen}

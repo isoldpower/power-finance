@@ -1,0 +1,41 @@
+import {FC, useState} from "react";
+import {BalanceSummary} from "@widget/wallet";
+import {OpenTransactionModal} from "@feature/wallet/open-transaction-modal/OpenTransactionModal.tsx";
+import {NewTransactionForm} from "@widget/wallet/new-transaction-form/NewTransactionForm.tsx";
+import { DialogHeader, DialogTitle } from "@internal/ui-library";
+
+const DashboardPage: FC = () => {
+	const [transactionOpen, setTransactionOpen] = useState(false);
+
+	return (
+		<div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
+			<div className="mb-8">
+				<h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+				<p className="text-gray-500">Welcome to your financial overview</p>
+			</div>
+			<div className="bg-gradient-to-r from-neutral-800 to-neutral-900 rounded-xl shadow-lg mb-8 p-6 text-white">
+				<div className="md:flex md:justify-between md:items-center">
+					<BalanceSummary />
+					<div className="mt-4 md:mt-0">
+						<OpenTransactionModal
+							newTransactionOpen={transactionOpen}
+							setNewTransactionOpen={setTransactionOpen}
+						>
+							<DialogHeader>
+								<DialogTitle>
+									Add Transaction
+								</DialogTitle>
+							</DialogHeader>
+							<NewTransactionForm onClose={() => setTransactionOpen(false)} />
+						</OpenTransactionModal>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+};
+
+DashboardPage.displayName = 'DashboardPage';
+
+export { DashboardPage };
+export default DashboardPage;

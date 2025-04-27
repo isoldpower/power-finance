@@ -7,7 +7,7 @@ import {ArrowLeftCircleIcon} from "lucide-react";
 interface UserProfilePageProps {}
 
 const UserProfilePage: FC<UserProfilePageProps> = () => {
-	const overviewRoute = getFinanceRoute('overview');
+	const overviewRoute = getFinanceRoute('dashboard');
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

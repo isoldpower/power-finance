@@ -18,7 +18,7 @@ const AuthProvider: FC<AuthProviderProps> = ({
 	clerkThemes,
 	children
 }) => {
-	const overviewRoute = getFinanceRoute('overview');
+	const overviewRoute = getFinanceRoute('dashboard');
 	const navigate = useNavigate();
 
 	const theme = useClerkTheme(clerkThemes);

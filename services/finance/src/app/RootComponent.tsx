@@ -1,6 +1,6 @@
 import { Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { AuthProvider, SettingsProvider } from "@internal/shared";
+import { AuthProvider } from "@internal/shared";
 import { useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
 
 import { checkEnvVariables } from "./env/checkEnv.ts";
@@ -15,17 +15,15 @@ function RootComponent() {
 	}
 
 	return (
-		<SettingsProvider>
-			<ApiProvider>
-				<AuthProvider
-					publicKey={envVariables.CLIENT_CLERK_PUBLIC_KEY}
-					clerkThemes={themeDictionary}
-				>
-					<Outlet/>
-					<TanStackRouterDevtools/>
-				</AuthProvider>
-			</ApiProvider>
-		</SettingsProvider>
+		<ApiProvider>
+			<AuthProvider
+				publicKey={envVariables.CLIENT_CLERK_PUBLIC_KEY}
+				clerkThemes={themeDictionary}
+			>
+				<Outlet/>
+				<TanStackRouterDevtools/>
+			</AuthProvider>
+		</ApiProvider>
 	)
 }
 
