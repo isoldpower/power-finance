@@ -1,6 +1,5 @@
 import { cn, ToggleGroup, ToggleGroupItem } from "@internal/ui-library";
 import type { ComponentProps, FC, ReactNode } from "react";
-import { TRANSACTION_TYPES } from "@widget/wallet/new-transaction-form/schema.ts";
 
 type SingleToggleFieldProps = Omit<ComponentProps<typeof ToggleGroup>, 'type'> & {
 	options: Array<{ label: ReactNode; value: string }>;
@@ -14,7 +13,7 @@ const SingleToggleField: FC<SingleToggleFieldProps> = ({ options, className, ...
 			onValueChange={props.onChange}
 			{...props}
 		>
-			{TRANSACTION_TYPES.map((option) => (
+			{options.map((option) => (
 				<ToggleGroupItem
 					key={option.value}
 					value={option.value}
