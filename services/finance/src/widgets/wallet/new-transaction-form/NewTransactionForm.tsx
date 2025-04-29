@@ -1,16 +1,14 @@
-import {FC, useMemo} from "react";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormField } from "@internal/ui-library";
-import {NewTransaction} from "@feature/wallet/transaction-actions/NewTransaction.tsx";
-import {InputField} from "@shared/components/form-helpers/InputField.tsx";
-import {Button} from "@internal/ui-library";
-import {defaultValues, formSchema, FormSchema, TRANSACTION_TYPES} from "./schema.ts";
-import {SingleToggleField} from "@shared/components/form-helpers/SingleToggleField.tsx";
-import {SelectField} from "@shared/components/form-helpers/SelectField.tsx";
-import { useWalletsList } from "@feature/wallet";
-import {ShowOnValue} from "@shared/components/form-helpers/ShowOnValue.tsx";
-import {FieldLayout} from "@entity/wallet/transaction-fields/FieldLayout.tsx";
+import { Form, FormField, Button } from "@internal/ui-library";
+import type { FC } from "react";
+
+import { FieldLayout } from "@entity/wallet";
+import { useWalletsList, NewTransaction } from "@feature/wallet";
+import { ShowOnValue, SingleToggleField, SelectField, InputField } from "@shared/components";
+import { defaultValues, formSchema, TRANSACTION_TYPES } from "./schema.ts";
+import type { FormSchema } from "./schema.ts";
 
 
 interface NewTransactionFormProps {

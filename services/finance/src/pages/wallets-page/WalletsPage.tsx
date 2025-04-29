@@ -1,9 +1,9 @@
 import { useState} from 'react';
 import type { FC } from 'react';
-import { EditableWalletCard } from "@widget/wallet/wallet-card/EditableWalletCard.tsx";
-import { OpenWalletCreation } from "@feature/wallet/wallet-actions/OpenWalletCreation.tsx";
-import { WalletCreationModal } from "@widget/wallet/wallet-creation-modal/WalletCreationModal.tsx";
-import { PreviewWalletsList } from "@widget/wallet/wallets-list/PreviewWalletsList.tsx";
+
+import { EditableWalletCard, WalletCreationModal, FullWalletsList } from "@widget/wallet";
+import { OpenWalletCreation } from "@feature/wallet";
+
 
 const WalletsPage: FC = () => {
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -19,9 +19,9 @@ const WalletsPage: FC = () => {
 					<WalletCreationModal onClose={() => setIsAddModalOpen(false)} />
 				</OpenWalletCreation>
 			</div>
-			<PreviewWalletsList>
+			<FullWalletsList onCreate={() => setIsAddModalOpen(true)}>
 				<EditableWalletCard wallet={null} />
-			</PreviewWalletsList>
+			</FullWalletsList>
 		</div>
 	);
 };

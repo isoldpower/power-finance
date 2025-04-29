@@ -1,6 +1,6 @@
-import { Button, Icons } from "@internal/ui-library";
+import { Button, Icons, Dialog, DialogContent, DialogTrigger } from "@internal/ui-library";
 import type { FC, ReactNode } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@internal/ui-library";
+
 
 interface OpenTransactionModalProps {
 	children: ReactNode;

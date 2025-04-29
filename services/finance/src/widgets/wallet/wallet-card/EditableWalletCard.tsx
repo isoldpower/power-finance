@@ -1,14 +1,16 @@
-import type { Wallet } from "@entity/wallet";
 import { cn, Icons } from "@internal/ui-library";
-import { useWallet , useWalletMutationsState } from "@feature/wallet";
-import { useCardBalance } from "@feature/wallet/total-balance/useCardBalance.ts";
-import { EditWallet } from "@feature/wallet/wallet-actions/EditWallet.tsx";
-import { DeleteWallet } from "@feature/wallet/wallet-actions/DeleteWallet.tsx";
-import { WalletCardFx } from "@feature/wallet/card-fx/WalletCardFx.tsx";
-import { CardUnavailable } from "@entity/wallet/card/CardUnavailable.tsx";
-import { CardError } from "@entity/wallet/card/CardError.tsx";
-import { WalletCard } from "@entity/wallet/card/WalletCard.tsx";
-import { CardAccessible } from "@entity/wallet/card/CardAccessible.tsx";
+
+import {
+	useWallet,
+	useWalletMutationsState,
+	useCardBalance,
+	EditWallet,
+	DeleteWallet,
+	WalletCardFx
+} from "@feature/wallet";
+import { CardUnavailable, CardError, WalletCard, CardAccessible } from "@entity/wallet";
+import type { Wallet } from "@entity/wallet";
+
 
 interface EditableWalletCardProps {
 	wallet: Wallet | null;

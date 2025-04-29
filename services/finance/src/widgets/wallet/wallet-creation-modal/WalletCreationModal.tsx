@@ -1,16 +1,15 @@
-import {FC} from "react";
-import {useForm} from "react-hook-form";
-import {FormSchema, WALLET_TYPES} from "./schema.ts";
-import { defaultValues, formSchema } from "./schema.ts";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { codes, code } from 'currency-codes';
+import { Button, Form, FormField } from "@internal/ui-library";
+import type { FC } from "react";
 
-import {FieldLayout} from "@entity/wallet/transaction-fields/FieldLayout.tsx";
-import {SingleToggleField} from "@shared/components/form-helpers/SingleToggleField.tsx";
-import {InputField} from "@shared/components/form-helpers/InputField.tsx";
-import {SelectField} from "@shared/components/form-helpers/SelectField.tsx";
-import {Button, Form, FormField } from "@internal/ui-library";
-import {NewWallet} from "@feature/wallet/wallet-actions/NewWallet.tsx";
+import { FieldLayout } from "@entity/wallet";
+import { NewWallet } from "@feature/wallet";
+import { SelectField, InputField, SingleToggleField } from "@shared/components";
+import { WALLET_TYPES, defaultValues, formSchema } from "./schema.ts";
+import type { FormSchema } from "./schema.ts";
+
 
 interface WalletCreationModalProps {
 	onClose: () => void;

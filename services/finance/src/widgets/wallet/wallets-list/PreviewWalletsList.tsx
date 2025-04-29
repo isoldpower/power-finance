@@ -1,13 +1,12 @@
-import { cloneElement, FC, ReactElement } from "react";
-import type { Wallet } from "@entity/wallet";
-import {WalletCardsListFx} from "@feature/wallet/cards-list-fx/WalletCardsListFx.tsx";
-import {CardsListPending} from "@entity/wallet/cards-list/CardsListPending.tsx";
-import {useWalletsList} from "@feature/wallet";
-import {CardsListError} from "@entity/wallet/cards-list/CardsListError.tsx";
-import {CardsList} from "@entity/wallet/cards-list/CardsList.tsx";
-import {Link} from "@tanstack/react-router";
-import {getFinanceRoute} from "@internal/shared";
+import { cloneElement } from "react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@internal/ui-library";
+import { getFinanceRoute } from "@internal/shared";
+import type { FC, ReactElement } from "react";
+
+import { useWalletsList, WalletCardsListFx } from "@feature/wallet";
+import { CardsListPending, CardsListError, CardsList } from "@entity/wallet";
+import type { Wallet } from "@entity/wallet";
 
 type PreviewWalletsListProps = {
 	children: ReactElement<{ wallet: Wallet }>;
@@ -16,8 +15,7 @@ type PreviewWalletsListProps = {
 const PreviewWalletsList: FC<PreviewWalletsListProps> = ({ children }) => {
 	const { status, wallets } = useWalletsList();
 
-	return (
-		wallets.length > 0 || status === 'pending'
+	return wallets.length > 0 || status === 'pending'
 		? (
 			<WalletCardsListFx
 				pending={<CardsListPending amount={3} /> }
@@ -43,7 +41,7 @@ const PreviewWalletsList: FC<PreviewWalletsListProps> = ({ children }) => {
 					</Link>
 				</Button>
 			</div>
-		))
+		)
 }
 
 PreviewWalletsList.displayName = 'PreviewWalletsList';
