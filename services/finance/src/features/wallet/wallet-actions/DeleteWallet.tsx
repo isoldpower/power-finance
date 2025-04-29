@@ -1,9 +1,19 @@
-import type { Wallet } from "@entity/wallet";
-import {ComponentProps, FC, useState} from "react";
+import type { ComponentProps, FC } from "react";
+import { useCallback, useState } from "react";
+import {
+	Button,
+	Dialog,
+	DialogContent,
+	DialogTrigger,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle
+} from "@internal/ui-library";
 
-import { useCallback } from "react";
-import { Button, Dialog, DialogContent, DialogTrigger, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@internal/ui-library";
-import {useWallet} from "@feature/wallet";
+import { useWalletMethods } from "@feature/wallet";
+import type { Wallet } from "@entity/wallet";
+
 
 interface DeleteWalletProps extends Omit<ComponentProps<typeof Button>, 'onClick'> {
 	wallet: Wallet;
@@ -11,9 +21,9 @@ interface DeleteWalletProps extends Omit<ComponentProps<typeof Button>, 'onClick
 
 const DeleteWallet: FC<DeleteWalletProps> = ({ children, wallet, ...props }) => {
 	const [open, setOpen] = useState(false);
-	const { methods } = useWallet(wallet.id);
+	const { deleteWallet } = useWalletMethods(wallet.id);
 	const handleDelete = useCallback(() => {
-		methods.deleteWallet();
+		deleteWallet();
 		setOpen(false);
 	}, []);
 

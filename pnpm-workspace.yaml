@@ -9,6 +9,8 @@ catalog:
   "@tanstack/react-router": "^1.116.0"
   "@tanstack/react-router-devtools": "^1.116.0"
   "@tanstack/router-plugin": "^1.116.1"
+  "@tanstack/react-query": "^5.74.4"
+  "@tanstack/react-query-devtools": "4"
 
   vite: ^6.3.1
   "@tailwindcss/vite": "^4.1.4"

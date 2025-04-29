@@ -1,11 +1,11 @@
 import type { FC } from "react";
-import { useTotalBalance, useWallets } from "@feature/wallet";
+import { useTotalBalance , useWalletsList } from "@feature/wallet";
 
 interface BalanceSummaryProps {}
 
 const BalanceSummary: FC<BalanceSummaryProps> = () => {
-	const { wallets } = useWallets();
-	const totalBalance = useTotalBalance(wallets);
+	const { wallets } = useWalletsList();
+	const totalBalance = useTotalBalance(wallets ?? []);
 
 	return (
 		<div>

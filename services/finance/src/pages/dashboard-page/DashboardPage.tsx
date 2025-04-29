@@ -1,16 +1,17 @@
-import {FC, useState} from "react";
-import {BalanceSummary} from "@widget/wallet";
-import {OpenTransactionModal} from "@feature/wallet/open-transaction-modal/OpenTransactionModal.tsx";
-import {NewTransactionForm} from "@widget/wallet/new-transaction-form/NewTransactionForm.tsx";
-import { DialogHeader, DialogTitle, Icons, Button } from "@internal/ui-library";
-import {Link} from "@tanstack/react-router";
-import {getFinanceRoute} from "@internal/shared";
-import { useWallets } from "@feature/wallet";
-import WalletCard from "@widget/wallet/wallet-card/WalletCard.tsx";
-import {EmptyWalletsExternal} from "@widget/wallet/wallets-not-found/EmptyWalletsExternal.tsx";
+import { useState } from "react";
+import { DialogHeader, DialogTitle } from "@internal/ui-library";
+import type { FC } from "react";
+
+import {
+	BalanceSummary,
+	NewTransactionForm,
+	EditableWalletCard,
+	PreviewWalletsList,
+	WalletsListNavigationHeader
+} from "@widget/wallet";
+import { OpenTransactionModal } from "@feature/wallet";
 
 const DashboardPage: FC = () => {
-	const { wallets, query: { isLoading } } = useWallets();
 	const [transactionOpen, setTransactionOpen] = useState(false);
 
 	return (
@@ -38,32 +39,10 @@ const DashboardPage: FC = () => {
 				</div>
 			</div>
 			<div className="mb-8">
-				<div className="flex justify-between items-center mb-4">
-					<h2 className="text-xl font-bold text-gray-900">
-						Your Wallets <span className="text-gray-400">({wallets.length})</span>
-					</h2>
-					<Button variant="link" asChild>
-						<Link to={getFinanceRoute('wallets')} className="text-sm flex items-center">
-							View all
-							<Icons.ChevronRight size={16} className="ml-1" />
-						</Link>
-					</Button>
-				</div>
-
-				{isLoading ? (
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-pulse">
-						{[1, 2, 3].map((i) => (
-							<div key={i} className="bg-gray-100 h-32 rounded-lg"></div>
-						))}
-					</div>
-				) : (
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-						{wallets.slice(0, 3).map((wallet) => (
-							<WalletCard wallet={wallet} key={wallet.id} />
-						))}
-						{wallets.length === 0 && <EmptyWalletsExternal />}
-					</div>
-				)}
+				<WalletsListNavigationHeader />
+				<PreviewWalletsList>
+					<EditableWalletCard wallet={null}/>
+				</PreviewWalletsList>
 			</div>
 		</div>
 	);

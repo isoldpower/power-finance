@@ -1,14 +1,9 @@
-import {useEffect} from "react";
 import {useSettingsContext} from "@internal/shared";
 import viteLogo from "/vite.svg";
 import reactLogo from "/react.svg";
 
 function AppContents() {
 	const { onUpdateField, theme } = useSettingsContext();
-
-	useEffect(() => {
-		console.log('analytics', theme);
-	}, [theme]);
 
 	return (
 		<>

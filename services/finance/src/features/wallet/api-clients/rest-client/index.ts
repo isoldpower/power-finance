@@ -1,18 +1,24 @@
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 
-import type { Wallet } from "@entity/wallet";
-import type { IStorage } from "@app/api";
-import { LocalStorageMock } from "@app/api";
+import type {Wallet} from "@entity/wallet";
+import type {IStorage} from "@app/api";
+import {LocalStorageMock} from "@app/api";
 
-import { flatToWalletDetailed, flatToWalletPreview } from "../mutators/flat-to-api.ts";
+import {flatToWalletDetailed, flatToWalletPreview} from "../mutators/flat-to-api.ts";
 import {
 	IWalletsRESTApiClient,
-	WalletDeleteRequest, WalletDeleteResponse,
-	WalletGetRequest, WalletGetResponse,
-	WalletListRequest, WalletListResponse,
-	WalletPatchRequest, WalletPatchResponse,
-	WalletPostRequest, WalletPostResponse,
-	WalletPutRequest, WalletPutResponse
+	WalletDeleteRequest,
+	WalletDeleteResponse,
+	WalletGetRequest,
+	WalletGetResponse,
+	WalletListRequest,
+	WalletListResponse,
+	WalletPatchRequest,
+	WalletPatchResponse,
+	WalletPostRequest,
+	WalletPostResponse,
+	WalletPutRequest,
+	WalletPutResponse
 } from "./types.ts";
 
 
@@ -29,7 +35,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 		return new Promise((resolve) => setTimeout(resolve, 1000))
 			.then(() => this.storage.get(request.id))
 			.then((value) => {
-				if (!value) return Promise.reject(new Error("Not found"));
+				if (!value) throw new Error("Not found");
 
 				return flatToWalletDetailed(value);
 			});

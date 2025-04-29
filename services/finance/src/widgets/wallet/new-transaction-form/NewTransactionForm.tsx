@@ -2,13 +2,13 @@ import {FC, useMemo} from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField } from "@internal/ui-library";
-import {NewTransaction} from "@feature/wallet/new-transaction/NewTransaction.tsx";
+import {NewTransaction} from "@feature/wallet/transaction-actions/NewTransaction.tsx";
 import {InputField} from "@shared/components/form-helpers/InputField.tsx";
 import {Button} from "@internal/ui-library";
 import {defaultValues, formSchema, FormSchema, TRANSACTION_TYPES} from "./schema.ts";
 import {SingleToggleField} from "@shared/components/form-helpers/SingleToggleField.tsx";
 import {SelectField} from "@shared/components/form-helpers/SelectField.tsx";
-import {useWallets} from "@feature/wallet";
+import { useWalletsList } from "@feature/wallet";
 import {ShowOnValue} from "@shared/components/form-helpers/ShowOnValue.tsx";
 import {FieldLayout} from "@entity/wallet/transaction-fields/FieldLayout.tsx";
 
@@ -25,7 +25,7 @@ const NewTransactionForm: FC<NewTransactionFormProps> = ({ onClose }) => {
 	const fromWallet = form.watch('from');
 	const toWallet = form.watch('to');
 
-	const { wallets } = useWallets();
+	const { wallets } = useWalletsList();
 	const walletsOptions = useMemo(() => {
 		return wallets.map((wallet) => ({
 			label: wallet.name,

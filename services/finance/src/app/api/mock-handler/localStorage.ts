@@ -1,6 +1,6 @@
-import type { IStorage, SpecificResource } from "./types.ts";
+import type {IStorage, SpecificResource} from "./types.ts";
 
-class LocalStorageMock<TValue extends SpecificResource> implements IStorage<TValue> {
+class LocalStorageMock<TValue extends SpecificResource<object>> implements IStorage<TValue> {
 	private readonly storageKey: string;
 
 	constructor(_storageKey: string) {

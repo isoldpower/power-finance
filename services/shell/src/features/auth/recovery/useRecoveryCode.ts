@@ -20,7 +20,6 @@ const useRecoveryCode = () => {
 				strategy: 'reset_password_email_code',
 				identifier: email,
 			}).then((_) => {
-				console.log()
 				return true;
 			})
 			.catch((err) => {
@@ -56,7 +55,6 @@ const useRecoveryCode = () => {
 					setError('');
 					return true;
 				} else {
-					console.log(result)
 					setError('Unknown error. Please try again.');
 					return false;
 				}

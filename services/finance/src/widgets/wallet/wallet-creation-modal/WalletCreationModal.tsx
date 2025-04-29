@@ -10,7 +10,7 @@ import {SingleToggleField} from "@shared/components/form-helpers/SingleToggleFie
 import {InputField} from "@shared/components/form-helpers/InputField.tsx";
 import {SelectField} from "@shared/components/form-helpers/SelectField.tsx";
 import {Button, Form, FormField } from "@internal/ui-library";
-import {NewWallet} from "@feature/wallet/new-wallet/NewWallet.tsx";
+import {NewWallet} from "@feature/wallet/wallet-actions/NewWallet.tsx";
 
 interface WalletCreationModalProps {
 	onClose: () => void;

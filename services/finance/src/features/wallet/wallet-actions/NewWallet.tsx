@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type {FieldValues, UseFormHandleSubmit} from "react-hook-form";
-import {useWallets, WalletValuableFields} from "@feature/wallet";
+import { useWalletsListMethods, WalletValuableFields } from "@feature/wallet";
 
 interface NewWalletProps<T extends FieldValues> {
 	handleSubmit: UseFormHandleSubmit<T>;
@@ -15,9 +15,7 @@ function NewWallet<T extends FieldValues>({
 	children,
 	mutate
 }: NewWalletProps<T>) {
-	const {
-		methods: { createWallet }
-	} = useWallets();
+	const { createWallet } = useWalletsListMethods();
 	const onSubmit = async (data: T) => {
 		const mutatedData = mutate(data);
 

@@ -1,17 +1,11 @@
-import {FC, useState} from 'react';
-import {useWallets } from "@feature/wallet";
-import WalletCard from "@widget/wallet/wallet-card/WalletCard.tsx";
-import {OpenWalletCreation} from "@feature/wallet/open-wallet-creation/OpenWalletCreation.tsx";
-import {WalletCreationModal} from "@widget/wallet/wallet-creation-modal/WalletCreationModal.tsx";
-import { EmptyWalletsInternal } from '@src/widgets/wallet/wallets-not-found/EmptyWalletsInternal';
+import { useState} from 'react';
+import type { FC } from 'react';
+import { EditableWalletCard } from "@widget/wallet/wallet-card/EditableWalletCard.tsx";
+import { OpenWalletCreation } from "@feature/wallet/wallet-actions/OpenWalletCreation.tsx";
+import { WalletCreationModal } from "@widget/wallet/wallet-creation-modal/WalletCreationModal.tsx";
+import { PreviewWalletsList } from "@widget/wallet/wallets-list/PreviewWalletsList.tsx";
 
 const WalletsPage: FC = () => {
-	const {
-		wallets,
-		isMutating,
-		query: { isLoading, isPending }
-	} = useWallets();
-
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
 	return (
@@ -25,25 +19,9 @@ const WalletsPage: FC = () => {
 					<WalletCreationModal onClose={() => setIsAddModalOpen(false)} />
 				</OpenWalletCreation>
 			</div>
-			{(isLoading || isMutating || isPending) ? (
-				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 animate-pulse">
-					{[1, 2, 3].map((i) => (
-						<div key={i} className="bg-gray-100 h-32 rounded-lg" />
-					))}
-				</div>
-			) : (
-				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-					{wallets.map((wallet) => (
-						<WalletCard
-							key={wallet.id}
-							wallet={wallet} />
-					))}
-
-					{wallets.length === 0 && (
-						<EmptyWalletsInternal openModal={() => setIsAddModalOpen(true)} />
-					)}
-				</div>
-			)}
+			<PreviewWalletsList>
+				<EditableWalletCard wallet={null} />
+			</PreviewWalletsList>
 		</div>
 	);
 };

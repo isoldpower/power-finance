@@ -9,8 +9,8 @@ import '@internal/ui-library/css';
 import { routeTree } from "./routeTree.gen.ts";
 
 
-const router = createRouter({ routeTree });
 const queryClient = new QueryClient();
+const router = createRouter({ routeTree });
 
 function App() {
 	return (

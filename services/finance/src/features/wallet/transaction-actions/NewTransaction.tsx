@@ -3,7 +3,7 @@ import type { FieldValues, UseFormHandleSubmit } from "react-hook-form";
 
 interface NewTransactionProps<T extends FieldValues> {
 	handleSubmit: UseFormHandleSubmit<T>;
-	onSuccess?: () => void;
+	onSuccess?: (data: T) => void;
 	children?: ReactNode;
 }
 
@@ -14,7 +14,7 @@ function NewTransaction<T extends FieldValues>({
 }: NewTransactionProps<T>) {
 	const onSubmit = async (data: T) => {
 		console.log('Form submitted', data);
-		onSuccess && onSuccess();
+		onSuccess && onSuccess(data);
 	}
 
 	return (
