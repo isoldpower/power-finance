@@ -1,16 +1,20 @@
-import {Wallet} from "@entity/wallet";
-import {useSettingsContext} from "@internal/shared";
-import {useCallback, useMemo} from "react";
+import { useCallback, useMemo } from "react";
+import { useSettingsContext } from "@internal/shared";
+
+import { useCurrencyRates } from "@shared/external-api";
+import type { Wallet } from "@entity/wallet";
 
 const useTotalBalance = (wallets: Wallet[]) => {
 	const { mainCurrency, locale } = useSettingsContext();
+	const { convertCurrencyToMain } = useCurrencyRates();
 
-	const totalBalance = useMemo(() => {
+	const computeTotalBalance = useCallback(() => {
 		return wallets.reduce((sum, wallet) => {
-			const adjustedBalance = wallet.reversed ? -wallet.balance : wallet.balance;
+			const convertedBalance = convertCurrencyToMain(wallet.balance, wallet.currency);
+			const adjustedBalance = wallet.reversed ? -convertedBalance : convertedBalance;
 			return sum + adjustedBalance;
 		}, 0);
-	}, [wallets]);
+	}, [wallets, convertCurrencyToMain]);
 
 	const formatCurrency = useCallback((
 		amount: number,
@@ -23,8 +27,10 @@ const useTotalBalance = (wallets: Wallet[]) => {
 	}, [locale, mainCurrency]);
 
 	return useMemo(() => {
+		const totalBalance = computeTotalBalance();
+
 		return formatCurrency(totalBalance);
-	}, [totalBalance, formatCurrency]);
+	}, [computeTotalBalance, formatCurrency]);
 }
 
 export { useTotalBalance };
