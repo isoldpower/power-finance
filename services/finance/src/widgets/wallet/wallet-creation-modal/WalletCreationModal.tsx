@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { codes, code } from 'currency-codes';
 import { Button, Form, FormField } from "@internal/ui-library";
+import { useSettingsContext } from "@internal/shared";
 import type { FC } from "react";
 
 import { FieldLayout } from "@entity/wallet";
@@ -16,9 +17,10 @@ interface WalletCreationModalProps {
 }
 
 const WalletCreationModal: FC<WalletCreationModalProps> = ({ onClose }) => {
+	const { mainCurrency } = useSettingsContext();
 	const form = useForm<FormSchema>({
 		resolver: zodResolver(formSchema),
-		defaultValues
+		defaultValues: Object.assign(defaultValues, { currency: mainCurrency })
 	});
 
 	return (
@@ -54,8 +56,9 @@ const WalletCreationModal: FC<WalletCreationModalProps> = ({ onClose }) => {
 						control={form.control}
 						name="currency"
 						render={({ field }) => (
-							<FieldLayout label="From Account">
+							<FieldLayout label="Currency">
 								<SelectField
+									placeholder="Select currency"
 									options={codes().map((item) => ({
 										label: `${code(item)?.currency || item} (${item})`,
 										value: item
@@ -67,7 +70,7 @@ const WalletCreationModal: FC<WalletCreationModalProps> = ({ onClose }) => {
 						control={form.control}
 						name="type"
 						render={({ field }) => (
-							<FieldLayout label="To Account">
+							<FieldLayout label="Account Type">
 								<SingleToggleField options={WALLET_TYPES.map((walletType) => ({
 									value: walletType,
 									label: `${walletType.charAt(0).toUpperCase()}${walletType.slice(1)} Account`

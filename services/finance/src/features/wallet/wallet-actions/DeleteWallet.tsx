@@ -39,8 +39,12 @@ const DeleteWallet: FC<DeleteWalletProps> = ({ children, wallet, ...props }) => 
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Are you sure you want to delete this wallet?</DialogTitle>
-					<DialogDescription>This action cannot be undone.</DialogDescription>
+					<DialogTitle>
+						Are you sure you want to delete this wallet?
+					</DialogTitle>
+					<DialogDescription>
+						This action cannot be undone.
+					</DialogDescription>
 				</DialogHeader>
 				<DialogFooter>
 					<div className="flex justify-end gap-2 mt-4">

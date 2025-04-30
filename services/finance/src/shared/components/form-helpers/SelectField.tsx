@@ -5,18 +5,20 @@ interface SelectFieldProps extends Omit<ComponentProps<typeof Select>, 'onValueC
 	options: Array<{ label: string; value: string }>;
 	excluded?: string[];
 	onChange: (value: string) => void;
+	placeholder?: string;
 }
 
 const SelectField: FC<SelectFieldProps> = ({
 	options,
 	excluded = [],
+	placeholder = 'Select an option',
 	...props
 }) => {
 	return (
 		<Select onValueChange={props.onChange} {...props}>
 			<FormControl>
 				<SelectTrigger className="w-full">
-					<SelectValue placeholder="Select account" />
+					<SelectValue placeholder={placeholder} />
 				</SelectTrigger>
 			</FormControl>
 			<SelectContent>

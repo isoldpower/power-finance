@@ -9,7 +9,7 @@ interface FinanceRoutes {
 const financeRoutes: FinanceRoutes = {
 	root: `/${FINANCE_ROOT}`,
 	dashboard: `${FINANCE_ROOT}/dashboard`,
-	wallets: `${FINANCE_ROOT}/wallets`,
+	wallets: `${FINANCE_ROOT}/dashboard/wallets`,
 }
 
 const getFinanceRoute = (route: keyof FinanceRoutes): string => {

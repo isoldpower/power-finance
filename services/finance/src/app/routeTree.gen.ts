@@ -11,23 +11,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as WalletsImport } from './routes/wallets'
-import { Route as DashboardImport } from './routes/dashboard'
+import { Route as FinanceImport } from './routes/finance'
 import { Route as IndexImport } from './routes/index'
-import { Route as FinanceIndexImport } from './routes/finance/index'
-import { Route as FinanceOverviewImport } from './routes/finance/overview'
+import { Route as DashboardIndexImport } from './routes/dashboard/index'
+import { Route as DashboardWalletsImport } from './routes/dashboard/wallets'
+import { Route as FinanceDashboardIndexImport } from './routes/finance.dashboard/index'
+import { Route as FinanceDashboardWalletsImport } from './routes/finance.dashboard/wallets'
 
 // Create/Update Routes
 
-const WalletsRoute = WalletsImport.update({
-  id: '/wallets',
-  path: '/wallets',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DashboardRoute = DashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const FinanceRoute = FinanceImport.update({
+  id: '/finance',
+  path: '/finance',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -37,16 +32,28 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const FinanceIndexRoute = FinanceIndexImport.update({
-  id: '/finance/',
-  path: '/finance/',
+const DashboardIndexRoute = DashboardIndexImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const FinanceOverviewRoute = FinanceOverviewImport.update({
-  id: '/finance/overview',
-  path: '/finance/overview',
+const DashboardWalletsRoute = DashboardWalletsImport.update({
+  id: '/dashboard/wallets',
+  path: '/dashboard/wallets',
   getParentRoute: () => rootRoute,
+} as any)
+
+const FinanceDashboardIndexRoute = FinanceDashboardIndexImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
+  getParentRoute: () => FinanceRoute,
+} as any)
+
+const FinanceDashboardWalletsRoute = FinanceDashboardWalletsImport.update({
+  id: '/dashboard/wallets',
+  path: '/dashboard/wallets',
+  getParentRoute: () => FinanceRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -60,93 +67,127 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardImport
-      parentRoute: typeof rootRoute
-    }
-    '/wallets': {
-      id: '/wallets'
-      path: '/wallets'
-      fullPath: '/wallets'
-      preLoaderRoute: typeof WalletsImport
-      parentRoute: typeof rootRoute
-    }
-    '/finance/overview': {
-      id: '/finance/overview'
-      path: '/finance/overview'
-      fullPath: '/finance/overview'
-      preLoaderRoute: typeof FinanceOverviewImport
-      parentRoute: typeof rootRoute
-    }
-    '/finance/': {
-      id: '/finance/'
+    '/finance': {
+      id: '/finance'
       path: '/finance'
       fullPath: '/finance'
-      preLoaderRoute: typeof FinanceIndexImport
+      preLoaderRoute: typeof FinanceImport
       parentRoute: typeof rootRoute
+    }
+    '/dashboard/wallets': {
+      id: '/dashboard/wallets'
+      path: '/dashboard/wallets'
+      fullPath: '/dashboard/wallets'
+      preLoaderRoute: typeof DashboardWalletsImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/finance/dashboard/wallets': {
+      id: '/finance/dashboard/wallets'
+      path: '/dashboard/wallets'
+      fullPath: '/finance/dashboard/wallets'
+      preLoaderRoute: typeof FinanceDashboardWalletsImport
+      parentRoute: typeof FinanceImport
+    }
+    '/finance/dashboard/': {
+      id: '/finance/dashboard/'
+      path: '/dashboard'
+      fullPath: '/finance/dashboard'
+      preLoaderRoute: typeof FinanceDashboardIndexImport
+      parentRoute: typeof FinanceImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface FinanceRouteChildren {
+  FinanceDashboardWalletsRoute: typeof FinanceDashboardWalletsRoute
+  FinanceDashboardIndexRoute: typeof FinanceDashboardIndexRoute
+}
+
+const FinanceRouteChildren: FinanceRouteChildren = {
+  FinanceDashboardWalletsRoute: FinanceDashboardWalletsRoute,
+  FinanceDashboardIndexRoute: FinanceDashboardIndexRoute,
+}
+
+const FinanceRouteWithChildren =
+  FinanceRoute._addFileChildren(FinanceRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/wallets': typeof WalletsRoute
-  '/finance/overview': typeof FinanceOverviewRoute
-  '/finance': typeof FinanceIndexRoute
+  '/finance': typeof FinanceRouteWithChildren
+  '/dashboard/wallets': typeof DashboardWalletsRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/finance/dashboard/wallets': typeof FinanceDashboardWalletsRoute
+  '/finance/dashboard': typeof FinanceDashboardIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/wallets': typeof WalletsRoute
-  '/finance/overview': typeof FinanceOverviewRoute
-  '/finance': typeof FinanceIndexRoute
+  '/finance': typeof FinanceRouteWithChildren
+  '/dashboard/wallets': typeof DashboardWalletsRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/finance/dashboard/wallets': typeof FinanceDashboardWalletsRoute
+  '/finance/dashboard': typeof FinanceDashboardIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/wallets': typeof WalletsRoute
-  '/finance/overview': typeof FinanceOverviewRoute
-  '/finance/': typeof FinanceIndexRoute
+  '/finance': typeof FinanceRouteWithChildren
+  '/dashboard/wallets': typeof DashboardWalletsRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/finance/dashboard/wallets': typeof FinanceDashboardWalletsRoute
+  '/finance/dashboard/': typeof FinanceDashboardIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/wallets' | '/finance/overview' | '/finance'
+  fullPaths:
+    | '/'
+    | '/finance'
+    | '/dashboard/wallets'
+    | '/dashboard'
+    | '/finance/dashboard/wallets'
+    | '/finance/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/wallets' | '/finance/overview' | '/finance'
+  to:
+    | '/'
+    | '/finance'
+    | '/dashboard/wallets'
+    | '/dashboard'
+    | '/finance/dashboard/wallets'
+    | '/finance/dashboard'
   id:
     | '__root__'
     | '/'
-    | '/dashboard'
-    | '/wallets'
-    | '/finance/overview'
-    | '/finance/'
+    | '/finance'
+    | '/dashboard/wallets'
+    | '/dashboard/'
+    | '/finance/dashboard/wallets'
+    | '/finance/dashboard/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
-  WalletsRoute: typeof WalletsRoute
-  FinanceOverviewRoute: typeof FinanceOverviewRoute
-  FinanceIndexRoute: typeof FinanceIndexRoute
+  FinanceRoute: typeof FinanceRouteWithChildren
+  DashboardWalletsRoute: typeof DashboardWalletsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
-  WalletsRoute: WalletsRoute,
-  FinanceOverviewRoute: FinanceOverviewRoute,
-  FinanceIndexRoute: FinanceIndexRoute,
+  FinanceRoute: FinanceRouteWithChildren,
+  DashboardWalletsRoute: DashboardWalletsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -160,26 +201,34 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/dashboard",
-        "/wallets",
-        "/finance/overview",
-        "/finance/"
+        "/finance",
+        "/dashboard/wallets",
+        "/dashboard/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/dashboard": {
-      "filePath": "dashboard.tsx"
+    "/finance": {
+      "filePath": "finance.tsx",
+      "children": [
+        "/finance/dashboard/wallets",
+        "/finance/dashboard/"
+      ]
     },
-    "/wallets": {
-      "filePath": "wallets.tsx"
+    "/dashboard/wallets": {
+      "filePath": "dashboard/wallets.tsx"
     },
-    "/finance/overview": {
-      "filePath": "finance/overview.tsx"
+    "/dashboard/": {
+      "filePath": "dashboard/index.tsx"
     },
-    "/finance/": {
-      "filePath": "finance/index.tsx"
+    "/finance/dashboard/wallets": {
+      "filePath": "finance.dashboard/wallets.tsx",
+      "parent": "/finance"
+    },
+    "/finance/dashboard/": {
+      "filePath": "finance.dashboard/index.tsx",
+      "parent": "/finance"
     }
   }
 }

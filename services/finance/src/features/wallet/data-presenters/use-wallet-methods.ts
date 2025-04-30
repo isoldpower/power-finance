@@ -3,7 +3,7 @@ import {
 	deleteWallet as deleteWalletApi,
 	fetchWallet as fetchWalletApi,
 	updateWallet as updateWalletApi,
-	replaceWallet as replaceWalletApi, ListAllWalletsResponse
+	replaceWallet as replaceWalletApi
 } from "@feature/wallet";
 import { useApiContext } from "@app/api";
 import { useCallback , useMemo } from "react";
@@ -13,10 +13,11 @@ import type {
 	FetchWalletResponse, WalletValuableFields,
 	DeleteWalletRequest, DeleteWalletResponse,
 	ReplaceWalletRequest, ReplaceWalletResponse,
-	UpdateWalletRequest, UpdateWalletResponse
+	UpdateWalletRequest, UpdateWalletResponse,
+	ListAllWalletsResponse
 } from "@feature/wallet";
-import type { Wallet } from "@entity/wallet";
-import {WALLET_KEY, WALLETS_LIST_KEY} from "@feature/wallet/data-presenters/config.ts";
+import { WALLET_KEY, WALLETS_LIST_KEY } from "./config.ts";
+
 
 type UseWalletReturn = {
 	meta: {
@@ -52,10 +53,16 @@ const useWalletMethods = (
 	) => {
 		if (!data) return;
 
-		client.setQueryData([WALLETS_LIST_KEY], (oldData: Wallet[] | undefined) => {
+		client.setQueryData([WALLETS_LIST_KEY], (oldData: ListAllWalletsResponse | undefined) => {
 			if (!oldData) return [];
 
-			return oldData.map((wallet) => wallet.id === data.id ? data : wallet);
+			return {
+				data: oldData.data.map((wallet) => wallet.id === data.id ? data : wallet),
+				meta: {
+					...oldData.meta,
+					total: oldData.meta.total - 1
+				}
+			};;
 		})
 	}, [client]);
 

@@ -83,7 +83,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 		return new Promise((resolve) => setTimeout(resolve, 1000))
 			.then(() => this.storage.get(request.id))
 			.then((value) => {
-				if (!value) return Promise.reject(new Error("Not found"));
+				if (!value) throw new Error("Not found");
 
 				this.storage.remove(value);
 				const updatedValue = Object.assign(value, request.data);
@@ -98,7 +98,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 		return new Promise((resolve) => setTimeout(resolve, 1000))
 			.then(() => this.storage.get(request.id))
 			.then((value) => {
-				if (!value) return Promise.reject(new Error("Not found"));
+				if (!value) throw new Error("Not found");
 
 				this.storage.remove(value);
 				const updatedValue: Wallet = Object.assign({ id: value.id }, request.data);
@@ -113,7 +113,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 		return new Promise((resolve) => setTimeout(resolve, 1000))
 			.then(() => this.storage.get(request.id))
 			.then((value) => {
-				if (!value) return Promise.reject(new Error("Not found"));
+				if (!value) throw new Error("Not found");
 
 				this.storage.remove(value);
 				return {

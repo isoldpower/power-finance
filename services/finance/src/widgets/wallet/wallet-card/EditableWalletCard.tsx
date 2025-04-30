@@ -1,23 +1,24 @@
 import { cn, Icons } from "@internal/ui-library";
+import type { FC } from "react";
 
 import {
 	useWallet,
 	useWalletMutationsState,
 	useCardBalance,
-	EditWallet,
 	DeleteWallet,
 	WalletCardFx
 } from "@feature/wallet";
 import { CardUnavailable, CardError, WalletCard, CardAccessible } from "@entity/wallet";
 import type { Wallet } from "@entity/wallet";
+import {EditWalletModal} from "@widget/wallet/wallet-card/EditWalletModal.tsx";
 
 
 interface EditableWalletCardProps {
 	wallet: Wallet | null;
 }
 
-const EditableWalletCard: React.FC<EditableWalletCardProps> = ({
-	wallet: passedWallet,
+const EditableWalletCard: FC<EditableWalletCardProps> = ({
+	wallet: passedWallet
 }) => {
 	if (!passedWallet) return null;
 
@@ -42,11 +43,11 @@ const EditableWalletCard: React.FC<EditableWalletCardProps> = ({
 						</p>
 					</div>
 					<div className="flex space-x-1">
-						<EditWallet wallet={passedWallet} variant="ghost" size="sm" color="neutral">
-							<Icons.Edit size={15}/>
-						</EditWallet>
+						<EditWalletModal wallet={passedWallet}>
+							<Icons.Edit size={15} />
+						</EditWalletModal>
 						<DeleteWallet wallet={passedWallet} variant="ghost" size="sm" className="text-red-800">
-							<Icons.Trash size={15}/>
+							<Icons.Trash size={15} />
 						</DeleteWallet>
 					</div>
 				</div>

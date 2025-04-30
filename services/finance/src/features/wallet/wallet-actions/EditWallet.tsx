@@ -1,29 +1,57 @@
-import type { ComponentProps, FC } from "react";
+import {ReactNode, useEffect, useMemo} from "react";
+import type { UseFormReturn } from "react-hook-form";
+
+import { useWalletMethods } from "@feature/wallet";
 import type { Wallet } from "@entity/wallet";
+import type { EditSchema } from "./schemas.ts";
 
-import { useCallback } from "react";
-import { Button } from "@internal/ui-library";
 
-interface EditWalletProps extends Omit<ComponentProps<typeof Button>, 'onClick'> {
+interface EditWalletProps {
+	form: UseFormReturn<EditSchema>;
 	wallet: Wallet;
+	onSuccess?: (data: EditSchema) => void;
+	children?: ReactNode;
 }
 
-const EditWallet: FC<EditWalletProps> = ({ children, wallet, ...props }) => {
-	const handleEdit = useCallback(() => {
-		console.log(`Edit wallet ${wallet.id}`);
-	}, []);
+const useEditDefaultValues = (wallet: Wallet): EditSchema => {
+	return useMemo(() => ({
+		name: wallet.name,
+		type: wallet.reversed ? 'credit' : 'debit',
+		balance: wallet.balance,
+		currency: wallet.currency,
+	}), [wallet])
+};
+
+function EditWallet({
+	onSuccess,
+	children,
+	form: { handleSubmit, reset },
+	wallet
+}: EditWalletProps) {
+	const { updateWallet } = useWalletMethods(wallet.id);
+	const defaults = useEditDefaultValues(wallet);
+
+	useEffect(() => {
+		reset(defaults);
+	}, [defaults]);
+
+	const onSubmit = async (data: EditSchema) => {
+		const { type, ...rest } = data;
+		const walletData = { reversed: type === 'credit', ...rest };
+
+		updateWallet(walletData);
+		onSuccess && onSuccess(data);
+		reset();
+	}
 
 	return (
-		<Button
-			type="button"
-			onClick={handleEdit}
-			{...props}
-		>
+		<form onSubmit={handleSubmit(onSubmit)}>
 			{children}
-		</Button>
+		</form>
 	)
 }
 
 EditWallet.displayName = 'EditWallet';
 
-export { EditWallet };
+export { EditWallet, useEditDefaultValues };
+export type { EditWalletProps };

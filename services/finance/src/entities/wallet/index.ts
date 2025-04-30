@@ -9,6 +9,7 @@ export { WalletCard } from './card/WalletCard.tsx';
 export { CardsList } from './cards-list/CardsList.tsx';
 export { CardsListError } from './cards-list/CardsListError.tsx';
 export { CardsListPending } from './cards-list/CardsListPending.tsx';
+export { HeadingTextLoading } from './heading-text-fx/HeadingTextLoading.tsx';
 
 export type { CurrencyPickerProps } from './currency-picker/CurrencyPicker.tsx';
 export type { LocalePickerProps } from './locale-picker/LocalePicker.tsx';

@@ -13,6 +13,7 @@ import { SettingsProvider } from "@internal/shared";
 import './styles.css';
 import '@/styles/_index.css';
 
+
 export default function Index() {
 	return (
 		<SettingsProvider>
