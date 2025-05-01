@@ -1,4 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCallback , useMemo } from "react";
+import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
+
 import {
 	deleteWallet as deleteWalletApi,
 	fetchWallet as fetchWalletApi,
@@ -6,9 +9,7 @@ import {
 	replaceWallet as replaceWalletApi
 } from "@feature/wallet";
 import { useApiContext } from "@app/api";
-import { useCallback , useMemo } from "react";
-
-import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
+import { CACHE_KEYS } from "./config.ts";
 import type {
 	FetchWalletResponse, WalletValuableFields,
 	DeleteWalletRequest, DeleteWalletResponse,
@@ -16,7 +17,6 @@ import type {
 	UpdateWalletRequest, UpdateWalletResponse,
 	ListAllWalletsResponse
 } from "@feature/wallet";
-import { WALLET_KEY, WALLETS_LIST_KEY } from "./config.ts";
 
 
 type UseWalletReturn = {
@@ -38,7 +38,7 @@ const useWalletMethods = (
 	const apiContext = useApiContext();
 	const client = useQueryClient();
 	const singleQuery = useQuery({
-		queryKey: [WALLET_KEY, id],
+		queryKey: [CACHE_KEYS.fetch, id],
 		refetchOnMount: false,
 		refetchOnReconnect: false,
 		refetchOnWindowFocus: false,
@@ -53,16 +53,13 @@ const useWalletMethods = (
 	) => {
 		if (!data) return;
 
-		client.setQueryData([WALLETS_LIST_KEY], (oldData: ListAllWalletsResponse | undefined) => {
+		client.setQueryData([CACHE_KEYS.list], (oldData: ListAllWalletsResponse | undefined) => {
 			if (!oldData) return [];
 
 			return {
 				data: oldData.data.map((wallet) => wallet.id === data.id ? data : wallet),
-				meta: {
-					...oldData.meta,
-					total: oldData.meta.total - 1
-				}
-			};;
+				meta: oldData.meta
+			};
 		})
 	}, [client]);
 
@@ -71,7 +68,7 @@ const useWalletMethods = (
 	) => {
 		if (!data) return;
 
-		client.setQueryData([WALLETS_LIST_KEY], (oldData: ListAllWalletsResponse | undefined) => {
+		client.setQueryData([CACHE_KEYS.list], (oldData: ListAllWalletsResponse | undefined) => {
 			if (!oldData) return [];
 
 			return {
@@ -89,7 +86,7 @@ const useWalletMethods = (
 			payload: data,
 			handler: apiContext.walletsClients.rest
 		}),
-		mutationKey: ['updateWallet', id],
+		mutationKey: [CACHE_KEYS.update, id],
 		onSettled: () => singleQuery.refetch()
 			.then(({ data }) => synchronizeList(data))
 	});
@@ -99,7 +96,7 @@ const useWalletMethods = (
 			id,
 			handler: apiContext.walletsClients.rest
 		}),
-		mutationKey: ['deleteWallet', id],
+		mutationKey: [CACHE_KEYS.delete, id],
 		onSettled: () => filterList(singleQuery.data)
 	});
 
@@ -108,7 +105,7 @@ const useWalletMethods = (
 			payload: data,
 			handler: apiContext.walletsClients.rest
 		}),
-		mutationKey: ['replaceWallet', id],
+		mutationKey: [CACHE_KEYS.replace, id],
 		onSettled: () => singleQuery.refetch()
 			.then(({ data }) => synchronizeList(data))
 	});

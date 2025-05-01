@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { DialogHeader, DialogTitle } from "@internal/ui-library";
 import type { FC } from "react";
 
 import {
@@ -9,9 +8,11 @@ import {
 	PreviewWalletsList,
 	WalletsListNavigationHeader
 } from "@widget/wallet";
-import { OpenTransactionModal } from "@feature/wallet";
+import { useWalletsList } from "@feature/wallet";
+import { OpenTransactionCreation } from "@feature/transaction";
 
 const DashboardPage: FC = () => {
+	const { wallets } = useWalletsList({ refetchOnMount: true, refetchOnReconnect: true });
 	const [transactionOpen, setTransactionOpen] = useState(false);
 
 	return (
@@ -24,17 +25,14 @@ const DashboardPage: FC = () => {
 				<div className="md:flex md:justify-between md:items-center">
 					<BalanceSummary />
 					<div className="mt-4 md:mt-0">
-						<OpenTransactionModal
+						<OpenTransactionCreation
 							newTransactionOpen={transactionOpen}
 							setNewTransactionOpen={setTransactionOpen}
 						>
-							<DialogHeader>
-								<DialogTitle>
-									Add Transaction
-								</DialogTitle>
-							</DialogHeader>
-							<NewTransactionForm onClose={() => setTransactionOpen(false)} />
-						</OpenTransactionModal>
+							<NewTransactionForm
+								wallets={wallets}
+								onClose={() => setTransactionOpen(false)} />
+						</OpenTransactionCreation>
 					</div>
 				</div>
 			</div>

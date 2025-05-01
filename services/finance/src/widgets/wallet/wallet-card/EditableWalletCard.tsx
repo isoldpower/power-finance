@@ -9,8 +9,8 @@ import {
 	WalletCardFx
 } from "@feature/wallet";
 import { CardUnavailable, CardError, WalletCard, CardAccessible } from "@entity/wallet";
+import { EditWalletModal } from "./EditWalletModal.tsx";
 import type { Wallet } from "@entity/wallet";
-import {EditWalletModal} from "@widget/wallet/wallet-card/EditWalletModal.tsx";
 
 
 interface EditableWalletCardProps {

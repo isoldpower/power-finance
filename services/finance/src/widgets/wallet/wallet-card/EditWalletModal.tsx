@@ -1,16 +1,15 @@
 import { Button, Dialog, DialogTrigger, DialogContent, Form, FormField, DialogTitle } from "@internal/ui-library";
 import { useState } from "react";
-import type { FC, ReactNode } from "react";
-
+import { code, codes } from "currency-codes";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { editSchema, EditWallet } from "@feature/wallet";
-import type { EditSchema } from "@feature/wallet";
-import { FieldLayout, Wallet } from "@entity/wallet";
-import {InputField, SelectField, SingleToggleField} from "@shared/components";
-import {code, codes} from "currency-codes";
-import { WALLET_TYPES } from "@widget/wallet/wallet-creation-modal/schema.ts";
-import {useEditDefaultValues} from "@feature/wallet/wallet-actions/EditWallet.tsx";
+import type { FC, ReactNode } from "react";
+
+import { walletSchema, EditWallet, useEditDefaultValues } from "@feature/wallet";
+import { FieldLayout, WALLET_TYPES } from "@entity/wallet";
+import { InputField, SelectField, SingleToggleField } from "@shared/components";
+import type { WalletSchema } from "@feature/wallet";
+import type { Wallet } from "@entity/wallet";
 
 
 interface EditWalletCardProps {
@@ -24,8 +23,8 @@ const EditWalletModal: FC<EditWalletCardProps> = ({
 }) => {
 	const [isEditOpen, setIsEditOpen] = useState(false);
 	const defaults = useEditDefaultValues(wallet);
-	const form = useForm<EditSchema>({
-		resolver: zodResolver(editSchema),
+	const form = useForm<WalletSchema>({
+		resolver: zodResolver(walletSchema),
 		defaultValues: defaults
 	});
 

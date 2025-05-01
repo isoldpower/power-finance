@@ -2,13 +2,18 @@ import type { FC } from 'react';
 import { createContext, useContext, useMemo } from 'react';
 
 import { WalletsMockRESTApiClient } from "@feature/wallet";
+import { TransactionMockRESTApiClient } from "@feature/transaction";
 import type { IWalletsRESTApiClient } from "@feature/wallet";
+import type { ITransactionsRESTApiClient } from "@feature/transaction";
 
 
 interface ApiContextType {
 	walletsClients: {
 		readonly rest: IWalletsRESTApiClient
-	}
+	},
+	transactionsClients: {
+		readonly rest: ITransactionsRESTApiClient
+	},
 }
 
 interface ApiProviderProps {
@@ -20,7 +25,10 @@ const ApiContext = createContext<ApiContextType | null>(null);
 const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
   const contextValue = useMemo<ApiContextType>(() => ({
     walletsClients: {
-			rest: new WalletsMockRESTApiClient()
+			rest: new WalletsMockRESTApiClient("wallets")
+		},
+		transactionsClients: {
+			rest: new TransactionMockRESTApiClient("transactions")
 		}
   }), []);
 

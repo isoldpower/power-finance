@@ -2,39 +2,29 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { codes, code } from 'currency-codes';
 import { Button, Form, FormField } from "@internal/ui-library";
-import { useSettingsContext } from "@internal/shared";
 import type { FC } from "react";
 
-import { FieldLayout } from "@entity/wallet";
+import { FieldLayout, WALLET_TYPES } from "@entity/wallet";
 import { NewWallet } from "@feature/wallet";
 import { SelectField, InputField, SingleToggleField } from "@shared/components";
-import { WALLET_TYPES, defaultValues, formSchema } from "./schema.ts";
-import type { FormSchema } from "./schema.ts";
+import { walletSchema, useNewDefaultValues } from "@feature/wallet";
+import type { WalletSchema } from "@feature/wallet";
 
 
-interface WalletCreationModalProps {
+interface NewWalletFormProps {
 	onClose: () => void;
 }
 
-const WalletCreationModal: FC<WalletCreationModalProps> = ({ onClose }) => {
-	const { mainCurrency } = useSettingsContext();
-	const form = useForm<FormSchema>({
-		resolver: zodResolver(formSchema),
-		defaultValues: Object.assign(defaultValues, { currency: mainCurrency })
+const NewWalletForm: FC<NewWalletFormProps> = ({ onClose }) => {
+	const defaults = useNewDefaultValues();
+	const form = useForm<WalletSchema>({
+		resolver: zodResolver(walletSchema),
+		defaultValues: defaults
 	});
 
 	return (
 		<Form {...form}>
-			<NewWallet
-				onSuccess={onClose}
-				mutate={(values) => ({
-					name: values.name,
-					balance: Number(values.balance),
-					currency: values.currency,
-					reversed: values.type === 'credit'
-				})}
-				handleSubmit={form.handleSubmit}
-			>
+			<NewWallet onSuccess={onClose} handleSubmit={form.handleSubmit}>
 				<div className="space-y-4 py-4">
 					<FormField
 						control={form.control}
@@ -92,6 +82,6 @@ const WalletCreationModal: FC<WalletCreationModalProps> = ({ onClose }) => {
 	);
 }
 
-WalletCreationModal.displayName = 'WalletCreationModal';
+NewWalletForm.displayName = 'NewWalletForm';
 
-export { WalletCreationModal };
+export { NewWalletForm };

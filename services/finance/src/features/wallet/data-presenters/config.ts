@@ -1,2 +1,8 @@
-export const WALLETS_LIST_KEY = 'wallets';
-export const WALLET_KEY = 'wallet';
+export const CACHE_KEYS = {
+	list: 'wallets',
+	fetch: 'wallet',
+	delete: 'deleteWallet',
+	update: 'updateWallet',
+	replace: 'replaceWallet',
+	create: 'createWallet',
+};

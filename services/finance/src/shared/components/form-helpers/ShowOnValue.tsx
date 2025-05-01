@@ -5,7 +5,7 @@ interface ShowOnValueProps<T extends FieldValues> {
 	children: ReactNode;
 	form: UseFormReturn<T>;
 	value: Path<T>;
-	targetValue: T[keyof T];
+	targetValue: T[keyof T][];
 	dependentValues?: Path<T>[];
 }
 
@@ -16,9 +16,9 @@ function ShowOnValue<T extends FieldValues>({
 	targetValue,
 	dependentValues = []
 }: ShowOnValueProps<T>) {
-	const currentValue = form.watch([value]);
+	const currentValue = form.watch(value);
 	useEffect(() => {
-		if (currentValue.includes(targetValue)) return;
+		if (!targetValue.includes(currentValue)) return;
 
 		dependentValues?.map((dependency) => {
 			if (form.getFieldState(dependency)?.isDirty) {
@@ -28,7 +28,7 @@ function ShowOnValue<T extends FieldValues>({
 		})
 	}, [currentValue]);
 
-	return currentValue.includes(targetValue) && (
+	return targetValue.includes(currentValue) && (
 		<>
 			{children}
 		</>

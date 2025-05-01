@@ -3,17 +3,17 @@ import type { UseFormReturn } from "react-hook-form";
 
 import { useWalletMethods } from "@feature/wallet";
 import type { Wallet } from "@entity/wallet";
-import type { EditSchema } from "./schemas.ts";
+import type { WalletSchema } from "./schemas.ts";
 
 
 interface EditWalletProps {
-	form: UseFormReturn<EditSchema>;
+	form: UseFormReturn<WalletSchema>;
 	wallet: Wallet;
-	onSuccess?: (data: EditSchema) => void;
+	onSuccess?: (data: WalletSchema) => void;
 	children?: ReactNode;
 }
 
-const useEditDefaultValues = (wallet: Wallet): EditSchema => {
+const useEditDefaultValues = (wallet: Wallet): WalletSchema => {
 	return useMemo(() => ({
 		name: wallet.name,
 		type: wallet.reversed ? 'credit' : 'debit',
@@ -35,7 +35,7 @@ function EditWallet({
 		reset(defaults);
 	}, [defaults]);
 
-	const onSubmit = async (data: EditSchema) => {
+	const onSubmit = async (data: WalletSchema) => {
 		const { type, ...rest } = data;
 		const walletData = { reversed: type === 'credit', ...rest };
 

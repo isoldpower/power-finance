@@ -1,27 +1,42 @@
-import type { ReactNode } from "react";
-import type {FieldValues, UseFormHandleSubmit} from "react-hook-form";
-import { useWalletsListMethods, WalletValuableFields } from "@feature/wallet";
+import {ReactNode, useCallback} from "react";
+import type { UseFormHandleSubmit } from "react-hook-form";
 
-interface NewWalletProps<T extends FieldValues> {
-	handleSubmit: UseFormHandleSubmit<T>;
-	onSuccess?: (values: T) => void;
+import { useWalletsListMethods } from "@feature/wallet";
+import { useSettingsContext } from "@internal/shared";
+import type { WalletSchema } from "@feature/wallet";
+
+
+interface NewWalletProps {
+	handleSubmit: UseFormHandleSubmit<WalletSchema>;
+	onSuccess?: (values: WalletSchema) => void;
 	children?: ReactNode;
-	mutate: (values: T) => WalletValuableFields;
 }
 
-function NewWallet<T extends FieldValues>({
+const useNewDefaultValues = (): WalletSchema => {
+	const { mainCurrency } = useSettingsContext();
+
+	return {
+		name: '',
+		balance: 0,
+		currency: mainCurrency,
+		type: 'debit'
+	};
+}
+
+function NewWallet({
 	handleSubmit,
 	onSuccess,
 	children,
-	mutate
-}: NewWalletProps<T>) {
+}: NewWalletProps) {
 	const { createWallet } = useWalletsListMethods();
-	const onSubmit = async (data: T) => {
-		const mutatedData = mutate(data);
 
-		createWallet(mutatedData);
+	const onSubmit = useCallback(async (data: WalletSchema) => {
+		const { type, ...rest } = data;
+		const walletData = { reversed: type === 'credit', ...rest };
+
+		createWallet(walletData);
 		onSuccess && onSuccess(data);
-	}
+	}, [createWallet, onSuccess]);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
@@ -32,5 +47,5 @@ function NewWallet<T extends FieldValues>({
 
 NewWallet.displayName = 'NewWallet';
 
-export { NewWallet };
+export { NewWallet, useNewDefaultValues };
 export type { NewWalletProps };

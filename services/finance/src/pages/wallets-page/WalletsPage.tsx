@@ -1,7 +1,7 @@
 import { useState} from 'react';
 import type { FC } from 'react';
 
-import { EditableWalletCard, WalletCreationModal, FullWalletsList } from "@widget/wallet";
+import { EditableWalletCard, NewWalletForm, FullWalletsList } from "@widget/wallet";
 import { OpenWalletCreation } from "@feature/wallet";
 
 
@@ -16,7 +16,7 @@ const WalletsPage: FC = () => {
 					<p className="text-gray-500">Manage your accounts and cards</p>
 				</div>
 				<OpenWalletCreation isAddModalOpen={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-					<WalletCreationModal onClose={() => setIsAddModalOpen(false)} />
+					<NewWalletForm onClose={() => setIsAddModalOpen(false)} />
 				</OpenWalletCreation>
 			</div>
 			<FullWalletsList onCreate={() => setIsAddModalOpen(true)}>

@@ -1,14 +1,14 @@
-import { Button, Icons, Dialog, DialogContent, DialogTrigger } from "@internal/ui-library";
+import { Button, Icons, Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@internal/ui-library";
 import type { FC, ReactNode } from "react";
 
 
-interface OpenTransactionModalProps {
+interface OpenTransactionCreationProps {
 	children: ReactNode;
 	newTransactionOpen: boolean;
 	setNewTransactionOpen: (open: boolean) => void;
 }
 
-const OpenTransactionModal: FC<OpenTransactionModalProps> = ({
+const OpenTransactionCreation: FC<OpenTransactionCreationProps> = ({
 	children,
 	newTransactionOpen,
 	setNewTransactionOpen
@@ -27,6 +27,11 @@ const OpenTransactionModal: FC<OpenTransactionModalProps> = ({
 					</Button>
 				</DialogTrigger>
 				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>
+							Add Transaction
+						</DialogTitle>
+					</DialogHeader>
 					{children}
 				</DialogContent>
 			</Dialog>
@@ -34,7 +39,7 @@ const OpenTransactionModal: FC<OpenTransactionModalProps> = ({
 	);
 }
 
-OpenTransactionModal.displayName = 'OpenTransactionModal';
+OpenTransactionCreation.displayName = 'OpenTransactionCreation';
 
-export { OpenTransactionModal };
-export type { OpenTransactionModalProps };
+export { OpenTransactionCreation };
+export type { OpenTransactionCreationProps };

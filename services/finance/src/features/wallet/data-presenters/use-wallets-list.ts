@@ -3,7 +3,7 @@ import { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
 import { listAllWallets } from "@feature/wallet";
 import { useApiContext } from "@app/api";
-import { WALLETS_LIST_KEY } from "./config.ts";
+import { CACHE_KEYS } from "./config.ts";
 import { useMemo } from "react";
 import type { Wallet } from "@entity/wallet";
 import type { ListAllWalletsResponse } from "@feature/wallet";
@@ -19,7 +19,7 @@ const useWalletsList = (
 ): UseWalletsListReturn  => {
 	const apiContext = useApiContext();
 	const query = useQuery<ListAllWalletsResponse>({
-		queryKey: [WALLETS_LIST_KEY],
+		queryKey: [CACHE_KEYS.list],
 		queryFn: () => listAllWallets({
 			handler: apiContext.walletsClients.rest
 		}),

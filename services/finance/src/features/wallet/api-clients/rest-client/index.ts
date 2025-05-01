@@ -25,8 +25,8 @@ import {
 class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 	private readonly storage: IStorage<Wallet>;
 
-	constructor() {
-		this.storage = new LocalStorageMock<Wallet>("wallets");
+	constructor(_key: string) {
+		this.storage = new LocalStorageMock<Wallet>(_key);
 	}
 
 	public get(
