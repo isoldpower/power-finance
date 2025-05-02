@@ -5,3 +5,6 @@ export { OpenTransactionCreation } from './transaction-actions/OpenTransactionCr
 export { NewTransaction } from './transaction-actions/NewTransaction.tsx';
 export { transactionSchema, defaultValues, TRANSACTION_TYPES } from './transaction-actions/schemas.ts';
 export type { TransactionSchema } from './transaction-actions/schemas.ts';
+
+export { getRecentTransactions } from './recent-transactions/getRecentTransactions.ts';
+export { TransactionsListFx } from './list-fx/TransactionsListFx.tsx';

@@ -7,7 +7,15 @@ const flatToTransactionPreview = (
 ): TransactionPreview => {
 	const { type, id, ...data } = flat;
 
-	return { type, id, data };
+	return {
+		type,
+		id,
+		data,
+		meta: {
+			id,
+			createdAt: flat.createdAt
+		}
+	};
 }
 
 const flatToTransactionDetailed = (
@@ -19,10 +27,7 @@ const flatToTransactionDetailed = (
 		type,
 		id,
 		data,
-		meta: {
-			id,
-			createdAt: createdAt || new Date().toISOString()
-		}
+		meta: { id, createdAt }
 	};
 }
 

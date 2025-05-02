@@ -21,6 +21,7 @@ interface TransactionPreview {
 	id: string
 	type: TransactionType
 	data: object
+	meta: TransactionMeta
 }
 
 type TransactionMinimalPayload = TransactionValuableFields;

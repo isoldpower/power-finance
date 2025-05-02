@@ -27,7 +27,7 @@ interface AdjustTransactionData {
 
 type Transaction = {
 	id: string;
-	createdAt?: string;
+	createdAt: string;
 } & (
 	(TransferTransactionData & { type: 'transfer' }) |
 	(ExpenseTransactionData & { type: 'expense' }) |

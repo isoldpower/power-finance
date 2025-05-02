@@ -20,7 +20,8 @@ const buildTransferTransaction = (
 		from: data.from,
 		to: data.to,
 		type: 'transfer',
-		amount: data.amount
+		amount: data.amount,
+		createdAt: response.meta.createdAt
 	} satisfies Transaction;
 }
 
@@ -35,6 +36,7 @@ const buildExpenseTransaction = (
 		amount: data.amount,
 		description: data.description,
 		from: data.from,
+		createdAt: response.meta.createdAt
 	} satisfies Transaction;
 }
 
@@ -48,7 +50,8 @@ const buildIncomeTransaction = (
 		type: 'income',
 		amount: data.amount,
 		to: data.to,
-		description: data.description
+		description: data.description,
+		createdAt: response.meta.createdAt
 	} satisfies Transaction;
 }
 
@@ -62,7 +65,8 @@ const buildAdjustTransaction = (
 		type: 'adjust',
 		amount: data.amount,
 		to: data.to,
-		description: data.description
+		description: data.description,
+		createdAt: response.meta.createdAt
 	} satisfies Transaction;
 }
 
