@@ -15,10 +15,12 @@ import {
 	RecentTransactionsList,
 	RecentTransaction
 } from "@widget/transaction";
+import {Wallet} from "@entity/wallet";
 
 const DashboardPage: FC = () => {
-	const { wallets } = useWalletsList({ refetchOnMount: true, refetchOnReconnect: true });
+	const { wallets } = useWalletsList();
 	const [transactionOpen, setTransactionOpen] = useState(false);
+	const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
 
 	return (
 		<div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto flex flex-col gap-8">
@@ -44,12 +46,15 @@ const DashboardPage: FC = () => {
 			<div>
 				<WalletsListNavigationHeader />
 				<PreviewWalletsList>
-					<EditableWalletCard wallet={null}/>
+					<EditableWalletCard
+						wallet={null}
+						selected={selectedWallet || undefined}
+						onSelected={setSelectedWallet} />
 				</PreviewWalletsList>
 			</div>
 			<div>
 				<TransactionsListNavigationHeader />
-				<RecentTransactionsList>
+				<RecentTransactionsList selectedWallet={selectedWallet}>
 					<RecentTransaction transaction={null}/>
 				</RecentTransactionsList>
 			</div>

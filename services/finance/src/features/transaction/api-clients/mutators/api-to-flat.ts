@@ -74,7 +74,9 @@ const detailedBuildWrapper = (
 	routine: (response: TransactionPreview) => Transaction,
 	response: TransactionDetailed
 ): Transaction => {
-	return Object.assign(routine(response), {
+	const preview = routine(response);
+
+	return Object.assign(preview, {
 		createdAt: response.meta.createdAt,
 	}) satisfies Transaction;
 }
@@ -115,4 +117,7 @@ const transactionDetailedResponseToFlat = (
 	}
 }
 
-export { transactionPreviewResponseToFlat, transactionDetailedResponseToFlat };
+export {
+	transactionPreviewResponseToFlat,
+	transactionDetailedResponseToFlat,
+};

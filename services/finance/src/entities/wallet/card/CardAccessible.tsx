@@ -6,7 +6,7 @@ interface CardAccessibleProps {
 
 const CardAccessible: FC<CardAccessibleProps> = ({ children }) => {
 	return (
-		<div className='duration-200 hover:shadow-md'>
+		<div className='duration-200 hover:shadow-md rounded-lg'>
 			{ children }
 		</div>
 	)

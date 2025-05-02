@@ -28,7 +28,7 @@ const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
 			rest: new WalletsMockRESTApiClient("wallets")
 		},
 		transactionsClients: {
-			rest: new TransactionMockRESTApiClient("transactions")
+			rest: new TransactionMockRESTApiClient("transactions", "wallets")
 		}
   }), []);
 

@@ -6,7 +6,7 @@ interface WalletCardProps {
 
 const WalletCard: FC<WalletCardProps> = ({ children }) => {
 	return (
-		<div className='border rounded-lg p-4 cursor-pointer transition-all duration-200 shadow-sm'>
+		<div className='border rounded-lg p-4 transition-all duration-200 shadow-sm'>
 			{ children }
 		</div>
 	)

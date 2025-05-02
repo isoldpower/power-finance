@@ -15,10 +15,14 @@ import type { Wallet } from "@entity/wallet";
 
 interface EditableWalletCardProps {
 	wallet: Wallet | null;
+	onSelected?: (wallet: Wallet) => void;
+	selected?: Wallet;
 }
 
 const EditableWalletCard: FC<EditableWalletCardProps> = ({
-	wallet: passedWallet
+	wallet: passedWallet,
+	selected,
+	onSelected
 }) => {
 	if (!passedWallet) return null;
 
@@ -34,36 +38,44 @@ const EditableWalletCard: FC<EditableWalletCardProps> = ({
 			mutating={isMutating}
 			fetchStatus={fetchStatus}
 		>
-			<WalletCard>
-				<div className="flex justify-between items-start mb-3">
-					<div>
-						<h3 className="font-medium text-gray-900">{passedWallet.name}</h3>
-						<p className="text-xs text-gray-500">
-							{passedWallet.reversed ? 'Credit Account' : 'Debit Account'}
-						</p>
+			<button
+				className={cn(
+					"flex flex-col w-full text-left! rounded-lg",
+					selected?.id === passedWallet.id && "outline outline-gray-600"
+				)}
+				onClick={() => onSelected?.(passedWallet)}
+			>
+				<WalletCard>
+					<div className="flex justify-between items-start mb-3">
+						<div>
+							<h3 className="font-medium text-gray-900">{passedWallet.name}</h3>
+							<p className="text-xs text-gray-500">
+								{passedWallet.reversed ? 'Credit Account' : 'Debit Account'}
+							</p>
+						</div>
+						<div className="flex space-x-1">
+							<EditWalletModal wallet={passedWallet}>
+								<Icons.Edit size={15} />
+							</EditWalletModal>
+							<DeleteWallet wallet={passedWallet} variant="ghost" size="sm" className="text-red-800">
+								<Icons.Trash size={15} />
+							</DeleteWallet>
+						</div>
 					</div>
-					<div className="flex space-x-1">
-						<EditWalletModal wallet={passedWallet}>
-							<Icons.Edit size={15} />
-						</EditWalletModal>
-						<DeleteWallet wallet={passedWallet} variant="ghost" size="sm" className="text-red-800">
-							<Icons.Trash size={15} />
-						</DeleteWallet>
+					<div className="mt-2">
+						<span className={cn(
+							'text-lg font-bold',
+							(
+								(passedWallet.balance < 0 && !passedWallet.reversed) ||
+								(passedWallet.balance > 0 && passedWallet.reversed)
+							) ? 'text-red-700' : 'text-green-700',
+							passedWallet.balance === 0 && 'text-gray-500'
+						)}>
+							{balance}
+						</span>
 					</div>
-				</div>
-				<div className="mt-2">
-					<span className={cn(
-						'text-lg font-bold',
-						(
-							(passedWallet.balance < 0 && !passedWallet.reversed) ||
-							(passedWallet.balance > 0 && passedWallet.reversed)
-						) ? 'text-red-700' : 'text-green-700',
-						passedWallet.balance === 0 && 'text-gray-500'
-					)}>
-						{balance}
-					</span>
-				</div>
-			</WalletCard>
+				</WalletCard>
+			</button>
 		</WalletCardFx>
 	);
 }

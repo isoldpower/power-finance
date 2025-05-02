@@ -20,7 +20,6 @@ function NewTransaction({
 	const { createTransaction } = useTransactionsListMethods();
 
 	const onSubmit = useCallback(async (data: TransactionSchema) => {
-		console.log('submit');
 		const createData = {
 			data,
 			type: data.type as TransactionValuableFields['type']
