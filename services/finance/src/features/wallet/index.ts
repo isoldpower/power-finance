@@ -13,3 +13,4 @@ export type { WalletSchema } from './wallet-actions/schemas.ts';
 
 export { WalletCardFx } from './card-fx/WalletCardFx.tsx';
 export { WalletCardsListFx } from './cards-list-fx/WalletCardsListFx.tsx';
+export { useWalletSelection } from './wallet-selection/useWalletSelection.tsx';

@@ -1,24 +1,26 @@
 import { Button, Icons, Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@internal/ui-library";
 import type { FC, ReactNode } from "react";
 
+import { useTransactionModal } from "./useTransactionModal.ts";
+import type { UseTransactionModalOptions } from "./useTransactionModal.ts";
 
-interface OpenTransactionCreationProps {
+
+interface OpenTransactionCreationProps extends UseTransactionModalOptions{
 	children: ReactNode;
-	newTransactionOpen: boolean;
-	setNewTransactionOpen: (open: boolean) => void;
 }
 
 const OpenTransactionCreation: FC<OpenTransactionCreationProps> = ({
 	children,
-	newTransactionOpen,
-	setNewTransactionOpen
+	...options
 }) => {
+	const { open, openTransactionModal } = useTransactionModal(options);
+
 	return (
 		<>
-			<Dialog open={newTransactionOpen} onOpenChange={setNewTransactionOpen}>
+			<Dialog open={open} onOpenChange={openTransactionModal}>
 				<DialogTrigger asChild>
 					<Button
-						onClick={() => setNewTransactionOpen(true)}
+						onClick={() => openTransactionModal(true)}
 						variant="outline"
 						className="bg-white/10 text-white border-white/20 hover:bg-white/20"
 					>

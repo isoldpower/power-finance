@@ -1,5 +1,3 @@
-import { Icons } from "@internal/ui-library";
-import { TransactionTarget } from "./TransactionTarget.tsx";
 import type { TransactionTargetOptions } from "./TransactionTarget.tsx";
 
 
@@ -10,15 +8,15 @@ interface TransactionTransfersProps {
 
 const TransactionTargets: React.FC<TransactionTransfersProps> = ({ from, to }) => {
 	return (
-		<div className="flex items-center w-full text-xs text-gray-500 gap-4">
+		<div className="flex text-xs text-gray-500 mt-1">
 			{from && (
-				<TransactionTarget receiver={false} target={from} />
+				<span>{from.target.name}</span>
 			)}
-			{from && to && <span className="mx-1 flex justify-center">
-				<Icons.CircleArrowRight className="w-6 h-6 text-gray-500" />
-			</span>}
+			{from && to && (
+				<span className="mx-1">→</span>
+			)}
 			{to && (
-				<TransactionTarget receiver target={to} />
+				<span>{to.target.name}</span>
 			)}
 		</div>
 	);

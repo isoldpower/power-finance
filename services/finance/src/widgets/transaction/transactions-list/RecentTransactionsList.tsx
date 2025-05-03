@@ -4,18 +4,23 @@ import { Button } from "@internal/ui-library";
 import { getFinanceRoute } from "@internal/shared";
 import type { FC, ReactElement } from "react";
 
-import { getRecentTransactions, TransactionsListFx, useTransactionsList } from "@feature/transaction";
+import {
+	getRecentTransactions,
+	TransactionsListFx,
+	useTransactionsList,
+	filterRelatedTransactions,
+	getMonthGroupedTransactions
+} from "@feature/transaction";
 import { TransactionsList, TransactionsListError, TransactionsListPending } from "@entity/transaction";
+import { useLocaleDateTransform } from "@shared/utils";
 import type { Transaction } from "@entity/transaction";
-import type { Wallet } from "@entity/wallet";
 
 
 type RecentTransactionsListProps = {
 	children: ReactElement<{
-		transaction: Transaction,
-		source: Wallet | null
+		transaction: Transaction
 	}>;
-	selectedWallet?: Wallet | null;
+	selectedWallet?: string | undefined;
 }
 
 const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
@@ -23,6 +28,13 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 	selectedWallet
 }) => {
 	const { status, transactions } = useTransactionsList();
+	const transform = useLocaleDateTransform();
+	const selectedTransactions = getMonthGroupedTransactions(
+		filterRelatedTransactions(
+			selectedWallet,
+			getRecentTransactions(transactions)
+		)
+	);
 
 	return transactions.length > 0 || status === 'pending'
 		? (
@@ -32,20 +44,22 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 				status={status}
 			>
 				<TransactionsList>
-					{getRecentTransactions(transactions)
-						.filter((transaction) => {
-							const displayAll = !selectedWallet;
-							const isSource = transaction.from?.id === selectedWallet?.id;
-							const isDestination = transaction.to?.id === selectedWallet?.id;
-
-							return displayAll || isSource || isDestination;
-						})
-						.map((transaction) => (
-							cloneElement(children, {
-								transaction,
-								source: selectedWallet,
-								key: transaction.id
-							})
+					{Object.entries(selectedTransactions).map(([date, related]) => (
+						<div key={date} className="space-y-2">
+							<h3 className="text-sm font-medium text-gray-500">
+								{transform(date)}
+							</h3>
+							<div className="bg-white rounded-lg overflow-hidden border border-gray-200">
+								{related.map((transaction) => (
+									<div key={transaction.id} className="border-b last:border-b-0">
+										{cloneElement(children, {
+											transaction,
+											key: transaction.id
+										})}
+									</div>
+								))}
+							</div>
+						</div>
 					))}
 				</TransactionsList>
 			</TransactionsListFx>

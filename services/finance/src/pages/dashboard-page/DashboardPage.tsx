@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { FC } from "react";
 
 import {
@@ -8,19 +7,20 @@ import {
 	PreviewWalletsList,
 	WalletsListNavigationHeader
 } from "@widget/wallet";
-import { useWalletsList } from "@feature/wallet";
-import { OpenTransactionCreation } from "@feature/transaction";
+import {useWalletSelection, useWalletsList} from "@feature/wallet";
+import { OpenTransactionCreation, useTransactionModal } from "@feature/transaction";
 import {
 	TransactionsListNavigationHeader,
 	RecentTransactionsList,
 	RecentTransaction
 } from "@widget/transaction";
-import {Wallet} from "@entity/wallet";
+
 
 const DashboardPage: FC = () => {
 	const { wallets } = useWalletsList();
-	const [transactionOpen, setTransactionOpen] = useState(false);
-	const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
+	const { openTransactionModal } = useTransactionModal({ searchKey: 'newTransaction' });
+	const { selected, setSelected } = useWalletSelection({ searchKey: 'selectedWallet' });
+
 
 	return (
 		<div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto flex flex-col gap-8">
@@ -32,13 +32,10 @@ const DashboardPage: FC = () => {
 				<div className="md:flex md:justify-between md:items-center">
 					<BalanceSummary />
 					<div className="mt-4 md:mt-0">
-						<OpenTransactionCreation
-							newTransactionOpen={transactionOpen}
-							setNewTransactionOpen={setTransactionOpen}
-						>
+						<OpenTransactionCreation>
 							<NewTransactionForm
 								wallets={wallets}
-								onClose={() => setTransactionOpen(false)} />
+								onClose={() => openTransactionModal(false)} />
 						</OpenTransactionCreation>
 					</div>
 				</div>
@@ -48,13 +45,13 @@ const DashboardPage: FC = () => {
 				<PreviewWalletsList>
 					<EditableWalletCard
 						wallet={null}
-						selected={selectedWallet || undefined}
-						onSelected={setSelectedWallet} />
+						selected={selected}
+						onSelected={setSelected} />
 				</PreviewWalletsList>
 			</div>
 			<div>
 				<TransactionsListNavigationHeader />
-				<RecentTransactionsList selectedWallet={selectedWallet}>
+				<RecentTransactionsList selectedWallet={selected}>
 					<RecentTransaction transaction={null}/>
 				</RecentTransactionsList>
 			</div>

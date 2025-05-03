@@ -1,5 +1,5 @@
 import { cn, Icons } from "@internal/ui-library";
-import type { FC } from "react";
+import {FC, useCallback} from "react";
 
 import {
 	useWallet,
@@ -15,8 +15,8 @@ import type { Wallet } from "@entity/wallet";
 
 interface EditableWalletCardProps {
 	wallet: Wallet | null;
-	onSelected?: (wallet: Wallet) => void;
-	selected?: Wallet;
+	onSelected?: (walletId: string | undefined) => void;
+	selected?: string | undefined;
 }
 
 const EditableWalletCard: FC<EditableWalletCardProps> = ({
@@ -30,6 +30,13 @@ const EditableWalletCard: FC<EditableWalletCardProps> = ({
 	const { fetchStatus } = useWallet(passedWallet.id);
 	const balance = useCardBalance(passedWallet);
 
+	const handleSelect = useCallback(() => {
+		onSelected?.(selected === passedWallet.id
+			? undefined
+			: passedWallet.id
+		);
+	}, [onSelected, passedWallet, selected]);
+
 	return (
 		<WalletCardFx
 			staleWrap={CardUnavailable}
@@ -41,9 +48,9 @@ const EditableWalletCard: FC<EditableWalletCardProps> = ({
 			<button
 				className={cn(
 					"flex flex-col w-full text-left! rounded-lg",
-					selected?.id === passedWallet.id && "outline outline-gray-600"
+					selected === passedWallet.id && "outline outline-gray-600"
 				)}
-				onClick={() => onSelected?.(passedWallet)}
+				onClick={handleSelect}
 			>
 				<WalletCard>
 					<div className="flex justify-between items-start mb-3">

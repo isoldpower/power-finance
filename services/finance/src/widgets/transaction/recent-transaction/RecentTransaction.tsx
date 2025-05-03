@@ -1,10 +1,9 @@
 import type { FC } from "react";
 
 import {
-	TransactionPaper,
-	TransactionTypeIcon,
 	TransactionTargets,
-	TransactionSince
+	TransactionTypeIcon,
+	TransactionValue
 } from "@entity/transaction";
 import type { Transaction } from "@entity/transaction";
 
@@ -19,25 +18,46 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 	if (!passedTransaction) return null;
 
 	return (
-		<TransactionPaper>
-			<div className="flex items-center gap-10 grow">
+		<div
+			key={passedTransaction.id}
+			className="p-4 border-b last:border-b-0 hover:bg-gray-50 transition-colors"
+		>
+			<div className="flex items-center">
 				<TransactionTypeIcon type={passedTransaction.type} />
-				<div className="flex grow justify-between">
+				<div className="ml-3 flex-grow">
+					<p className="text-sm font-medium text-gray-900">
+						{passedTransaction.description || 'Some category'}
+					</p>
 					<TransactionTargets
-						to={passedTransaction.type === 'income' || passedTransaction.type === 'adjust' || passedTransaction.type === 'transfer'
-							? { amount: passedTransaction.amount, currency: 'USD', target: passedTransaction.to }
-							: undefined}
-						from={passedTransaction.type === 'expense' || passedTransaction.type === 'transfer'
-							? { amount: passedTransaction.amount, currency: 'RUB', target: passedTransaction.from }
-							: undefined}
-					/>
+						to={passedTransaction.to && { amount: passedTransaction.amount, currency: 'USD', target: passedTransaction.to }}
+						from={passedTransaction.from && { amount: passedTransaction.amount, currency: 'RUB', target: passedTransaction.from }} />
 				</div>
-				{passedTransaction.type && (
-					<TransactionSince
-						date={passedTransaction.createdAt} />
-				)}
+				<TransactionValue amount={
+					passedTransaction.from?.id === passedTransaction.id
+						? -passedTransaction.amount
+						: passedTransaction.amount
+				} />
 			</div>
-		</TransactionPaper>
+		</div>
+		// <TransactionPaper>
+		// 	<div className="flex items-center gap-10 grow">
+		// 		<TransactionTypeIcon type={passedTransaction.type} />
+		// 		<div className="flex grow justify-between">
+		// 			<TransactionTargets
+		// 				to={passedTransaction.type === 'income' || passedTransaction.type === 'adjust' || passedTransaction.type === 'transfer'
+		// 					? { amount: passedTransaction.amount, currency: 'USD', target: passedTransaction.to }
+		// 					: undefined}
+		// 				from={passedTransaction.type === 'expense' || passedTransaction.type === 'transfer'
+		// 					? { amount: passedTransaction.amount, currency: 'RUB', target: passedTransaction.from }
+		// 					: undefined}
+		// 			/>
+		// 		</div>
+		// 		{passedTransaction.type && (
+		// 			<TransactionSince
+		// 				date={passedTransaction.createdAt} />
+		// 		)}
+		// 	</div>
+		// </TransactionPaper>
 	);
 }
 
