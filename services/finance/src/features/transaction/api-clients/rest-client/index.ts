@@ -91,6 +91,24 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 
 		return new Promise((resolve) => setTimeout(resolve, 1000))
 			.then(() => this.storage.add(filledPayload))
+			.then(() => {
+				if (filledPayload.from) {
+					const fromWallet = this.walletStorage.get(filledPayload.from.wallet);
+					if (fromWallet) {
+						this.walletStorage.remove(fromWallet);
+						fromWallet.balance -= filledPayload.from.amount;
+						this.walletStorage.add(fromWallet);
+					}
+				}
+				if (filledPayload.to) {
+					const toWallet = this.walletStorage.get(filledPayload.to.wallet);
+					if (toWallet) {
+						this.walletStorage.remove(toWallet);
+						toWallet.balance += filledPayload.to.amount;
+						this.walletStorage.add(toWallet);
+					}
+				}
+			})
 			.then(() => storageToTransaction(this.walletStorage.list(), filledPayload))
 			.then((flat) => flatToTransactionDetailed(flat));
 	}

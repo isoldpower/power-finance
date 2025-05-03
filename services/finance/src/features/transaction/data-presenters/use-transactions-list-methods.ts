@@ -43,7 +43,9 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 			handler: apiContext.transactionsClients.rest
 		}),
 		mutationKey: [CACHE_KEYS.create],
-		onSettled: () => query.refetch()
+		onSettled: () => {
+			query.refetch()
+		}
 	});
 
 	const createTransaction = useCallback((

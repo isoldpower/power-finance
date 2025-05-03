@@ -22,7 +22,7 @@ const transactionSchema = z.object({
 	category: z.string().optional(),
 	description: z.string().optional(),
 	date: z.date().optional(),
-	targetCurrency: z.string().optional(),
+	targetCurrency: z.string()
 }).refine((values) => {
 	const { type, amount } = values;
 	return !(type !== 'adjust' && amount < 0);
@@ -65,6 +65,7 @@ const defaultValues: TransactionSchema = {
 	category: '',
 	description: '',
 	date: new Date(),
+	targetCurrency: ''
 };
 
 export { TRANSACTION_TYPES, transactionSchema, defaultValues };

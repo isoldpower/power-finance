@@ -5,6 +5,7 @@ import { WalletsMockRESTApiClient } from "@feature/wallet";
 import { TransactionMockRESTApiClient } from "@feature/transaction";
 import type { IWalletsRESTApiClient } from "@feature/wallet";
 import type { ITransactionsRESTApiClient } from "@feature/transaction";
+import { ApiQueryReactions } from "./query-reactions";
 
 
 interface ApiContextType {
@@ -33,6 +34,7 @@ const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
 
   return (
     <ApiContext.Provider value={contextValue}>
+			<ApiQueryReactions />
       {children}
     </ApiContext.Provider>
   );

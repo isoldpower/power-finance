@@ -1,8 +1,8 @@
 import { Button, Icons, Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@internal/ui-library";
 import type { FC, ReactNode } from "react";
 
-import { useTransactionModal } from "./useTransactionModal.ts";
-import type { UseTransactionModalOptions } from "./useTransactionModal.ts";
+import { useTransactionModal } from "./lib/useTransactionModal.ts";
+import type { UseTransactionModalOptions } from "./lib/useTransactionModal.ts";
 
 
 interface OpenTransactionCreationProps extends UseTransactionModalOptions{

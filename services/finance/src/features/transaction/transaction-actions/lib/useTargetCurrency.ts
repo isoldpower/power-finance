@@ -3,7 +3,7 @@ import { useSettingsContext } from "@internal/shared";
 import type { UseFormReturn } from "react-hook-form";
 
 import { useWalletsList } from "@feature/wallet";
-import type { TransactionSchema } from "./schemas.ts";
+import type { TransactionSchema } from "../schemas.ts";
 
 
 const useTargetCurrency = (
