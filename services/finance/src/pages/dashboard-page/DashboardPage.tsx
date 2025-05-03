@@ -19,7 +19,7 @@ import {
 const DashboardPage: FC = () => {
 	const { wallets } = useWalletsList();
 	const { openTransactionModal } = useTransactionModal({ searchKey: 'newTransaction' });
-	const { selected, setSelected } = useWalletSelection({ searchKey: 'selectedWallet' });
+	const { selected } = useWalletSelection({ searchKey: 'selectedWallet' });
 
 
 	return (
@@ -44,9 +44,7 @@ const DashboardPage: FC = () => {
 				<WalletsListNavigationHeader />
 				<PreviewWalletsList>
 					<EditableWalletCard
-						wallet={null}
-						selected={selected}
-						onSelected={setSelected} />
+						wallet={null} />
 				</PreviewWalletsList>
 			</div>
 			<div>

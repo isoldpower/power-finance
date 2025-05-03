@@ -18,7 +18,8 @@ import type { Transaction } from "@entity/transaction";
 
 type RecentTransactionsListProps = {
 	children: ReactElement<{
-		transaction: Transaction
+		transaction: Transaction,
+		selectedWallet?: string | undefined
 	}>;
 	selectedWallet?: string | undefined;
 }
@@ -54,6 +55,7 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 									<div key={transaction.id} className="border-b last:border-b-0">
 										{cloneElement(children, {
 											transaction,
+											selectedWallet,
 											key: transaction.id
 										})}
 									</div>

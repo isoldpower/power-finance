@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const searchSchema = z.object({
-	newTransaction: z.boolean().default(false),
+	newTransaction: z.boolean().optional(),
 	selectedWallet: z.string().optional()
 })
 

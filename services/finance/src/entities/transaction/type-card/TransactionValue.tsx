@@ -1,18 +1,21 @@
 import { useLocaleCurrency } from "@shared/utils";
+import { cn } from "@internal/ui-library";
 import type { FC } from "react";
 
 
 interface TransactionValueProps {
 	amount: number;
+	perspective: 'outcome' | 'income';
 }
 
-const TransactionValue: FC<TransactionValueProps> = ({ amount }) => {
+const TransactionValue: FC<TransactionValueProps> = ({ amount, perspective }) => {
 	const transformCurrency = useLocaleCurrency();
 
 	return (
-		<div className={`ml-3 text-right ${
-			amount > 0 ? 'text-green-600' : 'text-red-600'
-		}`}>
+		<div className={cn(
+			'ml-3 text-right',
+			((amount > 0 && perspective === 'income') || (amount < 0 && perspective === 'outcome')) ? 'text-green-600' : 'text-red-600'
+		)}>
 			<p className="text-sm font-medium">
 				{transformCurrency(amount, 'USD')}
 			</p>

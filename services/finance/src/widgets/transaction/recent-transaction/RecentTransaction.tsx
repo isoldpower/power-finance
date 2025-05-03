@@ -10,10 +10,12 @@ import type { Transaction } from "@entity/transaction";
 
 interface RecentTransactionProps {
 	transaction: Transaction | null;
+	selectedWallet?: string | undefined;
 }
 
 const RecentTransaction: FC<RecentTransactionProps> = ({
-	transaction: passedTransaction
+	transaction: passedTransaction,
+	selectedWallet
 }) => {
 	if (!passedTransaction) return null;
 
@@ -32,11 +34,15 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 						to={passedTransaction.to && { amount: passedTransaction.amount, currency: 'USD', target: passedTransaction.to }}
 						from={passedTransaction.from && { amount: passedTransaction.amount, currency: 'RUB', target: passedTransaction.from }} />
 				</div>
-				<TransactionValue amount={
-					passedTransaction.from?.id === passedTransaction.id
-						? -passedTransaction.amount
-						: passedTransaction.amount
-				} />
+				<TransactionValue
+					perspective={(passedTransaction.from?.id === selectedWallet || !selectedWallet)
+						? 'outcome'
+						: 'income'}
+					amount={
+						passedTransaction.from?.id === passedTransaction.id
+							? -passedTransaction.amount
+							: passedTransaction.amount
+					} />
 			</div>
 		</div>
 		// <TransactionPaper>
