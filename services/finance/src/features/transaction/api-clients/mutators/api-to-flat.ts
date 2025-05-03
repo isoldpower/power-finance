@@ -20,7 +20,6 @@ const buildTransferTransaction = (
 		from: data.from,
 		to: data.to,
 		type: 'transfer',
-		amount: data.amount,
 		createdAt: response.meta.createdAt
 	} satisfies Transaction;
 }
@@ -33,7 +32,6 @@ const buildExpenseTransaction = (
 	return {
 		id: response.id,
 		type: 'expense',
-		amount: data.amount,
 		description: data.description,
 		from: data.from,
 		createdAt: response.meta.createdAt
@@ -48,7 +46,6 @@ const buildIncomeTransaction = (
 	return {
 		id: response.id,
 		type: 'income',
-		amount: data.amount,
 		to: data.to,
 		description: data.description,
 		createdAt: response.meta.createdAt
@@ -63,7 +60,6 @@ const buildAdjustTransaction = (
 	return {
 		id: response.id,
 		type: 'adjust',
-		amount: data.amount,
 		to: data.to,
 		description: data.description,
 		createdAt: response.meta.createdAt

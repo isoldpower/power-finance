@@ -1,5 +1,6 @@
 import type { Transaction } from "@entity/transaction";
 
+
 const getMonthGroupedTransactions = (
 	transactions: Transaction[]
 ) => {

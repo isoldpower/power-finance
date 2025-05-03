@@ -11,13 +11,24 @@ import type {
 	TransactionPutRequest, TransactionPutResponse,
 	TransactionDeleteRequest, TransactionDeleteResponse
 } from "./types.ts";
-import type { StorageTransaction, TransactionMinimalPayload } from "../types.ts";
+import type { TransactionMinimalPayload } from "../types.ts";
 import type { Wallet } from "@entity/wallet";
 import type { Transaction } from "@entity/transaction";
 
 
+type StorageTransaction = Omit<Transaction, 'from' | 'to'> & {
+	from: {
+		wallet: string;
+		amount: number;
+	} | undefined;
+	to: {
+		wallet: string;
+		amount: number;
+	} | undefined;
+}
+
 const createTransactionFromMinimalPayload = (
-	{ data, type }: TransactionMinimalPayload
+	{ description, from, to, type }: TransactionMinimalPayload
 ): StorageTransaction => {
 	const timestamp = new Date().toISOString();
 	const id = uuidv4();
@@ -25,11 +36,10 @@ const createTransactionFromMinimalPayload = (
 	return {
 		id,
 		type,
-		description: data.description,
+		description: description,
 		createdAt: timestamp,
-		amount: data.amount || 0,
-		from: data.from,
-		to: data.to,
+		from,
+		to,
 	} satisfies StorageTransaction;
 };
 
@@ -38,13 +48,19 @@ const storageToTransaction = (
 	value: StorageTransaction
 ): Transaction => {
 	const { from, to, ...rest } = value;
+	const fromWallet = wallets.find((wallet) => wallet.id === value.from?.wallet);
+	const toWallet = wallets.find((wallet) => wallet.id === value.to?.wallet);
 
-	return Object.assign(rest, {
-		from: wallets.find((wallet) => wallet.id === value.from) as Wallet,
-		to: wallets.find((wallet) => wallet.id === value.to) as Wallet
-	}) satisfies Transaction;
+	return {
+		...rest,
+		from: (value.from && fromWallet
+			? { wallet: fromWallet, amount: value.from.amount }
+			: undefined),
+		to: (value.to && toWallet
+			? { wallet: toWallet, amount: value.to.amount }
+			: undefined)
+	} as Transaction;
 }
-
 
 class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 	private readonly storage: IStorage<StorageTransaction>;

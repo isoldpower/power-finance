@@ -1,26 +1,34 @@
-import type { Transaction, TransactionType } from "@entity/transaction";
+import type { TransactionType } from "@entity/transaction";
 import type { Wallet } from "@entity/wallet";
 
-interface TransactionValuableFields {
-	type: TransactionType
-	data: Omit<TransactionData, 'from' | 'to' | 'id' | 'createdAt'> & {
-		from?: string;
-		to?: string;
-	}
+interface TransactionSide {
+	wallet: string;
+	amount: number;
 }
 
-interface TransactionMeta {
-	createdAt: string
-	id: string
+interface TransactionSideDetailed {
+	wallet: Wallet;
+	amount: number;
 }
 
 interface TransactionData {
 	id: string;
 	createdAt: string;
-	from?: Wallet;
-	to?: Wallet;
+	from?: TransactionSideDetailed;
+	to?: TransactionSideDetailed;
 	description?: string;
-	amount?: number;
+}
+
+type TransactionValuableFields = {
+	from?: TransactionSide;
+	to?: TransactionSide;
+	description?: string;
+	type: TransactionType;
+};
+
+interface TransactionMeta {
+	createdAt: string
+	id: string
 }
 
 interface TransactionDetailed {
@@ -39,17 +47,10 @@ interface TransactionPreview {
 
 type TransactionMinimalPayload = TransactionValuableFields;
 
-
-type StorageTransaction = Omit<Transaction, 'from' | 'to'> & {
-	from?: string;
-	to?: string;
-}
-
 export type {
 	TransactionDetailed,
 	TransactionPreview,
 	TransactionMeta,
 	TransactionValuableFields,
-	TransactionMinimalPayload,
-	StorageTransaction
+	TransactionMinimalPayload
 };

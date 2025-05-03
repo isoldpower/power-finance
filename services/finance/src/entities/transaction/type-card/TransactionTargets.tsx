@@ -1,5 +1,9 @@
-import type { TransactionTargetOptions } from "./TransactionTarget.tsx";
+import type { Wallet } from "@entity/wallet";
 
+
+interface TransactionTargetOptions {
+	target: Wallet;
+}
 
 interface TransactionTransfersProps {
 	from?: TransactionTargetOptions;

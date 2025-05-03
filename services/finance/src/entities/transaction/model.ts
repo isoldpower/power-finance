@@ -2,36 +2,37 @@ import type { Wallet } from "@entity/wallet";
 
 type TransactionType = 'expense' | 'income' | 'transfer' | 'adjust';
 
-interface TransferTransactionData {
+interface TransactionSide {
+	wallet: Wallet;
 	amount: number;
-	from: Wallet;
-	to: Wallet;
+}
+
+interface TransferTransactionData {
+	from: TransactionSide;
+	to: TransactionSide;
 	description?: string;
 }
 
 interface ExpenseTransactionData {
-	amount: number;
-	from: Wallet;
+	from: TransactionSide;
 	description?: string;
 }
 
 interface IncomeTransactionData {
-	amount: number;
-	to: Wallet;
+	to: TransactionSide;
 	description?: string;
 }
 
 interface AdjustTransactionData {
-	amount: number;
-	to: Wallet;
+	to: TransactionSide;
 	description?: string;
 }
 
 type Transaction = {
 	id: string;
 	createdAt: string;
-	from?: Wallet;
-	to?: Wallet;
+	from?: TransactionSide;
+	to?: TransactionSide;
 } & (
 	(TransferTransactionData & { type: 'transfer' }) |
 	(ExpenseTransactionData & { type: 'expense' }) |
@@ -47,6 +48,7 @@ type PossibleTransactionData =
 
 export type {
 	Transaction,
+	TransactionSide,
 	TransactionType,
 	TransferTransactionData,
 	PossibleTransactionData,

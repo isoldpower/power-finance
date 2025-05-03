@@ -1,15 +1,19 @@
-import { FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@internal/ui-library"
+import { FormItem, FormLabel, FormControl, FormMessage, FormDescription, cn } from "@internal/ui-library"
 import type { FC, ReactNode } from "react";
 
 interface FieldLayoutProps {
 	label: string;
 	children?: ReactNode;
 	description?: string;
+	className?: string;
 }
 
-const FieldLayout: FC<FieldLayoutProps> = ({ label, children, description }) => {
+const FieldLayout: FC<FieldLayoutProps> = ({ label, children, description, className }) => {
 	return (
-		<FormItem>
+		<FormItem className={cn(
+			'flex flex-col',
+			className
+		)}>
 			<FormLabel>
 				{label}
 			</FormLabel>

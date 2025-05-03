@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import {FC, useRef} from 'react';
 import { createContext, useContext, useMemo } from 'react';
 
 import { WalletsMockRESTApiClient } from "@feature/wallet";
@@ -23,13 +23,12 @@ interface ApiProviderProps {
 const ApiContext = createContext<ApiContextType | null>(null);
 
 const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
+	const walletsClient = useRef(new WalletsMockRESTApiClient("wallets"));
+	const transactionsClient = useRef(new TransactionMockRESTApiClient("transactions", "wallets"));
+
   const contextValue = useMemo<ApiContextType>(() => ({
-    walletsClients: {
-			rest: new WalletsMockRESTApiClient("wallets")
-		},
-		transactionsClients: {
-			rest: new TransactionMockRESTApiClient("transactions", "wallets")
-		}
+    walletsClients: { rest: walletsClient.current },
+		transactionsClients: { rest: transactionsClient.current }
   }), []);
 
   return (

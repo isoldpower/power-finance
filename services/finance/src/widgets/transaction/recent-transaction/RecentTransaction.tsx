@@ -1,6 +1,8 @@
+import { useMemo } from "react";
 import type { FC } from "react";
 
 import {
+	TransactionPaper,
 	TransactionTargets,
 	TransactionTypeIcon,
 	TransactionValue
@@ -19,11 +21,28 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 }) => {
 	if (!passedTransaction) return null;
 
+	const perspective = useMemo(() => {
+		return !selectedWallet
+			? passedTransaction.type === 'transfer'
+				? 'neutral'
+				: passedTransaction.type === 'income'
+					? 'income'
+					: 'outcome'
+			: passedTransaction.from?.wallet?.id === selectedWallet
+				? 'outcome'
+				: 'income';
+	}, [passedTransaction, selectedWallet]);
+
+	const transactionSide = useMemo(() => {
+		return (!selectedWallet
+			? passedTransaction.from ?? passedTransaction.to
+			: selectedWallet === passedTransaction.from?.wallet?.id
+				? passedTransaction.from
+				: passedTransaction.to) ?? undefined
+	}, [passedTransaction, selectedWallet]);
+
 	return (
-		<div
-			key={passedTransaction.id}
-			className="p-4 border-b last:border-b-0 hover:bg-gray-50 transition-colors"
-		>
+		<TransactionPaper>
 			<div className="flex items-center">
 				<TransactionTypeIcon type={passedTransaction.type} />
 				<div className="ml-3 flex-grow">
@@ -31,39 +50,18 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 						{passedTransaction.description || 'Some category'}
 					</p>
 					<TransactionTargets
-						to={passedTransaction.to && { amount: passedTransaction.amount, currency: 'USD', target: passedTransaction.to }}
-						from={passedTransaction.from && { amount: passedTransaction.amount, currency: 'RUB', target: passedTransaction.from }} />
+						to={passedTransaction.to && {
+							target: passedTransaction.to.wallet
+						}}
+						from={passedTransaction.from && {
+							target: passedTransaction.from.wallet
+						}} />
 				</div>
 				<TransactionValue
-					perspective={(passedTransaction.from?.id === selectedWallet || !selectedWallet)
-						? 'outcome'
-						: 'income'}
-					amount={
-						passedTransaction.from?.id === passedTransaction.id
-							? -passedTransaction.amount
-							: passedTransaction.amount
-					} />
+					perspective={perspective}
+					side={transactionSide} />
 			</div>
-		</div>
-		// <TransactionPaper>
-		// 	<div className="flex items-center gap-10 grow">
-		// 		<TransactionTypeIcon type={passedTransaction.type} />
-		// 		<div className="flex grow justify-between">
-		// 			<TransactionTargets
-		// 				to={passedTransaction.type === 'income' || passedTransaction.type === 'adjust' || passedTransaction.type === 'transfer'
-		// 					? { amount: passedTransaction.amount, currency: 'USD', target: passedTransaction.to }
-		// 					: undefined}
-		// 				from={passedTransaction.type === 'expense' || passedTransaction.type === 'transfer'
-		// 					? { amount: passedTransaction.amount, currency: 'RUB', target: passedTransaction.from }
-		// 					: undefined}
-		// 			/>
-		// 		</div>
-		// 		{passedTransaction.type && (
-		// 			<TransactionSince
-		// 				date={passedTransaction.createdAt} />
-		// 		)}
-		// 	</div>
-		// </TransactionPaper>
+		</TransactionPaper>
 	);
 }
 

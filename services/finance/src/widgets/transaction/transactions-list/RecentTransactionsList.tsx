@@ -1,7 +1,4 @@
 import { cloneElement } from "react";
-import { Link } from "@tanstack/react-router";
-import { Button } from "@internal/ui-library";
-import { getFinanceRoute } from "@internal/shared";
 import type { FC, ReactElement } from "react";
 
 import {
@@ -67,16 +64,12 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 			</TransactionsListFx>
 		)
 		: (
-			<div className="col-span-3 text-center py-10 border border-dashed rounded-lg">
-				<p className="text-gray-500">No wallets found</p>
-				<Button variant="link" asChild>
-					<Link to={getFinanceRoute('wallets')}>
-						Add your first wallet
-					</Link>
-				</Button>
+			<div className="text-center py-10 border border-dashed rounded-lg">
+				<p className="text-gray-500">No transactions found</p>
+				<p className="text-sm text-gray-400 mt-1">Add your first transaction to get started</p>
 			</div>
-		)
-}
+		);
+};
 
 RecentTransactionsList.displayName = 'RecentTransactionsList';
 

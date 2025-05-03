@@ -52,14 +52,6 @@ const EditWalletModal: FC<EditWalletCardProps> = ({
 								)} />
 							<FormField
 								control={form.control}
-								name="balance"
-								render={({ field }) => (
-									<FieldLayout label="Initial Balance">
-										<InputField placeholder="Enter transfer value" type="number" {...field} />
-									</FieldLayout>
-								)} />
-							<FormField
-								control={form.control}
 								name="currency"
 								render={({ field }) => (
 									<FieldLayout label="Currency">

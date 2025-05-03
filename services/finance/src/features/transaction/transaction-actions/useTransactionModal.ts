@@ -9,15 +9,16 @@ interface UseTransactionModalOptions {
 const useTransactionModal = ({
 	searchKey = 'newTransaction'
 }: UseTransactionModalOptions) => {
+	const current = useSearch({ strict: false });
 	const navigate = useNavigate();
 	const related = useSearch({ strict: false });
 
 	const openTransactionModal = useCallback((open: boolean) => {
 		navigate({
 			to: '.',
-			search: (prev: object) => ({ ...prev, [searchKey]: open }),
+			search:  { ...current, [searchKey]: open }
 		});
-	}, [navigate, searchKey]);
+	}, [navigate, current, searchKey]);
 
 	return {
 		openTransactionModal,

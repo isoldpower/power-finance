@@ -3,6 +3,7 @@ import { useSettingsContext } from "@internal/shared";
 
 import { POLLING_INTERVAL, QUERY_KEY } from "./config.ts";
 import { fetchCurrencies } from "./fetchCurrencies.ts";
+import { convertCurrency } from "./convertCurrency.ts";
 import { useCallback, useMemo } from "react";
 
 const useCurrencyRates = () => {
@@ -26,11 +27,23 @@ const useCurrencyRates = () => {
 		return rate ? amount * Math.pow(rate, -1) : 0;
 	}, [data]);
 
+	const convertFromTo = useCallback(async (
+		amount: number,
+		from: string,
+		to: string
+	) => {
+		const rate = await convertCurrency(from, to);
+		if (!rate) return 0;
+
+		return amount * rate.rate;
+	}, [data]);
+
 	return useMemo(() => ({
 		convertCurrencyToMain,
 		currencies: data,
+		convertFromTo,
 		fetchStatus
-	}), [data, convertCurrencyToMain, fetchStatus]);
+	}), [data, convertCurrencyToMain, convertFromTo, fetchStatus]);
 }
 
 export { useCurrencyRates };

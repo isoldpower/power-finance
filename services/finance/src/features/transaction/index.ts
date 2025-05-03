@@ -5,6 +5,7 @@ export { OpenTransactionCreation } from './transaction-actions/OpenTransactionCr
 export { useTransactionModal } from './transaction-actions/useTransactionModal.ts';
 export { NewTransaction } from './transaction-actions/NewTransaction.tsx';
 export { transactionSchema, defaultValues, TRANSACTION_TYPES } from './transaction-actions/schemas.ts';
+export { useTargetCurrency } from './transaction-actions/useTargetCurrency.ts';
 export type { TransactionSchema } from './transaction-actions/schemas.ts';
 
 export { filterRelatedTransactions } from './recent-transactions/filterRelatedTransactions.ts';

@@ -6,6 +6,7 @@ interface SelectFieldProps extends Omit<ComponentProps<typeof Select>, 'onValueC
 	excluded?: string[];
 	onChange: (value: string) => void;
 	placeholder?: string;
+	className?: string;
 }
 
 const SelectField: FC<SelectFieldProps> = ({

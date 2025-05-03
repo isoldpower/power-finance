@@ -43,14 +43,13 @@ const DashboardPage: FC = () => {
 			<div>
 				<WalletsListNavigationHeader />
 				<PreviewWalletsList>
-					<EditableWalletCard
-						wallet={null} />
+					<EditableWalletCard wallet={null} />
 				</PreviewWalletsList>
 			</div>
 			<div>
 				<TransactionsListNavigationHeader />
 				<RecentTransactionsList selectedWallet={selected}>
-					<RecentTransaction transaction={null}/>
+					<RecentTransaction transaction={null} />
 				</RecentTransactionsList>
 			</div>
 		</div>

@@ -6,7 +6,7 @@ interface TransactionsListProps {
 
 const TransactionsList: FC<TransactionsListProps> = ({ children }) => {
   return (
-	<div className="grid">
+	<div className="flex flex-col gap-4">
 	  {children}
 	</div>
   )
