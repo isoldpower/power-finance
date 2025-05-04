@@ -1,43 +1,41 @@
 import { Button, Icons, Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@internal/ui-library";
-import type { FC, ReactNode } from "react";
-
-import { useTransactionModal } from "./lib/useTransactionModal.ts";
-import type { UseTransactionModalOptions } from "./lib/useTransactionModal.ts";
+import type { FC, ReactNode, ComponentProps } from "react";
 
 
-interface OpenTransactionCreationProps extends UseTransactionModalOptions{
+interface OpenTransactionCreationProps extends ComponentProps<typeof Button> {
 	children: ReactNode;
+	isModalOpen: boolean;
+	setIsModalOpen: (isOpen: boolean) => void;
 }
 
 const OpenTransactionCreation: FC<OpenTransactionCreationProps> = ({
 	children,
-	...options
+	isModalOpen,
+	setIsModalOpen,
+	...props
 }) => {
-	const { open, openTransactionModal } = useTransactionModal(options);
-
 	return (
-		<>
-			<Dialog open={open} onOpenChange={openTransactionModal}>
-				<DialogTrigger asChild>
-					<Button
-						onClick={() => openTransactionModal(true)}
-						variant="outline"
-						className="bg-white/10 text-white border-white/20 hover:bg-white/20"
-					>
-						<Icons.Plus size={16} className="mr-1" />
+		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+			<DialogTrigger asChild>
+				<Button
+					onClick={() => setIsModalOpen(true)}
+					variant="outline"
+					className="bg-white/10 text-white border-white/20 hover:bg-white/20"
+					{...props}
+				>
+					<Icons.Plus size={16} className="mr-1" />
+					Add Transaction
+				</Button>
+			</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>
 						Add Transaction
-					</Button>
-				</DialogTrigger>
-				<DialogContent>
-					<DialogHeader>
-						<DialogTitle>
-							Add Transaction
-						</DialogTitle>
-					</DialogHeader>
-					{children}
-				</DialogContent>
-			</Dialog>
-		</>
+					</DialogTitle>
+				</DialogHeader>
+				{children}
+			</DialogContent>
+		</Dialog>
 	);
 }
 

@@ -15,6 +15,11 @@ const useTargetCurrency = (
 	const type = form.watch('type');
 	const from = form.watch('from');
 	const to = form.watch('to');
+	const target = form.watch('targetCurrency');
+
+	useEffect(() => {
+		console.log(target);
+	}, [target]);
 
 	useEffect(() => {
 		if (form.getFieldState('targetCurrency').isTouched) return;

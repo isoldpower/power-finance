@@ -9,18 +9,18 @@ import { useTransactionsList } from "@feature/transaction";
 type TransactionsListNavigationHeaderProps = {
 }
 
-const TransactionsListNavigationHeader: FC<TransactionsListNavigationHeaderProps> = () => {
-	const { status, transactions } = useTransactionsList();
+const TransactionsListNavigationHeader: FC<TransactionsListNavigationHeaderProps> = ({}) => {
+	const { status } = useTransactionsList();
 
 	return (
 		<div className="flex justify-between items-center mb-4">
 			<h2 className="text-xl font-bold text-gray-900">
 				Recent Transactions <span className="text-gray-400">
-				({ status === 'pending' ? "?" : Math.min(transactions.length, 5) })
+				{ status === 'pending' && "..."}
 			</span>
 			</h2>
 			<Button variant="link" asChild>
-				<Link to={getFinanceRoute('wallets')} className="text-sm flex items-center">
+				<Link to={getFinanceRoute('transactions')} className="text-sm flex items-center">
 					View all
 					<Icons.ChevronRight size={16} className="ml-1" />
 				</Link>

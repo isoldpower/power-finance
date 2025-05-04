@@ -9,4 +9,6 @@ export { TransactionTargets } from './type-card/TransactionTargets.tsx';
 export { TransactionTypeIcon } from './type-card/TransactionTypeIcon.tsx';
 export { TransactionValue } from './type-card/TransactionValue.tsx';
 
+export { FilterButton } from './filter-button/FilterButton.tsx';
+
 export type * from './model.ts';

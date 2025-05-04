@@ -6,7 +6,8 @@ import {
 	useWalletMutationsState,
 	useCardBalance,
 	DeleteWallet,
-	WalletCardFx, useWalletSelection
+	WalletCardFx,
+	useWalletSelection
 } from "@feature/wallet";
 import { CardUnavailable, CardError, WalletCard, CardAccessible } from "@entity/wallet";
 import { EditWalletModal } from "./EditWalletModal.tsx";
@@ -29,7 +30,7 @@ const EditableWalletCard: FC<EditableWalletCardProps> = ({
 
 	const handleSelect = useCallback(() => {
 		setSelected?.(selected === passedWallet.id
-			? undefined
+			? 'all'
 			: passedWallet.id
 		);
 	}, [setSelected, passedWallet, selected]);

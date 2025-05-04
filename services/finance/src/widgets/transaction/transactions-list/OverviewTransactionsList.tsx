@@ -5,15 +5,14 @@ import {
 	TransactionsListFx,
 	useTransactionsList,
 	filterRelatedTransactions,
-	getMonthGroupedTransactions,
-	getRecentTransactions
+	getMonthGroupedTransactions
 } from "@feature/transaction";
 import { TransactionsList, TransactionsListError, TransactionsListPending } from "@entity/transaction";
 import { useLocaleDateTransform } from "@shared/utils";
 import type { Transaction } from "@entity/transaction";
 
 
-type RecentTransactionsListProps = {
+type OverviewTransactionsListProps = {
 	children: ReactElement<{
 		transaction: Transaction,
 		selectedWallet?: string | undefined
@@ -21,7 +20,7 @@ type RecentTransactionsListProps = {
 	selectedWallet?: string | undefined;
 }
 
-const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
+const OverviewTransactionsList: FC<OverviewTransactionsListProps> = ({
 	children,
 	selectedWallet
 }) => {
@@ -30,11 +29,11 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 	const selectedTransactions = getMonthGroupedTransactions(
 		filterRelatedTransactions(
 			selectedWallet === 'all' ? undefined : selectedWallet,
-			getRecentTransactions(transactions)
+			transactions
 		)
 	);
 
-	return transactions.length > 0 || status === 'pending'
+	return Object.entries(selectedTransactions).length > 0 || status === 'pending'
 		? (
 			<TransactionsListFx
 				pending={<TransactionsListPending amount={3} /> }
@@ -64,18 +63,17 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 			</TransactionsListFx>
 		)
 		: (
-			<div className="text-center py-12 border border-dashed rounded-lg">
+			<div className="text-center py-10 border border-dashed rounded-lg">
 				<p className="text-gray-500">
 					No transactions found
 				</p>
 				<p className="text-sm text-gray-400 mt-1">
-					Add your first transaction to get started
-				</p>
+					It seems that this wallet doesn't have transactions</p>
 			</div>
 		);
 };
 
-RecentTransactionsList.displayName = 'RecentTransactionsList';
+OverviewTransactionsList.displayName = 'OverviewTransactionsList';
 
-export { RecentTransactionsList };
-export type { RecentTransactionsListProps };
+export { OverviewTransactionsList };
+export type { OverviewTransactionsListProps };

@@ -12,7 +12,7 @@ function getRecentTransactions(transactions: Transaction[]): Transaction[] {
 		return isInLastDay && isProcessed;
 	}).sort((a, b) => {
 		return Date.parse(b.createdAt) - Date.parse(a.createdAt)
-	}).slice(0, 5);
+	});
 }
 
 export { getRecentTransactions };

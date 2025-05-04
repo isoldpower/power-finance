@@ -1,4 +1,4 @@
-import { Select, FormControl, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@internal/ui-library";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@internal/ui-library";
 import {ComponentProps, FC} from "react";
 
 interface SelectFieldProps extends Omit<ComponentProps<typeof Select>, 'onValueChange'> {
@@ -17,11 +17,9 @@ const SelectField: FC<SelectFieldProps> = ({
 }) => {
 	return (
 		<Select onValueChange={props.onChange} {...props}>
-			<FormControl>
-				<SelectTrigger className="w-full">
-					<SelectValue placeholder={placeholder} />
-				</SelectTrigger>
-			</FormControl>
+			<SelectTrigger className="w-full">
+				<SelectValue placeholder={placeholder} />
+			</SelectTrigger>
 			<SelectContent>
 				{options
 					.filter((option) => !excluded.includes(option.value))

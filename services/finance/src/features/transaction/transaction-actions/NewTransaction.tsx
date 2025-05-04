@@ -31,6 +31,7 @@ function NewTransaction({
 				break;
 			default:
 				createData = await buildCreateData(wallets, data);
+				console.log(createData.to?.amount)
 				break;
 		}
 

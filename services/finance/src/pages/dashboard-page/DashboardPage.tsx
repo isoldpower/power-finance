@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { FC } from "react";
 
 import {
@@ -8,7 +9,7 @@ import {
 	WalletsListNavigationHeader
 } from "@widget/wallet";
 import {useWalletSelection, useWalletsList} from "@feature/wallet";
-import { OpenTransactionCreation, useTransactionModal } from "@feature/transaction";
+import { OpenTransactionCreation } from "@feature/transaction";
 import {
 	TransactionsListNavigationHeader,
 	RecentTransactionsList,
@@ -18,9 +19,8 @@ import {
 
 const DashboardPage: FC = () => {
 	const { wallets } = useWalletsList();
-	const { openTransactionModal } = useTransactionModal({ searchKey: 'newTransaction' });
 	const { selected } = useWalletSelection({ searchKey: 'selectedWallet' });
-
+	const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(false);
 
 	return (
 		<div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto flex flex-col gap-8">
@@ -32,10 +32,13 @@ const DashboardPage: FC = () => {
 				<div className="md:flex md:justify-between md:items-center">
 					<BalanceSummary />
 					<div className="mt-4 md:mt-0">
-						<OpenTransactionCreation>
+						<OpenTransactionCreation
+							setIsModalOpen={setIsNewTransactionModalOpen}
+							isModalOpen={isNewTransactionModalOpen}
+						>
 							<NewTransactionForm
 								wallets={wallets}
-								onClose={() => openTransactionModal(false)} />
+								onClose={() => setIsNewTransactionModalOpen(false)} />
 						</OpenTransactionCreation>
 					</div>
 				</div>

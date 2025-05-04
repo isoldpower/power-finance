@@ -20,7 +20,7 @@ const useWalletSelection = ({
 
 	return {
 		setSelected,
-		selected: related[searchKey],
+		selected: related[searchKey] as string | undefined,
 	}
 }
 
