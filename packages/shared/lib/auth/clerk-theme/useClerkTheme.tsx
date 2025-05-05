@@ -18,7 +18,10 @@ const useClerkTheme = (dictionary: UseClerkThemeOptions): UseClerkThemeReturn =>
 		Promise.resolve()
 			.then(() => dictionary[theme])
 			.then((theme) => theme.computeTheme())
-			.then((computedTheme) => setClerkTheme(computedTheme));
+			.then((computedTheme) => setClerkTheme(computedTheme))
+			.catch((error) => {
+				console.error("Error computing theme:", error);
+			});
 	}, [dictionary, theme]);
 
 	return clerkTheme;
