@@ -7,6 +7,7 @@ import { buildViteConfig } from "@internal/config";
 import { buildFederationRemote } from "./config/federation.js";
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
+
 export default (env: ConfigEnv) => {
 	const options: ViteConfigOptions = {
 		port: 3002,
@@ -18,9 +19,10 @@ export default (env: ConfigEnv) => {
 		}
 	}
 
+
 	return buildViteConfig({
 		plugins: [
-			buildFederationRemote({ name: 'finance' }),
+			buildFederationRemote({ name: 'finance' }, env),
 			TanStackRouterVite({
 				target: 'react',
 				autoCodeSplitting: true,
@@ -30,7 +32,8 @@ export default (env: ConfigEnv) => {
 		],
 		test: {
 			globals: true,
-			setupFiles: './vitest.setup.ts',
+			environment: 'jsdom',
+			setupFiles: ['./vitest.setup.ts'],
 			coverage: {
 				enabled: true,
 				reporter: ['text', 'json', 'html'],

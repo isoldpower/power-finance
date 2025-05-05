@@ -9,29 +9,32 @@ import { useCallback, useMemo } from "react";
 const useCurrencyRates = () => {
 	const { mainCurrency } = useSettingsContext();
 
-	const { data, fetchStatus } = useQuery({
+	const { data, fetchStatus, status, refetch } = useQuery({
 		queryKey: [QUERY_KEY, mainCurrency],
 		queryFn: ({ queryKey }) => fetchCurrencies(queryKey[1] as string),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		refetchOnReconnect: false,
 		refetchInterval: POLLING_INTERVAL,
+		enabled: !!mainCurrency
 	});
 
-	const convertCurrencyToMain = useCallback((
+	const convertCurrencyToMain = useCallback(async (
 		amount: number,
 		currency: string
 	) => {
-		const rate = data?.find((item) => item.to === currency)?.rate;
+		const currentData = data ?? (await refetch()).data;
+		const rate = currentData?.find(item => item.to === currency)?.rate;
 
-		return rate ? amount * Math.pow(rate, -1) : 0;
-	}, [data]);
+		return rate ? amount / rate : 0;
+	}, [data, refetch]);
 
 	return useMemo(() => ({
 		convertCurrencyToMain,
 		currencies: data,
-		fetchStatus
-	}), [data, convertCurrencyToMain, fetchStatus]);
+		fetchStatus,
+		status
+	}), [data, convertCurrencyToMain, fetchStatus, status]);
 }
 
 export { useCurrencyRates };
