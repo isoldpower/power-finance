@@ -6,15 +6,18 @@ export function buildFederationHost(
 ) {
 	return federation({
 		name: options.name,
-		remotes: {
-			analytics: {
-				type: "module",
-				name: "analytics",
-				entry: "http://localhost:3001/remoteEntry.js",
-				entryGlobalName: "analytics",
-				shareScope: "default",
-			},
-		},
+		remotes: Object.fromEntries(
+			options.remotes.map((remote) => [
+				remote.name,
+				{
+					type: "module",
+					name: remote.name,
+					entry: `${remote.url}/remoteEntry.js`,
+					entryGlobalName: remote.name,
+					shareScope: "default",
+				}
+			])
+		),
 		filename: "remoteEntry.js",
 		shared: ["react", "react-dom"],
 	})

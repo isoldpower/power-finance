@@ -1,0 +1,1 @@
+export {LabeledThemeSwitch} from './labeled-theme-switch/LabeledThemeSwitch.tsx';

@@ -13,12 +13,12 @@ export const buildViteConfig = (
 	options: ViteConfigOptions
 ) => defineConfig((env) => {
 	const config = resolveConfigOptions(env, options);
-	const { plugins, server, resolve, preview, ...rest } = userConfig;
+	const { plugins, server, resolve, preview, build, ...rest } = userConfig;
 
 	return {
 		plugins: [
-			...buildPlugins(config),
-			...(plugins ?? [])
+			...(plugins ?? []),
+			...buildPlugins(config)
 		],
 		resolve: Object.assign(
 			buildPaths(config),
@@ -31,6 +31,10 @@ export const buildViteConfig = (
 		server: Object.assign(
 			buildServer(config),
 			server ?? {}
+		),
+		build: Object.assign(
+			{ target: options.target ?? 'chrome89' },
+			build ?? {}
 		),
 		...rest
 	}

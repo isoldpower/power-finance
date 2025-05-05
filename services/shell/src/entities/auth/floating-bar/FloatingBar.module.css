@@ -1,0 +1,7 @@
+.floatingBar__box {
+	border-color: rgba(2, 6, 23, 0.07);
+	border-width: 0;
+	box-shadow: rgba(0, 0, 0, 0.08) 0 5px 15px 0,
+		rgba(25, 28, 33, 0.2) 0 15px 35px -5px,
+		rgba(2, 6, 23, 0.07) 0 0 0 1px;
+}

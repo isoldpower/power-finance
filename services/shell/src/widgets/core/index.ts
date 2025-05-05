@@ -1,1 +1,0 @@
-export {BrandAppLoader} from './brand-app-loader/BrandAppLoader.tsx';

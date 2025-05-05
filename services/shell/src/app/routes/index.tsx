@@ -1,16 +1,14 @@
-import {createFileRoute, Outlet} from '@tanstack/react-router'
-import {BrandAppLoader} from "@widget/core";
+import { createFileRoute, Navigate } from '@tanstack/react-router'
+import { AppLoader } from "@internal/ui-library";
 
 export const Route = createFileRoute('/')({
-	pendingComponent: BrandAppLoader,
+	pendingComponent: AppLoader,
 	component: HomePage
 })
 
 function HomePage() {
 	return (
-		<div className="p-2">
-			<h3>Index Page</h3>
-			<Outlet />
-		</div>
-	)
+		<Navigate to='/landing' replace />
+	);
 }
+

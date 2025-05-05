@@ -17,8 +17,8 @@ export default (env: ConfigEnv) => {
 	}
 
 	return buildViteConfig({
-		plugins: [ buildFederationRemote({ name: 'analytics' }) ],
-		server: { port: 3001 },
-		build: { target: 'chrome89' }
+		plugins: [
+			buildFederationRemote({ name: 'analytics' })
+		],
 	}, options)(env);
 }
