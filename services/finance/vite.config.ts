@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import type { ConfigEnv } from "vite";
 import { resolve } from "path";
 
@@ -27,6 +28,14 @@ export default (env: ConfigEnv) => {
 				generatedRouteTree: resolve(__dirname, 'src', 'app', 'routeTree.gen.ts'),
 			}),
 		],
+		test: {
+			globals: true,
+			setupFiles: './vitest.setup.ts',
+			coverage: {
+				enabled: true,
+				reporter: ['text', 'json', 'html'],
+			}
+		},
 		envPrefix: 'CLIENT_',
 	}, options)(env);
 }

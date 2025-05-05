@@ -13,6 +13,7 @@ cache
 .nx/workspace-data
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
+coverage/
 
 # Debug files
 .lerna-debug.log

@@ -5,6 +5,7 @@ import { POLLING_INTERVAL, QUERY_KEY } from "./config.ts";
 import { fetchCurrencies } from "./fetchCurrencies.ts";
 import { useCallback, useMemo } from "react";
 
+
 const useCurrencyRates = () => {
 	const { mainCurrency } = useSettingsContext();
 

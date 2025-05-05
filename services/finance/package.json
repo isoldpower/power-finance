@@ -6,6 +6,9 @@
     "dev": "nx serve",
     "build": "tsc -b && nx vite:build",
     "lint": "nx eslint:lint",
+    "test": "vitest --passWithNoTests",
+    "test:ui": "vitest --ui --coverage",
+    "test:coverage": "vitest run --coverage",
     "preview": "nx vite:preview",
     "chore": "rm -rf .__mf__temp cache",
     "clean": "rm -rf node_modules dist && pnpm chore",
@@ -35,9 +38,12 @@
     "@internal/ui-library": "workspace:^",
     "@module-federation/vite": "catalog:",
     "@tanstack/eslint-plugin-query": "^5.73.3",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^22.14.1",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "@vitest/coverage-v8": "3.1.2",
     "currency-codes": "^2.2.0",
     "eslint": "catalog:",
     "eslint-plugin-react-dom": "^1.48.4",
@@ -45,8 +51,12 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "eslint-plugin-react-x": "^1.48.4",
     "globals": "catalog:",
+    "jest-fixed-jsdom": "^0.0.9",
+    "jsdom": "^26.1.0",
+    "msw": "^2.7.5",
     "typescript": "catalog:",
     "typescript-eslint": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "vitest": "^3.1.2"
   }
 }

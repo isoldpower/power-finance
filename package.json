@@ -6,50 +6,44 @@
   "scripts": {
     "dev:shell": "nx run @power/shell:dev",
     "dev:analytics": "nx run @power/analytics:dev",
-		"dev:finance": "nx run @power/finance:dev",
+    "dev:finance": "nx run @power/finance:dev",
     "dev": "nx run-many -t dev",
-
-		"build:shell": "nx run @power/shell:build",
-		"build:analytics": "nx run @power/analytics:build",
-		"build:finance": "nx run @power/finance:build",
-		"build": "nx run-many -t build",
-
-		"lint:shell": "nx run @power/shell:lint",
-		"lint:analytics": "nx run @power/analytics:lint",
-		"lint:finance": "nx run @power/finance:lint",
-		"lint": "nx run-many -t lint",
-
-		"preview:shell": "pnpm run build:shell && nx run @power/shell:preview",
-		"preview:analytics": "pnpm run build:analytics && nx run @power/analytics:preview",
-		"preview:finance": "pnpm run build:finance && nx run @power/finance:preview",
-		"preview": "nx run-many -t build && nx run-many -t preview",
-
-		"chore:root": "rm -rf .__mf__temp cache",
-		"clean:root": "rm -rf node_modules dist && pnpm chore",
-		"reset:root": "pnpm clean && pnpm install",
-		"reset:root:hard": "pnpm clean && rm -rf pnpm-lock.yaml && pnpm install",
-
-		"chore:sub": "nx run-many -t chore",
-		"clean:sub": "nx run-many -t clean",
-		"reset:sub": "nx run-many -t reset",
-		"reset:sub:hard": "nx run-many -t reset:hard",
-
-		"chore": "pnpm run chore:sub && pnpm run chore:root",
-		"clean": "pnpm run clean:sub && pnpm run clean:root",
-		"reset": "pnpm run reset:sub && pnpm run reset:root",
-		"reset:hard": "pnpm run reset:sub:hard && pnpm run reset:root:hard",
-		"reset:fix": "rm -rf **/node_modules && pnpm install"
+    "build:shell": "nx run @power/shell:build",
+    "build:analytics": "nx run @power/analytics:build",
+    "build:finance": "nx run @power/finance:build",
+    "build": "nx run-many -t build",
+    "lint:shell": "nx run @power/shell:lint",
+    "lint:analytics": "nx run @power/analytics:lint",
+    "lint:finance": "nx run @power/finance:lint",
+    "lint": "nx run-many -t lint",
+    "preview:shell": "pnpm run build:shell && nx run @power/shell:preview",
+    "preview:analytics": "pnpm run build:analytics && nx run @power/analytics:preview",
+    "preview:finance": "pnpm run build:finance && nx run @power/finance:preview",
+    "preview": "nx run-many -t build && nx run-many -t preview",
+    "chore:root": "rm -rf .__mf__temp cache",
+    "clean:root": "rm -rf node_modules dist && pnpm chore",
+    "reset:root": "pnpm clean && pnpm install",
+    "reset:root:hard": "pnpm clean && rm -rf pnpm-lock.yaml && pnpm install",
+    "chore:sub": "nx run-many -t chore",
+    "clean:sub": "nx run-many -t clean",
+    "reset:sub": "nx run-many -t reset",
+    "reset:sub:hard": "nx run-many -t reset:hard",
+    "chore": "pnpm run chore:sub && pnpm run chore:root",
+    "clean": "pnpm run clean:sub && pnpm run clean:root",
+    "reset": "pnpm run reset:sub && pnpm run reset:root",
+    "reset:hard": "pnpm run reset:sub:hard && pnpm run reset:root:hard",
+    "reset:fix": "rm -rf **/node_modules && pnpm install"
   },
   "devDependencies": {
     "@nx/eslint": "20.8.0",
     "@nx/vite": "20.8.0",
     "@nx/web": "20.8.0",
+    "@vitest/ui": "3.1.2",
     "eslint": "~8.57.0",
     "jiti": "2.4.2",
     "lerna": "^8.2.2",
     "nx": "20.8.0",
     "typescript": "^5.5.3"
   },
-  "private": true,
-  "dependencies": {}
+  "private": true
 }

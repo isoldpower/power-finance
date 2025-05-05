@@ -27,13 +27,16 @@ async function convertCurrency(
 	const params = searchParams.toString();
 	const url = `${CONVERT_CURRENCY_API_URL}?${params}`;
 
-	return await axios.get<ConvertCurrencyResponse>(url)
+	return await axios.get<ConvertCurrencyResponse>(url, { timeout: 3000 })
 		.then((response) => {
 			if (!response.data.success) throw new Error('Failed to fetch currencies');
 
 			return response.data.info;
 		})
-		.then((info) => ({ from, to, rate: info.rate }));
+		.then((info) => ({ from, to, rate: info.rate }))
+		.catch((error) => {
+			throw new Error(`Failed to fetch currencies: ${error.message}`)
+		});
 }
 
 export { convertCurrency };
