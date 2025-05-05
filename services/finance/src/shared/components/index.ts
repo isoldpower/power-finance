@@ -2,6 +2,9 @@ export { HeaderBox } from './global-layout/HeaderBox.tsx';
 export { HeaderBoxOffset } from './global-layout/HeaderBoxOffset.tsx';
 export { GlobalLayout } from './global-layout/GlobalLayout.tsx';
 
+export { BreadcrumbItem } from './breadcrumbs/BreadcrumbItem.tsx';
+export { RelativeBreadcrumbs } from './breadcrumbs/RelativeBreadcrumbs.tsx';
+
 export { List } from './list/List.tsx';
 export { getTanStackPageFx } from './fx/getter.ts';
 

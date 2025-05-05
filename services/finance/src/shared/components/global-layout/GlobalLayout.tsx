@@ -3,12 +3,12 @@ import { useState } from "react";
 
 import { PopoverTrigger, PopoverContent, Popover } from "@internal/ui-library";
 
-import { RelativeBreadcrumbs } from "./RelativeBreadcrumbs.tsx";
-import { HeaderBox } from "@shared/components";
+import { HeaderBox, RelativeBreadcrumbs } from "@shared/components";
 import { PreferredCurrencySelection, GlobalLocaleSelection } from "@widget/preferences";
 import { PreferencesButton, PreferencesModalBox } from "@entity/preferences";
-import {Link} from "@tanstack/react-router";
-import {getFinanceRoute} from "@internal/shared";
+import { Link } from "@tanstack/react-router";
+import { getFinanceRoute } from "@internal/shared";
+
 
 interface GlobalLayoutProps {
 	children: ReactNode;

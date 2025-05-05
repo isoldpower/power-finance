@@ -49,7 +49,10 @@ function wrapper({ children }: { children: React.ReactNode }) {
 
 describe('useCurrencyRates', () => {
 	beforeAll(() => server.listen());
-	afterEach(() => server.resetHandlers());
+	afterEach(() => {
+		vi.clearAllMocks();
+		server.resetHandlers();
+	});
 	afterAll(() => server.close());
 
 	test('fetches currency data and converts correctly', async () => {

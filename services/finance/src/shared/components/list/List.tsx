@@ -1,7 +1,9 @@
-import {Children, LiHTMLAttributes, ReactNode} from "react";
+import { Children } from "react";
+import type { LiHTMLAttributes, ReactNode } from "react";
+
 
 interface ListProps extends LiHTMLAttributes<HTMLUListElement> {
-	children: ReactNode;
+	children?: ReactNode;
 	elementProps?: ((index: number) => LiHTMLAttributes<HTMLLIElement>) | LiHTMLAttributes<HTMLLIElement>;
 }
 

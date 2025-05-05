@@ -6,7 +6,8 @@ import {
 	BreadcrumbLink,
 	BreadcrumbSeparator
 } from "@internal/ui-library";
-import {BreadcrumbPage} from "@internal/ui-library";
+import { BreadcrumbPage } from "@internal/ui-library";
+
 
 interface BreadcrumbItemProps {
 	to: string;

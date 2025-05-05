@@ -13,7 +13,7 @@ interface RelativeBreadcrumbsProps {
 const RelativeBreadcrumbs: FC<RelativeBreadcrumbsProps> = ({
 	root = ''
 }) => {
-	const { pathname } = useLocation();
+	const {pathname} = useLocation();
 	const chunks = useMemo(() => {
 		const cutPathname = pathname.replace(root, '');
 
@@ -25,7 +25,7 @@ const RelativeBreadcrumbs: FC<RelativeBreadcrumbsProps> = ({
 		return chunks.map((chunk, index) => {
 			const path = `${chunks.slice(0, index + 1).join('/')}`;
 			const capitalizedChunk = chunk.charAt(0).toUpperCase() + chunk.slice(1);
-			return { name: capitalizedChunk, path };
+			return {name: capitalizedChunk, path};
 		});
 	}, [chunks]);
 

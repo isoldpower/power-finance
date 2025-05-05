@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = require("axios");
 var http_js_1 = require("axios/lib/adapters/http.js");
+require("@testing-library/jest-dom");
 // Force axios to use HTTP handler even in when environment is set to 'jsdom'
 function mockAxiosHandler() {
     axios_1.default.defaults.adapter = http_js_1.default;

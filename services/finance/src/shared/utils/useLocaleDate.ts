@@ -1,5 +1,6 @@
 import { useSettingsContext } from "@internal/shared";
-import {useCallback, useMemo} from "react";
+import { useCallback, useMemo } from "react";
+
 
 export const useLocaleDate = (date: string) => {
 	const { locale } = useSettingsContext();
@@ -7,11 +8,15 @@ export const useLocaleDate = (date: string) => {
 	return useMemo(() => {
 		const dateFormat = new Date(date);
 
-		return new Intl.DateTimeFormat(locale, {
-			month: 'short',
-			day: 'numeric',
-			year: 'numeric'
-		}).format(dateFormat);
+		try {
+			return new Intl.DateTimeFormat(locale, {
+				month: 'short',
+				day: 'numeric',
+				year: 'numeric'
+			}).format(dateFormat);
+		} catch (e) {
+			return dateFormat.toLocaleDateString();
+		}
 	}, [locale, date]);
 }
 
@@ -21,10 +26,14 @@ export const useLocaleDateTransform = () => {
 	return useCallback((date: string) => {
 		const dateFormat = new Date(date);
 
-		return new Intl.DateTimeFormat(locale, {
-			month: 'short',
-			day: 'numeric',
-			year: 'numeric'
-		}).format(dateFormat);
+		try {
+			return new Intl.DateTimeFormat(locale, {
+				month: 'short',
+				day: 'numeric',
+				year: 'numeric'
+			}).format(dateFormat);
+		} catch (e) {
+			return dateFormat.toLocaleDateString();
+		}
 	}, [locale]);
 }

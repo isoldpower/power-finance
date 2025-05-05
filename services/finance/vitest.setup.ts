@@ -1,5 +1,6 @@
 import axios from "axios";
 import http from 'axios/lib/adapters/http.js';
+import '@testing-library/jest-dom';
 
 
 // Force axios to use HTTP handler even in when environment is set to 'jsdom'
