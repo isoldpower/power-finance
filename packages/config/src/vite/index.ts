@@ -33,7 +33,7 @@ export const buildViteConfig = (
 			server ?? {}
 		),
 		build: Object.assign(
-			{ target: 'chrome89' },
+			{ target: options.target ?? 'chrome89' },
 			build ?? {}
 		),
 		...rest
