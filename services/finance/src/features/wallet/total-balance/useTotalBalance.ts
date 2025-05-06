@@ -4,6 +4,7 @@ import { useSettingsContext } from "@internal/shared";
 import { useCurrencyRates } from "@shared/external-api";
 import type { Wallet } from "@entity/wallet";
 
+
 const useTotalBalance = (wallets: Wallet[]) => {
 	const { mainCurrency, locale } = useSettingsContext();
 	const { convertCurrencyToMain } = useCurrencyRates();
