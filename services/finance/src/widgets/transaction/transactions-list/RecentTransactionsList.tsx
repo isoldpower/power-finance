@@ -34,7 +34,7 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 		)
 	);
 
-	return transactions.length > 0 || status === 'pending'
+	return Object.entries(selectedTransactions).length > 0 || status === 'pending'
 		? (
 			<TransactionsListFx
 				pending={<TransactionsListPending amount={3} /> }

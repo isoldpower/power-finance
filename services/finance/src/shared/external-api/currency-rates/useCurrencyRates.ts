@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { useSettingsContext } from "@internal/shared";
+import {useQuery} from "@tanstack/react-query";
+import {useSettingsContext} from "@internal/shared";
 
-import { POLLING_INTERVAL, QUERY_KEY } from "./config.ts";
-import { fetchCurrencies } from "./fetchCurrencies.ts";
-import { useCallback, useMemo } from "react";
+import {POLLING_INTERVAL, QUERY_KEY} from "./config.ts";
+import {fetchCurrencies} from "./fetchCurrencies.ts";
+import {useCallback, useMemo} from "react";
 
 
 const useCurrencyRates = () => {
@@ -19,12 +19,13 @@ const useCurrencyRates = () => {
 		enabled: !!mainCurrency
 	});
 
-	const convertCurrencyToMain = useCallback(async (
+	const convertCurrencyToMain = useCallback((
 		amount: number,
 		currency: string
 	) => {
-		const currentData = data ?? (await refetch()).data;
-		const rate = currentData?.find(item => item.to === currency)?.rate;
+		const rate = data?.find(item => {
+			return item.to === currency;
+		})?.rate;
 
 		return rate ? amount / rate : 0;
 	}, [data, refetch]);
