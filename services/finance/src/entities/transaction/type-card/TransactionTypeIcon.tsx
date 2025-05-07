@@ -1,4 +1,4 @@
-import { ArrowUpRight, ArrowDownLeft, ArrowLeftRight, MoreHorizontal } from 'lucide-react';
+import { Icons } from '@internal/ui-library';
 import type { TransactionType } from "@entity/transaction";
 
 import { useMemo } from "react";
@@ -12,13 +12,13 @@ const TransactionTypeIcon: React.FC<TransactionTypeIconProps> = ({ type }) => {
 	const item = useMemo(() => {
 		switch (type) {
 			case 'income':
-				return <ArrowDownLeft className="text-green-500" />;
+				return <Icons.ArrowDownLeft className="text-green-500" />;
 			case 'expense':
-				return <ArrowUpRight className="text-red-500" />;
+				return <Icons.ArrowUpRight className="text-red-500" />;
 			case 'transfer':
-				return <ArrowLeftRight className="text-blue-500" />;
+				return <Icons.ArrowLeftRight className="text-blue-500" />;
 			default:
-				return <MoreHorizontal className="text-purple-500" />;
+				return <Icons.MoreHorizontal className="text-purple-500" />;
 		}
 	}, [type]);
 

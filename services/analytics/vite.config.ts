@@ -9,10 +9,10 @@ export default (env: ConfigEnv) => {
 	const options: ViteConfigOptions = {
 		port: 3001,
 		paths: {
-			root: __dirname,
-			src: resolve(__dirname, 'src'),
-			output: resolve(__dirname, 'dist'),
-			public: resolve(__dirname, 'public')
+			root: import.meta.dirname,
+			src: resolve(import.meta.dirname, 'src'),
+			output: resolve(import.meta.dirname, 'dist'),
+			public: resolve(import.meta.dirname, 'public')
 		}
 	}
 

@@ -68,4 +68,5 @@ function ToggleGroupItem({
   )
 }
 
+export type { ToggleGroupSingleProps, ToggleGroupMultipleProps } from '@radix-ui/react-toggle-group';
 export { ToggleGroup, ToggleGroupItem }

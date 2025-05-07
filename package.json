@@ -2,6 +2,7 @@
   "name": "power-drive",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "dev:shell": "nx run @power/shell:dev",
@@ -32,8 +33,9 @@
     "clean": "pnpm run clean:sub && pnpm run clean:root",
     "reset": "pnpm run reset:sub && pnpm run reset:root",
     "reset:hard": "pnpm run reset:sub:hard && pnpm run reset:root:hard",
-    "reset:fix": "rm -rf **/node_modules && pnpm install"
-  },
+    "reset:fix": "rm -rf **/node_modules && pnpm install",
+		"postinstall": "pnpm --filter @internal/config run build"
+	},
   "devDependencies": {
     "@nx/eslint": "20.8.0",
     "@nx/vite": "20.8.0",
@@ -43,7 +45,8 @@
     "jiti": "2.4.2",
     "lerna": "^8.2.2",
     "nx": "20.8.0",
-    "typescript": "^5.5.3"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   },
   "private": true
 }

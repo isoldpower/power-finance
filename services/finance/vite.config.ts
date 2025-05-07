@@ -3,10 +3,14 @@ import type { ConfigEnv } from "vite";
 import { resolve } from "path";
 
 import type { ViteConfigOptions } from "@internal/config";
-import { buildViteConfig } from "@internal/config";
 import { buildFederationRemote } from "./config/federation.js";
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
+import { buildViteConfig } from "@internal/config";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default (env: ConfigEnv) => {
 	const options: ViteConfigOptions = {

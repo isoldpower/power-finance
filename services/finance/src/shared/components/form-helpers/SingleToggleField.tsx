@@ -1,8 +1,15 @@
 import { cn, ToggleGroup, ToggleGroupItem } from "@internal/ui-library";
-import {ComponentProps, FC, ReactNode, useCallback} from "react";
+import { useCallback } from "react";
+import type { ComponentProps, FC, FormEvent, FormEventHandler, ReactNode } from "react";
 
-type SingleToggleFieldProps = Omit<ComponentProps<typeof ToggleGroup>, 'type' | 'className'> & {
+
+type SingleToggleFieldProps = Omit<
+	ComponentProps<typeof ToggleGroup>,
+	'type' | 'className' | 'value' | 'defaultValue' | 'onValueChange'
+> & {
 	options: { label: ReactNode; value: string }[];
+	value?: string;
+	defaultValue?: string;
 	className?: string
 }
 
@@ -11,7 +18,7 @@ const SingleToggleField: FC<SingleToggleFieldProps> = ({ options, className, onC
 		if (!value) return;
 
 		if (onChange) {
-			(onChange as (value: string) => void)(value);
+			(onChange as FormEventHandler)(value as unknown as FormEvent);
 		}
 	}, [onChange]);
 

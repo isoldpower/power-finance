@@ -12,7 +12,9 @@ export default defineConfig({
 	plugins: [
 		react(),
 		tailwindcss(),
-		dts({ tsconfigPath: './tsconfig.app.json' })
+		dts({
+			tsconfigPath: './tsconfig.app.json'
+		})
 	],
 	resolve: {
 		alias: {

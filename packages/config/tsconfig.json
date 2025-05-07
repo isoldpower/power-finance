@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
 		"emitDeclarationOnly": true,
+		"declaration": true,
+		"declarationDir": "./dist",
+		"noEmit": false,
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleResolution": "Bundler",

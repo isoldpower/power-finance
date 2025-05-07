@@ -1,6 +1,7 @@
 # Secret files
 .env
 
+
 # Builds and compiled files
 /tmp
 /out-tsc
@@ -14,6 +15,7 @@ cache
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
 coverage/
+.rollup.cache/
 
 # Debug files
 .lerna-debug.log

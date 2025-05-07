@@ -22,7 +22,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-		/* Linking */
 		"baseUrl": ".",
 		"paths": {
 			"@/*": [

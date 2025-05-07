@@ -34,7 +34,10 @@
   },
 	"peerDependencies": {
 		"react": "catalog:",
-		"react-dom": "catalog:"
+		"react-dom": "catalog:",
+		"@clerk/clerk-react": "catalog:",
+		"@clerk/types": "^4.54.2",
+		"@tanstack/react-router": "catalog:"
 	},
   "devDependencies": {
     "react": "catalog:",
