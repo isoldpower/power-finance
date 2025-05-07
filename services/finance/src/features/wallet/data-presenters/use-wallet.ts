@@ -30,7 +30,7 @@ const useWallet = (
 
 	return useMemo(() => ({
 		...query,
-		wallet: query?.data
+		wallet: query.data
 	}), [query]);
 }
 

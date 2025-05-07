@@ -5,14 +5,14 @@ import type { TransactionPreview, TransactionDetailed } from "../types.ts";
 const flatToTransactionPreview = (
 	flat: Transaction
 ): TransactionPreview => {
-	const { type, id, ...data } = flat;
+	const { type, ...data } = flat;
 
 	return {
 		type,
-		id,
+		id: data.id,
 		data,
 		meta: {
-			id,
+			id: data.id,
 			createdAt: flat.createdAt
 		}
 	};
@@ -21,13 +21,16 @@ const flatToTransactionPreview = (
 const flatToTransactionDetailed = (
 	flat: Transaction
 ): TransactionDetailed => {
-	const { type, createdAt, id, ...data } = flat;
+	const { type, ...data } = flat;
 
 	return {
 		type,
-		id,
+		id: data.id,
 		data,
-		meta: { id, createdAt }
+		meta: {
+			id: data.id,
+			createdAt: data.createdAt
+		}
 	};
 }
 

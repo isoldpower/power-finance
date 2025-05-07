@@ -1,10 +1,10 @@
 import { useLocation } from "@tanstack/react-router";
-import { FC, useMemo } from "react";
-import {
-	Breadcrumb,
-	BreadcrumbList,
-} from "@internal/ui-library";
+import { useMemo } from "react";
+import { Breadcrumb, BreadcrumbList } from "@internal/ui-library";
+import type { FC } from "react";
+
 import { BreadcrumbItem } from "./BreadcrumbItem.tsx";
+
 
 interface RelativeBreadcrumbsProps {
 	root?: string
@@ -19,11 +19,11 @@ const RelativeBreadcrumbs: FC<RelativeBreadcrumbsProps> = ({
 
 		return cutPathname.split('/')
 			.filter(Boolean);
-	}, [pathname]);
+	}, [pathname, root]);
 
 	const breadcrumbs = useMemo(() => {
 		return chunks.map((chunk, index) => {
-			const path = `${chunks.slice(0, index + 1).join('/')}`;
+			const path = chunks.slice(0, index + 1).join('/');
 			const capitalizedChunk = chunk.charAt(0).toUpperCase() + chunk.slice(1);
 			return {name: capitalizedChunk, path};
 		});
@@ -36,7 +36,7 @@ const RelativeBreadcrumbs: FC<RelativeBreadcrumbsProps> = ({
 					Home
 				</BreadcrumbItem>
 				{breadcrumbs.map((breadcrumb, index) => (
-					<BreadcrumbItem to={`${root}/${breadcrumb.path}`} key={index}>
+					<BreadcrumbItem to={`${root}/${breadcrumb.path}`} key={`breadcrumb-item-${index.toString()}`}>
 						{breadcrumb.name}
 					</BreadcrumbItem>
 				))}

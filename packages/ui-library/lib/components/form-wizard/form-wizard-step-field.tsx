@@ -19,7 +19,7 @@ type FormWizardStepFieldProps<
 function FormWizardStepField<
 	T1 extends FieldValues,
 	T2 extends z.ZodTypeDef
->({ formSchema, children, ...props }: FormWizardStepFieldProps<T1, T2>) {
+>({ children, ...props }: FormWizardStepFieldProps<T1, T2>) {
 	const { form } = useWizardStepContext();
 	const parsedForm = useMemo(() => form as UseFormReturn<T1>, [form]);
 

@@ -28,7 +28,7 @@ const useWalletsList = (
 
 	return useMemo(() => ({
 		...query,
-		wallets: query?.data?.data ?? []
+		wallets: query.data?.data ?? []
 	}), [query]);
 }
 

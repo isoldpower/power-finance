@@ -10,7 +10,7 @@ import { useSettingsContext } from '@internal/shared';
 // Mock the useSettingsContext
 const mockedUseSettingsContext = useSettingsContext as unknown as Mock;
 vi.mock('@internal/shared', async () => {
-	const actual = await vi.importActual<any>('@internal/shared');
+	const actual = await vi.importActual<object>('@internal/shared');
 
 	return {
 		...actual,
@@ -48,12 +48,12 @@ function wrapper({ children }: { children: React.ReactNode }) {
 }
 
 describe('useCurrencyRates', () => {
-	beforeAll(() => server.listen());
+	beforeAll(() => { server.listen(); });
 	afterEach(() => {
 		vi.clearAllMocks();
 		server.resetHandlers();
 	});
-	afterAll(() => server.close());
+	afterAll(() => { server.close(); });
 
 	test('fetches currency data and converts correctly', async () => {
 		mockedUseSettingsContext.mockReturnValue({ mainCurrency: 'USD' });
@@ -63,7 +63,7 @@ describe('useCurrencyRates', () => {
 			expect(result.current.status).toBe('success');
 		});
 
-		const converted = await result.current.convertCurrencyToMain(
+		const converted = result.current.convertCurrencyToMain(
 			100,
 			'EUR'
 		);
@@ -78,7 +78,7 @@ describe('useCurrencyRates', () => {
 			expect(result.current.status).toBe('success');
 		});
 
-		const converted = await result.current.convertCurrencyToMain(
+		const converted = result.current.convertCurrencyToMain(
 			100,
 			'INVALID'
 		);

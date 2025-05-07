@@ -1,10 +1,10 @@
-import {Wallet} from "@entity/wallet";
-import {WalletDetailed, WalletPreview} from "@feature/wallet/api-clients/types.ts";
+import { Wallet } from "@entity/wallet";
+import type { WalletDetailed, WalletPreview } from "../types.ts";
 
 const flatToWalletPreview = (
 	flat: Wallet
 ): WalletPreview => {
-	const { id, createdAt, updatedAt, ...data } = flat;
+	const { id, ...data } = flat;
 
 	return { ...data, id };
 }
@@ -18,8 +18,8 @@ const flatToWalletDetailed = (
 		...data,
 		id,
 		meta: {
-			createdAt: createdAt || '',
-			updatedAt: updatedAt || '',
+			createdAt: createdAt ?? '',
+			updatedAt: updatedAt ?? '',
 			id
 		}
 	};

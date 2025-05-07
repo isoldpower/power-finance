@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import {describe, it, expect, vi, Mock} from 'vitest';
 import { RelativeBreadcrumbs } from './RelativeBreadcrumbs';
 import { useLocation } from '@tanstack/react-router';
+import type { LinkProps } from '@tanstack/react-router';
+import type { ReactNode } from "react";
 
 
 // Mocking the useLocation hook from react-router
@@ -11,7 +13,11 @@ vi.mock('@tanstack/react-router', async () => {
 	return {
 		...actual,
 		useLocation: vi.fn(),
-		Link: ({ to, children }: any) => <a href={to}>{children}</a>
+		Link: ({ to, children }: LinkProps) => (
+			<a href={to as string}>
+				{children as ReactNode}
+			</a>
+		)
 	};
 });
 

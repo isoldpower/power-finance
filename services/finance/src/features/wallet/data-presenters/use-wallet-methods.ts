@@ -19,7 +19,7 @@ import type {
 } from "@feature/wallet";
 
 
-type UseWalletReturn = {
+interface UseWalletReturn {
 	meta: {
 		updateMutation: UseMutationResult<UpdateWalletResponse, Error, UpdateWalletRequest['payload']>;
 		deleteMutation: UseMutationResult<DeleteWalletResponse, Error, string>;
@@ -88,7 +88,7 @@ const useWalletMethods = (
 		}),
 		mutationKey: [CACHE_KEYS.update, id],
 		onSettled: () => singleQuery.refetch()
-			.then(({ data }) => synchronizeList(data))
+			.then(({ data }) => { synchronizeList(data); })
 	});
 
 	const deleteMutation = useMutation({
@@ -97,7 +97,7 @@ const useWalletMethods = (
 			handler: apiContext.walletsClients.rest
 		}),
 		mutationKey: [CACHE_KEYS.delete, id],
-		onSettled: () => filterList(singleQuery.data)
+		onSettled: () => { filterList(singleQuery.data); }
 	});
 
 	const replaceMutation = useMutation({
@@ -107,30 +107,30 @@ const useWalletMethods = (
 		}),
 		mutationKey: [CACHE_KEYS.replace, id],
 		onSettled: () => singleQuery.refetch()
-			.then(({ data }) => synchronizeList(data))
+			.then(({ data }) => { synchronizeList(data); })
 	});
 
 	const fetchWallet = useCallback(() => {
 		return singleQuery.refetch();
-	}, [singleQuery.refetch]);
+	}, [singleQuery]);
 
 	const updateWallet = useCallback((
 		data: WalletValuableFields
 	) => {
-		return updateMutation.mutate({ id, data })
-	}, [id, updateMutation.mutate]);
+		updateMutation.mutate({ id, data });
+	}, [id, updateMutation]);
 
 	const deleteWallet = useCallback(() => {
-		return deleteMutation.mutate(id);
-	}, [id, deleteMutation.mutate]);
+		deleteMutation.mutate(id);
+	}, [deleteMutation, id]);
 
 	const replaceWallet = useCallback((
 		data: WalletValuableFields
 	) => {
 		const indexedData = Object.assign(data, { id });
 
-		return replaceMutation.mutate({ id, data: indexedData });
-	}, [id, replaceMutation.mutate]);
+		replaceMutation.mutate({ id, data: indexedData });
+	}, [id, replaceMutation]);
 
 	const meta = useMemo(() => ({
 		updateMutation,

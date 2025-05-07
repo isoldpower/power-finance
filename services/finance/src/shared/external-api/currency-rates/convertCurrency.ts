@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { CONVERT_CURRENCY_API_URL } from "./config.ts";
+import {z} from "zod";
 
 
 interface ConvertCurrencyResponse {
@@ -34,8 +35,14 @@ async function convertCurrency(
 			return response.data.info;
 		})
 		.then((info) => ({ from, to, rate: info.rate }))
-		.catch((error) => {
-			throw new Error(`Failed to fetch currencies: ${error.message}`)
+		.catch((error: unknown) => {
+			const { message } = z.object({
+				message: z.string()
+			}).catch({
+				message: `Unknown error when converting currency ${from} to ${to}`
+			}).parse(error);
+
+			throw new Error(`Failed to convert currencies: ${message}`)
 		});
 }
 

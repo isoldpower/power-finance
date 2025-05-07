@@ -1,5 +1,5 @@
 import {FC, useRef} from 'react';
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, useMemo } from 'react';
 
 import { WalletsMockRESTApiClient } from "@feature/wallet";
 import { TransactionMockRESTApiClient } from "@feature/transaction";
@@ -33,24 +33,14 @@ const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
   }), []);
 
   return (
-    <ApiContext.Provider value={contextValue}>
+    <ApiContext value={contextValue}>
 			<ApiQueryReactions />
       {children}
-    </ApiContext.Provider>
+    </ApiContext>
   );
 };
 
 ApiProvider.displayName = 'ApiProvider';
 
-const useApiContext = () => {
-  const context = useContext(ApiContext);
-
-  if (!context) {
-    throw new Error('useApiContext must be used within an ApiProvider');
-  }
-
-  return context;
-};
-
-export { ApiProvider, useApiContext };
+export { ApiProvider, ApiContext };
 export type { ApiContextType, ApiProviderProps };

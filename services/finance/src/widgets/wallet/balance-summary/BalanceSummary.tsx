@@ -1,13 +1,14 @@
 import type { FC } from "react";
 
 import { useTotalBalance , useWalletsList } from "@feature/wallet";
-import { HeadingTextLoading } from "@entity/wallet";
+import { HeadingTextLoading } from "@feature/wallet";
 
-interface BalanceSummaryProps {}
+type BalanceSummaryProps = object;
+
 
 const BalanceSummary: FC<BalanceSummaryProps> = () => {
 	const { wallets, isPending } = useWalletsList();
-	const totalBalance = useTotalBalance(wallets ?? []);
+	const totalBalance = useTotalBalance(wallets);
 
 	return (
 		<div>

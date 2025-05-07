@@ -2,6 +2,7 @@ import { Button, Form, FormField } from "@internal/ui-library";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearch } from "@tanstack/react-router";
+import { z } from "zod";
 import type { FC } from "react";
 
 import { filterDefaultValues, transactionFiltersSchema, ApplyQueryFilters } from "@feature/transaction";
@@ -19,11 +20,15 @@ const TransactionFiltersModal: FC<TransactionFiltersModalProps> = ({
 	onClose,
 	wallets
 }) => {
-	const { selectedWallet } = useSearch({ strict: false });
+	const searchParams: unknown = useSearch({ strict: false });
+	const { selectedWallet } = z.object({
+		selectedWallet: z.string()
+	}).catch({ selectedWallet: 'all' }).parse(searchParams);
+
 	const form = useForm({
 		resolver: zodResolver(transactionFiltersSchema),
 		defaultValues: Object.assign(filterDefaultValues, {
-			selectedWallet: selectedWallet as string
+			selectedWallet: selectedWallet
 		})
 	});
 

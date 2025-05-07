@@ -31,16 +31,15 @@ function NewTransaction({
 				break;
 			default:
 				createData = await buildCreateData(wallets, data);
-				console.log(createData.to?.amount)
 				break;
 		}
 
 		createTransaction(createData);
-		onSuccess && onSuccess(data);
+		if(onSuccess) onSuccess(data);
 	}, [wallets, createTransaction, onSuccess]);
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
+		<form onSubmit={() => handleSubmit(onSubmit)}>
 			{children}
 		</form>
 	);

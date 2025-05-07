@@ -6,8 +6,7 @@ import type { FC } from "react";
 import { useWalletsList } from "@feature/wallet";
 
 
-type WalletsListNavigationHeaderProps = {
-}
+type WalletsListNavigationHeaderProps = object;
 
 const WalletsListNavigationHeader: FC<WalletsListNavigationHeaderProps> = () => {
 	const { status, wallets } = useWalletsList();

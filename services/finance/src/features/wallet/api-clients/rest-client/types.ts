@@ -1,7 +1,7 @@
 import type {
 	DeleteRequest, DeleteResponse, IDeleteHandler,
 	GetRequest, GetResponse, IGetHandler,
-	ListParams, ListRequest, ListResponse, IListHandler,
+	ListRequest, ListResponse, IListHandler,
 	PatchRequest, PatchResponse, IPatchHandler,
 	PostRequest, PostResponse, IPostHandler,
 	PutRequest, PutResponse, IPutHandler
@@ -9,11 +9,11 @@ import type {
 import type {WalletDetailed, WalletMinimalPayload, WalletPreview, WalletValuableFields} from "../types.ts";
 
 interface IWalletsRESTApiClient extends IGetHandler<object, WalletDetailed>,
-	IPostHandler<WalletMinimalPayload, WalletDetailed, object>,
-	IListHandler<WalletPreview, object>,
+	IPostHandler<WalletMinimalPayload, WalletDetailed>,
+	IListHandler<WalletPreview>,
 	IPatchHandler<WalletMinimalPayload, WalletDetailed>,
 	IPutHandler<WalletMinimalPayload, WalletDetailed>,
-	IDeleteHandler<object> {
+	IDeleteHandler {
 }
 
 type WalletGetRequest = GetRequest<object>;
@@ -22,7 +22,7 @@ type WalletGetResponse = GetResponse<WalletDetailed>;
 type WalletPostRequest = PostRequest<WalletValuableFields, object>;
 type WalletPostResponse = PostResponse<WalletDetailed>;
 
-type WalletListRequest = ListRequest<ListParams>;
+type WalletListRequest = ListRequest;
 type WalletListResponse = ListResponse<WalletPreview>;
 
 type WalletPatchRequest = PatchRequest<WalletValuableFields, object>

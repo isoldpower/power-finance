@@ -9,9 +9,9 @@ import {useCallback, useMemo} from "react";
 const useCurrencyRates = () => {
 	const { mainCurrency } = useSettingsContext();
 
-	const { data, fetchStatus, status, refetch } = useQuery({
+	const { data, fetchStatus, status } = useQuery({
 		queryKey: [QUERY_KEY, mainCurrency],
-		queryFn: ({ queryKey }) => fetchCurrencies(queryKey[1] as string),
+		queryFn: ({ queryKey }) => fetchCurrencies(queryKey[1]),
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		refetchOnReconnect: false,
@@ -28,7 +28,7 @@ const useCurrencyRates = () => {
 		})?.rate;
 
 		return rate ? amount / rate : 0;
-	}, [data, refetch]);
+	}, [data]);
 
 	return useMemo(() => ({
 		convertCurrencyToMain,

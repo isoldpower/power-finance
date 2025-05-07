@@ -7,7 +7,7 @@ import { CardsListPending, CardsListError, CardsList } from "@entity/wallet";
 import type { Wallet } from "@entity/wallet";
 
 
-type FullWalletsListProps = {
+interface FullWalletsListProps {
 	onCreate?: () => void;
 	children: ReactElement<{ wallet: Wallet }>;
 }

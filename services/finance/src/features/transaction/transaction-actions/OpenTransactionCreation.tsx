@@ -18,7 +18,7 @@ const OpenTransactionCreation: FC<OpenTransactionCreationProps> = ({
 		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
 			<DialogTrigger asChild>
 				<Button
-					onClick={() => setIsModalOpen(true)}
+					onClick={() => { setIsModalOpen(true); }}
 					variant="outline"
 					className="bg-white/10 text-white border-white/20 hover:bg-white/20"
 					{...props}

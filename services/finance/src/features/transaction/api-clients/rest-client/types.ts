@@ -1,7 +1,7 @@
 import type {
 	DeleteRequest, DeleteResponse, IDeleteHandler,
 	GetRequest, GetResponse, IGetHandler,
-	ListParams, ListRequest, ListResponse, IListHandler,
+	ListRequest, ListResponse, IListHandler,
 	PostRequest, PostResponse, IPostHandler,
 	PutRequest, PutResponse, IPutHandler
 } from "@app/api/model";
@@ -9,10 +9,10 @@ import type { TransactionDetailed, TransactionPreview, TransactionMinimalPayload
 
 interface ITransactionsRESTApiClient extends
 	IGetHandler<object, TransactionDetailed>,
-	IPostHandler<TransactionMinimalPayload, TransactionDetailed, object>,
-	IListHandler<TransactionPreview, object>,
+	IPostHandler<TransactionMinimalPayload, TransactionDetailed>,
+	IListHandler<TransactionPreview>,
 	IPutHandler<TransactionMinimalPayload, TransactionDetailed>,
-	IDeleteHandler<object> {
+	IDeleteHandler {
 }
 
 type TransactionGetRequest = GetRequest<object>;
@@ -21,7 +21,7 @@ type TransactionGetResponse = GetResponse<TransactionDetailed>;
 type TransactionPostRequest = PostRequest<TransactionValuableFields, object>;
 type TransactionPostResponse = PostResponse<TransactionDetailed>;
 
-type TransactionListRequest = ListRequest<ListParams>;
+type TransactionListRequest = ListRequest;
 type TransactionListResponse = ListResponse<TransactionPreview>;
 
 type TransactionPutRequest = PutRequest<TransactionValuableFields, object>;

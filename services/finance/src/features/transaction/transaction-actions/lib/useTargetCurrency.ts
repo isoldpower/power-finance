@@ -15,14 +15,9 @@ const useTargetCurrency = (
 	const type = form.watch('type');
 	const from = form.watch('from');
 	const to = form.watch('to');
-	const target = form.watch('targetCurrency');
 
 	useEffect(() => {
-		console.log(target);
-	}, [target]);
-
-	useEffect(() => {
-		if (form.getFieldState('targetCurrency').isTouched) return;
+		if (form.getFieldState('targetCurrency').isDirty) return;
 
 		const fromWallet = wallets.find((wallet) => wallet.id === from);
 		const toWallet = wallets.find((wallet) => wallet.id === to);
@@ -43,7 +38,7 @@ const useTargetCurrency = (
 				form.setValue('targetCurrency', mainCurrency);
 				break;
 		}
-	}, [type, from, to]);
+	}, [type, from, to, form, wallets, mainCurrency]);
 }
 
 export { useTargetCurrency };

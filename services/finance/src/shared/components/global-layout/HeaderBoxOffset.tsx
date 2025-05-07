@@ -8,7 +8,7 @@ interface HeaderBoxOffsetProps {
 const HeaderBoxOffset: FC<HeaderBoxOffsetProps> = ({ children }) => {
 	return (
 		<div style={{
-			marginTop: `${HEADER_HEIGHT}px`,
+			marginTop: `${HEADER_HEIGHT.toString()}px`,
 		}}>
 			{children}
 		</div>

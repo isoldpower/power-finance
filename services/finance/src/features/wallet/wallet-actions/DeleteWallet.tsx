@@ -25,7 +25,7 @@ const DeleteWallet: FC<DeleteWalletProps> = ({ children, wallet, ...props }) => 
 	const handleDelete = useCallback(() => {
 		deleteWallet();
 		setOpen(false);
-	}, []);
+	}, [deleteWallet]);
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -48,7 +48,7 @@ const DeleteWallet: FC<DeleteWalletProps> = ({ children, wallet, ...props }) => 
 				</DialogHeader>
 				<DialogFooter>
 					<div className="flex justify-end gap-2 mt-4">
-						<Button variant="secondary" onClick={() => setOpen(false)}>Cancel</Button>
+						<Button variant="secondary" onClick={() => { setOpen(false); }}>Cancel</Button>
 						<Button variant="destructive" onClick={handleDelete}>Delete</Button>
 					</div>
 				</DialogFooter>

@@ -47,7 +47,7 @@ const storageToTransaction = (
 	wallets: Wallet[],
 	value: StorageTransaction
 ): Transaction => {
-	const { from, to, ...rest } = value;
+	const { ...rest } = value;
 	const fromWallet = wallets.find((wallet) => wallet.id === value.from?.wallet);
 	const toWallet = wallets.find((wallet) => wallet.id === value.to?.wallet);
 
@@ -90,7 +90,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		const filledPayload = createTransactionFromMinimalPayload(request.data);
 
 		return new Promise((resolve) => setTimeout(resolve, 1000))
-			.then(() => this.storage.add(filledPayload))
+			.then(() => { this.storage.add(filledPayload); })
 			.then(() => {
 				if (filledPayload.from) {
 					const fromWallet = this.walletStorage.get(filledPayload.from.wallet);

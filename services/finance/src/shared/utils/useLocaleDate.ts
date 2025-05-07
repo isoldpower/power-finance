@@ -15,6 +15,7 @@ export const useLocaleDate = (date: string) => {
 				year: 'numeric'
 			}).format(dateFormat);
 		} catch (e) {
+			console.error(e);
 			return dateFormat.toLocaleDateString();
 		}
 	}, [locale, date]);
@@ -33,6 +34,7 @@ export const useLocaleDateTransform = () => {
 				year: 'numeric'
 			}).format(dateFormat);
 		} catch (e) {
+			console.error(e);
 			return dateFormat.toLocaleDateString();
 		}
 	}, [locale]);

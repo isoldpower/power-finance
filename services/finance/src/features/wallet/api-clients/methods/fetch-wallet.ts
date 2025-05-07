@@ -7,8 +7,7 @@ interface FetchWalletRequest {
 	payload: WalletGetRequest
 }
 
-interface FetchWalletResponse extends Wallet {
-}
+type FetchWalletResponse = Wallet & object;
 
 async function fetchWallet(
 	request: FetchWalletRequest

@@ -37,7 +37,7 @@ const CurrencyPicker: FC<CurrencyPickerProps> = ({ onSelected, value, notFound }
 							key={currency.value}
 							value={currency.value}
 							onSelect={(currentValue) => {
-								onSelected && onSelected(currentValue === value ? "" : currentValue)
+								if (onSelected) onSelected(currentValue === value ? "" : currentValue);
 							}}
 						>
 							{currency.label}

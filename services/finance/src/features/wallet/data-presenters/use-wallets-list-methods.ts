@@ -15,9 +15,9 @@ import type {
 	ListAllWalletsResponse
 } from "@feature/wallet";
 
-type UseWalletsReturn = {
+interface UseWalletsReturn {
 	meta: {
-		query: UseQueryResult<ListAllWalletsResponse, Error>;
+		query: UseQueryResult<ListAllWalletsResponse>;
 		createMutation: UseMutationResult<CreateWalletResponse, Error, CreateWalletRequest['payload']>;
 	}
 	createWallet: (data: WalletValuableFields) => void;
@@ -49,12 +49,12 @@ const useWalletsListMethods = (): UseWalletsReturn => {
 	const createWallet = useCallback((
 		data: WalletValuableFields
 	) => {
-		return createMutation.mutate({ data })
-	}, [createMutation.mutate]);
+		createMutation.mutate({ data });
+	}, [createMutation]);
 
 	const fetchAllWallets = useCallback(() => {
 		return query.refetch();
-	}, []);
+	}, [query]);
 
 	const meta = useMemo(() => ({
 		createMutation,

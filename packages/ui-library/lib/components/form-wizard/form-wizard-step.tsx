@@ -51,7 +51,7 @@ function FormWizardStep<
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		const payload = { ...values, ...savedValues };
 
-		externalOnSubmit && Promise
+		if (externalOnSubmit) Promise
 			.resolve(externalOnSubmit(payload))
 			.then((value) => value && handleConfirm(payload));
 

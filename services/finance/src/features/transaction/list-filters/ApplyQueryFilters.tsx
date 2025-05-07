@@ -24,10 +24,10 @@ const ApplyQueryFilters: FC<ApplyQueryFiltersProps> = ({
 	const onSuccessfulSubmit = useCallback((data: TransactionFiltersSchema) => {
 		setSelected(data.selectedWallet);
 		onSuccess?.(data);
-	}, [onSuccess]);
+	}, [onSuccess, setSelected]);
 
 	return (
-		<form onSubmit={handleSubmit(onSuccessfulSubmit)}>
+		<form onSubmit={() => handleSubmit(onSuccessfulSubmit)}>
 			{children}
 		</form>
 	)

@@ -11,7 +11,7 @@ import type { Transaction } from "@entity/transaction";
 
 
 interface RecentTransactionProps {
-	transaction: Transaction | null;
+	transaction: Transaction;
 	selectedWallet?: string | undefined;
 }
 
@@ -19,8 +19,6 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 	transaction: passedTransaction,
 	selectedWallet
 }) => {
-	if (!passedTransaction) return null;
-
 	const perspective = useMemo(() => {
 		return !selectedWallet
 			? passedTransaction.type === 'transfer'
@@ -28,7 +26,7 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 				: passedTransaction.type === 'income'
 					? 'income'
 					: 'outcome'
-			: passedTransaction.from?.wallet?.id === selectedWallet
+			: passedTransaction.from?.wallet.id === selectedWallet
 				? 'outcome'
 				: 'income';
 	}, [passedTransaction, selectedWallet]);
@@ -36,7 +34,7 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 	const transactionSide = useMemo(() => {
 		return (!selectedWallet
 			? passedTransaction.from ?? passedTransaction.to
-			: selectedWallet === passedTransaction.from?.wallet?.id
+			: selectedWallet === passedTransaction.from?.wallet.id
 				? passedTransaction.from
 				: passedTransaction.to) ?? undefined
 	}, [passedTransaction, selectedWallet]);
@@ -47,7 +45,7 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 				<TransactionTypeIcon type={passedTransaction.type} />
 				<div className="ml-3 flex-grow">
 					<p className="text-sm font-medium text-gray-900">
-						{passedTransaction.description || 'Some category'}
+						{passedTransaction.description ?? 'Some category'}
 					</p>
 					<TransactionTargets
 						to={passedTransaction.to && {
@@ -57,9 +55,11 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 							target: passedTransaction.from.wallet
 						}} />
 				</div>
-				<TransactionValue
-					perspective={perspective}
-					side={transactionSide} />
+				{transactionSide && (
+					<TransactionValue
+						perspective={perspective}
+						side={transactionSide}/>
+				)}
 			</div>
 		</TransactionPaper>
 	);

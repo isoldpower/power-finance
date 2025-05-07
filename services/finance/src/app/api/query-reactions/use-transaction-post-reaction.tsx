@@ -2,6 +2,7 @@ import type { QueryReaction } from "./use-query-reactions.ts";
 import { useWalletsListMethods } from "@feature/wallet";
 import { useCallback } from "react";
 
+
 const useTransactionPostReaction = (): QueryReaction => {
 	const { fetchAllWallets } = useWalletsListMethods();
 
@@ -9,7 +10,7 @@ const useTransactionPostReaction = (): QueryReaction => {
 		fetchAllWallets();
 	}
 
-	const compare = useCallback((keys: string[]) => {
+	const compare = useCallback((keys: unknown[]) => {
 		return keys.includes('transactions') ||
 			keys.includes('transaction');
 	}, []);

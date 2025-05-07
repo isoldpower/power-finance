@@ -1,8 +1,7 @@
 import { Button, Icons } from "@internal/ui-library";
 import type { ComponentProps, FC } from "react";
 
-interface PreferencesButtonProps extends ComponentProps<'button'> {
-}
+type PreferencesButtonProps = ComponentProps<'button'> & object;
 
 const PreferencesButton: FC<PreferencesButtonProps> = ({ ...props }) => {
 	return (

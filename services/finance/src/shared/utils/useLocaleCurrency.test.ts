@@ -6,7 +6,7 @@ import { useSettingsContext } from '@internal/shared';
 // Mock the useSettingsContext to provide specific locale values
 const mockedUseSettingsContext = useSettingsContext as unknown as Mock;
 vi.mock('@internal/shared', async () => {
-	const actual = await vi.importActual<any>('@internal/shared');
+	const actual = await vi.importActual<object>('@internal/shared');
 	return {
 		...actual,
 		useSettingsContext: vi.fn(),

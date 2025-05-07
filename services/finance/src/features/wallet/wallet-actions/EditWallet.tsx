@@ -1,7 +1,9 @@
-import {ReactNode, useEffect, useMemo} from "react";
+import { useCallback, useEffect } from "react";
+import type { ReactNode, FormEvent } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
 import { useWalletMethods } from "@feature/wallet";
+import { useEditDefaultValues } from "./useSchemaDefaults.ts";
 import type { Wallet } from "@entity/wallet";
 import type { WalletSchema } from "./schemas.ts";
 
@@ -12,15 +14,6 @@ interface EditWalletProps {
 	onSuccess?: (data: WalletSchema) => void;
 	children?: ReactNode;
 }
-
-const useEditDefaultValues = (wallet: Wallet): WalletSchema => {
-	return useMemo(() => ({
-		name: wallet.name,
-		type: wallet.reversed ? 'credit' : 'debit',
-		balance: wallet.balance,
-		currency: wallet.currency,
-	}), [wallet])
-};
 
 function EditWallet({
 	onSuccess,
@@ -33,19 +26,28 @@ function EditWallet({
 
 	useEffect(() => {
 		reset(defaults);
-	}, [defaults]);
+	}, [defaults, reset]);
 
-	const onSubmit = async (data: WalletSchema) => {
+	const onSubmit = useCallback((data: WalletSchema) => {
 		const { type, ...rest } = data;
 		const walletData = { reversed: type === 'credit', ...rest };
 
 		updateWallet(walletData);
-		onSuccess && onSuccess(data);
+		if (onSuccess) onSuccess(data);
 		reset();
-	}
+	}, [onSuccess, reset, updateWallet]);
+
+	const handleSubmitForm = useCallback((
+		e: FormEvent<HTMLFormElement>
+	) => {
+		handleSubmit(onSubmit)(e)
+			.catch((e: unknown) => {
+				console.error(e)
+			});
+	}, [handleSubmit, onSubmit]);
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
+		<form onSubmit={handleSubmitForm}>
 			{children}
 		</form>
 	)
@@ -53,5 +55,5 @@ function EditWallet({
 
 EditWallet.displayName = 'EditWallet';
 
-export { EditWallet, useEditDefaultValues };
+export { EditWallet };
 export type { EditWalletProps };

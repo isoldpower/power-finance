@@ -1,4 +1,7 @@
+import { Suspense } from "react";
 import type { ReactNode, FC } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+
 
 interface WalletCardsListFxProps {
 	pending: ReactNode;
@@ -19,7 +22,13 @@ const WalletCardsListFx: FC<WalletCardsListFxProps> = ({
 		return error;
 	}
 
-	return children;
+	return (
+		<ErrorBoundary fallback={error}>
+			<Suspense fallback={pending}>
+				{children}
+			</Suspense>
+		</ErrorBoundary>
+	);
 }
 
 WalletCardsListFx.displayName = 'WalletCardsListFx';

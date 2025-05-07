@@ -10,7 +10,7 @@ const TransactionsListError: FC<TransactionsListErrorProps> = ({
   return (
 	<div className="grid gap-4">
 		{Array.from({ length: amount }).map((_, index) => (
-			<div key={index} className="rounded-lg bg-red-300 h-20" />
+			<div key={`transaction-error-${index.toString()}`} className="rounded-lg bg-red-300 h-20" />
 		))}
 	</div>
   )

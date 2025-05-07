@@ -30,7 +30,7 @@ const useTransaction = (
 
 	return useMemo(() => ({
 		...query,
-		transaction: query?.data
+		transaction: query.data
 	}), [query]);
 }
 

@@ -5,7 +5,7 @@ import { resolve } from "path";
 import type { ViteConfigOptions } from "@internal/config";
 import { buildViteConfig } from "@internal/config";
 import { buildFederationRemote } from "./config/federation.js";
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 
 
 export default (env: ConfigEnv) => {
@@ -33,7 +33,7 @@ export default (env: ConfigEnv) => {
 		test: {
 			globals: true,
 			environment: 'jsdom',
-			setupFiles: ['./vitest.setup.ts'],
+			setupFiles: ['./test/vitest.setup.ts'],
 			coverage: {
 				enabled: true,
 				reporter: ['text', 'json', 'html'],

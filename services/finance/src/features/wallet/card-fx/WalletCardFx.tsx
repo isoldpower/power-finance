@@ -1,4 +1,4 @@
-import type { ReactNode, FC } from "react";
+import {ReactNode, FC, Suspense} from "react";
 import { useMemo, Fragment } from "react";
 
 interface WalletCardFxProps {
@@ -23,12 +23,14 @@ const WalletCardFx: FC<WalletCardFxProps> = ({
 		if (fetchStatus === 'paused') return spoiledWrap;
 
 		return defaultWrap ?? Fragment;
-	}, [fetchStatus, staleWrap, spoiledWrap, mutating]);
+	}, [mutating, fetchStatus, staleWrap, spoiledWrap, defaultWrap]);
 
 	return (
-		<ComponentWrap>
-			{children}
-		</ComponentWrap>
+		<Suspense>
+			<ComponentWrap>
+				{children}
+			</ComponentWrap>
+		</Suspense>
 	)
 }
 

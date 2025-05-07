@@ -4,9 +4,8 @@ import type {
 	ExpenseTransactionData,
 	IncomeTransactionData,
 	Transaction,
-	TransactionType,
 	TransferTransactionData
-} from "src/entities/transaction";
+} from "@entity/transaction";
 
 
 const buildTransferTransaction = (
@@ -80,7 +79,7 @@ const detailedBuildWrapper = (
 const transactionPreviewResponseToFlat = (
 	response: TransactionPreview
 ): Transaction => {
-	const transactionType = response.type as TransactionType;
+	const transactionType = response.type;
 	switch (transactionType) {
 		case 'transfer':
 			return buildTransferTransaction(response);
@@ -91,14 +90,14 @@ const transactionPreviewResponseToFlat = (
 		case 'adjust':
 			return buildAdjustTransaction(response);
 		default:
-			throw new Error(`Unknown transaction type: ${transactionType}`);
+			throw new Error(`Unknown transaction type: ${transactionType as string}`);
 	}
 }
 
 const transactionDetailedResponseToFlat = (
 	response: TransactionDetailed
 ): Transaction => {
-	const transactionType = response.type as TransactionType;
+	const transactionType = response.type;
 	switch (transactionType) {
 		case 'transfer':
 			return detailedBuildWrapper(buildTransferTransaction, response);
@@ -109,7 +108,7 @@ const transactionDetailedResponseToFlat = (
 		case 'adjust':
 			return detailedBuildWrapper(buildAdjustTransaction, response);
 		default:
-			throw new Error(`Unknown transaction type: ${transactionType}`);
+			throw new Error(`Unknown transaction type: ${transactionType as string}`);
 	}
 }
 

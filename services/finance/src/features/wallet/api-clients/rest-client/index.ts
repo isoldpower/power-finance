@@ -52,7 +52,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 		});
 
 		return new Promise((resolve) => setTimeout(resolve, 1000))
-			.then(() => this.storage.add(filledPayload))
+			.then(() => { this.storage.add(filledPayload); })
 			.then(() => flatToWalletDetailed(filledPayload));
 	}
 

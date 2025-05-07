@@ -3,6 +3,7 @@ import type { FC } from 'react';
 
 import { EditableWalletCard, NewWalletForm, FullWalletsList } from "@widget/wallet";
 import { OpenWalletCreation } from "@feature/wallet";
+import type { Wallet } from "@entity/wallet";
 
 
 const WalletsPage: FC = () => {
@@ -16,11 +17,11 @@ const WalletsPage: FC = () => {
 					<p className="text-gray-500">Manage your accounts and cards</p>
 				</div>
 				<OpenWalletCreation isAddModalOpen={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-					<NewWalletForm onClose={() => setIsAddModalOpen(false)} />
+					<NewWalletForm onClose={() => { setIsAddModalOpen(false); }} />
 				</OpenWalletCreation>
 			</div>
-			<FullWalletsList onCreate={() => setIsAddModalOpen(true)}>
-				<EditableWalletCard wallet={null} />
+			<FullWalletsList onCreate={() => { setIsAddModalOpen(true); }}>
+				<EditableWalletCard wallet={{} as Wallet} />
 			</FullWalletsList>
 		</div>
 	);

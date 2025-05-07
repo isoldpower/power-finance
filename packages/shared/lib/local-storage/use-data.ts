@@ -15,7 +15,7 @@ function useStorageData(
 		function listener(event: Event) {
 			if (event.type === LOCAL_STORAGE_EVENT) {
 				const parsedEvent = event as LocalStorageEvent;
-				parsedEvent.key === storageKey && onStorageChange();
+				if (parsedEvent.key === storageKey) onStorageChange();
 			}
 		}
 

@@ -15,9 +15,9 @@ import type {
 	ListAllTransactionsResponse
 } from "@feature/transaction";
 
-type UseTransactionsReturn = {
+interface UseTransactionsReturn {
 	meta: {
-		query: UseQueryResult<ListAllTransactionsResponse, Error>;
+		query: UseQueryResult<ListAllTransactionsResponse>;
 		createMutation: UseMutationResult<CreateTransactionResponse, Error, CreateTransactionRequest['payload']>;
 	}
 	createTransaction: (data: TransactionValuableFields) => void;
@@ -44,19 +44,21 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 		}),
 		mutationKey: [CACHE_KEYS.create],
 		onSettled: () => {
-			query.refetch()
+			query.refetch().catch((err: unknown) => {
+				console.error(err)
+			});
 		}
 	});
 
 	const createTransaction = useCallback((
 		data: TransactionValuableFields
 	) => {
-		return createMutation.mutate({ data })
-	}, [createMutation.mutate]);
+		createMutation.mutate({ data });
+	}, [createMutation]);
 
 	const fetchAllTransactions = useCallback(() => {
 		return query.refetch();
-	}, []);
+	}, [query]);
 
 	const meta = useMemo(() => ({
 		createMutation,

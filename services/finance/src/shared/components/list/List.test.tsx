@@ -38,7 +38,7 @@ describe('List Component', () => {
 		render(
 			<List
 				elementProps={(index) => ({
-					'data-index': `li-${index}`,
+					'data-index': `li-${index.toString()}`,
 					className: index % 2 === 0 ? 'even' : 'odd',
 				})}
 			>

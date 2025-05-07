@@ -31,7 +31,7 @@ const EditWalletModal: FC<EditWalletCardProps> = ({
 	return (
 		<Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
 			<DialogTrigger asChild>
-				<Button type="button" variant="ghost" size="sm" color="neutral" onClick={() => setIsEditOpen(true)}>
+				<Button type="button" variant="ghost" size="sm" color="neutral" onClick={() => { setIsEditOpen(true); }}>
 					{children}
 				</Button>
 			</DialogTrigger>
@@ -58,7 +58,7 @@ const EditWalletModal: FC<EditWalletCardProps> = ({
 										<SelectField
 											placeholder="Select currency"
 											options={codes().map((item) => ({
-												label: `${code(item)?.currency || item} (${item})`,
+												label: `${code(item)?.currency ?? item} (${item})`,
 												value: item
 											}))}
 											{...field} />
@@ -78,7 +78,7 @@ const EditWalletModal: FC<EditWalletCardProps> = ({
 								)} />
 						</div>
 						<div className="flex items-center gap-2 pt-4">
-							<Button variant="outline" type="button" onClick={() => setIsEditOpen(false)}>
+							<Button variant="outline" type="button" onClick={() => { setIsEditOpen(false); }}>
 								Cancel
 							</Button>
 							<Button variant="default" type="submit">

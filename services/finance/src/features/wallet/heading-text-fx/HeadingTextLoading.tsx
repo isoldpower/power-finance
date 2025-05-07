@@ -4,7 +4,7 @@ import classes from './HeadingTextFx.module.css';
 import { cn } from "@internal/ui-library";
 
 
-interface HeadingTextLoadingProps {}
+type HeadingTextLoadingProps = object;
 
 const HeadingTextLoading: FC<HeadingTextLoadingProps> = () => {
 	return (

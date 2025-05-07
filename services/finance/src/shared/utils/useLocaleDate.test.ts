@@ -6,7 +6,7 @@ import { useSettingsContext } from '@internal/shared';
 // Mock the useSettingsContext hook to control its return value
 const mockedUseSettingsContext = useSettingsContext as unknown as Mock;
 vi.mock('@internal/shared', async () => {
-	const actual = await vi.importActual<any>('@internal/shared');
+	const actual = await vi.importActual<object>('@internal/shared');
 	return {
 		...actual,
 		useSettingsContext: vi.fn(),
@@ -43,7 +43,7 @@ describe('useLocaleDate', () => {
 		mockedUseSettingsContext.mockReturnValue({ locale: 'xx-XX' });
 
 		const { result } = renderHook(() => useLocaleDate('2023-05-01'));
-		// Just check it's a formatted date, not an exception
+		// Check it's a formatted date, not an exception
 		expect(typeof result.current).toBe('string');
 		expect(result.current).toContain('2023');
 	});

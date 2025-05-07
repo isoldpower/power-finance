@@ -24,7 +24,7 @@ const LocalePicker: FC<LocalePickerProps> = ({ onSelected, value, notFound }) =>
 	const supportedLocales = Intl.NumberFormat.supportedLocalesOf(locales);
 	const labeledLocales = supportedLocales.map((item) => ({
 		value: item,
-		label: getByTag(item)?.name ?? item,
+		label: getByTag(item).name,
 	}));
 
 	return (
@@ -40,7 +40,7 @@ const LocalePicker: FC<LocalePickerProps> = ({ onSelected, value, notFound }) =>
 							key={locale.value}
 							value={locale.value}
 							onSelect={(currentValue) => {
-								onSelected && onSelected(currentValue === value ? "" : currentValue)
+								if (onSelected) onSelected(currentValue === value ? "" : currentValue)
 							}}
 						>
 							{locale.label}

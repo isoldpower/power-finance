@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { CURRENCY_API_URL } from "./config.ts";
+import { z } from "zod";
 
 
 interface FetchCurrenciesResponse {
@@ -37,8 +38,14 @@ async function fetchCurrencies(
 				rate: value
 			}));
 		})
-		.catch((error) => {
-			throw new Error(`Failed to fetch currencies: ${error.message}`)
+		.catch((error: unknown) => {
+			const { message } = z.object({
+				message: z.string()
+			}).catch({
+				message: 'Unknown error when fetching currencies'
+			}).parse(error);
+
+			throw new Error(`Failed to fetch currencies: ${message}`)
 		});
 }
 

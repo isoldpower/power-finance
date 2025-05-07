@@ -69,21 +69,26 @@ const NewTransactionForm: FC<NewTransactionFormProps> = ({ onClose, wallets }) =
 									<SelectField
 										placeholder="Select currency"
 										options={codes().map((item) => ({
-											label: `${code(item)?.currency || item} (${item})`,
+											label: `${code(item)?.currency ?? item} (${item})`,
 											value: item
 										}))}
 										{...field} />
 								</FieldLayout>
 							)} />
 					</div>
-					<ShowOnValue form={form} value="type" targetValue={["transfer", "expense"]}>
+					<ShowOnValue
+						form={form}
+						value="type"
+						dependentValues={['from']}
+						targetValue={["transfer", "expense"]}
+					>
 						<FormField
 							control={form.control}
 							name="from"
 							render={({field}) => (
 								<FieldLayout label="From Account">
 									<SelectField
-										excluded={[toWallet || '']}
+										excluded={[toWallet ?? '']}
 										options={walletsOptions}
 										{...field} />
 								</FieldLayout>
@@ -101,9 +106,9 @@ const NewTransactionForm: FC<NewTransactionFormProps> = ({ onClose, wallets }) =
 							render={({field}) => (
 								<FieldLayout label="To Account">
 									<SelectField
-									excluded={[fromWallet || '']}
-									options={walletsOptions}
-									{...field} />
+										excluded={[fromWallet ?? '']}
+										options={walletsOptions}
+										{...field} />
 								</FieldLayout>
 							)} />
 					</ShowOnValue>

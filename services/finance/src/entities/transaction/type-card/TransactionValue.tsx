@@ -6,12 +6,11 @@ import type { TransactionSide } from "@entity/transaction";
 
 
 interface TransactionValueProps {
-	side: TransactionSide | undefined;
+	side: TransactionSide;
 	perspective: 'outcome' | 'income' | 'neutral';
 }
 
 const TransactionValue: FC<TransactionValueProps> = ({ side, perspective }) => {
-	if (!side) return null;
 	const transformCurrency = useLocaleCurrency();
 
 	return (

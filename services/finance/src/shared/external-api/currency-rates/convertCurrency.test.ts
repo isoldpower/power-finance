@@ -22,7 +22,7 @@ describe('convertCurrency (real calls)', () => {
 
 	test('Throws verbose error on failure', async () => {
 		await expect(convertCurrency('INVALID', 'INVALID'))
-			.rejects.toThrowError('Failed to fetch currencies');
+			.rejects.toThrowError('Failed to convert currencies');
 	});
 })
 
@@ -39,9 +39,9 @@ describe('convertCurrency (timeout)', () => {
 		})
 	);
 
-	beforeAll(() => server.listen());
-	afterEach(() => server.resetHandlers());
-	afterAll(() => server.close());
+	beforeAll(() => { server.listen(); });
+	afterEach(() => { server.resetHandlers(); });
+	afterAll(() => { server.close(); });
 
 	test('Throws timeout error after 3 seconds', async () => {
 		await expect(convertCurrency('USD', 'EUR')).rejects

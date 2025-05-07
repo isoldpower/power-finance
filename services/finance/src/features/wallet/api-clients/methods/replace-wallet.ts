@@ -7,8 +7,7 @@ interface ReplaceWalletRequest {
 	payload: WalletPutRequest
 }
 
-interface ReplaceWalletResponse extends Wallet {
-}
+type ReplaceWalletResponse =  Wallet & object;
 
 async function replaceWallet(
 	request: ReplaceWalletRequest

@@ -1,8 +1,9 @@
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@internal/ui-library";
-import {ComponentProps, FC} from "react";
+import type { ComponentProps, FC } from "react";
+
 
 interface SelectFieldProps extends Omit<ComponentProps<typeof Select>, 'onValueChange'> {
-	options: Array<{ label: string; value: string }>;
+	options: { label: string; value: string }[];
 	excluded?: string[];
 	onChange: (value: string) => void;
 	placeholder?: string;
@@ -11,7 +12,7 @@ interface SelectFieldProps extends Omit<ComponentProps<typeof Select>, 'onValueC
 
 const SelectField: FC<SelectFieldProps> = ({
 	options,
-	excluded = [],
+	excluded,
 	placeholder = 'Select an option',
 	...props
 }) => {
@@ -22,7 +23,7 @@ const SelectField: FC<SelectFieldProps> = ({
 			</SelectTrigger>
 			<SelectContent>
 				{options
-					.filter((option) => !excluded.includes(option.value))
+					.filter((option) => !(excluded ?? []).includes(option.value))
 					.map((option) => (
 						<SelectItem key={option.value} value={option.value}>
 							{option.label}

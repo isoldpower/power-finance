@@ -20,7 +20,7 @@ const List: React.FC<ListProps> = ({
 					: elementProps;
 
 				return (
-					<li key={index} {...overrideProps}>
+					<li key={`list-item-${index.toString()}`} {...overrideProps}>`
 						{child}
 					</li>
 				)

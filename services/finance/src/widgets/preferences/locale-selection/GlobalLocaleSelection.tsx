@@ -28,7 +28,7 @@ const GlobalLocaleSelection = () => {
 						className="w-[200px] justify-between"
 					>
 						{locale
-							? getByTag(locale)?.name ?? locale
+							? getByTag(locale).name
 							: "Select locale..."}
 						<Icons.ChevronsUpDown className="opacity-50"/>
 					</Button>

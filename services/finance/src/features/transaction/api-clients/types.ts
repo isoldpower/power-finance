@@ -19,12 +19,12 @@ interface TransactionData {
 	description?: string;
 }
 
-type TransactionValuableFields = {
+interface TransactionValuableFields {
 	from?: TransactionSide;
 	to?: TransactionSide;
 	description?: string;
 	type: TransactionType;
-};
+}
 
 interface TransactionMeta {
 	createdAt: string

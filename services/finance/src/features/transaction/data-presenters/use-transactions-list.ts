@@ -31,7 +31,7 @@ const useTransactionsList = (
 
 	return useMemo(() => ({
 		...query,
-		transactions: query?.data?.data ?? []
+		transactions: query.data?.data ?? []
 	}), [query]);
 }
 

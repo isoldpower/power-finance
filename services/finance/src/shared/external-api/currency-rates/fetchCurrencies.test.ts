@@ -48,9 +48,9 @@ describe('fetchCurrencies (timeout)', () => {
 		})
 	);
 
-	beforeAll(() => server.listen());
-	afterEach(() => server.resetHandlers());
-	afterAll(() => server.close());
+	beforeAll(() => { server.listen(); });
+	afterEach(() => { server.resetHandlers(); });
+	afterAll(() => { server.close(); });
 
 	test('Throws timeout error after 3 seconds', async () => {
 		await expect(fetchCurrencies('USD')).rejects

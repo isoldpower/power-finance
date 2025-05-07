@@ -6,10 +6,9 @@ import type { FC } from "react";
 import { useTransactionsList } from "@feature/transaction";
 
 
-type TransactionsListNavigationHeaderProps = {
-}
+type TransactionsListNavigationHeaderProps = object;
 
-const TransactionsListNavigationHeader: FC<TransactionsListNavigationHeaderProps> = ({}) => {
+const TransactionsListNavigationHeader: FC<TransactionsListNavigationHeaderProps> = () => {
 	const { status } = useTransactionsList();
 
 	return (

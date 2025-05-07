@@ -9,7 +9,7 @@ import { CardsListPending, CardsListError, CardsList } from "@entity/wallet";
 import type { Wallet } from "@entity/wallet";
 
 
-type PreviewWalletsListProps = {
+interface PreviewWalletsListProps {
 	children: ReactElement<{ wallet: Wallet }>;
 }
 

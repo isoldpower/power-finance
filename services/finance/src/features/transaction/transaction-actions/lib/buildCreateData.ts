@@ -9,7 +9,6 @@ const convertFromTo = async (
 	to: string
 ) => {
 	const rate = await convertCurrency(from, to);
-	if (!rate) return 0;
 
 	return amount * rate.rate;
 };
@@ -29,7 +28,7 @@ const getWalletValue = (
 const buildCreateData = async (
 	wallets: Wallet[],
 	data: TransactionSchema,
-	both: boolean = false
+	both = false
 ): Promise<TransactionValuableFields> => {
 	const fromWallet = getWalletValue(data.from, data, wallets);
 	const toWallet = getWalletValue(data.to, data, wallets);

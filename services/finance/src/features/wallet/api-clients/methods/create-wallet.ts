@@ -7,8 +7,7 @@ interface CreateWalletRequest {
 	payload: WalletPostRequest
 }
 
-interface CreateWalletResponse extends Wallet {
-}
+type CreateWalletResponse = Wallet & object;
 
 async function createWallet(
 	request: CreateWalletRequest

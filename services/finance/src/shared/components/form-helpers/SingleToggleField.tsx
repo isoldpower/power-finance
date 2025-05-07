@@ -1,16 +1,19 @@
 import { cn, ToggleGroup, ToggleGroupItem } from "@internal/ui-library";
 import {ComponentProps, FC, ReactNode, useCallback} from "react";
 
-type SingleToggleFieldProps = Omit<ComponentProps<typeof ToggleGroup>, 'type'> & {
-	options: Array<{ label: ReactNode; value: string }>;
+type SingleToggleFieldProps = Omit<ComponentProps<typeof ToggleGroup>, 'type' | 'className'> & {
+	options: { label: ReactNode; value: string }[];
+	className?: string
 }
 
-const SingleToggleField: FC<SingleToggleFieldProps> = ({ options, className, ...props }) => {
+const SingleToggleField: FC<SingleToggleFieldProps> = ({ options, className, onChange, ...props }) => {
 	const handleValueChange = useCallback((value: string) => {
 		if (!value) return;
 
-		props.onChange?.(value);
-	}, [props.onChange]);
+		if (onChange) {
+			(onChange as (value: string) => void)(value);
+		}
+	}, [onChange]);
 
 	return (
 		<ToggleGroup
@@ -23,7 +26,7 @@ const SingleToggleField: FC<SingleToggleFieldProps> = ({ options, className, ...
 				<ToggleGroupItem
 					key={option.value}
 					value={option.value}
-					aria-label={`Toggle ${option.label}`}
+					aria-label={`Toggle ${option.value}`}
 				>
 					{option.label}
 				</ToggleGroupItem>

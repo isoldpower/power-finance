@@ -50,7 +50,7 @@ const NewWalletForm: FC<NewWalletFormProps> = ({ onClose }) => {
 								<SelectField
 									placeholder="Select currency"
 									options={codes().map((item) => ({
-										label: `${code(item)?.currency || item} (${item})`,
+										label: `${code(item)?.currency ?? item} (${item})`,
 										value: item
 									}))}
 									{...field} />

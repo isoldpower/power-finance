@@ -16,7 +16,7 @@ const OpenWalletCreation: FC<OpenWalletCreationProps> = ({
 	return (
 		<Dialog open={isAddModalOpen} onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>
-				<Button onClick={() => onOpenChange(true)}>
+				<Button onClick={() => { onOpenChange(true); }}>
 					<div className="flex items-center gap-2">
 						<Icons.Plus size={16} />
 						Add Wallet

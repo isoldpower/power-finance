@@ -1,9 +1,12 @@
 const checkEnvVariables = (
-	_: Partial<ImportMetaEnv> = {}
+	defaults: Partial<ImportMetaEnv> = {}
 ): ImportMetaEnv => {
+	const realEnv = import.meta.env as Partial<ImportMetaEnv>;
 	const envDictionary: Record<keyof ImportMetaEnv, ImportMetaEnv[keyof ImportMetaEnv] | undefined> = {
 		...import.meta.env,
+		CLIENT_CLERK_PUBLIC_KEY: realEnv.CLIENT_CLERK_PUBLIC_KEY ?? defaults.CLIENT_CLERK_PUBLIC_KEY,
 	};
+
 	const undefinedEntries = Object.entries(envDictionary).filter(([, value]) => value === undefined);
 	const receivedEntries = Object.entries(envDictionary).filter(([, value]) => value !== undefined);
 

@@ -20,7 +20,14 @@ class LocalStorageMock<TValue extends SpecificResource<object>> implements IStor
 
 	list(): TValue[] {
 		const items = localStorage.getItem(this.storageKey);
-		return items ? JSON.parse(items) : [];
+		try {
+			return items
+				? JSON.parse(items) as TValue[]
+				: [];
+		} catch (e: unknown) {
+			console.error('Error parsing localStorage data:', e);
+			return [];
+		}
 	}
 
 	get(id: string): TValue | undefined {

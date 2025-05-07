@@ -22,7 +22,7 @@ const OpenTransactionFilters: FC<OpenTransactionFiltersProps> = ({
 				<Button
 					className="flex items-center gap-2"
 					variant="outline"
-					onClick={() => setIsModalOpen(true)}
+					onClick={() => { setIsModalOpen(true); }}
 				>
 					<Icons.Filter size={16} />
 					Filter

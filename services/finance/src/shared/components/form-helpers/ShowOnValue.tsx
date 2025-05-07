@@ -18,15 +18,15 @@ function ShowOnValue<T extends FieldValues>({
 }: ShowOnValueProps<T>) {
 	const currentValue = form.watch(value);
 	useEffect(() => {
-		if (!targetValue.includes(currentValue)) return;
+		if (targetValue.includes(currentValue)) return;
 
-		dependentValues?.map((dependency) => {
-			if (form.getFieldState(dependency)?.isDirty) {
+		dependentValues.map((dependency) => {
+			if (form.getFieldState(dependency).isDirty) {
 				form.clearErrors(dependency);
 				form.resetField(dependency);
 			}
 		})
-	}, [currentValue]);
+	}, [currentValue, dependentValues, form, targetValue]);
 
 	return targetValue.includes(currentValue) && (
 		<>

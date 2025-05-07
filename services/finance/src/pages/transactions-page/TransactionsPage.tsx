@@ -13,6 +13,7 @@ import {
 	WalletSelectionList,
 	TransactionFiltersModal
 } from "@widget/transaction";
+import type { Transaction } from "@entity/transaction";
 
 
 const TransactionsPage: FC = () => {
@@ -39,7 +40,7 @@ const TransactionsPage: FC = () => {
 					>
 						<TransactionFiltersModal
 							wallets={wallets}
-							onClose={() => setIsFilterModalOpen(false)} />
+							onClose={() => { setIsFilterModalOpen(false); }} />
 					</OpenTransactionFilters>
 					<OpenTransactionCreation
 						isModalOpen={newTransactionModalOpen}
@@ -48,13 +49,13 @@ const TransactionsPage: FC = () => {
 					>
 						<NewTransactionForm
 							wallets={wallets}
-							onClose={() => setNewTransactionModalOpen(false)} />
+							onClose={() => { setNewTransactionModalOpen(false); }} />
 					</OpenTransactionCreation>
 				</div>
 			</div>
 			<WalletSelectionList wallets={wallets} />
 			<OverviewTransactionsList selectedWallet={selected}>
-				<RecentTransaction transaction={null} selectedWallet={selected} />
+				<RecentTransaction transaction={{} as Transaction} selectedWallet={selected} />
 			</OverviewTransactionsList>
 		</div>
 	);

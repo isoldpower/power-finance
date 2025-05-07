@@ -17,7 +17,7 @@ import type {
 } from "@feature/transaction";
 
 
-type UseTransactionReturn = {
+interface UseTransactionReturn {
 	meta: {
 		deleteMutation: UseMutationResult<DeleteTransactionResponse, Error, string>;
 		replaceMutation: UseMutationResult<ReplaceTransactionResponse, Error, ReplaceTransactionRequest['payload']>;
@@ -83,7 +83,7 @@ const useTransactionMethods = (
 			handler: apiContext.transactionsClients.rest
 		}),
 		mutationKey: [CACHE_KEYS.delete, id],
-		onSettled: () => filterList(singleQuery.data)
+		onSettled: () => { filterList(singleQuery.data); }
 	});
 
 	const replaceMutation = useMutation({
@@ -93,24 +93,24 @@ const useTransactionMethods = (
 		}),
 		mutationKey: [CACHE_KEYS.replace, id],
 		onSettled: () => singleQuery.refetch()
-			.then(({ data }) => synchronizeList(data))
+			.then(({ data }) => { synchronizeList(data); })
 	});
 
 	const fetchTransaction = useCallback(() => {
 		return singleQuery.refetch();
-	}, [singleQuery.refetch]);
+	}, [singleQuery]);
 
 	const deleteTransaction = useCallback(() => {
-		return deleteMutation.mutate(id);
-	}, [id, deleteMutation.mutate]);
+		deleteMutation.mutate(id);
+	}, [deleteMutation, id]);
 
 	const replaceTransaction = useCallback((
 		data: TransactionValuableFields
 	) => {
 		const indexedData = Object.assign(data, { id });
 
-		return replaceMutation.mutate({ id, data: indexedData });
-	}, [id, replaceMutation.mutate]);
+		replaceMutation.mutate({ id, data: indexedData });
+	}, [id, replaceMutation]);
 
 	const meta = useMemo(() => ({
 		deleteMutation,
