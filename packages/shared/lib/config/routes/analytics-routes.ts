@@ -1,3 +1,6 @@
+import { getIsEmbedded } from "../../utils";
+import { getShellAnalyticsRoute } from "./shell-routes";
+
 interface AnalyticsRoutes {
 	root: string
 }
@@ -7,9 +10,15 @@ const analyticsRoutes: AnalyticsRoutes = {
 	root: '/'
 }
 
-const getAnalyticsRoute = (route: keyof AnalyticsRoutes): string => {
+const getAnalyticsRouteInternal = (route: keyof AnalyticsRoutes): string => {
 	return analyticsRoutes[route];
 }
 
-export { getAnalyticsRoute };
+const getAnalyticsRoute = (route: keyof AnalyticsRoutes): string => {
+	return getIsEmbedded() 
+		? getShellAnalyticsRoute(route) 
+		: getAnalyticsRouteInternal(route);
+}
+
+export { getAnalyticsRoute, getAnalyticsRouteInternal };
 export type { AnalyticsRoutes };

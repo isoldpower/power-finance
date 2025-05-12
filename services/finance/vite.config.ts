@@ -23,7 +23,6 @@ export default (env: ConfigEnv) => {
 		}
 	}
 
-
 	return buildViteConfig({
 		plugins: [
 			buildFederationRemote({ name: 'finance' }, env),

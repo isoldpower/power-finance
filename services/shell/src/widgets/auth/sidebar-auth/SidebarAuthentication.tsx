@@ -1,11 +1,12 @@
-import type {FC, ReactNode} from "react";
-import {useRef, Suspense} from "react";
-import {SignedIn, SignedOut, UserButton} from "@clerk/clerk-react";
-import {getFinanceRoute, getShellRoute, NavigateToSignIn, useSettingsContext} from "@internal/shared";
-import {getUserButtonAppearance, SidebarBox, SidebarError, SidebarSkeleton, SignInButton} from "@entity/auth";
-import {AuthSidebarFx} from "@feature/auth";
+import type { FC, ReactNode } from "react";
+import { useRef, Suspense } from "react";
+import { SignedIn, SignedOut, UserButton } from "@internal/shared";
+import { getFinanceRoute, getShellRoute, NavigateToSignIn, useSettingsContext } from "@internal/shared";
+import { getUserButtonAppearance, SidebarBox, SidebarError, SidebarSkeleton, SignInButton } from "@entity/auth";
+import { AuthSidebarFx } from "@feature/auth";
 
-interface SidebarAuthenticationProps {}
+
+type SidebarAuthenticationProps = object & {};
 
 const SidebarAuthentication: FC<SidebarAuthenticationProps> = () => {
 	const {sidebarOpen} = useSettingsContext();
@@ -14,12 +15,16 @@ const SidebarAuthentication: FC<SidebarAuthenticationProps> = () => {
 			<SidebarSkeleton withName={sidebarOpen} />
 		</SidebarBox>
 	);
+	const errorComponent = useRef<ReactNode>(
+		<SidebarError />
+	);
 
 	return (
 		<Suspense fallback={pendingComponent.current}>
 			<AuthSidebarFx
 				pendingComponent={pendingComponent.current}
-				errorComponent={<SidebarError />}>
+				errorComponent={errorComponent.current}
+			>
 				<SignedIn>
 					<SidebarBox>
 						<UserButton

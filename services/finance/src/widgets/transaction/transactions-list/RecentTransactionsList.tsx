@@ -65,10 +65,10 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 		)
 		: (
 			<div className="text-center py-12 border border-dashed rounded-lg">
-				<p className="text-gray-500">
+				<p className="text-silent">
 					No transactions found
 				</p>
-				<p className="text-sm text-gray-400 mt-1">
+				<p className="text-sm text-silent mt-1">
 					Add your first transaction to get started
 				</p>
 			</div>

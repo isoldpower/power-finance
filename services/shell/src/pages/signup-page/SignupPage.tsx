@@ -3,7 +3,8 @@ import { SignUp } from "@clerk/clerk-react";
 import { getFinanceRoute, getShellRoute, useRouteWithOrigin } from "@internal/shared";
 import { getSignupPaperAppearance } from "@entity/auth";
 
-interface SignupPageProps {}
+
+type SignupPageProps = object & {};
 
 const SignupPage: FC<SignupPageProps> = () => {
 	const routes = getShellRoute('auth');

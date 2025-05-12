@@ -4,12 +4,11 @@ import { lazy } from "react";
 import { RemoteLoadingFx } from "@feature/remotes";
 
 
-interface FinanceMFModuleProps {
-}
+type FinanceMFModuleProps = object & {};
 
 const FinanceRemoteApp = lazy(() => import('finance/remote-app'));
 
-const FinanceMFModule: FC<FinanceMFModuleProps> = ({}) => {
+const FinanceMFModule: FC<FinanceMFModuleProps> = () => {
 	return (
 		<RemoteLoadingFx>
 			<FinanceRemoteApp />

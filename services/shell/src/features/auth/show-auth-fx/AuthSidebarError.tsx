@@ -1,6 +1,7 @@
-import type {FC, ReactNode} from "react";
-import {ClerkLoaded, ClerkLoading} from "@clerk/clerk-react";
-import {ErrorBoundary} from "react-error-boundary";
+import { ClerkLoaded, ClerkLoading } from "@internal/shared";
+import type { FC, ReactNode } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+
 
 interface AuthSidebarFxProps {
 	pendingComponent: ReactNode;
@@ -20,8 +21,8 @@ const AuthSidebarFx: FC<AuthSidebarFxProps> = ({ pendingComponent, errorComponen
 				</ErrorBoundary>
 			</ClerkLoaded>
 		</>
-	)
-}
+	);
+};
 
 AuthSidebarFx.displayName = 'AuthSidebarFx';
 

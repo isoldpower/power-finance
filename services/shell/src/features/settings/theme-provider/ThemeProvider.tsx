@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useSettingsContext } from "@internal/shared";
 
-type ThemeHandlerProps = {
+interface ThemeHandlerProps {
 	children?: React.ReactNode
 }
 

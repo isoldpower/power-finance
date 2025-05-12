@@ -11,8 +11,8 @@ const BalanceSummary: FC<BalanceSummaryProps> = () => {
 	const totalBalance = useTotalBalance(wallets);
 
 	return (
-		<div>
-			<h2 className="text-lg font-medium text-white opacity-90">Total Balance</h2>
+		<div className="text-card-foreground">
+			<h2 className="text-lg font-medium opacity-90">Total Balance</h2>
 			{isPending
 				? (
 					<HeadingTextLoading />

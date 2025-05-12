@@ -2,7 +2,7 @@ import {LucideProps} from "lucide-react";
 import type {ForwardRefExoticComponent, RefAttributes} from "react";
 
 import {CreditCard, ClipboardIcon, SquareKanban, ScanSearch} from "lucide-react";
-import {getShellFinanceRoute} from "@internal/shared";
+import {getFinanceRoute} from "@internal/shared";
 
 interface NavigationLink {
 	title: string;
@@ -39,7 +39,7 @@ const data: Navigation = {
 			items: [
 				{
 					title: 'Management',
-					url: getShellFinanceRoute('overview'),
+					url: getFinanceRoute('dashboard'),
 					icon: SquareKanban
 				},
 				{

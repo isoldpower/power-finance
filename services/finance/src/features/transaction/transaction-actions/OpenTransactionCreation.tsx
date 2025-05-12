@@ -20,7 +20,6 @@ const OpenTransactionCreation: FC<OpenTransactionCreationProps> = ({
 				<Button
 					onClick={() => { setIsModalOpen(true); }}
 					variant="outline"
-					className="bg-white/10 text-white border-white/20 hover:bg-white/20"
 					{...props}
 				>
 					<Icons.Plus size={16} className="mr-1" />

@@ -2,6 +2,7 @@ import { useContext } from 'react';
 
 import { SettingsContext } from './context.js';
 
+
 export const useSettingsContext = () => {
   const context = useContext(SettingsContext);
 

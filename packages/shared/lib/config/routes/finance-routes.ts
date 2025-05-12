@@ -1,3 +1,6 @@
+import { getIsEmbedded } from "../../utils";
+import { getShellFinanceRoute } from "./shell-routes";
+
 const FINANCE_ROOT = '';
 
 interface FinanceRoutes {
@@ -14,9 +17,15 @@ const financeRoutes: FinanceRoutes = {
 	transactions: `${FINANCE_ROOT}/dashboard/transactions`,
 }
 
-const getFinanceRoute = (route: keyof FinanceRoutes): string => {
+const getFinanceRouteInternal = (route: keyof FinanceRoutes): string => {
 	return financeRoutes[route];
 }
 
-export { getFinanceRoute };
+const getFinanceRoute = (route: keyof FinanceRoutes): string => {
+	return getIsEmbedded() 
+		? getShellFinanceRoute(route) 
+		: getFinanceRouteInternal(route);
+}
+
+export { getFinanceRoute, getFinanceRouteInternal };
 export type { FinanceRoutes };

@@ -10,7 +10,7 @@ interface NavigateToLandingProps extends Omit<LinkProps, 'to'> {
 const NavigateToLanding: FC<NavigateToLandingProps> = ({ children, ...props }) => {
 	return (
 		<Link to={getShellRoute('landing')} {...props}>
-			{children || 'Landing'}
+			{children ?? 'Landing'}
 		</Link>
 	)
 }

@@ -6,12 +6,12 @@
   "scripts": {
     "dev": "nx serve",
     "build": "tsc -b && nx vite:build",
+    "preview": "nx vite:preview",
     "lint": "nx eslint:lint",
     "test": "vitest --passWithNoTests",
     "test:ui": "vitest --ui --coverage",
     "test:coverage": "vitest run --coverage",
 		"typecheck": "tsc -p ./config/tsconfig.app.json",
-    "preview": "nx vite:preview",
     "chore": "rm -rf .__mf__temp cache",
     "clean": "rm -rf node_modules dist && pnpm chore",
     "reset": "pnpm clean && pnpm install",

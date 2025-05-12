@@ -27,11 +27,14 @@ export default defineConfig({
 			name: 'InternalLib'
 		},
 		rollupOptions: {
-			external: ['react', 'react-dom'],
+			external: ['react', 'react-dom', '@clerk/clerk-react', '@clerk/types', '@tanstack/react-router'],
 			output: {
 				globals: {
 					react: 'React',
-					'react-dom': 'ReactDOM'
+					'react-dom': 'ReactDOM',
+					'@clerk/clerk-react': 'Clerk',
+					'@clerk/types': 'ClerkTypes',
+					'@tanstack/react-router': 'TanStackReactRouter'
 				},
 			},
 		},

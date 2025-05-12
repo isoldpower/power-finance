@@ -1,0 +1,4 @@
+.text-silent {
+    color: var(--gray-500);
+    @apply dark:text-gray-400;
+}

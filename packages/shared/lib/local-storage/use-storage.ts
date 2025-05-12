@@ -37,7 +37,7 @@ function useLocalStorage<T>(
 				set(parsedValue);
 			}
 		}
-	}, [actualValue, multiValue, state]);
+	}, [actualValue]);
 
 	const setState = useCallback(
 		(updateState: Partial<T> | T) => {
@@ -61,7 +61,7 @@ function useLocalStorage<T>(
 				setState({ [name]: updateValue } as Partial<T>);
 			}
 		},
-		[multiValue, setState]
+		[multiValue, setState, key]
 	);
 
 	const resetState = useCallback(() => {

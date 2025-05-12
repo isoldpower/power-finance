@@ -7,7 +7,7 @@ const AppSidebarHeader: FC<ComponentProps<typeof SidebarHeader>> = ({
 	const { open } = useSidebar();
 
 	return (
-		<SidebarHeader className="drop-shadow shadow-sm mb-4 p-4" {...props}>
+		<SidebarHeader className="border-b border-b-sidebar-accent mb-4 p-4 h-[54px]" {...props}>
 			<div className='flex justify-between items-center'>
 				<LogoComponent withText={open} />
 			</div>

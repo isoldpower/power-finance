@@ -20,8 +20,10 @@ function RootComponent() {
 				publicKey={envVariables.CLIENT_CLERK_PUBLIC_KEY}
 				clerkThemes={themeDictionary}
 			>
-				<Outlet/>
-				<TanStackRouterDevtools initialIsOpen={false} position='bottom-right' />
+				<Outlet />
+				<div className="pb-4">
+					<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
+				</div>
 			</AuthProvider>
 		</ApiProvider>
 	)

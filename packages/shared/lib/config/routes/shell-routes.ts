@@ -1,9 +1,10 @@
-import type {AnalyticsRoutes} from "./analytics-routes.ts";
-import {FinanceRoutes} from "./finance-routes.ts";
+import { getAnalyticsRouteInternal } from "./analytics-routes.ts";
+import { getFinanceRouteInternal } from "./finance-routes.ts";
+import type { AnalyticsRoutes } from "./analytics-routes.ts";
+import type { FinanceRoutes } from "./finance-routes.ts";
 
-import {getAnalyticsRoute} from './analytics-routes.ts';
-import {getFinanceRoute} from "./finance-routes.ts";
-import {joinRouteSegments} from "../../helpers";
+import { joinRouteSegments } from "../../helpers";
+
 
 interface ShellRoutes {
 	root: string
@@ -42,11 +43,11 @@ const getShellRoute = <T extends keyof ShellRoutes>(
 }
 
 const getShellAnalyticsRoute = (route: keyof AnalyticsRoutes): string => {
-	return joinRouteSegments(shellRoutes.analyticsPrefix, getAnalyticsRoute(route));
+	return joinRouteSegments(shellRoutes.analyticsPrefix, getAnalyticsRouteInternal(route));
 }
 
 const getShellFinanceRoute = (route: keyof FinanceRoutes): string => {
-	return joinRouteSegments(shellRoutes.financePrefix, getFinanceRoute(route));
+	return joinRouteSegments(shellRoutes.financePrefix, getFinanceRouteInternal(route));
 }
 
 export { getShellRoute, getShellFinanceRoute, getShellAnalyticsRoute, };

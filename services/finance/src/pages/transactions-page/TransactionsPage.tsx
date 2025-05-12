@@ -26,10 +26,10 @@ const TransactionsPage: FC = () => {
 		<div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
 			<div className="flex justify-between items-center mb-6">
 				<div>
-					<h1 className="text-2xl font-bold text-gray-900">
+					<h1 className="text-2xl font-bold">
 						Transactions
 					</h1>
-					<p className="text-gray-500">
+					<p className="text-silent">
 						View and manage your financial activity
 					</p>
 				</div>
@@ -45,7 +45,6 @@ const TransactionsPage: FC = () => {
 					<OpenTransactionCreation
 						isModalOpen={newTransactionModalOpen}
 						setIsModalOpen={setNewTransactionModalOpen}
-						className="text-black"
 					>
 						<NewTransactionForm
 							wallets={wallets}

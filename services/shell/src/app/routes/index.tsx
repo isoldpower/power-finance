@@ -1,14 +1,12 @@
+import { getShellRoute } from '@internal/shared'
 import { createFileRoute, Navigate } from '@tanstack/react-router'
-import { AppLoader } from "@internal/ui-library";
 
 export const Route = createFileRoute('/')({
-	pendingComponent: AppLoader,
-	component: HomePage
+	component: RedirectToHome
 })
 
-function HomePage() {
+function RedirectToHome() {
 	return (
-		<Navigate to='/landing' replace />
+		<Navigate to={getShellRoute('landing')} replace />
 	);
 }
-

@@ -27,10 +27,10 @@ const DashboardPage: FC = () => {
 	return (
 		<div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto flex flex-col gap-8">
 			<div>
-				<h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-				<p className="text-gray-500">Welcome to your financial overview</p>
+				<h1 className="text-2xl font-bold">Dashboard</h1>
+				<p className="text-gray-500 dark:text-gray-300">Welcome to your financial overview</p>
 			</div>
-			<div className="bg-gradient-to-r from-neutral-800 to-neutral-900 rounded-xl shadow-lg p-6 text-white">
+			<div className="bg-gradient-to-r bg-card rounded-xl shadow-sm p-6">
 				<div className="md:flex md:justify-between md:items-center">
 					<BalanceSummary />
 					<div className="mt-4 md:mt-0">

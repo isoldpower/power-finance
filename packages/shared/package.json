@@ -1,9 +1,9 @@
 {
 	"name": "@internal/shared",
-  "version": "0.0.0",
+	"version": "0.0.0",
 	"description": "shared library of utilities and common elements",
 	"type": "module",
-  "private": true,
+	"private": true,
 	"author": "isoldpower <lapinnr_personal@proton.me>",
 	"homepage": "https://github.com/isoldpower/power-drive#readme",
 	"license": "ISC",
@@ -24,14 +24,14 @@
 			"require": "./dist/main.umd.cjs"
 		}
 	},
-  "scripts": {
+	"scripts": {
 		"watch:build": "vite build --watch",
 		"watch:types": "tsc -p tsconfig.build.json --watch",
 		"watch": "pnpm watch:build & pnpm watch:types",
 		"build": "tsc -b && vite build",
 		"example": "nx serve",
 		"lint": "eslint ."
-  },
+	},
 	"peerDependencies": {
 		"react": "catalog:",
 		"react-dom": "catalog:",
@@ -39,20 +39,20 @@
 		"@clerk/types": "^4.54.2",
 		"@tanstack/react-router": "catalog:"
 	},
-  "devDependencies": {
-    "react": "catalog:",
-    "react-dom": "catalog:",
-    "@eslint/js": "^9.22.0",
-    "@types/react": "^19.0.10",
-    "@types/react-dom": "^19.0.4",
-    "@vitejs/plugin-react-swc": "^3.8.0",
-    "eslint": "^9.22.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
-    "globals": "^16.0.0",
-    "typescript": "~5.7.2",
-    "typescript-eslint": "^8.26.1",
-    "vite": "catalog:",
+	"devDependencies": {
+		"react": "catalog:",
+		"react-dom": "catalog:",
+		"@eslint/js": "^9.22.0",
+		"@types/react": "^19.0.10",
+		"@types/react-dom": "^19.0.4",
+		"@vitejs/plugin-react-swc": "^3.8.0",
+		"eslint": "^9.22.0",
+		"eslint-plugin-react-hooks": "^5.2.0",
+		"eslint-plugin-react-refresh": "^0.4.19",
+		"globals": "^16.0.0",
+		"typescript": "~5.7.2",
+		"typescript-eslint": "^8.26.1",
+		"vite": "catalog:",
 		"vite-plugin-dts": "^4.5.3"
-  }
+	}
 }

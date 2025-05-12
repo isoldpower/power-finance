@@ -1,17 +1,12 @@
 import type { FC } from "react";
-
-import classes from './HeadingTextFx.module.css';
-import { cn } from "@internal/ui-library";
+import { Skeleton } from "@internal/ui-library";
 
 
 type HeadingTextLoadingProps = object;
 
 const HeadingTextLoading: FC<HeadingTextLoadingProps> = () => {
 	return (
-		<div className={cn(
-			classes.headingText__loading,
-			'my-3'
-		)} />
+		<Skeleton className="mt-2 h-8 w-xl" />
 	);
 }
 

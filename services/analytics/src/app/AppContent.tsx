@@ -1,6 +1,7 @@
-import {useSettingsContext} from "@internal/shared";
+import { useSettingsContext } from "@internal/shared";
 import viteLogo from "/vite.svg";
 import reactLogo from "/react.svg";
+
 
 function AppContents() {
 	const { onUpdateField, theme } = useSettingsContext();
@@ -30,7 +31,7 @@ function AppContents() {
 				Click on the Vite and React logos to learn more
 			</p>
 		</>
-	)
+	);
 }
 
 export { AppContents };

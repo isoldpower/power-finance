@@ -1,6 +1,12 @@
-import {createFileRoute} from '@tanstack/react-router'
-import {FinancePage} from "@page/finance-page";
+import { FinancePage } from '@/pages/finance-page';
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/finance/$')({
-  component: FinancePage,
-});
+  component: RouteComponent,
+})
+
+function RouteComponent() {
+	return (
+		<FinancePage />
+	);
+}

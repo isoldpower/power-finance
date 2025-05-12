@@ -14,8 +14,9 @@ function RouteComponent() {
 			to: '/auth/login',
 			replace: true,
 			...params
-		});
-	}, [pathname]);
+		})
+		.catch(console.error);
+	}, [pathname, navigate, params]);
 
 	return (
 		<>

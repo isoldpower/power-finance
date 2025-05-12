@@ -11,9 +11,10 @@ import {
 } from "@internal/ui-library";
 
 import {data, NavigationGroup, NavigationItem} from "./config.ts";
-import { AppSidebarHeader } from "./header.tsx";
-import { AppSidebarFooter } from "./footer.tsx";
-import { AppSidebarItem } from "./item.tsx";
+import { AppSidebarHeader } from "./SidebarHeader.tsx";
+import { AppSidebarFooter } from "./SidebarFooter.tsx";
+import { AppSidebarItem } from "./SidebarItem.tsx";
+
 
 export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
 	return (

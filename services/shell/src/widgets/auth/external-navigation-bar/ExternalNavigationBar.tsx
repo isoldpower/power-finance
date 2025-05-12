@@ -1,14 +1,14 @@
-import type {FC} from "react";
-import {FloatingBar} from "@entity/auth";
-import {ArrowLeft} from "lucide-react";
-import {NavigateToLanding} from "@feature/auth";
-import {HideOnRoute} from "@shared/components";
-import {getShellRoute, NavigateToRecovery, NavigateToSignIn} from "@internal/shared";
+import type { FC } from "react";
+import { FloatingBar } from "@entity/auth";
+import { ArrowLeft } from "lucide-react";
+import { NavigateToLanding } from "@feature/auth";
+import { HideOnRoute } from "@shared/components";
+import { getShellRoute, NavigateToRecovery, NavigateToSignIn } from "@internal/shared";
 
-interface ExternalNavigationBarProps {
-}
 
-const ExternalNavigationBar: FC<ExternalNavigationBarProps> = ({ }) => {
+type ExternalNavigationBarProps = object & {};
+
+const ExternalNavigationBar: FC<ExternalNavigationBarProps> = () => {
 	const authRoutes = getShellRoute('auth');
 
 	return (

@@ -1,11 +1,12 @@
 import type {FC, ReactNode} from "react";
-import type {UseClerkThemeOptions} from "../clerk-theme/useClerkTheme.tsx";
+import type { UseClerkThemeOptions } from "../clerk-theme/useClerkTheme.tsx";
 
-import {ClerkProvider} from "@clerk/clerk-react";
-import {useNavigate} from "@tanstack/react-router";
-import {useClerkTheme} from "../clerk-theme/useClerkTheme.tsx";
-import {getFinanceRoute} from "../../config";
-import {useRouteWithOrigin} from "../../helpers";
+import { ClerkProvider } from "@clerk/clerk-react";
+import { useNavigate } from "@tanstack/react-router";
+import { useClerkTheme } from "../clerk-theme/useClerkTheme.tsx";
+import { getFinanceRoute } from "../../config";
+import { useRouteWithOrigin } from "../../helpers";
+
 
 interface AuthProviderProps {
 	children: ReactNode;
