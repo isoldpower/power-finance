@@ -7,7 +7,7 @@ interface TransactionPaperProps {
 
 const TransactionPaper: FC<TransactionPaperProps> = ({ children }) => {
 	return (
-		<div className="p-4 border-b last:border-b-0 hover:bg-gray-50 transition-colors">
+		<div className="p-4 last:border-b-0 bg-card transition-colors">
 			{children}
 		</div>
 	)

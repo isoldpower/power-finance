@@ -29,5 +29,5 @@
 			]
 		}
 	},
-  "include": ["src", "lib"]
+  "include": ["src", "lib", "@/components/shadcn/ui/sonner.tsx"]
 }

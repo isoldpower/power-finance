@@ -1,4 +1,5 @@
-import {FC, useCallback} from "react";
+import { useCallback } from "react";
+import type { FC } from "react";
 
 import { z } from "zod";
 import { ArrowRight } from "lucide-react";
@@ -7,7 +8,7 @@ import { useRecoveryCode } from "@feature/auth";
 import { FormButton } from "@entity/auth";
 
 
-interface InitialRecoveryFormProps {}
+type InitialRecoveryFormProps = object & {};
 
 const InitialRecoveryForm: FC<InitialRecoveryFormProps> = () => {
 	const { verifyEmail, error } = useRecoveryCode();
@@ -20,7 +21,7 @@ const InitialRecoveryForm: FC<InitialRecoveryFormProps> = () => {
 	): Promise<boolean> => {
 		if (!values.email || typeof values.email !== 'string') return false;
 
-		return await verifyEmail(values.email as string);
+		return await verifyEmail(values.email);
 	}, [verifyEmail]);
 
 	return (

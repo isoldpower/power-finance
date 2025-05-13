@@ -17,3 +17,4 @@ export { WalletCardFx } from './card-fx/WalletCardFx.tsx';
 export { WalletCardBoundaries } from './card-fx/WalletCardBoundaries.tsx';
 export { WalletCardsListFx } from './cards-list-fx/WalletCardsListFx.tsx';
 export { useWalletSelection } from './wallet-selection/useWalletSelection.tsx';
+export { SelectWalletToQuery } from './wallet-selection/SelectWalletToQuery.tsx';

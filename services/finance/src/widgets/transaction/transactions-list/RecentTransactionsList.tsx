@@ -47,7 +47,7 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 							<h3 className="text-sm font-medium text-gray-500">
 								{transform(date)}
 							</h3>
-							<div className="bg-white rounded-lg overflow-hidden border border-gray-200">
+							<div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
 								{related?.map((transaction) => (
 									<div key={transaction.id} className="border-b last:border-b-0">
 										{cloneElement(children, {

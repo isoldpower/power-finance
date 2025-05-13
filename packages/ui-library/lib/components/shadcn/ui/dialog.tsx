@@ -9,24 +9,28 @@ import { cn } from "@/utils/index"
 function Dialog({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root>) {
+  console.log('rendering dialog');
   return <DialogPrimitive.Root data-slot="dialog" {...props} />
 }
 
 function DialogTrigger({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
+  console.log('rendering dialog trigger');
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
 }
 
 function DialogPortal({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Portal>) {
+  console.log('rendering dialog portal');
   return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
 }
 
 function DialogClose({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Close>) {
+  console.log('rendering dialog close');
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />
 }
 
@@ -34,6 +38,7 @@ function DialogOverlay({
   className,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
+  console.log('rendering dialog overlay');
   return (
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
@@ -51,6 +56,7 @@ function DialogContent({
   children,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content>) {
+  console.log('rendering dialog content');
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />

@@ -47,10 +47,10 @@ const OverviewTransactionsList: FC<OverviewTransactionsListProps> = ({
 				<TransactionsList>
 					{Object.entries(selectedTransactions).map(([date, related]) => (
 						<div key={date} className="space-y-2">
-							<h3 className="text-sm font-medium text-gray-500">
+							<h3 className="text-sm font-medium text-silent">
 								{transform(date)}
 							</h3>
-							<div className="bg-white rounded-lg overflow-hidden border border-gray-200">
+							<div className="rounded-lg overflow-hidden border-gray-200 dark:border-gray-800">
 								{related?.map((transaction) => (
 									<div key={transaction.id} className="border-b last:border-b-0">
 										{cloneElement(children, {
@@ -68,10 +68,10 @@ const OverviewTransactionsList: FC<OverviewTransactionsListProps> = ({
 		)
 		: (
 			<div className="text-center py-10 border border-dashed rounded-lg">
-				<p className="text-gray-500">
+				<p className="text-silent">
 					No transactions found
 				</p>
-				<p className="text-sm text-gray-400 mt-1">
+				<p className="text-sm text-silent mt-1">
 					It seems that this wallet doesn't have transactions</p>
 			</div>
 		);

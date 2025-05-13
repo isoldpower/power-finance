@@ -1,0 +1,18 @@
+### TODO
+- [ ] Analytics
+    - [ ] Implement api handlers
+    - [ ] Create basic analytics using react-table and visx
+    - [ ] Implement filtering using zustand
+    - [ ] Cover with tests
+    - [ ] Implement CI for the service
+- [ ] Shell
+    - [ ] Restyle the code according to eslint and Finance service
+    - [ ] Implement landing page
+    - [ ] Cover with tests
+    - [ ] Integrate with Analytics service
+    - [ ] Better FX (Async handling using ErrorBoundary and Suspense)
+    - [ ] Better UX (Loaders, less twitching)
+- [ ] Finance
+    - [ ] Optimise rerenders
+    - [ ] E2E tests
+    - [ ] Draft Mode (major feature)

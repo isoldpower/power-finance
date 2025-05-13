@@ -27,6 +27,10 @@ function EditWallet({
 	useEffect(() => {
 		reset(defaults);
 	}, [defaults, reset]);
+	
+	useEffect(() => {
+		console.log(Date.now(), 'resetting');
+	}, [reset]);
 
 	const onSubmit = useCallback((data: WalletSchema) => {
 		const { type, ...rest } = data;
@@ -50,7 +54,7 @@ function EditWallet({
 		<form onSubmit={handleSubmitForm}>
 			{children}
 		</form>
-	)
+	);
 }
 
 EditWallet.displayName = 'EditWallet';

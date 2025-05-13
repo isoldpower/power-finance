@@ -1,17 +1,13 @@
-import type { FC, ReactNode } from "react";
+import type { FC } from "react";
 
 
-interface CardPendingProps {
-	children?: ReactNode;
-}
+type CardPendingProps = object & {};
 
-const CardPending: FC<CardPendingProps> = ({ children }) => {
+const CardPending: FC<CardPendingProps> = () => {
 	return (
-		<div className='animate-pulse h-28 rounded-lg bg-gray-100'>
-			{ children }
-		</div>
-	)
-}
+		<div className='animate-pulse bg-gray-100 dark:bg-gray-900 h-36 rounded-lg' />
+	);
+};
 
 CardPending.displayName = 'CardPending';
 

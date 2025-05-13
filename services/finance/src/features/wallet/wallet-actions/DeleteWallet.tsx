@@ -22,10 +22,15 @@ interface DeleteWalletProps extends Omit<ComponentProps<typeof Button>, 'onClick
 const DeleteWallet: FC<DeleteWalletProps> = ({ children, wallet, ...props }) => {
 	const [open, setOpen] = useState(false);
 	const { deleteWallet } = useWalletMethods(wallet.id);
+
 	const handleDelete = useCallback(() => {
 		deleteWallet();
 		setOpen(false);
 	}, [deleteWallet]);
+
+	const handleCancel = useCallback(() => {
+		setOpen(false);
+	}, [setOpen]);
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -48,8 +53,12 @@ const DeleteWallet: FC<DeleteWalletProps> = ({ children, wallet, ...props }) => 
 				</DialogHeader>
 				<DialogFooter>
 					<div className="flex justify-end gap-2 mt-4">
-						<Button variant="secondary" onClick={() => { setOpen(false); }}>Cancel</Button>
-						<Button variant="destructive" onClick={handleDelete}>Delete</Button>
+						<Button variant="secondary" onClick={handleCancel}>
+							Cancel
+						</Button>
+						<Button variant="destructive" onClick={handleDelete}>
+							Delete
+						</Button>
 					</div>
 				</DialogFooter>
 			</DialogContent>

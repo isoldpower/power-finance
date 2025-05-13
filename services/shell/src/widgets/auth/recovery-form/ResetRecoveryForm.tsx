@@ -20,7 +20,7 @@ import { FormButton } from "@entity/auth";
 import { usePasswordChecks, useRecoveryCode } from "@feature/auth";
 
 
-interface ResetRecoveryFormProps {}
+type ResetRecoveryFormProps = object & {};
 
 const ResetRecoveryForm: FC<ResetRecoveryFormProps> = () => {
 	const { checkPasswordStrength, checkPasswordCompromised } = usePasswordChecks();
@@ -43,7 +43,7 @@ const ResetRecoveryForm: FC<ResetRecoveryFormProps> = () => {
 			!values.code || typeof values.code !== 'string'
 		) return false;
 
-		return await resetPassword(values.code as string, values.password as string);
+		return await resetPassword(values.code, values.password);
 	}, [resetPassword]);
 
 	return (

@@ -1,4 +1,4 @@
-import {ReactNode, useCallback} from "react";
+import { FormEvent, ReactNode, useCallback } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
 
 import { useWalletsListMethods } from "@feature/wallet";
@@ -26,11 +26,17 @@ function NewWallet({
 		if (onSuccess) onSuccess(data);
 	}, [createWallet, onSuccess]);
 
+	const handleSubmitForm = useCallback((
+		e: FormEvent<HTMLFormElement>
+	) => {
+		handleSubmit(onSubmit)(e).catch(console.error);
+	}, [handleSubmit, onSubmit]);
+
 	return (
-		<form onSubmit={() => handleSubmit(onSubmit)}>
+		<form onSubmit={handleSubmitForm}>
 			{children}
 		</form>
-	)
+	);
 }
 
 NewWallet.displayName = 'NewWallet';

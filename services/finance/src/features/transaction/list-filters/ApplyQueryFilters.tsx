@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import type { FC, ReactNode } from "react";
+import type { FC, FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
 
 import { useWalletSelection } from "@feature/wallet";
@@ -26,8 +26,14 @@ const ApplyQueryFilters: FC<ApplyQueryFiltersProps> = ({
 		onSuccess?.(data);
 	}, [onSuccess, setSelected]);
 
+	const handleSubmitForm = useCallback((
+		e: FormEvent<HTMLFormElement>
+	) => {
+		handleSubmit(onSuccessfulSubmit)(e).catch(console.error);
+	}, [handleSubmit, onSuccessfulSubmit]);
+
 	return (
-		<form onSubmit={() => handleSubmit(onSuccessfulSubmit)}>
+		<form onSubmit={handleSubmitForm}>
 			{children}
 		</form>
 	)

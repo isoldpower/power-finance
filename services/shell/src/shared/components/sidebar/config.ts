@@ -1,13 +1,13 @@
-import {LucideProps} from "lucide-react";
 import type {ForwardRefExoticComponent, RefAttributes} from "react";
 
-import {CreditCard, ClipboardIcon, SquareKanban, ScanSearch} from "lucide-react";
-import {getFinanceRoute} from "@internal/shared";
+import { getFinanceRoute } from "@internal/shared";
+import { Icons } from "@internal/ui-library";
+
 
 interface NavigationLink {
 	title: string;
 	url: string;
-	icon?: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
+	icon?: ForwardRefExoticComponent<Omit<Icons.LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
 	items?: never;
 }
 
@@ -30,7 +30,7 @@ const data: Navigation = {
 				{
 					title: 'Landing',
 					url: '/landing',
-					icon: ScanSearch
+					icon: Icons.ScanSearch
 				}
 			]
 		},
@@ -38,20 +38,10 @@ const data: Navigation = {
 			title: 'Finance Application',
 			items: [
 				{
-					title: 'Management',
+					title: 'Dashboard',
 					url: getFinanceRoute('dashboard'),
-					icon: SquareKanban
-				},
-				{
-					title: 'Transactions',
-					url: '/transactions',
-					icon: CreditCard
-				},
-				{
-					title: 'Reports',
-					url: '/reports',
-					icon: ClipboardIcon
-				},
+					icon: Icons.SquareKanban
+				}
 			],
 		},
 		{

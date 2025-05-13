@@ -44,8 +44,11 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 			<div className="flex items-center">
 				<TransactionTypeIcon type={passedTransaction.type} />
 				<div className="ml-3 flex-grow">
-					<p className="text-sm font-medium text-gray-900">
-						{passedTransaction.description ?? 'Some category'}
+					<p className="text-sm font-medium">
+						{passedTransaction.description?.length && passedTransaction.description.length > 0 
+							? passedTransaction.description
+							: 'Some category'
+						}
 					</p>
 					<TransactionTargets
 						to={passedTransaction.to && {
