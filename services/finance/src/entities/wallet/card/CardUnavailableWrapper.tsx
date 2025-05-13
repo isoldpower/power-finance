@@ -1,15 +1,14 @@
+import { cn } from "@internal/ui-library";
 import type { FC, ReactNode } from "react";
 
 
 interface CardUnavailableWrapperProps {
-	children?: ReactNode;
+	className?: ReactNode;
 }
 
-const CardUnavailableWrapper: FC<CardUnavailableWrapperProps> = ({ children }) => {
+const CardUnavailableWrapper: FC<CardUnavailableWrapperProps> = ({ className }) => {
 	return (
-		<div className='opacity-50'>
-			{ children }
-		</div>
+		<div className={cn('opacity-50 bg-gray-200 dark:bg-gray-900 rounded-lg', className)} />
 	)
 }
 

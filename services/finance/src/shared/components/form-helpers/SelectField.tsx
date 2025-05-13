@@ -1,4 +1,4 @@
-import { Select, SelectTrigger, SelectContent, SelectItem } from "@internal/ui-library";
+import { Select, SelectTrigger, SelectContent, SelectItem, cn } from "@internal/ui-library";
 import { useMemo, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
@@ -47,27 +47,31 @@ const SelectField: FC<SelectFieldProps> = ({
 	return (
 		<Select onValueChange={props.onChange} open={open} onOpenChange={setOpen} {...props}>
 			<SelectTrigger className="w-full">
-				{selectedOption?.label ?? placeholder}
+				<div className="truncate max-w-full">
+					{selectedOption?.label ?? placeholder}
+				</div>
 			</SelectTrigger>
 			<SelectContent>
-				<div ref={rootRef} className="h-[200px] w-full overflow-y-auto contain-strict">
-					<div style={{ height: `${totalHeight.toString()}px`, width: '100%', position: 'relative' }}>
+				<div ref={rootRef} className={cn(
+						"w-full overflow-y-auto contain-strict",
+						'max-h-[200px]'
+					)} style={{ height: `${totalHeight.toString()}px`, position: 'relative' }}>
+					<div style={{ height: `${totalHeight.toString()}px`, position: 'relative' }}>
 						{virtualItems.map((virtualItem) => {
 							const item = memoizedOptions[virtualItem.index];
 							return (
 								<SelectItem
 									key={item.value}
 									value={item.value}
+									className="absolute top-0 left-0"
 									style={{
-									position: 'absolute',
-									top: 0,
-									left: 0,
-									width: '100%',
-									height: `${virtualItem.size.toString()}px`,
-									transform: `translateY(${virtualItem.start.toString()}px)`
+										height: `${virtualItem.size.toString()}px`,
+										transform: `translateY(${virtualItem.start.toString()}px)`
 									}}
 								>
-									{item.label}
+									<div className="truncate pr-2 max-w-full">
+										{item.label}
+									</div>
 								</SelectItem>
 							);
 						})}

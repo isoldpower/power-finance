@@ -12,7 +12,7 @@ interface TransactionTransfersProps {
 
 const TransactionTargets: React.FC<TransactionTransfersProps> = ({ from, to }) => {
 	return (
-		<div className="flex text-xs text-gray-500 mt-1">
+		<div className="flex text-xs text-silent">
 			{from && (
 				<span>{from.target.name}</span>
 			)}

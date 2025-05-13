@@ -16,7 +16,7 @@ const WalletSelectionList: FC<WalletSelectionListProps> = ({ wallets }) => {
 		<div className="mb-6 flex flex-wrap gap-2">
 			<FilterButton
 				onClick={() => { setSelected('all'); }}
-				selected={selected === 'all'}
+				selected={!selected}
 			>
 				All accounts
 			</FilterButton>

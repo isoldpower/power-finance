@@ -1,14 +1,13 @@
-import type { FC, ReactNode } from "react";
+import { cn } from "@internal/ui-library";
+import type { FC } from "react";
 
 interface CardErrorWrapperProps {
-	children: ReactNode;
+	className?: string;
 }
 
-const CardErrorWrapper: FC<CardErrorWrapperProps> = ({ children }) => {
+const CardErrorWrapper: FC<CardErrorWrapperProps> = ({ className }) => {
 	return (
-		<div className='bg-red-300 opacity-50'>
-			{ children }
-		</div>
+		<div className={cn('opacity-50 bg-red-300', className)} />
 	)
 }
 

@@ -28,10 +28,6 @@ function EditWallet({
 		reset(defaults);
 	}, [defaults, reset]);
 	
-	useEffect(() => {
-		console.log(Date.now(), 'resetting');
-	}, [reset]);
-
 	const onSubmit = useCallback((data: WalletSchema) => {
 		const { type, ...rest } = data;
 		const walletData = { reversed: type === 'credit', ...rest };

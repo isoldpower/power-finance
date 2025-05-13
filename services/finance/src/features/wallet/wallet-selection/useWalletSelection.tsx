@@ -25,7 +25,7 @@ const useWalletSelection = ({
 
 	return {
 		setSelected,
-		selected: related[searchKey],
+		selected: related[searchKey] === 'all' ? undefined : related[searchKey],
 	}
 }
 

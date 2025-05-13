@@ -16,7 +16,7 @@ const GlobalLocaleSelection = () => {
 
 	return (
 		<div className="flex gap-4 items-center justify-between">
-			<h3 className="text-neutral-600">
+			<h3>
 				Locale
 			</h3>
 			<Popover open={open} onOpenChange={setOpen}>

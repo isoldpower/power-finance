@@ -13,11 +13,16 @@ const TransactionsListNavigationHeader: FC<TransactionsListNavigationHeaderProps
 
 	return (
 		<div className="flex justify-between items-center mb-4">
-			<h2 className="text-xl font-bold">
-				Recent Transactions <span className="text-gray-400">
-				{ status === 'pending' && "..."}
-			</span>
-			</h2>
+			<div className="flex flex-col">
+				<h2 className="text-xl font-bold">
+					Recent Transactions <span className="text-silent">
+						{ status === 'pending' && "..."}
+					</span>
+				</h2>
+				<p className="text-silent">
+					For the last 7 days
+					</p>
+			</div>
 			<Button variant="link" asChild>
 				<Link to={getFinanceRoute('transactions')} className="text-sm flex items-center">
 					View all

@@ -24,7 +24,7 @@ const TransactionValue: FC<TransactionValueProps> = ({ side, perspective }) => {
 				{transformCurrency(side.amount, side.wallet.currency)}
 			</p>
 			<p className="text-xs text-gray-500 mt-1">
-				Some category
+				Additional info
 			</p>
 		</div>
 	);

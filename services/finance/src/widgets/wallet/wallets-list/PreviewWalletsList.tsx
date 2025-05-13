@@ -4,7 +4,7 @@ import { Button } from "@internal/ui-library";
 import { getFinanceRoute } from "@internal/shared";
 import type { FC, ReactElement } from "react";
 
-import { useWalletsList, WalletCardsListFx } from "@feature/wallet";
+import { SelectWalletToQuery, useWalletsList, WalletCardsListFx } from "@feature/wallet";
 import { CardsListPending, CardsListError, CardsList } from "@entity/wallet";
 import type { Wallet } from "@entity/wallet";
 
@@ -25,10 +25,9 @@ const PreviewWalletsList: FC<PreviewWalletsListProps> = ({ children }) => {
 			>
 				<CardsList>
 					{wallets.slice(0, 3).map((wallet) => (
-						cloneElement(children, {
-							wallet,
-							key: wallet.id
-						})
+						<SelectWalletToQuery walletId={wallet.id} key={wallet.id}>
+							{cloneElement(children, { wallet })}
+						</SelectWalletToQuery>
 					))}
 				</CardsList>
 			</WalletCardsListFx>

@@ -13,6 +13,6 @@
     - [ ] Better FX (Async handling using ErrorBoundary and Suspense)
     - [ ] Better UX (Loaders, less twitching)
 - [ ] Finance
-    - [ ] Optimise rerenders
+    - [x] Optimise rerenders
     - [ ] E2E tests
     - [ ] Draft Mode (major feature)

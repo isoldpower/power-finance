@@ -29,7 +29,7 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 	const transform = useLocaleDateTransform();
 	const selectedTransactions = getMonthGroupedTransactions(
 		filterRelatedTransactions(
-			selectedWallet === 'all' ? undefined : selectedWallet,
+			selectedWallet,
 			getRecentTransactions(transactions)
 		)
 	);

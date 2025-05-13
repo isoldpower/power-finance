@@ -59,15 +59,15 @@ const EditWalletModal: FC<EditWalletCardProps> = ({
 				Edit Wallet
 			</DialogTitle>
 			<Form {...form}>
-				<EditWallet form={form} wallet={wallet}>
+				<EditWallet form={form} wallet={wallet} onSuccess={handleClose}>
 					<div className="space-y-4 py-4">
 						<FormField
 							control={form.control}
 							name="name"
 							render={({ field }) => (
-							<FieldLayout label="Wallet Name">
-								<InputField placeholder="e.g., Main Account" {...field} />
-							</FieldLayout>
+								<FieldLayout label="Wallet Name">
+									<InputField placeholder="e.g., Main Account" {...field} />
+								</FieldLayout>
 							)} />
 						<FormField
 							control={form.control}
