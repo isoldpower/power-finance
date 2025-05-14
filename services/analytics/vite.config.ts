@@ -1,5 +1,6 @@
 import type { ConfigEnv } from "vite";
 import { resolve } from "path";
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 
 import type { ViteConfigOptions } from "@internal/config";
 import { buildViteConfig } from "@internal/config";
@@ -18,6 +19,12 @@ export default (env: ConfigEnv) => {
 
 	return buildViteConfig({
 		plugins: [
+			TanStackRouterVite({
+				target: 'react',
+				autoCodeSplitting: true,
+				routesDirectory: resolve(__dirname, 'src', 'app', 'routes'),
+				generatedRouteTree: resolve(__dirname, 'src', 'app', 'routeTree.gen.ts'),
+			}),
 			buildFederationRemote({ name: 'analytics' })
 		],
 	}, options)(env);

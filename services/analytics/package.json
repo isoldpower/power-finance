@@ -1,29 +1,42 @@
 {
   "name": "@power/analytics",
   "private": true,
-	"type": "module",
+  "type": "module",
   "version": "0.0.0",
   "scripts": {
     "dev": "nx serve",
     "build": "tsc -b && nx vite:build",
     "lint": "nx eslint:lint",
     "preview": "nx vite:preview",
-		"chore": "rm -rf .__mf__temp cache",
-		"clean": "rm -rf node_modules dist && pnpm chore",
-		"reset": "pnpm clean && pnpm install",
-		"reset:hard": "pnpm clean && rm -rf pnpm-lock.yaml && pnpm install"
+    "chore": "rm -rf .__mf__temp cache",
+    "clean": "rm -rf node_modules dist && pnpm chore",
+    "reset": "pnpm clean && pnpm install",
+    "reset:hard": "pnpm clean && rm -rf pnpm-lock.yaml && pnpm install"
   },
   "dependencies": {
+    "@internal/shared": "workspace:^",
+    "@internal/ui-library": "workspace:^",
+    "@tanstack/react-router": "catalog:",
+    "@visx/axis": "^3.12.0",
+    "@visx/curve": "^3.12.0",
+    "@visx/event": "^3.12.0",
+    "@visx/gradient": "^3.12.0",
+    "@visx/grid": "^3.12.0",
+    "@visx/group": "^3.12.0",
+    "@visx/scale": "^3.12.0",
+    "@visx/shape": "^3.12.0",
+    "@visx/tooltip": "^3.12.0",
+    "date-fns": "^4.1.0",
     "react": "catalog:",
+    "react-day-picker": "^9.7.0",
     "react-dom": "catalog:",
-    "react-error-boundary": "^5.0.0"
+    "react-error-boundary": "^5.0.0",
+    "zustand": "^5.0.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
-    "@module-federation/vite": "catalog:",
-		"vite": "catalog:",
     "@internal/config": "workspace:^",
-		"@internal/shared": "workspace:^",
+    "@module-federation/vite": "catalog:",
     "@types/node": "^22.14.1",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
@@ -32,6 +45,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "typescript": "~5.7.2",
-    "typescript-eslint": "^8.24.1"
+    "typescript-eslint": "^8.24.1",
+    "vite": "catalog:"
   }
 }
