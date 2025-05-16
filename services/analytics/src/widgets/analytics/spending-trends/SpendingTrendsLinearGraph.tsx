@@ -7,22 +7,22 @@ import { data } from "./dataMock";
 import { GridChartSkeleton, LinearChartPath, GridChartContainer, GridChartLegend, SpendingDataFlat } from "@entity/analytics";
 import { HoverTooltipOverlay, ShowHoverTooltip } from "@feature/analytics";
 import { useTooltip } from "@visx/tooltip";
+import { useParentSize } from "@visx/responsive";
 
 
-interface SpendingTrendsLinearGraphProps {
-    width?: number;
-    height?: number; 
-}
+type SpendingTrendsLinearGraphProps = object & {
+    height?: number;
+};
 
-const SpendingTrendsLinearGraph: FC<SpendingTrendsLinearGraphProps> = ({ 
-    width = 800,
-    height = 400
+const SpendingTrendsLinearGraph: FC<SpendingTrendsLinearGraphProps> = ({
+    height: targetHeight = 400,
 }) => {
+    const { width, height, parentRef } = useParentSize();
     const dataset = useMemo(() => {
         return Object.entries(data)
             .map(([key, value]) => ({ date: key, ...value }));
     }, []);
-    const margin = useRef({ top: 0, right: 0, bottom: 30, left: 0 });
+    const margin = useRef({ top: 0, right: 10, bottom: 10, left: 60 });
     const innerWidth = useMemo(() => width - margin.current.left - margin.current.right, [width]);
     const innerHeight = useMemo(() => height - margin.current.top - margin.current.bottom, [height]);
 
@@ -47,15 +47,15 @@ const SpendingTrendsLinearGraph: FC<SpendingTrendsLinearGraphProps> = ({
 
 
     return (
-        <Card className={cn("h-full")}>
+        <Card className={cn("rounded-none border-none shadow-none")}>
             <CardHeader>
                 <CardTitle>Spending Trends</CardTitle>
                 <CardDescription>
                     Income vs. expenses over the period of time
                 </CardDescription>
             </CardHeader>
-            <CardContent className="relative">
-                <GridChartContainer width={width} height={height}>
+            <CardContent className="relative" style={{ height: targetHeight }} ref={parentRef}>
+                <GridChartContainer width={width} height={height} margin={margin.current}>
                     <GridChartSkeleton
                         horizontalScale={dateScale}
                         verticalScale={valueScale}
@@ -81,6 +81,8 @@ const SpendingTrendsLinearGraph: FC<SpendingTrendsLinearGraphProps> = ({
                         title='expenses'
                     />
                     <HoverTooltipOverlay
+                        width={innerWidth}
+                        height={innerHeight}
                         horizontalScale={dateScale}
                         verticalScale={valueScale}
                         dataset={dataset}
@@ -89,12 +91,13 @@ const SpendingTrendsLinearGraph: FC<SpendingTrendsLinearGraphProps> = ({
                     />
                 </GridChartContainer>
                 <ShowHoverTooltip {...tooltip} />
-                <GridChartLegend
-                    entries={[
-                        { color: 'var(--chart-1)', label: 'Income' },
-                        { color: 'var(--chart-2)', label: 'Expenses' },
-                    ]}
-                />
+                <div className="absolute left-0 right-0 bottom-0">
+                    <GridChartLegend
+                        entries={[
+                            { color: 'var(--chart-1)', label: 'Income' },
+                            { color: 'var(--chart-2)', label: 'Expenses' },
+                        ]} />
+                </div>
             </CardContent>
         </Card>
     )

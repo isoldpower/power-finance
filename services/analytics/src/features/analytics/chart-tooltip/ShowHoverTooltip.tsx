@@ -26,13 +26,13 @@ const ShowHoverTooltip: FC<ShowHoverTooltipProps> = ({
                 <div className="text-sm font-bold">
                     {format(tooltipData.date, "MMMM yyyy")}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 break-keep w-max">
                     <div className="h-2 w-2 rounded-full bg-chart-1" />
                     <span>
                         Income: ${tooltipData.income}
                     </span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 break-keep w-max">
                     <div className="h-2 w-2 rounded-full bg-chart-2" />
                     <span>
                         Expenses: ${tooltipData.expenses}

@@ -1,7 +1,7 @@
 import type { FC } from "react";
 
 import { DashboardHeading, GlobalContainer } from "@entity/analytics";
-import { ConfigurableGrid, ConfigurableGridPlate, SpendingTrendsLinearGraph } from "@widget/analytics";
+import { ConfigurableGrid, ConfigurableGridPlate, ConfigurableGridRow, SpendingTrendsLinearGraph } from "@widget/analytics";
 
 
 const DashboardPage: FC = () => {
@@ -13,9 +13,19 @@ const DashboardPage: FC = () => {
                     text="Straightforward way to track your expenses"
                 />
                 <ConfigurableGrid>
-                    <ConfigurableGridPlate>
-                        <SpendingTrendsLinearGraph />
-                    </ConfigurableGridPlate>
+                    <ConfigurableGridRow>
+                        <ConfigurableGridPlate basis="60%">
+                            <SpendingTrendsLinearGraph height={400} />
+                        </ConfigurableGridPlate>
+                        <ConfigurableGridPlate basis="40%">
+                            <SpendingTrendsLinearGraph height={400} />
+                        </ConfigurableGridPlate>
+                    </ConfigurableGridRow>
+                    <ConfigurableGridRow>
+                        <ConfigurableGridPlate basis="100%">
+                            <SpendingTrendsLinearGraph height={400} />
+                        </ConfigurableGridPlate>
+                    </ConfigurableGridRow>
                 </ConfigurableGrid>
             </div>
         </GlobalContainer>

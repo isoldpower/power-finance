@@ -16,6 +16,8 @@ interface HoverTooltipOverlayProps {
     dataset: SpendingDataFlat[];
     margin: { top: number; right: number; bottom: number; left: number };
     tooltip: ReturnType<typeof useTooltip<SpendingDataFlat>>;
+    width: number;
+    height: number;
 }
 
 
@@ -24,7 +26,9 @@ const HoverTooltipOverlay: FC<HoverTooltipOverlayProps> = ({
     verticalScale,
     dataset,
     margin,
-    tooltip
+    tooltip,
+    width,
+    height
 }) => {
     const { 
         tooltipData,
@@ -52,23 +56,23 @@ const HoverTooltipOverlay: FC<HoverTooltipOverlayProps> = ({
             item = previousDistance > nextDistance ? nextItem : previousItem;
         }
 
-        const verticalAverageSource = (item.income + item.expenses) / 2;
-        const horizontalSource = new Date(item.date);
+        const verticalAverageSource = (item.income + item.expenses) / 2 + margin.top;
+        const horizontalSource = new Date(new Date(item.date).getTime() - margin.left);
 
         showTooltip({
           tooltipData: item,
           tooltipLeft: horizontalScale(horizontalSource),
           tooltipTop: verticalScale(verticalAverageSource),
         })
-    }, [horizontalScale, margin.left, dataset, showTooltip, verticalScale]);
+    }, [horizontalScale, margin.left, margin.top, dataset, showTooltip, verticalScale]);
 
     return (
         <>
             <Bar
                 x={0}
                 y={0}
-                width={innerWidth}
-                height={innerHeight}
+                width={width}
+                height={height}
                 fill="transparent"
                 onTouchStart={handleTooltip}
                 onTouchMove={handleTooltip}
@@ -79,7 +83,7 @@ const HoverTooltipOverlay: FC<HoverTooltipOverlayProps> = ({
                 <Group>
                     <Line
                         from={{ x: tooltipLeft, y: 0 }}
-                        to={{ x: tooltipLeft, y: innerHeight }}
+                        to={{ x: tooltipLeft, y: height }}
                         stroke='var(--foreground)'
                         className="opacity-30"
                         strokeWidth={1}

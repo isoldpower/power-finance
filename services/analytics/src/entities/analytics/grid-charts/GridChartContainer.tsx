@@ -8,16 +8,19 @@ interface GridChartContainerProps {
     children: ReactNode;
     width: number;
     height: number;
+    margin: { top: number, right: number, bottom: number, left: number };
 }
-
 const GridChartContainer = forwardRef<HTMLDivElement, GridChartContainerProps>((
-    { children, width, height },
+    { children, width, height, margin },
     ref
 ) => {
+    const fullWidth = width + margin.left + margin.right;
+    const fullHeight = height + margin.top + margin.bottom;
+
     return (
-        <div className="w-full relative" style={{ height }} ref={ref}>
-            <svg width="100%" height="100%" viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
-                <Group>
+        <div className="absolute" style={{ height }} ref={ref}>
+            <svg className="w-full h-full" viewBox={`0 0 ${fullWidth.toString()} ${fullHeight.toString()}`}>
+                <Group left={margin.left} top={margin.top}>
                     {children}
                 </Group>
             </svg>

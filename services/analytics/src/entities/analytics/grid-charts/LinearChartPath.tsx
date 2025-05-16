@@ -57,7 +57,6 @@ const LinearChartPath: FC<LinearChartPathProps> = ({
                 strokeWidth={2}
                 curve={curve}
             />
-
             {data.map((item, i) => (
                 <circle
                     key={`${title}-point-${i.toString()}`}
