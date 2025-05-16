@@ -2,10 +2,9 @@ import { useCallback } from "react";
 import { localPoint } from "@visx/event"
 import { useTooltip } from "@visx/tooltip";
 import { scaleLinear, scaleTime } from "@visx/scale";
-import { Bar, Line } from "@visx/shape";
-import { Group } from "@visx/group";
+import { Bar } from "@visx/shape";
 import { bisector } from "d3-array"
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 
 import type { SpendingDataFlat } from "@entity/analytics";
 
@@ -18,8 +17,12 @@ interface HoverTooltipOverlayProps {
     tooltip: ReturnType<typeof useTooltip<SpendingDataFlat>>;
     width: number;
     height: number;
+	children: ReactNode;
+	computePosition: (item: SpendingDataFlat, index: number) => {
+		tooltipLeft: number;
+		tooltipTop: number;
+	};
 }
-
 
 const HoverTooltipOverlay: FC<HoverTooltipOverlayProps> = ({
     horizontalScale,
@@ -28,13 +31,14 @@ const HoverTooltipOverlay: FC<HoverTooltipOverlayProps> = ({
     margin,
     tooltip,
     width,
-    height
+    height,
+	children,
+	computePosition
 }) => {
     const { 
         tooltipData,
         showTooltip,
         hideTooltip,
-        tooltipLeft
     } = tooltip;
     
     const handleTooltip = useCallback((
@@ -42,31 +46,31 @@ const HoverTooltipOverlay: FC<HoverTooltipOverlayProps> = ({
     ) => {
         const { x: horizontalPoint } = localPoint(event) ?? { x: 0 };
         const absolutePoint = horizontalScale.invert(horizontalPoint - margin.left);
-
-        const index = bisector((d: { date: string }) => d.date).left(dataset, absolutePoint.toISOString(), 1);
+        const index = bisector((d: SpendingDataFlat) => d.date).left(dataset, absolutePoint);
         const previousItem = dataset[index - 1];
         const nextItem = index < dataset.length ? dataset[index] : undefined;
 
         // Compare the distance to the previous and next item to determine which one to show
         let item = previousItem;
         if (nextItem?.date) {
-            const previousDistance = absolutePoint.valueOf() - new Date(previousItem.date).getTime();
-            const nextDistance = new Date(nextItem.date).getTime() - absolutePoint.valueOf();
+            const previousDistance = absolutePoint.valueOf() - previousItem.date;
+            const nextDistance = nextItem.date - absolutePoint.valueOf();
 
             item = previousDistance > nextDistance ? nextItem : previousItem;
         }
 
-        const verticalAverageSource = (item.income + item.expenses) / 2 + margin.top;
-        const horizontalSource = new Date(new Date(item.date).getTime() - margin.left);
+        const { tooltipLeft, tooltipTop } = computePosition(item, nextItem?.date ? index : index - 1);
+		const finalTooltipLeft = horizontalScale(tooltipLeft);
+		const finalTooltipTop = verticalScale(tooltipTop);
 
         showTooltip({
           tooltipData: item,
-          tooltipLeft: horizontalScale(horizontalSource),
-          tooltipTop: verticalScale(verticalAverageSource),
-        })
-    }, [horizontalScale, margin.left, margin.top, dataset, showTooltip, verticalScale]);
+          tooltipLeft: finalTooltipLeft,
+          tooltipTop: finalTooltipTop,
+        });
+    }, [horizontalScale, margin.left, dataset, computePosition, verticalScale, showTooltip]);
 
-    return (
+    return width > 0 && height > 0 && (
         <>
             <Bar
                 x={0}
@@ -80,35 +84,7 @@ const HoverTooltipOverlay: FC<HoverTooltipOverlayProps> = ({
                 onMouseLeave={hideTooltip}
             />
             {tooltipData && (
-                <Group>
-                    <Line
-                        from={{ x: tooltipLeft, y: 0 }}
-                        to={{ x: tooltipLeft, y: height }}
-                        stroke='var(--foreground)'
-                        className="opacity-30"
-                        strokeWidth={1}
-                        strokeDasharray="5,2"
-                        pointerEvents="none"
-                    />
-                    <circle
-                        cx={tooltipLeft}
-                        cy={verticalScale(tooltipData.income)}
-                        r={6}
-                        fill='var(--chart-1)'
-                        stroke="white"
-                        strokeWidth={2}
-                        pointerEvents="none"
-                    />
-                    <circle
-                        cx={tooltipLeft}
-                        cy={verticalScale(tooltipData.expenses)}
-                        r={6}
-                        fill='var(--chart-2)'
-                        stroke="white"
-                        strokeWidth={2}
-                        pointerEvents="none"
-                    />
-                </Group>
+                children
             )}
         </>
     )

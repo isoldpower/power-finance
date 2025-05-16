@@ -2,6 +2,7 @@ import type { FC } from "react";
 
 import { DashboardHeading, GlobalContainer } from "@entity/analytics";
 import { ConfigurableGrid, ConfigurableGridPlate, ConfigurableGridRow, SpendingTrendsLinearGraph } from "@widget/analytics";
+import { SpendingTrendsThresholdGraph } from "@src/widgets/analytics/spending-trends/SpendingTrendsThresholdGraph";
 
 
 const DashboardPage: FC = () => {
@@ -18,7 +19,7 @@ const DashboardPage: FC = () => {
                             <SpendingTrendsLinearGraph height={400} />
                         </ConfigurableGridPlate>
                         <ConfigurableGridPlate basis="40%">
-                            <SpendingTrendsLinearGraph height={400} />
+                            <SpendingTrendsThresholdGraph height={400} />
                         </ConfigurableGridPlate>
                     </ConfigurableGridRow>
                     <ConfigurableGridRow>

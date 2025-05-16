@@ -9,7 +9,7 @@ interface DataPoint {
     value: number;
 }
 
-interface LinearChartPathProps {
+interface GridChartLinearPathProps {
     curve: ComponentProps<typeof AreaClosed>['curve'];
     data: DataPoint[];
     xAccessor: AccessorForArrayItem<DataPoint, number>;
@@ -19,7 +19,7 @@ interface LinearChartPathProps {
     title?: string;
 }
 
-const LinearChartPath: FC<LinearChartPathProps> = ({
+const GridChartLinearPath: FC<GridChartLinearPathProps> = ({
     curve,
     data,
     xAccessor,
@@ -73,6 +73,7 @@ const LinearChartPath: FC<LinearChartPathProps> = ({
     )    
 };
 
-LinearChartPath.displayName = "LinearChartPath";
+GridChartLinearPath.displayName = "GridChartLinearPath";
 
-export { LinearChartPath };
+export { GridChartLinearPath };
+export type { GridChartLinearPathProps };

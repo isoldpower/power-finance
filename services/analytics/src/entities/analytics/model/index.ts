@@ -1,0 +1,1 @@
+export type { SpendingDataFlat, SpendingDataPiece, SpendingDataSet } from './spendingTrends';

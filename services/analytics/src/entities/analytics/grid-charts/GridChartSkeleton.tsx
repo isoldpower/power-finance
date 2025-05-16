@@ -18,7 +18,7 @@ const GridChartSkeleton: FC<GridChartSkeletonProps> = ({
     width,
     height
 }) => {
-    return (
+    return width > 0 && height > 0 && (
         <>
             <GridRows
                 scale={verticalScale}
@@ -51,7 +51,7 @@ const GridChartSkeleton: FC<GridChartSkeletonProps> = ({
                     dx: -4,
                     dy: 4,
                 })}
-                tickFormat={(value: NumberLike) => `$${value.valueOf().toString()}`}
+                tickFormat={(value: NumberLike) => `$${value.valueOf().toLocaleString()}`}
             />
         </>
     )

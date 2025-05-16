@@ -6,7 +6,7 @@ interface SpendingDataPiece {
 type SpendingDataSet = Record<string, SpendingDataPiece>;
 
 interface SpendingDataFlat {
-    date: string;
+    date: number;
     income: number;
     expenses: number;
 }
