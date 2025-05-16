@@ -15,6 +15,7 @@ interface HoverTooltipOverlayProps {
     verticalScale: ReturnType<typeof scaleLinear<number | undefined>>;
     dataset: SpendingDataFlat[];
     margin: { top: number; right: number; bottom: number; left: number };
+    tooltip: ReturnType<typeof useTooltip<SpendingDataFlat>>;
 }
 
 
@@ -23,13 +24,14 @@ const HoverTooltipOverlay: FC<HoverTooltipOverlayProps> = ({
     verticalScale,
     dataset,
     margin,
+    tooltip
 }) => {
     const { 
         tooltipData,
         showTooltip,
         hideTooltip,
-        tooltipLeft,
-    } = useTooltip<SpendingDataFlat>();
+        tooltipLeft
+    } = tooltip;
     
     const handleTooltip = useCallback((
         event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>
@@ -39,21 +41,24 @@ const HoverTooltipOverlay: FC<HoverTooltipOverlayProps> = ({
 
         const index = bisector((d: { date: string }) => d.date).left(dataset, absolutePoint.toISOString(), 1);
         const previousItem = dataset[index - 1];
-        const nextItem = dataset[index];
+        const nextItem = index < dataset.length ? dataset[index] : undefined;
 
         // Compare the distance to the previous and next item to determine which one to show
         let item = previousItem;
-        if (nextItem.date) {
+        if (nextItem?.date) {
             const previousDistance = absolutePoint.valueOf() - new Date(previousItem.date).getTime();
             const nextDistance = new Date(nextItem.date).getTime() - absolutePoint.valueOf();
 
             item = previousDistance > nextDistance ? nextItem : previousItem;
         }
 
+        const verticalAverageSource = (item.income + item.expenses) / 2;
+        const horizontalSource = new Date(item.date);
+
         showTooltip({
           tooltipData: item,
-          tooltipLeft: horizontalScale(new Date(item.date)),
-          tooltipTop: verticalScale(item.income),
+          tooltipLeft: horizontalScale(horizontalSource),
+          tooltipTop: verticalScale(verticalAverageSource),
         })
     }, [horizontalScale, margin.left, dataset, showTooltip, verticalScale]);
 

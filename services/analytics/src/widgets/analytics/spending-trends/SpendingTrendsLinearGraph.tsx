@@ -4,8 +4,9 @@ import { scaleLinear, scaleTime } from "@visx/scale";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, cn } from "@internal/ui-library";
 
 import { data } from "./dataMock";
-import { GridChartSkeleton, LinearChartPath, GridChartContainer, GridChartLegend } from "@entity/analytics";
-import { HoverTooltipOverlay } from "@feature/analytics";
+import { GridChartSkeleton, LinearChartPath, GridChartContainer, GridChartLegend, SpendingDataFlat } from "@entity/analytics";
+import { HoverTooltipOverlay, ShowHoverTooltip } from "@feature/analytics";
+import { useTooltip } from "@visx/tooltip";
 
 
 interface SpendingTrendsLinearGraphProps {
@@ -21,10 +22,11 @@ const SpendingTrendsLinearGraph: FC<SpendingTrendsLinearGraphProps> = ({
         return Object.entries(data)
             .map(([key, value]) => ({ date: key, ...value }));
     }, []);
-
     const margin = useRef({ top: 0, right: 0, bottom: 30, left: 0 });
     const innerWidth = useMemo(() => width - margin.current.left - margin.current.right, [width]);
     const innerHeight = useMemo(() => height - margin.current.top - margin.current.bottom, [height]);
+
+    const tooltip = useTooltip<SpendingDataFlat>();
     
     const dateScale = useMemo(() => {
         const dates = Object.keys(data).map((key) => new Date(key));
@@ -43,6 +45,7 @@ const SpendingTrendsLinearGraph: FC<SpendingTrendsLinearGraphProps> = ({
         });
     }, [innerHeight]);
 
+
     return (
         <Card className={cn("h-full")}>
             <CardHeader>
@@ -51,7 +54,7 @@ const SpendingTrendsLinearGraph: FC<SpendingTrendsLinearGraphProps> = ({
                     Income vs. expenses over the period of time
                 </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="relative">
                 <GridChartContainer width={width} height={height}>
                     <GridChartSkeleton
                         horizontalScale={dateScale}
@@ -82,8 +85,10 @@ const SpendingTrendsLinearGraph: FC<SpendingTrendsLinearGraphProps> = ({
                         verticalScale={valueScale}
                         dataset={dataset}
                         margin={margin.current}
+                        tooltip={tooltip}
                     />
                 </GridChartContainer>
+                <ShowHoverTooltip {...tooltip} />
                 <GridChartLegend
                     entries={[
                         { color: 'var(--chart-1)', label: 'Income' },

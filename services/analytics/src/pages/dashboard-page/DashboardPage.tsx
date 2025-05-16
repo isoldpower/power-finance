@@ -19,7 +19,7 @@ const DashboardPage: FC = () => {
                 </ConfigurableGrid>
             </div>
         </GlobalContainer>
-    )
+    );
 }
 
 export { DashboardPage };

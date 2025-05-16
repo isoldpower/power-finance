@@ -1,4 +1,4 @@
-import { defaultStyles, useTooltipInPortal } from "@visx/tooltip";
+import { Tooltip } from "@visx/tooltip";
 import { format } from "date-fns";
 import type { FC } from "react";
 
@@ -7,24 +7,20 @@ import type { SpendingDataFlat } from "@entity/analytics";
 
 interface ShowHoverTooltipProps {
     tooltipData?: SpendingDataFlat;
-    tooltipTop: number;
-    tooltipLeft: number;
-    TooltipInPortal: ReturnType<typeof useTooltipInPortal>['TooltipInPortal'];
+    tooltipTop?: number | undefined;
+    tooltipLeft?: number | undefined;
 }
 
 const ShowHoverTooltip: FC<ShowHoverTooltipProps> = ({ 
     tooltipData,
     tooltipTop,
-    tooltipLeft,
-    TooltipInPortal
+    tooltipLeft
 }) => {
     return tooltipData && (
-        <TooltipInPortal 
+        <Tooltip
             key={Math.random()}
             top={tooltipTop ? tooltipTop - 40 : 0}
             left={tooltipLeft ? tooltipLeft + 40 : 0}
-            className="border bg-popover text-popover-foreground"
-            style={defaultStyles}
         >
             <div className="p-2">
                 <div className="text-sm font-bold">
@@ -43,7 +39,7 @@ const ShowHoverTooltip: FC<ShowHoverTooltipProps> = ({
                     </span>
                 </div>
             </div>
-        </TooltipInPortal>
+        </Tooltip>
     );
 };
 
