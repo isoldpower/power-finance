@@ -3,6 +3,7 @@ export { DashboardHeading } from './dashboard-heading/DasboardHeading';
 export { GridChartSkeleton } from './grid-charts/GridChartSkeleton';
 export { GridChartContainer } from './grid-charts/GridChartContainer';
 export { GridChartLegend } from './grid-charts/GridChartLegend';
+export { GridChartCard } from './grid-charts/GridChartCard';
 
 export { GridChartLinearPath } from './spending-linear-graph/GridChartLinearPath';
 export { GridChartLinearOverlay } from './spending-linear-graph/GridChartLinearOverlay';

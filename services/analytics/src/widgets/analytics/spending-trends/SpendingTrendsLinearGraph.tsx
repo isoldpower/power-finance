@@ -1,18 +1,17 @@
 import { FC, useMemo, useRef } from "react";
 import { curveMonotoneX } from '@visx/curve';
 import { scaleLinear, scaleTime } from "@visx/scale";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, cn } from "@internal/ui-library";
+import { useTooltip } from "@visx/tooltip";
+import { useParentSize } from "@visx/responsive";
 
 import { data } from "./dataMock";
 import { GridChartSkeleton, GridChartLinearPath, GridChartContainer, GridChartLegend, SpendingDataFlat, GridChartLinearTooltip, GridChartLinearOverlay } from "@entity/analytics";
 import { HoverTooltipOverlay, ShowHoverTooltip } from "@feature/analytics";
-import { useTooltip } from "@visx/tooltip";
-import { useParentSize } from "@visx/responsive";
 
 
-type SpendingTrendsLinearGraphProps = object & {
+interface SpendingTrendsLinearGraphProps {
     height?: number;
-};
+}
 
 const SpendingTrendsLinearGraph: FC<SpendingTrendsLinearGraphProps> = ({
     height: targetHeight = 400,
@@ -22,7 +21,7 @@ const SpendingTrendsLinearGraph: FC<SpendingTrendsLinearGraphProps> = ({
         return Object.entries(data)
             .map(([key, value]) => ({ date: new Date(key).getTime(), ...value }));
     }, []);
-    const margin = useRef({ top: 0, right: 10, bottom: 10, left: 60 });
+    const margin = useRef({ top: 0, right: 10, bottom: 30, left: 60 });
     const innerWidth = useMemo(() => width - margin.current.left - margin.current.right, [width]);
     const innerHeight = useMemo(() => height - margin.current.top - margin.current.bottom, [height]);
 
@@ -46,72 +45,63 @@ const SpendingTrendsLinearGraph: FC<SpendingTrendsLinearGraphProps> = ({
     }, [innerHeight]);
 
     return (
-        <Card className={cn("rounded-none border-none shadow-none")}>
-            <CardHeader>
-                <CardTitle>Spending Trends</CardTitle>
-                <CardDescription>
-                    Income vs. expenses over the period of time
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="relative" style={{ height: targetHeight }} ref={parentRef}>
-                <GridChartContainer width={width} height={height} margin={margin.current}>
-                    <GridChartSkeleton
-                        horizontalScale={dateScale}
-                        verticalScale={valueScale}
-                        width={innerWidth}
-                        height={innerHeight}
-                    />
-                    <GridChartLinearPath
-                        color='var(--chart-1)'
-                        xAccessor={(d: { key: string, value: number }) => dateScale(new Date(d.key))}
-                        yAccessor={(d: { key: string, value: number }) => valueScale(d.value)}
-                        yScale={valueScale}
-                        curve={curveMonotoneX}
-                        data={Object.entries(data).map(([date, value]) => ({ key: date, value: value.expenses }))}
-                        title='expenses'
-                    />
-                    <GridChartLinearPath
-                        color='var(--chart-2)'
-                        xAccessor={(d: { key: string, value: number }) => dateScale(new Date(d.key))}
-                        yAccessor={(d: { key: string, value: number }) => valueScale(d.value)}
-                        yScale={valueScale}
-                        curve={curveMonotoneX}
-                        data={Object.entries(data).map(([date, value]) => ({ key: date, value: value.income }))}
-                        title='income'
-                    />
-                    <HoverTooltipOverlay
-                        width={innerWidth}
-                        height={innerHeight}
-                        horizontalScale={dateScale}
-                        verticalScale={valueScale}
-                        dataset={dataset}
-                        margin={margin.current}
-                        tooltip={tooltip}
-						computePosition={(item) => ({
-							tooltipTop: (item.income + item.expenses) / 2 + margin.current.top,
-							tooltipLeft: item.date
-						})}
-                    >
-                        <GridChartLinearOverlay
-                            tooltipLeft={tooltip.tooltipLeft}
-                            tooltipData={tooltip.tooltipData}
-                            verticalScale={valueScale}
-                            height={innerHeight}
-                        />
-                    </HoverTooltipOverlay>
-                </GridChartContainer>
-                <ShowHoverTooltip {...tooltip}>
-					<GridChartLinearTooltip tooltipData={tooltip.tooltipData} />
-				</ShowHoverTooltip>
-                <div className="absolute left-0 right-0 bottom-0">
-                    <GridChartLegend
-                        entries={[
-                            { color: 'var(--chart-2)', label: 'Income' },
-                            { color: 'var(--chart-1)', label: 'Expenses' },
-                        ]} />
-                </div>
-            </CardContent>
-        </Card>
+		<div className="relative pb-4" style={{ height: targetHeight }} ref={parentRef}>
+			<GridChartContainer width={width} height={height} margin={margin.current}>
+				<GridChartSkeleton
+					horizontalScale={dateScale}
+					verticalScale={valueScale}
+					width={innerWidth}
+					height={innerHeight}
+				/>
+				<GridChartLinearPath
+					color='var(--chart-1)'
+					xAccessor={(d: { key: string, value: number }) => dateScale(new Date(d.key))}
+					yAccessor={(d: { key: string, value: number }) => valueScale(d.value)}
+					yScale={valueScale}
+					curve={curveMonotoneX}
+					data={Object.entries(data).map(([date, value]) => ({ key: date, value: value.expenses }))}
+					title='expenses'
+				/>
+				<GridChartLinearPath
+					color='var(--chart-2)'
+					xAccessor={(d: { key: string, value: number }) => dateScale(new Date(d.key))}
+					yAccessor={(d: { key: string, value: number }) => valueScale(d.value)}
+					yScale={valueScale}
+					curve={curveMonotoneX}
+					data={Object.entries(data).map(([date, value]) => ({ key: date, value: value.income }))}
+					title='income'
+				/>
+				<HoverTooltipOverlay
+					width={innerWidth}
+					height={innerHeight}
+					horizontalScale={dateScale}
+					dataset={dataset}
+					margin={margin.current}
+					tooltip={tooltip}
+					computePosition={(item) => ({
+						tooltipTop: valueScale((item.income + item.expenses) / 2 + margin.current.top),
+						tooltipLeft: dateScale(item.date)
+					})}
+				>
+					<GridChartLinearOverlay
+						tooltipLeft={tooltip.tooltipLeft}
+						tooltipData={tooltip.tooltipData}
+						verticalScale={valueScale}
+						height={innerHeight}
+					/>
+				</HoverTooltipOverlay>
+			</GridChartContainer>
+			<ShowHoverTooltip {...tooltip}>
+				<GridChartLinearTooltip tooltipData={tooltip.tooltipData} />
+			</ShowHoverTooltip>
+			<div className="absolute left-0 right-0 bottom-0">
+				<GridChartLegend
+					entries={[
+						{ color: 'var(--chart-2)', label: 'Income' },
+						{ color: 'var(--chart-1)', label: 'Expenses' },
+					]} />
+			</div>
+		</div>
     );
 };
 

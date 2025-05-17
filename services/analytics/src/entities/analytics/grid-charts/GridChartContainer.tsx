@@ -14,12 +14,9 @@ const GridChartContainer = forwardRef<HTMLDivElement, GridChartContainerProps>((
     { children, width, height, margin },
     ref
 ) => {
-    const fullWidth = width + margin.left + margin.right;
-    const fullHeight = height + margin.top + margin.bottom;
-
     return (
         <div className="absolute" style={{ height }} ref={ref}>
-            <svg className="w-full h-full" viewBox={`0 0 ${fullWidth.toString()} ${fullHeight.toString()}`}>
+            <svg className="w-full h-full" viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
                 <Group left={margin.left} top={margin.top}>
                     {children}
                 </Group>

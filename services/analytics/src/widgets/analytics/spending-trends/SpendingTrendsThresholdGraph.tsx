@@ -1,4 +1,3 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, cn } from '@internal/ui-library';
 import { useMemo, useRef, type FC } from 'react';
 import { scaleTime, scaleLinear } from '@visx/scale';
 import { useParentSize } from '@visx/responsive';
@@ -32,7 +31,7 @@ const SpendingTrendsThresholdGraph: FC<SpendingTrendsThresholdGraphProps> = ({
 		return Object.entries(data)
 			.map(([key, value]) => ({ date: new Date(key).getTime(), ...value }));
     }, []);
-	const margin = useRef({ top: 0, right: 10, bottom: 10, left: 60 });
+	const margin = useRef({ top: 0, right: 10, bottom: 30, left: 60 });
 	const innerWidth = useMemo(() => width - margin.current.left - margin.current.right, [width]);
 	const innerHeight = useMemo(() => height - margin.current.top - margin.current.bottom, [height]);
 	
@@ -56,80 +55,71 @@ const SpendingTrendsThresholdGraph: FC<SpendingTrendsThresholdGraphProps> = ({
 	}, [innerHeight]);
 
   	return (
-		<Card className={cn("rounded-none border-none shadow-none")}>
-            <CardHeader>
-                <CardTitle>Spending Trends</CardTitle>
-                <CardDescription>
-                    Income vs. expenses over the period of time
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="relative" style={{ height: targetHeight }} ref={parentRef}>
-                <GridChartContainer width={width} height={height} margin={margin.current}>
-                    <GridChartSkeleton
-                        horizontalScale={dateScale}
-                        verticalScale={valueScale}
-                        width={innerWidth}
-                        height={innerHeight}
-                    />
-					<Threshold<SpendingDataFlat>
-						id={Math.random().toString()}
+		<div className="relative pb-4" style={{ height: targetHeight }} ref={parentRef}>
+			<GridChartContainer width={width} height={height} margin={margin.current}>
+				<GridChartSkeleton
+					horizontalScale={dateScale}
+					verticalScale={valueScale}
+					width={innerWidth}
+					height={innerHeight}
+				/>
+				<Threshold<SpendingDataFlat>
+					id={Math.random().toString()}
+					data={dataset}
+					x={(d: SpendingDataFlat) => dateScale(new Date(d.date))}
+					y0={(d: SpendingDataFlat) => valueScale(d.expenses)}
+					y1={(d: SpendingDataFlat) => valueScale(d.income)}
+					clipAboveTo={0}
+					clipBelowTo={innerHeight}
+					curve={curveBasis}
+					belowAreaProps={{
+						fill: 'var(--chart-1)',
+						fillOpacity: 0.2,
+					}}
+					aboveAreaProps={{
+						fill: 'var(--chart-2)',
+						fillOpacity: 0.2,
+					}} />
+					<GridChartThresholdPath
 						data={dataset}
-						x={(d: SpendingDataFlat) => dateScale(new Date(d.date))}
-						y0={(d: SpendingDataFlat) => valueScale(d.expenses)}
-						y1={(d: SpendingDataFlat) => valueScale(d.income)}
-						clipAboveTo={0}
-						clipBelowTo={innerHeight}
-						curve={curveBasis}
-						belowAreaProps={{
-							fill: 'var(--chart-1)',
-							fillOpacity: 0.2,
-						}}
-						aboveAreaProps={{
-							fill: 'var(--chart-2)',
-							fillOpacity: 0.2,
-						}} />
-						<GridChartThresholdPath
-							data={dataset}
-							xAccessor={(d) => dateScale(d.date)}
-							yAccessor={(d) => valueScale(d.expenses)}
-						/>
-						<GridChartThresholdPath
-							data={dataset}
-							xAccessor={(d) => dateScale(d.date)}
-							yAccessor={(d) => valueScale(d.income)}
-						/>
-						<HoverTooltipOverlay
-							width={innerWidth}
+						xAccessor={(d) => dateScale(d.date)}
+						yAccessor={(d) => valueScale(d.expenses)}
+					/>
+					<GridChartThresholdPath
+						data={dataset}
+						xAccessor={(d) => dateScale(d.date)}
+						yAccessor={(d) => valueScale(d.income)}
+					/>
+					<HoverTooltipOverlay
+						width={innerWidth}
+						height={innerHeight}
+						horizontalScale={dateScale}
+						dataset={dataset}
+						margin={margin.current}
+						tooltip={tooltip}
+						computePosition={(item, point) => ({
+							tooltipTop: point.y - 40,
+							tooltipLeft: dateScale(item.date)
+						})}
+					>
+						<GridChartThresholdOverlay
+							tooltipLeft={tooltip.tooltipLeft}
+							tooltipData={tooltip.tooltipData}
 							height={innerHeight}
-							horizontalScale={dateScale}
-							verticalScale={valueScale}
-							dataset={dataset}
-							margin={margin.current}
-							tooltip={tooltip}
-							computePosition={(item) => ({
-								tooltipTop: Math.max(...dataset.map((d) => Math.max(d.expenses, d.income))),
-								tooltipLeft: item.date
-							})}
-						>
-							<GridChartThresholdOverlay
-								tooltipLeft={tooltip.tooltipLeft}
-								tooltipData={tooltip.tooltipData}
-								height={innerHeight}
-							/>
-						</HoverTooltipOverlay>
-                </GridChartContainer>
-                <ShowHoverTooltip {...tooltip}>
-					<GridChartThresholdTooltip tooltipData={tooltip.tooltipData} />
-				</ShowHoverTooltip>
-                <div className="absolute left-0 right-0 bottom-0">
-                    <GridChartLegend
-                        entries={[
-                            { color: 'var(--chart-2)', label: 'Positive' },
-                            { color: 'var(--chart-1)', label: 'Negative' },
-                        ]} />
-                </div>
-            </CardContent>
-        </Card>
+						/>
+					</HoverTooltipOverlay>
+			</GridChartContainer>
+			<ShowHoverTooltip {...tooltip}>
+				<GridChartThresholdTooltip tooltipData={tooltip.tooltipData} />
+			</ShowHoverTooltip>
+			<div className="absolute left-0 right-0 bottom-0">
+				<GridChartLegend
+					entries={[
+						{ color: 'var(--chart-2)', label: 'Positive' },
+						{ color: 'var(--chart-1)', label: 'Negative' },
+					]} />
+			</div>
+		</div>
   	);
 };
 
