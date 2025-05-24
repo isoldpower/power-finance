@@ -6,18 +6,8 @@ import type { FC } from "react";
 
 import { CategorisedPieChartArc, CategorisedPieChartShell } from "@entity/analytics";
 import { PieChartInteractions } from "@feature/analytics";
-import { data } from './dataMock';
+import { groupedData } from './dataMock';
 
-
-const groupedData = Object.values(data)
-	.reduce<Record<string, number>>((acc, item) => {
-		if (!acc[item.category]) {
-			acc[item.category] = 0;
-		}
-		
-		acc[item.category] += item.amount;
-		return acc;
-	}, {});
 
 const categories = Object.keys(groupedData);
 const categoryDataset = Object.entries(groupedData).map(([category, amount]) => ({ category, amount }));

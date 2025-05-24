@@ -16,5 +16,9 @@ export { GridChartThresholdOverlay } from './spending-threshold-graph/GridChartT
 export { CategorisedPieChartShell } from './categorised-pie-chart/CategorisedPieChartShell';
 export { CategorisedPieChartArc } from './categorised-pie-chart/CategorisedPieChartArc';
 
+export { CategorisedRadarChartShell } from './categorised-radar-chart/CategorisedRadarChartShell';
+export { CategorisedRadarChartGrid } from './categorised-radar-chart/CategorisedRadarChartGrid';
+export { CategorisedRadarChartPolygon } from './categorised-radar-chart/CategorisedRadarChartPolygon';
+
 export type { GlobalContainerProps } from './global-container/GlobalContainer';
 export type { DashboardHeadingProps } from './dashboard-heading/DasboardHeading';

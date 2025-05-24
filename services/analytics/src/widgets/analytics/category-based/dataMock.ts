@@ -21,4 +21,14 @@ const data: CategorisedDataSet = Object.fromEntries(
     }, [])
 );
 
-export { data };
+const groupedData = Object.values(data)
+	.reduce<Record<string, number>>((acc, item) => {
+		if (!acc[item.category]) {
+			acc[item.category] = 0;
+		}
+		
+		acc[item.category] += item.amount;
+		return acc;
+	}, {});
+
+export { data, groupedData };

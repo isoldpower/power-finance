@@ -5,5 +5,8 @@ export { ConfigurationStoreProvider } from './configuration-store/provider';
 export { useConfigurationStore } from './configuration-store/useStore';
 export { PieChartInteractions } from './pie-chart-interactions/PieChartInteractions';
 
+export { DEGREES, genAngles, genPoints } from './radar-chart-placement/generators';
+export { genPolygonPoints } from './radar-chart-placement/getPoints';
+
 export type { TrendsGraphType } from './configuration-store/types';
 export type { CategoryGraphType } from './configuration-store/types';

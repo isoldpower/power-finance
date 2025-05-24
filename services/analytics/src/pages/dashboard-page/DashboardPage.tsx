@@ -10,6 +10,7 @@ import {
 	SpendingTrendsThresholdGraph,
 	SpendingTrendsGraphsSet,
 	CategoryBasedPieChart,
+	CategoryBasedRadarChart,
 	CategoryBasedGraphsSet
 } from "@widget/analytics";
 
@@ -36,6 +37,7 @@ const DashboardPage: FC = () => {
 								<CategoryBasedGraphsSet
 									graphSet={{
 										pie: <CategoryBasedPieChart size={400} />,
+										radar: <CategoryBasedRadarChart size={400} />
 									}} />
 							</ConfigurableGridPlate>
 						</ConfigurableGridRow>
