@@ -1,8 +1,7 @@
 import { Tooltip } from "@visx/tooltip";
-import { format } from "date-fns";
 import type { FC, ReactNode } from "react";
 
-import type { SpendingDataFlat } from "@entity/analytics";
+import type { SpendingDataFlat } from "@entity/analytics/model";
 
 
 interface ShowHoverTooltipProps {

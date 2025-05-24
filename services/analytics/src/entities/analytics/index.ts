@@ -12,6 +12,9 @@ export { GridChartLinearTooltip } from './spending-linear-graph/GridChartLinearT
 export { GridChartThresholdPath } from './spending-threshold-graph/GridChartThresholdPath';
 export { GridChartThresholdTooltip } from './spending-threshold-graph/GridChartThresholdTooltip';
 export { GridChartThresholdOverlay } from './spending-threshold-graph/GridChartThresholdOverlay';
+
+export { CategorisedPieChartShell } from './categorised-pie-chart/CategorisedPieChartShell';
+export { CategorisedPieChartArc } from './categorised-pie-chart/CategorisedPieChartArc';
+
 export type { GlobalContainerProps } from './global-container/GlobalContainer';
 export type { DashboardHeadingProps } from './dashboard-heading/DasboardHeading';
-export type * from './model/spendingTrends';

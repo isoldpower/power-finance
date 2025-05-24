@@ -8,7 +8,9 @@ import {
 	ConfigurableGridRow,
 	SpendingTrendsLinearGraph,
 	SpendingTrendsThresholdGraph,
-	SpendingTrendsGraphsSet
+	SpendingTrendsGraphsSet,
+	CategoryBasedPieChart,
+	CategoryBasedGraphsSet
 } from "@widget/analytics";
 
 
@@ -31,9 +33,10 @@ const DashboardPage: FC = () => {
 									}} />
 							</ConfigurableGridPlate>
 							<ConfigurableGridPlate basis="40%">
-								<div>Pie Chart</div>
-								<div>Radial Bars</div>
-								<div>Radar</div>
+								<CategoryBasedGraphsSet
+									graphSet={{
+										pie: <CategoryBasedPieChart size={400} />,
+									}} />
 							</ConfigurableGridPlate>
 						</ConfigurableGridRow>
 						<ConfigurableGridRow>

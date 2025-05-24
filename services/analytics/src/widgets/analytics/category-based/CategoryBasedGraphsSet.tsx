@@ -4,35 +4,35 @@ import type { ReactNode } from "react";
 import { GridChartCard } from "@entity/analytics";
 import { useConfigurationStore } from "@feature/analytics";
 import { SelectGraphType } from "@feature/analytics";
-import type { TrendsGraphType } from "@feature/analytics";
+import type { CategoryGraphType } from "@feature/analytics";
 
 
-interface SpendingTrendsGraphsSetProps {
-	graphSet: Record<TrendsGraphType, ReactNode>;
+interface CategoryBasedGraphsSetProps {
+	graphSet: Record<CategoryGraphType, ReactNode>;
 }
 
-function SpendingTrendsGraphsSet({
+function CategoryBasedGraphsSet({
 	graphSet
-}: SpendingTrendsGraphsSetProps) {
-	const graphType = useConfigurationStore((state) => state.graphType);
-	const setGraphType = useConfigurationStore((state) => state.setTrendsGraphType);
+}: CategoryBasedGraphsSetProps) {
+	const graphType = useConfigurationStore((state) => state.categoryGraphType);
+	const setGraphType = useConfigurationStore((state) => state.setCategoryGraphType);
 
-	const handleGraphTypeChange = useCallback((graphType: TrendsGraphType) => {
+	const handleGraphTypeChange = useCallback((graphType: CategoryGraphType) => {
 		setGraphType(graphType);
 	}, [setGraphType]);
 
 	return (
 		<GridChartCard
-			title="Spending Trends"
-			description="Income vs. expenses over the period of time"
+			title="Category Based"
+			description="Expenses and income by category"
 			actions={
-				<SelectGraphType<TrendsGraphType, string>
+				<SelectGraphType<CategoryGraphType, string>
 					className="max-w-40"
 					graphType={graphType}
 					onChange={handleGraphTypeChange}
 					options={Object.fromEntries(
 						Object.keys(graphSet).map((key) => [key, key.charAt(0).toUpperCase() + key.slice(1)])
-					) as Record<TrendsGraphType, string>} />
+					) as Record<CategoryGraphType, string>} />
 			}
 		>
 			{Object.entries(graphSet).map(([key, value]) => {
@@ -46,4 +46,4 @@ function SpendingTrendsGraphsSet({
 	);
 };
 
-export { SpendingTrendsGraphsSet };
+export { CategoryBasedGraphsSet };

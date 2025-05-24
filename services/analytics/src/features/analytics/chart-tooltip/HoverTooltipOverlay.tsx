@@ -6,7 +6,7 @@ import { Bar } from "@visx/shape";
 import { bisector } from "d3-array"
 import type { FC, ReactNode } from "react";
 
-import type { SpendingDataFlat } from "@entity/analytics";
+import type { SpendingDataFlat } from "@entity/analytics/model";
 
 
 interface HoverTooltipOverlayProps {

@@ -1,11 +1,14 @@
-type GraphType = "linear" | "threshold";
+type TrendsGraphType = "linear" | "threshold";
+type CategoryGraphType = "pie" | "radial" | "radar";
 
 interface ConfigurationStoreState {
-	graphType: GraphType;
+	graphType: TrendsGraphType;
+	categoryGraphType: CategoryGraphType;
 }
 
 interface ConfigurationStore extends ConfigurationStoreState {
-	setGraphType: (graphType: GraphType) => void;
+	setTrendsGraphType: (graphType: TrendsGraphType) => void;
+	setCategoryGraphType: (graphType: CategoryGraphType) => void;
 }
 
-export type { GraphType, ConfigurationStore, ConfigurationStoreState };
+export type { TrendsGraphType, CategoryGraphType, ConfigurationStore, ConfigurationStoreState };

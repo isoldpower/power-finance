@@ -1,4 +1,4 @@
-import { SpendingDataSet, SpendingDataPiece } from "@entity/analytics";
+import type { SpendingDataSet, SpendingDataPiece } from "@entity/analytics/model";
 
 const data: SpendingDataSet = Object.fromEntries(
     Array.from({ length: 30 }).reduce((

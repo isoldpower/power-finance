@@ -12,10 +12,10 @@ import {
 	GridChartSkeleton,
 	GridChartThresholdOverlay,
 	GridChartThresholdPath,
-	GridChartThresholdTooltip,
-	SpendingDataFlat
+	GridChartThresholdTooltip
 } from '@entity/analytics';
 import { HoverTooltipOverlay, ShowHoverTooltip } from '@feature/analytics';
+import type { SpendingDataFlat } from '@entity/analytics/model';
 
 
 interface SpendingTrendsThresholdGraphProps {

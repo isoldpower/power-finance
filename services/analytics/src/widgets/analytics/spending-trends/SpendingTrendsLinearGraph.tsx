@@ -5,8 +5,9 @@ import { useTooltip } from "@visx/tooltip";
 import { useParentSize } from "@visx/responsive";
 
 import { data } from "./dataMock";
-import { GridChartSkeleton, GridChartLinearPath, GridChartContainer, GridChartLegend, SpendingDataFlat, GridChartLinearTooltip, GridChartLinearOverlay } from "@entity/analytics";
+import { GridChartSkeleton, GridChartLinearPath, GridChartContainer, GridChartLegend, GridChartLinearTooltip, GridChartLinearOverlay } from "@entity/analytics";
 import { HoverTooltipOverlay, ShowHoverTooltip } from "@feature/analytics";
+import type { SpendingDataFlat } from "@entity/analytics/model";
 
 
 interface SpendingTrendsLinearGraphProps {

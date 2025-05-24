@@ -5,6 +5,9 @@ export { SpendingTrendsLinearGraph } from './spending-trends/SpendingTrendsLinea
 export { SpendingTrendsThresholdGraph } from './spending-trends/SpendingTrendsThresholdGraph';
 export { SpendingTrendsGraphsSet } from './spending-trends/SpendingTrendsGraphsSet';
 
+export { CategoryBasedPieChart } from './category-based/CategoryBasedPieChart';
+export { CategoryBasedGraphsSet } from './category-based/CategoryBasedGraphsSet';
+
 export type { ConfigurableGridProps } from './configurable-grid/ConfigurableGrid';
 export type { ConfigurableGridPlateProps } from './configurable-grid/ConfigurableGridPlate';
 export type { ConfigurableGridRowProps } from './configurable-grid/ConfigurableGridRow';
