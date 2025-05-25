@@ -6,12 +6,19 @@ const genAngles = (length: number) => {
 	}));
 }
   
-const genPoints = (length: number, radius: number) => {
+const genPoints = (
+	length: number,
+	radius: number,
+	offset: {
+		x: number;
+		y: number;
+	} = { x: 0, y: 0 }
+) => {
 	const step = (Math.PI * 2) / length;
 
 	return Array.from({ length }).map((_, i) => ({
-		x: radius * Math.sin(i * step),
-		y: radius * Math.cos(i * step),
+		x: (radius + offset.x) * Math.sin(i * step),
+		y: (radius + offset.y) * Math.cos(i * step),
 	}));
 };
 

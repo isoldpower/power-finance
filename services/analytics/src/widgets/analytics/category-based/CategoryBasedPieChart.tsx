@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { Pie } from '@visx/shape';
 import { useState } from 'react';
 import { useParentSize } from "@visx/responsive";
@@ -6,11 +6,8 @@ import type { FC } from "react";
 
 import { CategorisedPieChartArc, CategorisedPieChartShell } from "@entity/analytics";
 import { PieChartInteractions } from "@feature/analytics";
-import { groupedData } from './dataMock';
+import { flatGroupedData } from './dataMock';
 
-
-const categories = Object.keys(groupedData);
-const categoryDataset = Object.entries(groupedData).map(([category, amount]) => ({ category, amount }));
 
 interface CategoryBasedPieChartProps {
 	size?: number | string;
@@ -34,19 +31,15 @@ const CategoryBasedPieChart: FC<CategoryBasedPieChartProps> = ({
 	const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 	const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
-	useEffect(() => {
-		console.log("selectedCategory", selectedCategory, "hoveredCategory", hoveredCategory);
-	}, [selectedCategory, hoveredCategory]);
-
 	return (typeof size === 'number' && size < 10) ? null : (
-		<div className="relative" style={{ height: size, width: size }} ref={parentRef}>
+		<div className="relative mx-auto" style={{ height: size, width: size }} ref={parentRef}>
 			<CategorisedPieChartShell
 				width={width}
 				height={height}
 				margin={margin.current}
 			>
 				<Pie
-					data={selectedCategory ? categoryDataset.filter(({ category }) => category === selectedCategory) : categoryDataset}
+					data={selectedCategory ? flatGroupedData.filter(({ category }) => category === selectedCategory) : flatGroupedData}
 					pieValue={(item) => item.amount}
 					outerRadius={radius}
 					innerRadius={(item) => {
@@ -68,7 +61,7 @@ const CategoryBasedPieChart: FC<CategoryBasedPieChartProps> = ({
 						>
 							<CategorisedPieChartArc
 								pie={pie}
-								categories={categories}
+								categories={flatGroupedData.map(({ category }) => category)}
 								donutThickness={donutThickness}
 								{...arc}
 							/>

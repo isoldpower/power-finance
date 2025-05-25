@@ -7,6 +7,7 @@ export { SpendingTrendsGraphsSet } from './spending-trends/SpendingTrendsGraphsS
 
 export { CategoryBasedPieChart } from './category-based/CategoryBasedPieChart';
 export { CategoryBasedRadarChart } from './category-based/CategoryBasedRadarChart';
+export { CategoryBasedRadialChart } from './category-based/CategoryBasedRadialChart';
 export { CategoryBasedGraphsSet } from './category-based/CategoryBasedGraphsSet';
 
 export type { ConfigurableGridProps } from './configurable-grid/ConfigurableGrid';

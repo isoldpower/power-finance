@@ -45,7 +45,8 @@ const CategorisedRadarChartGrid: FC<CategorisedRadarChartGridProps> = ({
 			{Array.from({ length: data.length }).map((_, i) => (
 				<Line 
 					key={`radar-line-${i.toString()}`} 
-					from={zeroPoint} to={points[i]} 
+					from={zeroPoint} 
+					to={points[i]} 
 					stroke={color}
 				/>
 			))}

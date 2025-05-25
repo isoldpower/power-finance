@@ -17,7 +17,7 @@ const CategorisedRadarChartPolygon: FC<CategorisedRadarChartPolygonProps> = ({
 				fill={color}
 				fillOpacity={0.2}
 				stroke={color}
-				strokeWidth={1}
+				strokeWidth={2}
 			/>
 			{points.map((point, i) => (
 				<circle 

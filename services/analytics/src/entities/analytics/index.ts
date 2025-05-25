@@ -19,6 +19,10 @@ export { CategorisedPieChartArc } from './categorised-pie-chart/CategorisedPieCh
 export { CategorisedRadarChartShell } from './categorised-radar-chart/CategorisedRadarChartShell';
 export { CategorisedRadarChartGrid } from './categorised-radar-chart/CategorisedRadarChartGrid';
 export { CategorisedRadarChartPolygon } from './categorised-radar-chart/CategorisedRadarChartPolygon';
+export { CategorisedRadarChartLabels } from './categorised-radar-chart/CategorisedRadarChartLabels';
+
+export { CategorisedRadialChartArc } from './categorised-radial-chart/CategorisedRadialChartArc';
+export { CategorisedRadialChartLabel } from './categorised-radial-chart/CategorisedRadialChartLabel';
 
 export type { GlobalContainerProps } from './global-container/GlobalContainer';
 export type { DashboardHeadingProps } from './dashboard-heading/DasboardHeading';

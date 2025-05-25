@@ -1,7 +1,7 @@
 
 import type { CategorisedDataSet, CategorisedDataPiece } from "@entity/analytics/model";
 
-const categories = ['Food', 'Transportation', 'Entertainment', 'Shopping', 'Other'];
+const categories = ['Food', 'Transportation', 'Entertainment', 'Shopping', 'Other', 'Health', 'Education', 'Travel', 'Bills'];
 const data: CategorisedDataSet = Object.fromEntries(
     Array.from({ length: 30 }).reduce((
         acc: [string, CategorisedDataPiece][],
@@ -31,4 +31,6 @@ const groupedData = Object.values(data)
 		return acc;
 	}, {});
 
-export { data, groupedData };
+const flatGroupedData = Object.entries(groupedData).map(([category, amount]) => ({ category, amount }));
+
+export { data, groupedData, flatGroupedData };

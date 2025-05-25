@@ -25,7 +25,7 @@ const CategorisedPieChartArc: FC<CategorisedPieChartArcProps> = ({
 	const getCategoryColor = scaleOrdinal({
 		domain: categories,
 		range: Array.from({ length: categories.length }).map((_, index) => {
-			return `var(--chart-${(index + 1).toString()})`
+			return `var(--chart-${(index % 5 + 1).toString()})`
 		})
 	});
 
