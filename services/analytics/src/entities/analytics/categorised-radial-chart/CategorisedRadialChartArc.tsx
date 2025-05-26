@@ -12,6 +12,7 @@ interface CategorisedRadialChartArcProps {
 	yScale: ReturnType<typeof scaleRadial<number>>;
 	innerRadius: number;
 	index: number;
+	color?: string;
 }
 
 const CategorisedRadialChartArc: FC<CategorisedRadialChartArcProps> = ({
@@ -19,12 +20,12 @@ const CategorisedRadialChartArc: FC<CategorisedRadialChartArcProps> = ({
 	xScale,
 	yScale,
 	innerRadius,
-	index
+	index,
+	color: barColor = `var(--chart-${(index % 5 + 1).toString()})`
 }) => {
 	const startAngle = xScale(item.category) ?? 0;
 	const endAngle = startAngle + xScale.bandwidth();
 	const outerRadius = yScale(item.amount);
-	const barColor = `var(--chart-${(index % 5 + 1).toString()})`;
 
 	return (
 		<Arc

@@ -9,8 +9,12 @@ import {
 	CategorisedRadarChartShell,
 	CategorisedRadarChartGrid,
 	CategorisedRadarChartPolygon,
-	CategorisedRadarChartLabels
+	CategorisedRadarChartLabels,
+	CategorisedRadarChartTooltip
 } from '@entity/analytics';
+import { useTooltip } from '@visx/tooltip';
+import { RadarChartTooltipOverlay, ShowRadarChartTooltip } from '@feature/analytics';
+import type { CategorisedDataPiece } from '@entity/analytics/model';
 
 
 const LABELS_OFFSET = { x: 10, y: 20 };
@@ -27,6 +31,8 @@ const CategoryBasedRadarChart: FC<CategoryBasedRadarChartProps> = ({
 	margin: passedMargin
 }) => {
 	const { width, height, parentRef } = useParentSize();
+	const tooltip = useTooltip<CategorisedDataPiece>();
+
 	const margin = useRef(passedMargin ?? { top: 0, left: 40, right: 40, bottom: 0 });
 	const innerWidth = useMemo(() => width - margin.current.left - margin.current.right, [width, margin]);
 	const innerHeight = useMemo(() => height - margin.current.top - margin.current.bottom, [height, margin]);
@@ -68,7 +74,25 @@ const CategoryBasedRadarChart: FC<CategoryBasedRadarChartProps> = ({
 					points={genPoints(flatGroupedData.length, radius, LABELS_OFFSET)}
 					data={flatGroupedData}
 				/>
+				<RadarChartTooltipOverlay
+					data={flatGroupedData}
+					points={polygonPoints}
+					tooltip={tooltip}
+					width={width}
+					height={height}
+				>
+					<circle
+						className='pointer-events-none'
+						cx={tooltip.tooltipLeft ?? 0}
+						cy={tooltip.tooltipTop ?? 0}
+						r={6}
+						fill='var(--chart-1)'
+					/>
+				</RadarChartTooltipOverlay>
 			</CategorisedRadarChartShell>
+			<ShowRadarChartTooltip height={innerHeight} width={innerWidth} {...tooltip}>
+				<CategorisedRadarChartTooltip tooltipData={tooltip.tooltipData} />
+			</ShowRadarChartTooltip>
 		</div>
 	);
 }

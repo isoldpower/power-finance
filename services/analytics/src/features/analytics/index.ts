@@ -8,5 +8,10 @@ export { PieChartInteractions } from './pie-chart-interactions/PieChartInteracti
 export { DEGREES, genAngles, genPoints } from './radar-chart-placement/generators';
 export { genPolygonPoints } from './radar-chart-placement/getPoints';
 
+export { ShowRadarChartTooltip } from './radar-chart-interactions/ShowRadarChartTooltip';
+export { RadarChartTooltipOverlay } from './radar-chart-interactions/RadarChartTooltipOverlay';
+
+export { RadialChartInteractions } from './radial-chart-interactions/RadialChartInteractions';
+
 export type { TrendsGraphType } from './configuration-store/types';
 export type { CategoryGraphType } from './configuration-store/types';

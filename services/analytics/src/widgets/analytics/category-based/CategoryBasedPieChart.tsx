@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { useParentSize } from "@visx/responsive";
 import type { FC } from "react";
 
-import { CategorisedPieChartArc, CategorisedPieChartShell } from "@entity/analytics";
+import { CategorisedPieChartAccent, CategorisedPieChartArc, CategorisedPieChartShell } from "@entity/analytics";
 import { PieChartInteractions } from "@feature/analytics";
 import { flatGroupedData } from './dataMock';
 
+
+const HOVER_THICKNESS_RATIO = 0.8;
 
 interface CategoryBasedPieChartProps {
 	size?: number | string;
@@ -23,7 +25,7 @@ const CategoryBasedPieChart: FC<CategoryBasedPieChartProps> = ({
   donutThickness = 50,
 }) => {
 	const { width, height, parentRef } = useParentSize();
-	const margin = useRef(passedMargin ?? { top: 20, right: 20, bottom: 20, left: 20 });
+	const margin = useRef(passedMargin ?? { top: 40, right: 40, bottom: 40, left: 40 });
     const innerWidth = useMemo(() => width - margin.current.left - margin.current.right, [width]);
     const innerHeight = useMemo(() => height - margin.current.top - margin.current.bottom, [height]);
 	const radius = useMemo(() => Math.min(innerWidth, innerHeight) / 2, [innerWidth, innerHeight]);
@@ -46,7 +48,7 @@ const CategoryBasedPieChart: FC<CategoryBasedPieChartProps> = ({
 						const isHovered = !selectedCategory && item.data.category === hoveredCategory;
 						return isHovered 
 							? radius - donutThickness 
-							: radius - donutThickness * 0.8;
+							: radius - donutThickness * HOVER_THICKNESS_RATIO;
 					}}
 					cornerRadius={3}
 					padAngle={0.005}
@@ -60,6 +62,7 @@ const CategoryBasedPieChart: FC<CategoryBasedPieChartProps> = ({
 							selectedCategory={selectedCategory}
 						>
 							<CategorisedPieChartArc
+								labeled={!selectedCategory}
 								pie={pie}
 								categories={flatGroupedData.map(({ category }) => category)}
 								donutThickness={donutThickness}
@@ -68,6 +71,11 @@ const CategoryBasedPieChart: FC<CategoryBasedPieChartProps> = ({
 						</PieChartInteractions>
 					))}
 				</Pie>
+				<CategorisedPieChartAccent
+					selectedCategory={selectedCategory}
+					hoverCategory={hoveredCategory}
+					data={flatGroupedData}
+				/>
 			</CategorisedPieChartShell>
 		</div>
 	);

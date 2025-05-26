@@ -10,12 +10,14 @@ type CategorisedPieChartArcProps = PieArcDatum<{
 	pie: ProvidedProps<{ category: string; amount: number; }>
 	categories: string[];
 	donutThickness: number;
+	labeled?: boolean
 };
 
 const CategorisedPieChartArc: FC<CategorisedPieChartArcProps> = ({ 
 	pie,
 	categories,
 	donutThickness,
+	labeled = true,
 	...arc
 }) => {
 	const [centroidX, centroidY] = pie.path.centroid(arc);
@@ -36,7 +38,7 @@ const CategorisedPieChartArc: FC<CategorisedPieChartArcProps> = ({
 				d={pie.path(arc) ?? undefined} 
 				fill={getCategoryColor(arc.data.category)} 
 			/>
-			{hasSpaceForLabel && <text
+			{hasSpaceForLabel && labeled && <text
 				fill="black"
 				fontSize={9}
 				pointerEvents="none"

@@ -24,7 +24,7 @@ function CategoryBasedGraphsSet({
 	return (
 		<GridChartCard
 			title="Category Based"
-			description="Expenses and income by category"
+			description="Expenses by category"
 			actions={
 				<SelectGraphType<CategoryGraphType, string>
 					className="max-w-40"

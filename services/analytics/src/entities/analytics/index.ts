@@ -15,14 +15,17 @@ export { GridChartThresholdOverlay } from './spending-threshold-graph/GridChartT
 
 export { CategorisedPieChartShell } from './categorised-pie-chart/CategorisedPieChartShell';
 export { CategorisedPieChartArc } from './categorised-pie-chart/CategorisedPieChartArc';
+export { CategorisedPieChartAccent } from './categorised-pie-chart/CategorisedPieChartAccent';
 
 export { CategorisedRadarChartShell } from './categorised-radar-chart/CategorisedRadarChartShell';
 export { CategorisedRadarChartGrid } from './categorised-radar-chart/CategorisedRadarChartGrid';
 export { CategorisedRadarChartPolygon } from './categorised-radar-chart/CategorisedRadarChartPolygon';
 export { CategorisedRadarChartLabels } from './categorised-radar-chart/CategorisedRadarChartLabels';
+export { CategorisedRadarChartTooltip } from './categorised-radar-chart/CategorisedRadarChartTooltip';
 
 export { CategorisedRadialChartArc } from './categorised-radial-chart/CategorisedRadialChartArc';
 export { CategorisedRadialChartLabel } from './categorised-radial-chart/CategorisedRadialChartLabel';
+export { CategorisedRadialChartCenter } from './categorised-radial-chart/CategorisedRadialChartCenter';
 
 export type { GlobalContainerProps } from './global-container/GlobalContainer';
 export type { DashboardHeadingProps } from './dashboard-heading/DasboardHeading';

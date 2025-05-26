@@ -17,6 +17,7 @@ const ShowHoverTooltip: FC<ShowHoverTooltipProps> = ({
     tooltipLeft,
 	children
 }) => {
+	console.log(tooltipData, tooltipTop, tooltipLeft);
     return tooltipData && (
         <Tooltip
             key={Math.random()}
