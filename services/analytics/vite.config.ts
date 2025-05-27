@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import type { ConfigEnv } from "vite";
 import { resolve } from "path";
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
@@ -27,5 +28,14 @@ export default (env: ConfigEnv) => {
 			}),
 			buildFederationRemote({ name: 'analytics' })
 		],
+		test: {
+			globals: true,
+			environment: 'jsdom',
+			setupFiles: ['./test/vitest.setup.ts'],
+			coverage: {
+				enabled: true,
+				reporter: ['text', 'json', 'html'],
+			}
+		},
 	}, options)(env);
 }
