@@ -13,5 +13,8 @@ export { RadarChartTooltipOverlay } from './radar-chart-interactions/RadarChartT
 
 export { RadialChartInteractions } from './radial-chart-interactions/RadialChartInteractions';
 
+export { SankeyChartFlowInteractions } from './sankey-chart-interactions/SankeyChartFlowInteractions';
+export { SankeyChartNodeInteractions } from './sankey-chart-interactions/SankeyChartNodeInteractions';
+
 export type { TrendsGraphType } from './configuration-store/types';
 export type { CategoryGraphType } from './configuration-store/types';

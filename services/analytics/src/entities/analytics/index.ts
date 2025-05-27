@@ -27,5 +27,11 @@ export { CategorisedRadialChartArc } from './categorised-radial-chart/Categorise
 export { CategorisedRadialChartLabel } from './categorised-radial-chart/CategorisedRadialChartLabel';
 export { CategorisedRadialChartCenter } from './categorised-radial-chart/CategorisedRadialChartCenter';
 
+export { MoneyFlowSankeyChartShell } from './money-flow-sankey-chart/MoneyFlowSankeyChartShell';
+export { MoneyFlowSankeyChartNode } from './money-flow-sankey-chart/MoneyFlowSankeyChartNode';
+export { MoneyFlowSankeyChartFlow } from './money-flow-sankey-chart/MoneyFlowSankeyChartFlow';
+export { SankeyChartNodeTooltip } from './money-flow-sankey-chart/SankeyChartNodeTooltip';
+export { SankeyChartFlowTooltip } from './money-flow-sankey-chart/SankeyChartFlowTooltip';
+
 export type { GlobalContainerProps } from './global-container/GlobalContainer';
 export type { DashboardHeadingProps } from './dashboard-heading/DasboardHeading';

@@ -12,8 +12,10 @@ import {
 	CategoryBasedPieChart,
 	CategoryBasedRadarChart,
 	CategoryBasedGraphsSet,
-	CategoryBasedRadialChart
+	CategoryBasedRadialChart,
+	MoneyFlowSankeyChart
 } from "@widget/analytics";
+import { MoneyFlowGraph } from "@src/widgets/analytics/money-flow/MoneyFlowGraph";
 
 
 const DashboardPage: FC = () => {
@@ -45,7 +47,9 @@ const DashboardPage: FC = () => {
 						</ConfigurableGridRow>
 						<ConfigurableGridRow>
 							<ConfigurableGridPlate basis="100%">
-								<div>Sankey Chart</div>
+								<MoneyFlowGraph>
+									<MoneyFlowSankeyChart height={300} />
+								</MoneyFlowGraph>
 							</ConfigurableGridPlate>
 						</ConfigurableGridRow>
 					</ConfigurationStoreProvider>
