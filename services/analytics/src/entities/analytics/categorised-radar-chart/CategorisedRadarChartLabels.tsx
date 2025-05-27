@@ -15,7 +15,7 @@ const CategorisedRadarChartLabels: FC<CategorisedRadarChartLabelsProps> = ({
 }) => {
 	return points.map((point, index) => (
 		<text
-			key={index}
+			key={`radar-chart-label-${index.toString()}`}
 			x={point.x}
 			y={point.y}
 			textAnchor="middle"

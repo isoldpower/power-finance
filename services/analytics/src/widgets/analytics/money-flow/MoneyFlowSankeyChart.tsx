@@ -47,10 +47,10 @@ const MoneyFlowSankeyChart: FC<MoneyFlowSankeyChartProps> = ({
 							<Group>
 								{graph.links.map((link, i) => (
 									<SankeyChartFlowInteractions 
+										key={`sankey-link-${i.toString()}`}
 										showTooltip={linkTooltip.showTooltip}
 										hideTooltip={linkTooltip.hideTooltip}
 										link={link}
-										key={i}
 									>
 										<MoneyFlowSankeyChartFlow
 											link={link}
@@ -63,7 +63,7 @@ const MoneyFlowSankeyChart: FC<MoneyFlowSankeyChartProps> = ({
 								{graph.nodes.map((item, i) => (
 									<SankeyChartNodeInteractions
 										node={item}
-										key={i}
+										key={`sankey-node-${i.toString()}`}
 										hideTooltip={nodeTooltip.hideTooltip}
 										showTooltip={nodeTooltip.showTooltip}
 									>

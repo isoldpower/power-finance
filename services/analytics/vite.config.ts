@@ -7,6 +7,7 @@ import type { ViteConfigOptions } from "@internal/config";
 import { buildViteConfig } from "@internal/config";
 import { buildFederationRemote } from "./config/federation.js";
 
+
 export default (env: ConfigEnv) => {
 	const options: ViteConfigOptions = {
 		port: 3001,
@@ -20,13 +21,13 @@ export default (env: ConfigEnv) => {
 
 	return buildViteConfig({
 		plugins: [
+			buildFederationRemote({ name: 'analytics' }),
 			TanStackRouterVite({
 				target: 'react',
 				autoCodeSplitting: true,
 				routesDirectory: resolve(__dirname, 'src', 'app', 'routes'),
 				generatedRouteTree: resolve(__dirname, 'src', 'app', 'routeTree.gen.ts'),
 			}),
-			buildFederationRemote({ name: 'analytics' })
 		],
 		test: {
 			globals: true,

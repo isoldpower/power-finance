@@ -1,7 +1,6 @@
 import { Group } from "@visx/group";
-import { forwardRef } from "react";
 
-import type { ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 
 
 interface GridChartContainerProps {
@@ -9,11 +8,11 @@ interface GridChartContainerProps {
     width: number;
     height: number;
     margin: { top: number, right: number, bottom: number, left: number };
+	ref?: React.RefObject<HTMLDivElement | null>
 }
-const GridChartContainer = forwardRef<HTMLDivElement, GridChartContainerProps>((
-    { children, width, height, margin },
-    ref
-) => {
+const GridChartContainer: FC<GridChartContainerProps> = ({
+	ref, children, width, height, margin
+}) => {
     return (
         <div className="absolute" style={{ height }} ref={ref}>
             <svg className="w-full h-full" viewBox={`0 0 ${width.toString()} ${height.toString()}`}>
@@ -23,7 +22,7 @@ const GridChartContainer = forwardRef<HTMLDivElement, GridChartContainerProps>((
             </svg>
         </div>
     );
-});
+};
 
 GridChartContainer.displayName = "GridChartContainer";
 

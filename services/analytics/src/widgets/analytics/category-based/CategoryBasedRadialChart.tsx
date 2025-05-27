@@ -57,6 +57,7 @@ const CategoryBasedRadialChart: FC<CategoryBasedRadialChartProps> = ({
 			<CategorisedRadarChartShell width={width} height={height} margin={margin.current}>
 				{flatGroupedData.map((item, index) => (
 					<RadialChartInteractions 
+						key={item.category}
 						category={item.category}
 						selectedCategory={selectedCategory}
 						onHoverChange={setHoverCategory}

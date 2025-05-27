@@ -55,6 +55,7 @@ const CategoryBasedPieChart: FC<CategoryBasedPieChartProps> = ({
 				>
 					{(pie) => pie.arcs.map((arc) => (
 						<PieChartInteractions
+							key={arc.index}
 							animate={animate}
 							arc={arc}
 							onHoverChange={setHoveredCategory}

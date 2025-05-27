@@ -6,20 +6,16 @@ import type { ViteConfigOptions } from "@internal/config";
 import { buildFederationRemote } from "./config/federation.js";
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import { buildViteConfig } from "@internal/config";
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
 
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default (env: ConfigEnv) => {
 	const options: ViteConfigOptions = {
 		port: 3002,
 		paths: {
-			root: __dirname,
-			src: resolve(__dirname, 'src'),
-			output: resolve(__dirname, 'dist'),
-			public: resolve(__dirname, 'public')
+			root: import.meta.dirname,
+			src: resolve(import.meta.dirname, 'src'),
+			output: resolve(import.meta.dirname, 'dist'),
+			public: resolve(import.meta.dirname, 'public')
 		}
 	}
 
@@ -29,8 +25,8 @@ export default (env: ConfigEnv) => {
 			TanStackRouterVite({
 				target: 'react',
 				autoCodeSplitting: true,
-				routesDirectory: resolve(__dirname, 'src', 'app', 'routes'),
-				generatedRouteTree: resolve(__dirname, 'src', 'app', 'routeTree.gen.ts'),
+				routesDirectory: resolve(import.meta.dirname, 'src', 'app', 'routes'),
+				generatedRouteTree: resolve(import.meta.dirname, 'src', 'app', 'routeTree.gen.ts'),
 			}),
 		],
 		test: {

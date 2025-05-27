@@ -16,11 +16,11 @@ interface ConfigurationStoreProviderProps {
 
 function ConfigurationStoreProvider({ 
 	children,
-	initialState = {}
+	initialState
 }: ConfigurationStoreProviderProps) {
 	const defaultValues = useRef<ConfigurationStoreState>({
-		graphType: initialState.graphType ?? "linear",
-		categoryGraphType: initialState.categoryGraphType ?? "pie",
+		graphType: initialState?.graphType ?? "linear",
+		categoryGraphType: initialState?.categoryGraphType ?? "pie",
 	});
 
 	const [store] = useState(() => {
@@ -45,9 +45,9 @@ function ConfigurationStoreProvider({
 	});
 
 	return (
-		<ConfigurationStoreContext.Provider value={store}>
+		<ConfigurationStoreContext value={store}>
 			{children}
-		</ConfigurationStoreContext.Provider>
+		</ConfigurationStoreContext>
 	);
 }
 

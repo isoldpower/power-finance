@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"module": "ESNext",
 		"skipLibCheck": true,
+		"types": ["vitest/globals", "@testing-library/jest-dom"],
 
 		/* Bundler mode */
 		"moduleResolution": "bundler",
@@ -22,8 +23,8 @@
 		"paths": {
 			"@src/*": [ "./src/*" ],
 			"@feature/*": [ "./src/features/*" ],
-			"@app/*": [ "./src/app/*" ],
 			"@page/*": [ "./src/pages/*" ],
+			"@app/*": [ "./src/app/*" ],
 			"@entity/*": [ "./src/entities/*" ],
 			"@widget/*": [ "./src/widgets/*" ],
 			"@shared/*": [ "./src/shared/*" ],
