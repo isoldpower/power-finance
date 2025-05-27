@@ -1,0 +1,42 @@
+name: Analytics CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  finance-ci:
+    runs-on: ubuntu-latest
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_KEY }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build related internal packages
+        env:
+          NODE_OPTIONS: --require ts-node/register
+        run: npx nx run-many -t build --projects=@internal/*
+      - name: Run linter
+        env:
+          NODE_OPTIONS: --require ts-node/register
+        run: npx nx lint @power/analytics
+      - name: Run type-checking
+        env:
+          NODE_OPTIONS: --require ts-node/register
+        run: npx nx typecheck @power/analytics
+      - name: Run tests
+        env:
+          NODE_OPTIONS: --require ts-node/register
+        run: npx nx test @power/analytics

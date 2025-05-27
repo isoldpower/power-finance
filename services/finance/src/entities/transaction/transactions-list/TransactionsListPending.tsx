@@ -1,4 +1,3 @@
-import { Skeleton } from "@internal/ui-library";
 import type { FC } from "react";
 
 
