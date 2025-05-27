@@ -18,7 +18,7 @@ const GridChartThresholdTooltip: FC<GridChartThresholdTooltipProps> = ({
 	};
 	
 	return tooltipData && (
-		<div className="p-2 bg-popover">
+		<div className="p-2">
 			<div className="text-sm font-bold">
 				{format(tooltipData.date, "MMMM yyyy")}
 			</div>

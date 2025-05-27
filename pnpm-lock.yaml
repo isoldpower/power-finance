@@ -344,6 +344,9 @@ importers:
       '@internal/ui-library':
         specifier: workspace:^
         version: link:../../packages/ui-library
+      '@tanstack/react-query-devtools':
+        specifier: 'catalog:'
+        version: 4.36.1(@tanstack/react-query@5.76.0(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@tanstack/react-router':
         specifier: 'catalog:'
         version: 1.120.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)

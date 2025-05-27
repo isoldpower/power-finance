@@ -55,7 +55,7 @@ const SpendingTrendsThresholdGraph: FC<SpendingTrendsThresholdGraphProps> = ({
 	}, [innerHeight]);
 
   	return (
-		<div className="relative pb-4" style={{ height: targetHeight }} ref={parentRef}>
+		<div className="relative pb-6" style={{ height: targetHeight }} ref={parentRef}>
 			<GridChartContainer width={width} height={height} margin={margin.current}>
 				<GridChartSkeleton
 					horizontalScale={dateScale}

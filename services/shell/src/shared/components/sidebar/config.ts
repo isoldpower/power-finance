@@ -1,6 +1,6 @@
 import type {ForwardRefExoticComponent, RefAttributes} from "react";
 
-import { getFinanceRoute } from "@internal/shared";
+import { getAnalyticsRoute, getFinanceRoute } from "@internal/shared";
 import { Icons } from "@internal/ui-library";
 
 
@@ -48,12 +48,9 @@ const data: Navigation = {
 			title: 'Analytics',
 			items: [
 				{
-					title: 'Overview',
-					url: '/analytics/overview'
-				},
-				{
-					title: 'Protected View',
-					url: '/analytics/protected'
+					title: 'Main Metrics',
+					url: getAnalyticsRoute('dashboard'),
+					icon: Icons.ActivitySquare
 				},
 			],
 		}

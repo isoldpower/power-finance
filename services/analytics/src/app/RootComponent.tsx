@@ -1,4 +1,5 @@
-import { FC, ReactNode } from "react";
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import type { FC, ReactNode } from "react";
 
 
 interface RootComponentProps {
@@ -11,6 +12,7 @@ const RootComponent: FC<RootComponentProps> = ({
 	return (
 		<div>
 			{children}
+			<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
 		</div>
 	);
 }

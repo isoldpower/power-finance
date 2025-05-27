@@ -4,13 +4,13 @@ import { RootComponent } from '../RootComponent.tsx';
 
 
 export const Route = createRootRoute({
-  component: RootLayout,
+  	component: RootLayout,
 })
 
 function RootLayout() {
-  return (
-    <RootComponent>
-      <Outlet />
-    </RootComponent>
-  );
+	return (
+		<RootComponent>
+			<Outlet />
+		</RootComponent>
+	);
 }

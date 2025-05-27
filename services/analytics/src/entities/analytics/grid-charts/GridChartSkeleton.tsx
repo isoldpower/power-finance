@@ -37,6 +37,7 @@ const GridChartSkeleton: FC<GridChartSkeletonProps> = ({
                 tickLabelProps={() => ({
                     fontSize: 12,
                     textAnchor: "middle",
+					fill: 'var(--color-foreground)',
                 })}
                 tickFormat={(date) => format(date as Date, "MMM")}
             />
@@ -48,6 +49,7 @@ const GridChartSkeleton: FC<GridChartSkeletonProps> = ({
                 tickLabelProps={() => ({
                     fontSize: 12,
                     textAnchor: "end",
+					fill: 'var(--color-foreground)',
                     dx: -4,
                     dy: 4,
                 })}

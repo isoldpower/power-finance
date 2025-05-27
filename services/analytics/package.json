@@ -17,6 +17,7 @@
     "@internal/shared": "workspace:^",
     "@internal/ui-library": "workspace:^",
     "@tanstack/react-router": "catalog:",
+	"@tanstack/react-router-devtools": "catalog:",
     "@visx/axis": "^3.12.0",
     "@visx/curve": "^3.12.0",
     "@visx/event": "^3.12.0",

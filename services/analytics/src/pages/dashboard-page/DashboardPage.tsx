@@ -21,7 +21,7 @@ import { MoneyFlowGraph } from "@src/widgets/analytics/money-flow/MoneyFlowGraph
 const DashboardPage: FC = () => {
     return (
         <GlobalContainer>
-            <div className="mt-8">
+            <div className="mt-12">
                 <DashboardHeading
                     heading="Dashboard"
                     text="Straightforward way to track your expenses"

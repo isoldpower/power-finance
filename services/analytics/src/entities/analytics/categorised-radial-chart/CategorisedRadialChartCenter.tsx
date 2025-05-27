@@ -21,12 +21,12 @@ const CategorisedRadialChartCenter: FC<CategorisedRadialChartCenterProps> = ({
 
 	return (
 		<Group>
-			<Text x={0} y={-12} textAnchor="middle" verticalAnchor="middle" fontSize={18} fontWeight="bold">
+			<Text x={0} y={-12} textAnchor="middle" verticalAnchor="middle" fontSize={18} fontWeight="bold" fill="var(--color-foreground)">
 				{[
 					accentCategory ? accentCategory.slice(0, 1).toUpperCase() + accentCategory.slice(1) : 'Total',
 				].join(' ')}
 			</Text>
-			<Text x={0} y={12} textAnchor="middle" verticalAnchor="middle" fontSize={13}>
+			<Text x={0} y={12} textAnchor="middle" verticalAnchor="middle" fontSize={13} fill="var(--color-foreground)">
 				{[
 					`$${accentCategoryAmount.toFixed(2).toString()}`,
 					accentCategory && `(${accentCategoryPercentage.toFixed(2).toString()}%)`

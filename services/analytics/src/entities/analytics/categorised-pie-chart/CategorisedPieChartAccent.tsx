@@ -29,13 +29,13 @@ const CategorisedPieChartAccent: FC<CategorisedPieChartAccentProps> = ({
 
 	return (
 		<>
-			<Text textAnchor="middle" dominantBaseline="middle" fontSize={20} fill='black' dy={-20}>
+			<Text textAnchor="middle" dominantBaseline="middle" fontSize={20} fill='var(--color-foreground)' dy={-20}>
 				{[
 					accentCategory ?? 'Total',
 					`${(accentCategoryAmount / totalAmount * 100).toFixed(2).toString()}%`
 				].filter(Boolean).join(' ')}
 			</Text>
-			<Text textAnchor="middle" dominantBaseline="middle" fontSize={14} fill='black' dy={20}>
+			<Text textAnchor="middle" dominantBaseline="middle" fontSize={14} fill='var(--color-foreground)' dy={20}>
 				{[
 					accentCategory && `$${accentCategoryAmount.toFixed(2).toString()}`,
 					`$${totalAmount.toFixed(2).toString()}`

@@ -8,7 +8,7 @@ interface CategorisedRadarChartTooltipProps {
 
 const CategorisedRadarChartTooltip: FC<CategorisedRadarChartTooltipProps> = ({ tooltipData }) => {
     return (
-		<div className="p-2 bg-popover">
+		<div className="p-2">
 			<div className="text-sm font-bold">
 				{tooltipData?.category}
 			</div>

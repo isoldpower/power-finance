@@ -21,9 +21,7 @@ function RootComponent() {
 				clerkThemes={themeDictionary}
 			>
 				<Outlet />
-				<div className="pb-4">
-					<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
-				</div>
+				<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
 			</AuthProvider>
 		</ApiProvider>
 	)

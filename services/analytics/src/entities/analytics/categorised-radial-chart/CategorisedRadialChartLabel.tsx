@@ -38,7 +38,7 @@ const CategorisedRadialChartLabel: FC<CategorisedRadialChartLabelProps> = ({
 			dominantBaseline="end"
 			textAnchor="middle"
 			fontSize={10}
-			fill='black'
+			fill='var(--color-foreground)'
 			angle={toDegrees(midAngle)}
 		>
 			{item.category}

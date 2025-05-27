@@ -39,7 +39,7 @@ const CategorisedPieChartArc: FC<CategorisedPieChartArcProps> = ({
 				fill={getCategoryColor(arc.data.category)} 
 			/>
 			{hasSpaceForLabel && labeled && <text
-				fill="black"
+				fill="var(--color-foreground)"
 				fontSize={9}
 				pointerEvents="none"
 				textAnchor="middle"

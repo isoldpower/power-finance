@@ -19,6 +19,7 @@ const CategorisedRadarChartLabels: FC<CategorisedRadarChartLabelsProps> = ({
 			x={point.x}
 			y={point.y}
 			textAnchor="middle"
+			fill='var(--color-foreground)'
 			dominantBaseline="middle"
 			fontSize={10}
 		>
