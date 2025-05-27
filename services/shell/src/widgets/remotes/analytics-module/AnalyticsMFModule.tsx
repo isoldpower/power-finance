@@ -3,12 +3,10 @@ import {lazy} from "react";
 
 import {RemoteLoadingFx} from "@feature/remotes";
 
-interface AnalyticsMFModuleProps {
-}
 
 const AnalyticsRemoteApp = lazy(() => import('analytics/remote-app'));
 
-const AnalyticsMFModule: FC<AnalyticsMFModuleProps> = ({}) => {
+const AnalyticsMFModule: FC = () => {
 	return (
 		<RemoteLoadingFx>
 			<AnalyticsRemoteApp />
@@ -19,4 +17,3 @@ const AnalyticsMFModule: FC<AnalyticsMFModuleProps> = ({}) => {
 AnalyticsMFModule.displayName = 'AnalyticsMFModule';
 
 export { AnalyticsMFModule };
-export type { AnalyticsMFModuleProps };

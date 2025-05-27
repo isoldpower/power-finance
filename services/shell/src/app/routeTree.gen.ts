@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LandingImport } from './routes/landing'
 import { Route as FinanceRouteImport } from './routes/finance/route'
 import { Route as AuthRouteImport } from './routes/auth/route'
+import { Route as AnalyticsRouteImport } from './routes/analytics/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
 import { Route as FinanceSplatImport } from './routes/finance/$'
@@ -40,6 +41,12 @@ const FinanceRouteRoute = FinanceRouteImport.update({
 const AuthRouteRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AnalyticsRouteRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -86,9 +93,9 @@ const AuthLoginRoute = AuthLoginImport.update({
 } as any)
 
 const AnalyticsSplatRoute = AnalyticsSplatImport.update({
-  id: '/analytics/$',
-  path: '/analytics/$',
-  getParentRoute: () => rootRoute,
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => AnalyticsRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -100,6 +107,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
       parentRoute: typeof rootRoute
     }
     '/auth': {
@@ -125,10 +139,10 @@ declare module '@tanstack/react-router' {
     }
     '/analytics/$': {
       id: '/analytics/$'
-      path: '/analytics/$'
+      path: '/$'
       fullPath: '/analytics/$'
       preLoaderRoute: typeof AnalyticsSplatImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AnalyticsRouteImport
     }
     '/auth/login': {
       id: '/auth/login'
@@ -177,6 +191,18 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface AnalyticsRouteRouteChildren {
+  AnalyticsSplatRoute: typeof AnalyticsSplatRoute
+}
+
+const AnalyticsRouteRouteChildren: AnalyticsRouteRouteChildren = {
+  AnalyticsSplatRoute: AnalyticsSplatRoute,
+}
+
+const AnalyticsRouteRouteWithChildren = AnalyticsRouteRoute._addFileChildren(
+  AnalyticsRouteRouteChildren,
+)
+
 interface AuthRouteRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthProfileRoute: typeof AuthProfileRoute
@@ -211,6 +237,7 @@ const FinanceRouteRouteWithChildren = FinanceRouteRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/finance': typeof FinanceRouteRouteWithChildren
   '/landing': typeof LandingRoute
@@ -225,6 +252,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRouteRouteWithChildren
   '/finance': typeof FinanceRouteRouteWithChildren
   '/landing': typeof LandingRoute
   '/analytics/$': typeof AnalyticsSplatRoute
@@ -239,6 +267,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/finance': typeof FinanceRouteRouteWithChildren
   '/landing': typeof LandingRoute
@@ -255,6 +284,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/analytics'
     | '/auth'
     | '/finance'
     | '/landing'
@@ -268,6 +298,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/analytics'
     | '/finance'
     | '/landing'
     | '/analytics/$'
@@ -280,6 +311,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/analytics'
     | '/auth'
     | '/finance'
     | '/landing'
@@ -295,18 +327,18 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnalyticsRouteRoute: typeof AnalyticsRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   FinanceRouteRoute: typeof FinanceRouteRouteWithChildren
   LandingRoute: typeof LandingRoute
-  AnalyticsSplatRoute: typeof AnalyticsSplatRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnalyticsRouteRoute: AnalyticsRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   FinanceRouteRoute: FinanceRouteRouteWithChildren,
   LandingRoute: LandingRoute,
-  AnalyticsSplatRoute: AnalyticsSplatRoute,
 }
 
 export const routeTree = rootRoute
@@ -320,14 +352,20 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/analytics",
         "/auth",
         "/finance",
-        "/landing",
-        "/analytics/$"
+        "/landing"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/analytics": {
+      "filePath": "analytics/route.tsx",
+      "children": [
+        "/analytics/$"
+      ]
     },
     "/auth": {
       "filePath": "auth/route.tsx",
@@ -349,7 +387,8 @@ export const routeTree = rootRoute
       "filePath": "landing.tsx"
     },
     "/analytics/$": {
-      "filePath": "analytics/$.tsx"
+      "filePath": "analytics/$.tsx",
+      "parent": "/analytics"
     },
     "/auth/login": {
       "filePath": "auth/login.tsx",

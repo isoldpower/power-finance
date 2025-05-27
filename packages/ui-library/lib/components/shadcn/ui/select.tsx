@@ -105,8 +105,6 @@ function SelectItem({
   children,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Item>) {
-  console.log('rerender select item');
-
   return (
     <SelectPrimitive.Item
       data-slot="select-item"

@@ -1,5 +1,6 @@
-import { ReactNode, FC, Suspense } from "react";
 import { useMemo } from "react";
+import type { ReactNode, FC } from "react";
+
 
 interface WalletCardFxProps {
 	staleWrap: FC<{ className?: string }>;

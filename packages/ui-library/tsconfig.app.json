@@ -24,10 +24,8 @@
 
 		"baseUrl": ".",
 		"paths": {
-			"@/*": [
-				"./lib/*"
-			]
+			"@/*": ["./lib/*"]
 		}
 	},
-  "include": ["src", "lib", "@/components/shadcn/ui/sonner.tsx"]
+  "include": ["src", "lib"]
 }
