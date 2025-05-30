@@ -21,11 +21,6 @@ const ShowRadarChartTooltip: FC<ShowRadarChartTooltipProps> = ({
 	width,
 	children
 }) => {
-	console.log({
-		top: (tooltipTop ?? 0) + height / 2,
-		left: (tooltipLeft ?? 0) + width / 2,
-	});
-
     return tooltipData && (
         <Tooltip
             key={Math.random()}
