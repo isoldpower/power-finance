@@ -4,5 +4,5 @@ import {LandingPage} from "@page/landing-page";
 
 export const Route = createFileRoute('/landing')({
 	pendingComponent: () => <AppLoader />,
-  component: () => <LandingPage />,
+  	component: () => <LandingPage />,
 })

@@ -10,7 +10,6 @@ const SidebarFloatingTrigger = () => {
 
 		const stylesheet = getComputedStyle(triggerRef.current);
 		setOffset(parseInt(stylesheet.blockSize, 10) + parseInt(stylesheet.marginLeft) + parseInt(stylesheet.marginRight));
-		console.log(stylesheet.blockSize, stylesheet.marginLeft, stylesheet.marginRight, stylesheet.blockSize + stylesheet.marginLeft + stylesheet.marginRight)
 	}, []);
 
 	return (
