@@ -8,6 +8,12 @@ interface FetchTransactionRequest {
 	payload: TransactionGetRequest
 }
 
+type HellOWorld = {
+	message: string
+	rest: number
+	test: boolean
+} | null | undefined;
+
 type FetchTransactionResponse = Transaction & {}
 
 async function fetchTransaction(
