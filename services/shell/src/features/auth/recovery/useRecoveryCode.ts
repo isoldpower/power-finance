@@ -1,5 +1,5 @@
-import { useSignIn } from "@clerk/clerk-react";
-import {useCallback, useEffect, useState} from "react";
+import { useSignIn } from "@internal/shared";
+import { useCallback, useState } from "react";
 
 const useRecoveryCode = () => {
 	const [error, setError] = useState<string | null>(null);
@@ -9,7 +9,7 @@ const useRecoveryCode = () => {
 	const verifyEmail = useCallback(async (
 		email: string
 	): Promise<boolean> => {
-		if (!signIn || !isLoaded) {
+		if (!isLoaded || !signIn) {
 			console.error('signIn is not available')
 			setError('Auth Provider is not yet loaded. Please try again in a second.');
 			return false;
@@ -27,7 +27,7 @@ const useRecoveryCode = () => {
 				setError(err.errors[0].longMessage)
 				return false;
 			});
-	}, [signIn]);
+	}, [isLoaded, signIn]);
 
 	const resetPassword = useCallback(async (
 		code: string,
@@ -64,11 +64,7 @@ const useRecoveryCode = () => {
 				setError(err.errors[0].longMessage);
 				return false;
 			})
-	}, [signIn]);
-
-	useEffect(() => {
-
-	}, []);
+	}, [isLoaded, signIn]);
 
 	return { verifyEmail, error, secondFactor, resetPassword };
 }

@@ -1,24 +1,30 @@
 import {useEffect, useState} from "react";
 import {useSettingsContext} from "../../main.ts";
 
-import type {Theme} from "@clerk/types";
-import type {ThemeType} from "../../main.ts";
-import type {UseClerkSpecificThemeReturn} from "../types.ts";
+import type { Theme } from "@clerk/types";
+import type { ThemeType } from "../../main.ts";
+import type { UseClerkSpecificThemeReturn } from "../types.ts";
 
 type UseClerkThemeOptions = Record<ThemeType, UseClerkSpecificThemeReturn>
 type UseClerkThemeReturn = Theme | undefined;
 
+let lastComputedTheme: Theme = {};
+
 const useClerkTheme = (dictionary: UseClerkThemeOptions): UseClerkThemeReturn => {
-	const [clerkTheme, setClerkTheme] = useState<Theme>({});
+	const [clerkTheme, setClerkTheme] = useState<Theme>(lastComputedTheme);
 	const { theme } = useSettingsContext();
 
 	useEffect(() => {
+		console.log('Something Changed!');
 		// We send the setClerkTheme routine to the MicroTaskQueue
 		// to ensure that we compute properties after the DOM has updated its style
 		Promise.resolve()
 			.then(() => dictionary[theme])
 			.then((theme) => theme.computeTheme())
-			.then((computedTheme) => setClerkTheme(computedTheme))
+			.then((computedTheme) => {
+				lastComputedTheme = computedTheme;
+				setClerkTheme(computedTheme)
+			})
 			.catch((error) => {
 				console.error("Error computing theme:", error);
 			});

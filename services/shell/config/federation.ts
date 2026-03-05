@@ -19,6 +19,20 @@ export function buildFederationHost(
 			])
 		),
 		filename: "remoteEntry.js",
-		shared: ["react", "react-dom"],
+		shared: {
+			'react': {
+				singleton: true,
+				strictVersion: true,
+				requiredVersion: '>=19.0.0',
+			},
+			'react-dom': {
+				singleton: true,
+				strictVersion: true,
+				requiredVersion: '>=19.0.0',
+			},
+			'@internal/shared': {
+				singleton: true
+			}
+		},
 	})
 }

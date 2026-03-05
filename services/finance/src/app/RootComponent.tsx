@@ -1,6 +1,6 @@
 import { Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { AuthProvider, ClerkProvider, getIsEmbedded } from "@internal/shared";
+import { AuthGuard, AuthProvider, getIsEmbedded, useIsClerkProvided, ClerkProvider } from "@internal/shared";
 import { useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
 
 import { checkEnvVariables } from "./env/checkEnv.ts";
@@ -13,28 +13,32 @@ function RootComponent() {
 	const ActualAuthProvider = useMemo(() => {
 		return getIsEmbedded() ? EmbeddedAuthProvider : PrimaryAuthProvider;
 	}, []);
-
+	
 	return (
 		<ApiProvider>
 			<ActualAuthProvider envVariables={envVariables}>
-				<Outlet />
-				<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
+				<AuthGuard>
+					<Outlet />
+					<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
+				</AuthGuard>
 			</ActualAuthProvider>
 		</ApiProvider>
 	)
 }
 
 const EmbeddedAuthProvider: FC<{ envVariables: ImportMetaEnv; children: ReactNode; }> = ({
-	envVariables,
-	children
+	children,
+	envVariables
 }) => {
-	return (
-		<ClerkProvider 
-			publishableKey={envVariables.CLIENT_CLERK_PUBLIC_KEY}
-		>
-			{children}
-		</ClerkProvider>
-	);
+	const clerkProvided = useIsClerkProvided();
+	
+	return clerkProvided
+		? children
+		: (
+			<ClerkProvider publishableKey={envVariables.CLIENT_CLERK_PUBLIC_KEY}>
+				{children}
+			</ClerkProvider>
+		);
 }
 
 const PrimaryAuthProvider: FC<{ envVariables: ImportMetaEnv; children: ReactNode; }> = ({

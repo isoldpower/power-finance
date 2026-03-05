@@ -27,6 +27,9 @@ export function buildFederationRemote(
 				strictVersion: true,
 				requiredVersion: '>=19.0.0',
 			},
+			'@internal/shared': {
+				singleton: true
+			}
 		}
 	})
 }

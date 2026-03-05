@@ -4,9 +4,11 @@ import { lazy, useState } from "react";
 import { AttachToShadowDom, RemoteLoadingFx, TransferColorSchemeToShadowDom } from "@feature/remotes";
 
 
+type AnalyticsMFModuleProps = object & {};
+
 const AnalyticsRemoteApp = lazy(() => import('analytics/remote-app'));
 
-const AnalyticsMFModule: FC = () => {
+const AnalyticsMFModule: FC<AnalyticsMFModuleProps> = () => {
 	const [shadowMountPoint, setShadowMountPoint] = useState<HTMLDivElement | null>(null);
 
 	return (
@@ -23,5 +25,7 @@ const AnalyticsMFModule: FC = () => {
 }
 
 AnalyticsMFModule.displayName = 'AnalyticsMFModule';
+export default AnalyticsMFModule;
 
 export { AnalyticsMFModule };
+export type { AnalyticsMFModuleProps };

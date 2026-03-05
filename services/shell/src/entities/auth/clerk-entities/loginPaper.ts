@@ -1,8 +1,8 @@
-import type {Theme} from "@clerk/types";
+import type { types } from "@internal/shared";
 
 const getLoginPaperAppearance = (
-	overrides: Theme = {}
-): Theme => {
+	overrides: types.Theme = {}
+): types.Theme => {
 	const { layout, elements, ...rest } = overrides;
 
 	return Object.assign({
@@ -17,7 +17,7 @@ const getLoginPaperAppearance = (
 			socialButtonsVariant: 'blockButton',
 			...layout
 		}
-	}, rest) as Theme;
+	}, rest) as types.Theme;
 };
 
 export { getLoginPaperAppearance };

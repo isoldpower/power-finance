@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { SignIn } from "@clerk/clerk-react";
+import { SignIn } from "@internal/shared";
 import { getFinanceRoute, getShellRoute, useRouteWithOrigin } from "@internal/shared";
 import { getLoginPaperAppearance } from "@entity/auth";
 

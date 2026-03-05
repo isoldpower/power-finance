@@ -25,9 +25,9 @@ npm install -g pnpm
 
 1) Install the project using PNPM
 ```bash
-pnpm install --recursive
+pnpm install --recursive --shamefully-hoist
 ```
-**NOTE:** it will also run the postinstall script for successful project initialisation
+**NOTE:** it will also run the postinstall script for successful project initialization
 
 2) Build internal packages for consistency. Even thought this step is highly **recommended**, it is **still optional** (as some services can be independent from internal packages)
 ```bash
