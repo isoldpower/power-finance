@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { ClerkLoaded, RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
+import { ClerkLoaded, RedirectToSignIn, useAuth } from "@clerk/clerk-react";
 import { useLocation } from "@tanstack/react-router";
 
 interface AuthGuardProps {
@@ -7,16 +7,16 @@ interface AuthGuardProps {
 }
 
 const AuthGuard: FC<AuthGuardProps> = ({ children }) => {
+	const { isLoaded, isSignedIn } = useAuth();
 	const { pathname } = useLocation();
 
 	return (
 		<ClerkLoaded>
-			<SignedOut>
+			{(!isLoaded || !isSignedIn) ? (
 				<RedirectToSignIn signInFallbackRedirectUrl={pathname}/>
-			</SignedOut>
-			<SignedIn>
-				{children}
-			</SignedIn>
+			) : (
+				<>{children}</>
+			)}
 		</ClerkLoaded>
 	)
 }

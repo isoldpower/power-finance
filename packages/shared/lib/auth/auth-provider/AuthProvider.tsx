@@ -1,4 +1,4 @@
-import {FC, ReactNode, useEffect} from "react";
+import type { FC, ReactNode } from "react";
 import type { UseClerkThemeOptions } from "../hooks/useClerkTheme.tsx";
 
 import { useNavigate } from "@tanstack/react-router";
@@ -20,11 +20,7 @@ const AuthProvider: FC<AuthProviderProps> = ({
 }) => {
 	const overviewRoute = getFinanceRoute('dashboard');
 	const navigate = useNavigate();
-
 	const theme = useClerkTheme(clerkThemes);
-	useEffect(() => {
-		console.log(theme);
-	}, [theme]);
 
 	return (
 		<ClerkProvider

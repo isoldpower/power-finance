@@ -15,7 +15,6 @@ const useClerkTheme = (dictionary: UseClerkThemeOptions): UseClerkThemeReturn =>
 	const { theme } = useSettingsContext();
 
 	useEffect(() => {
-		console.log('Something Changed!');
 		// We send the setClerkTheme routine to the MicroTaskQueue
 		// to ensure that we compute properties after the DOM has updated its style
 		Promise.resolve()
