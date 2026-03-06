@@ -3,7 +3,9 @@ import { SidebarProvider, useClerkDarkTheme, useClerkLightTheme } from "@interna
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { checkEnvVariables } from "./env/checkEnv";
 import { ThemeHandler } from "@feature/settings";
-import { ReactNode } from "react";
+import { useMemo } from "react";
+
+import type { ReactNode } from "react";
 
 
 interface RootComponentProps {
@@ -12,10 +14,12 @@ interface RootComponentProps {
 
 function RootComponent({ children }: RootComponentProps) {
 	const envVariables = checkEnvVariables();
-	const themeDictionary = {
-		light: useClerkLightTheme(),
-		dark: useClerkDarkTheme(),
-	};
+	const lightTheme = useClerkLightTheme();
+	const darkTheme = useClerkDarkTheme();
+	const themeDictionary = useMemo(() => ({
+		light: lightTheme,
+		dark: darkTheme,
+	}), [darkTheme, lightTheme]);
 	
 	return (
 		<AuthProvider

@@ -1,8 +1,8 @@
-import type {Theme} from "@clerk/types";
+import type { types } from "@internal/shared";
 
 const getUserButtonAppearance = (
-	overrides: Theme = {}
-): Theme => {
+	overrides: types.Theme = {}
+): types.Theme => {
 	const { layout, ...rest } = overrides;
 
 	return Object.assign({

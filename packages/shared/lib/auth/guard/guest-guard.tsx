@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { ClerkLoaded, SignedIn, SignedOut } from "@clerk/clerk-react";
+import { ClerkLoaded, useAuth } from "@clerk/clerk-react";
 import { Navigate } from "@tanstack/react-router";
 
 interface GuestGuardProps {
@@ -8,14 +8,15 @@ interface GuestGuardProps {
 }
 
 const GuestGuard: FC<GuestGuardProps> = ({ children, to }) => {
+	const { isLoaded, isSignedIn } = useAuth();
+	
 	return (
 		<ClerkLoaded>
-			<SignedIn>
+			{(isLoaded && isSignedIn) ? (
 				<Navigate to={to} replace />
-			</SignedIn>
-			<SignedOut>
-				{children}
-			</SignedOut>
+			) : (
+				<>{children}</>
+			)}
 		</ClerkLoaded>
 	)
 }

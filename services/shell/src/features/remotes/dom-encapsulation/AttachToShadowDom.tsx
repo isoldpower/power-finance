@@ -1,6 +1,6 @@
-import { useRef, useEffect, useState, useCallback } from "react";
-import { createPortal } from "react-dom";
 import type { FC, ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 
 interface AttachToShadowDomProps {
@@ -49,7 +49,7 @@ const AttachToShadowDom: FC<AttachToShadowDomProps> = ({
 	}, [id]);
 
 	const createStyleObserver = useCallback(() => {
-		const observer = new MutationObserver((mutations) => {
+		return new MutationObserver((mutations) => {
 			mutations.forEach((mutation) => {
 				mutation.addedNodes.forEach((node) => {
 					if (node.nodeName === "STYLE" && shadowRootRef.current) {
@@ -67,8 +67,6 @@ const AttachToShadowDom: FC<AttachToShadowDomProps> = ({
 				});
 			});
 		});
-
-		return observer;
 	}, [id]);
 
 	useEffect(() => {

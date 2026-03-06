@@ -1,40 +1,65 @@
 import { Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { AuthProvider, ClerkProvider, getIsEmbedded } from "@internal/shared";
+import { AuthGuard, AuthProvider, getIsEmbedded, useIsClerkProvided, ClerkProvider } from "@internal/shared";
 import { useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
 
 import { checkEnvVariables } from "./env/checkEnv.ts";
 import { ApiProvider } from "./api";
-import { FC, ReactNode, useMemo } from "react";
+import { FC, ReactNode } from "react";
 
 
 function RootComponent() {
 	const envVariables = checkEnvVariables();
-	const ActualAuthProvider = useMemo(() => {
-		return getIsEmbedded() ? EmbeddedAuthProvider : PrimaryAuthProvider;
-	}, []);
-
+	
 	return (
 		<ApiProvider>
-			<ActualAuthProvider envVariables={envVariables}>
-				<Outlet />
-				<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
-			</ActualAuthProvider>
+			<DynamicAuthProvider
+				key={getIsEmbedded() ? 'embedded' : 'primary'} 
+				envVariables={envVariables}
+			>
+				<AuthGuard>
+					<Outlet />
+					<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
+				</AuthGuard>
+			</DynamicAuthProvider>
 		</ApiProvider>
 	)
 }
 
-const EmbeddedAuthProvider: FC<{ envVariables: ImportMetaEnv; children: ReactNode; }> = ({
+const DynamicAuthProvider: FC<{ envVariables: ImportMetaEnv; children: ReactNode }> = ({
 	envVariables,
 	children
 }) => {
+	const isEmbedded = getIsEmbedded();
+
+	if (isEmbedded) {
+		return (
+			<EmbeddedAuthProvider envVariables={envVariables}>
+				{children}
+			</EmbeddedAuthProvider>
+		);
+	}
+
 	return (
-		<ClerkProvider 
-			publishableKey={envVariables.CLIENT_CLERK_PUBLIC_KEY}
-		>
+		<PrimaryAuthProvider envVariables={envVariables}>
 			{children}
-		</ClerkProvider>
+		</PrimaryAuthProvider>
 	);
+};
+
+const EmbeddedAuthProvider: FC<{ envVariables: ImportMetaEnv; children: ReactNode; }> = ({
+	children,
+	envVariables
+}) => {
+	const clerkProvided = useIsClerkProvided();
+	
+	return clerkProvided
+		? children
+		: (
+			<ClerkProvider publishableKey={envVariables.CLIENT_CLERK_PUBLIC_KEY}>
+				{children}
+			</ClerkProvider>
+		);
 }
 
 const PrimaryAuthProvider: FC<{ envVariables: ImportMetaEnv; children: ReactNode; }> = ({
@@ -44,7 +69,7 @@ const PrimaryAuthProvider: FC<{ envVariables: ImportMetaEnv; children: ReactNode
 	const themeDictionary = {
 		light: useClerkLightTheme(),
 		dark: useClerkDarkTheme(),
-	}
+	};
 
 	return (
 		<AuthProvider

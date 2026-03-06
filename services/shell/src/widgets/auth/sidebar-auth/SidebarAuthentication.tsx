@@ -1,6 +1,6 @@
 import type { FC, ReactNode } from "react";
 import { useRef, Suspense } from "react";
-import { SignedIn, SignedOut, UserButton } from "@internal/shared";
+import { clerk } from "@internal/shared";
 import { getFinanceRoute, getShellRoute, NavigateToSignIn, useSettingsContext } from "@internal/shared";
 import { getUserButtonAppearance, SidebarBox, SidebarError, SidebarSkeleton, SignInButton } from "@entity/auth";
 import { AuthSidebarFx } from "@feature/auth";
@@ -25,9 +25,9 @@ const SidebarAuthentication: FC<SidebarAuthenticationProps> = () => {
 				pendingComponent={pendingComponent.current}
 				errorComponent={errorComponent.current}
 			>
-				<SignedIn>
+				<clerk.SignedIn>
 					<SidebarBox>
-						<UserButton
+						<clerk.UserButton
 							fallback={<SidebarSkeleton withName={sidebarOpen} />}
 							afterSwitchSessionUrl={getFinanceRoute('dashboard')}
 							userProfileMode='navigation'
@@ -35,15 +35,15 @@ const SidebarAuthentication: FC<SidebarAuthenticationProps> = () => {
 							showName={sidebarOpen}
 							appearance={getUserButtonAppearance()} />
 					</SidebarBox>
-				</SignedIn>
+				</clerk.SignedIn>
 			</AuthSidebarFx>
-			<SignedOut>
+			<clerk.SignedOut>
 				<NavigateToSignIn>
 					<SignInButton>
 						Sign in
 					</SignInButton>
 				</NavigateToSignIn>
-			</SignedOut>
+			</clerk.SignedOut>
 		</Suspense>
 	)
 }

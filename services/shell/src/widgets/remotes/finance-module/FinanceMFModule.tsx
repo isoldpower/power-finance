@@ -25,6 +25,7 @@ const FinanceMFModule: FC<FinanceMFModuleProps> = () => {
 }
 
 FinanceMFModule.displayName = 'FinanceMFModule';
+export default FinanceMFModule;
 
 export { FinanceMFModule };
 export type { FinanceMFModuleProps };

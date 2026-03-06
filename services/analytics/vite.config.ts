@@ -21,7 +21,7 @@ export default (env: ConfigEnv) => {
 
 	return buildViteConfig({
 		plugins: [
-			buildFederationRemote({ name: 'analytics' }),
+			buildFederationRemote({ name: 'analytics' }, env),
 			TanStackRouterVite({
 				target: 'react',
 				autoCodeSplitting: true,
@@ -29,6 +29,11 @@ export default (env: ConfigEnv) => {
 				generatedRouteTree: resolve(__dirname, 'src', 'app', 'routeTree.gen.ts'),
 			}),
 		],
+		server: {
+			headers: {
+				'Cache-Control': 'no-store'
+			}
+		},
 		test: {
 			globals: true,
 			environment: 'jsdom',
@@ -38,5 +43,6 @@ export default (env: ConfigEnv) => {
 				reporter: ['text', 'json', 'html'],
 			}
 		},
+		envPrefix: 'CLIENT_'
 	}, options)(env);
 }

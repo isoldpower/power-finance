@@ -29,6 +29,11 @@ export default (env: ConfigEnv) => {
 				generatedRouteTree: resolve(import.meta.dirname, 'src', 'app', 'routeTree.gen.ts'),
 			}),
 		],
+		server: {
+			headers: {
+				'Cache-Control': 'no-store'
+			}
+		},
 		test: {
 			globals: true,
 			environment: 'jsdom',

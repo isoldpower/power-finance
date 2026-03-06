@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { UserProfile } from "@clerk/clerk-react";
+import { UserProfile } from "@internal/shared";
 import { getProfilePaperAppearance } from "@entity/auth";
 import { getFinanceRoute, useRouteWithOrigin } from "@internal/shared";
 import {ArrowLeftCircleIcon} from "lucide-react";

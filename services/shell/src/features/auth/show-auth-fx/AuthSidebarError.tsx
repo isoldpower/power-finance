@@ -1,4 +1,4 @@
-import { ClerkLoaded, ClerkLoading } from "@internal/shared";
+import { clerk } from "@internal/shared";
 import type { FC, ReactNode } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -12,14 +12,14 @@ interface AuthSidebarFxProps {
 const AuthSidebarFx: FC<AuthSidebarFxProps> = ({ pendingComponent, errorComponent, children }) => {
 	return (
 		<>
-			<ClerkLoading>
+			<clerk.ClerkLoading>
 				{pendingComponent}
-			</ClerkLoading>
-			<ClerkLoaded>
+			</clerk.ClerkLoading>
+			<clerk.ClerkLoaded>
 				<ErrorBoundary fallback={errorComponent}>
 					{children}
 				</ErrorBoundary>
-			</ClerkLoaded>
+			</clerk.ClerkLoaded>
 		</>
 	);
 };

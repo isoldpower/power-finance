@@ -6,7 +6,7 @@ export const buildPaths = (
 ): NonNullable<UserConfig['resolve']> => {
 	return {
 		preserveSymlinks: true,
-		dedupe: ['react', 'react-dom', '@internal/shared'],
+		dedupe: ['react', 'react-dom', 'react/jsx-runtime', '@internal/shared'],
 		alias: {
 			"@": `${config.paths.src}`,
 			"@src": `${config.paths.src}`,

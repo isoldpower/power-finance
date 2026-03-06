@@ -1,21 +1,17 @@
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import type { FC, ReactNode } from "react";
+import { Outlet } from "@tanstack/react-router";
+import { AuthGuard } from "@internal/shared";
+
+import type { FC } from "react";
 
 
-interface RootComponentProps {
-	children: ReactNode;
-}
-
-const RootComponent: FC<RootComponentProps> = ({ 
-	children
- }) => {
+const RootComponent: FC = () => {
 	return (
-		<div>
-			{children}
+		<AuthGuard>
+			<Outlet />
 			<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
-		</div>
+		</AuthGuard>
 	);
 }
 
 export { RootComponent };
-export type { RootComponentProps };

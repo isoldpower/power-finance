@@ -16,7 +16,7 @@ const TransactionValue: FC<TransactionValueProps> = ({ side, perspective }) => {
 	return (
 		<div className={cn(
 			'ml-3 text-right',
-			perspective === 'neutral' && 'text-gray-900',
+			perspective === 'neutral' && 'text-muted-foreground',
 			((side.amount > 0 && perspective === 'outcome') || (side.amount < 0 && perspective === 'income')) && 'text-red-600',
 			((side.amount > 0 && perspective === 'income') || (side.amount < 0 && perspective === 'outcome')) && 'text-green-600'
 		)}>

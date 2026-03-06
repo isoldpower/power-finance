@@ -16,9 +16,6 @@
   "dependencies": {
     "react": "catalog:",
     "react-dom": "catalog:",
-    "@clerk/clerk-react": "catalog:",
-    "@clerk/themes": "^2.2.34",
-    "@clerk/types": "^4.54.2",
     "zod": "^3.24.3",
 
     "@tanstack/react-router": "catalog:",

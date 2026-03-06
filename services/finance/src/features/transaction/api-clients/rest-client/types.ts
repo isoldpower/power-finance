@@ -6,6 +6,7 @@ import type {
 	PutRequest, PutResponse, IPutHandler
 } from "@app/api/model";
 import type { TransactionDetailed, TransactionPreview, TransactionMinimalPayload, TransactionValuableFields } from "../types.ts";
+import type {Transaction} from "@entity/transaction";
 
 interface ITransactionsRESTApiClient extends
 	IGetHandler<object, TransactionDetailed>,
@@ -30,9 +31,20 @@ type TransactionPutResponse = PutResponse<TransactionDetailed>;
 type TransactionDeleteRequest = DeleteRequest<object>;
 type TransactionDeleteResponse = DeleteResponse;
 
+type StorageTransaction = Omit<Transaction, 'from' | 'to'> & {
+	from: {
+		wallet: string;
+		amount: number;
+	} | undefined;
+	to: {
+		wallet: string;
+		amount: number;
+	} | undefined;
+}
+
 export type {TransactionGetRequest, TransactionGetResponse};
 export type {TransactionPostRequest, TransactionPostResponse};
 export type {TransactionListRequest, TransactionListResponse};
 export type {TransactionPutRequest, TransactionPutResponse};
 export type {TransactionDeleteRequest, TransactionDeleteResponse};
-export type {ITransactionsRESTApiClient};
+export type {ITransactionsRESTApiClient, StorageTransaction};
