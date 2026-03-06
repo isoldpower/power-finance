@@ -3,7 +3,7 @@ import { createContext, useMemo } from 'react';
 
 import { ApiQueryReactions } from "./query-reactions";
 import { WalletsMockRESTApiClient } from "@feature/wallet";
-import {TransactionMockRESTApiClient, TransactionTestRESTApiClient} from "@feature/transaction";
+import { TransactionMockRESTApiClient } from "@feature/transaction";
 import type { FC } from 'react';
 import type { IWalletsRESTApiClient } from "@feature/wallet";
 import type { ITransactionsRESTApiClient } from "@feature/transaction";
