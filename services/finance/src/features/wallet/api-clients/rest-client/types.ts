@@ -6,7 +6,7 @@ import type {
 	PostRequest, PostResponse, IPostHandler,
 	PutRequest, PutResponse, IPutHandler
 } from "@app/api/model";
-import type {WalletDetailed, WalletMinimalPayload, WalletPreview, WalletValuableFields} from "../types.ts";
+import type { WalletDetailed, WalletMinimalPayload, WalletPreview, WalletValuableFields } from "../types.ts";
 
 interface IWalletsRESTApiClient extends IGetHandler<object, WalletDetailed>,
 	IPostHandler<WalletMinimalPayload, WalletDetailed>,

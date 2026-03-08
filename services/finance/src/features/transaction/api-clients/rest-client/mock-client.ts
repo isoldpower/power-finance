@@ -60,7 +60,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 					const fromWallet = this.walletStorage.get(filledPayload.from.wallet);
 					if (fromWallet) {
 						this.walletStorage.remove(fromWallet);
-						fromWallet.balance -= filledPayload.from.amount;
+						fromWallet.balance.amount -= filledPayload.from.amount;
 						this.walletStorage.add(fromWallet);
 					}
 				}
@@ -68,7 +68,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 					const toWallet = this.walletStorage.get(filledPayload.to.wallet);
 					if (toWallet) {
 						this.walletStorage.remove(toWallet);
-						toWallet.balance += filledPayload.to.amount;
+						toWallet.balance.amount += filledPayload.to.amount;
 						this.walletStorage.add(toWallet);
 					}
 				}

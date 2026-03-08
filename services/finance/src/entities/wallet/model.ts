@@ -1,9 +1,11 @@
 interface Wallet {
 	id: string;
 	name: string;
-	currency: string;
-	balance: number;
-	reversed: boolean;
+	balance: { 
+		amount: number;
+		currency: string;
+	}
+	credit: boolean;
 	createdAt?: string;
 	updatedAt?: string;
 }

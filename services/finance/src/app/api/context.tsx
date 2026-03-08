@@ -1,12 +1,11 @@
-import { useRef } from 'react';
 import { createContext, useMemo } from 'react';
 
 import { ApiQueryReactions } from "./query-reactions";
-import { WalletsMockRESTApiClient } from "@feature/wallet";
-import { TransactionMockRESTApiClient } from "@feature/transaction";
 import type { FC } from 'react';
 import type { IWalletsRESTApiClient } from "@feature/wallet";
 import type { ITransactionsRESTApiClient } from "@feature/transaction";
+import { useWalletsApi } from "./useWalletsApi.ts";
+import { useTransactionsApi } from "./useTransactionsApi.ts";
 
 
 interface ApiContextType {
@@ -19,19 +18,23 @@ interface ApiContextType {
 }
 
 interface ApiProviderProps {
-  readonly children: React.ReactNode
+  	readonly children: React.ReactNode
+	readonly envVariables: ImportMetaEnv
 }
 
 const ApiContext = createContext<ApiContextType | null>(null);
 
-const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
-	const walletsClient = useRef(new WalletsMockRESTApiClient("wallets"));
-	const transactionsClient = useRef(new TransactionMockRESTApiClient("transactions", "wallets"));
-
+const ApiProvider: FC<ApiProviderProps> = ({ 
+	children, 
+	envVariables
+}) => {
+	const walletsClients = useWalletsApi(envVariables.CLIENT_API_BASE_URL);
+	const transactionsClients = useTransactionsApi(envVariables.CLIENT_API_BASE_URL);
+	
 	const contextValue = useMemo<ApiContextType>(() => ({
-		walletsClients: {rest: walletsClient.current},
-		transactionsClients: {rest: transactionsClient.current}
-	}), []);
+		walletsClients,
+		transactionsClients
+	}), [transactionsClients, walletsClients]);
 
 	return (
 		<ApiContext value={contextValue}>

@@ -37,7 +37,7 @@ const EditableWalletCard: FC<EditableWalletCardProps> = ({
 				<div>
 					<h3 className="font-medium">{passedWallet.name}</h3>
 					<p className="text-xs text-silent">
-						{passedWallet.reversed ? 'Credit Account' : 'Debit Account'}
+						{passedWallet.credit ? 'Credit Account' : 'Debit Account'}
 					</p>
 				</div>
 				<div className="flex space-x-1 [&>*]:z-20">
@@ -53,10 +53,10 @@ const EditableWalletCard: FC<EditableWalletCardProps> = ({
 				<span className={cn(
 					'text-lg font-bold',
 					(
-						(passedWallet.balance < 0 && !passedWallet.reversed) ||
-						(passedWallet.balance > 0 && passedWallet.reversed)
+						(passedWallet.balance.amount < 0 && !passedWallet.credit) ||
+						(passedWallet.balance.amount > 0 && passedWallet.credit)
 					) ? 'text-red-700' : 'text-green-700',
-					passedWallet.balance === 0 && 'text-gray-500'
+					passedWallet.balance.amount === 0 && 'text-gray-500'
 				)}>
 					{balance}
 				</span>

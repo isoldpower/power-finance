@@ -4,7 +4,7 @@ import { ApiContext } from "./context.tsx";
 const useApiContext = () => {
 	const context = use(ApiContext);
 
-	if (!context) {
+	if (context === null) {
 		throw new Error('useApiContext must be used within an ApiProvider');
 	}
 

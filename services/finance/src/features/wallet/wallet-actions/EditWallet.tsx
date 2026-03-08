@@ -29,8 +29,15 @@ function EditWallet({
 	}, [defaults, reset]);
 	
 	const onSubmit = useCallback((data: WalletSchema) => {
-		const { type, ...rest } = data;
-		const walletData = { reversed: type === 'credit', ...rest };
+		const { type, balance, currency, ...rest } = data;
+		const walletData = { 
+			credit: type === 'credit',
+			balance: {
+				currency,
+				amount: balance,
+			},
+			...rest
+		};
 
 		updateWallet(walletData);
 		if (onSuccess) onSuccess(data);

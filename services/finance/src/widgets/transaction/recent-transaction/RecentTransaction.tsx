@@ -61,7 +61,11 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 				{transactionSide && (
 					<TransactionValue
 						perspective={perspective}
-						side={{ ...transactionSide, amount: transactionSide.amount * (transactionSide.wallet.reversed ? -1 : 1) }}/>
+						side={{ 
+							...transactionSide, 
+							amount: transactionSide.amount * (transactionSide.wallet.credit ? -1 : 1) 
+					    }}
+					/>
 				)}
 			</div>
 		</TransactionPaper>

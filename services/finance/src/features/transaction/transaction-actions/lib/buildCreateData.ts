@@ -22,7 +22,7 @@ const getWalletValue = (
 	if (!wallet) return;
 
 	return convertFromTo(data.amount, data.targetCurrency, wallet.currency)
-		.then((value) => value * (wallet.reversed ? -1 : 1));
+		.then((value) => value * (wallet.credit ? -1 : 1));
 }
 
 const buildCreateData = async (

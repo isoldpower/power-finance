@@ -19,9 +19,9 @@ const useNewDefaultValues = (): WalletSchema => {
 const useEditDefaultValues = (wallet: Wallet): WalletSchema => {
 	return useMemo(() => ({
 		name: wallet.name,
-		type: wallet.reversed ? 'credit' : 'debit',
-		balance: wallet.balance,
-		currency: wallet.currency,
+		type: wallet.credit ? 'credit' : 'debit',
+		balance: wallet.balance.amount,
+		currency: wallet.balance.currency,
 	}), [wallet])
 };
 

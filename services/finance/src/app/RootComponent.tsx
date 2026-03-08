@@ -12,17 +12,17 @@ function RootComponent() {
 	const envVariables = checkEnvVariables();
 	
 	return (
-		<ApiProvider>
-			<DynamicAuthProvider
-				key={getIsEmbedded() ? 'embedded' : 'primary'} 
-				envVariables={envVariables}
-			>
+		<DynamicAuthProvider
+			key={getIsEmbedded() ? 'embedded' : 'primary'} 
+			envVariables={envVariables}
+		>
+			<ApiProvider envVariables={envVariables}>
 				<AuthGuard>
 					<Outlet />
 					<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
 				</AuthGuard>
-			</DynamicAuthProvider>
-		</ApiProvider>
+			</ApiProvider>
+		</DynamicAuthProvider>
 	)
 }
 

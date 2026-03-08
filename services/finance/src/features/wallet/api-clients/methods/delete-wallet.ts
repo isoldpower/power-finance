@@ -1,4 +1,4 @@
-import type { IWalletsRESTApiClient } from "../rest-client";
+import type { IWalletsRESTApiClient } from "../rest-client/types.ts";
 
 interface DeleteWalletRequest {
 	handler: Pick<IWalletsRESTApiClient, 'delete'>

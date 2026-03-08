@@ -19,8 +19,15 @@ function NewWallet({
 	const { createWallet } = useWalletsListMethods();
 
 	const onSubmit = useCallback((data: WalletSchema) => {
-		const { type, ...rest } = data;
-		const walletData = { reversed: type === 'credit', ...rest };
+		const { type, balance: balanceAmount, currency, ...rest } = data;
+		const walletData = { 
+			credit: type === 'credit',
+			balance: {
+				amount: balanceAmount,
+				currency: currency,
+			},
+			...rest
+		};
 
 		createWallet(walletData);
 		if (onSuccess) onSuccess(data);
