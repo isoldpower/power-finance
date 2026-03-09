@@ -13,7 +13,7 @@ interface TransactionSideDetailed {
 
 interface TransactionData {
 	id: string;
-	createdAt: string;
+	created_at: string;
 	from?: TransactionSideDetailed;
 	to?: TransactionSideDetailed;
 	description?: string;
@@ -27,7 +27,7 @@ interface TransactionValuableFields {
 }
 
 interface TransactionMeta {
-	createdAt: string
+	created_at: string
 	id: string
 }
 

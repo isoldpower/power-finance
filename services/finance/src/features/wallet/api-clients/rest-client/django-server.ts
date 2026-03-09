@@ -25,7 +25,7 @@ class WalletsDjangoRESTApiClient implements IWalletsRESTApiClient {
 	
 	private resolvePostfix(params: object | undefined): string {
 		let requestPostfix = '';
-		if (params) {
+		if (params && Object.keys(params).length > 0) {
 			const urlParams = new URLSearchParams(Object.entries(params));
 			requestPostfix = `?${urlParams.toString()}`;
 		}

@@ -11,6 +11,7 @@ export { CategoryBasedRadialChart } from './category-based/CategoryBasedRadialCh
 export { CategoryBasedGraphsSet } from './category-based/CategoryBasedGraphsSet';
 
 export { MoneyFlowSankeyChart } from './money-flow/MoneyFlowSankeyChart';
+export { MoneyFlowGraph } from './money-flow/MoneyFlowGraph';
 
 export type { ConfigurableGridProps } from './configurable-grid/ConfigurableGrid';
 export type { ConfigurableGridPlateProps } from './configurable-grid/ConfigurableGridPlate';

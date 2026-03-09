@@ -21,7 +21,7 @@ const getWalletValue = (
 	const wallet = wallets.find((wallet) => wallet.id === walletId);
 	if (!wallet) return;
 
-	return convertFromTo(data.amount, data.targetCurrency, wallet.currency)
+	return convertFromTo(data.amount, data.targetCurrency, wallet.balance.currency)
 		.then((value) => value * (wallet.credit ? -1 : 1));
 }
 

@@ -20,7 +20,7 @@ import type { Wallet } from "@entity/wallet";
 
 interface NewTransactionFormProps {
 	wallets: Wallet[];
-  onClose: () => void;
+  	onClose: () => void;
 }
 
 const NewTransactionForm: FC<NewTransactionFormProps> = ({ onClose, wallets }) => {

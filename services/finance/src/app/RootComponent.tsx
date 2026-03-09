@@ -5,7 +5,7 @@ import { useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
 
 import { checkEnvVariables } from "./env/checkEnv.ts";
 import { ApiProvider } from "./api";
-import { FC, ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 
 
 function RootComponent() {

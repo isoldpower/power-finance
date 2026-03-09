@@ -1,6 +1,6 @@
-import { useAxiosInstance } from "./axios-handler/useAxiosInstance.ts";
 import { useMemo } from "react";
 import { IWalletsRESTApiClient, WalletsDjangoRESTApiClient } from "@feature/wallet";
+import { useAxiosInstance } from "@internal/shared";
 
 
 interface UseWalletsApiResponse {

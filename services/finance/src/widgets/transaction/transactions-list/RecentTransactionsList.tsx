@@ -33,6 +33,7 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 			getRecentTransactions(transactions)
 		)
 	);
+	console.log(transactions, selectedTransactions);
 
 	return Object.entries(selectedTransactions).length > 0 || status === 'pending'
 		? (

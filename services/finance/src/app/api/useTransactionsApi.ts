@@ -1,6 +1,8 @@
-import { useAxiosInstance } from "./axios-handler/useAxiosInstance.ts";
-import { useEffect, useMemo } from "react";
-import { ITransactionsRESTApiClient, TransactionMockRESTApiClient } from "@feature/transaction";
+import { useMemo } from "react";
+
+import { TransactionDjangoRESTApiClient } from "@feature/transaction";
+import type { ITransactionsRESTApiClient } from "@feature/transaction";
+import { useAxiosInstance } from "@internal/shared";
 
 
 interface UseTransactionsApiResponse {
@@ -12,17 +14,13 @@ function useTransactionsApi(baseUrl: string): UseTransactionsApiResponse {
 		baseUrl: `${baseUrl}/transactions`
 	});
 
-	useEffect(() => {
-		console.log("useTransactionsApi", transactionsAxiosInstance);
+	const restTransactionsClient = useMemo<ITransactionsRESTApiClient>(() => {
+		return new TransactionDjangoRESTApiClient(transactionsAxiosInstance);
 	}, [transactionsAxiosInstance]);
 
-	const restWalletsClient = useMemo<ITransactionsRESTApiClient>(() => {
-		return new TransactionMockRESTApiClient("transactions", "wallets");
-	}, []);
-
 	return useMemo(() => ({
-		rest: restWalletsClient
-	}), [restWalletsClient]);
+		rest: restTransactionsClient
+	}), [restTransactionsClient]);
 }
 
 export { useTransactionsApi };

@@ -15,11 +15,11 @@ interface FullWalletsListProps {
 const FullWalletsList: FC<FullWalletsListProps> = ({ children, onCreate }) => {
 	const { status, wallets } = useWalletsList();
 
-	return wallets.length > 0 || status === 'pending'
+	return wallets.length > 0 || ['pending', 'error'].includes(status)
 		? (
 			<WalletCardsListFx
-				pending={<CardsListPending amount={5} /> }
-				error={<CardsListError amount={5} /> }
+				pending={<CardsListPending amount={6} /> }
+				error={<CardsListError amount={6} /> }
 				status={status}
 			>
 				<CardsList>

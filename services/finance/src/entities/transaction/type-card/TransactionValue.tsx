@@ -21,7 +21,7 @@ const TransactionValue: FC<TransactionValueProps> = ({ side, perspective }) => {
 			((side.amount > 0 && perspective === 'income') || (side.amount < 0 && perspective === 'outcome')) && 'text-green-600'
 		)}>
 			<p className="text-sm font-medium">
-				{transformCurrency(side.amount, side.wallet.currency)}
+				{transformCurrency(side.amount, side.wallet.balance.currency)}
 			</p>
 			<p className="text-xs text-gray-500 mt-1">
 				Additional info

@@ -19,7 +19,7 @@ const buildTransferTransaction = (
 		from: data.from,
 		to: data.to,
 		type: 'transfer',
-		createdAt: response.meta.createdAt
+		createdAt: response.meta.created_at
 	} satisfies Transaction;
 }
 
@@ -33,7 +33,7 @@ const buildExpenseTransaction = (
 		type: 'expense',
 		description: data.description,
 		from: data.from,
-		createdAt: response.meta.createdAt
+		createdAt: response.meta.created_at
 	} satisfies Transaction;
 }
 
@@ -47,7 +47,7 @@ const buildIncomeTransaction = (
 		type: 'income',
 		to: data.to,
 		description: data.description,
-		createdAt: response.meta.createdAt
+		createdAt: response.meta.created_at
 	} satisfies Transaction;
 }
 
@@ -61,7 +61,7 @@ const buildAdjustTransaction = (
 		type: 'adjust',
 		to: data.to,
 		description: data.description,
-		createdAt: response.meta.createdAt
+		createdAt: response.meta.created_at
 	} satisfies Transaction;
 }
 
@@ -72,7 +72,7 @@ const detailedBuildWrapper = (
 	const preview = routine(response);
 
 	return Object.assign(preview, {
-		createdAt: response.meta.createdAt,
+		createdAt: response.meta.created_at,
 	}) satisfies Transaction;
 }
 

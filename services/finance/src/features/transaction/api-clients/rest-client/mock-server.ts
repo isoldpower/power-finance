@@ -4,17 +4,16 @@ import type {
 import {
 	IStorage, 
 	LocalStorageMock
-} from "@app/api";
+} from "@internal/shared";
 import type {
 	Wallet
 } from "@entity/wallet";
 import type {
 	StorageTransaction,
 	TransactionDeleteRequest, TransactionDeleteResponse,
-	TransactionGetRequest,
-	TransactionGetResponse, TransactionListRequest,
-	TransactionListResponse, TransactionPostRequest, TransactionPostResponse, TransactionPutRequest,
-	TransactionPutResponse
+	TransactionGetRequest, TransactionGetResponse, 
+	TransactionListRequest, TransactionListResponse,
+	TransactionPostRequest, TransactionPostResponse,
 } from "./types.ts";
 import {
 	flatToTransactionDetailed,
@@ -101,25 +100,6 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 					limit: end - start,
 				}
 			}));
-	}
-
-	put(
-		request: TransactionPutRequest
-	): Promise<TransactionPutResponse> {
-		return new Promise((resolve) => setTimeout(resolve, 1000))
-			.then(() => this.storage.get(request.id))
-			.then((value) => {
-				if (!value) throw new Error("Not found");
-
-				this.storage.remove(value);
-				const convertedPayload = createTransactionFromMinimalPayload(request.data);
-				const updatedValue = Object.assign(convertedPayload, {
-					id: value.id,
-					createdAt: value.createdAt
-				})
-				this.storage.add(updatedValue);
-				return flatToTransactionDetailed(storageToTransaction(this.walletStorage.list(), updatedValue));
-			});
 	}
 
 	delete(

@@ -3,6 +3,7 @@ export * from './data-presenters';
 
 export { useTotalBalance } from './total-balance/useTotalBalance.ts';
 export { useCardBalance } from './total-balance/useCardBalance.ts';
+export { WalletBalanceFx } from './total-balance/WalletBalanceFx.tsx';
 
 export { DeleteWallet } from './wallet-actions/DeleteWallet.tsx';
 export { NewWallet } from './wallet-actions/NewWallet.tsx';

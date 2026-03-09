@@ -1,8 +1,8 @@
 import {v4 as uuidv4} from "uuid";
 
 import type {Wallet} from "@entity/wallet";
-import type {IStorage} from "@app/api";
-import {LocalStorageMock} from "@app/api";
+import type {IStorage} from "@internal/shared";
+import {LocalStorageMock} from "@internal/shared";
 
 import {flatToWalletDetailed, flatToWalletPreview} from "../mutators/flat-to-api.ts";
 import {
