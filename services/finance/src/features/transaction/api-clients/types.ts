@@ -2,7 +2,7 @@ import type { TransactionType } from "@entity/transaction";
 import type { Wallet } from "@entity/wallet";
 
 interface TransactionSide {
-	wallet: string;
+	wallet_id: string;
 	amount: number;
 }
 
@@ -11,17 +11,9 @@ interface TransactionSideDetailed {
 	amount: number;
 }
 
-interface TransactionData {
-	id: string;
-	created_at: string;
-	from?: TransactionSideDetailed;
-	to?: TransactionSideDetailed;
-	description?: string;
-}
-
 interface TransactionValuableFields {
-	from?: TransactionSide;
-	to?: TransactionSide;
+	sender?: TransactionSide | null;
+	receiver?: TransactionSide | null;
 	description?: string;
 	type: TransactionType;
 }
@@ -34,20 +26,28 @@ interface TransactionMeta {
 interface TransactionDetailed {
 	id: string
 	type: TransactionType
-	data: TransactionData
+	description?: string
+	sender?: TransactionSideDetailed | null
+	receiver?: TransactionSideDetailed | null
+	
 	meta: TransactionMeta
 }
 
 interface TransactionPreview {
 	id: string
 	type: TransactionType
-	data: TransactionData
+	description?: string
+	sender?: TransactionSide | null
+	receiver?: TransactionSide | null
+	
 	meta: TransactionMeta
 }
 
 type TransactionMinimalPayload = TransactionValuableFields;
 
 export type {
+	TransactionSide,
+	TransactionSideDetailed,
 	TransactionDetailed,
 	TransactionPreview,
 	TransactionMeta,

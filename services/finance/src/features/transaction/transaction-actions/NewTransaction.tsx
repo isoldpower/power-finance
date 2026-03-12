@@ -25,15 +25,11 @@ function NewTransaction({
 	const { createTransaction } = useTransactionsListMethods();
 
 	const onSubmit = useCallback(async (data: TransactionSchema) => {
-		let createData: TransactionValuableFields;
-		switch (data.type) {
-			case 'transfer':
-				createData = await buildCreateData(wallets, data, true);
-				break;
-			default:
-				createData = await buildCreateData(wallets, data);
-				break;
-		}
+		const createData: TransactionValuableFields = await buildCreateData(
+			wallets,
+			data, 
+			data.type === 'transfer'
+		);
 
 		createTransaction(createData);
 		if(onSuccess) onSuccess(data);

@@ -40,11 +40,11 @@ class TransactionDjangoRESTApiClient implements ITransactionsRESTApiClient {
 		const postfix = this.resolvePostfix(request.params);
 		const adjustedData = { ...request.data };
 		
-		if (adjustedData.from?.amount) {
-			adjustedData.from.amount = Number(adjustedData.from.amount.toFixed(2));
+		if (adjustedData.sender?.amount) {
+			adjustedData.sender.amount = Number(adjustedData.sender.amount.toFixed(2));
 		} 
-		if (adjustedData.to?.amount) {
-			adjustedData.to.amount = Number(adjustedData.to.amount.toFixed(2));
+		if (adjustedData.receiver?.amount) {
+			adjustedData.receiver.amount = Number(adjustedData.receiver.amount.toFixed(2));
 		}
 		
 		return this.axiosInstance.post<TransactionPostResponse>(`/${postfix}`, adjustedData)

@@ -3,82 +3,150 @@ import type {
 	AdjustTransactionData,
 	ExpenseTransactionData,
 	IncomeTransactionData,
-	Transaction,
+	TransactionDto,
+	TransactionPreviewDto, 
+	TransactionPreviewSide,
+	TransactionSide,
 	TransferTransactionData
 } from "@entity/transaction";
 
 
-const buildTransferTransaction = (
+const buildPreviewTransferTransaction = (
 	response: TransactionPreview
-): Transaction => {
-	const data = response.data as TransferTransactionData;
+): TransactionPreviewDto => {
+	const data = response as TransferTransactionData<TransactionPreviewSide>;
 
 	return {
 		id: response.id,
 		description: data.description,
-		from: data.from,
-		to: data.to,
+		sender: data.sender,
+		receiver: data.receiver,
 		type: 'transfer',
 		createdAt: response.meta.created_at
-	} satisfies Transaction;
+	} satisfies TransactionPreviewDto;
 }
 
-const buildExpenseTransaction = (
+const buildPreviewExpenseTransaction = (
 	response: TransactionPreview
-): Transaction => {
-	const data = response.data as ExpenseTransactionData;
+): TransactionPreviewDto => {
+	const data = response as ExpenseTransactionData<TransactionPreviewSide>;
 
 	return {
 		id: response.id,
 		type: 'expense',
 		description: data.description,
-		from: data.from,
+		sender: data.sender,
 		createdAt: response.meta.created_at
-	} satisfies Transaction;
+	} satisfies TransactionPreviewDto;
 }
 
-const buildIncomeTransaction = (
+const buildPreviewIncomeTransaction = (
 	response: TransactionPreview
-): Transaction => {
-	const data = response.data as IncomeTransactionData;
+): TransactionPreviewDto => {
+	const data = response as IncomeTransactionData<TransactionPreviewSide>;
 
 	return {
 		id: response.id,
 		type: 'income',
-		to: data.to,
+		receiver: data.receiver,
 		description: data.description,
 		createdAt: response.meta.created_at
-	} satisfies Transaction;
+	} satisfies TransactionPreviewDto;
 }
 
-const buildAdjustTransaction = (
+const buildPreviewAdjustTransaction = (
 	response: TransactionPreview
-): Transaction => {
-	const data = response.data as AdjustTransactionData;
+): TransactionPreviewDto => {
+	const data = response as AdjustTransactionData<TransactionPreviewSide>;
 
 	return {
 		id: response.id,
 		type: 'adjust',
-		to: data.to,
+		receiver: data.receiver,
 		description: data.description,
-		createdAt: response.meta.created_at
-	} satisfies Transaction;
+		createdAt: response.meta.created_at,
+	} satisfies TransactionPreviewDto;
 }
 
-const detailedBuildWrapper = (
-	routine: (response: TransactionPreview) => Transaction,
+const buildTransferTransaction = (
 	response: TransactionDetailed
-): Transaction => {
-	const preview = routine(response);
+): TransactionDto => {
+	const data = response as TransferTransactionData<TransactionSide>;
 
-	return Object.assign(preview, {
+	return {
+		id: response.id,
+		description: data.description,
+		sender: data.sender,
+		receiver: data.receiver,
+		type: 'transfer',
+		createdAt: response.meta.created_at
+	} satisfies TransactionDto;
+}
+
+const buildExpenseTransaction = (
+	response: TransactionDetailed
+): TransactionDto => {
+	const data = response as ExpenseTransactionData<TransactionSide>;
+
+	return {
+		id: response.id,
+		type: 'expense',
+		description: data.description,
+		sender: data.sender,
+		createdAt: response.meta.created_at
+	} satisfies TransactionDto;
+}
+
+const buildIncomeTransaction = (
+	response: TransactionDetailed
+): TransactionDto => {
+	const data = response as IncomeTransactionData<TransactionSide>;
+
+	return {
+		id: response.id,
+		type: 'income',
+		receiver: data.receiver,
+		description: data.description,
+		createdAt: response.meta.created_at
+	} satisfies TransactionDto;
+}
+
+const buildAdjustTransaction = (
+	response: TransactionDetailed
+): TransactionDto => {
+	const data = response as AdjustTransactionData<TransactionSide>;
+
+	return {
+		id: response.id,
+		type: 'adjust',
+		receiver: data.receiver,
+		description: data.description,
 		createdAt: response.meta.created_at,
-	}) satisfies Transaction;
+	} satisfies TransactionDto;
 }
 
 const transactionPreviewResponseToFlat = (
 	response: TransactionPreview
-): Transaction => {
+): TransactionPreviewDto => {
+	const transactionType = response.type;
+	
+	switch (transactionType) {
+		case 'transfer':
+			return buildPreviewTransferTransaction(response);
+		case 'expense':
+			return buildPreviewExpenseTransaction(response);
+		case 'income':
+			return buildPreviewIncomeTransaction(response);
+		case 'adjust':
+			return buildPreviewAdjustTransaction(response);
+		default:
+			throw new Error(`Unknown transaction type: ${transactionType as string}`);
+	}
+}
+
+const transactionDetailedResponseToFlat = (
+	response: TransactionDetailed
+): TransactionDto => {
 	const transactionType = response.type;
 	switch (transactionType) {
 		case 'transfer':
@@ -89,24 +157,6 @@ const transactionPreviewResponseToFlat = (
 			return buildIncomeTransaction(response);
 		case 'adjust':
 			return buildAdjustTransaction(response);
-		default:
-			throw new Error(`Unknown transaction type: ${transactionType as string}`);
-	}
-}
-
-const transactionDetailedResponseToFlat = (
-	response: TransactionDetailed
-): Transaction => {
-	const transactionType = response.type;
-	switch (transactionType) {
-		case 'transfer':
-			return detailedBuildWrapper(buildTransferTransaction, response);
-		case 'expense':
-			return detailedBuildWrapper(buildExpenseTransaction, response);
-		case 'income':
-			return detailedBuildWrapper(buildIncomeTransaction, response);
-		case 'adjust':
-			return detailedBuildWrapper(buildAdjustTransaction, response);
 		default:
 			throw new Error(`Unknown transaction type: ${transactionType as string}`);
 	}

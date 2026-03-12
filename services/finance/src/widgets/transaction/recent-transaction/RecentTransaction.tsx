@@ -7,11 +7,12 @@ import {
 	TransactionTypeIcon,
 	TransactionValue
 } from "@entity/transaction";
-import type { Transaction } from "@entity/transaction";
+import { useTransaction } from "@feature/transaction";
+import type { TransactionPreviewDto } from "@entity/transaction";
 
 
 interface RecentTransactionProps {
-	transaction: Transaction;
+	transaction: TransactionPreviewDto;
 	selectedWallet?: string | undefined;
 }
 
@@ -19,6 +20,8 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 	transaction: passedTransaction,
 	selectedWallet
 }) => {
+	const { transaction: detailedTransaction, isLoading } = useTransaction(passedTransaction.id);
+	
 	const perspective = useMemo(() => {
 		return !selectedWallet
 			? passedTransaction.type === 'transfer'
@@ -26,18 +29,18 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 				: passedTransaction.type === 'income'
 					? 'income'
 					: 'outcome'
-			: passedTransaction.from?.wallet.id === selectedWallet
+			: passedTransaction.sender?.wallet_id === selectedWallet
 				? 'outcome'
 				: 'income';
 	}, [passedTransaction, selectedWallet]);
 
 	const transactionSide = useMemo(() => {
-		return (!selectedWallet
-			? passedTransaction.from ?? passedTransaction.to
-			: selectedWallet === passedTransaction.from?.wallet.id
-				? passedTransaction.from
-				: passedTransaction.to) ?? undefined
-	}, [passedTransaction, selectedWallet]);
+		return detailedTransaction ? (!selectedWallet
+			? detailedTransaction.sender ?? detailedTransaction.receiver
+			: selectedWallet === detailedTransaction.sender?.wallet.id
+				? detailedTransaction.sender
+				: detailedTransaction.receiver ?? undefined) : undefined
+	}, [detailedTransaction, selectedWallet]);
 
 	return (
 		<TransactionPaper>
@@ -50,18 +53,20 @@ const RecentTransaction: FC<RecentTransactionProps> = ({
 							: 'Some category'
 						}
 					</p>
-					<TransactionTargets
-						to={passedTransaction.to && {
-							target: passedTransaction.to.wallet
-						}}
-						from={passedTransaction.from && {
-							target: passedTransaction.from.wallet
-						}} />
+					{(!isLoading && detailedTransaction) ? (
+						<TransactionTargets
+							to={detailedTransaction.receiver && {
+								target: detailedTransaction.receiver.wallet
+							}}
+							from={detailedTransaction.sender && {
+								target: detailedTransaction.sender.wallet
+							}} />
+					) : null}
 				</div>
 				{transactionSide && (
 					<TransactionValue
 						perspective={perspective}
-						side={{ 
+						side={{
 							...transactionSide, 
 							amount: transactionSide.amount * (transactionSide.wallet.credit ? -1 : 1) 
 					    }}

@@ -15,14 +15,8 @@ import type {
 	TransactionListRequest, TransactionListResponse,
 	TransactionPostRequest, TransactionPostResponse,
 } from "./types.ts";
-import {
-	flatToTransactionDetailed,
-	flatToTransactionPreview
-} from "../mutators/flat-to-api.ts";
-import {
-	createTransactionFromMinimalPayload,
-	storageToTransaction
-} from "./utils.ts";
+import { flatToTransactionDetailed, flatPreviewToTransactionPreview } from "../mutators/flat-to-api.ts";
+import { createTransactionFromMinimalPayload, storageToTransaction } from "./utils.ts";
 
 
 class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
@@ -55,20 +49,20 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		return new Promise((resolve) => setTimeout(resolve, 1000))
 			.then(() => { this.storage.add(filledPayload); })
 			.then(() => {
-				if (filledPayload.from) {
-					const fromWallet = this.walletStorage.get(filledPayload.from.wallet);
-					if (fromWallet) {
-						this.walletStorage.remove(fromWallet);
-						fromWallet.balance.amount -= filledPayload.from.amount;
-						this.walletStorage.add(fromWallet);
+				if (filledPayload.sender) {
+					const senderWallet = this.walletStorage.get(filledPayload.sender.wallet);
+					if (senderWallet) {
+						this.walletStorage.remove(senderWallet);
+						senderWallet.balance.amount -= filledPayload.sender.amount;
+						this.walletStorage.add(senderWallet);
 					}
 				}
-				if (filledPayload.to) {
-					const toWallet = this.walletStorage.get(filledPayload.to.wallet);
-					if (toWallet) {
-						this.walletStorage.remove(toWallet);
-						toWallet.balance.amount += filledPayload.to.amount;
-						this.walletStorage.add(toWallet);
+				if (filledPayload.receiver) {
+					const receiverWallet = this.walletStorage.get(filledPayload.receiver.wallet);
+					if (receiverWallet) {
+						this.walletStorage.remove(receiverWallet);
+						receiverWallet.balance.amount += filledPayload.receiver.amount;
+						this.walletStorage.add(receiverWallet);
 					}
 				}
 			})
@@ -93,7 +87,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 				return values.map((value) => storageToTransaction(wallets, value));
 			})
 			.then((values) => ({
-				data: values.map(flatToTransactionPreview),
+				data: values.map(flatPreviewToTransactionPreview),
 				meta: {
 					total: items.length,
 					offset: request.params?.offset ?? 0,

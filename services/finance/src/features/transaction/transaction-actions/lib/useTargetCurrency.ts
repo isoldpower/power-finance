@@ -23,16 +23,16 @@ const useTargetCurrency = (
 		const toWallet = wallets.find((wallet) => wallet.id === to);
 		switch (type) {
 			case 'transfer':
-				form.setValue('targetCurrency', fromWallet?.currency ?? toWallet?.currency ?? mainCurrency);
+				form.setValue('targetCurrency', fromWallet?.balance.currency ?? toWallet?.balance.currency ?? mainCurrency);
 				break;
 			case 'expense':
-				form.setValue('targetCurrency', fromWallet?.currency ?? mainCurrency);
+				form.setValue('targetCurrency', fromWallet?.balance.currency ?? mainCurrency);
 				break;
 			case 'income':
-				form.setValue('targetCurrency', toWallet?.currency ?? mainCurrency);
+				form.setValue('targetCurrency', toWallet?.balance.currency ?? mainCurrency);
 				break;
 			case 'adjust':
-				form.setValue('targetCurrency', toWallet?.currency ?? mainCurrency);
+				form.setValue('targetCurrency', toWallet?.balance.currency ?? mainCurrency);
 				break;
 			default:
 				form.setValue('targetCurrency', mainCurrency);

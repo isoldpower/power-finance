@@ -13,12 +13,12 @@ import {
 	TransactionsListPending
 } from "@entity/transaction";
 import { useLocaleDateTransform } from "@shared/utils";
-import type { Transaction } from "@entity/transaction";
+import type { TransactionPreviewDto } from "@entity/transaction";
 
 
 interface OverviewTransactionsListProps {
 	children: ReactElement<{
-		transaction: Transaction,
+		transaction: TransactionPreviewDto,
 		selectedWallet?: string | undefined
 	}>;
 	selectedWallet?: string | undefined;
@@ -51,7 +51,7 @@ const OverviewTransactionsList: FC<OverviewTransactionsListProps> = ({
 								{transform(date)}
 							</h3>
 							<div className="rounded-lg outline outline-gray-200 dark:outline-gray-800">
-								{related?.map((transaction) => (
+								{related.map((transaction) => (
 									<div key={transaction.id} className="border-b last:border-b-0">
 										{cloneElement(children, {
 											transaction,

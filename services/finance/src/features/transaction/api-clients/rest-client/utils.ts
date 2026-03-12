@@ -1,11 +1,11 @@
-import type {StorageTransaction} from "./types.ts";
-import type {TransactionMinimalPayload} from "../types.ts";
-import type {Wallet} from "@entity/wallet";
-import type {Transaction} from "@entity/transaction";
-import {v4 as uuidv4} from "uuid";
+import type { StorageTransaction } from "./types.ts";
+import type { TransactionMinimalPayload } from "../types.ts";
+import type { Wallet } from "@entity/wallet";
+import type { TransactionDto } from "@entity/transaction";
+import { v4 as uuidv4 } from "uuid";
 
 const createTransactionFromMinimalPayload = (
-	{ description, from, to, type }: TransactionMinimalPayload
+	{ description, sender, receiver, type }: TransactionMinimalPayload
 ): StorageTransaction => {
 	const timestamp = new Date().toISOString();
 	const id = uuidv4();
@@ -15,28 +15,40 @@ const createTransactionFromMinimalPayload = (
 		type,
 		description: description,
 		createdAt: timestamp,
-		from,
-		to,
+		sender: sender ? {
+			wallet: sender.wallet_id,
+			amount: sender.amount
+		} : undefined,
+		receiver: receiver ? {
+			wallet: receiver.wallet_id,
+			amount: receiver.amount
+		} : undefined,
 	} satisfies StorageTransaction;
 };
 
 const storageToTransaction = (
 	wallets: Wallet[],
 	value: StorageTransaction
-): Transaction => {
+): TransactionDto => {
 	const { ...rest } = value;
-	const fromWallet = wallets.find((wallet) => wallet.id === value.from?.wallet);
-	const toWallet = wallets.find((wallet) => wallet.id === value.to?.wallet);
+	const fromWallet = wallets.find((wallet) => {
+		return wallet.id === value.sender?.wallet;
+	});
+	const toWallet = wallets.find((wallet) => {
+		return wallet.id === value.receiver?.wallet;
+	});
 
 	return {
 		...rest,
-		from: (value.from && fromWallet
-			? { wallet: fromWallet, amount: value.from.amount }
-			: undefined),
-		to: (value.to && toWallet
-			? { wallet: toWallet, amount: value.to.amount }
-			: undefined)
-	} as Transaction;
+		sender: ((value.sender && fromWallet) ? { 
+			wallet: fromWallet, 
+			amount: value.sender.amount 
+		} : undefined),
+		receiver: ((value.receiver && toWallet) ? {
+			wallet: toWallet, 
+			amount: value.receiver.amount 
+		} : undefined)
+	} as TransactionDto;
 }
 
 export { createTransactionFromMinimalPayload, storageToTransaction };

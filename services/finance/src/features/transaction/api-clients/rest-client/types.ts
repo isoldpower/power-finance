@@ -5,14 +5,14 @@ import type {
 	PostRequest, PostResponse, IPostHandler
 } from "@internal/shared";
 import type { TransactionDetailed, TransactionPreview, TransactionMinimalPayload, TransactionValuableFields } from "../types.ts";
-import type { Transaction } from "@entity/transaction";
+import type { TransactionDto } from "@entity/transaction";
 
 interface ITransactionsRESTApiClient extends
 	IGetHandler<object, TransactionDetailed>,
 	IPostHandler<TransactionMinimalPayload, TransactionDetailed>,
 	IListHandler<TransactionPreview>,
-	IDeleteHandler {
-}
+	IDeleteHandler 
+{}
 
 type TransactionGetRequest = GetRequest<object>;
 type TransactionGetResponse = GetResponse<TransactionDetailed>;
@@ -26,12 +26,12 @@ type TransactionListResponse = ListResponse<TransactionPreview>;
 type TransactionDeleteRequest = DeleteRequest<object>;
 type TransactionDeleteResponse = DeleteResponse;
 
-type StorageTransaction = Omit<Transaction, 'from' | 'to'> & {
-	from: {
+type StorageTransaction = Omit<TransactionDto, 'sender' | 'receiver'> & {
+	sender: {
 		wallet: string;
 		amount: number;
 	} | undefined;
-	to: {
+	receiver: {
 		wallet: string;
 		amount: number;
 	} | undefined;

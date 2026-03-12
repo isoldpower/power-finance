@@ -1,6 +1,6 @@
-import type { Transaction } from "@entity/transaction";
+import type { TransactionPreviewDto } from "@entity/transaction";
 
-function getRecentTransactions(transactions: Transaction[]): Transaction[] {
+function getRecentTransactions(transactions: TransactionPreviewDto[]): TransactionPreviewDto[] {
 	const now = new Date();
 	const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 

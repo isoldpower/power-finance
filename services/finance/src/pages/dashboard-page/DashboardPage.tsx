@@ -15,7 +15,7 @@ import {
 	RecentTransactionsList,
 	RecentTransaction
 } from "@widget/transaction";
-import type { Transaction } from "@entity/transaction";
+import type { TransactionPreviewDto } from "@entity/transaction";
 import { Wallet } from "@entity/wallet";
 
 
@@ -54,7 +54,7 @@ const DashboardPage: FC = () => {
 			<div>
 				<TransactionsListNavigationHeader />
 				<RecentTransactionsList selectedWallet={selected}>
-					<RecentTransaction transaction={{} as Transaction} />
+					<RecentTransaction transaction={{} as TransactionPreviewDto} />
 				</RecentTransactionsList>
 			</div>
 		</div>

@@ -30,7 +30,8 @@ function EditWallet({
 	
 	const onSubmit = useCallback((data: WalletSchema) => {
 		const { type, balance, currency, ...rest } = data;
-		const walletData = { 
+		
+		const walletData = {
 			credit: type === 'credit',
 			balance: {
 				currency,

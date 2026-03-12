@@ -1,4 +1,4 @@
-import type { Transaction } from "src/entities/transaction";
+import type { TransactionDto } from "src/entities/transaction";
 import type { ITransactionsRESTApiClient } from "../rest-client";
 import type { TransactionGetRequest } from "../rest-client/types.ts";
 import { transactionDetailedResponseToFlat } from "../mutators/api-to-flat.ts";
@@ -8,13 +8,12 @@ interface FetchTransactionRequest {
 	payload: TransactionGetRequest
 }
 
-type FetchTransactionResponse = Transaction & {}
+type FetchTransactionResponse = TransactionDto & {}
 
 async function fetchTransaction(
 	request: FetchTransactionRequest
 ): Promise<FetchTransactionResponse> {
-	return request.handler.get(request.payload)
-		.then(transactionDetailedResponseToFlat);
+	return request.handler.get(request.payload).then(transactionDetailedResponseToFlat);
 }
 
 export { fetchTransaction };

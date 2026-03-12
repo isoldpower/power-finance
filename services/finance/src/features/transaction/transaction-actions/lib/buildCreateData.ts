@@ -42,12 +42,12 @@ const buildCreateData = async (
 
 	return {
 		description: data.description,
-		from: data.from && resolvedValues[0] ? {
-			wallet: data.from,
+		sender: data.from && resolvedValues[0] ? {
+			wallet_id: data.from,
 			amount: resolvedValues[0]
 		} : undefined,
-		to: data.to && resolvedValues[1] ? {
-			wallet: data.to,
+		receiver: data.to && resolvedValues[1] ? {
+			wallet_id: data.to,
 			amount: resolvedValues[1]
 		} : undefined,
 		type: data.type as TransactionValuableFields['type']

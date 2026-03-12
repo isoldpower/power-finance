@@ -7,51 +7,64 @@ interface TransactionSide {
 	amount: number;
 }
 
-interface TransferTransactionData {
-	from: TransactionSide;
-	to: TransactionSide;
+interface TransactionPreviewSide {
+	wallet_id: string;
+	amount: number;
+}
+
+interface TransferTransactionData<T> {
+	sender: T;
+	receiver: T;
 	description?: string;
 }
 
-interface ExpenseTransactionData {
-	from: TransactionSide;
+interface ExpenseTransactionData<T> {
+	sender: T;
 	description?: string;
 }
 
-interface IncomeTransactionData {
-	to: TransactionSide;
+interface IncomeTransactionData<T> {
+	receiver: T;
 	description?: string;
 }
 
-interface AdjustTransactionData {
-	to: TransactionSide;
+interface AdjustTransactionData<T> {
+	receiver: T;
 	description?: string;
 }
 
-type Transaction = {
+type TransactionDto = {
 	id: string;
 	createdAt: string;
-	from?: TransactionSide;
-	to?: TransactionSide;
+	sender?: TransactionSide;
+	receiver?: TransactionSide;
 } & (
-	(TransferTransactionData & { type: 'transfer' }) |
-	(ExpenseTransactionData & { type: 'expense' }) |
-	(IncomeTransactionData & { type: 'income' }) |
-	(AdjustTransactionData & { type: 'adjust' })
+	(TransferTransactionData<TransactionSide> & { type: 'transfer' }) |
+	(ExpenseTransactionData<TransactionSide> & { type: 'expense' }) |
+	(IncomeTransactionData<TransactionSide> & { type: 'income' }) |
+	(AdjustTransactionData<TransactionSide> & { type: 'adjust' })
 )
 
-type PossibleTransactionData =
-	(TransferTransactionData & { type: 'transfer' }) |
-	(ExpenseTransactionData & { type: 'expense' }) |
-	(IncomeTransactionData & { type: 'income' }) |
-	(AdjustTransactionData & { type: 'adjust' });
+type TransactionPreviewDto = {
+	id: string;
+	createdAt: string;
+	sender?: TransactionPreviewSide;
+	receiver?: TransactionPreviewSide;
+} & (
+	(TransferTransactionData<TransactionPreviewSide> & { type: 'transfer' }) |
+	(ExpenseTransactionData<TransactionPreviewSide> & { type: 'expense' }) |
+	(IncomeTransactionData<TransactionPreviewSide> & { type: 'income' }) |
+	(AdjustTransactionData<TransactionPreviewSide> & { type: 'adjust' })
+)
 
 export type {
-	Transaction,
+	TransactionPreviewSide,
 	TransactionSide,
+	TransactionDto,
+	TransactionPreviewDto,
+	
 	TransactionType,
 	TransferTransactionData,
-	PossibleTransactionData,
 	ExpenseTransactionData,
 	IncomeTransactionData,
 	AdjustTransactionData

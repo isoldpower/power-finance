@@ -18,8 +18,8 @@ const flatToWalletDetailed = (
 		...data,
 		id,
 		meta: {
-			createdAt: createdAt ?? '',
-			updatedAt: updatedAt ?? '',
+			created_at: createdAt ?? '',
+			updated_at: updatedAt ?? '',
 			id
 		}
 	};
