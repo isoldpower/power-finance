@@ -36,7 +36,7 @@ const useTransactionMethods = (
 		refetchOnWindowFocus: false,
 		queryFn: () => fetchTransactionApi({
 			payload: { id },
-			handler: apiContext.transactionsClients.rest
+			handler: apiContext.transactionServers.rest
 		})
 	});
 
@@ -76,7 +76,7 @@ const useTransactionMethods = (
 	const deleteMutation = useMutation({
 		mutationFn: (id: DeleteTransactionRequest['id']) => deleteTransactionApi({
 			id,
-			handler: apiContext.transactionsClients.rest
+			handler: apiContext.transactionServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.delete, id],
 		onSettled: () => { filterList(singleQuery.data); }

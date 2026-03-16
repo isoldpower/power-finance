@@ -24,7 +24,7 @@ const useTransactionsList = (
 	const query = useQuery<ListAllTransactionsResponse>({
 		queryKey: [CACHE_KEYS.list],
 		queryFn: () => listAllTransactions({
-			handler: apiContext.transactionsClients.rest
+			handler: apiContext.transactionServers.rest
 		}),
 		...options ?? {}
 	});

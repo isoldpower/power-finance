@@ -9,7 +9,7 @@ import {
 	replaceWallet as replaceWalletApi
 } from "@feature/wallet";
 import { useApiContext } from "@app/api";
-import { CACHE_KEYS } from "./config.ts";
+import { CACHE_KEYS } from "./cache-config.ts";
 import type {
 	FetchWalletResponse, WalletValuableFields,
 	DeleteWalletRequest, DeleteWalletResponse,
@@ -44,7 +44,7 @@ const useWalletMethods = (
 		refetchOnWindowFocus: false,
 		queryFn: () => fetchWalletApi({
 			payload: { id },
-			handler: apiContext.walletsClients.rest
+			handler: apiContext.walletServers.rest
 		})
 	});
 
@@ -84,7 +84,7 @@ const useWalletMethods = (
 	const updateMutation = useMutation({
 		mutationFn: (data: UpdateWalletRequest['payload']) => updateWalletApi({
 			payload: data,
-			handler: apiContext.walletsClients.rest
+			handler: apiContext.walletServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.update, id],
 		onSettled: () => singleQuery.refetch()
@@ -94,16 +94,18 @@ const useWalletMethods = (
 	const deleteMutation = useMutation({
 		mutationFn: (id: DeleteWalletRequest['id']) => deleteWalletApi({
 			id,
-			handler: apiContext.walletsClients.rest
+			handler: apiContext.walletServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.delete, id],
-		onSettled: () => { filterList(singleQuery.data); }
+		onSettled: () => { 
+			filterList(singleQuery.data);
+		}
 	});
 
 	const replaceMutation = useMutation({
 		mutationFn: (data: ReplaceWalletRequest['payload']) => replaceWalletApi({
 			payload: data,
-			handler: apiContext.walletsClients.rest
+			handler: apiContext.walletServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.replace, id],
 		onSettled: () => singleQuery.refetch()

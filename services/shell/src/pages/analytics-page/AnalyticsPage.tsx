@@ -1,5 +1,6 @@
-import {AnalyticsMFModule} from "@widget/remotes";
-import {ErrorBoundary} from "react-error-boundary";
+import { AnalyticsMFModule } from "@widget/remotes";
+import { ErrorBoundary } from "react-error-boundary";
+
 
 function AnalyticsPage() {
 	return (

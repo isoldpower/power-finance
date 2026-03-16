@@ -8,7 +8,7 @@ type BalanceSummaryProps = object;
 const BalanceSummary: FC<BalanceSummaryProps> = () => {
 	const { wallets, status } = useWalletsList();
 	const totalBalance = useTotalBalance(wallets);
-
+	
 	return (
 		<div className="text-card-foreground">
 			<h2 className="text-lg font-medium opacity-90">Total Balance</h2>

@@ -7,7 +7,7 @@ import {
 	createWallet as createWalletApi,
 	listAllWallets as listAllWalletsApi
 } from "@feature/wallet";
-import { CACHE_KEYS } from "./config.ts";
+import { CACHE_KEYS } from "./cache-config.ts";
 import type {
 	CreateWalletRequest,
 	CreateWalletResponse,
@@ -33,14 +33,14 @@ const useWalletsListMethods = (): UseWalletsReturn => {
 		refetchOnWindowFocus: false,
 		refetchOnReconnect: false,
 		queryFn: () => listAllWalletsApi({
-			handler: apiContext.walletsClients.rest
+			handler: apiContext.walletServers.rest
 		})
 	});
 
 	const createMutation = useMutation({
 		mutationFn: (data: CreateWalletRequest['payload']) => createWalletApi({
 			payload: data,
-			handler: apiContext.walletsClients.rest
+			handler: apiContext.walletServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.create],
 		onSettled: () => query.refetch()

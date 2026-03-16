@@ -33,14 +33,14 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 		refetchOnWindowFocus: false,
 		refetchOnReconnect: false,
 		queryFn: () => listAllTransactionsApi({
-			handler: apiContext.transactionsClients.rest
+			handler: apiContext.transactionServers.rest
 		})
 	});
 
 	const createMutation = useMutation({
 		mutationFn: (data: CreateTransactionRequest['payload']) => createTransactionApi({
 			payload: data,
-			handler: apiContext.transactionsClients.rest
+			handler: apiContext.transactionServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.create],
 		onSettled: () => {

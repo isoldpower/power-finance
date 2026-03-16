@@ -23,7 +23,7 @@ const useTransaction = (
 		queryKey: [CACHE_KEYS.fetch, id],
 		queryFn: () => fetchTransaction({
 			payload: { id },
-			handler: apiContext.transactionsClients.rest
+			handler: apiContext.transactionServers.rest
 		}),
 		...options ?? {}
 	});

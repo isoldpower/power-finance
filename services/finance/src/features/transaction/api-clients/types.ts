@@ -1,6 +1,7 @@
 import type { TransactionType } from "@entity/transaction";
 import type { Wallet } from "@entity/wallet";
 
+
 interface TransactionSide {
 	wallet_id: string;
 	amount: number;

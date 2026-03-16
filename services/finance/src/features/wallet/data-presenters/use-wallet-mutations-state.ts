@@ -1,7 +1,7 @@
 import { useMutationState } from "@tanstack/react-query";
 import { useMemo } from "react";
 
-import { CACHE_KEYS } from "./config.ts";
+import { CACHE_KEYS } from "./cache-config.ts";
 
 
 interface UseWalletMutationsStateReturn {

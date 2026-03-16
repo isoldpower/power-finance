@@ -1,20 +1,25 @@
 import { createContext, useMemo } from 'react';
 
 import { ApiQueryReactions } from "./query-reactions";
+import { useWalletsApi } from "./servers/useWalletsApi.ts";
+import { useTransactionsApi } from "./servers/useTransactionsApi.ts";
+import { useWebhooksApi } from "./servers/useWebhooksApi.ts";
 import type { FC } from 'react';
 import type { IWalletsRESTApiClient } from "@feature/wallet";
 import type { ITransactionsRESTApiClient } from "@feature/transaction";
-import { useWalletsApi } from "./useWalletsApi.ts";
-import { useTransactionsApi } from "./useTransactionsApi.ts";
+import type { IWebhookRESTApiClient } from "@feature/webhook";
 
 
 interface ApiContextType {
-	walletsClients: {
+	walletServers: {
 		readonly rest: IWalletsRESTApiClient
 	},
-	transactionsClients: {
+	transactionServers: {
 		readonly rest: ITransactionsRESTApiClient
 	},
+	webhookServers: {
+		readonly rest: IWebhookRESTApiClient
+	}
 }
 
 interface ApiProviderProps {
@@ -28,13 +33,15 @@ const ApiProvider: FC<ApiProviderProps> = ({
 	children, 
 	envVariables
 }) => {
-	const walletsClients = useWalletsApi(envVariables.CLIENT_API_BASE_URL);
-	const transactionsClients = useTransactionsApi(envVariables.CLIENT_API_BASE_URL);
+	const walletServers = useWalletsApi(envVariables.CLIENT_API_BASE_URL);
+	const transactionServers = useTransactionsApi(envVariables.CLIENT_API_BASE_URL);
+	const webhookServers = useWebhooksApi(envVariables.CLIENT_API_BASE_URL);
 	
 	const contextValue = useMemo<ApiContextType>(() => ({
-		walletsClients,
-		transactionsClients
-	}), [transactionsClients, walletsClients]);
+		walletServers,
+		transactionServers,
+		webhookServers
+	}), [transactionServers, walletServers, webhookServers]);
 
 	return (
 		<ApiContext value={contextValue}>

@@ -8,6 +8,7 @@ interface FinanceRoutes {
 	dashboard: string
 	wallets: string
 	transactions: string
+	settings: string
 }
 
 const financeRoutes: FinanceRoutes = {
@@ -15,6 +16,7 @@ const financeRoutes: FinanceRoutes = {
 	dashboard: `${FINANCE_ROOT}/dashboard`,
 	wallets: `${FINANCE_ROOT}/dashboard/wallets`,
 	transactions: `${FINANCE_ROOT}/dashboard/transactions`,
+	settings: `${FINANCE_ROOT}/settings`
 }
 
 const getFinanceRouteInternal = (route: keyof FinanceRoutes): string => {

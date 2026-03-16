@@ -4,7 +4,7 @@ import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
 import { fetchWallet } from "@feature/wallet";
 import { useApiContext } from "@app/api";
-import { CACHE_KEYS } from "./config.ts";
+import { CACHE_KEYS } from "./cache-config.ts";
 import type { Wallet } from "@entity/wallet";
 import type { FetchWalletResponse } from "@feature/wallet";
 
@@ -23,7 +23,7 @@ const useWallet = (
 		queryKey: [CACHE_KEYS.fetch, id],
 		queryFn: () => fetchWallet({
 			payload: { id },
-			handler: apiContext.walletsClients.rest
+			handler: apiContext.walletServers.rest
 		}),
 		...options ?? {}
 	});
