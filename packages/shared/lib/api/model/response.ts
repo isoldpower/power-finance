@@ -6,8 +6,8 @@ interface ListMeta {
   total: number
 }
 
-type DeleteMeta = SpecificResource<{
-  deleted: boolean
+type DeleteMeta = SpecificResource<{ 
+	success: boolean
 }>;
 
 type GetResponse<D = unknown> = SpecificResource<D>;
@@ -24,8 +24,8 @@ type PutResponse<D = unknown> = SpecificResource<D>;
 type PatchResponse<D = unknown> = SpecificResource<D>;
 
 interface DeleteResponse {
-  message: string
-  meta: DeleteMeta
+	message: string
+	meta: DeleteMeta
 }
 
 export type { GetResponse, ListResponse, PostResponse, PutResponse, DeleteResponse, PatchResponse };

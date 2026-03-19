@@ -1,11 +1,10 @@
-import { cn, Icons } from "@internal/ui-library";
+import {Button, cn, Icons} from "@internal/ui-library";
 import { useMemo, type FC } from "react";
 
 import {
 	useWallet,
 	useWalletMutationsState,
 	useCardBalance,
-	DeleteWallet,
 	WalletCardFx,
 	WalletCardBoundaries
 } from "@feature/wallet";
@@ -16,8 +15,9 @@ import {
 	CardPending,
 	CardError
 } from "@entity/wallet";
-import { EditWalletModal } from "./EditWalletModal.tsx";
+import { EditWalletModalProcess } from "@process/wallet";
 import type { Wallet } from "@entity/wallet";
+import { DeleteWalletModalProcess } from "@process/wallet/edit-wallet-modal/DeleteWalletModalProcess.tsx";
 
 
 interface EditableWalletCardProps {
@@ -41,12 +41,16 @@ const EditableWalletCard: FC<EditableWalletCardProps> = ({
 					</p>
 				</div>
 				<div className="flex space-x-1 [&>*]:z-20">
-					<EditWalletModal wallet={passedWallet}>
-						<Icons.Edit size={15} />
-					</EditWalletModal>
-					<DeleteWallet wallet={passedWallet} variant="ghost" size="sm" className="text-red-800 dark:text-red-500">
-						<Icons.Trash size={15} />
-					</DeleteWallet>
+					<EditWalletModalProcess wallet={passedWallet}>
+						<Button type="button" variant="ghost" size="sm" color="neutral">
+							<Icons.Edit size={15} />
+						</Button>
+					</EditWalletModalProcess>
+					<DeleteWalletModalProcess wallet={passedWallet}>
+						<Button type="button" variant="ghost" size="sm" className="text-red-800 dark:text-red-500">
+							<Icons.Trash size={15} />
+						</Button>
+					</DeleteWalletModalProcess>
 				</div>
 			</div>
 			<div className="mt-2">

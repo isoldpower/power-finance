@@ -4,8 +4,8 @@ import { useState } from "react";
 import {PopoverTrigger, PopoverContent, Popover, Button} from "@internal/ui-library";
 
 import { HeaderBox, RelativeBreadcrumbs } from "@shared/components";
-import { PreferredCurrencySelection, GlobalLocaleSelection } from "@widget/preferences";
-import { PreferencesButton, PreferencesModalBox } from "@entity/preferences";
+import { PreferredCurrencySelection, GlobalLocaleSelection } from "@widget/settings";
+import { PreferencesButton, PreferencesModalBox } from "@entity/settings";
 import { Link } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
 

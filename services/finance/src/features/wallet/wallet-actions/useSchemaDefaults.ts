@@ -1,19 +1,19 @@
 import { useSettingsContext } from "@internal/shared";
 import { useMemo } from "react";
 
-import type { WalletSchema } from "@feature/wallet";
+import type { DeleteWalletSchema, WalletSchema } from "@feature/wallet";
 import type { Wallet } from "@entity/wallet";
 
 
 const useNewDefaultValues = (): WalletSchema => {
 	const { mainCurrency } = useSettingsContext();
 
-	return {
+	return useMemo(() => ({
 		name: '',
 		balance: 0,
 		currency: mainCurrency,
 		type: 'debit'
-	};
+	}), [mainCurrency]);
 }
 
 const useEditDefaultValues = (wallet: Wallet): WalletSchema => {
@@ -25,4 +25,10 @@ const useEditDefaultValues = (wallet: Wallet): WalletSchema => {
 	}), [wallet])
 };
 
-export { useNewDefaultValues, useEditDefaultValues };
+const useDeleteDefaultValues = (wallet: Wallet): DeleteWalletSchema => {
+	return useMemo(() => ({
+		id: wallet.id
+	}), [wallet]);
+}
+
+export { useNewDefaultValues, useEditDefaultValues, useDeleteDefaultValues };

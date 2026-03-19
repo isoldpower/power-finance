@@ -8,7 +8,12 @@ const walletSchema = z.object({
 	type: z.enum([WALLET_TYPES[0], ...WALLET_TYPES.slice(1)])
 });
 
-type WalletSchema = z.infer<typeof walletSchema>;
+const deleteWalletSchema = z.object({
+	id: z.string().min(1, "Couldn't identify wallet id"),
+});
 
-export { walletSchema };
-export type { WalletSchema };
+type WalletSchema = z.infer<typeof walletSchema>;
+type DeleteWalletSchema = z.infer<typeof deleteWalletSchema>;
+
+export { walletSchema, deleteWalletSchema };
+export type { WalletSchema, DeleteWalletSchema };

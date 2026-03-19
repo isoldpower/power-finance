@@ -1,3 +1,4 @@
+import { walletDeletedToFlat } from "../mutators/delete-to-flat.ts";
 import type { IWalletsRESTApiClient } from "../rest-client/types.ts";
 
 interface DeleteWalletRequest {
@@ -7,12 +8,15 @@ interface DeleteWalletRequest {
 
 interface DeleteWalletResponse {
 	message: string
+	success: boolean
+	id: string
 }
 
 async function deleteWallet(
 	request: DeleteWalletRequest
 ): Promise<DeleteWalletResponse> {
-	return request.handler.delete({ id: request.id });
+	return request.handler.delete({ id: request.id })
+		.then(walletDeletedToFlat);
 }
 
 export { deleteWallet };

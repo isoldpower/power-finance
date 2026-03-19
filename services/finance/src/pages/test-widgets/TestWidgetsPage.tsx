@@ -1,5 +1,5 @@
 import { SelectWalletToQuery, useWallet } from "@feature/wallet";
-import { EditableWalletCard } from "@widget/wallet";
+import { WalletCardWithControls } from "@process/wallet";
 
 
 export default function TestWidgetsPage() {
@@ -9,13 +9,13 @@ export default function TestWidgetsPage() {
         <div className="p-6 flex flex-col gap-4">
             <div className="flex flex-col gap-4 w-lg">
                 <h3>Wallet {fetchStatus}</h3>
-                {wallet && <EditableWalletCard wallet={wallet} />}
+                {wallet && <WalletCardWithControls wallet={wallet} />}
             </div>
             <div className="flex flex-col gap-4 w-lg">
                 <h3>Wallet {fetchStatus}</h3>
                 {wallet && (
                     <SelectWalletToQuery walletId={wallet.id}>
-                        <EditableWalletCard wallet={wallet} />
+                        <WalletCardWithControls wallet={wallet} />
                     </SelectWalletToQuery>
                 )}
             </div>

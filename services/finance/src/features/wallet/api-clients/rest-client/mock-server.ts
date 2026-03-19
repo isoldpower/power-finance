@@ -120,7 +120,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 					message: `Successfully deleted resource at ${request.id}`,
 					meta: {
 						id: request.id,
-						deleted: true
+						success: true
 					}
 				};
 			});

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import type {
 	MutationReaction,
+	MutationCompareArgument,
 	MutationSubscribeCallback,
 	QueryReaction,
 	SubscribeCallback
@@ -59,4 +60,5 @@ const useQueryReactions = (
 	}, [queryCacheCallback, mutationCacheCallback, queryClient]);
 }
 
+export type { MutationReaction, MutationCompareArgument };
 export { useQueryReactions };

@@ -1,7 +1,8 @@
-import { useState} from 'react';
+import { useState } from 'react';
 import type { FC } from 'react';
 
-import { EditableWalletCard, NewWalletForm, FullWalletsList } from "@widget/wallet";
+import { WalletCardWithControls } from "@process/wallet";
+import { NewWalletForm, FullWalletsList } from "@widget/wallet";
 import { OpenWalletCreation } from "@feature/wallet";
 import type { Wallet } from "@entity/wallet";
 
@@ -21,7 +22,7 @@ const WalletsPage: FC = () => {
 				</OpenWalletCreation>
 			</div>
 			<FullWalletsList onCreate={() => { setIsAddModalOpen(true); }}>
-				<EditableWalletCard wallet={{} as Wallet} />
+				<WalletCardWithControls wallet={{} as Wallet} />
 			</FullWalletsList>
 		</div>
 	);

@@ -7,7 +7,7 @@ import { useWebhooksApi } from "./servers/useWebhooksApi.ts";
 import type { FC } from 'react';
 import type { IWalletsRESTApiClient } from "@feature/wallet";
 import type { ITransactionsRESTApiClient } from "@feature/transaction";
-import type { IWebhookRESTApiClient } from "@feature/webhook";
+import type { IWebhookRESTApiClient } from "@feature/settings";
 
 
 interface ApiContextType {

@@ -4,4 +4,4 @@ export const CACHE_KEYS = {
 	delete: 'deleteTransaction',
 	replace: 'replaceTransaction',
 	create: 'createTransaction',
-};
+} as const;

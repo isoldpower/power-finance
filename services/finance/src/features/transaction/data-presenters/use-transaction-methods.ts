@@ -40,6 +40,7 @@ const useTransactionMethods = (
 		})
 	});
 
+	// USED FOR PATCH/PUT REQUESTS AS OPTIMISTIC UPDATES.
 	// const synchronizeList = useCallback((
 	// 	data: FetchTransactionResponse | undefined
 	// ) => {

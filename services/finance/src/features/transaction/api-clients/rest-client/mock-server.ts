@@ -109,7 +109,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 					message: `Successfully deleted resource at ${request.id}`,
 					meta: {
 						id: request.id,
-						deleted: true
+						success: true
 					}
 				};
 			});

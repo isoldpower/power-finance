@@ -26,9 +26,9 @@ interface UseWalletReturn {
 		replaceMutation: UseMutationResult<ReplaceWalletResponse, Error, ReplaceWalletRequest['payload']>;
 		query: UseQueryResult<FetchWalletResponse>;
 	}
-	updateWallet: (data: WalletValuableFields) => void;
-	replaceWallet: (data: WalletValuableFields) => void;
-	deleteWallet: () => void;
+	updateWallet: (data: WalletValuableFields) => Promise<UpdateWalletResponse>;
+	replaceWallet: (data: WalletValuableFields) => Promise<ReplaceWalletResponse>;
+	deleteWallet: () => Promise<DeleteWalletResponse>;
 	fetchWallet: () => void;
 }
 
@@ -119,11 +119,11 @@ const useWalletMethods = (
 	const updateWallet = useCallback((
 		data: WalletValuableFields
 	) => {
-		updateMutation.mutate({ id, data });
+		return updateMutation.mutateAsync({ id, data });
 	}, [id, updateMutation]);
 
 	const deleteWallet = useCallback(() => {
-		deleteMutation.mutate(id);
+		return deleteMutation.mutateAsync(id);
 	}, [deleteMutation, id]);
 
 	const replaceWallet = useCallback((
@@ -131,7 +131,7 @@ const useWalletMethods = (
 	) => {
 		const indexedData = Object.assign(data, { id });
 
-		replaceMutation.mutate({ id, data: indexedData });
+		return replaceMutation.mutateAsync({ id, data: indexedData });
 	}, [id, replaceMutation]);
 
 	const meta = useMemo(() => ({
