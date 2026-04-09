@@ -1,132 +1,175 @@
-import type { TransactionDetailed, TransactionPreview } from "../types.ts";
+import type { 
+	TransactionDetailed as ApiTransactionDetailed,
+	TransactionPreview as ApiTransactionPreview,
+	TransactionSide as ApiTransactionSide,
+	TransactionSideDetailed as ApiTransactionSideDetailed,
+} from "../types.ts";
 import type {
 	AdjustTransactionData,
 	ExpenseTransactionData,
 	IncomeTransactionData,
 	TransactionDto,
-	TransactionPreviewDto, 
-	TransactionPreviewSide,
-	TransactionSide,
+	TransactionPreviewDto,
 	TransferTransactionData
 } from "@entity/transaction";
 
 
 const buildPreviewTransferTransaction = (
-	response: TransactionPreview
+	response: ApiTransactionPreview
 ): TransactionPreviewDto => {
-	const data = response as TransferTransactionData<TransactionPreviewSide>;
+	const data = response as TransferTransactionData<ApiTransactionSide>;
 
 	return {
 		id: response.id,
 		description: data.description,
-		sender: data.sender,
-		receiver: data.receiver,
+		sender: {
+			walletId: data.sender.wallet_id,
+			currencyCode: data.sender.currency_code,
+			amount: data.sender.amount,
+		},
+		receiver: {
+			walletId: data.receiver.wallet_id,
+			currencyCode: data.receiver.currency_code,
+			amount: data.receiver.amount,
+		},
 		type: 'transfer',
 		createdAt: response.meta.created_at
 	} satisfies TransactionPreviewDto;
 }
 
 const buildPreviewExpenseTransaction = (
-	response: TransactionPreview
+	response: ApiTransactionPreview
 ): TransactionPreviewDto => {
-	const data = response as ExpenseTransactionData<TransactionPreviewSide>;
+	const data = response as ExpenseTransactionData<ApiTransactionSide>;
 
 	return {
 		id: response.id,
 		type: 'expense',
 		description: data.description,
-		sender: data.sender,
+		sender: {
+			walletId: data.sender.wallet_id,
+			currencyCode: data.sender.currency_code,
+			amount: data.sender.amount,
+		},
 		createdAt: response.meta.created_at
 	} satisfies TransactionPreviewDto;
 }
 
 const buildPreviewIncomeTransaction = (
-	response: TransactionPreview
+	response: ApiTransactionPreview
 ): TransactionPreviewDto => {
-	const data = response as IncomeTransactionData<TransactionPreviewSide>;
+	const data = response as IncomeTransactionData<ApiTransactionSide>;
 
 	return {
 		id: response.id,
 		type: 'income',
-		receiver: data.receiver,
+		receiver: {
+			walletId: data.receiver.wallet_id,
+			currencyCode: data.receiver.currency_code,
+			amount: data.receiver.amount,
+		},
 		description: data.description,
 		createdAt: response.meta.created_at
 	} satisfies TransactionPreviewDto;
 }
 
 const buildPreviewAdjustTransaction = (
-	response: TransactionPreview
+	response: ApiTransactionPreview
 ): TransactionPreviewDto => {
-	const data = response as AdjustTransactionData<TransactionPreviewSide>;
+	const data = response as AdjustTransactionData<ApiTransactionSide>;
 
 	return {
 		id: response.id,
 		type: 'adjust',
-		receiver: data.receiver,
+		receiver: {
+			walletId: data.receiver.wallet_id,
+			currencyCode: data.receiver.currency_code,
+			amount: data.receiver.amount,
+		},
 		description: data.description,
 		createdAt: response.meta.created_at,
 	} satisfies TransactionPreviewDto;
 }
 
 const buildTransferTransaction = (
-	response: TransactionDetailed
+	response: ApiTransactionDetailed
 ): TransactionDto => {
-	const data = response as TransferTransactionData<TransactionSide>;
+	const data = response as TransferTransactionData<ApiTransactionSideDetailed>;
 
 	return {
 		id: response.id,
 		description: data.description,
-		sender: data.sender,
-		receiver: data.receiver,
+		sender: {
+			wallet: data.sender.wallet,
+			currencyCode: data.sender.currency_code,
+			amount: data.sender.amount,
+		},
+		receiver: {
+			wallet: data.receiver.wallet,
+			currencyCode: data.receiver.currency_code,
+			amount: data.sender.amount,
+		},
 		type: 'transfer',
 		createdAt: response.meta.created_at
 	} satisfies TransactionDto;
 }
 
 const buildExpenseTransaction = (
-	response: TransactionDetailed
+	response: ApiTransactionDetailed
 ): TransactionDto => {
-	const data = response as ExpenseTransactionData<TransactionSide>;
+	const data = response as ExpenseTransactionData<ApiTransactionSideDetailed>;
 
 	return {
 		id: response.id,
 		type: 'expense',
 		description: data.description,
-		sender: data.sender,
+		sender: {
+			wallet: data.sender.wallet,
+			currencyCode: data.sender.currency_code,
+			amount: data.sender.amount,
+		},
 		createdAt: response.meta.created_at
 	} satisfies TransactionDto;
 }
 
 const buildIncomeTransaction = (
-	response: TransactionDetailed
+	response: ApiTransactionDetailed
 ): TransactionDto => {
-	const data = response as IncomeTransactionData<TransactionSide>;
+	const data = response as IncomeTransactionData<ApiTransactionSideDetailed>;
 
 	return {
 		id: response.id,
 		type: 'income',
-		receiver: data.receiver,
+		receiver: {
+			wallet: data.receiver.wallet,
+			currencyCode: data.receiver.currency_code,
+			amount: data.receiver.amount,
+		},
 		description: data.description,
 		createdAt: response.meta.created_at
 	} satisfies TransactionDto;
 }
 
 const buildAdjustTransaction = (
-	response: TransactionDetailed
+	response: ApiTransactionDetailed
 ): TransactionDto => {
-	const data = response as AdjustTransactionData<TransactionSide>;
+	const data = response as AdjustTransactionData<ApiTransactionSideDetailed>;
 
 	return {
 		id: response.id,
 		type: 'adjust',
-		receiver: data.receiver,
+		receiver: {
+			wallet: data.receiver.wallet,
+			currencyCode: data.receiver.currency_code,
+			amount: data.receiver.amount,
+		},
 		description: data.description,
 		createdAt: response.meta.created_at,
 	} satisfies TransactionDto;
 }
 
 const transactionPreviewResponseToFlat = (
-	response: TransactionPreview
+	response: ApiTransactionPreview
 ): TransactionPreviewDto => {
 	const transactionType = response.type;
 	
@@ -145,7 +188,7 @@ const transactionPreviewResponseToFlat = (
 }
 
 const transactionDetailedResponseToFlat = (
-	response: TransactionDetailed
+	response: ApiTransactionDetailed
 ): TransactionDto => {
 	const transactionType = response.type;
 	switch (transactionType) {

@@ -4,11 +4,13 @@ import type { Wallet } from "@entity/wallet";
 
 interface TransactionSide {
 	wallet_id: string;
+	currency_code: string;
 	amount: number;
 }
 
 interface TransactionSideDetailed {
 	wallet: Wallet;
+	currency_code: string;
 	amount: number;
 }
 

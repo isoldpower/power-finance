@@ -4,11 +4,13 @@ type TransactionType = 'expense' | 'income' | 'transfer' | 'adjust';
 
 interface TransactionSide {
 	wallet: Wallet;
+	currencyCode: string;
 	amount: number;
 }
 
 interface TransactionPreviewSide {
-	wallet_id: string;
+	walletId: string;
+	currencyCode: string;
 	amount: number;
 }
 

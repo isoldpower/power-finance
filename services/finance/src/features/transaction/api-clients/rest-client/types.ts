@@ -29,10 +29,12 @@ type TransactionDeleteResponse = DeleteResponse;
 type StorageTransaction = Omit<TransactionDto, 'sender' | 'receiver'> & {
 	sender: {
 		wallet: string;
+		currency_code: string;
 		amount: number;
 	} | undefined;
 	receiver: {
 		wallet: string;
+		currency_code: string;
 		amount: number;
 	} | undefined;
 }
