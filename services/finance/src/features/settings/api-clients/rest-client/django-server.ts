@@ -66,7 +66,7 @@ class WebhookDjangoRESTApiClient implements IWebhookRESTApiClient {
 	): Promise<WebhookRotateResponse> {
 		const postfix = this.resolvePostfix(request.params);
 		
-		return this.axiosInstance.post<WebhookRotateResponse>(`/${request.data.id}/rotate/${postfix}`)
+		return this.axiosInstance.post<WebhookRotateResponse>(`/${request.data.id}/secret/${postfix}`)
 			.then((response) => response.data);
 	}
 	

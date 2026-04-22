@@ -11,7 +11,7 @@ import { CACHE_KEYS } from "./config.ts";
 import type {
 	CreateTransactionRequest,
 	CreateTransactionResponse,
-	TransactionValuableFields,
+	TransactionMinimalPayload,
 	ListAllTransactionsResponse
 } from "@feature/transaction";
 
@@ -20,7 +20,7 @@ interface UseTransactionsReturn {
 		query: UseQueryResult<ListAllTransactionsResponse>;
 		createMutation: UseMutationResult<CreateTransactionResponse, Error, CreateTransactionRequest['payload']>;
 	}
-	createTransaction: (data: TransactionValuableFields) => void;
+	createTransaction: (data: TransactionMinimalPayload) => void;
 	fetchAllTransactions: () => void;
 }
 
@@ -51,7 +51,7 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 	});
 
 	const createTransaction = useCallback((
-		data: TransactionValuableFields
+		data: TransactionMinimalPayload
 	) => {
 		createMutation.mutate({ data });
 	}, [createMutation]);

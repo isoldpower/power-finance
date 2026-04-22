@@ -4,11 +4,11 @@ import type {
 	IDeleteHandler, DeleteRequest, DeleteResponse,
 	IGetHandler, GetRequest, GetResponse, SpecificResource, IPatchHandler, PatchRequest, PatchResponse,
 } from "@internal/shared";
-import { WebhookDetailed, WebhookPreview, WebhookValuableFields } from "../types.ts";
+import type { WebhookDetailed, WebhookPreview, WebhookValuableFields, WebhookWithSecret } from "../types.ts";
 
 
-interface IWebhookRESTApiClient extends 
-	IPostHandler<WebhookValuableFields, WebhookDetailed>,
+interface IWebhookRESTApiClient extends
+	IPostHandler<WebhookValuableFields, WebhookWithSecret>,
 	IListHandler<WebhookPreview>,
 	IGetHandler<object, WebhookDetailed>,
 	IPatchHandler<Partial<WebhookValuableFields>, WebhookDetailed>,
@@ -16,11 +16,11 @@ interface IWebhookRESTApiClient extends
 {
 	rotateSecret: (
 		request: PostRequest<SpecificResource<unknown>, object>
-	) => Promise<PostResponse<WebhookDetailed>>
+	) => Promise<PostResponse<WebhookWithSecret>>
 }
 
 type WebhookPostRequest = PostRequest<WebhookValuableFields, object>;
-type WebhookPostResponse = PostResponse<WebhookDetailed>;
+type WebhookPostResponse = PostResponse<WebhookWithSecret>;
 
 type WebhookListRequest = ListRequest;
 type WebhookListResponse = ListResponse<WebhookPreview>;
@@ -32,7 +32,7 @@ type WebhookGetRequest = GetRequest<object>;
 type WebhookGetResponse = GetResponse<WebhookDetailed>;
 
 type WebhookRotateRequest = PostRequest<SpecificResource<unknown>, object>;
-type WebhookRotateResponse = PostResponse<WebhookDetailed>;
+type WebhookRotateResponse = PostResponse<WebhookWithSecret>;
 
 type WebhookUpdateRequest = PatchRequest<Partial<WebhookValuableFields>, object>;
 type WebhookUpdateResponse = PatchResponse<WebhookDetailed>;

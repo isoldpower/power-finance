@@ -1,14 +1,10 @@
-import { DeleteResponse } from "@internal/shared";
-
 interface FlatDeleteResponse {
 	message: string
-	id: string
-	success: boolean
+	id: string | null
 }
 
-const deleteToFlat = (response: DeleteResponse): FlatDeleteResponse => ({
+const deleteToFlat = (response: { message: string; meta: { id: string | null } }): FlatDeleteResponse => ({
 	message: response.message,
-	success: response.meta.success,
 	id: response.meta.id
 });
 

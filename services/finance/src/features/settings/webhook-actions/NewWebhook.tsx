@@ -27,7 +27,6 @@ function NewWebhook({
 		const webhookData = {
 			url,
 			title,
-			subscribed: []
 		} satisfies WebhookValuableFields;
 
 		if (onBeforeCreate) onBeforeCreate(webhookData);

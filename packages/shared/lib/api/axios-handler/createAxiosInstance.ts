@@ -18,13 +18,18 @@ const createAxiosInstance = ({
 
 	axiosInstance.interceptors.request.use(async (config) => {
 		const token = await getToken();
-		
+
 		if (token) {
 			config.headers.Authorization = `Bearer ${token}`;
 		} else {
 			delete config.headers.Authorization;
 		}
-		
+
+		const method = config.method?.toUpperCase();
+		if (method && !['GET', 'HEAD', 'OPTIONS'].includes(method)) {
+			config.headers['Idempotency-Key'] = crypto.randomUUID();
+		}
+
 		return config;
 	});
 	

@@ -1,6 +1,6 @@
 import type { WebhookEndpoint } from "@entity/settings/webhook";
 import type { IWebhookRESTApiClient, WebhookPostRequest } from "../rest-client/types.ts";
-import { webhookDetailedResponseToFlat } from "../mutators/api-to-flat.ts";
+import { webhookWithSecretResponseToFlat } from "../mutators/api-to-flat.ts";
 
 
 interface CreateWebhookRequest {
@@ -14,7 +14,7 @@ async function createWebhookEndpoint(
 	request: CreateWebhookRequest
 ): Promise<CreateWebhookResponse> {
 	return request.handler.post(request.payload)
-		.then(webhookDetailedResponseToFlat)
+		.then(webhookWithSecretResponseToFlat)
 }
 
 export { createWebhookEndpoint };

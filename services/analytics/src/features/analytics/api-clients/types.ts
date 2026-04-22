@@ -6,7 +6,6 @@ interface CategoryAnalyticsPiece {
 }
 
 interface MoneyFlowNode {
-	id: string;
 	name: string;
 	level: number;
 }

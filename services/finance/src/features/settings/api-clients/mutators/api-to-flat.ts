@@ -1,11 +1,13 @@
-import { WebhookEndpoint } from "@entity/settings/webhook";
-import { WebhookPreview, WebhookDetailed } from "../types.ts";
+import type { WebhookEndpoint } from "@entity/settings/webhook";
+import type { WebhookPreview, WebhookDetailed, WebhookWithSecret } from "../types.ts";
 
 const webhookPreviewResponseToFlat = (
 	response: WebhookPreview
 ): WebhookEndpoint => {
-	return { 
-		...response
+	return {
+		id: response.id,
+		url: response.url,
+		title: response.title,
 	} satisfies WebhookEndpoint;
 }
 
@@ -16,10 +18,22 @@ const webhookDetailedResponseToFlat = (
 
 	return {
 		...data,
-		...meta,
 		createdAt: meta.created_at,
 		updatedAt: meta.updated_at
 	} satisfies WebhookEndpoint;
 }
 
-export { webhookPreviewResponseToFlat, webhookDetailedResponseToFlat };
+const webhookWithSecretResponseToFlat = (
+	response: WebhookWithSecret
+): WebhookEndpoint => {
+	const { meta, secret, ...data } = response;
+
+	return {
+		...data,
+		secret,
+		createdAt: meta.created_at,
+		updatedAt: meta.updated_at
+	} satisfies WebhookEndpoint;
+}
+
+export { webhookPreviewResponseToFlat, webhookDetailedResponseToFlat, webhookWithSecretResponseToFlat };

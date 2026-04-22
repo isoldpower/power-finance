@@ -1,8 +1,8 @@
-import type { GetRequest, GetResponse } from "@internal/shared";
+import type { GetRequest } from "@internal/shared";
 import {
 	CategoriesAnalyticsResponse,
 	ExpenditureAnalyticsResponse,
-	MoneyFlowAnalyticsResponse, 
+	MoneyFlowAnalyticsResponse,
 	SpendingHeatmapResponse,
 	WalletBalanceHistoryResponse
 } from "../types";
@@ -25,7 +25,7 @@ interface ExpenditureDatasetGetRequest { params?: object }
 type ExpenditureDatasetGetResponse = ExpenditureAnalyticsResponse;
 
 type BalanceHistoryDatasetGetRequest = GetRequest<object>
-type BalanceHistoryDatasetGetResponse = GetResponse<WalletBalanceHistoryResponse>;
+type BalanceHistoryDatasetGetResponse = WalletBalanceHistoryResponse;
 
 interface SpendingHeatmapDatasetGetRequest { params?: object }
 type SpendingHeatmapDatasetGetResponse = SpendingHeatmapResponse;

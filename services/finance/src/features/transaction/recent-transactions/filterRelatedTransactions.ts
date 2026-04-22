@@ -6,10 +6,9 @@ const filterRelatedTransactions = (
 ) => {
 	return transactions.filter((transaction) => {
 		const displayAll = !walletId;
-		const isSource = transaction.sender?.walletId === walletId;
-		const isDestination = transaction.receiver?.walletId === walletId;
+		const isSource = transaction.source_wallet_id === walletId;
 
-		return displayAll || isSource || isDestination;
+		return displayAll || isSource;
 	});
 }
 

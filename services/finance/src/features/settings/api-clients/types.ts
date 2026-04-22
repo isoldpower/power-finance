@@ -2,7 +2,6 @@ interface WebhookPreview {
 	id: string
 	url: string
 	title: string
-	subscribed: string[]
 }
 
 interface WebhookMeta {
@@ -15,15 +14,20 @@ interface WebhookDetailed {
 	id: string
 	url: string
 	title: string
-	subscribed: string[]
-	secret?: string
 	meta: WebhookMeta
+}
+
+interface WebhookWithSecret {
+	id: string
+	url: string
+	title: string
+	meta: WebhookMeta
+	secret: string
 }
 
 interface WebhookValuableFields {
 	url: string
 	title: string
-	subscribed: string[]
 }
 
-export type { WebhookMeta, WebhookPreview, WebhookDetailed, WebhookValuableFields };
+export type { WebhookMeta, WebhookPreview, WebhookDetailed, WebhookWithSecret, WebhookValuableFields };

@@ -5,7 +5,7 @@ const getMonthGroupedTransactions = (
 	transactions: TransactionPreviewDto[]
 ) => {
 	return transactions.reduce<Record<string, TransactionPreviewDto[]>>((groups, transaction) => {
-		const date = new Date(transaction.createdAt).toDateString();
+		const date = new Date(transaction.created_at).toDateString();
 		groups[date] ??= [];
 
 		groups[date].push(transaction);

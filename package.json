@@ -6,6 +6,7 @@
 	"main": "dist/index.js",
 	"private": true,
 	"scripts": {
+		"install:safe": "pnpm install --recursive --shamefully-hoist",
 		"dev:shell": "nx run @power/shell:dev",
 		"dev:analytics": "nx run @power/analytics:dev",
 		"dev:finance": "nx run @power/finance:dev",

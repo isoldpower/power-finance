@@ -1,21 +1,21 @@
-import { WebhookEndpoint } from "@entity/settings/webhook";
-import { WebhookPreview, WebhookDetailed } from "../types.ts";
+import type { WebhookEndpoint } from "@entity/settings/webhook";
+import type { WebhookPreview, WebhookDetailed } from "../types.ts";
 
 const flatToWebhookPreview = (
 	flat: WebhookEndpoint
 ): WebhookPreview => {
-	const { id, url, title, subscribed } = flat;
+	const { id, url, title } = flat;
 
-	return { id, url, title, subscribed };
+	return { id, url, title };
 }
 
 const flatToWebhookDetailed = (
 	flat: WebhookEndpoint
 ): WebhookDetailed => {
-	const { id, url, title, subscribed, secret, createdAt, updatedAt } = flat;
+	const { id, url, title, createdAt, updatedAt } = flat;
 
 	return {
-		id, url, title, subscribed, secret,
+		id, url, title,
 		meta: {
 			id,
 			created_at: createdAt ?? '',

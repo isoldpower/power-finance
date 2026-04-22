@@ -1,73 +1,19 @@
 import type { Wallet } from "@entity/wallet";
 
-type TransactionType = 'expense' | 'income' | 'transfer' | 'adjust';
-
-interface TransactionSide {
-	wallet: Wallet;
-	currencyCode: string;
-	amount: number;
-}
-
-interface TransactionPreviewSide {
-	walletId: string;
-	currencyCode: string;
-	amount: number;
-}
-
-interface TransferTransactionData<T> {
-	sender: T;
-	receiver: T;
-	description?: string;
-}
-
-interface ExpenseTransactionData<T> {
-	sender: T;
-	description?: string;
-}
-
-interface IncomeTransactionData<T> {
-	receiver: T;
-	description?: string;
-}
-
-interface AdjustTransactionData<T> {
-	receiver: T;
-	description?: string;
-}
-
-type TransactionDto = {
+interface TransactionDto {
 	id: string;
-	createdAt: string;
-	sender?: TransactionSide;
-	receiver?: TransactionSide;
-} & (
-	(TransferTransactionData<TransactionSide> & { type: 'transfer' }) |
-	(ExpenseTransactionData<TransactionSide> & { type: 'expense' }) |
-	(IncomeTransactionData<TransactionSide> & { type: 'income' }) |
-	(AdjustTransactionData<TransactionSide> & { type: 'adjust' })
-)
+	amount: string;
+	currency_code: string;
+	source_wallet: Wallet;
+	created_at: string;
+}
 
-type TransactionPreviewDto = {
+interface TransactionPreviewDto {
 	id: string;
-	createdAt: string;
-	sender?: TransactionPreviewSide;
-	receiver?: TransactionPreviewSide;
-} & (
-	(TransferTransactionData<TransactionPreviewSide> & { type: 'transfer' }) |
-	(ExpenseTransactionData<TransactionPreviewSide> & { type: 'expense' }) |
-	(IncomeTransactionData<TransactionPreviewSide> & { type: 'income' }) |
-	(AdjustTransactionData<TransactionPreviewSide> & { type: 'adjust' })
-)
+	amount: string;
+	currency_code: string;
+	source_wallet_id: string;
+	created_at: string;
+}
 
-export type {
-	TransactionPreviewSide,
-	TransactionSide,
-	TransactionDto,
-	TransactionPreviewDto,
-	
-	TransactionType,
-	TransferTransactionData,
-	ExpenseTransactionData,
-	IncomeTransactionData,
-	AdjustTransactionData
-};
+export type { TransactionDto, TransactionPreviewDto };

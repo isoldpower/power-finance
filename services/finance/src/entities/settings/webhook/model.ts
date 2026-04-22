@@ -3,7 +3,6 @@ interface WebhookEndpoint {
 	title: string
 	url: string
 	secret?: string
-	subscribed: string[]
 	createdAt?: string
 	updatedAt?: string
 }

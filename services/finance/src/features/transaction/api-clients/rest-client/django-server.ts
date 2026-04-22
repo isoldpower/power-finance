@@ -10,7 +10,7 @@ import type { AxiosInstance } from "axios";
 
 class TransactionDjangoRESTApiClient implements ITransactionsRESTApiClient {
 	private readonly axiosInstance: AxiosInstance;
-	
+
 	constructor(axiosInstance: AxiosInstance) {
 		this.axiosInstance = axiosInstance;
 	}
@@ -29,7 +29,7 @@ class TransactionDjangoRESTApiClient implements ITransactionsRESTApiClient {
 		request: TransactionGetRequest
 	): Promise<TransactionGetResponse> {
 		const postfix = this.resolvePostfix(request.params);
-		
+
 		return this.axiosInstance.get<TransactionGetResponse>(`/${request.id}/${postfix}`)
 			.then((response) => response.data);
 	}
@@ -38,16 +38,8 @@ class TransactionDjangoRESTApiClient implements ITransactionsRESTApiClient {
 		request: TransactionPostRequest
 	): Promise<TransactionPostResponse> {
 		const postfix = this.resolvePostfix(request.params);
-		const adjustedData = { ...request.data };
-		
-		if (adjustedData.sender?.amount) {
-			adjustedData.sender.amount = Number(adjustedData.sender.amount.toFixed(2));
-		} 
-		if (adjustedData.receiver?.amount) {
-			adjustedData.receiver.amount = Number(adjustedData.receiver.amount.toFixed(2));
-		}
-		
-		return this.axiosInstance.post<TransactionPostResponse>(`/${postfix}`, adjustedData)
+
+		return this.axiosInstance.post<TransactionPostResponse>(`/${postfix}`, request.data)
 			.then((response) => response.data);
 	}
 
@@ -64,8 +56,8 @@ class TransactionDjangoRESTApiClient implements ITransactionsRESTApiClient {
 		request: TransactionDeleteRequest
 	): Promise<TransactionDeleteResponse> {
 		const postfix = this.resolvePostfix(request.params);
-		
-		return this.axiosInstance.delete<TransactionDeleteResponse>(`/${postfix}`)
+
+		return this.axiosInstance.delete<TransactionDeleteResponse>(`/${request.id}/${postfix}`)
 			.then((response) => response.data);
 	}
 }

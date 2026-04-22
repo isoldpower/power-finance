@@ -9,8 +9,7 @@ interface DeleteWebhookRequest {
 
 interface DeleteWebhookResponse {
 	message: string
-	id: string
-	success: boolean
+	id: string | null
 }
 
 async function deleteWebhookEndpoint(
