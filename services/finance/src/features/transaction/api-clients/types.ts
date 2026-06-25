@@ -1,56 +1,24 @@
-import type { TransactionType } from "@entity/transaction";
-import type { Wallet } from "@entity/wallet";
+import type { WalletPreview } from "@feature/wallet/api-clients/types.ts";
 
-interface TransactionSide {
-	wallet: string;
-	amount: number;
-}
-
-interface TransactionSideDetailed {
-	wallet: Wallet;
-	amount: number;
-}
-
-interface TransactionData {
-	id: string;
-	createdAt: string;
-	from?: TransactionSideDetailed;
-	to?: TransactionSideDetailed;
-	description?: string;
-}
-
-interface TransactionValuableFields {
-	from?: TransactionSide;
-	to?: TransactionSide;
-	description?: string;
-	type: TransactionType;
-}
-
-interface TransactionMeta {
-	createdAt: string
+interface TransactionPreview {
 	id: string
+	amount: string
+	currency_code: string
+	source_wallet_id: string
+	created_at: string
 }
 
 interface TransactionDetailed {
 	id: string
-	type: TransactionType
-	data: TransactionData
-	meta: TransactionMeta
+	amount: string
+	currency_code: string
+	source_wallet: WalletPreview
+	created_at: string
 }
 
-interface TransactionPreview {
-	id: string
-	type: TransactionType
-	data: TransactionData
-	meta: TransactionMeta
+interface TransactionMinimalPayload {
+	source_wallet_id: string
+	amount: string
 }
 
-type TransactionMinimalPayload = TransactionValuableFields;
-
-export type {
-	TransactionDetailed,
-	TransactionPreview,
-	TransactionMeta,
-	TransactionValuableFields,
-	TransactionMinimalPayload
-};
+export type { TransactionPreview, TransactionDetailed, TransactionMinimalPayload };

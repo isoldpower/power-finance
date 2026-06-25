@@ -1,5 +1,5 @@
 import { transactionPreviewResponseToFlat } from "../mutators/api-to-flat.ts";
-import type { Transaction } from "src/entities/transaction";
+import type { TransactionPreviewDto } from "src/entities/transaction";
 import type { ITransactionsRESTApiClient } from "../rest-client";
 
 interface ListAllTransactionsRequest {
@@ -7,7 +7,7 @@ interface ListAllTransactionsRequest {
 }
 
 interface ListAllTransactionsResponse {
-	data: Transaction[];
+	data: TransactionPreviewDto[];
 	meta: {
 		limit: number
 		offset: number

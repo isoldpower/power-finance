@@ -1,37 +1,14 @@
-import type { Transaction } from "src/entities/transaction";
-import type { TransactionPreview, TransactionDetailed } from "../types.ts";
+import type { TransactionMinimalPayload } from "../types.ts";
+import type { TransactionDto } from "@entity/transaction";
 
 
-const flatToTransactionPreview = (
-	flat: Transaction
-): TransactionPreview => {
-	const { type, ...data } = flat;
-
+const transactionDtoToPayload = (
+	dto: Pick<TransactionDto, 'source_wallet' | 'amount'>
+): TransactionMinimalPayload => {
 	return {
-		type,
-		id: data.id,
-		data,
-		meta: {
-			id: data.id,
-			createdAt: flat.createdAt
-		}
+		source_wallet_id: dto.source_wallet.id,
+		amount: dto.amount,
 	};
 }
 
-const flatToTransactionDetailed = (
-	flat: Transaction
-): TransactionDetailed => {
-	const { type, ...data } = flat;
-
-	return {
-		type,
-		id: data.id,
-		data,
-		meta: {
-			id: data.id,
-			createdAt: data.createdAt
-		}
-	};
-}
-
-export { flatToTransactionPreview, flatToTransactionDetailed };
+export { transactionDtoToPayload };

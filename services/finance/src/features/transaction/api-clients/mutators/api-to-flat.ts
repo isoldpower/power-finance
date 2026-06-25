@@ -1,118 +1,37 @@
 import type { TransactionDetailed, TransactionPreview } from "../types.ts";
-import type {
-	AdjustTransactionData,
-	ExpenseTransactionData,
-	IncomeTransactionData,
-	Transaction,
-	TransferTransactionData
-} from "@entity/transaction";
+import type { TransactionDto, TransactionPreviewDto } from "@entity/transaction";
 
 
-const buildTransferTransaction = (
-	response: TransactionPreview
-): Transaction => {
-	const data = response.data as TransferTransactionData;
-
-	return {
-		id: response.id,
-		description: data.description,
-		from: data.from,
-		to: data.to,
-		type: 'transfer',
-		createdAt: response.meta.createdAt
-	} satisfies Transaction;
-}
-
-const buildExpenseTransaction = (
-	response: TransactionPreview
-): Transaction => {
-	const data = response.data as ExpenseTransactionData;
-
-	return {
-		id: response.id,
-		type: 'expense',
-		description: data.description,
-		from: data.from,
-		createdAt: response.meta.createdAt
-	} satisfies Transaction;
-}
-
-const buildIncomeTransaction = (
-	response: TransactionPreview
-): Transaction => {
-	const data = response.data as IncomeTransactionData;
-
-	return {
-		id: response.id,
-		type: 'income',
-		to: data.to,
-		description: data.description,
-		createdAt: response.meta.createdAt
-	} satisfies Transaction;
-}
-
-const buildAdjustTransaction = (
-	response: TransactionPreview
-): Transaction => {
-	const data = response.data as AdjustTransactionData;
-
-	return {
-		id: response.id,
-		type: 'adjust',
-		to: data.to,
-		description: data.description,
-		createdAt: response.meta.createdAt
-	} satisfies Transaction;
-}
-
-const detailedBuildWrapper = (
-	routine: (response: TransactionPreview) => Transaction,
-	response: TransactionDetailed
-): Transaction => {
-	const preview = routine(response);
-
-	return Object.assign(preview, {
-		createdAt: response.meta.createdAt,
-	}) satisfies Transaction;
-}
+const parseWallet = (wallet: TransactionDetailed['source_wallet']) => ({
+	...wallet,
+	balance: {
+		...wallet.balance,
+		amount: parseFloat(wallet.balance.amount as unknown as string),
+	},
+});
 
 const transactionPreviewResponseToFlat = (
 	response: TransactionPreview
-): Transaction => {
-	const transactionType = response.type;
-	switch (transactionType) {
-		case 'transfer':
-			return buildTransferTransaction(response);
-		case 'expense':
-			return buildExpenseTransaction(response);
-		case 'income':
-			return buildIncomeTransaction(response);
-		case 'adjust':
-			return buildAdjustTransaction(response);
-		default:
-			throw new Error(`Unknown transaction type: ${transactionType as string}`);
-	}
+): TransactionPreviewDto => {
+	return {
+		id: response.id,
+		amount: response.amount,
+		currency_code: response.currency_code,
+		source_wallet_id: response.source_wallet_id,
+		created_at: response.created_at,
+	};
 }
 
 const transactionDetailedResponseToFlat = (
 	response: TransactionDetailed
-): Transaction => {
-	const transactionType = response.type;
-	switch (transactionType) {
-		case 'transfer':
-			return detailedBuildWrapper(buildTransferTransaction, response);
-		case 'expense':
-			return detailedBuildWrapper(buildExpenseTransaction, response);
-		case 'income':
-			return detailedBuildWrapper(buildIncomeTransaction, response);
-		case 'adjust':
-			return detailedBuildWrapper(buildAdjustTransaction, response);
-		default:
-			throw new Error(`Unknown transaction type: ${transactionType as string}`);
-	}
+): TransactionDto => {
+	return {
+		id: response.id,
+		amount: response.amount,
+		currency_code: response.currency_code,
+		source_wallet: parseWallet(response.source_wallet),
+		created_at: response.created_at,
+	};
 }
 
-export {
-	transactionPreviewResponseToFlat,
-	transactionDetailedResponseToFlat,
-};
+export { transactionPreviewResponseToFlat, transactionDetailedResponseToFlat };

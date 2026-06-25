@@ -12,6 +12,7 @@ export { ShowOnValue } from './form-helpers/ShowOnValue.tsx';
 export { InputField } from './form-helpers/InputField.tsx';
 export { SelectField } from './form-helpers/SelectField.tsx';
 export { SingleToggleField } from './form-helpers/SingleToggleField.tsx';
+export { TabsWithSearchParam } from './tabs-with-search-param/TabsWithSearchParam.tsx';
 
 export type { HeaderBoxProps } from './global-layout/HeaderBox.tsx';
 export type { HeaderBoxOffsetProps } from './global-layout/HeaderBoxOffset.tsx';

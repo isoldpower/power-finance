@@ -1,58 +1,19 @@
 import type { Wallet } from "@entity/wallet";
 
-type TransactionType = 'expense' | 'income' | 'transfer' | 'adjust';
-
-interface TransactionSide {
-	wallet: Wallet;
-	amount: number;
-}
-
-interface TransferTransactionData {
-	from: TransactionSide;
-	to: TransactionSide;
-	description?: string;
-}
-
-interface ExpenseTransactionData {
-	from: TransactionSide;
-	description?: string;
-}
-
-interface IncomeTransactionData {
-	to: TransactionSide;
-	description?: string;
-}
-
-interface AdjustTransactionData {
-	to: TransactionSide;
-	description?: string;
-}
-
-type Transaction = {
+interface TransactionDto {
 	id: string;
-	createdAt: string;
-	from?: TransactionSide;
-	to?: TransactionSide;
-} & (
-	(TransferTransactionData & { type: 'transfer' }) |
-	(ExpenseTransactionData & { type: 'expense' }) |
-	(IncomeTransactionData & { type: 'income' }) |
-	(AdjustTransactionData & { type: 'adjust' })
-)
+	amount: string;
+	currency_code: string;
+	source_wallet: Wallet;
+	created_at: string;
+}
 
-type PossibleTransactionData =
-	(TransferTransactionData & { type: 'transfer' }) |
-	(ExpenseTransactionData & { type: 'expense' }) |
-	(IncomeTransactionData & { type: 'income' }) |
-	(AdjustTransactionData & { type: 'adjust' });
+interface TransactionPreviewDto {
+	id: string;
+	amount: string;
+	currency_code: string;
+	source_wallet_id: string;
+	created_at: string;
+}
 
-export type {
-	Transaction,
-	TransactionSide,
-	TransactionType,
-	TransferTransactionData,
-	PossibleTransactionData,
-	ExpenseTransactionData,
-	IncomeTransactionData,
-	AdjustTransactionData
-};
+export type { TransactionDto, TransactionPreviewDto };

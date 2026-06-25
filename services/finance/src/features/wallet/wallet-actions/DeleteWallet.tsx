@@ -1,71 +1,62 @@
-import type { ComponentProps, FC } from "react";
-import { useCallback, useState } from "react";
-import {
-	Button,
-	Dialog,
-	DialogContent,
-	DialogTrigger,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle
-} from "@internal/ui-library";
+import { useCallback, useEffect } from "react";
+import type { ReactNode, FormEvent } from "react";
+import type { UseFormReturn } from "react-hook-form";
 
-import { useWalletMethods } from "@feature/wallet";
+import { DeleteWalletSchema, useWalletMethods } from "@feature/wallet";
+import { useDeleteDefaultValues } from "./useSchemaDefaults.ts";
 import type { Wallet } from "@entity/wallet";
 
 
-interface DeleteWalletProps extends Omit<ComponentProps<typeof Button>, 'onClick'> {
+interface DeleteWalletProps {
+	form: UseFormReturn<DeleteWalletSchema>;
 	wallet: Wallet;
+	onSuccess?: (data: DeleteWalletSchema) => void;
+	children?: ReactNode;
 }
 
-const DeleteWallet: FC<DeleteWalletProps> = ({ children, wallet, ...props }) => {
-	const [open, setOpen] = useState(false);
+function DeleteWallet({
+	onSuccess,
+	children,
+	form: { handleSubmit, reset },
+	wallet
+}: DeleteWalletProps) {
 	const { deleteWallet } = useWalletMethods(wallet.id);
+	const defaults = useDeleteDefaultValues(wallet);
 
-	const handleDelete = useCallback(() => {
-		deleteWallet();
-		setOpen(false);
-	}, [deleteWallet]);
+	useEffect(() => {
+		reset(defaults);
+	}, [defaults, reset]);
 
-	const handleCancel = useCallback(() => {
-		setOpen(false);
-	}, [setOpen]);
+	const onSubmit = useCallback(async (data: DeleteWalletSchema) => {
+		if (data.id !== wallet.id) {
+			return;
+		}
+		
+		const response = await deleteWallet();
+		if (response.success) {
+			if (onSuccess) onSuccess(data);
+			
+			reset();
+		}
+	}, [wallet.id, deleteWallet, onSuccess, reset]);
+
+	const handleSubmitForm = useCallback((
+		e: FormEvent<HTMLFormElement>
+	) => {
+		handleSubmit(onSubmit)(e)
+			.catch((e: unknown) => {
+				console.error(e)
+			});
+	}, [handleSubmit, onSubmit]);
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger asChild>
-				<Button
-					type="button"
-					{...props}
-				>
-					{children}
-				</Button>
-			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>
-						Are you sure you want to delete this wallet?
-					</DialogTitle>
-					<DialogDescription>
-						This action cannot be undone.
-					</DialogDescription>
-				</DialogHeader>
-				<DialogFooter>
-					<div className="flex justify-end gap-2 mt-4">
-						<Button variant="secondary" onClick={handleCancel}>
-							Cancel
-						</Button>
-						<Button variant="destructive" onClick={handleDelete}>
-							Delete
-						</Button>
-					</div>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
-	)
+		<form onSubmit={handleSubmitForm}>
+			{children}
+		</form>
+	);
 }
 
 DeleteWallet.displayName = 'DeleteWallet';
 
 export { DeleteWallet };
+export type { DeleteWalletProps };

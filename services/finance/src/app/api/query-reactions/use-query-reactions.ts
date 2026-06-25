@@ -1,27 +1,64 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import type {
+	MutationReaction,
+	MutationCompareArgument,
+	MutationSubscribeCallback,
+	QueryReaction,
+	SubscribeCallback
+} from "./types";
 
 
-interface QueryReaction {
-	compare: (keys: unknown[]) => boolean;
-	reaction: (data: unknown) => void;
-}
-
-const useQueryReactions = (reactions: QueryReaction[]) => {
+const useQueryReactions = (
+	queryReactions: QueryReaction[],
+	mutationReactions: MutationReaction[] = []
+) => {
+	const queryReactionsRef = useRef(queryReactions);
+	const mutationReactionsRef = useRef(mutationReactions);
 	const queryClient = useQueryClient();
 
 	useEffect(() => {
-		const unsubscribe = queryClient.getQueryCache().subscribe((query) => {
-			if (query.type === 'updated') reactions.map((reaction) => {
-				if (Array.isArray(query.query.queryKey) && reaction.compare(query.query.queryKey)) {
-					reaction.reaction(query.query.state.data);
-				}
-			});
-		})
+		queryReactionsRef.current = queryReactions;
+		mutationReactionsRef.current = mutationReactions;
+	}, [queryReactions, mutationReactions]);
+	
+	const queryCacheCallback = useCallback<SubscribeCallback>((event) => {
+		if (event.type !== 'updated' || event.action.type !== 'success') {
+			return;
+		}
 
-		return () => { unsubscribe(); };
-	}, [queryClient, reactions]);
+		queryReactionsRef.current.forEach((reaction) => {
+			if (reaction.compare(event)) {
+				reaction.reaction(event.query.state.data);
+			}
+		});
+	}, []);
+
+	const mutationCacheCallback = useCallback<MutationSubscribeCallback>((event) => {
+		if (event.type !== 'updated' || event.action.type !== 'success') {
+			return;
+		}
+
+		mutationReactionsRef.current.forEach((reaction) => {
+			if (reaction.compare(event)) {
+				reaction.reaction(event.mutation.state.data);
+			}
+		});
+	}, []);
+
+	useEffect(() => {
+		const queryCache = queryClient.getQueryCache();
+		const unsubscribeQuery = queryCache.subscribe(queryCacheCallback);
+
+		const mutationCache = queryClient.getMutationCache();
+		const unsubscribeMutation = mutationCache.subscribe(mutationCacheCallback);
+
+		return () => {
+			unsubscribeQuery();
+			unsubscribeMutation();
+		};
+	}, [queryCacheCallback, mutationCacheCallback, queryClient]);
 }
 
+export type { MutationReaction, MutationCompareArgument };
 export { useQueryReactions };
-export type { QueryReaction };

@@ -10,12 +10,12 @@ import {
 } from "@feature/transaction";
 import { TransactionsList, TransactionsListError, TransactionsListPending } from "@entity/transaction";
 import { useLocaleDateTransform } from "@shared/utils";
-import type { Transaction } from "@entity/transaction";
+import type { TransactionPreviewDto } from "@entity/transaction";
 
 
 interface RecentTransactionsListProps {
 	children: ReactElement<{
-		transaction: Transaction,
+		transaction: TransactionPreviewDto,
 		selectedWallet?: string | undefined
 	}>;
 	selectedWallet?: string | undefined;
@@ -33,7 +33,6 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 			getRecentTransactions(transactions)
 		)
 	);
-
 	return Object.entries(selectedTransactions).length > 0 || status === 'pending'
 		? (
 			<TransactionsListFx
@@ -48,7 +47,7 @@ const RecentTransactionsList: FC<RecentTransactionsListProps> = ({
 								{transform(date)}
 							</h3>
 							<div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
-								{related?.map((transaction) => (
+								{related.map((transaction) => (
 									<div key={transaction.id} className="border-b last:border-b-0">
 										{cloneElement(children, {
 											transaction,

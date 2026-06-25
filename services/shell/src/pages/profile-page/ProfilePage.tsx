@@ -1,22 +1,22 @@
 import { FC } from "react";
-import { UserProfile } from "@internal/shared";
+import { clerk } from "@internal/shared";
 import { getProfilePaperAppearance } from "@entity/auth";
 import { getFinanceRoute, useRouteWithOrigin } from "@internal/shared";
-import {ArrowLeftCircleIcon} from "lucide-react";
+import { ArrowLeftCircleIcon } from "lucide-react";
 
-interface UserProfilePageProps {}
+type UserProfilePageProps = object & {}
 
 const UserProfilePage: FC<UserProfilePageProps> = () => {
 	const overviewRoute = getFinanceRoute('dashboard');
 
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-			<UserProfile appearance={getProfilePaperAppearance()}>
-				<UserProfile.Link
+			<clerk.UserProfile appearance={getProfilePaperAppearance()}>
+				<clerk.UserProfile.Link
 					label="Homepage"
 					url={useRouteWithOrigin(overviewRoute)}
 					labelIcon={<ArrowLeftCircleIcon width={16} height={16} />} />
-			</UserProfile>
+			</clerk.UserProfile>
 		</div>
 	);
 };

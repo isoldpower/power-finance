@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TestImport } from './routes/test'
 import { Route as LandingImport } from './routes/landing'
 import { Route as FinanceRouteImport } from './routes/finance/route'
 import { Route as AuthRouteImport } from './routes/auth/route'
@@ -25,6 +26,12 @@ import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AnalyticsSplatImport } from './routes/analytics/$'
 
 // Create/Update Routes
+
+const TestRoute = TestImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LandingRoute = LandingImport.update({
   id: '/landing',
@@ -137,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LandingImport
       parentRoute: typeof rootRoute
     }
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestImport
+      parentRoute: typeof rootRoute
+    }
     '/analytics/$': {
       id: '/analytics/$'
       path: '/$'
@@ -241,6 +255,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/finance': typeof FinanceRouteRouteWithChildren
   '/landing': typeof LandingRoute
+  '/test': typeof TestRoute
   '/analytics/$': typeof AnalyticsSplatRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile': typeof AuthProfileRoute
@@ -255,6 +270,7 @@ export interface FileRoutesByTo {
   '/analytics': typeof AnalyticsRouteRouteWithChildren
   '/finance': typeof FinanceRouteRouteWithChildren
   '/landing': typeof LandingRoute
+  '/test': typeof TestRoute
   '/analytics/$': typeof AnalyticsSplatRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile': typeof AuthProfileRoute
@@ -271,6 +287,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/finance': typeof FinanceRouteRouteWithChildren
   '/landing': typeof LandingRoute
+  '/test': typeof TestRoute
   '/analytics/$': typeof AnalyticsSplatRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile': typeof AuthProfileRoute
@@ -288,6 +305,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/finance'
     | '/landing'
+    | '/test'
     | '/analytics/$'
     | '/auth/login'
     | '/auth/profile'
@@ -301,6 +319,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/finance'
     | '/landing'
+    | '/test'
     | '/analytics/$'
     | '/auth/login'
     | '/auth/profile'
@@ -315,6 +334,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/finance'
     | '/landing'
+    | '/test'
     | '/analytics/$'
     | '/auth/login'
     | '/auth/profile'
@@ -331,6 +351,7 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   FinanceRouteRoute: typeof FinanceRouteRouteWithChildren
   LandingRoute: typeof LandingRoute
+  TestRoute: typeof TestRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -339,6 +360,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   FinanceRouteRoute: FinanceRouteRouteWithChildren,
   LandingRoute: LandingRoute,
+  TestRoute: TestRoute,
 }
 
 export const routeTree = rootRoute
@@ -355,7 +377,8 @@ export const routeTree = rootRoute
         "/analytics",
         "/auth",
         "/finance",
-        "/landing"
+        "/landing",
+        "/test"
       ]
     },
     "/": {
@@ -385,6 +408,9 @@ export const routeTree = rootRoute
     },
     "/landing": {
       "filePath": "landing.tsx"
+    },
+    "/test": {
+      "filePath": "test.tsx"
     },
     "/analytics/$": {
       "filePath": "analytics/$.tsx",

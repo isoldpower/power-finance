@@ -16,7 +16,7 @@ const TransactionsListNavigationHeader: FC<TransactionsListNavigationHeaderProps
 			<div className="flex flex-col">
 				<h2 className="text-xl font-bold">
 					Recent Transactions <span className="text-silent">
-						{ status === 'pending' && "..."}
+						{ status === 'pending' && "(...)"}
 					</span>
 				</h2>
 				<p className="text-silent">

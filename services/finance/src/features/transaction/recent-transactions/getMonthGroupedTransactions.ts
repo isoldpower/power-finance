@@ -1,11 +1,11 @@
-import type { Transaction } from "@entity/transaction";
+import type { TransactionPreviewDto } from "@entity/transaction";
 
 
 const getMonthGroupedTransactions = (
-	transactions: Transaction[]
+	transactions: TransactionPreviewDto[]
 ) => {
-	return transactions.reduce<Record<string, Transaction[] | undefined>>((groups, transaction) => {
-		const date = new Date(transaction.createdAt).toDateString();
+	return transactions.reduce<Record<string, TransactionPreviewDto[]>>((groups, transaction) => {
+		const date = new Date(transaction.created_at).toDateString();
 		groups[date] ??= [];
 
 		groups[date].push(transaction);

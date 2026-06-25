@@ -1,7 +1,12 @@
 import type { FC } from "react";
 
 import { DashboardHeading, GlobalContainer } from "@entity/analytics";
-import { ConfigurationStoreProvider } from "@feature/analytics";
+import {
+	ConfigurationStoreProvider,
+	useCategoryData,
+	useExpenditureHistory,
+	useMoneyFlow
+} from "@feature/analytics";
 import { 
 	ConfigurableGrid,
 	ConfigurableGridPlate,
@@ -13,12 +18,16 @@ import {
 	CategoryBasedRadarChart,
 	CategoryBasedGraphsSet,
 	CategoryBasedRadialChart,
-	MoneyFlowSankeyChart
+	MoneyFlowSankeyChart,
+	MoneyFlowGraph
 } from "@widget/analytics";
-import { MoneyFlowGraph } from "@src/widgets/analytics/money-flow/MoneyFlowGraph";
 
 
 const DashboardPage: FC = () => {
+	const { data: categoryData, isLoading: isCategoryLoading } = useCategoryData();
+	const { data: expenditureData, isLoading: isExpenditureLoading } = useExpenditureHistory();
+	const { data: moneyFlowData, isLoading: isMoneyFlowLoading } = useMoneyFlow();
+	
     return (
         <GlobalContainer>
             <div className="mt-12">
@@ -32,23 +41,42 @@ const DashboardPage: FC = () => {
 							<ConfigurableGridPlate basis="60%">
 								<SpendingTrendsGraphsSet
 									graphSet={{
-										linear: <SpendingTrendsLinearGraph height={400} />,
-										threshold: <SpendingTrendsThresholdGraph height={400} />
+										linear: <SpendingTrendsLinearGraph
+											data={expenditureData}
+											isLoading={isExpenditureLoading}
+											height={400} />,
+										threshold: <SpendingTrendsThresholdGraph
+											data={expenditureData}
+											isLoading={isExpenditureLoading}
+											height={400} />
 									}} />
 							</ConfigurableGridPlate>
 							<ConfigurableGridPlate basis="40%">
 								<CategoryBasedGraphsSet
 									graphSet={{
-										pie: <CategoryBasedPieChart size={400} />,
-										radar: <CategoryBasedRadarChart size={400} />,
-										radial: <CategoryBasedRadialChart size={400} />
+										pie: <CategoryBasedPieChart
+											data={categoryData}	
+											isLoading={isCategoryLoading} 
+											size={400} />,
+										radar: <CategoryBasedRadarChart
+											data={categoryData}
+											isLoading={isCategoryLoading}
+											size={400} />,
+										radial: <CategoryBasedRadialChart
+											data={categoryData}
+											isLoading={isCategoryLoading} 
+											size={400} />
 									}} />
 							</ConfigurableGridPlate>
 						</ConfigurableGridRow>
 						<ConfigurableGridRow>
 							<ConfigurableGridPlate basis="100%">
 								<MoneyFlowGraph>
-									<MoneyFlowSankeyChart height={300} />
+									<MoneyFlowSankeyChart
+										data={moneyFlowData}
+										isLoading={isMoneyFlowLoading}
+										height={300}
+									/>
 								</MoneyFlowGraph>
 							</ConfigurableGridPlate>
 						</ConfigurableGridRow>

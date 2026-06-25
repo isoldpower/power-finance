@@ -11,8 +11,8 @@ const useTotalBalance = (wallets: Wallet[]) => {
 
 	const computeTotalBalance = useCallback(() => {
 		return wallets.reduce((sum, wallet) => {
-			const convertedBalance = convertCurrencyToMain(wallet.balance, wallet.currency);
-			const adjustedBalance = wallet.reversed ? -convertedBalance : convertedBalance;
+			const convertedBalance = convertCurrencyToMain(wallet.balance.amount, wallet.balance.currency);
+			const adjustedBalance = wallet.credit ? -convertedBalance : convertedBalance;
 			return sum + adjustedBalance;
 		}, 0);
 	}, [wallets, convertCurrencyToMain]);

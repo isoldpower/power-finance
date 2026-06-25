@@ -1,37 +1,47 @@
-import { useRef } from 'react';
 import { createContext, useMemo } from 'react';
 
 import { ApiQueryReactions } from "./query-reactions";
-import { WalletsMockRESTApiClient } from "@feature/wallet";
-import { TransactionMockRESTApiClient } from "@feature/transaction";
+import { useWalletsApi } from "./servers/useWalletsApi.ts";
+import { useTransactionsApi } from "./servers/useTransactionsApi.ts";
+import { useWebhooksApi } from "./servers/useWebhooksApi.ts";
 import type { FC } from 'react';
 import type { IWalletsRESTApiClient } from "@feature/wallet";
 import type { ITransactionsRESTApiClient } from "@feature/transaction";
+import type { IWebhookRESTApiClient } from "@feature/settings";
 
 
 interface ApiContextType {
-	walletsClients: {
+	walletServers: {
 		readonly rest: IWalletsRESTApiClient
 	},
-	transactionsClients: {
+	transactionServers: {
 		readonly rest: ITransactionsRESTApiClient
 	},
+	webhookServers: {
+		readonly rest: IWebhookRESTApiClient
+	}
 }
 
 interface ApiProviderProps {
-  readonly children: React.ReactNode
+  	readonly children: React.ReactNode
+	readonly envVariables: ImportMetaEnv
 }
 
 const ApiContext = createContext<ApiContextType | null>(null);
 
-const ApiProvider: FC<ApiProviderProps> = ({ children }) => {
-	const walletsClient = useRef(new WalletsMockRESTApiClient("wallets"));
-	const transactionsClient = useRef(new TransactionMockRESTApiClient("transactions", "wallets"));
-
+const ApiProvider: FC<ApiProviderProps> = ({ 
+	children, 
+	envVariables
+}) => {
+	const walletServers = useWalletsApi(envVariables.CLIENT_API_BASE_URL);
+	const transactionServers = useTransactionsApi(envVariables.CLIENT_API_BASE_URL);
+	const webhookServers = useWebhooksApi(envVariables.CLIENT_API_BASE_URL);
+	
 	const contextValue = useMemo<ApiContextType>(() => ({
-		walletsClients: {rest: walletsClient.current},
-		transactionsClients: {rest: transactionsClient.current}
-	}), []);
+		walletServers,
+		transactionServers,
+		webhookServers
+	}), [transactionServers, walletServers, webhookServers]);
 
 	return (
 		<ApiContext value={contextValue}>

@@ -1,30 +1,21 @@
-import { cn } from "@internal/ui-library";
 import type { FC } from "react";
 
 import { useLocaleCurrency } from "@shared/utils";
-import type { TransactionSide } from "@entity/transaction";
 
 
 interface TransactionValueProps {
-	side: TransactionSide;
-	perspective: 'outcome' | 'income' | 'neutral';
+	amount: string;
+	currencyCode: string;
 }
 
-const TransactionValue: FC<TransactionValueProps> = ({ side, perspective }) => {
+const TransactionValue: FC<TransactionValueProps> = ({ amount, currencyCode }) => {
 	const transformCurrency = useLocaleCurrency();
+	const numericAmount = parseFloat(amount);
 
 	return (
-		<div className={cn(
-			'ml-3 text-right',
-			perspective === 'neutral' && 'text-muted-foreground',
-			((side.amount > 0 && perspective === 'outcome') || (side.amount < 0 && perspective === 'income')) && 'text-red-600',
-			((side.amount > 0 && perspective === 'income') || (side.amount < 0 && perspective === 'outcome')) && 'text-green-600'
-		)}>
+		<div className="ml-3 text-right">
 			<p className="text-sm font-medium">
-				{transformCurrency(side.amount, side.wallet.currency)}
-			</p>
-			<p className="text-xs text-gray-500 mt-1">
-				Additional info
+				{transformCurrency(numericAmount, currencyCode)}
 			</p>
 		</div>
 	);

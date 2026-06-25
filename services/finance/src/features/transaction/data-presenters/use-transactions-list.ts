@@ -5,7 +5,7 @@ import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import { listAllTransactions } from "@feature/transaction";
 import { useApiContext } from "@app/api";
 import { CACHE_KEYS } from "./config.ts";
-import type { Transaction } from "@entity/transaction";
+import type { TransactionPreviewDto } from "@entity/transaction";
 import type { ListAllTransactionsResponse } from "@feature/transaction";
 
 type UseTransactionsListOptions = Omit<
@@ -14,7 +14,7 @@ type UseTransactionsListOptions = Omit<
 > & {};
 
 type UseTransactionsListReturn = UseQueryResult & {
-	transactions: Transaction[];
+	transactions: TransactionPreviewDto[];
 }
 
 const useTransactionsList = (
@@ -24,7 +24,7 @@ const useTransactionsList = (
 	const query = useQuery<ListAllTransactionsResponse>({
 		queryKey: [CACHE_KEYS.list],
 		queryFn: () => listAllTransactions({
-			handler: apiContext.transactionsClients.rest
+			handler: apiContext.transactionServers.rest
 		}),
 		...options ?? {}
 	});

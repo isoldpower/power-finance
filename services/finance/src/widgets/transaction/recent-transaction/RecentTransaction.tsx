@@ -1,67 +1,40 @@
-import { useMemo } from "react";
 import type { FC } from "react";
 
 import {
 	TransactionPaper,
-	TransactionTargets,
-	TransactionTypeIcon,
 	TransactionValue
 } from "@entity/transaction";
-import type { Transaction } from "@entity/transaction";
+import { useTransaction } from "@feature/transaction";
+import type { TransactionPreviewDto } from "@entity/transaction";
 
 
 interface RecentTransactionProps {
-	transaction: Transaction;
+	transaction: TransactionPreviewDto;
 	selectedWallet?: string | undefined;
 }
 
 const RecentTransaction: FC<RecentTransactionProps> = ({
 	transaction: passedTransaction,
-	selectedWallet
 }) => {
-	const perspective = useMemo(() => {
-		return !selectedWallet
-			? passedTransaction.type === 'transfer'
-				? 'neutral'
-				: passedTransaction.type === 'income'
-					? 'income'
-					: 'outcome'
-			: passedTransaction.from?.wallet.id === selectedWallet
-				? 'outcome'
-				: 'income';
-	}, [passedTransaction, selectedWallet]);
-
-	const transactionSide = useMemo(() => {
-		return (!selectedWallet
-			? passedTransaction.from ?? passedTransaction.to
-			: selectedWallet === passedTransaction.from?.wallet.id
-				? passedTransaction.from
-				: passedTransaction.to) ?? undefined
-	}, [passedTransaction, selectedWallet]);
+	const { transaction: detailedTransaction, isLoading } = useTransaction(passedTransaction.id);
 
 	return (
 		<TransactionPaper>
 			<div className="flex items-center">
-				<TransactionTypeIcon type={passedTransaction.type} />
+				<div className="w-8 h-8 p-2 flex-shrink-0 bg-gray-100 rounded-full flex items-center justify-center" />
 				<div className="ml-3 flex-grow">
 					<p className="text-sm font-medium">
-						{passedTransaction.description?.length && passedTransaction.description.length > 0 
-							? passedTransaction.description
-							: 'Some category'
-						}
+						{passedTransaction.currency_code}
 					</p>
-					<TransactionTargets
-						to={passedTransaction.to && {
-							target: passedTransaction.to.wallet
-						}}
-						from={passedTransaction.from && {
-							target: passedTransaction.from.wallet
-						}} />
+					{(!isLoading && detailedTransaction) ? (
+						<p className="text-xs text-gray-500">{detailedTransaction.source_wallet.name}</p>
+					) : null}
 				</div>
-				{transactionSide && (
+				{!isLoading && detailedTransaction && (
 					<TransactionValue
-						perspective={perspective}
-						side={{ ...transactionSide, amount: transactionSide.amount * (transactionSide.wallet.reversed ? -1 : 1) }}/>
+						amount={detailedTransaction.amount}
+						currencyCode={detailedTransaction.currency_code}
+					/>
 				)}
 			</div>
 		</TransactionPaper>

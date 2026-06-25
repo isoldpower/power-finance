@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
 import { Button, Icons } from "@internal/ui-library";
-import type { FC } from "react";
+import { FC, useMemo } from "react";
 
 import { useWalletsList } from "@feature/wallet";
 
@@ -10,12 +10,17 @@ type WalletsListNavigationHeaderProps = object;
 
 const WalletsListNavigationHeader: FC<WalletsListNavigationHeaderProps> = () => {
 	const { status, wallets } = useWalletsList();
+	const countSummary = useMemo(() => ({
+		pending: '...',
+		error: 'X',
+		success: wallets.length
+	}), [wallets]);
 
 	return (
 		<div className="flex justify-between items-center mb-4">
 			<h2 className="text-xl font-bold">
 				Your Wallets <span className="text-gray-400">
-				({ status === 'pending' ? "?" : wallets.length })
+				({ countSummary[status] })
 			</span>
 			</h2>
 			<Button variant="link" asChild>

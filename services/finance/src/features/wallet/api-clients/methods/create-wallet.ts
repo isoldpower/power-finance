@@ -1,6 +1,5 @@
 import type { Wallet } from "@entity/wallet";
-import type { IWalletsRESTApiClient } from "../rest-client";
-import type { WalletPostRequest } from "../rest-client/types.ts";
+import type { IWalletsRESTApiClient, WalletPostRequest } from "../rest-client/types.ts";
 
 interface CreateWalletRequest {
 	handler: Pick<IWalletsRESTApiClient, 'post'>

@@ -5,24 +5,24 @@ import { useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
 
 import { checkEnvVariables } from "./env/checkEnv.ts";
 import { ApiProvider } from "./api";
-import { FC, ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 
 
 function RootComponent() {
 	const envVariables = checkEnvVariables();
 	
 	return (
-		<ApiProvider>
-			<DynamicAuthProvider
-				key={getIsEmbedded() ? 'embedded' : 'primary'} 
-				envVariables={envVariables}
-			>
+		<DynamicAuthProvider
+			key={getIsEmbedded() ? 'embedded' : 'primary'} 
+			envVariables={envVariables}
+		>
+			<ApiProvider envVariables={envVariables}>
 				<AuthGuard>
 					<Outlet />
 					<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
 				</AuthGuard>
-			</DynamicAuthProvider>
-		</ApiProvider>
+			</ApiProvider>
+		</DynamicAuthProvider>
 	)
 }
 

@@ -16,7 +16,7 @@ interface PreviewWalletsListProps {
 const PreviewWalletsList: FC<PreviewWalletsListProps> = ({ children }) => {
 	const {status, wallets} = useWalletsList();
 
-	return wallets.length > 0 || status === 'pending'
+	return wallets.length > 0 || ['pending', 'error'].includes(status)
 		? (
 			<WalletCardsListFx
 				pending={<CardsListPending amount={3}/>}

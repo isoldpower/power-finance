@@ -1,22 +1,22 @@
 import { useState } from "react";
 import type { FC } from "react";
 
+import { WalletCardWithControls } from "@process/wallet";
 import {
 	BalanceSummary,
-	NewTransactionForm,
-	EditableWalletCard,
 	PreviewWalletsList,
 	WalletsListNavigationHeader
 } from "@widget/wallet";
-import {useWalletSelection, useWalletsList} from "@feature/wallet";
-import { OpenTransactionCreation } from "@feature/transaction";
 import {
 	TransactionsListNavigationHeader,
 	RecentTransactionsList,
-	RecentTransaction
+	RecentTransaction, NewTransactionForm
 } from "@widget/transaction";
-import type { Transaction } from "@entity/transaction";
-import { Wallet } from "@entity/wallet";
+
+import { useWalletSelection, useWalletsList } from "@feature/wallet";
+import { OpenTransactionCreation } from "@feature/transaction";
+import type { TransactionPreviewDto } from "@entity/transaction";
+import type { Wallet } from "@entity/wallet";
 
 
 const DashboardPage: FC = () => {
@@ -40,7 +40,8 @@ const DashboardPage: FC = () => {
 						>
 							<NewTransactionForm
 								wallets={wallets}
-								onClose={() => { setIsNewTransactionModalOpen(false); }} />
+								onClose={() => { setIsNewTransactionModalOpen(false); }} 
+							/>
 						</OpenTransactionCreation>
 					</div>
 				</div>
@@ -48,13 +49,13 @@ const DashboardPage: FC = () => {
 			<div>
 				<WalletsListNavigationHeader />
 				<PreviewWalletsList>
-					<EditableWalletCard wallet={{} as Wallet} />
+					<WalletCardWithControls wallet={{} as Wallet} />
 				</PreviewWalletsList>
 			</div>
 			<div>
 				<TransactionsListNavigationHeader />
 				<RecentTransactionsList selectedWallet={selected}>
-					<RecentTransaction transaction={{} as Transaction} />
+					<RecentTransaction transaction={{} as TransactionPreviewDto} />
 				</RecentTransactionsList>
 			</div>
 		</div>

@@ -1,6 +1,5 @@
 import type { FC } from "react";
-import { SignUp } from "@internal/shared";
-import { getFinanceRoute, getShellRoute, useRouteWithOrigin } from "@internal/shared";
+import { clerk, getFinanceRoute, getShellRoute, useRouteWithOrigin } from "@internal/shared";
 import { getSignupPaperAppearance } from "@entity/auth";
 
 
@@ -11,7 +10,7 @@ const SignupPage: FC<SignupPageProps> = () => {
 	const overviewRoute = getFinanceRoute('dashboard');
 
 	return (
-		<SignUp
+		<clerk.SignUp
 			signInUrl={useRouteWithOrigin(routes.login)}
 			appearance={getSignupPaperAppearance({
 				layout: {

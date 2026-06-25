@@ -10,9 +10,9 @@ const useCardBalance = (wallet: Wallet) => {
 	};
 
 	return useMemo(() => {
-		return wallet.reversed
-			? formatCurrency(-wallet.balance, wallet.currency)
-			: formatCurrency(wallet.balance, wallet.currency)
+		return wallet.credit
+			? formatCurrency(-wallet.balance.amount, wallet.balance.currency)
+			: formatCurrency(wallet.balance.amount, wallet.balance.currency)
 	}, [wallet])
 }
 

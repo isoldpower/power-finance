@@ -12,11 +12,13 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as SettingsIndexImport } from './routes/settings/index'
 import { Route as FinanceIndexImport } from './routes/finance/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as TestWidgetsImport } from './routes/test/widgets'
 import { Route as DashboardWalletsImport } from './routes/dashboard/wallets'
 import { Route as DashboardTransactionsImport } from './routes/dashboard/transactions'
+import { Route as FinanceSettingsIndexImport } from './routes/finance/settings/index'
 import { Route as FinanceDashboardIndexImport } from './routes/finance/dashboard/index'
 import { Route as FinanceDashboardWalletsImport } from './routes/finance/dashboard/wallets'
 import { Route as FinanceDashboardTransactionsImport } from './routes/finance/dashboard/transactions'
@@ -26,6 +28,12 @@ import { Route as FinanceDashboardTransactionsImport } from './routes/finance/da
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SettingsIndexRoute = SettingsIndexImport.update({
+  id: '/settings/',
+  path: '/settings/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -56,6 +64,12 @@ const DashboardWalletsRoute = DashboardWalletsImport.update({
 const DashboardTransactionsRoute = DashboardTransactionsImport.update({
   id: '/dashboard/transactions',
   path: '/dashboard/transactions',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const FinanceSettingsIndexRoute = FinanceSettingsIndexImport.update({
+  id: '/finance/settings/',
+  path: '/finance/settings/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -124,6 +138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinanceIndexImport
       parentRoute: typeof rootRoute
     }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/finance/dashboard/transactions': {
       id: '/finance/dashboard/transactions'
       path: '/finance/dashboard/transactions'
@@ -145,6 +166,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FinanceDashboardIndexImport
       parentRoute: typeof rootRoute
     }
+    '/finance/settings/': {
+      id: '/finance/settings/'
+      path: '/finance/settings'
+      fullPath: '/finance/settings'
+      preLoaderRoute: typeof FinanceSettingsIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -157,9 +185,11 @@ export interface FileRoutesByFullPath {
   '/test/widgets': typeof TestWidgetsRoute
   '/dashboard': typeof DashboardIndexRoute
   '/finance': typeof FinanceIndexRoute
+  '/settings': typeof SettingsIndexRoute
   '/finance/dashboard/transactions': typeof FinanceDashboardTransactionsRoute
   '/finance/dashboard/wallets': typeof FinanceDashboardWalletsRoute
   '/finance/dashboard': typeof FinanceDashboardIndexRoute
+  '/finance/settings': typeof FinanceSettingsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -169,9 +199,11 @@ export interface FileRoutesByTo {
   '/test/widgets': typeof TestWidgetsRoute
   '/dashboard': typeof DashboardIndexRoute
   '/finance': typeof FinanceIndexRoute
+  '/settings': typeof SettingsIndexRoute
   '/finance/dashboard/transactions': typeof FinanceDashboardTransactionsRoute
   '/finance/dashboard/wallets': typeof FinanceDashboardWalletsRoute
   '/finance/dashboard': typeof FinanceDashboardIndexRoute
+  '/finance/settings': typeof FinanceSettingsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -182,9 +214,11 @@ export interface FileRoutesById {
   '/test/widgets': typeof TestWidgetsRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/finance/': typeof FinanceIndexRoute
+  '/settings/': typeof SettingsIndexRoute
   '/finance/dashboard/transactions': typeof FinanceDashboardTransactionsRoute
   '/finance/dashboard/wallets': typeof FinanceDashboardWalletsRoute
   '/finance/dashboard/': typeof FinanceDashboardIndexRoute
+  '/finance/settings/': typeof FinanceSettingsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -196,9 +230,11 @@ export interface FileRouteTypes {
     | '/test/widgets'
     | '/dashboard'
     | '/finance'
+    | '/settings'
     | '/finance/dashboard/transactions'
     | '/finance/dashboard/wallets'
     | '/finance/dashboard'
+    | '/finance/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -207,9 +243,11 @@ export interface FileRouteTypes {
     | '/test/widgets'
     | '/dashboard'
     | '/finance'
+    | '/settings'
     | '/finance/dashboard/transactions'
     | '/finance/dashboard/wallets'
     | '/finance/dashboard'
+    | '/finance/settings'
   id:
     | '__root__'
     | '/'
@@ -218,9 +256,11 @@ export interface FileRouteTypes {
     | '/test/widgets'
     | '/dashboard/'
     | '/finance/'
+    | '/settings/'
     | '/finance/dashboard/transactions'
     | '/finance/dashboard/wallets'
     | '/finance/dashboard/'
+    | '/finance/settings/'
   fileRoutesById: FileRoutesById
 }
 
@@ -231,9 +271,11 @@ export interface RootRouteChildren {
   TestWidgetsRoute: typeof TestWidgetsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   FinanceIndexRoute: typeof FinanceIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
   FinanceDashboardTransactionsRoute: typeof FinanceDashboardTransactionsRoute
   FinanceDashboardWalletsRoute: typeof FinanceDashboardWalletsRoute
   FinanceDashboardIndexRoute: typeof FinanceDashboardIndexRoute
+  FinanceSettingsIndexRoute: typeof FinanceSettingsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -243,9 +285,11 @@ const rootRouteChildren: RootRouteChildren = {
   TestWidgetsRoute: TestWidgetsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   FinanceIndexRoute: FinanceIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
   FinanceDashboardTransactionsRoute: FinanceDashboardTransactionsRoute,
   FinanceDashboardWalletsRoute: FinanceDashboardWalletsRoute,
   FinanceDashboardIndexRoute: FinanceDashboardIndexRoute,
+  FinanceSettingsIndexRoute: FinanceSettingsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -264,9 +308,11 @@ export const routeTree = rootRoute
         "/test/widgets",
         "/dashboard/",
         "/finance/",
+        "/settings/",
         "/finance/dashboard/transactions",
         "/finance/dashboard/wallets",
-        "/finance/dashboard/"
+        "/finance/dashboard/",
+        "/finance/settings/"
       ]
     },
     "/": {
@@ -287,6 +333,9 @@ export const routeTree = rootRoute
     "/finance/": {
       "filePath": "finance/index.tsx"
     },
+    "/settings/": {
+      "filePath": "settings/index.tsx"
+    },
     "/finance/dashboard/transactions": {
       "filePath": "finance/dashboard/transactions.tsx"
     },
@@ -295,6 +344,9 @@ export const routeTree = rootRoute
     },
     "/finance/dashboard/": {
       "filePath": "finance/dashboard/index.tsx"
+    },
+    "/finance/settings/": {
+      "filePath": "finance/settings/index.tsx"
     }
   }
 }

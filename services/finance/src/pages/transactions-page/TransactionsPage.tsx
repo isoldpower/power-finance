@@ -13,7 +13,7 @@ import {
 	WalletSelectionList,
 	TransactionFiltersModal
 } from "@widget/transaction";
-import type { Transaction } from "@entity/transaction";
+import type { TransactionPreviewDto } from "@entity/transaction";
 
 
 const TransactionsPage: FC = () => {
@@ -54,7 +54,7 @@ const TransactionsPage: FC = () => {
 			</div>
 			<WalletSelectionList wallets={wallets} />
 			<OverviewTransactionsList selectedWallet={selected}>
-				<RecentTransaction transaction={{} as Transaction} selectedWallet={selected} />
+				<RecentTransaction transaction={{} as TransactionPreviewDto} selectedWallet={selected} />
 			</OverviewTransactionsList>
 		</div>
 	);

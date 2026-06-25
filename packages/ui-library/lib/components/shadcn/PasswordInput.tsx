@@ -8,12 +8,17 @@ import { Button, Input } from "./ui";
 import { cn } from "@/utils";
 
 
-type InputProps = ComponentProps<typeof Input>
+type InputProps = ComponentProps<typeof Input> & {
+	enableButton?: boolean;
+}
 
 const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
-	({ className, ...props }, ref) => {
+	({ className, enableButton, ...props }, 
+	ref
+) => {
 		const [showPassword, setShowPassword] = useState(false);
 		const disabled = props.value === "" || props.value === undefined || props.disabled;
+		const buttonDisabled = disabled && !enableButton;
 
 		return (
 			<div className="relative">
@@ -29,9 +34,9 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
 					size="sm"
 					className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent!"
 					onClick={() => setShowPassword((prev) => !prev)}
-					disabled={disabled}
+					disabled={buttonDisabled}
 				>
-					{showPassword && !disabled ? (
+					{showPassword && !buttonDisabled ? (
 						<EyeIcon
 							className="h-4 w-4"
 							aria-hidden="true"

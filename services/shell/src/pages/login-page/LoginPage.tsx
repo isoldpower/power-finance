@@ -1,6 +1,5 @@
-import { FC } from "react";
-import { SignIn } from "@internal/shared";
-import { getFinanceRoute, getShellRoute, useRouteWithOrigin } from "@internal/shared";
+import type { FC } from "react";
+import { clerk, getFinanceRoute, getShellRoute, useRouteWithOrigin } from "@internal/shared";
 import { getLoginPaperAppearance } from "@entity/auth";
 
 type LoginPageProps = object & {};
@@ -10,7 +9,7 @@ const LoginPage: FC<LoginPageProps> = () => {
 	const overviewRoute = getFinanceRoute('dashboard');
 
 	return (
-		<SignIn
+		<clerk.SignIn
 			signUpUrl={useRouteWithOrigin(routes.signup)}
 			fallbackRedirectUrl={useRouteWithOrigin(overviewRoute)}
 			transferable={false}

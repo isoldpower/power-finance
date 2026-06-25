@@ -1,11 +1,11 @@
 import type { FC, ReactNode } from "react";
 import { useState } from "react";
 
-import { PopoverTrigger, PopoverContent, Popover } from "@internal/ui-library";
+import {PopoverTrigger, PopoverContent, Popover, Button} from "@internal/ui-library";
 
 import { HeaderBox, RelativeBreadcrumbs } from "@shared/components";
-import { PreferredCurrencySelection, GlobalLocaleSelection } from "@widget/preferences";
-import { PreferencesButton, PreferencesModalBox } from "@entity/preferences";
+import { PreferredCurrencySelection, GlobalLocaleSelection } from "@widget/settings";
+import { PreferencesButton, PreferencesModalBox } from "@entity/settings";
 import { Link } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
 
@@ -26,7 +26,7 @@ const GlobalLayout: FC<GlobalLayoutProps> = ({ children }) => {
 					</h1>
 				</Link>
 				<div className="flex gap-8 basis-[400px]">
-					<RelativeBreadcrumbs root={getFinanceRoute('dashboard')} />
+					<RelativeBreadcrumbs />
 					<Popover open={open} onOpenChange={setOpen}>
 						<PopoverTrigger asChild>
 							<PreferencesButton />
@@ -35,6 +35,11 @@ const GlobalLayout: FC<GlobalLayoutProps> = ({ children }) => {
 							<PreferencesModalBox>
 								<PreferredCurrencySelection />
 								<GlobalLocaleSelection />
+								<Button asChild>
+									<Link to={getFinanceRoute('settings')}>
+										More settings
+									</Link>
+								</Button>
 							</PreferencesModalBox>
 						</PopoverContent>
 					</Popover>

@@ -9,7 +9,7 @@ import {
 	replaceWallet as replaceWalletApi
 } from "@feature/wallet";
 import { useApiContext } from "@app/api";
-import { CACHE_KEYS } from "./config.ts";
+import { CACHE_KEYS } from "./cache-config.ts";
 import type {
 	FetchWalletResponse, WalletValuableFields,
 	DeleteWalletRequest, DeleteWalletResponse,
@@ -26,9 +26,9 @@ interface UseWalletReturn {
 		replaceMutation: UseMutationResult<ReplaceWalletResponse, Error, ReplaceWalletRequest['payload']>;
 		query: UseQueryResult<FetchWalletResponse>;
 	}
-	updateWallet: (data: WalletValuableFields) => void;
-	replaceWallet: (data: WalletValuableFields) => void;
-	deleteWallet: () => void;
+	updateWallet: (data: WalletValuableFields) => Promise<UpdateWalletResponse>;
+	replaceWallet: (data: WalletValuableFields) => Promise<ReplaceWalletResponse>;
+	deleteWallet: () => Promise<DeleteWalletResponse>;
 	fetchWallet: () => void;
 }
 
@@ -44,7 +44,7 @@ const useWalletMethods = (
 		refetchOnWindowFocus: false,
 		queryFn: () => fetchWalletApi({
 			payload: { id },
-			handler: apiContext.walletsClients.rest
+			handler: apiContext.walletServers.rest
 		})
 	});
 
@@ -84,7 +84,7 @@ const useWalletMethods = (
 	const updateMutation = useMutation({
 		mutationFn: (data: UpdateWalletRequest['payload']) => updateWalletApi({
 			payload: data,
-			handler: apiContext.walletsClients.rest
+			handler: apiContext.walletServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.update, id],
 		onSettled: () => singleQuery.refetch()
@@ -94,16 +94,18 @@ const useWalletMethods = (
 	const deleteMutation = useMutation({
 		mutationFn: (id: DeleteWalletRequest['id']) => deleteWalletApi({
 			id,
-			handler: apiContext.walletsClients.rest
+			handler: apiContext.walletServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.delete, id],
-		onSettled: () => { filterList(singleQuery.data); }
+		onSettled: () => { 
+			filterList(singleQuery.data);
+		}
 	});
 
 	const replaceMutation = useMutation({
 		mutationFn: (data: ReplaceWalletRequest['payload']) => replaceWalletApi({
 			payload: data,
-			handler: apiContext.walletsClients.rest
+			handler: apiContext.walletServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.replace, id],
 		onSettled: () => singleQuery.refetch()
@@ -117,11 +119,11 @@ const useWalletMethods = (
 	const updateWallet = useCallback((
 		data: WalletValuableFields
 	) => {
-		updateMutation.mutate({ id, data });
+		return updateMutation.mutateAsync({ id, data });
 	}, [id, updateMutation]);
 
 	const deleteWallet = useCallback(() => {
-		deleteMutation.mutate(id);
+		return deleteMutation.mutateAsync(id);
 	}, [deleteMutation, id]);
 
 	const replaceWallet = useCallback((
@@ -129,7 +131,7 @@ const useWalletMethods = (
 	) => {
 		const indexedData = Object.assign(data, { id });
 
-		replaceMutation.mutate({ id, data: indexedData });
+		return replaceMutation.mutateAsync({ id, data: indexedData });
 	}, [id, replaceMutation]);
 
 	const meta = useMemo(() => ({
