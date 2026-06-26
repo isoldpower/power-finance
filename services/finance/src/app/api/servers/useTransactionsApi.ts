@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 
-import { TransactionDjangoRESTApiClient } from "@feature/transaction";
+import { TransactionDjangoRESTApiClient, TransactionMockRESTApiClient } from "@feature/transaction";
 import type { ITransactionsRESTApiClient } from "@feature/transaction";
 import { useAxiosInstance } from "@internal/shared";
 
+const USE_DJANGO_BACKEND: boolean = false;
 
 interface UseTransactionsApiResponse {
 	rest: ITransactionsRESTApiClient;
@@ -15,7 +16,9 @@ function useTransactionsApi(baseUrl: string): UseTransactionsApiResponse {
 	});
 
 	const restTransactionsClient = useMemo<ITransactionsRESTApiClient>(() => {
-		return new TransactionDjangoRESTApiClient(transactionsAxiosInstance);
+		return USE_DJANGO_BACKEND
+			? new TransactionDjangoRESTApiClient(transactionsAxiosInstance)
+			: new TransactionMockRESTApiClient('transactions');
 	}, [transactionsAxiosInstance]);
 
 	return useMemo(() => ({

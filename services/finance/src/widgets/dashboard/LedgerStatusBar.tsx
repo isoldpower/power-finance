@@ -3,29 +3,35 @@ import { Link } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
 import { FinanceCard, FinanceStat, FinanceBadge } from "@internal/ui-library";
 
-// TODO wire to backend
-const MOCK_LEDGER = {
-	assets: "$18,880.50",
-	liabilities: "$640.20",
-	equity: "$18,240.30",
-};
+import { useLedgerBalance } from "@feature/summary";
+import { useConvertMoney } from "@feature/fx";
 
 const LedgerStatusBar: FC = () => {
+	const { ledger, isPending } = useLedgerBalance();
+	const { convert } = useConvertMoney();
+
+	const placeholder = isPending ? '…' : '—';
+	const assets = ledger ? convert(ledger.assets).formatted : placeholder;
+	const liabilities = ledger ? convert(ledger.liabilities).formatted : placeholder;
+	const equity = ledger ? convert(ledger.equity).formatted : placeholder;
+
 	return (
-		<FinanceCard className="flex flex-wrap items-center gap-[18px] px-[18px] py-3">
+		<FinanceCard className="flex flex-wrap items-center gap-x-[18px] gap-y-2 px-[18px] py-3">
 			<div className="flex items-center gap-2.5">
 				<span className="font-numeric text-[11px] uppercase tracking-[0.14em] text-text-3">Ledger</span>
 				<FinanceBadge tone="neutral" appearance="outline" size="sm">double-entry</FinanceBadge>
 			</div>
-			<div className="hidden h-7 w-px bg-border sm:block" />
-			<FinanceStat size="sm" label="Assets" value={MOCK_LEDGER.assets} className="hidden sm:flex" />
-			<span className="hidden text-text-3 sm:block">−</span>
-			<FinanceStat size="sm" label="Liabilities" value={MOCK_LEDGER.liabilities} className="hidden sm:flex" />
-			<span className="hidden text-text-3 sm:block">=</span>
-			<FinanceStat size="sm" label="Equity" value={MOCK_LEDGER.equity} className="hidden sm:flex" />
+			<div className="hidden items-end gap-[18px] sm:flex">
+				<div className="h-7 w-px self-center bg-border-strong" />
+				<FinanceStat size="sm" label="Assets" value={assets} />
+				<span className="pb-0.5 text-[15px] font-medium text-text-2">−</span>
+				<FinanceStat size="sm" label="Liabilities" value={liabilities} />
+				<span className="pb-0.5 text-[15px] font-medium text-text-2">=</span>
+				<FinanceStat size="sm" label="Equity" value={equity} />
+			</div>
 			<div className="flex-1" />
 			<div className="flex items-center gap-3">
-				<FinanceBadge tone="pos" appearance="soft" dot>balanced</FinanceBadge>
+				{ledger?.balanced ? <FinanceBadge tone="pos" appearance="soft" dot>balanced</FinanceBadge> : null}
 				<Link to={getFinanceRoute('management')} className="whitespace-nowrap text-xs font-semibold text-primary hover:underline">
 					Manage →
 				</Link>

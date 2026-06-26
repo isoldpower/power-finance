@@ -32,7 +32,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 	public get(
 		request: WalletGetRequest
 	): Promise<WalletGetResponse> {
-		return new Promise((resolve) => setTimeout(resolve, 1000))
+		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => this.storage.get(request.id))
 			.then((value) => {
 				if (!value) throw new Error("Not found");
@@ -51,7 +51,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 			updated_at: timestamp,
 		});
 
-		return new Promise((resolve) => setTimeout(resolve, 1000))
+		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => { this.storage.add(filledPayload); })
 			.then(() => flatToWalletDetailed(filledPayload));
 	}
@@ -65,7 +65,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 			? start + request.params.limit
 			: items.length;
 
-		return new Promise((resolve) => setTimeout(resolve, 1000))
+		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => items.slice(start, end))
 			.then((values) => ({
 				data: values.map(flatToWalletPreview),
@@ -80,7 +80,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 	patch(
 		request: WalletPatchRequest
 	): Promise<WalletPatchResponse> {
-		return new Promise((resolve) => setTimeout(resolve, 1000))
+		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => this.storage.get(request.id))
 			.then((value) => {
 				if (!value) throw new Error("Not found");
@@ -95,7 +95,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 	put(
 		request: WalletPutRequest
 	): Promise<WalletPutResponse> {
-		return new Promise((resolve) => setTimeout(resolve, 1000))
+		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => this.storage.get(request.id))
 			.then((value) => {
 				if (!value) throw new Error("Not found");
@@ -110,7 +110,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 	delete(
 		request: WalletDeleteRequest
 	): Promise<WalletDeleteResponse> {
-		return new Promise((resolve) => setTimeout(resolve, 1000))
+		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => this.storage.get(request.id))
 			.then((value) => {
 				if (!value) throw new Error("Not found");

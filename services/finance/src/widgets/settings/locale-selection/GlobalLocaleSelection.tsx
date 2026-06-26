@@ -33,7 +33,7 @@ const GlobalLocaleSelection = () => {
 						<Icons.ChevronsUpDown className="opacity-50"/>
 					</UiButton>
 				</UiPopoverTrigger>
-				<UiPopoverContent className="w-[200px] p-0">
+				<UiPopoverContent className="finance-theme w-[200px] p-0">
 					<LocalePicker
 						value={locale}
 						onSelected={(value) => {

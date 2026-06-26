@@ -3,6 +3,8 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { AuthGuard, AuthProvider, getIsEmbedded, useIsClerkProvided, ClerkProvider } from "@internal/shared";
 import { useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
 
+import { GlobalLayout } from "@shared/components";
+
 import { checkEnvVariables } from "./env/checkEnv.ts";
 import { ApiProvider } from "./api";
 import type { FC, ReactNode } from "react";
@@ -18,7 +20,9 @@ function RootComponent() {
 		>
 			<ApiProvider envVariables={envVariables}>
 				<AuthGuard>
-					<Outlet />
+					<GlobalLayout>
+						<Outlet />
+					</GlobalLayout>
 					<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
 				</AuthGuard>
 			</ApiProvider>

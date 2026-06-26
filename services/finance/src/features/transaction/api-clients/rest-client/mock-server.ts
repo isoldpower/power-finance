@@ -19,7 +19,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 	public get(
 		request: TransactionGetRequest
 	): Promise<TransactionGetResponse> {
-		return new Promise((resolve) => setTimeout(resolve, 1000))
+		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => this.storage.get(request.id))
 			.then((value) => {
 				if (!value) throw new Error("Not found");
@@ -44,7 +44,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 	): Promise<TransactionPostResponse> {
 		const stored = createTransactionFromMinimalPayload(request.data);
 
-		return new Promise((resolve) => setTimeout(resolve, 1000))
+		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => { this.storage.add(stored); })
 			.then(() => ({
 				id: stored.id,
@@ -69,7 +69,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 			? start + request.params.limit
 			: items.length;
 
-		return new Promise((resolve) => setTimeout(resolve, 1000))
+		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => items.slice(start, end))
 			.then((values) => ({
 				data: values.map((v) => ({
@@ -90,7 +90,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 	delete(
 		request: TransactionDeleteRequest
 	): Promise<TransactionDeleteResponse> {
-		return new Promise((resolve) => setTimeout(resolve, 1000))
+		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => this.storage.get(request.id))
 			.then((value) => {
 				if (!value) throw new Error("Not found");
@@ -100,6 +100,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 					message: `Successfully deleted resource at ${request.id}`,
 					meta: {
 						id: request.id,
+						success: true,
 					}
 				};
 			});

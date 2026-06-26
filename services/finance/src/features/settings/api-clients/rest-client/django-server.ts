@@ -1,9 +1,17 @@
 import {
-	IWebhookRESTApiClient, WebhookDeleteRequest, WebhookDeleteResponse, WebhookGetRequest, WebhookGetResponse,
+	IWebhookRESTApiClient,
+	WebhookDeleteRequest,
+	WebhookDeleteResponse,
+	WebhookGetRequest,
+	WebhookGetResponse,
 	WebhookListRequest,
 	WebhookListResponse,
 	WebhookPostRequest,
-	WebhookPostResponse, WebhookRotateRequest, WebhookRotateResponse, WebhookUpdateRequest, WebhookUpdateResponse
+	WebhookPostResponse,
+	WebhookRotateRequest,
+	WebhookRotateResponse,
+	WebhookUpdateRequest,
+	WebhookUpdateResponse,
 } from "./types.ts";
 import { AxiosInstance } from "axios";
 
@@ -25,9 +33,7 @@ class WebhookDjangoRESTApiClient implements IWebhookRESTApiClient {
 		return requestPostfix;
 	}
 
-	public post(
-		request: WebhookPostRequest
-	): Promise<WebhookPostResponse> {
+	public post(request: WebhookPostRequest): Promise<WebhookPostResponse> {
 		const postfix = this.resolvePostfix(request.params);
 		
 		return this.axiosInstance.post<WebhookPostResponse>(`/${postfix}`, request.data)

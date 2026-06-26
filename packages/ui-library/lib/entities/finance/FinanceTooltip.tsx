@@ -17,7 +17,8 @@ function FinanceTooltip({ content, children, side = "top", className }: FinanceT
 			<TooltipContent
 				side={side}
 				className={cn(
-					"rounded-lg bg-[var(--text)] px-2.5 py-1.5 text-[11.5px] font-medium leading-snug text-[var(--surface)] shadow-[var(--shadow-lg)] [&_svg]:bg-[var(--text)] [&_svg]:fill-[var(--text)]",
+					// `finance-theme` re-establishes design tokens — Radix portals this to body.
+					"finance-theme rounded-lg bg-[var(--text)] px-2.5 py-1.5 text-[11.5px] font-medium leading-snug text-[var(--surface)] shadow-[var(--shadow-lg)] [&_svg]:bg-[var(--text)] [&_svg]:fill-[var(--text)]",
 					className
 				)}
 			>

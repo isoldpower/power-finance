@@ -11,14 +11,15 @@ import {
 	FinanceMenuItem,
 } from "@internal/ui-library";
 
+import { useTransactionsList } from "@feature/transaction";
+import { useWalletsList } from "@feature/wallet";
+import { useConvertMoney } from "@feature/fx";
+import { useLocaleCurrency } from "@shared/utils";
+
 import { SectionHeader } from "./SectionHeader.tsx";
-import {
-	MOCK_TRANSACTIONS,
-	MOCK_WALLETS,
-	MOCK_TXN_CATEGORIES,
-	MOCK_TXN_TYPES,
-} from "./mock.ts";
-import type { MockTransaction, PanelMode } from "./mock.ts";
+import { toTransactionRow } from "./adapters.ts";
+import type { TransactionRowView } from "./adapters.ts";
+import type { PanelMode } from "./mock.ts";
 
 interface TransactionsSectionProps {
 	onOpenPanel: (mode: PanelMode) => void;
@@ -31,58 +32,72 @@ interface FilterChipProps {
 	onSelect: (value: string) => void;
 }
 
-const FilterChip: FC<FilterChipProps> = ({ label, active, options, onSelect }) => {
-	return (
-		<FinanceMenu>
-			<FinanceMenuTrigger asChild>
-				<button
-					type="button"
-					className={cn(
-						"flex items-center gap-1.5 rounded-[var(--radius-md)] border px-3 py-2 text-xs font-semibold",
-						active ? "border-[var(--accent-border)] bg-[var(--accent-soft)] text-primary" : "border-border-strong text-text-2"
-					)}
-				>
-					{label} <span className="text-[9px] text-text-3">▾</span>
-				</button>
-			</FinanceMenuTrigger>
-			<FinanceMenuContent align="start" className="min-w-44">
-				{options.map((option) => (
-					<FinanceMenuItem key={option.value} onClick={() => { onSelect(option.value); }}>
-						{option.label}
-					</FinanceMenuItem>
-				))}
-			</FinanceMenuContent>
-		</FinanceMenu>
-	);
-};
+const FilterChip: FC<FilterChipProps> = ({ label, active, options, onSelect }) => (
+	<FinanceMenu>
+		<FinanceMenuTrigger asChild>
+			<button
+				type="button"
+				className={cn(
+					"flex items-center gap-1.5 rounded-[var(--radius-md)] border px-3 py-2 text-xs font-semibold",
+					active ? "border-[var(--accent-border)] bg-[var(--accent-soft)] text-primary" : "border-border-strong text-text-2"
+				)}
+			>
+				{label} <span className="text-[9px] text-text-3">▾</span>
+			</button>
+		</FinanceMenuTrigger>
+		<FinanceMenuContent align="start" className="min-w-44">
+			{options.map((option) => (
+				<FinanceMenuItem key={option.value} onClick={() => { onSelect(option.value); }}>
+					{option.label}
+				</FinanceMenuItem>
+			))}
+		</FinanceMenuContent>
+	</FinanceMenu>
+);
 
 const SORT_OPTIONS = [
 	{ value: 'recent', label: 'Most recent' },
 	{ value: 'amount', label: 'Amount: high → low' },
-	{ value: 'az', label: 'Description A–Z' },
+];
+
+const TYPE_OPTIONS = [
+	{ value: 'all', label: 'All types' },
+	{ value: 'income', label: 'income' },
+	{ value: 'expense', label: 'expense' },
 ];
 
 const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel }) => {
+	const { transactions, isPending } = useTransactionsList();
+	const { wallets } = useWalletsList();
+	const { convert } = useConvertMoney();
+	const formatCurrency = useLocaleCurrency();
+
 	const [query, setQuery] = useState('');
 	const [walletFilter, setWalletFilter] = useState('all');
-	const [catFilter, setCatFilter] = useState('all');
 	const [typeFilter, setTypeFilter] = useState('all');
 	const [sort, setSort] = useState('recent');
 	const [selected, setSelected] = useState<Set<string>>(new Set());
 	const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
+	const walletById = useMemo(
+		() => new Map(wallets.map((wallet) => [wallet.id, { name: wallet.name, currency: wallet.balance.currency }])),
+		[wallets]
+	);
+
 	const rows = useMemo(() => {
-		const filtered = MOCK_TRANSACTIONS.filter((txn) => {
-			const haystack = `${txn.description} ${txn.amount} ${txn.category}`.toLowerCase();
+		const mapped = transactions.map((txn) => toTransactionRow(txn, walletById, formatCurrency));
+		const filtered = mapped.filter((row) => {
+			const haystack = `${row.walletName} ${row.amount.toString()} ${row.category}`.toLowerCase();
 			const matchesQuery = haystack.includes(query.toLowerCase());
-			const matchesWallet = walletFilter === 'all' || txn.walletId === walletFilter;
-			const matchesCat = catFilter === 'all' || txn.category === catFilter;
-			const matchesType = typeFilter === 'all' || txn.type === typeFilter;
-			return matchesQuery && matchesWallet && matchesCat && matchesType;
+			const matchesWallet = walletFilter === 'all' || row.walletId === walletFilter;
+			const matchesType = typeFilter === 'all'
+				|| (typeFilter === 'income' && row.amount >= 0)
+				|| (typeFilter === 'expense' && row.amount < 0);
+			return matchesQuery && matchesWallet && matchesType;
 		});
-		if (sort === 'az') return [...filtered].sort((a, b) => a.description.localeCompare(b.description));
-		return filtered;
-	}, [query, walletFilter, catFilter, typeFilter, sort]);
+		if (sort === 'amount') return [...filtered].sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount));
+		return [...filtered].sort((a, b) => b.id.localeCompare(a.id));
+	}, [transactions, walletById, formatCurrency, query, walletFilter, typeFilter, sort]);
 
 	const toggle = (set: Set<string>, id: string) => {
 		const next = new Set(set);
@@ -92,7 +107,7 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel }) => {
 
 	const walletLabel = walletFilter === 'all'
 		? 'All wallets'
-		: MOCK_WALLETS.find((wallet) => wallet.id === walletFilter)?.name ?? 'All wallets';
+		: walletById.get(walletFilter)?.name ?? 'All wallets';
 	const sortLabel = SORT_OPTIONS.find((option) => option.value === sort)?.label ?? '';
 
 	return (
@@ -116,8 +131,8 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel }) => {
 						<input
 							value={query}
 							onChange={(event) => { setQuery(event.target.value); }}
-							placeholder="Search description, amount, note…"
-							className="min-w-0 flex-1 border-none bg-transparent text-[13px] outline-none placeholder:text-text-3"
+							placeholder="Search wallet, amount…"
+							className="min-w-0 flex-1 border-none bg-transparent text-[13px] outline-none placeholder:text-[var(--text-3)]"
 						/>
 						{query ? (
 							<button type="button" onClick={() => { setQuery(''); }} className="text-sm leading-none text-text-3">✕</button>
@@ -127,19 +142,13 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel }) => {
 						label={walletLabel}
 						active={walletFilter !== 'all'}
 						onSelect={setWalletFilter}
-						options={[{ value: 'all', label: 'All wallets' }, ...MOCK_WALLETS.map((wallet) => ({ value: wallet.id, label: wallet.name }))]}
-					/>
-					<FilterChip
-						label={catFilter === 'all' ? 'All categories' : catFilter}
-						active={catFilter !== 'all'}
-						onSelect={setCatFilter}
-						options={[{ value: 'all', label: 'All categories' }, ...MOCK_TXN_CATEGORIES.map((cat) => ({ value: cat, label: cat }))]}
+						options={[{ value: 'all', label: 'All wallets' }, ...wallets.map((wallet) => ({ value: wallet.id, label: wallet.name }))]}
 					/>
 					<FilterChip
 						label={typeFilter === 'all' ? 'All types' : typeFilter}
 						active={typeFilter !== 'all'}
 						onSelect={setTypeFilter}
-						options={[{ value: 'all', label: 'All types' }, ...MOCK_TXN_TYPES.map((type) => ({ value: type, label: type }))]}
+						options={TYPE_OPTIONS}
 					/>
 					<FilterChip
 						label={`Sort: ${sortLabel}`}
@@ -170,18 +179,23 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel }) => {
 					<div className="w-[26px]" />
 				</div>
 
-				{rows.map((txn) => (
-					<TransactionRow
-						key={txn.id}
-						txn={txn}
-						selected={selected.has(txn.id)}
-						expanded={expanded.has(txn.id)}
-						onSelect={() => { setSelected((prev) => toggle(prev, txn.id)); }}
-						onExpand={() => { setExpanded((prev) => toggle(prev, txn.id)); }}
-					/>
-				))}
+				{isPending ? (
+					<div className="px-4 py-10 text-center text-[13px] text-text-3">Loading…</div>
+				) : (
+					rows.map((row) => (
+						<TransactionRow
+							key={row.id}
+							row={row}
+							formatted={convert({ amount: row.amount, currency: row.currency }).formatted}
+							selected={selected.has(row.id)}
+							expanded={expanded.has(row.id)}
+							onSelect={() => { setSelected((prev) => toggle(prev, row.id)); }}
+							onExpand={() => { setExpanded((prev) => toggle(prev, row.id)); }}
+						/>
+					))
+				)}
 
-				{rows.length === 0 ? (
+				{!isPending && rows.length === 0 ? (
 					<div className="flex flex-col items-center justify-center gap-1.5 px-5 py-10 text-center">
 						<div className="flex size-[38px] items-center justify-center rounded-[10px] border border-dashed border-border-strong text-[17px] text-text-3">⌕</div>
 						<div className="text-[13.5px] font-semibold text-text-2">No matching transactions</div>
@@ -190,7 +204,7 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel }) => {
 				) : null}
 
 				<div className="flex items-center px-4 py-2.5 text-xs text-text-3">
-					<span>Showing <b className="text-text-2">1–{rows.length}</b> of {MOCK_TRANSACTIONS.length}</span>
+					<span>Showing <b className="text-text-2">1–{rows.length}</b> of {transactions.length}</span>
 				</div>
 			</FinanceCard>
 		</section>
@@ -198,15 +212,16 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel }) => {
 };
 
 interface TransactionRowProps {
-	txn: MockTransaction;
+	row: TransactionRowView;
+	formatted: string;
 	selected: boolean;
 	expanded: boolean;
 	onSelect: () => void;
 	onExpand: () => void;
 }
 
-const TransactionRow: FC<TransactionRowProps> = ({ txn, selected, expanded, onSelect, onExpand }) => {
-	const totalDebit = txn.lines.find((line) => line.type === 'DR')?.amount ?? txn.amount;
+const TransactionRow: FC<TransactionRowProps> = ({ row, formatted, selected, expanded, onSelect, onExpand }) => {
+	const totalDebit = row.lines.find((line) => line.type === 'DR')?.amount ?? formatted;
 	return (
 		<div className="border-b border-border last:border-b-0">
 			<div onClick={onExpand} className="flex h-14 cursor-pointer items-center px-4 hover:bg-secondary">
@@ -227,24 +242,21 @@ const TransactionRow: FC<TransactionRowProps> = ({ txn, selected, expanded, onSe
 					</button>
 				</div>
 				<div className="w-[74px] font-numeric">
-					<div className="text-xs">{txn.date}</div>
-					<div className="text-[10px] text-text-3">{txn.time}</div>
+					<div className="text-xs">{row.date}</div>
+					<div className="text-[10px] text-text-3">{row.time}</div>
 				</div>
 				<div className="flex min-w-0 flex-1 items-center gap-2.5">
-					<div className={`flex size-[30px] flex-none items-center justify-center rounded-[8px] ${txn.iconClass}`}>{txn.icon}</div>
+					<div className={`flex size-[30px] flex-none items-center justify-center rounded-[8px] ${row.iconClass}`}>{row.icon}</div>
 					<div className="min-w-0">
-						<div className="truncate text-[13.5px] font-semibold">{txn.description}</div>
-						{txn.scanned ? (
-							<div className="flex items-center gap-1 text-[10.5px] text-primary">⛶ scanned receipt</div>
-						) : null}
+						<div className="truncate text-[13.5px] font-semibold">{row.kind}</div>
 					</div>
 				</div>
-				<div className="hidden w-[130px] text-[12.5px] text-text-2 md:block">{txn.walletName}</div>
+				<div className="hidden w-[130px] text-[12.5px] text-text-2 md:block">{row.walletName}</div>
 				<div className="hidden w-[108px] md:block">
-					<FinanceBadge tone="neutral" appearance="outline" size="sm">{txn.category}</FinanceBadge>
+					<FinanceBadge tone="neutral" appearance="outline" size="sm">{row.category}</FinanceBadge>
 				</div>
 				<div className="w-[104px] text-right">
-					<FinanceMoney tone={txn.amountTone} size="sm">{txn.amount}</FinanceMoney>
+					<FinanceMoney tone={row.tone} size="sm">{formatted}</FinanceMoney>
 				</div>
 				<div className="w-[26px] text-right">
 					<span className={cn("inline-block text-[11px] text-text-3 transition-transform", expanded && "rotate-180")}>▾</span>
@@ -254,7 +266,7 @@ const TransactionRow: FC<TransactionRowProps> = ({ txn, selected, expanded, onSe
 				<div className="max-w-[600px] py-1 pl-[52px] pr-4 pb-4">
 					<div className="mb-3 flex items-center gap-2">
 						<span className="font-numeric text-[9.5px] tracking-[0.12em] text-text-3">DERIVED JOURNAL POSTING</span>
-						<FinanceBadge tone="accent" appearance="outline" size="sm">AI</FinanceBadge>
+						<FinanceBadge tone="neutral" appearance="outline" size="sm">TODO backend</FinanceBadge>
 						<div className="flex-1" />
 						<span className="flex items-center gap-1 text-[10.5px] font-semibold text-pos">
 							<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -264,22 +276,22 @@ const TransactionRow: FC<TransactionRowProps> = ({ txn, selected, expanded, onSe
 						</span>
 					</div>
 					<div className="flex items-center gap-2.5 rounded-[9px] border border-border-strong bg-card px-3 py-2.5">
-						<div className={`flex size-7 flex-none items-center justify-center rounded-[7px] ${txn.iconClass}`}>{txn.icon}</div>
+						<div className={`flex size-7 flex-none items-center justify-center rounded-[7px] ${row.iconClass}`}>{row.icon}</div>
 						<div className="min-w-0 flex-1">
-							<div className="truncate text-[12.5px] font-semibold">{txn.description}</div>
-							<div className="font-numeric text-[9px] tracking-[0.08em] text-text-3">TRANSACTION · {txn.kind}</div>
+							<div className="truncate text-[12.5px] font-semibold">{row.walletName}</div>
+							<div className="font-numeric text-[9px] tracking-[0.08em] text-text-3">TRANSACTION · {row.kind}</div>
 						</div>
-						<FinanceMoney tone={txn.amountTone} size="sm">{txn.amount}</FinanceMoney>
+						<FinanceMoney tone={row.tone} size="sm">{formatted}</FinanceMoney>
 					</div>
-					{txn.lines.map((line, index) => (
-						<div key={`${txn.id}-${line.account}-${index.toString()}`} className="ml-[17px] mt-2 flex items-center gap-2.5 rounded-[9px] border border-border bg-card px-3 py-2.5">
+					{row.lines.map((line, index) => (
+						<div key={`${row.id}-${line.account}-${index.toString()}`} className="ml-[17px] mt-2 flex items-center gap-2.5 rounded-[9px] border border-border bg-card px-3 py-2.5">
 							<FinanceBadge tone={line.type === 'DR' ? 'accent' : 'viol'} appearance="soft" size="sm">{line.type}</FinanceBadge>
 							<span className="min-w-0 flex-1 truncate text-[12.5px] font-semibold">{line.account}</span>
 							<span className="font-numeric text-[9px] uppercase tracking-[0.06em] text-text-3">{line.side}</span>
 							<span className="min-w-16 text-right font-display text-[13px] font-semibold">{line.amount}</span>
 						</div>
 					))}
-					<div className="mt-3 font-numeric text-[10.5px] text-text-3">{txn.provenance}</div>
+					<div className="mt-3 font-numeric text-[10.5px] text-text-3">{row.provenance}</div>
 				</div>
 			) : null}
 		</div>

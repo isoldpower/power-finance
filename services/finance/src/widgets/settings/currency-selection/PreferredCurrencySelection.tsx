@@ -31,7 +31,7 @@ const PreferredCurrencySelection = () => {
 						<Icons.ChevronsUpDown className="opacity-50"/>
 					</UiButton>
 				</UiPopoverTrigger>
-				<UiPopoverContent className="w-[200px] p-0">
+				<UiPopoverContent className="finance-theme w-[200px] p-0">
 					<CurrencyPicker
 						value={mainCurrency}
 						onSelected={(value) => {

@@ -4,10 +4,18 @@ import { ApiQueryReactions } from "./query-reactions";
 import { useWalletsApi } from "./servers/useWalletsApi.ts";
 import { useTransactionsApi } from "./servers/useTransactionsApi.ts";
 import { useWebhooksApi } from "./servers/useWebhooksApi.ts";
+import { useSummaryApi } from "./servers/useSummaryApi.ts";
+import { useActionsApi } from "./servers/useActionsApi.ts";
+import { useNotificationsApi } from "./servers/useNotificationsApi.ts";
+import { useFxApi } from "./servers/useFxApi.ts";
 import type { FC } from 'react';
 import type { IWalletsRESTApiClient } from "@feature/wallet";
 import type { ITransactionsRESTApiClient } from "@feature/transaction";
 import type { IWebhookRESTApiClient } from "@feature/settings";
+import type { ISummaryRESTApiClient } from "@feature/summary";
+import type { IActionsRESTApiClient } from "@feature/actions";
+import type { INotificationsRESTApiClient } from "@feature/notifications";
+import type { IFxRESTApiClient } from "@feature/fx";
 
 
 interface ApiContextType {
@@ -19,6 +27,18 @@ interface ApiContextType {
 	},
 	webhookServers: {
 		readonly rest: IWebhookRESTApiClient
+	},
+	summaryServers: {
+		readonly rest: ISummaryRESTApiClient
+	},
+	actionServers: {
+		readonly rest: IActionsRESTApiClient
+	},
+	notificationServers: {
+		readonly rest: INotificationsRESTApiClient
+	},
+	fxServers: {
+		readonly rest: IFxRESTApiClient
 	}
 }
 
@@ -36,12 +56,20 @@ const ApiProvider: FC<ApiProviderProps> = ({
 	const walletServers = useWalletsApi(envVariables.CLIENT_API_BASE_URL);
 	const transactionServers = useTransactionsApi(envVariables.CLIENT_API_BASE_URL);
 	const webhookServers = useWebhooksApi(envVariables.CLIENT_API_BASE_URL);
-	
+	const summaryServers = useSummaryApi(envVariables.CLIENT_API_BASE_URL);
+	const actionServers = useActionsApi(envVariables.CLIENT_API_BASE_URL);
+	const notificationServers = useNotificationsApi(envVariables.CLIENT_API_BASE_URL);
+	const fxServers = useFxApi(envVariables.CLIENT_API_BASE_URL);
+
 	const contextValue = useMemo<ApiContextType>(() => ({
 		walletServers,
 		transactionServers,
-		webhookServers
-	}), [transactionServers, walletServers, webhookServers]);
+		webhookServers,
+		summaryServers,
+		actionServers,
+		notificationServers,
+		fxServers
+	}), [transactionServers, walletServers, webhookServers, summaryServers, actionServers, notificationServers, fxServers]);
 
 	return (
 		<ApiContext value={contextValue}>

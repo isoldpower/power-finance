@@ -7,8 +7,18 @@ export const useLocaleCurrency = () => {
 	return useCallback((
 		amount: number,
 		currency: string
-	) => amount.toLocaleString(locale, {
-		style: 'currency',
-		currency: currency,
-	}), [locale]);
+	) => {
+		const code = currency.trim() || 'USD';
+		try {
+			return amount.toLocaleString(locale, {
+				style: 'currency',
+				currency: code,
+			});
+		} catch {
+			return amount.toLocaleString(locale, {
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2,
+			});
+		}
+	}, [locale]);
 }
