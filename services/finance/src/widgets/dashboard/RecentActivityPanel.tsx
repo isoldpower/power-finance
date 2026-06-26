@@ -20,7 +20,7 @@ const MOCK_GROUPS = [
 		tone: 'pos' as const,
 		items: [
 			{ id: 't3', icon: '💼', iconClass: 'bg-pos-soft text-pos', desc: 'Acme Corp Salary', wallet: 'Main Checking', category: 'Income', amount: '+$4,200.00', tone: 'pos' as const, time: '09:00' },
-			{ id: 't4', icon: '🚇', iconClass: 'bg-accent-soft text-primary', desc: 'Metro Transit', wallet: 'Main Checking', category: 'Transport', amount: '−$58.30', tone: 'neg' as const, time: '18:21' },
+			{ id: 't4', icon: '🚇', iconClass: 'bg-[var(--accent-soft)] text-primary', desc: 'Metro Transit', wallet: 'Main Checking', category: 'Transport', amount: '−$58.30', tone: 'neg' as const, time: '18:21' },
 		],
 	},
 ];

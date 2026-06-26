@@ -6,7 +6,7 @@ const MOCK_NEEDS_ACTION = [
 	{
 		id: 'recurring',
 		icon: '↻',
-		iconClass: 'bg-accent-soft text-primary',
+		iconClass: 'bg-[var(--accent-soft)] text-primary',
 		title: 'Confirm recurring rent — $1,450.00',
 		subtitle: 'Detected on Main Checking · due Jun 30',
 		primary: 'Approve',
@@ -35,7 +35,7 @@ const MOCK_NEEDS_ACTION = [
 const NeedsActionPanel: FC = () => {
 	return (
 		<FinanceCard variant="accent" className="overflow-hidden">
-			<div className="flex items-center gap-2.5 border-b border-border bg-accent-soft px-[18px] py-3.5">
+			<div className="flex items-center gap-2.5 border-b border-border bg-[var(--accent-soft)] px-[18px] py-3.5">
 				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
 					<path d="M12 9v4" />
 					<path d="M12 17h.01" />
