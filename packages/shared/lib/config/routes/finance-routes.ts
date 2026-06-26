@@ -6,6 +6,8 @@ const FINANCE_ROOT = '';
 interface FinanceRoutes {
 	root: string
 	dashboard: string
+	management: string
+	planning: string
 	wallets: string
 	transactions: string
 	settings: string
@@ -14,6 +16,8 @@ interface FinanceRoutes {
 const financeRoutes: FinanceRoutes = {
 	root: `/${FINANCE_ROOT}`,
 	dashboard: `${FINANCE_ROOT}/dashboard`,
+	management: `${FINANCE_ROOT}/management`,
+	planning: `${FINANCE_ROOT}/planning`,
 	wallets: `${FINANCE_ROOT}/dashboard/wallets`,
 	transactions: `${FINANCE_ROOT}/dashboard/transactions`,
 	settings: `${FINANCE_ROOT}/settings`

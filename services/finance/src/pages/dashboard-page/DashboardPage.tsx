@@ -1,62 +1,37 @@
-import { useState } from "react";
 import type { FC } from "react";
 
-import { WalletCardWithControls } from "@process/wallet";
 import {
-	BalanceSummary,
-	PreviewWalletsList,
-	WalletsListNavigationHeader
-} from "@widget/wallet";
-import {
-	TransactionsListNavigationHeader,
-	RecentTransactionsList,
-	RecentTransaction, NewTransactionForm
-} from "@widget/transaction";
-
-import { useWalletSelection, useWalletsList } from "@feature/wallet";
-import { OpenTransactionCreation } from "@feature/transaction";
-import type { TransactionPreviewDto } from "@entity/transaction";
-import type { Wallet } from "@entity/wallet";
+	NetWorthHero,
+	CashFlowCard,
+	LedgerStatusBar,
+	NeedsActionPanel,
+	RecentActivityPanel,
+	QuickAddPanel,
+} from "@widget/dashboard";
 
 
 const DashboardPage: FC = () => {
-	const { wallets } = useWalletsList();
-	const { selected } = useWalletSelection({ searchKey: 'selectedWallet' });
-	const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(false);
-
 	return (
-		<div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto flex flex-col gap-8">
-			<div>
-				<h1 className="text-2xl font-bold">Dashboard</h1>
-				<p className="text-gray-500 dark:text-gray-300">Welcome to your financial overview</p>
+		<div className="mx-auto flex max-w-[1320px] flex-col gap-4 px-[22px] pb-[70px] pt-[22px]">
+			<div className="flex flex-wrap items-center gap-3.5">
+				<h1 className="font-display text-2xl font-semibold tracking-[-0.01em]">Dashboard</h1>
+				<span className="hidden font-numeric text-[11px] uppercase tracking-[0.08em] text-text-3 sm:block">
+					Your financial overview
+				</span>
 			</div>
-			<div className="bg-gradient-to-r bg-card rounded-xl shadow-sm p-6">
-				<div className="md:flex md:justify-between md:items-center">
-					<BalanceSummary />
-					<div className="mt-4 md:mt-0">
-						<OpenTransactionCreation
-							setIsModalOpen={setIsNewTransactionModalOpen}
-							isModalOpen={isNewTransactionModalOpen}
-						>
-							<NewTransactionForm
-								wallets={wallets}
-								onClose={() => { setIsNewTransactionModalOpen(false); }} 
-							/>
-						</OpenTransactionCreation>
-					</div>
-				</div>
+
+			<div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.15fr_1fr]">
+				<NetWorthHero />
+				<CashFlowCard />
 			</div>
-			<div>
-				<WalletsListNavigationHeader />
-				<PreviewWalletsList>
-					<WalletCardWithControls wallet={{} as Wallet} />
-				</PreviewWalletsList>
-			</div>
-			<div>
-				<TransactionsListNavigationHeader />
-				<RecentTransactionsList selectedWallet={selected}>
-					<RecentTransaction transaction={{} as TransactionPreviewDto} />
-				</RecentTransactionsList>
+
+			<LedgerStatusBar />
+
+			<NeedsActionPanel />
+
+			<div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[1fr_360px]">
+				<RecentActivityPanel />
+				<QuickAddPanel />
 			</div>
 		</div>
 	);
