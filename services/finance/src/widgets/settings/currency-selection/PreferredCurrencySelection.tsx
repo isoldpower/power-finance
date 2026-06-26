@@ -1,8 +1,8 @@
 import {
-	PopoverContent,
-	PopoverTrigger,
-	Button,
-	Popover,
+	UiPopoverContent,
+	UiPopoverTrigger,
+	UiButton,
+	UiPopover,
 	Icons,
 } from '@internal/ui-library';
 import { useState } from "react";
@@ -17,9 +17,9 @@ const PreferredCurrencySelection = () => {
 	return (
 		<div className="flex gap-4 items-center justify-between">
 			<h3>Main currency</h3>
-			<Popover open={open} onOpenChange={setOpen}>
-				<PopoverTrigger asChild>
-					<Button
+			<UiPopover open={open} onOpenChange={setOpen}>
+				<UiPopoverTrigger asChild>
+					<UiButton
 						variant="outline"
 						role="combobox"
 						aria-expanded={open}
@@ -27,19 +27,19 @@ const PreferredCurrencySelection = () => {
 					>
 						{mainCurrency
 							? code(mainCurrency)?.currency ?? mainCurrency
-							: "Select currency..."}
+							: "UiSelect currency..."}
 						<Icons.ChevronsUpDown className="opacity-50"/>
-					</Button>
-				</PopoverTrigger>
-				<PopoverContent className="w-[200px] p-0">
+					</UiButton>
+				</UiPopoverTrigger>
+				<UiPopoverContent className="w-[200px] p-0">
 					<CurrencyPicker
 						value={mainCurrency}
 						onSelected={(value) => {
 							setOpen(false)
 							onUpdateField('mainCurrency', value);
 						}} />
-				</PopoverContent>
-			</Popover>
+				</UiPopoverContent>
+			</UiPopover>
 		</div>
 	)
 }

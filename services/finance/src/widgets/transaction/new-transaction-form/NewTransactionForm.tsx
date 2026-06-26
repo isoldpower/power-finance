@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormField, Button } from "@internal/ui-library";
+import { UiForm, UiFormField, UiButton } from "@internal/ui-library";
 import type { FC } from "react";
 
 import { FieldLayout } from "@entity/transaction";
@@ -34,10 +34,10 @@ const NewTransactionForm: FC<NewTransactionFormProps> = ({ onClose, wallets }) =
   }, [wallets]);
 
   return (
-		<Form {...form}>
+		<UiForm {...form}>
 			<NewTransaction onSuccess={onClose} handleSubmit={form.handleSubmit}>
 				<div className="space-y-4 py-4">
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="source_wallet_id"
 						render={({field}) => (
@@ -47,7 +47,7 @@ const NewTransactionForm: FC<NewTransactionFormProps> = ({ onClose, wallets }) =
 									{...field} />
 							</FieldLayout>
 						)} />
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="amount"
 						render={({field}) => (
@@ -55,7 +55,7 @@ const NewTransactionForm: FC<NewTransactionFormProps> = ({ onClose, wallets }) =
 								<InputField placeholder="Enter amount" type="number" {...field} />
 							</FieldLayout>
 						)} />
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="description"
 						render={({field}) => (
@@ -65,15 +65,15 @@ const NewTransactionForm: FC<NewTransactionFormProps> = ({ onClose, wallets }) =
 						)} />
 				</div>
 				<div className="flex items-center gap-2 pt-4">
-					<Button variant="outline" type="button" onClick={onClose}>
+					<UiButton variant="outline" type="button" onClick={onClose}>
 						Cancel
-					</Button>
-					<Button variant="default" type="submit">
+					</UiButton>
+					<UiButton variant="default" type="submit">
 						Create Transaction
-					</Button>
+					</UiButton>
 				</div>
 			</NewTransaction>
-		</Form>
+		</UiForm>
   )
 }
 

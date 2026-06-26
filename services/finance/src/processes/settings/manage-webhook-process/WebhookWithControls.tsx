@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 
 import {
-	Button,
-	CardDescription,
-	CardTitle,
+	UiButton,
+	UiCardDescription,
+	UiCardTitle,
 	Icons
 } from "@internal/ui-library";
 import type { WebhookEndpoint } from "@entity/settings";
@@ -24,23 +24,23 @@ const WebhookWithControls: FC<WebhookWithControlsProps> = ({
 		<div className="p-2">
 			<div className="flex justify-between items-center">
 				<div className="flex flex-col gap-2">
-					<CardTitle className="mb-0! pb-0!">
+					<UiCardTitle className="mb-0! pb-0!">
 						{webhook.title}
-					</CardTitle>
-					<CardDescription className="mt-0! pt-0!">
+					</UiCardTitle>
+					<UiCardDescription className="mt-0! pt-0!">
 						{webhook.url}
-					</CardDescription>
+					</UiCardDescription>
 				</div>
 				<div className="flex gap-2 items-center">
 					<EditWebhookModalProcess targetWebhook={webhook}>
-						<Button size="icon" variant="secondary">
+						<UiButton size="icon" variant="secondary">
 							<Icons.Pencil />
-						</Button>
+						</UiButton>
 					</EditWebhookModalProcess>
 					<DeleteWebhookModalProcess targetWebhook={webhook}>
-						<Button size="icon" variant="destructive">
+						<UiButton size="icon" variant="destructive">
 							<Icons.Trash2 />
-						</Button>
+						</UiButton>
 					</DeleteWebhookModalProcess>
 				</div>
 			</div>

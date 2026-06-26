@@ -2,12 +2,12 @@ import type { FC, ReactNode } from "react";
 import { codes, code } from 'currency-codes';
 
 import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
+	UiCommand,
+	UiCommandEmpty,
+	UiCommandGroup,
+	UiCommandInput,
+	UiCommandItem,
+	UiCommandList,
 	Icons,
 	cn
 } from "@internal/ui-library";
@@ -25,15 +25,15 @@ const CurrencyPicker: FC<CurrencyPickerProps> = ({ onSelected, value, notFound }
 	}));
 
 	return (
-		<Command>
-			<CommandInput placeholder="Search currency..." className="h-9"/>
-			<CommandList>
-				<CommandEmpty>
+		<UiCommand>
+			<UiCommandInput placeholder="Search currency..." className="h-9"/>
+			<UiCommandList>
+				<UiCommandEmpty>
 					{notFound ?? "No currency found."}
-				</CommandEmpty>
-				<CommandGroup>
+				</UiCommandEmpty>
+				<UiCommandGroup>
 					{labeledCurrencies.map((currency) => (
-						<CommandItem
+						<UiCommandItem
 							key={currency.value}
 							value={currency.value}
 							onSelect={(currentValue) => {
@@ -47,11 +47,11 @@ const CurrencyPicker: FC<CurrencyPickerProps> = ({ onSelected, value, notFound }
 									value === currency.value ? "opacity-100" : "opacity-0"
 								)}
 							/>
-						</CommandItem>
+						</UiCommandItem>
 					))}
-				</CommandGroup>
-			</CommandList>
-		</Command>
+				</UiCommandGroup>
+			</UiCommandList>
+		</UiCommand>
 	)
 }
 

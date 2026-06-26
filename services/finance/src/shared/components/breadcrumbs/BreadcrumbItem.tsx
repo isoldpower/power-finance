@@ -2,11 +2,11 @@ import type {FC, ReactNode} from "react";
 
 import {Link, useLocation} from "@tanstack/react-router";
 import {
-	BreadcrumbItem as UIBreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbSeparator
+	UiBreadcrumbItem,
+	UiBreadcrumbLink,
+	UiBreadcrumbSeparator,
+	UiBreadcrumbPage
 } from "@internal/ui-library";
-import { BreadcrumbPage } from "@internal/ui-library";
 
 
 interface BreadcrumbItemProps {
@@ -22,20 +22,20 @@ const BreadcrumbItem: FC<BreadcrumbItemProps> = ({
 
 	return (
 		<>
-			<UIBreadcrumbItem>
+			<UiBreadcrumbItem>
 				{to === pathname ? (
-					<BreadcrumbPage>
+					<UiBreadcrumbPage>
 						{children}
-					</BreadcrumbPage>
+					</UiBreadcrumbPage>
 				) : (
-					<BreadcrumbLink asChild>
+					<UiBreadcrumbLink asChild>
 						<Link to={to}>
 							{children}
 						</Link>
-					</BreadcrumbLink>
+					</UiBreadcrumbLink>
 				)}
-			</UIBreadcrumbItem>
-			<BreadcrumbSeparator/>
+			</UiBreadcrumbItem>
+			<UiBreadcrumbSeparator/>
 		</>
 	)
 }

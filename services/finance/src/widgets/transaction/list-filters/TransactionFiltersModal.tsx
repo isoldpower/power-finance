@@ -1,4 +1,4 @@
-import { Button, Form, FormField } from "@internal/ui-library";
+import { UiButton, UiForm, UiFormField } from "@internal/ui-library";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearch } from "@tanstack/react-router";
@@ -33,10 +33,10 @@ const TransactionFiltersModal: FC<TransactionFiltersModalProps> = ({
 	});
 
 	return (
-		<Form {...form}>
+		<UiForm {...form}>
 			<ApplyQueryFilters handleSubmit={form.handleSubmit} wallets={wallets} onSuccess={onClose}>
 				<div className="space-y-4">
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="selectedWallet"
 						render={({field}) => (
@@ -50,16 +50,16 @@ const TransactionFiltersModal: FC<TransactionFiltersModalProps> = ({
 							</FieldLayout>
 						)} />
 					<div className="pt-4 flex space-x-3">
-						<Button variant="outline" onClick={onClose}>
+						<UiButton variant="outline" onClick={onClose}>
 							Cancel
-						</Button>
-						<Button type="submit">
+						</UiButton>
+						<UiButton type="submit">
 							Apply Filters
-						</Button>
+						</UiButton>
 					</div>
 				</div>
 			</ApplyQueryFilters>
-		</Form>
+		</UiForm>
 	)
 }
 

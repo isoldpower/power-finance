@@ -1,6 +1,6 @@
 import type { ReactNode, FC } from "react";
 
-import { Dialog, DialogTrigger, DialogContent, Button, Icons } from "@internal/ui-library";
+import { UiDialog, UiDialogTrigger, UiDialogContent, UiButton, Icons } from "@internal/ui-library";
 
 interface OpenWalletCreationProps {
 	children: ReactNode;
@@ -14,19 +14,19 @@ const OpenWalletCreation: FC<OpenWalletCreationProps> = ({
 	onOpenChange
 }) => {
 	return (
-		<Dialog open={isAddModalOpen} onOpenChange={onOpenChange}>
-			<DialogTrigger asChild>
-				<Button onClick={() => { onOpenChange(true); }}>
+		<UiDialog open={isAddModalOpen} onOpenChange={onOpenChange}>
+			<UiDialogTrigger asChild>
+				<UiButton onClick={() => { onOpenChange(true); }}>
 					<div className="flex items-center gap-2">
 						<Icons.Plus size={16} />
 						Add Wallet
 					</div>
-				</Button>
-			</DialogTrigger>
-			<DialogContent>
+				</UiButton>
+			</UiDialogTrigger>
+			<UiDialogContent>
 				{children}
-			</DialogContent>
-		</Dialog>
+			</UiDialogContent>
+		</UiDialog>
 	)
 }
 

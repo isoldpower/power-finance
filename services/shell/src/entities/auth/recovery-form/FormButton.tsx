@@ -1,15 +1,15 @@
 import type { ComponentProps, FC, ReactNode } from "react";
 import classes from './Form.module.css';
 import { cn } from "@shared/lib";
-import { Button } from "@internal/ui-library";
+import { UiButton } from "@internal/ui-library";
 
-interface FormButtonProps extends ComponentProps<typeof Button> {
+interface FormButtonProps extends ComponentProps<typeof UiButton> {
 	children: ReactNode;
 }
 
 const FormButton: FC<FormButtonProps> = ({ children, className, ...props }) => {
 	return (
-		<Button
+		<UiButton
 			className={cn(
 				classes.recoveryForm__button,
 				className,
@@ -19,7 +19,7 @@ const FormButton: FC<FormButtonProps> = ({ children, className, ...props }) => {
 			{...props}
 		>
 			{children}
-		</Button>
+		</UiButton>
 	);
 };
 

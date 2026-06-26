@@ -1,6 +1,6 @@
 import type {FC, HTMLAttributes} from "react";
 import { ChooseTheme } from "@feature/settings";
-import { Label } from "@internal/ui-library";
+import { UiLabel } from "@internal/ui-library";
 
 interface LabeledThemeSwitchProps extends HTMLAttributes<HTMLDivElement> {
 }
@@ -14,9 +14,9 @@ const LabeledThemeSwitch: FC<LabeledThemeSwitchProps> = ({ className, children, 
 			].join(" ")}
 			{...props}
 		>
-			<Label htmlFor="color-theme">
+			<UiLabel htmlFor="color-theme">
 				{children || 'Dark Theme'}
-			</Label>
+			</UiLabel>
 			<ChooseTheme />
 		</div>
 	)

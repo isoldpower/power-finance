@@ -4,15 +4,15 @@ import type { ComponentProps } from "react";
 
 import { forwardRef, useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { Button, Input } from "./ui";
+import { UiButton, UiInput } from "@/entities/root";
 import { cn } from "@/utils";
 
 
-type InputProps = ComponentProps<typeof Input> & {
+type PasswordInputProps = ComponentProps<typeof UiInput> & {
 	enableButton?: boolean;
 }
 
-const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
+const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
 	({ className, enableButton, ...props }, 
 	ref
 ) => {
@@ -22,13 +22,13 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
 
 		return (
 			<div className="relative">
-				<Input
+				<UiInput
 					type={showPassword ? "text" : "password"}
 					className={cn("hide-password-toggle pr-10", className)}
 					ref={ref}
 					{...props}
 				/>
-				<Button
+				<UiButton
 					type="button"
 					variant="ghost"
 					size="sm"
@@ -50,9 +50,7 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
 					<span className="sr-only">
 						{showPassword ? "Hide password" : "Show password"}
 					</span>
-				</Button>
-
-				{/* hides browsers password toggles */}
+				</UiButton>
 				<style>{`
 					.hide-password-toggle::-ms-reveal,
 					.hide-password-toggle::-ms-clear {
@@ -69,4 +67,4 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
 PasswordInput.displayName = "PasswordInput";
 
 export { PasswordInput };
-export type { InputProps };
+export type { PasswordInputProps };

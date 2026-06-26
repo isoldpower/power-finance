@@ -1,4 +1,4 @@
-import { Button, Form, FormField } from "@internal/ui-library";
+import { UiButton, UiForm, UiFormField } from "@internal/ui-library";
 import { code, codes } from "currency-codes";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,10 +32,10 @@ const EditWalletForm: FC<EditWalletCardProps> = ({
 	});
 
 	return (
-		<Form {...form}>
+		<UiForm {...form}>
 			<EditWallet form={form} wallet={wallet} onSuccess={closeModal}>
 				<div className="space-y-4 py-4">
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="name"
 						render={({field}) => (
@@ -43,18 +43,18 @@ const EditWalletForm: FC<EditWalletCardProps> = ({
 								<InputField placeholder="e.g., Main Account" {...field} />
 							</FieldLayout>
 						)}/>
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="currency"
 						render={({field}) => (
 							<FieldLayout label="Currency">
 								<SelectField
-									placeholder="Select currency"
+									placeholder="UiSelect currency"
 									options={CURRENCY_OPTIONS}
 									{...field} />
 							</FieldLayout>
 						)}/>
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="type"
 						render={({field}) => (
@@ -69,15 +69,15 @@ const EditWalletForm: FC<EditWalletCardProps> = ({
 						)}/>
 				</div>
 				<div className="flex items-center gap-2 pt-4">
-					<Button variant="outline" type="button" onClick={closeModal}>
+					<UiButton variant="outline" type="button" onClick={closeModal}>
 						Cancel
-					</Button>
-					<Button variant="default" type="submit">
+					</UiButton>
+					<UiButton variant="default" type="submit">
 						Update Wallet
-					</Button>
+					</UiButton>
 				</div>
 			</EditWallet>
-		</Form>
+		</UiForm>
 	);
 }
 

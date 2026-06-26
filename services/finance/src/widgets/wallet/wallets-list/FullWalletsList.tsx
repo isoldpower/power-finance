@@ -1,5 +1,5 @@
 import { cloneElement } from "react";
-import { Button, Icons } from "@internal/ui-library";
+import { UiButton, Icons } from "@internal/ui-library";
 import type { FC, ReactElement } from "react";
 
 import { useWalletsList, WalletCardsListFx } from "@feature/wallet";
@@ -36,7 +36,7 @@ const FullWalletsList: FC<FullWalletsListProps> = ({ children, onCreate }) => {
 			<div className="col-span-3 text-center py-12 border border-dashed rounded-lg">
 				<p className="text-gray-500">No wallets found</p>
 				<p className="text-sm text-gray-400 mt-1">Add your first wallet to get started</p>
-				<Button
+				<UiButton
 					onClick={onCreate}
 					className="mt-4"
 					size="sm"
@@ -45,7 +45,7 @@ const FullWalletsList: FC<FullWalletsListProps> = ({ children, onCreate }) => {
 						<Icons.Plus size={16} />
 						Add Wallet
 					</div>
-				</Button>
+				</UiButton>
 			</div>
 		)
 }

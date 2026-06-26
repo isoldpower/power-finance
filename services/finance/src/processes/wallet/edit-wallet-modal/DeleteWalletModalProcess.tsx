@@ -1,10 +1,10 @@
 import {
-	Dialog,
-	DialogTrigger,
-	DialogContent,
-	DialogTitle,
-	DialogDescription,
-	DialogHeader
+	UiDialog,
+	UiDialogTrigger,
+	UiDialogContent,
+	UiDialogTitle,
+	UiDialogDescription,
+	UiDialogHeader
 } from "@internal/ui-library";
 import {useState, useCallback, type ReactNode, FC} from "react";
 
@@ -28,25 +28,25 @@ const DeleteWalletModalProcess: FC<DeleteWalletCardProps> = ({
 	}, []);
 
 	return (
-		<Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-			<DialogTrigger asChild>
+		<UiDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+			<UiDialogTrigger asChild>
 				{children}
-			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>
+			</UiDialogTrigger>
+			<UiDialogContent>
+				<UiDialogHeader>
+					<UiDialogTitle>
 						Are you sure you want to delete this wallet?
-					</DialogTitle>
-					<DialogDescription>
+					</UiDialogTitle>
+					<UiDialogDescription>
 						This action cannot be undone.
-					</DialogDescription>
-				</DialogHeader>
+					</UiDialogDescription>
+				</UiDialogHeader>
 				<DeleteWalletForm
 					wallet={wallet}
 					closeModal={handleClose}
 				/>
-			</DialogContent>
-		</Dialog>
+			</UiDialogContent>
+		</UiDialog>
 	);
 }
 

@@ -1,4 +1,4 @@
-import { Skeleton } from "@internal/ui-library";
+import { UiSkeleton } from "@internal/ui-library";
 import {FC} from "react";
 
 interface SidebarSkeletonProps {
@@ -10,10 +10,10 @@ const SidebarSkeleton: FC<SidebarSkeletonProps> = ({
 }) => {
   return (
 		<div className="flex items-center gap-4">
-			<Skeleton
+			<UiSkeleton
 				className="h-7 w-7 rounded-full bg-sidebar-accent" />
 			{withName && (
-				<Skeleton className="h-5 w-16 rounded bg-sidebar-accent" />
+				<UiSkeleton className="h-5 w-16 rounded bg-sidebar-accent" />
 			)}
 		</div>
   )

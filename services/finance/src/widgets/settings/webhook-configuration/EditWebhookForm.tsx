@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Form, FormField } from "@internal/ui-library";
+import { UiButton, UiForm, UiFormField } from "@internal/ui-library";
 import { useCallback, useState } from "react";
 import type { FC, PropsWithChildren } from "react";
 
@@ -42,7 +42,7 @@ const EditWebhookForm: FC<EditWebhookFormProps> = ({
 	}, []);
 
 	return (
-		<Form {...form}>
+		<UiForm {...form}>
 			<EditWebhook
 				onBeforeEdit={handleLoading}
 				onSuccess={handleOnSuccess}
@@ -50,7 +50,7 @@ const EditWebhookForm: FC<EditWebhookFormProps> = ({
 				handleSubmit={form.handleSubmit}
 			>
 				<div className="grid items-start gap-4">
-					<FormField
+					<UiFormField
 						disabled={loading}
 						control={form.control}
 						name="title"
@@ -59,7 +59,7 @@ const EditWebhookForm: FC<EditWebhookFormProps> = ({
 								<InputField placeholder="e.g., My Website Hook" {...field} />
 							</FieldLayout>
 						)} />
-					<FormField
+					<UiFormField
 						disabled={loading}
 						control={form.control}
 						name="url"
@@ -73,13 +73,13 @@ const EditWebhookForm: FC<EditWebhookFormProps> = ({
 							</FieldLayout>
 						)} />
 					<div className="flex justify-end">
-						<Button variant="default" type="submit">
+						<UiButton variant="default" type="submit">
 							Save Changes
-						</Button>
+						</UiButton>
 					</div>
 				</div>
 			</EditWebhook>
-		</Form>
+		</UiForm>
 	);
 }
 

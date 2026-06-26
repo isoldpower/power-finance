@@ -1,4 +1,4 @@
-import {Button, cn, Icons} from "@internal/ui-library";
+import {UiButton, cn, Icons} from "@internal/ui-library";
 import { useMemo, type FC } from "react";
 
 import {
@@ -42,14 +42,14 @@ const EditableWalletCard: FC<EditableWalletCardProps> = ({
 				</div>
 				<div className="flex space-x-1 [&>*]:z-20">
 					<EditWalletModalProcess wallet={passedWallet}>
-						<Button type="button" variant="ghost" size="sm" color="neutral">
+						<UiButton type="button" variant="ghost" size="sm" color="neutral">
 							<Icons.Edit size={15} />
-						</Button>
+						</UiButton>
 					</EditWalletModalProcess>
 					<DeleteWalletModalProcess wallet={passedWallet}>
-						<Button type="button" variant="ghost" size="sm" className="text-red-800 dark:text-red-500">
+						<UiButton type="button" variant="ghost" size="sm" className="text-red-800 dark:text-red-500">
 							<Icons.Trash size={15} />
-						</Button>
+						</UiButton>
 					</DeleteWalletModalProcess>
 				</div>
 			</div>

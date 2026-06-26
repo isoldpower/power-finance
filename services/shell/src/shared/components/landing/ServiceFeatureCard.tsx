@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@internal/ui-library"
+import { UiCard, UiCardContent, UiCardDescription, UiCardHeader, UiCardTitle } from "@internal/ui-library"
 import { FC } from "react";
 
 
@@ -14,21 +14,21 @@ const ServiceFeatureCard: FC<ServiceFeatureCardProps> = ({
 	Icon
 }) => {
 	return (
-		<Card>
-			<CardHeader>
+		<UiCard>
+			<UiCardHeader>
 				<div className="flex items-center space-x-2">
 					<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100">
 						<Icon className="h-6 w-6 text-gray-800" />
 					</div>
-					<CardTitle>{title}</CardTitle>
+					<UiCardTitle>{title}</UiCardTitle>
 				</div>
-			</CardHeader>
-			<CardContent>
-				<CardDescription>
+			</UiCardHeader>
+			<UiCardContent>
+				<UiCardDescription>
 					{description}
-				</CardDescription>
-			</CardContent>
-		</Card>
+				</UiCardDescription>
+			</UiCardContent>
+		</UiCard>
 	)
 }
 

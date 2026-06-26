@@ -5,23 +5,23 @@ import { PanelLeftIcon } from "lucide-react"
 
 import { useIsMobile } from "@/utils/hooks/useMobile.ts"
 import { cn } from "@/utils/lib/utils.ts"
-import { Button } from "@/components/shadcn/ui/button"
-import { Input } from "@/components/shadcn/ui/input"
-import { Separator } from "@/components/shadcn/ui/separator"
+import { Button } from "@/entities/shadcn/ui/button"
+import { Input } from "@/entities/shadcn/ui/input"
+import { Separator } from "@/entities/shadcn/ui/separator"
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/shadcn/ui/sheet"
-import { Skeleton } from "@/components/shadcn/ui/skeleton"
+} from "@/entities/shadcn/ui/sheet"
+import { Skeleton } from "@/entities/shadcn/ui/skeleton"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/shadcn/ui/tooltip"
+} from "@/entities/shadcn/ui/tooltip"
 import { useSettingsContext } from "@internal/shared";
 
 

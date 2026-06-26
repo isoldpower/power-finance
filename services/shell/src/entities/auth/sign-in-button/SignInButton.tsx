@@ -1,6 +1,6 @@
 import type {FC, ReactNode} from "react";
 import {LogIn} from "lucide-react";
-import { Button } from "@internal/ui-library";
+import { UiButton } from "@internal/ui-library";
 
 interface SignInButtonProps {
 	children: ReactNode;
@@ -8,12 +8,12 @@ interface SignInButtonProps {
 
 const SignInButton: FC<SignInButtonProps> = ({ children }) => {
 	return (
-		<Button variant='outline' asChild>
+		<UiButton variant='outline' asChild>
 			<div className='flex items-center gap-2 w-full'>
 				{children}
 				<LogIn className="size-4" />
 			</div>
-		</Button>
+		</UiButton>
 	);
 };
 

@@ -1,8 +1,8 @@
 import {
-	PopoverContent,
-	PopoverTrigger,
-	Button,
-	Popover,
+	UiPopoverContent,
+	UiPopoverTrigger,
+	UiButton,
+	UiPopover,
 	Icons,
 } from '@internal/ui-library';
 import { useState } from "react";
@@ -19,9 +19,9 @@ const GlobalLocaleSelection = () => {
 			<h3>
 				Locale
 			</h3>
-			<Popover open={open} onOpenChange={setOpen}>
-				<PopoverTrigger asChild>
-					<Button
+			<UiPopover open={open} onOpenChange={setOpen}>
+				<UiPopoverTrigger asChild>
+					<UiButton
 						variant="outline"
 						role="combobox"
 						aria-expanded={open}
@@ -29,19 +29,19 @@ const GlobalLocaleSelection = () => {
 					>
 						{locale
 							? getByTag(locale).name
-							: "Select locale..."}
+							: "UiSelect locale..."}
 						<Icons.ChevronsUpDown className="opacity-50"/>
-					</Button>
-				</PopoverTrigger>
-				<PopoverContent className="w-[200px] p-0">
+					</UiButton>
+				</UiPopoverTrigger>
+				<UiPopoverContent className="w-[200px] p-0">
 					<LocalePicker
 						value={locale}
 						onSelected={(value) => {
 							setOpen(false)
 							onUpdateField('locale', value);
 						}} />
-				</PopoverContent>
-			</Popover>
+				</UiPopoverContent>
+			</UiPopover>
 		</div>
 	)
 }

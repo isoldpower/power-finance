@@ -13,7 +13,8 @@ export default defineConfig({
 		react(),
 		tailwindcss(),
 		dts({
-			tsconfigPath: './tsconfig.app.json'
+			tsconfigPath: './tsconfig.app.json',
+			exclude: ['**/*.stories.tsx', '.storybook/**']
 		})
 	],
 	resolve: {

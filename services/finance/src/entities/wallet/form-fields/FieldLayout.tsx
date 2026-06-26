@@ -1,4 +1,4 @@
-import { FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@internal/ui-library"
+import { UiFormItem, UiFormLabel, UiFormControl, UiFormMessage, UiFormDescription } from "@internal/ui-library"
 import type { FC, ReactNode } from "react";
 
 interface FieldLayoutProps {
@@ -9,20 +9,20 @@ interface FieldLayoutProps {
 
 const FieldLayout: FC<FieldLayoutProps> = ({ label, children, description }) => {
 	return (
-		<FormItem>
-			<FormLabel>
+		<UiFormItem>
+			<UiFormLabel>
 				{label}
-			</FormLabel>
-			<FormControl>
+			</UiFormLabel>
+			<UiFormControl>
 				{children}
-			</FormControl>
+			</UiFormControl>
 			{description && (
-				<FormDescription>
+				<UiFormDescription>
 					{description}
-				</FormDescription>
+				</UiFormDescription>
 			)}
-			<FormMessage />
-		</FormItem>
+			<UiFormMessage />
+		</UiFormItem>
 	)
 }
 

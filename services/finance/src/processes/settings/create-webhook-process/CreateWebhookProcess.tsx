@@ -3,10 +3,10 @@ import { useCallback } from "react";
 
 import { NewWebhookForm, CreateWebhookFinishModal } from "@widget/settings";
 import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
+	UiCard,
+	UiCardContent,
+	UiCardHeader,
+	UiCardTitle,
 } from "@internal/ui-library";
 import type { WebhookEndpoint } from "@entity/settings";
 
@@ -32,21 +32,21 @@ const CreateWebhookProcess: FC = () => {
 	}, [createdWebhook]);
 	
 	return (
-		<Card>
-			<CardHeader>
-				<CardTitle>
+		<UiCard>
+			<UiCardHeader>
+				<UiCardTitle>
 					Create New Webhook
-				</CardTitle>
-			</CardHeader>
-			<CardContent>
+				</UiCardTitle>
+			</UiCardHeader>
+			<UiCardContent>
 				<NewWebhookForm onWebhookCreated={handleWebhookCreated} />
-			</CardContent>
+			</UiCardContent>
 			<CreateWebhookFinishModal 
 				open={finishCreateOpen}
 				onOpenChange={handleFinishCreateOpenChange}
 				webhook={createdWebhook}
 			/>
-		</Card>
+		</UiCard>
 	);
 }
 

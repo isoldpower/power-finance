@@ -1,12 +1,12 @@
 import {FC, ReactNode} from "react";
 
 import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
+	UiCommand,
+	UiCommandEmpty,
+	UiCommandGroup,
+	UiCommandInput,
+	UiCommandItem,
+	UiCommandList,
 	Icons,
 	cn
 } from "@internal/ui-library";
@@ -28,15 +28,15 @@ const LocalePicker: FC<LocalePickerProps> = ({ onSelected, value, notFound }) =>
 	}));
 
 	return (
-		<Command>
-			<CommandInput placeholder="Search locale..." className="h-9"/>
-			<CommandList>
-				<CommandEmpty>
+		<UiCommand>
+			<UiCommandInput placeholder="Search locale..." className="h-9"/>
+			<UiCommandList>
+				<UiCommandEmpty>
 					{notFound ?? "No locale found."}
-				</CommandEmpty>
-				<CommandGroup>
+				</UiCommandEmpty>
+				<UiCommandGroup>
 					{labeledLocales.map((locale) => (
-						<CommandItem
+						<UiCommandItem
 							key={locale.value}
 							value={locale.value}
 							onSelect={(currentValue) => {
@@ -50,11 +50,11 @@ const LocalePicker: FC<LocalePickerProps> = ({ onSelected, value, notFound }) =>
 									value === locale.value ? "opacity-100" : "opacity-0"
 								)}
 							/>
-						</CommandItem>
+						</UiCommandItem>
 					))}
-				</CommandGroup>
-			</CommandList>
-		</Command>
+				</UiCommandGroup>
+			</UiCommandList>
+		</UiCommand>
 	)
 }
 

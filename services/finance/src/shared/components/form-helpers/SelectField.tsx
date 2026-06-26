@@ -1,11 +1,11 @@
-import { Select, SelectTrigger, SelectContent, SelectItem, cn } from "@internal/ui-library";
+import { UiSelect, UiSelectTrigger, UiSelectContent, UiSelectItem, cn } from "@internal/ui-library";
 import { useMemo, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
 import type { ComponentProps, FC } from "react";
 
 
-interface SelectFieldProps extends Omit<ComponentProps<typeof Select>, 'onValueChange'> {
+interface SelectFieldProps extends Omit<ComponentProps<typeof UiSelect>, 'onValueChange'> {
   options: { label: string; value: string }[];
   excluded?: string[];
   onChange: (value: string) => void;
@@ -16,7 +16,7 @@ interface SelectFieldProps extends Omit<ComponentProps<typeof Select>, 'onValueC
 const SelectField: FC<SelectFieldProps> = ({
   options,
   excluded,
-  placeholder = 'Select an option',
+  placeholder = 'UiSelect an option',
   ...props
 }) => {
 	const [open, setOpen] = useState(false);
@@ -45,13 +45,13 @@ const SelectField: FC<SelectFieldProps> = ({
 	const virtualItems = optionsVirtualizer.getVirtualItems();
 
 	return (
-		<Select onValueChange={props.onChange} open={open} onOpenChange={setOpen} {...props}>
-			<SelectTrigger className="w-full">
+		<UiSelect onValueChange={props.onChange} open={open} onOpenChange={setOpen} {...props}>
+			<UiSelectTrigger className="w-full">
 				<div className="truncate max-w-full">
 					{selectedOption?.label ?? placeholder}
 				</div>
-			</SelectTrigger>
-			<SelectContent>
+			</UiSelectTrigger>
+			<UiSelectContent>
 				<div ref={rootRef} className={cn(
 						"w-full overflow-y-auto contain-strict",
 						'max-h-[200px]'
@@ -60,7 +60,7 @@ const SelectField: FC<SelectFieldProps> = ({
 						{virtualItems.map((virtualItem) => {
 							const item = memoizedOptions[virtualItem.index];
 							return (
-								<SelectItem
+								<UiSelectItem
 									key={item.value}
 									value={item.value}
 									className="absolute top-0 left-0"
@@ -72,13 +72,13 @@ const SelectField: FC<SelectFieldProps> = ({
 									<div className="truncate pr-2 max-w-full">
 										{item.label}
 									</div>
-								</SelectItem>
+								</UiSelectItem>
 							);
 						})}
 					</div>
 				</div>
-			</SelectContent>
-		</Select>
+			</UiSelectContent>
+		</UiSelect>
 	);
 };
 

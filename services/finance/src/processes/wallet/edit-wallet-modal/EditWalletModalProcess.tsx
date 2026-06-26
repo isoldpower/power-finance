@@ -1,4 +1,4 @@
-import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@internal/ui-library";
+import { UiDialog, UiDialogTrigger, UiDialogContent, UiDialogTitle } from "@internal/ui-library";
 import {useState, useCallback, type ReactNode, FC} from "react";
 
 import { EditWalletForm } from "@widget/wallet";
@@ -21,20 +21,20 @@ const EditWalletModalProcess: FC<EditWalletCardProps> = ({
 	}, []);
 
 	return (
-		<Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-			<DialogTrigger asChild>
+		<UiDialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+			<UiDialogTrigger asChild>
 				{children}
-			</DialogTrigger>
-			<DialogContent>
-				<DialogTitle>
+			</UiDialogTrigger>
+			<UiDialogContent>
+				<UiDialogTitle>
 					Edit Wallet
-				</DialogTitle>
+				</UiDialogTitle>
 				<EditWalletForm 
 					wallet={wallet} 
 					closeModal={handleClose}
 				/>
-			</DialogContent>
-		</Dialog>
+			</UiDialogContent>
+		</UiDialog>
 	);
 }
 

@@ -1,6 +1,6 @@
 import { useLocation } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { Breadcrumb, BreadcrumbList } from "@internal/ui-library";
+import { UiBreadcrumb, UiBreadcrumbList } from "@internal/ui-library";
 import type { FC } from "react";
 
 import { BreadcrumbItem } from "./BreadcrumbItem.tsx";
@@ -30,8 +30,8 @@ const RelativeBreadcrumbs: FC<RelativeBreadcrumbsProps> = ({
 	}, [chunks]);
 
 	return (
-		<Breadcrumb className="flex items-center rounded border px-4 basis-[600px]">
-			<BreadcrumbList>
+		<UiBreadcrumb className="flex items-center rounded border px-4 basis-[600px]">
+			<UiBreadcrumbList>
 				<BreadcrumbItem to={root}>
 					Home
 				</BreadcrumbItem>
@@ -40,8 +40,8 @@ const RelativeBreadcrumbs: FC<RelativeBreadcrumbsProps> = ({
 						{breadcrumb.name}
 					</BreadcrumbItem>
 				))}
-			</BreadcrumbList>
-		</Breadcrumb>
+			</UiBreadcrumbList>
+		</UiBreadcrumb>
 	)
 }
 

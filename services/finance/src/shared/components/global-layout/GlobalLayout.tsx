@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from "react";
 import { useState } from "react";
 
-import {PopoverTrigger, PopoverContent, Popover, Button} from "@internal/ui-library";
+import {UiPopoverTrigger, UiPopoverContent, UiPopover, UiButton} from "@internal/ui-library";
 
 import { HeaderBox, RelativeBreadcrumbs } from "@shared/components";
 import { PreferredCurrencySelection, GlobalLocaleSelection } from "@widget/settings";
@@ -27,22 +27,22 @@ const GlobalLayout: FC<GlobalLayoutProps> = ({ children }) => {
 				</Link>
 				<div className="flex gap-8 basis-[400px]">
 					<RelativeBreadcrumbs />
-					<Popover open={open} onOpenChange={setOpen}>
-						<PopoverTrigger asChild>
+					<UiPopover open={open} onOpenChange={setOpen}>
+						<UiPopoverTrigger asChild>
 							<PreferencesButton />
-						</PopoverTrigger>
-						<PopoverContent className="min-w-80 grow w-fit mr-4">
+						</UiPopoverTrigger>
+						<UiPopoverContent className="min-w-80 grow w-fit mr-4">
 							<PreferencesModalBox>
 								<PreferredCurrencySelection />
 								<GlobalLocaleSelection />
-								<Button asChild>
+								<UiButton asChild>
 									<Link to={getFinanceRoute('settings')}>
 										More settings
 									</Link>
-								</Button>
+								</UiButton>
 							</PreferencesModalBox>
-						</PopoverContent>
-					</Popover>
+						</UiPopoverContent>
+					</UiPopover>
 				</div>
 			</HeaderBox>
 			<main>

@@ -1,8 +1,8 @@
-import { Button, Icons, Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@internal/ui-library";
+import { UiButton, Icons, UiDialog, UiDialogContent, UiDialogTrigger, UiDialogHeader, UiDialogTitle } from "@internal/ui-library";
 import type { FC, ReactNode, ComponentProps } from "react";
 
 
-interface OpenTransactionCreationProps extends ComponentProps<typeof Button> {
+interface OpenTransactionCreationProps extends ComponentProps<typeof UiButton> {
 	children: ReactNode;
 	isModalOpen: boolean;
 	setIsModalOpen: (isOpen: boolean) => void;
@@ -15,26 +15,26 @@ const OpenTransactionCreation: FC<OpenTransactionCreationProps> = ({
 	...props
 }) => {
 	return (
-		<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-			<DialogTrigger asChild>
-				<Button
+		<UiDialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+			<UiDialogTrigger asChild>
+				<UiButton
 					onClick={() => { setIsModalOpen(true); }}
 					variant="outline"
 					{...props}
 				>
 					<Icons.Plus size={16} className="mr-1" />
 					Add Transaction
-				</Button>
-			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>
+				</UiButton>
+			</UiDialogTrigger>
+			<UiDialogContent>
+				<UiDialogHeader>
+					<UiDialogTitle>
 						Add Transaction
-					</DialogTitle>
-				</DialogHeader>
+					</UiDialogTitle>
+				</UiDialogHeader>
 				{children}
-			</DialogContent>
-		</Dialog>
+			</UiDialogContent>
+		</UiDialog>
 	);
 }
 

@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import type { ZodType } from "zod";
 import type { DefaultValues, FieldValues, UseFormReturn } from "react-hook-form";
 
-import { Form } from '@/components';
+import { UiForm } from '@/entities/root';
 import { useFormWizardContext } from "./context/context.ts";
 import { WizardStepContextProvider } from "./step-context/context.ts";
 import type { WizardStepContextType } from "./step-context/types.ts";
@@ -67,14 +67,14 @@ function FormWizardStep<
 	}), [form, order, activeStep]);
 
 	return activeStep === order && (
-		<Form {...form}>
+		<UiForm {...form}>
 			<form aria-label={label} onSubmit={form.handleSubmit(onSubmit)}>
 				<WizardStepContextProvider value={contextValue}>
 					{children}
 				</WizardStepContextProvider>
 			</form>
-		</Form>
-	)
+		</UiForm>
+	);
 }
 
 FormWizardStep.displayName = 'FormWizardStep';

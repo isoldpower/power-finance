@@ -1,4 +1,4 @@
-import { FormItem, FormLabel, FormControl, FormMessage, FormDescription, cn } from "@internal/ui-library"
+import { UiFormItem, UiFormLabel, UiFormControl, UiFormMessage, UiFormDescription, cn } from "@internal/ui-library"
 import type { FC, ReactNode } from "react";
 
 interface FieldLayoutProps {
@@ -10,23 +10,23 @@ interface FieldLayoutProps {
 
 const FieldLayout: FC<FieldLayoutProps> = ({ label, children, description, className }) => {
 	return (
-		<FormItem className={cn(
+		<UiFormItem className={cn(
 			'flex flex-col',
 			className
 		)}>
-			<FormLabel>
+			<UiFormLabel>
 				{label}
-			</FormLabel>
-			<FormControl>
+			</UiFormLabel>
+			<UiFormControl>
 				{children}
-			</FormControl>
+			</UiFormControl>
 			{description && (
-				<FormDescription>
+				<UiFormDescription>
 					{description}
-				</FormDescription>
+				</UiFormDescription>
 			)}
-			<FormMessage />
-		</FormItem>
+			<UiFormMessage />
+		</UiFormItem>
 	)
 }
 

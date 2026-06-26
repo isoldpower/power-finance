@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {Tabs} from "@internal/ui-library";
+import {UiTabs} from "@internal/ui-library";
 import {useNavigate, useSearch} from "@tanstack/react-router";
 import type { ComponentProps, FC } from "react";
 
@@ -7,7 +7,7 @@ import type { ComponentProps, FC } from "react";
 type TabsWithSearchParamsProps = {
 	searchParam: string;
 	defaultValue: string;
-} & ComponentProps<typeof Tabs>;
+} & ComponentProps<typeof UiTabs>;
 
 const TabsWithSearchParam: FC<TabsWithSearchParamsProps> = ({ 
 	searchParam,
@@ -50,9 +50,9 @@ const TabsWithSearchParam: FC<TabsWithSearchParamsProps> = ({
 	}, [value]);
 
 	return (
-		<Tabs value={value ?? tabValue} onValueChange={onValueChange ?? setTabValue} {...props}>
+		<UiTabs value={value ?? tabValue} onValueChange={onValueChange ?? setTabValue} {...props}>
 			{children}
-		</Tabs>
+		</UiTabs>
 	);
 }
 

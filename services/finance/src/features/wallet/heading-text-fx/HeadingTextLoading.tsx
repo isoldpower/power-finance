@@ -1,12 +1,12 @@
 import type { FC } from "react";
-import { Skeleton } from "@internal/ui-library";
+import { UiSkeleton } from "@internal/ui-library";
 
 
 type HeadingTextLoadingProps = object;
 
 const HeadingTextLoading: FC<HeadingTextLoadingProps> = () => {
 	return (
-		<Skeleton className="mt-2 h-8 w-xl" />
+		<UiSkeleton className="mt-2 h-8 w-xl" />
 	);
 }
 

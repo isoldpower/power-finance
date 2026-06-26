@@ -1,4 +1,4 @@
-import { Button, Icons } from "@internal/ui-library";
+import { UiButton, Icons } from "@internal/ui-library";
 import { Link } from "@tanstack/react-router";
 import type { FC } from "react";
 
@@ -21,14 +21,14 @@ const LandingPage: FC = () => {
 				badge="Smart Financial Management"
 			>
 				<div className="flex flex-col gap-2 min-[400px]:flex-row!">
-					<Button size="lg" variant="secondary" asChild>
+					<UiButton size="lg" variant="secondary" asChild>
 						<Link to={getFinanceRoute('dashboard')}>
 							Start Free Trial
 						</Link>
-					</Button>
-					<Button size="lg" disabled>
+					</UiButton>
+					<UiButton size="lg" disabled>
 						Watch Demo
-					</Button>
+					</UiButton>
 				</div>
 				<div className="flex items-center space-x-4 text-sm text-gray-500">
 					<div className="flex items-center space-x-1">
@@ -57,11 +57,11 @@ const LandingPage: FC = () => {
 					))}
 				</div>
 				<div className="flex justify-center">
-					<Button size="lg" variant="default" asChild>
+					<UiButton size="lg" variant="default" asChild>
 						<Link to={getAnalyticsRoute('dashboard')}>
 							Get Started Today
 						</Link>
-					</Button>
+					</UiButton>
 				</div>
 			</LandingSectionShell>
 		</div>

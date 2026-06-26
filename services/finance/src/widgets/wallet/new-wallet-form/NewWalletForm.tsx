@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { codes, code } from 'currency-codes';
-import { Button, Form, FormField } from "@internal/ui-library";
+import { UiButton, UiForm, UiFormField } from "@internal/ui-library";
 import type { FC } from "react";
 
 import { FieldLayout, WALLET_TYPES } from "@entity/wallet";
@@ -23,10 +23,10 @@ const NewWalletForm: FC<NewWalletFormProps> = ({ onClose }) => {
 	});
 
 	return (
-		<Form {...form}>
+		<UiForm {...form}>
 			<NewWallet onSuccess={onClose} handleSubmit={form.handleSubmit}>
 				<div className="space-y-4 py-4">
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="name"
 						render={({ field }) => (
@@ -34,7 +34,7 @@ const NewWalletForm: FC<NewWalletFormProps> = ({ onClose }) => {
 								<InputField placeholder="e.g., Main Account" {...field} />
 							</FieldLayout>
 						)} />
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="balance"
 						render={({ field }) => (
@@ -42,13 +42,13 @@ const NewWalletForm: FC<NewWalletFormProps> = ({ onClose }) => {
 								<InputField placeholder="Enter transfer value" type="number" {...field} />
 							</FieldLayout>
 						)} />
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="currency"
 						render={({ field }) => (
 							<FieldLayout label="Currency">
 								<SelectField
-									placeholder="Select currency"
+									placeholder="UiSelect currency"
 									options={codes().map((item) => ({
 										label: `${code(item)?.currency ?? item} (${item})`,
 										value: item
@@ -56,7 +56,7 @@ const NewWalletForm: FC<NewWalletFormProps> = ({ onClose }) => {
 									{...field} />
 							</FieldLayout>
 						)} />
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="type"
 						render={({ field }) => (
@@ -70,15 +70,15 @@ const NewWalletForm: FC<NewWalletFormProps> = ({ onClose }) => {
 						)} />
 				</div>
 				<div className="flex items-center gap-2 pt-4">
-					<Button variant="outline" type="button" onClick={onClose}>
+					<UiButton variant="outline" type="button" onClick={onClose}>
 						Cancel
-					</Button>
-					<Button variant="default" type="submit">
+					</UiButton>
+					<UiButton variant="default" type="submit">
 						Create Wallet
-					</Button>
+					</UiButton>
 				</div>
 			</NewWallet>
-		</Form>
+		</UiForm>
 	);
 }
 

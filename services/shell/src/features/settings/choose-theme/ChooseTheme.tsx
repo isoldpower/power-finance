@@ -3,7 +3,7 @@ import type {SwitchProps} from "@radix-ui/react-switch";
 
 import {useCallback, useMemo} from "react";
 import {useSettingsContext} from "@internal/shared";
-import { Switch } from "@internal/ui-library";
+import { UiSwitch } from "@internal/ui-library";
 
 interface ChooseThemeProps extends Omit<SwitchProps, 'checked' | 'defaultChecked'> {
 }
@@ -18,7 +18,7 @@ const ChooseTheme: FC<ChooseThemeProps> = ({ onCheckedChange, ...props }) => {
 	}, [settings.onUpdateField]);
 
 	return (
-		<Switch
+		<UiSwitch
 			onCheckedChange={handleChange}
 			checked={isDarkTheme}
 			id="color-theme"

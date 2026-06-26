@@ -1,5 +1,5 @@
 import { AuthProvider } from "@internal/shared";
-import { SidebarProvider, useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
+import { UiSidebarProvider, useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { checkEnvVariables } from "./env/checkEnv";
 import { ThemeHandler } from "@feature/settings";
@@ -27,10 +27,10 @@ function RootComponent({ children }: RootComponentProps) {
 			clerkThemes={themeDictionary}
 		>
 			<ThemeHandler>
-				<SidebarProvider>
+				<UiSidebarProvider>
 					{children}
 					<TanStackRouterDevtools initialIsOpen={false} position='bottom-right' />
-				</SidebarProvider>
+				</UiSidebarProvider>
 			</ThemeHandler>
 		</AuthProvider>
 	);

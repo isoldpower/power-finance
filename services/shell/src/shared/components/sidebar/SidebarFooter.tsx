@@ -1,23 +1,23 @@
 import type { ComponentProps, FC } from "react";
-import { Separator, SidebarFooter, useSidebar } from "@internal/ui-library"
+import { UiSeparator, UiSidebarFooter, useUiSidebar } from "@internal/ui-library"
 import { LabeledThemeSwitch } from "@widget/settings";
 import { SidebarAuthentication } from "@widget/auth";
 
-const AppSidebarFooter: FC<ComponentProps<typeof SidebarFooter>> = ({
+const AppSidebarFooter: FC<ComponentProps<typeof UiSidebarFooter>> = ({
 	...props
 }) => {
-	const {open} = useSidebar();
+	const {open} = useUiSidebar();
 
 	return (
-		<SidebarFooter {...props}>
-			<Separator />
+		<UiSidebarFooter {...props}>
+			<UiSeparator />
 			<LabeledThemeSwitch className={!open ? "flex-col gap-2" : ""}>
 				<span className="text-xs text-muted-foreground">
 					{open ? 'Dark Mode' : 'Dark'}
 				</span>
 			</LabeledThemeSwitch>
 			<SidebarAuthentication/>
-		</SidebarFooter>
+		</UiSidebarFooter>
 	)
 }
 

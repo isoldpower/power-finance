@@ -3,7 +3,7 @@ import type { FC } from "react";
 
 import { z } from "zod";
 import { ArrowRight } from "lucide-react";
-import { FormControl, FormItem, FormLabel, FormMessage, FormWizard, Input } from "@internal/ui-library";
+import { UiFormControl, UiFormItem, UiFormLabel, UiFormMessage, FormWizard, UiInput } from "@internal/ui-library";
 import { useRecoveryCode } from "@feature/auth";
 import { FormButton } from "@entity/auth";
 
@@ -29,15 +29,15 @@ const InitialRecoveryForm: FC<InitialRecoveryFormProps> = () => {
 			<div className="flex flex-col gap-8">
 				<FormWizard.StepField formSchema={formSchema} name="email">
 					{({ field }) => (
-						<FormItem>
-							<FormLabel>Email address</FormLabel>
-							<FormControl>
-								<Input placeholder="Enter your email address" {...field} />
-							</FormControl>
+						<UiFormItem>
+							<UiFormLabel>Email address</UiFormLabel>
+							<UiFormControl>
+								<UiInput placeholder="Enter your email address" {...field} />
+							</UiFormControl>
 							<div className="text-left">
-								<FormMessage className="text-xs">{ error ?? '' }</FormMessage>
+								<UiFormMessage className="text-xs">{ error ?? '' }</UiFormMessage>
 							</div>
-						</FormItem>
+						</UiFormItem>
 					)}
 				</FormWizard.StepField>
 				<FormButton type="submit" size="sm" className="hover:gap-4">

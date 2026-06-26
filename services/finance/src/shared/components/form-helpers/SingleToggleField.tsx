@@ -1,10 +1,10 @@
-import { cn, ToggleGroup, ToggleGroupItem } from "@internal/ui-library";
+import { cn, UiToggleGroup, UiToggleGroupItem } from "@internal/ui-library";
 import { useCallback } from "react";
 import type { ComponentProps, FC, FormEvent, FormEventHandler, ReactNode } from "react";
 
 
 type SingleToggleFieldProps = Omit<
-	ComponentProps<typeof ToggleGroup>,
+	ComponentProps<typeof UiToggleGroup>,
 	'type' | 'className' | 'value' | 'defaultValue' | 'onValueChange'
 > & {
 	options: { label: ReactNode; value: string }[];
@@ -23,22 +23,22 @@ const SingleToggleField: FC<SingleToggleFieldProps> = ({ options, className, onC
 	}, [onChange]);
 
 	return (
-		<ToggleGroup
+		<UiToggleGroup
 			type="single"
 			className={cn("w-full border", className)}
 			onValueChange={handleValueChange}
 			{...props}
 		>
 			{options.map((option) => (
-				<ToggleGroupItem
+				<UiToggleGroupItem
 					key={option.value}
 					value={option.value}
-					aria-label={`Toggle ${option.value}`}
+					aria-label={`UiToggle ${option.value}`}
 				>
 					{option.label}
-				</ToggleGroupItem>
+				</UiToggleGroupItem>
 			))}
-		</ToggleGroup>
+		</UiToggleGroup>
 	);
 };
 

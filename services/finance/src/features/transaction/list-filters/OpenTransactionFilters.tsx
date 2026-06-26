@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogContent, DialogTrigger, Icons } from "@internal/ui-library";
+import { UiButton, UiDialog, UiDialogContent, UiDialogTrigger, Icons } from "@internal/ui-library";
 import type { FC, ReactNode } from "react";
 
 
@@ -14,24 +14,24 @@ const OpenTransactionFilters: FC<OpenTransactionFiltersProps> = ({
 	isModalOpen
 }) => {
 	return (
-		<Dialog
+		<UiDialog
 			open={isModalOpen}
 			onOpenChange={setIsModalOpen}
 		>
-			<DialogTrigger asChild>
-				<Button
+			<UiDialogTrigger asChild>
+				<UiButton
 					className="flex items-center gap-2"
 					variant="outline"
 					onClick={() => { setIsModalOpen(true); }}
 				>
 					<Icons.Filter size={16} />
 					Filter
-				</Button>
-			</DialogTrigger>
-			<DialogContent>
+				</UiButton>
+			</UiDialogTrigger>
+			<UiDialogContent>
 				{children}
-			</DialogContent>
-		</Dialog>
+			</UiDialogContent>
+		</UiDialog>
 	);
 };
 

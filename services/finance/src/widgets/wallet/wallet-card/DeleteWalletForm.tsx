@@ -1,4 +1,4 @@
-import {Button, Form, FormField} from "@internal/ui-library";
+import {UiButton, UiForm, UiFormField} from "@internal/ui-library";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { FC } from "react";
@@ -25,10 +25,10 @@ const DeleteWalletForm: FC<DeleteWalletFormProps> = ({
 	});
 
 	return (
-		<Form {...form}>
+		<UiForm {...form}>
 			<DeleteWallet form={form} wallet={wallet} onSuccess={closeModal}>
 				<div className='space-y-4'>
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="id"
 						render={({ field }) => (
@@ -37,16 +37,16 @@ const DeleteWalletForm: FC<DeleteWalletFormProps> = ({
 							</FieldLayout>
 						)} />
 					<div className="flex justify-end gap-2">
-						<Button variant="secondary" type="button" onClick={closeModal}>
+						<UiButton variant="secondary" type="button" onClick={closeModal}>
 							Cancel
-						</Button>
-						<Button variant="destructive" type="submit">
+						</UiButton>
+						<UiButton variant="destructive" type="submit">
 							Delete
-						</Button>
+						</UiButton>
 					</div>
 				</div>
 			</DeleteWallet>
-		</Form>
+		</UiForm>
 	);
 }
 

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
-import { Button, Icons } from "@internal/ui-library";
+import { UiButton, Icons } from "@internal/ui-library";
 import { FC, useMemo } from "react";
 
 import { useWalletsList } from "@feature/wallet";
@@ -23,12 +23,12 @@ const WalletsListNavigationHeader: FC<WalletsListNavigationHeaderProps> = () => 
 				({ countSummary[status] })
 			</span>
 			</h2>
-			<Button variant="link" asChild>
+			<UiButton variant="link" asChild>
 				<Link to={getFinanceRoute('wallets')} className="text-sm flex items-center">
 					View all
 					<Icons.ChevronRight size={16} className="ml-1" />
 				</Link>
-			</Button>
+			</UiButton>
 		</div>
 	)
 }

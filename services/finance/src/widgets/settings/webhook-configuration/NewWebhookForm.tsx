@@ -1,5 +1,5 @@
 import {FC, useCallback, useState} from "react";
-import {Button, Form, FormField} from "@internal/ui-library";
+import {UiButton, UiForm, UiFormField} from "@internal/ui-library";
 import {FieldLayout} from "@entity/wallet";
 import {InputField} from "@shared/components";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,14 +43,14 @@ const NewWebhookForm: FC<NewWebhookModalProps> = ({
 	}, []);
 	
 	return (
-		<Form {...form}>
+		<UiForm {...form}>
 			<NewWebhook 
 				onBeforeCreate={handleLoading} 
 				onSuccess={handleOnSuccess} 
 				handleSubmit={form.handleSubmit}
 			>
 				<div className="grid items-start grid-cols-2 gap-4">
-					<FormField
+					<UiFormField
 						disabled={loading}
 						control={form.control}
 						name="title"
@@ -59,7 +59,7 @@ const NewWebhookForm: FC<NewWebhookModalProps> = ({
 								<InputField placeholder="e.g., My Website Hook" {...field} />
 							</FieldLayout>
 						)}/>
-					<FormField
+					<UiFormField
 						disabled={loading}
 						control={form.control}
 						name="url"
@@ -74,12 +74,12 @@ const NewWebhookForm: FC<NewWebhookModalProps> = ({
 						)}/>
 				</div>
 				<div className="pt-4">
-					<Button variant="default" type="submit" disabled={loading}>
+					<UiButton variant="default" type="submit" disabled={loading}>
 						Create Webhook
-					</Button>
+					</UiButton>
 				</div>
 			</NewWebhook>
-		</Form>
+		</UiForm>
 	);
 }
 

@@ -1,9 +1,9 @@
 import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
+	UiDialog,
+	UiDialogContent,
+	UiDialogHeader,
+	UiDialogTitle,
+	UiDialogTrigger,
 } from "@internal/ui-library";
 import { useCallback, useState } from "react";
 import type { FC, PropsWithChildren } from "react";
@@ -27,22 +27,22 @@ const EditWebhookModalProcess: FC<EditWebhookModalProps> = ({
 	}, []);
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger>
+		<UiDialog open={open} onOpenChange={setOpen}>
+			<UiDialogTrigger>
 				{children}
-			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>
+			</UiDialogTrigger>
+			<UiDialogContent>
+				<UiDialogHeader>
+					<UiDialogTitle>
 						Edit Webhook
-					</DialogTitle>
-				</DialogHeader>
+					</UiDialogTitle>
+				</UiDialogHeader>
 				<EditWebhookForm
 					targetWebhook={targetWebhook}
 					closeModal={closeModal}
 				/>
-			</DialogContent>
-		</Dialog>
+			</UiDialogContent>
+		</UiDialog>
 	);
 }
 

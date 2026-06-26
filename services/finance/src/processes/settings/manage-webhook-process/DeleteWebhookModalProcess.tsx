@@ -1,10 +1,10 @@
 import {
-	Dialog,
-	DialogContent, 
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
+	UiDialog,
+	UiDialogContent, 
+	UiDialogDescription,
+	UiDialogHeader,
+	UiDialogTitle,
+	UiDialogTrigger,
 } from "@internal/ui-library";
 import {FC, PropsWithChildren, useCallback, useState} from "react";
 
@@ -27,25 +27,25 @@ const DeleteWebhookModalProcess: FC<DeleteWebhookModalProps> = ({
 	}, []);
 	
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger>
+		<UiDialog open={open} onOpenChange={setOpen}>
+			<UiDialogTrigger>
 				{children}
-			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>
+			</UiDialogTrigger>
+			<UiDialogContent>
+				<UiDialogHeader>
+					<UiDialogTitle>
 						Delete Webhook
-					</DialogTitle>
-					<DialogDescription>
+					</UiDialogTitle>
+					<UiDialogDescription>
 						Are you sure you want to delete the following Webhook?
-					</DialogDescription>
-				</DialogHeader>
+					</UiDialogDescription>
+				</UiDialogHeader>
 				<DeleteWebhookForm 
 					targetWebhook={targetWebhook} 
 					closeModal={closeModal}
 				/>
-			</DialogContent>
-		</Dialog>
+			</UiDialogContent>
+		</UiDialog>
 	);
 }
 

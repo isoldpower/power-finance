@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Form, FormField } from "@internal/ui-library";
+import { UiButton, UiForm, UiFormField } from "@internal/ui-library";
 import type { FC, PropsWithChildren } from "react";
 
 import { DeleteWebhook, deleteWebhookSchema, useDeleteDefaultValues } from "@feature/settings";
@@ -26,14 +26,14 @@ const DeleteWebhookForm: FC<DeleteWebhookModalProps> = ({
 	});
 	
 	return (
-		<Form {...form}>
+		<UiForm {...form}>
 			<DeleteWebhook 
 				onSuccess={closeModal}
 				webhookId={targetWebhook.id}
 				handleSubmit={form.handleSubmit}
 			>
 				<div className="space-y-4">
-					<FormField
+					<UiFormField
 						control={form.control}
 						name="id"
 						render={({ field }) => (
@@ -42,16 +42,16 @@ const DeleteWebhookForm: FC<DeleteWebhookModalProps> = ({
 							</FieldLayout>
 						)} />
 					<div className="flex gap-2 justify-end">
-						<Button variant='secondary' type='button' onClick={closeModal}>
+						<UiButton variant='secondary' type='button' onClick={closeModal}>
 							Cancel
-						</Button>
-						<Button variant='destructive' type='submit'>
+						</UiButton>
+						<UiButton variant='destructive' type='submit'>
 							Delete
-						</Button>
+						</UiButton>
 					</div>
 				</div>
 			</DeleteWebhook>
-		</Form>
+		</UiForm>
 	);
 } 
 

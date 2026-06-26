@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 
 import {
-	TabsContent,
-	TabsList,
-	TabsTrigger,
+	UiTabsContent,
+	UiTabsList,
+	UiTabsTrigger,
 } from "@internal/ui-library";
 
 import { PreferencesModalBox } from "@entity/settings";
@@ -24,22 +24,22 @@ const SettingsPage: FC = () => {
 				defaultValue="preferences"
 				className="px-4"
 			>
-				<TabsList className="w-full justify-start">
-					<TabsTrigger className="flex-0" value="preferences">
+				<UiTabsList className="w-full justify-start">
+					<UiTabsTrigger className="flex-0" value="preferences">
 						Preferences
-					</TabsTrigger>
-					<TabsTrigger className="flex-0" value="webhooks">
+					</UiTabsTrigger>
+					<UiTabsTrigger className="flex-0" value="webhooks">
 						Webhooks
-					</TabsTrigger>
-				</TabsList>
+					</UiTabsTrigger>
+				</UiTabsList>
 				<div className="p-6 w-full">
-					<TabsContent value="preferences">
+					<UiTabsContent value="preferences">
 						<PreferencesModalBox>
 							<PreferredCurrencySelection/>
 							<GlobalLocaleSelection/>
 						</PreferencesModalBox>
-					</TabsContent>
-					<TabsContent value="webhooks">
+					</UiTabsContent>
+					<UiTabsContent value="webhooks">
 						<div className="grid grid-cols-1 gap-4">
 							<WebhooksListFx
 								errorElement={<div>hello</div>}
@@ -56,7 +56,7 @@ const SettingsPage: FC = () => {
 						</div>
 						<hr className="my-4" />
 						<CreateWebhookProcess />
-					</TabsContent>
+					</UiTabsContent>
 				</div>
 			</TabsWithSearchParam>
 		</div>

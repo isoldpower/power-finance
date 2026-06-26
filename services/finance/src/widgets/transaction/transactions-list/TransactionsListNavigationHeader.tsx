@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
-import { Button, Icons } from "@internal/ui-library";
+import { UiButton, Icons } from "@internal/ui-library";
 import type { FC } from "react";
 
 import { useTransactionsList } from "@feature/transaction";
@@ -23,12 +23,12 @@ const TransactionsListNavigationHeader: FC<TransactionsListNavigationHeaderProps
 					For the last 7 days
 					</p>
 			</div>
-			<Button variant="link" asChild>
+			<UiButton variant="link" asChild>
 				<Link to={getFinanceRoute('transactions')} className="text-sm flex items-center">
 					View all
 					<Icons.ChevronRight size={16} className="ml-1" />
 				</Link>
-			</Button>
+			</UiButton>
 		</div>
 	)
 }

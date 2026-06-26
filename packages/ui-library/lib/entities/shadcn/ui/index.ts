@@ -20,6 +20,8 @@ export * from './toggle-group.tsx';
 export * from './calendar.tsx';
 export * from './card.tsx';
 export * from './tabs.tsx';
+export * from './avatar.tsx';
+export * from './badge.tsx';
 
 export type * from './button.tsx';
 export type * from './form.tsx';
@@ -43,3 +45,5 @@ export type * from './sonner.tsx';
 export type * from './calendar.tsx';
 export type * from './card.tsx';
 export type * from './tabs.tsx';
+export type * from './avatar.tsx';
+export type * from './badge.tsx';
