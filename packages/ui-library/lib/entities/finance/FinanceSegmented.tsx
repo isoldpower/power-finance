@@ -21,14 +21,17 @@ function FinanceSegmented({
 
 function FinanceSegmentedItem({
 	className,
+	accent = false,
 	...props
-}: React.ComponentProps<typeof ToggleGroupItem>) {
+}: React.ComponentProps<typeof ToggleGroupItem> & { accent?: boolean }) {
 	return (
 		<ToggleGroupItem
 			className={cn(
 				"flex-none rounded-[var(--radius-sm)] px-3 text-[13px] font-semibold text-text-2",
 				"hover:bg-transparent hover:text-foreground",
-				"data-[state=on]:bg-card data-[state=on]:text-foreground data-[state=on]:shadow-sm",
+				accent
+					? "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+					: "data-[state=on]:bg-card data-[state=on]:text-foreground data-[state=on]:shadow-sm",
 				className
 			)}
 			{...props}

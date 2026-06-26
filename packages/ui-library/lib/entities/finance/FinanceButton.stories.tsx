@@ -10,13 +10,13 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					"`FinanceButton` is the Finance design-system action button — it wraps the shadcn Button and re-skins it to the Finance look: an indigo-gradient `primary` plus `outline`, `ghost` and `danger`. Render it inside an element carrying the `finance-theme` class.",
+					"`FinanceButton` is the Finance design-system action button — it wraps the shadcn Button and re-skins it to the Style Tile look: a solid-indigo `primary`, a `secondary` surface button, a low-emphasis `outline`, an accent-text `ghost`, and an outline `danger`. Render it inside an element carrying the `finance-theme` class.",
 			},
 		},
 	},
 	args: { children: "Approve transfer" },
 	argTypes: {
-		variant: { control: "select", options: ["primary", "outline", "ghost", "danger"] },
+		variant: { control: "select", options: ["primary", "secondary", "outline", "ghost", "danger"] },
 		size: { control: "select", options: ["sm", "md", "lg"] },
 	},
 } satisfies Meta<typeof FinanceButton>;
@@ -32,6 +32,7 @@ export const AllVariants: Story = {
 	render: () => (
 		<div className="flex flex-wrap items-center gap-3">
 			<FinanceButton variant="primary">Approve</FinanceButton>
+			<FinanceButton variant="secondary">Secondary</FinanceButton>
 			<FinanceButton variant="outline">Dismiss</FinanceButton>
 			<FinanceButton variant="ghost">Cancel</FinanceButton>
 			<FinanceButton variant="danger">Delete</FinanceButton>

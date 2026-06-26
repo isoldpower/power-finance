@@ -45,6 +45,7 @@
 	--shadow-lg: 0 4px 14px rgba(17, 20, 28, 0.08), 0 1px 3px rgba(17, 20, 28, 0.06);
 
 	font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+	font-variant-numeric: tabular-nums;
 	color: var(--foreground);
 }
 

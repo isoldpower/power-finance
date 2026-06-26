@@ -8,7 +8,7 @@ const financeInputVariants = cva("transition-[color,box-shadow,border-color]", {
 	variants: {
 		variant: {
 			default:
-				"h-10 rounded-[var(--radius-md)] border-border-strong bg-transparent px-3.5 text-sm focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-[var(--accent-soft)]",
+				"h-10 rounded-[var(--radius-md)] border-border-strong bg-transparent px-3.5 text-[13px] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-[var(--accent-soft)]",
 			bare:
 				"h-auto border-0 bg-transparent p-0 font-display text-3xl font-semibold shadow-none focus-visible:ring-0 dark:bg-transparent",
 		},

@@ -10,17 +10,19 @@ const financeButtonVariants = cva(
 		variants: {
 			variant: {
 				primary:
-					"bg-[image:var(--accent-grad)] text-white shadow-[0_3px_10px_var(--glow)] hover:brightness-95",
+					"bg-primary text-primary-foreground shadow-[var(--shadow)] hover:brightness-95",
+				secondary:
+					"border border-border-strong bg-card text-foreground shadow-[var(--shadow)] hover:bg-secondary",
 				outline:
 					"border border-border-strong bg-transparent text-foreground shadow-none hover:bg-secondary",
 				ghost:
-					"bg-transparent text-text-2 shadow-none hover:bg-secondary hover:text-foreground",
+					"bg-transparent text-primary shadow-none hover:bg-accent-soft",
 				danger:
-					"bg-neg text-white shadow-none hover:brightness-95",
+					"border border-[var(--neg-soft)] bg-transparent text-neg shadow-none hover:bg-neg-soft",
 			},
 			size: {
 				sm: "h-8 px-3 text-xs",
-				md: "h-9 px-4 text-sm",
+				md: "h-9 px-4 text-[13px]",
 				lg: "h-10 px-6 text-sm",
 			},
 		},

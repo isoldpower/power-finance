@@ -11,7 +11,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					"`FinanceSegmented` is the Finance segmented control — a single-select toggle group styled as the navbar tabs, dashboard period switcher and quick-add type toggle. Render `FinanceSegmentedItem`s with unique `value`s and drive it with `value`/`onValueChange`.",
+					"`FinanceSegmented` is the Finance segmented control — a single-select toggle group styled as the navbar tabs, dashboard period switcher and quick-add type toggle. Render `FinanceSegmentedItem`s with unique `value`s and drive it with `value`/`onValueChange`. Pass `accent` on the items for the solid-indigo active style (the transaction-type toggle); the default active style is the white surface pill.",
 			},
 		},
 	},
@@ -44,6 +44,23 @@ export const Period: Story = {
 					{["D", "W", "M", "Y"].map((x) => (
 						<FinanceSegmentedItem key={x} value={x}>{x}</FinanceSegmentedItem>
 					))}
+				</FinanceSegmented>
+			);
+		};
+		return <Demo />;
+	},
+};
+
+export const AccentType: Story = {
+	parameters: { docs: { description: { story: "The quick-add transaction-type toggle — `accent` items fill with indigo when active." } } },
+	render: () => {
+		const Demo = () => {
+			const [type, setType] = useState("expense");
+			return (
+				<FinanceSegmented value={type} onValueChange={(v) => v && setType(v)}>
+					<FinanceSegmentedItem accent value="expense">Expense</FinanceSegmentedItem>
+					<FinanceSegmentedItem accent value="income">Income</FinanceSegmentedItem>
+					<FinanceSegmentedItem accent value="transfer">Transfer</FinanceSegmentedItem>
 				</FinanceSegmented>
 			);
 		};
