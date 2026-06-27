@@ -13,12 +13,13 @@ import type { PanelMode } from "./mock.ts";
 
 interface WalletsSectionProps {
 	onOpenPanel: (mode: PanelMode) => void;
+	className?: string;
 }
 
 const selectClass =
 	"min-w-0 flex-1 cursor-pointer rounded-[var(--radius-md)] border border-border-strong bg-card px-2 py-1.5 text-xs font-semibold text-text-2 outline-none";
 
-const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel }) => {
+const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel, className }) => {
 	const { wallets: rawWallets, isPending } = useWalletsList();
 	const { transactions } = useTransactionsList();
 	const { convert } = useConvertMoney();
@@ -83,7 +84,7 @@ const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel }) => {
 	const togglePin = (id: string) => { setPins((prev) => ({ ...prev, [id]: !prev[id] })); };
 
 	return (
-		<section>
+		<section className={className}>
 			<SectionHeader
 				title="Wallets"
 				caption={`${decorated.length.toString()} accounts`}

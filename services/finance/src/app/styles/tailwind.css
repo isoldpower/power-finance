@@ -46,3 +46,66 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+@keyframes auroraDrift {
+	0% { transform: translate3d(0, 0, 0) scale(1.02); opacity: 0.82; }
+	50% { transform: translate3d(-1.6%, 1.1%, 0) scale(1.08); opacity: 1; }
+	100% { transform: translate3d(1.4%, -0.7%, 0) scale(1.04); opacity: 0.78; }
+}
+
+@keyframes fadeUp {
+	from { opacity: 0; transform: translate3d(0, 15px, 0); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes fadeDown {
+	from { opacity: 0; transform: translate3d(0, -12px, 0); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+@keyframes growX {
+	from { transform: scaleX(0); }
+	to { transform: scaleX(1); }
+}
+
+@keyframes scanline {
+	0% { top: 8%; }
+	100% { top: 88%; }
+}
+
+@keyframes slidein {
+	from { opacity: 0; transform: translateX(20px); }
+	to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes dropIn {
+	from { opacity: 0; transform: translateY(-6px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowPulse {
+	0%, 100% { box-shadow: 0 0 0 0 var(--pos-soft); }
+	50% { box-shadow: 0 0 0 5px var(--pos-soft); }
+}
+
+.fx-rise { animation: fadeUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+.fx-fade { animation: fadeIn 1s ease both; }
+.fx-wipe { transform-box: fill-box; transform-origin: left center; animation: growX 1.15s cubic-bezier(0.45, 0.05, 0.2, 1) both 0.45s; }
+.fx-grow-x { transform-origin: left; animation: growX 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+.fx-scanline { animation: scanline 1.8s ease-in-out infinite alternate; }
+.fx-slidein { animation: slidein 0.22s ease both; }
+.fx-drop { animation: dropIn 0.16s ease both; }
+.fx-glow { animation: glowPulse 2.4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+	.finance-aurora,
+	.fx-rise, .fx-fade, .fx-wipe, .fx-grow-x,
+	.fx-scanline, .fx-slidein, .fx-drop, .fx-glow {
+		animation: none !important;
+	}
+}

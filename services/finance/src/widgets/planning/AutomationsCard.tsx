@@ -13,7 +13,7 @@ const AutomationsCard: FC = () => {
 		<FinanceCard className="overflow-hidden">
 			<div className="flex items-center gap-2.5 border-b border-border px-[18px] py-3.5">
 				<span className="text-sm font-semibold">Automations &amp; rules</span>
-				<span className="rounded-[4px] bg-primary px-1.5 py-0.5 font-numeric text-[9px] font-bold text-white">AI</span>
+				<span className="rounded-[4px] bg-primary px-1.5 py-0.5 font-numeric text-[9px] font-semibold text-white">AI</span>
 				<div className="flex-1" />
 				<button type="button" className="text-[12.5px] font-semibold text-primary hover:underline">＋ New rule</button>
 			</div>

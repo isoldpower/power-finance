@@ -51,7 +51,7 @@ const CurrencySelector: FC<CurrencySelectorProps> = ({ className }) => {
 						<span className="w-3.5 font-display font-semibold">{currency.symbol}</span>
 						<span className="w-8 font-semibold">{currency.code}</span>
 						<span className="font-numeric text-[10.5px] text-text-3">{currency.name}</span>
-						<span className="ml-auto w-3 text-center font-bold text-primary">{mainCurrency === currency.code ? '✓' : ''}</span>
+						<span className="ml-auto w-3 text-center font-semibold text-primary">{mainCurrency === currency.code ? '✓' : ''}</span>
 					</button>
 				))}
 			</FinanceMenuContent>

@@ -53,7 +53,7 @@ function FinanceNotification({
 		<div className={cn(financeNotificationVariants({ level }), className)} {...props}>
 			<div
 				className={cn(
-					"flex size-[22px] flex-none items-center justify-center rounded-[5px] border text-xs font-bold",
+					"flex size-[22px] flex-none items-center justify-center rounded-[5px] border text-xs font-semibold",
 					iconByLevel[level]
 				)}
 			>

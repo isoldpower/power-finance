@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { FinanceCard, FinanceButton } from "@internal/ui-library";
+import { FinanceCard, FinanceButton, cn } from "@internal/ui-library";
 
 import { useActions, useResolveAction } from "@feature/actions";
 
@@ -11,12 +11,16 @@ const ICON_BY_KIND: Record<string, { icon: string; className: string }> = {
 
 const fallbackIcon = { icon: '!', className: 'bg-[var(--accent-soft)] text-primary' };
 
-const NeedsActionPanel: FC = () => {
+interface NeedsActionPanelProps {
+	className?: string;
+}
+
+const NeedsActionPanel: FC<NeedsActionPanelProps> = ({ className }) => {
 	const { actions, isPending } = useActions();
 	const resolve = useResolveAction();
 
 	return (
-		<FinanceCard variant="accent" className="overflow-hidden">
+		<FinanceCard variant="accent" className={cn("overflow-hidden", className)}>
 			<div className="flex items-center gap-2.5 border-b border-border bg-[var(--accent-soft)] px-[18px] py-3.5">
 				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
 					<path d="M12 9v4" />
@@ -24,7 +28,7 @@ const NeedsActionPanel: FC = () => {
 					<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
 				</svg>
 				<span className="text-[14.5px] font-semibold">Needs your action</span>
-				<span className="rounded-full bg-primary px-2.5 py-0.5 text-[11.5px] font-bold text-white">
+				<span className="rounded-full bg-primary px-2.5 py-0.5 text-[11.5px] font-semibold text-white">
 					{actions.length}
 				</span>
 				<div className="flex-1" />
@@ -43,7 +47,7 @@ const NeedsActionPanel: FC = () => {
 					const visual = ICON_BY_KIND[action.kind] ?? fallbackIcon;
 					return (
 						<div key={action.id} className="flex items-center gap-3.5 border-b border-border px-[18px] py-3.5 last:border-b-0 hover:bg-secondary">
-							<div className={`flex size-[34px] flex-none items-center justify-center rounded-[9px] text-[15px] font-bold ${visual.className}`}>
+							<div className={`flex size-[34px] flex-none items-center justify-center rounded-[9px] text-[15px] font-semibold ${visual.className}`}>
 								{visual.icon}
 							</div>
 							<div className="min-w-0 flex-1">

@@ -42,7 +42,7 @@ interface ManagementPanelProps {
 
 const TITLES: Record<PanelMode, ReactNode> = {
 	add: 'New transaction',
-	scan: <span className="flex items-center gap-2">Scan receipt <span className="rounded-[4px] bg-primary px-1.5 py-0.5 font-numeric text-[9px] font-bold text-white">AI</span></span>,
+	scan: <span className="flex items-center gap-2">Scan receipt <span className="rounded-[4px] bg-primary px-1.5 py-0.5 font-numeric text-[9px] font-semibold text-white">AI</span></span>,
 	wallet: 'New wallet',
 	transfer: 'Transfer money',
 	edit: 'Edit wallet',
@@ -252,6 +252,7 @@ const ScanForm: FC<{ onClose: () => void }> = ({ onClose }) => (
 		<div className="flex-1 overflow-auto p-5">
 			<div className="mb-5 flex gap-4">
 				<div className="relative w-[118px] flex-none overflow-hidden rounded-[10px] border border-border bg-[#f7f5ef] shadow-[var(--shadow)]">
+					<div className="fx-scanline pointer-events-none absolute inset-x-0 z-10 h-0.5 bg-primary shadow-[0_0_10px_2px_var(--glow)]" />
 					<div className="px-2.5 py-3 font-numeric text-[#3a382f]">
 						<div className="text-center text-[8px] font-semibold tracking-[0.1em]">WHOLE FOODS</div>
 						<div className="mb-1.5 text-center text-[6px] opacity-60">MARKET · SF</div>
@@ -283,7 +284,7 @@ const ScanForm: FC<{ onClose: () => void }> = ({ onClose }) => (
 					<span className="w-24 text-[11.5px] text-text-3">{field.label}</span>
 					<span className="flex flex-1 items-center gap-2 text-[13.5px] font-semibold">
 						{field.value}
-						{field.ai ? <span className="rounded-[4px] border border-[var(--accent-border)] px-1 font-numeric text-[8.5px] font-bold text-primary">AI</span> : null}
+						{field.ai ? <span className="rounded-[4px] border border-[var(--accent-border)] px-1 font-numeric text-[8.5px] font-semibold text-primary">AI</span> : null}
 					</span>
 					<span className="cursor-pointer text-[11px] text-text-3">edit</span>
 				</div>

@@ -1,6 +1,7 @@
 import type { FC } from "react";
-import { FinanceCard, FinanceMoney } from "@internal/ui-library";
+import { FinanceCard, cn } from "@internal/ui-library";
 
+import { AnimatedMoney } from "@shared/components";
 import { useInsights } from "@feature/summary";
 import { useConvertMoney } from "@feature/fx";
 
@@ -13,9 +14,10 @@ const RANGE_LABELS: Record<string, string> = {
 
 interface CashFlowCardProps {
 	range?: string;
+	className?: string;
 }
 
-const CashFlowCard: FC<CashFlowCardProps> = ({ range = '1M' }) => {
+const CashFlowCard: FC<CashFlowCardProps> = ({ range = '1M', className }) => {
 	const { cashFlow, isPending, isError } = useInsights({ metrics: ['cash_flow'], range });
 	const { convert } = useConvertMoney();
 
@@ -24,7 +26,7 @@ const CashFlowCard: FC<CashFlowCardProps> = ({ range = '1M' }) => {
 	const expenseShare = total > 0 ? (cashFlow!.out.amount / total) * 100 : 0;
 
 	return (
-		<FinanceCard className="flex flex-col px-6 py-[22px]">
+		<FinanceCard className={cn("flex flex-col px-6 py-[22px]", className)}>
 			<div className="flex items-center gap-2">
 				<span className="font-numeric text-[11px] uppercase tracking-[0.14em] text-text-3">
 					Cash flow · {RANGE_LABELS[range] ?? 'This month'}
@@ -49,17 +51,17 @@ const CashFlowCard: FC<CashFlowCardProps> = ({ range = '1M' }) => {
 								<span className="size-[7px] rounded-[2px] bg-pos" />
 								Income
 							</div>
-							<FinanceMoney tone="pos" size="xl" className="mt-1 block">{convert(cashFlow.in).formatted}</FinanceMoney>
+							<AnimatedMoney amount={convert(cashFlow.in).amount} currency={convert(cashFlow.in).currency} tone="pos" size="xl" className="mt-1 block text-[26px]" />
 						</div>
 						<div>
 							<div className="flex items-center gap-1.5 text-xs text-text-2">
 								<span className="size-[7px] rounded-[2px] bg-neg" />
 								Expenses
 							</div>
-							<FinanceMoney tone="neg" size="xl" className="mt-1 block">{convert(cashFlow.out).formatted}</FinanceMoney>
+							<AnimatedMoney amount={convert(cashFlow.out).amount} currency={convert(cashFlow.out).currency} tone="neg" size="xl" className="mt-1 block text-[26px]" />
 						</div>
 					</div>
-					<div className="mt-[18px] flex h-2 overflow-hidden rounded-full bg-secondary">
+					<div className="fx-grow-x [animation-delay:0.4s] mt-[18px] flex h-2 overflow-hidden rounded-full bg-secondary">
 						<div className="bg-pos" style={{ width: `${incomeShare.toFixed(1)}%` }} />
 						<div style={{ width: "1.5%" }} />
 						<div className="bg-neg" style={{ width: `${expenseShare.toFixed(1)}%` }} />
@@ -67,7 +69,7 @@ const CashFlowCard: FC<CashFlowCardProps> = ({ range = '1M' }) => {
 					<div className="flex-1" />
 					<div className="mt-[18px] flex items-center justify-between border-t border-border pt-3.5">
 						<span className="text-[13px] text-text-2">Net · {(RANGE_LABELS[range] ?? 'This month').toLowerCase()}</span>
-						<FinanceMoney tone={cashFlow.net.amount >= 0 ? "pos" : "neg"} size="lg">{convert(cashFlow.net).formatted}</FinanceMoney>
+						<AnimatedMoney amount={convert(cashFlow.net).amount} currency={convert(cashFlow.net).currency} tone={cashFlow.net.amount >= 0 ? "pos" : "neg"} size="lg" className="text-[20px]" />
 					</div>
 				</>
 			)}
@@ -78,8 +80,8 @@ const CashFlowCard: FC<CashFlowCardProps> = ({ range = '1M' }) => {
 const CashFlowSkeleton: FC = () => (
 	<div className="mt-[18px] flex flex-1 flex-col animate-pulse">
 		<div className="grid grid-cols-2 gap-3.5">
-			<div className="h-[46px] rounded-[var(--radius-md)] bg-secondary" />
-			<div className="h-[46px] rounded-[var(--radius-md)] bg-secondary" />
+			<div className="h-[42px] rounded-[var(--radius-md)] bg-secondary" />
+			<div className="h-[42px] rounded-[var(--radius-md)] bg-secondary" />
 		</div>
 		<div className="mt-[18px] h-2 rounded-full bg-secondary" />
 		<div className="flex-1" />

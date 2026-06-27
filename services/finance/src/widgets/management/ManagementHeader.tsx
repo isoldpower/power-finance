@@ -1,15 +1,16 @@
 import type { FC } from "react";
-import { FinanceButton } from "@internal/ui-library";
+import { cn, FinanceButton } from "@internal/ui-library";
 
 import type { PanelMode } from "./mock.ts";
 
 interface ManagementHeaderProps {
 	onOpenPanel: (mode: PanelMode) => void;
+	className?: string;
 }
 
-const ManagementHeader: FC<ManagementHeaderProps> = ({ onOpenPanel }) => {
+const ManagementHeader: FC<ManagementHeaderProps> = ({ onOpenPanel, className }) => {
 	return (
-		<div className="flex flex-wrap items-center gap-3.5">
+		<div className={cn("flex flex-wrap items-center gap-3.5", className)}>
 			<h1 className="font-display text-2xl font-semibold tracking-[-0.01em]">Management</h1>
 			<span className="hidden font-numeric text-[11px] uppercase tracking-[0.08em] text-text-3 sm:block">
 				Wallets · Transactions · Ledger
@@ -21,7 +22,7 @@ const ManagementHeader: FC<ManagementHeaderProps> = ({ onOpenPanel }) => {
 					<circle cx="12" cy="13" r="4" />
 				</svg>
 				Scan receipt
-				<span className="rounded-[4px] bg-primary px-1.5 font-numeric text-[9px] font-bold text-white">AI</span>
+				<span className="rounded-[4px] bg-primary px-1.5 font-numeric text-[9px] font-semibold text-white">AI</span>
 			</FinanceButton>
 			<FinanceButton className="shadow-[0_4px_14px_var(--glow)]" onClick={() => { onOpenPanel('add'); }}>
 				＋ Add

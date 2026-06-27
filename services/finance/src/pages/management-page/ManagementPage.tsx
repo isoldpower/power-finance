@@ -20,11 +20,11 @@ const ManagementPage: FC = () => {
 
 	return (
 		<div className="mx-auto flex max-w-[1320px] flex-col gap-6 px-[22px] pb-[70px] pt-[22px]">
-			<ManagementHeader onOpenPanel={openPanel} />
-			<LedgerBand />
-			<WalletsSection onOpenPanel={openPanel} />
-			<TransactionsSection onOpenPanel={openPanel} />
-			<ChartOfAccountsSection />
+			<ManagementHeader onOpenPanel={openPanel} className="fx-rise [animation-delay:0.05s]" />
+			<LedgerBand className="fx-rise [animation-delay:0.12s]" />
+			<WalletsSection onOpenPanel={openPanel} className="fx-rise [animation-delay:0.18s]" />
+			<TransactionsSection onOpenPanel={openPanel} className="fx-rise [animation-delay:0.24s]" />
+			<ChartOfAccountsSection className="fx-rise [animation-delay:0.3s]" />
 			<ManagementPanel mode={panelMode} onClose={closePanel} onSwitch={openPanel} />
 		</div>
 	);

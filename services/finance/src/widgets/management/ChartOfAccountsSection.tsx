@@ -5,7 +5,11 @@ import { cn, FinanceCard, FinanceMoney, FinanceBadge } from "@internal/ui-librar
 import { SectionHeader } from "./SectionHeader.tsx";
 import { MOCK_ACCOUNT_CATEGORIES, MOCK_ACCOUNT_HISTORY } from "./mock.ts";
 
-const ChartOfAccountsSection: FC = () => {
+interface ChartOfAccountsSectionProps {
+	className?: string;
+}
+
+const ChartOfAccountsSection: FC<ChartOfAccountsSectionProps> = ({ className }) => {
 	const [categoryId, setCategoryId] = useState(MOCK_ACCOUNT_CATEGORIES[0].id);
 	const category = MOCK_ACCOUNT_CATEGORIES.find((entry) => entry.id === categoryId) ?? MOCK_ACCOUNT_CATEGORIES[0];
 	const [accountId, setAccountId] = useState(category.accounts[0].id);
@@ -20,7 +24,7 @@ const ChartOfAccountsSection: FC = () => {
 	const accountCount = MOCK_ACCOUNT_CATEGORIES.reduce((sum, entry) => sum + entry.accounts.length, 0);
 
 	return (
-		<section>
+		<section className={className}>
 			<SectionHeader
 				title={
 					<span className="flex items-center gap-2.5">
@@ -121,7 +125,7 @@ const ChartOfAccountsSection: FC = () => {
 							<div className="min-w-0 flex-1">
 								<div className="mb-0.5 flex items-center gap-2.5">
 									<span className="font-display text-[19px] font-semibold tracking-[-0.01em]">{account.name}</span>
-									<span className="rounded-[4px] border border-border bg-secondary px-1.5 py-0.5 font-numeric text-[9.5px] font-bold uppercase tracking-[0.04em] text-text-2">{account.accountType}</span>
+									<span className="rounded-[4px] border border-border bg-secondary px-1.5 py-0.5 font-numeric text-[9.5px] font-semibold uppercase tracking-[0.04em] text-text-2">{account.accountType}</span>
 								</div>
 								<div className="text-[12.5px] text-text-3">{account.kind}</div>
 							</div>

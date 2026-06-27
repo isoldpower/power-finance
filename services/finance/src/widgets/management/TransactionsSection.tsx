@@ -23,6 +23,7 @@ import type { PanelMode } from "./mock.ts";
 
 interface TransactionsSectionProps {
 	onOpenPanel: (mode: PanelMode) => void;
+	className?: string;
 }
 
 interface FilterChipProps {
@@ -66,7 +67,7 @@ const TYPE_OPTIONS = [
 	{ value: 'expense', label: 'expense' },
 ];
 
-const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel }) => {
+const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel, className }) => {
 	const { transactions, isPending } = useTransactionsList();
 	const { wallets } = useWalletsList();
 	const { convert } = useConvertMoney();
@@ -111,7 +112,7 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel }) => {
 	const sortLabel = SORT_OPTIONS.find((option) => option.value === sort)?.label ?? '';
 
 	return (
-		<section>
+		<section className={className}>
 			<SectionHeader
 				title="Transactions"
 				caption="Each row posts to the ledger"

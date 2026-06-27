@@ -22,17 +22,29 @@ const RANGE_PCT: Record<string, number> = {
 	'1Y': 14.2,
 };
 
+const RANGE_SPAN_DAYS: Record<string, number> = {
+	'1W': 7,
+	'1M': 30,
+	'3M': 91,
+	'1Y': 365,
+};
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 const netWorthFor = (range: string): NetWorthInsight => {
 	const pct = RANGE_PCT[range] ?? RANGE_PCT['1M'];
+	const spanDays = RANGE_SPAN_DAYS[range] ?? 30;
 	const start = NET_WORTH_VALUE / (1 + pct / 100);
 	const points = 10;
+	const now = Date.now();
 	const series = Array.from({ length: points }, (_, index) => {
 		const t = index / (points - 1);
 		const trend = start + (NET_WORTH_VALUE - start) * t;
 		const wave = Math.sin(t * Math.PI * 1.5) * (NET_WORTH_VALUE - start) * 0.18;
-		return { t: String(index), v: Math.round((trend + wave) * 100) / 100 };
+		const date = new Date(now - spanDays * (1 - t) * DAY_MS);
+		const value = index === points - 1 ? NET_WORTH_VALUE : Math.round((trend + wave) * 100) / 100;
+		return { t: date.toISOString(), v: value };
 	});
-	series[series.length - 1] = { t: String(points - 1), v: NET_WORTH_VALUE };
 
 	return {
 		value: { amount: NET_WORTH_VALUE, currency: 'USD' },

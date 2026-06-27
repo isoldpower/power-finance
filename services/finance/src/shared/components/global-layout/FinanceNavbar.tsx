@@ -81,7 +81,7 @@ const FinanceNavbar: FC = () => {
 							<path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
 						</svg>
 						{unreadCount > 0 ? (
-							<span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full border-[1.5px] border-[var(--surface)] bg-neg px-1 text-[10px] font-bold text-white">
+							<span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full border-[1.5px] border-[var(--surface)] bg-neg px-1 text-[10px] font-semibold text-white">
 								{unreadCount}
 							</span>
 						) : null}

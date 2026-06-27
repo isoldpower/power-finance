@@ -5,7 +5,7 @@ import { cn } from "@/utils";
 import { Badge } from "@/entities/shadcn";
 
 const financeBadgeVariants = cva(
-	"inline-flex items-center gap-1.5 rounded-full border font-bold leading-none whitespace-nowrap", 
+	"inline-flex items-center gap-1.5 rounded-full border font-semibold leading-none whitespace-nowrap",
 	{
 		variants: {
 			tone: {
