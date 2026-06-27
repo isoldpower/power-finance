@@ -36,7 +36,8 @@ const PreferredCurrencySelection = () => {
 						value={mainCurrency}
 						onSelected={(value) => {
 							setOpen(false)
-							onUpdateField('mainCurrency', value);
+							// cmdk lowercases the selected value; currency codes (and the FX rate table) are uppercase.
+							if (value) onUpdateField('mainCurrency', value.toUpperCase());
 						}} />
 				</UiPopoverContent>
 			</UiPopover>

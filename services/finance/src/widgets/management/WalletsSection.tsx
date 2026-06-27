@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import { useMemo, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { cn, FinanceCard, FinanceMoney, FinanceButton } from "@internal/ui-library";
 
 import { useWalletsList } from "@feature/wallet";
@@ -7,23 +8,38 @@ import { useTransactionsList } from "@feature/transaction";
 import { useConvertMoney } from "@feature/fx";
 import { useLocaleCurrency } from "@shared/utils";
 
+import { MoneyInOriginal } from "@shared/components";
+
 import { SectionHeader } from "./SectionHeader.tsx";
+import { TRANSACTIONS_SECTION_ID } from "./constants.ts";
 import { gradientFromId, walletTypeLabel, relativeTime, toTransactionRow } from "./adapters.ts";
-import type { PanelMode } from "./mock.ts";
+import type { PanelMode, PanelWallet } from "./mock.ts";
 
 interface WalletsSectionProps {
-	onOpenPanel: (mode: PanelMode) => void;
+	onOpenPanel: (mode: PanelMode, wallet?: PanelWallet) => void;
 	className?: string;
 }
 
 const selectClass =
 	"min-w-0 flex-1 cursor-pointer rounded-[var(--radius-md)] border border-border-strong bg-card px-2 py-1.5 text-xs font-semibold text-text-2 outline-none";
 
+// Recent list is always padded to this many rows so the card height never shifts.
+const RECENT_SLOTS = 3;
+
 const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel, className }) => {
 	const { wallets: rawWallets, isPending } = useWalletsList();
 	const { transactions } = useTransactionsList();
 	const { convert } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
+	const navigate = useNavigate();
+
+	const seeAllInTransactions = (walletId: string) => {
+		navigate({ to: '.', search: (prev) => ({ ...prev, wallet: walletId, sort: 'recent' }) })
+			.then(() => {
+				document.getElementById(TRANSACTIONS_SECTION_ID)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			})
+			.catch((error: unknown) => { console.error(error); });
+	};
 
 	const [query, setQuery] = useState('');
 	const [typeFilter, setTypeFilter] = useState('all');
@@ -38,7 +54,8 @@ const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel, className }) => 
 		currency: wallet.balance.currency,
 		balance: wallet.balance,
 		gradient: gradientFromId(wallet.id),
-		updated: relativeTime(wallet.updatedAt),
+		credit: wallet.credit,
+		updated: wallet.updatedAt ? relativeTime(wallet.updatedAt) : '',
 	})), [rawWallets]);
 
 	const types = useMemo(() => [...new Set(decorated.map((wallet) => wallet.type))], [decorated]);
@@ -66,7 +83,8 @@ const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel, className }) => 
 		if (!selected) return [];
 		return transactions
 			.filter((txn) => txn.source_wallet_id === selected.id)
-			.slice(0, 3)
+			.sort((a, b) => b.created_at.localeCompare(a.created_at))
+			.slice(0, RECENT_SLOTS)
 			.map((txn) => toTransactionRow(txn, walletById, formatCurrency));
 	}, [transactions, selected, walletById, formatCurrency]);
 
@@ -124,7 +142,7 @@ const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel, className }) => 
 							</select>
 						</div>
 					</div>
-					<div className="h-[264px] overflow-y-auto">
+					<div className="flex h-[264px] flex-col overflow-y-auto">
 						{isPending ? (
 							<div className="px-4 py-[26px] text-center text-[13px] text-text-3">Loading…</div>
 						) : wallets.length === 0 ? (
@@ -144,7 +162,7 @@ const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel, className }) => 
 										<div className="truncate text-[13.5px] font-semibold">{wallet.name}</div>
 										<div className="text-[11px] text-text-3">{wallet.type} · {wallet.currency}</div>
 									</div>
-									<FinanceMoney tone={wallet.balance.amount >= 0 ? 'neutral' : 'neg'} size="sm">{convert(wallet.balance).formatted}</FinanceMoney>
+									<MoneyInOriginal amount={wallet.balance.amount} currency={wallet.balance.currency} tone={wallet.balance.amount >= 0 ? 'neutral' : 'neg'} size="sm" align="end" convert={convert} format={formatCurrency} />
 									<button
 										type="button"
 										title="Pin wallet"
@@ -162,6 +180,11 @@ const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel, className }) => 
 								</div>
 							))
 						)}
+						{!isPending && wallets.length > 0 ? (
+							<div className="flex flex-1 items-center justify-center px-4 py-4 text-center font-numeric text-[10.5px] uppercase tracking-[0.12em] text-text-3">
+								No more cards
+							</div>
+						) : null}
 					</div>
 				</FinanceCard>
 
@@ -169,54 +192,62 @@ const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel, className }) => 
 					{selected ? (
 						<>
 							<div className="relative overflow-hidden border-b border-border px-6 py-[22px]">
-								<div className="pointer-events-none absolute -right-10 -top-[60px] size-[200px] rounded-full bg-[radial-gradient(circle,var(--glow),transparent_68%)]" />
 								<div className="relative flex items-start gap-3.5">
 									<div className="h-11 w-16 flex-none rounded-[9px] shadow-[var(--shadow)]" style={{ background: selected.gradient }} />
 									<div className="flex-1">
 										<div className="font-display text-lg font-semibold">{selected.name}</div>
-										<div className="text-[12.5px] text-text-3">{selected.type} · {selected.currency} · updated {selected.updated}</div>
+										<div className="text-[12.5px] text-text-3">{selected.type} · {selected.currency}{selected.updated ? ` · updated ${selected.updated}` : ''}</div>
 									</div>
 									<div className="flex gap-2">
-										<FinanceButton variant="outline" size="sm" onClick={() => { onOpenPanel('transfer'); }}>Transfer</FinanceButton>
-										<FinanceButton variant="outline" size="sm" onClick={() => { onOpenPanel('edit'); }}>Edit</FinanceButton>
+										<FinanceButton variant="outline" size="sm" onClick={() => { onOpenPanel('transfer', selected); }}>Transfer</FinanceButton>
+										<FinanceButton variant="outline" size="sm" onClick={() => { onOpenPanel('edit', selected); }}>Edit</FinanceButton>
 									</div>
 								</div>
 								<div className="relative mt-[18px] flex items-end gap-5">
 									<div>
 										<div className="font-numeric text-[10px] uppercase tracking-[0.1em] text-text-3">Balance</div>
-										<FinanceMoney tone={selected.balance.amount >= 0 ? 'neutral' : 'neg'} size="xl">{convert(selected.balance).formatted}</FinanceMoney>
+										<MoneyInOriginal amount={selected.balance.amount} currency={selected.balance.currency} tone={selected.balance.amount >= 0 ? 'neutral' : 'neg'} size="xl" align="start" convert={convert} format={formatCurrency} />
 									</div>
 									<div className="flex-1" />
 									<div>
 										<div className="text-[11px] text-text-3">In</div>
-										<FinanceMoney tone="pos" size="md">{convert({ amount: monthFlow.in, currency: selected.currency }).formatted}</FinanceMoney>
+										<FinanceMoney tone="pos" size="md">{formatCurrency(monthFlow.in, selected.currency)}</FinanceMoney>
 									</div>
 									<div>
 										<div className="text-[11px] text-text-3">Out</div>
-										<FinanceMoney tone="neg" size="md">{convert({ amount: monthFlow.out, currency: selected.currency }).formatted}</FinanceMoney>
+										<FinanceMoney tone="neg" size="md">{formatCurrency(monthFlow.out, selected.currency)}</FinanceMoney>
 									</div>
 								</div>
 							</div>
 							<div className="px-[18px] pb-1 pt-3.5">
 								<span className="text-[13.5px] font-semibold">Recent in this wallet</span>
 							</div>
-							{recent.length === 0 ? (
-								<div className="flex items-center gap-3 border-b border-border px-[18px] py-2.5">
-									<div className="size-[30px] flex-none rounded-[8px] border border-dashed border-border-strong" />
-									<div className="flex-1 text-xs text-text-3 opacity-50">No activity yet</div>
-								</div>
-							) : (
-								recent.map((txn) => (
-									<div key={txn.id} className="flex items-center gap-3 border-b border-border px-[18px] py-2.5 last:border-b-0 hover:bg-secondary">
-										<div className={`flex size-[30px] flex-none items-center justify-center rounded-[8px] ${txn.iconClass}`}>{txn.icon}</div>
-										<div className="min-w-0 flex-1">
-											<div className="text-[13px] font-semibold">{txn.category}</div>
-											<div className="text-[11px] text-text-3">{txn.date} · {txn.time}</div>
-										</div>
-										<FinanceMoney tone={txn.tone} size="sm">{convert({ amount: txn.amount, currency: txn.currency }).formatted}</FinanceMoney>
+							{recent.map((txn) => (
+								<div key={txn.id} className="flex items-center gap-3 border-b border-border px-[18px] py-2.5 hover:bg-secondary">
+									<div className={`flex size-[30px] flex-none items-center justify-center rounded-[8px] ${txn.iconClass}`}>{txn.icon}</div>
+									<div className="min-w-0 flex-1">
+										<div className="text-[13px] font-semibold">{txn.category}</div>
+										<div className="text-[11px] text-text-3">{txn.date} · {txn.time}</div>
 									</div>
-								))
-							)}
+									<MoneyInOriginal amount={txn.amount} currency={txn.currency} tone={txn.tone} size="sm" align="end" convert={convert} format={formatCurrency} />
+								</div>
+							))}
+							{Array.from({ length: Math.max(0, RECENT_SLOTS - recent.length) }).map((_, index) => (
+								<div key={`empty-${index.toString()}`} className="flex items-center gap-3 border-b border-border px-[18px] py-2.5">
+									<div className="size-[30px] flex-none rounded-[8px] border border-dashed border-border-strong" />
+									<div className="min-w-0 flex-1">
+										<div className="text-[13px] font-medium text-text-3 opacity-50">No activity yet</div>
+										<div className="text-[11px] text-text-3">&nbsp;</div>
+									</div>
+								</div>
+							))}
+								<button
+									type="button"
+									onClick={() => { seeAllInTransactions(selected.id); }}
+									className="flex w-full items-center justify-center gap-1.5 px-[18px] py-3 text-[12.5px] font-semibold text-primary hover:bg-secondary"
+								>
+									See all transactions for {selected.name} →
+								</button>
 						</>
 					) : (
 						<div className="px-6 py-16 text-center text-[13px] text-text-3">

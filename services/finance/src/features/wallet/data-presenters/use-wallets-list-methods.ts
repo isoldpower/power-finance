@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 
@@ -24,8 +24,12 @@ interface UseWalletsReturn {
 	fetchAllWallets: () => void;
 }
 
+// Summary insights/ledger-balance are derived from wallets, so a new wallet must re-trigger them.
+const SUMMARY_KEYS = ['summary-insights', 'summary-ledger-balance'];
+
 const useWalletsListMethods = (): UseWalletsReturn => {
 	const apiContext = useApiContext();
+	const client = useQueryClient();
 
 	const query = useQuery({
 		queryKey: [CACHE_KEYS.list],
@@ -43,7 +47,12 @@ const useWalletsListMethods = (): UseWalletsReturn => {
 			handler: apiContext.walletServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.create],
-		onSettled: () => query.refetch()
+		onSettled: () => {
+			void query.refetch();
+			for (const key of SUMMARY_KEYS) {
+				void client.invalidateQueries({ queryKey: [key] });
+			}
+		}
 	});
 
 	const createWallet = useCallback((

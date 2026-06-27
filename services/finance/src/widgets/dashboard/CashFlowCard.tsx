@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { FinanceCard, cn } from "@internal/ui-library";
+import { FinanceCard, FinanceTooltip, cn } from "@internal/ui-library";
 
 import { AnimatedMoney } from "@shared/components";
 import { useInsights } from "@feature/summary";
@@ -33,9 +33,11 @@ const CashFlowCard: FC<CashFlowCardProps> = ({ range = '1M', className }) => {
 				</span>
 				<span className="flex-1" />
 				{cashFlow ? (
-					<span className="text-xs text-text-3">
-						Savings rate <b className="text-pos">{Math.round(cashFlow.savingsRate * 100)}%</b>
-					</span>
+					<FinanceTooltip content={`Net ${convert(cashFlow.net).formatted} kept of ${convert(cashFlow.in).formatted} income`}>
+						<span className="cursor-help text-xs text-text-3">
+							Savings rate <b className="text-pos">{Math.round(cashFlow.savingsRate * 100)}%</b>
+						</span>
+					</FinanceTooltip>
 				) : null}
 			</div>
 
@@ -46,20 +48,24 @@ const CashFlowCard: FC<CashFlowCardProps> = ({ range = '1M', className }) => {
 			) : (
 				<>
 					<div className="mt-[18px] grid grid-cols-2 gap-3.5">
-						<div>
-							<div className="flex items-center gap-1.5 text-xs text-text-2">
-								<span className="size-[7px] rounded-[2px] bg-pos" />
-								Income
+						<FinanceTooltip content={`${Math.round(incomeShare).toString()}% of gross flow · ${convert(cashFlow.in).formatted}`}>
+							<div className="cursor-help">
+								<div className="flex items-center gap-1.5 text-xs text-text-2">
+									<span className="size-[7px] rounded-[2px] bg-pos" />
+									Income
+								</div>
+								<AnimatedMoney amount={convert(cashFlow.in).amount} currency={convert(cashFlow.in).currency} tone="pos" size="xl" className="mt-1 block text-[26px]" />
 							</div>
-							<AnimatedMoney amount={convert(cashFlow.in).amount} currency={convert(cashFlow.in).currency} tone="pos" size="xl" className="mt-1 block text-[26px]" />
-						</div>
-						<div>
-							<div className="flex items-center gap-1.5 text-xs text-text-2">
-								<span className="size-[7px] rounded-[2px] bg-neg" />
-								Expenses
+						</FinanceTooltip>
+						<FinanceTooltip content={`${Math.round(expenseShare).toString()}% of gross flow · ${convert(cashFlow.out).formatted}`}>
+							<div className="cursor-help">
+								<div className="flex items-center gap-1.5 text-xs text-text-2">
+									<span className="size-[7px] rounded-[2px] bg-neg" />
+									Expenses
+								</div>
+								<AnimatedMoney amount={convert(cashFlow.out).amount} currency={convert(cashFlow.out).currency} tone="neg" size="xl" className="mt-1 block text-[26px]" />
 							</div>
-							<AnimatedMoney amount={convert(cashFlow.out).amount} currency={convert(cashFlow.out).currency} tone="neg" size="xl" className="mt-1 block text-[26px]" />
-						</div>
+						</FinanceTooltip>
 					</div>
 					<div className="fx-grow-x [animation-delay:0.4s] mt-[18px] flex h-2 overflow-hidden rounded-full bg-secondary">
 						<div className="bg-pos" style={{ width: `${incomeShare.toFixed(1)}%` }} />

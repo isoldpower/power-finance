@@ -22,11 +22,29 @@ import {
 } from "./types.ts";
 
 
+interface StoredTransaction {
+	id: string;
+	source_wallet_id: string;
+	amount: string;
+}
+
 class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 	private readonly storage: IStorage<Wallet>;
+	private readonly transactions: IStorage<StoredTransaction>;
 
 	constructor(_key: string) {
 		this.storage = new LocalStorageMock<Wallet>(_key);
+		// Balances are derived from the transactions ledger so they stay in sync once
+		// a transaction is created and the wallets query is re-fetched.
+		this.transactions = new LocalStorageMock<StoredTransaction>('transactions');
+	}
+
+	private withLiveBalance(wallet: Wallet): Wallet {
+		const delta = this.transactions.list().reduce(
+			(sum, txn) => txn.source_wallet_id === wallet.id ? sum + (parseFloat(txn.amount) || 0) : sum,
+			0
+		);
+		return { ...wallet, balance: { ...wallet.balance, amount: wallet.balance.amount + delta } };
 	}
 
 	public get(
@@ -37,7 +55,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 			.then((value) => {
 				if (!value) throw new Error("Not found");
 
-				return flatToWalletDetailed(value);
+				return flatToWalletDetailed(this.withLiveBalance(value));
 			});
 	}
 
@@ -47,8 +65,8 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 		const timestamp = new Date().toISOString();
 		const filledPayload: Wallet = Object.assign(request.data, {
 			id: uuidv4(),
-			created_at: timestamp,
-			updated_at: timestamp,
+			createdAt: timestamp,
+			updatedAt: timestamp,
 		});
 
 		return new Promise((resolve) => setTimeout(resolve, 250))
@@ -68,7 +86,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => items.slice(start, end))
 			.then((values) => ({
-				data: values.map(flatToWalletPreview),
+				data: values.map((value) => flatToWalletPreview(this.withLiveBalance(value))),
 				meta: {
 					total: items.length,
 					offset: request.params?.offset ?? 0,
@@ -86,9 +104,13 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 				if (!value) throw new Error("Not found");
 
 				this.storage.remove(value);
-				const updatedValue = Object.assign(value, request.data);
+				const openingAmount = value.balance.amount;
+				const updatedValue = Object.assign(value, request.data, { updatedAt: new Date().toISOString() });
+				// The stored balance is the wallet's opening amount; the live balance is derived from
+				// the transaction ledger, so a client write must never overwrite it (that double-counts).
+				updatedValue.balance = { ...updatedValue.balance, amount: openingAmount };
 				this.storage.add(updatedValue);
-				return flatToWalletDetailed(updatedValue);
+				return flatToWalletDetailed(this.withLiveBalance(updatedValue));
 			});
 	}
 
@@ -101,9 +123,14 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 				if (!value) throw new Error("Not found");
 
 				this.storage.remove(value);
-				const updatedValue: Wallet = Object.assign({ id: value.id }, request.data);
+				const updatedValue: Wallet = Object.assign(
+					{ id: value.id, createdAt: value.createdAt, updatedAt: new Date().toISOString() },
+					request.data
+				);
+				// Opening balance is server-owned (live balance derives from the ledger); keep the stored amount.
+				updatedValue.balance = { ...updatedValue.balance, amount: value.balance.amount };
 				this.storage.add(updatedValue);
-				return flatToWalletDetailed(updatedValue);
+				return flatToWalletDetailed(this.withLiveBalance(updatedValue));
 			});
 	}
 

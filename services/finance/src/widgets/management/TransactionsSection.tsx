@@ -1,9 +1,9 @@
 import type { FC, ReactNode } from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import {
 	cn,
 	FinanceCard,
-	FinanceMoney,
 	FinanceBadge,
 	FinanceMenu,
 	FinanceMenuTrigger,
@@ -17,6 +17,7 @@ import { useConvertMoney } from "@feature/fx";
 import { useLocaleCurrency } from "@shared/utils";
 
 import { SectionHeader } from "./SectionHeader.tsx";
+import { TRANSACTIONS_SECTION_ID } from "./constants.ts";
 import { toTransactionRow } from "./adapters.ts";
 import type { TransactionRowView } from "./adapters.ts";
 import type { PanelMode } from "./mock.ts";
@@ -56,6 +57,36 @@ const FilterChip: FC<FilterChipProps> = ({ label, active, options, onSelect }) =
 	</FinanceMenu>
 );
 
+const PAGE_SIZE = 8;
+
+// Compact page list: all pages when few, else first/last + a window around the current page.
+const buildPages = (current: number, count: number): (number | 'gap')[] => {
+	if (count <= 7) return Array.from({ length: count }, (_, index) => index + 1);
+	const pages: (number | 'gap')[] = [1];
+	const start = Math.max(2, current - 1);
+	const end = Math.min(count - 1, current + 1);
+	if (start > 2) pages.push('gap');
+	for (let page = start; page <= end; page += 1) pages.push(page);
+	if (end < count - 1) pages.push('gap');
+	pages.push(count);
+	return pages;
+};
+
+const PageButton: FC<{ active?: boolean; disabled?: boolean; onClick: () => void; children: ReactNode }> = ({ active = false, disabled = false, onClick, children }) => (
+	<button
+		type="button"
+		disabled={disabled}
+		onClick={onClick}
+		className={cn(
+			"flex h-7 min-w-7 items-center justify-center rounded-[var(--radius-md)] border px-2 text-xs font-semibold transition-colors",
+			active ? "border-primary bg-primary text-white" : "border-border-strong text-text-2 hover:bg-secondary",
+			disabled && "cursor-not-allowed opacity-40 hover:bg-transparent"
+		)}
+	>
+		{children}
+	</button>
+);
+
 const SORT_OPTIONS = [
 	{ value: 'recent', label: 'Most recent' },
 	{ value: 'amount', label: 'Amount: high → low' },
@@ -70,13 +101,23 @@ const TYPE_OPTIONS = [
 const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel, className }) => {
 	const { transactions, isPending } = useTransactionsList();
 	const { wallets } = useWalletsList();
-	const { convert } = useConvertMoney();
+	const { convert, targetCurrency } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
 
+	const navigate = useNavigate();
+	const search = useSearch({ strict: false });
+	const walletFilter = search.wallet ?? 'all';
+	const sort = search.sort ?? 'recent';
+
+	const setWalletFilter = (value: string) => {
+		void navigate({ to: '.', search: (prev) => ({ ...prev, wallet: value }) });
+	};
+	const setSort = (value: string) => {
+		void navigate({ to: '.', search: (prev) => ({ ...prev, sort: value as 'recent' | 'amount' }) });
+	};
+
 	const [query, setQuery] = useState('');
-	const [walletFilter, setWalletFilter] = useState('all');
 	const [typeFilter, setTypeFilter] = useState('all');
-	const [sort, setSort] = useState('recent');
 	const [selected, setSelected] = useState<Set<string>>(new Set());
 	const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
@@ -97,8 +138,19 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel, classN
 			return matchesQuery && matchesWallet && matchesType;
 		});
 		if (sort === 'amount') return [...filtered].sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount));
-		return [...filtered].sort((a, b) => b.id.localeCompare(a.id));
+		return [...filtered].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 	}, [transactions, walletById, formatCurrency, query, walletFilter, typeFilter, sort]);
+
+	const hasFilters = query !== '' || walletFilter !== 'all' || typeFilter !== 'all';
+
+	const [page, setPage] = useState(1);
+	useEffect(() => { setPage(1); }, [query, walletFilter, typeFilter, sort]);
+
+	const pageCount = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+	const currentPage = Math.min(page, pageCount);
+	const pageRows = rows.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+	const rangeStart = rows.length === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1;
+	const rangeEnd = Math.min(currentPage * PAGE_SIZE, rows.length);
 
 	const toggle = (set: Set<string>, id: string) => {
 		const next = new Set(set);
@@ -112,7 +164,7 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel, classN
 	const sortLabel = SORT_OPTIONS.find((option) => option.value === sort)?.label ?? '';
 
 	return (
-		<section className={className}>
+		<section id={TRANSACTIONS_SECTION_ID} className={cn("scroll-mt-[80px]", className)}>
 			<SectionHeader
 				title="Transactions"
 				caption="Each row posts to the ledger"
@@ -177,24 +229,36 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel, classN
 					<div className="hidden w-[130px] md:block">Wallet</div>
 					<div className="hidden w-[108px] md:block">Category</div>
 					<div className="w-[104px] text-right">Amount</div>
+					<div className="hidden w-[104px] text-right md:block">{targetCurrency}</div>
 					<div className="w-[26px]" />
 				</div>
 
 				{isPending ? (
 					<div className="px-4 py-10 text-center text-[13px] text-text-3">Loading…</div>
 				) : (
-					rows.map((row) => (
-						<TransactionRow
-							key={row.id}
-							row={row}
-							formatted={convert({ amount: row.amount, currency: row.currency }).formatted}
-							selected={selected.has(row.id)}
-							expanded={expanded.has(row.id)}
-							onSelect={() => { setSelected((prev) => toggle(prev, row.id)); }}
-							onExpand={() => { setExpanded((prev) => toggle(prev, row.id)); }}
-						/>
-					))
+					pageRows.map((row) => {
+						const main = convert({ amount: row.amount, currency: row.currency });
+						return (
+							<TransactionRow
+								key={row.id}
+								row={row}
+								amountOriginal={formatCurrency(row.amount, row.currency)}
+								amountMain={main.formatted}
+								converted={main.converted}
+								selected={selected.has(row.id)}
+								expanded={expanded.has(row.id)}
+								onSelect={() => { setSelected((prev) => toggle(prev, row.id)); }}
+								onExpand={() => { setExpanded((prev) => toggle(prev, row.id)); }}
+							/>
+						);
+					})
 				)}
+
+				{!isPending && pageRows.length > 0 && pageRows.length < PAGE_SIZE ? (
+					Array.from({ length: PAGE_SIZE - pageRows.length }).map((_, index) => (
+						<div key={`pad-${index.toString()}`} aria-hidden="true" className="h-14 border-b border-border last:border-b-0" />
+					))
+				) : null}
 
 				{!isPending && rows.length === 0 ? (
 					<div className="flex flex-col items-center justify-center gap-1.5 px-5 py-10 text-center">
@@ -204,9 +268,29 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel, classN
 					</div>
 				) : null}
 
-				<div className="flex items-center px-4 py-2.5 text-xs text-text-3">
-					<span>Showing <b className="text-text-2">1–{rows.length}</b> of {transactions.length}</span>
-				</div>
+				{!isPending && rows.length > 0 ? (
+					<div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2.5 text-xs text-text-3">
+						{hasFilters ? (
+							<span>Showing <b className="text-text-2">{rangeStart}–{rangeEnd}</b> of {rows.length} filtered · {transactions.length} total</span>
+						) : (
+							<span>Showing <b className="text-text-2">{rangeStart}–{rangeEnd}</b> of {transactions.length}</span>
+						)}
+						<div className="flex-1" />
+						{pageCount > 1 ? (
+							<div className="flex items-center gap-1">
+								<PageButton disabled={currentPage === 1} onClick={() => { setPage(currentPage - 1); }}>‹</PageButton>
+								{buildPages(currentPage, pageCount).map((entry, index) => (
+									entry === 'gap' ? (
+										<span key={`gap-${index.toString()}`} className="px-1 text-text-3">…</span>
+									) : (
+										<PageButton key={entry} active={entry === currentPage} onClick={() => { setPage(entry); }}>{entry}</PageButton>
+									)
+								))}
+								<PageButton disabled={currentPage === pageCount} onClick={() => { setPage(currentPage + 1); }}>›</PageButton>
+							</div>
+						) : null}
+					</div>
+				) : null}
 			</FinanceCard>
 		</section>
 	);
@@ -214,15 +298,32 @@ const TransactionsSection: FC<TransactionsSectionProps> = ({ onOpenPanel, classN
 
 interface TransactionRowProps {
 	row: TransactionRowView;
-	formatted: string;
+	amountOriginal: string;
+	amountMain: string;
+	converted: boolean;
 	selected: boolean;
 	expanded: boolean;
 	onSelect: () => void;
 	onExpand: () => void;
 }
 
-const TransactionRow: FC<TransactionRowProps> = ({ row, formatted, selected, expanded, onSelect, onExpand }) => {
-	const totalDebit = row.lines.find((line) => line.type === 'DR')?.amount ?? formatted;
+// Original and converted amounts share one muted accent here so neither competes for attention.
+const toneText: Record<TransactionRowView['tone'], string> = {
+	pos: 'text-pos',
+	neg: 'text-neg',
+	neutral: 'text-text-2',
+	muted: 'text-text-2',
+};
+
+const RowAmount: FC<{ original: string; main: string; converted: boolean; tone: TransactionRowView['tone'] }> = ({ original, main, converted, tone }) => (
+	<div className={cn("flex flex-col items-end font-numeric text-[12px] leading-tight", toneText[tone])}>
+		<span>{original}</span>
+		{converted ? <span>{main}</span> : null}
+	</div>
+);
+
+const TransactionRow: FC<TransactionRowProps> = ({ row, amountOriginal, amountMain, converted, selected, expanded, onSelect, onExpand }) => {
+	const totalDebit = row.lines.find((line) => line.type === 'DR')?.amount ?? amountOriginal;
 	return (
 		<div className="border-b border-border last:border-b-0">
 			<div onClick={onExpand} className="flex h-14 cursor-pointer items-center px-4 hover:bg-secondary">
@@ -256,9 +357,10 @@ const TransactionRow: FC<TransactionRowProps> = ({ row, formatted, selected, exp
 				<div className="hidden w-[108px] md:block">
 					<FinanceBadge tone="neutral" appearance="outline" size="sm">{row.category}</FinanceBadge>
 				</div>
-				<div className="w-[104px] text-right">
-					<FinanceMoney tone={row.tone} size="sm">{formatted}</FinanceMoney>
-				</div>
+				<div className={cn("w-[104px] text-right font-numeric text-[12px]", toneText[row.tone])}>{amountOriginal}</div>
+					<div className="hidden w-[104px] text-right font-numeric text-[12px] md:block">
+						{converted ? <span className={toneText[row.tone]}>{amountMain}</span> : <span className="text-text-3">—</span>}
+					</div>
 				<div className="w-[26px] text-right">
 					<span className={cn("inline-block text-[11px] text-text-3 transition-transform", expanded && "rotate-180")}>▾</span>
 				</div>
@@ -282,7 +384,7 @@ const TransactionRow: FC<TransactionRowProps> = ({ row, formatted, selected, exp
 							<div className="truncate text-[12.5px] font-semibold">{row.walletName}</div>
 							<div className="font-numeric text-[9px] tracking-[0.08em] text-text-3">TRANSACTION · {row.kind}</div>
 						</div>
-						<FinanceMoney tone={row.tone} size="sm">{formatted}</FinanceMoney>
+						<RowAmount original={amountOriginal} main={amountMain} converted={converted} tone={row.tone} />
 					</div>
 					{row.lines.map((line, index) => (
 						<div key={`${row.id}-${line.account}-${index.toString()}`} className="ml-[17px] mt-2 flex items-center gap-2.5 rounded-[9px] border border-border bg-card px-3 py-2.5">

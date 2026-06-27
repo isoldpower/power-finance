@@ -32,11 +32,21 @@ interface UseWalletReturn {
 	fetchWallet: () => void;
 }
 
+// Summary insights/ledger-balance are derived from wallet balances; editing/removing a
+// wallet must re-trigger them.
+const SUMMARY_KEYS = ['summary-insights', 'summary-ledger-balance'];
+
 const useWalletMethods = (
 	id: string
 ): UseWalletReturn => {
 	const apiContext = useApiContext();
 	const client = useQueryClient();
+
+	const invalidateSummary = useCallback(() => {
+		for (const key of SUMMARY_KEYS) {
+			void client.invalidateQueries({ queryKey: [key] });
+		}
+	}, [client]);
 	const singleQuery = useQuery({
 		queryKey: [CACHE_KEYS.fetch, id],
 		refetchOnMount: false,
@@ -88,7 +98,7 @@ const useWalletMethods = (
 		}),
 		mutationKey: [CACHE_KEYS.update, id],
 		onSettled: () => singleQuery.refetch()
-			.then(({ data }) => { synchronizeList(data); })
+			.then(({ data }) => { synchronizeList(data); invalidateSummary(); })
 	});
 
 	const deleteMutation = useMutation({
@@ -97,8 +107,9 @@ const useWalletMethods = (
 			handler: apiContext.walletServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.delete, id],
-		onSettled: () => { 
+		onSettled: () => {
 			filterList(singleQuery.data);
+			invalidateSummary();
 		}
 	});
 
@@ -109,7 +120,7 @@ const useWalletMethods = (
 		}),
 		mutationKey: [CACHE_KEYS.replace, id],
 		onSettled: () => singleQuery.refetch()
-			.then(({ data }) => { synchronizeList(data); })
+			.then(({ data }) => { synchronizeList(data); invalidateSummary(); })
 	});
 
 	const fetchWallet = useCallback(() => {

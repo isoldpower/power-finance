@@ -63,7 +63,7 @@ const FinanceNavbar: FC = () => {
 
 			<FinanceSegmented value={activeTab} onValueChange={onTabChange}>
 				{TABS.map((tab) => (
-					<FinanceSegmentedItem key={tab.key} value={tab.key}>
+					<FinanceSegmentedItem key={tab.key} value={tab.key} className="h-7">
 						{tab.label}
 					</FinanceSegmentedItem>
 				))}

@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { Link } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
-import { FinanceCard, FinanceStat, FinanceBadge, cn } from "@internal/ui-library";
+import { FinanceCard, FinanceStat, FinanceBadge, FinanceTooltip, cn } from "@internal/ui-library";
 
 import { AnimatedMoney } from "@shared/components";
 import { useLedgerBalance } from "@feature/summary";
@@ -34,11 +34,17 @@ const LedgerStatusBar: FC<LedgerStatusBarProps> = ({ className }) => {
 			</div>
 			<div className="hidden items-end gap-[18px] sm:flex">
 				<div className="h-7 w-px self-center bg-border-strong" />
-				<FinanceStat size="sm" label="Assets" value={assets} />
+				<FinanceTooltip content="What you own — wallets + receivables">
+					<div className="cursor-help"><FinanceStat size="sm" label="Assets" value={assets} /></div>
+				</FinanceTooltip>
 				<span className="pb-0.5 text-[15px] font-medium text-text-2">−</span>
-				<FinanceStat size="sm" label="Liabilities" value={liabilities} />
+				<FinanceTooltip content="What you owe — credit card balances">
+					<div className="cursor-help"><FinanceStat size="sm" label="Liabilities" value={liabilities} /></div>
+				</FinanceTooltip>
 				<span className="pb-0.5 text-[15px] font-medium text-text-2">=</span>
-				<FinanceStat size="sm" label="Equity" value={equity} />
+				<FinanceTooltip content="Assets − liabilities = net worth">
+					<div className="cursor-help"><FinanceStat size="sm" label="Equity" value={equity} /></div>
+				</FinanceTooltip>
 			</div>
 			<div className="flex-1" />
 			<div className="flex items-center gap-3">

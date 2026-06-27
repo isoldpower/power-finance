@@ -13,6 +13,8 @@ import {
 import { useWalletsList } from "@feature/wallet";
 import { useTransactionsListMethods } from "@feature/transaction";
 import { currencySymbol, sanitizeAmountInput } from "@shared/utils";
+import { WalletSelect } from "@shared/components";
+import { gradientFromId } from "@widget/management/adapters";
 
 type QuickAddType = 'expense' | 'income' | 'transfer';
 
@@ -28,14 +30,6 @@ const SIGN_COLOR: Record<QuickAddType, string> = {
 	transfer: 'text-primary',
 };
 
-const walletSelectClass =
-	"cursor-pointer rounded-[var(--radius-md)] border border-border-strong bg-card px-3.5 py-2.5 text-[13px] font-semibold outline-none";
-
-const walletFieldClass =
-	"flex items-center gap-2.5 rounded-[var(--radius-md)] border border-border-strong bg-card px-3.5 py-2.5";
-
-const innerSelectClass =
-	"min-w-0 flex-1 cursor-pointer border-none bg-transparent text-[13px] font-semibold outline-none";
 
 const TransferGlyph: FC<{ className?: string }> = ({ className }) => (
 	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -80,6 +74,7 @@ const QuickAddPanel: FC<QuickAddPanelProps> = ({ className }) => {
 	const isTransfer = type === 'transfer';
 	const signColor = SIGN_COLOR[type];
 	const currency = wallets.find((wallet) => wallet.id === walletId)?.balance.currency ?? 'USD';
+	const walletOptions = wallets.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: gradientFromId(wallet.id) }));
 	const numericAmount = parseFloat(amount);
 	const amountValid = !Number.isNaN(numericAmount) && numericAmount > 0;
 	const transferValid = !isTransfer || (toWalletId !== '' && toWalletId !== walletId);
@@ -134,44 +129,28 @@ const QuickAddPanel: FC<QuickAddPanelProps> = ({ className }) => {
 			</div>
 
 			{isTransfer ? (
-				<div className={walletFieldClass}>
-					<FromIcon className="flex-none text-text-3" />
-					<select
-						value={walletId}
-						onChange={(event) => { setWalletId(event.target.value); }}
-						className={innerSelectClass}
-					>
-						{wallets.map((wallet) => (
-							<option key={wallet.id} value={wallet.id}>{wallet.name} · {wallet.balance.currency}</option>
-						))}
-					</select>
-				</div>
-			) : (
-				<select
+				<WalletSelect
+					showSwatch={false}
+					leadingIcon={<FromIcon className="flex-none text-text-3" />}
+					options={walletOptions}
 					value={walletId}
-					onChange={(event) => { setWalletId(event.target.value); }}
-					className={cn(walletSelectClass, "w-full")}
-				>
-					{wallets.length === 0 ? <option value="">No wallets yet</option> : null}
-					{wallets.map((wallet) => (
-						<option key={wallet.id} value={wallet.id}>{wallet.name} · {wallet.balance.currency}</option>
-					))}
-				</select>
+					onChange={setWalletId}
+					emptyLabel="No wallets yet"
+				/>
+			) : (
+				<WalletSelect options={walletOptions} value={walletId} onChange={setWalletId} emptyLabel="No wallets yet" />
 			)}
 
 			{isTransfer ? (
-				<div className={cn(walletFieldClass, "mt-2")}>
-					<ToIcon className="flex-none text-text-3" />
-					<select
-						value={toWalletId}
-						onChange={(event) => { setToWalletId(event.target.value); }}
-						className={innerSelectClass}
-					>
-						{wallets.filter((wallet) => wallet.id !== walletId).map((wallet) => (
-							<option key={wallet.id} value={wallet.id}>{wallet.name} · {wallet.balance.currency}</option>
-						))}
-					</select>
-				</div>
+				<WalletSelect
+					showSwatch={false}
+					leadingIcon={<ToIcon className="flex-none text-text-3" />}
+					options={walletOptions.filter((option) => option.id !== walletId)}
+					value={toWalletId}
+					onChange={setToWalletId}
+					emptyLabel="Add another wallet"
+					className="mt-2"
+				/>
 			) : null}
 
 			<FinanceButton size="lg" className="mt-3.5 w-full" disabled={!canSubmit} onClick={onAdd}>

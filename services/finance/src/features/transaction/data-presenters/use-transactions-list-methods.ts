@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 
@@ -24,8 +24,14 @@ interface UseTransactionsReturn {
 	fetchAllTransactions: () => void;
 }
 
+// Posting a transaction changes balances, so re-fetch every query derived from the
+// ledger: the wallets list and the summary insights/ledger-balance (cache keys mirrored
+// from those features). Same refetch-on-mutation pattern used for the transaction list.
+const DERIVED_KEYS = ['wallets', 'summary-insights', 'summary-ledger-balance'];
+
 const useTransactionsListMethods = (): UseTransactionsReturn => {
 	const apiContext = useApiContext();
+	const client = useQueryClient();
 
 	const query = useQuery({
 		queryKey: [CACHE_KEYS.list],
@@ -47,6 +53,9 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 			query.refetch().catch((err: unknown) => {
 				console.error(err)
 			});
+			for (const key of DERIVED_KEYS) {
+				void client.invalidateQueries({ queryKey: [key] });
+			}
 		}
 	});
 

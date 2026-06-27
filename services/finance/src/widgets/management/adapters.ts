@@ -52,6 +52,7 @@ interface TransactionRowView {
 	currency: string;
 	walletId: string;
 	walletName: string;
+	createdAt: string;
 	date: string;
 	time: string;
 	icon: string;
@@ -88,6 +89,7 @@ const toTransactionRow = (
 		currency,
 		walletId: dto.source_wallet_id,
 		walletName,
+		createdAt: dto.created_at,
 		date: created.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
 		time: created.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }),
 		icon: iconFromAmount(amount),

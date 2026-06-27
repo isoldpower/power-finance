@@ -15,6 +15,10 @@ export { SingleToggleField } from './form-helpers/SingleToggleField.tsx';
 export { TabsWithSearchParam } from './tabs-with-search-param/TabsWithSearchParam.tsx';
 export { AnimatedMoney } from './money/AnimatedMoney.tsx';
 export type { AnimatedMoneyProps } from './money/AnimatedMoney.tsx';
+export { MoneyInOriginal } from './money/MoneyInOriginal.tsx';
+export type { MoneyInOriginalProps } from './money/MoneyInOriginal.tsx';
+export { WalletSelect } from './wallet/WalletSelect.tsx';
+export type { WalletSelectProps, WalletSelectOption } from './wallet/WalletSelect.tsx';
 
 export type { HeaderBoxProps } from './global-layout/HeaderBox.tsx';
 export type { HeaderBoxOffsetProps } from './global-layout/HeaderBoxOffset.tsx';

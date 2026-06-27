@@ -9,22 +9,21 @@ import {
 	FinanceSegmentedItem,
 } from "@internal/ui-library";
 
-import { useWalletsListMethods, useWalletsList } from "@feature/wallet";
+import { useWalletsListMethods, useWalletsList, useWalletMethods } from "@feature/wallet";
 import { useTransactionsListMethods } from "@feature/transaction";
-import { currencySymbol, sanitizeAmountInput } from "@shared/utils";
+import { currencySymbol, sanitizeAmountInput, useLocaleCurrency } from "@shared/utils";
+import { WalletSelect } from "@shared/components";
+import type { WalletSelectOption } from "@shared/components";
 
 import {
-	MOCK_WALLETS,
 	MOCK_WALLET_TYPES,
 	MOCK_CURRENCIES,
 	MOCK_TXN_CATEGORIES,
 } from "./mock.ts";
-import type { PanelMode } from "./mock.ts";
+import type { PanelMode, PanelWallet } from "./mock.ts";
+import { gradientFromId } from "./adapters.ts";
 
 const CREDIT_TYPE = 'Credit card';
-
-const walletSelectClass =
-	"w-full cursor-pointer rounded-[var(--radius-md)] border border-border-strong bg-card px-3.5 py-2.5 text-[13px] font-semibold text-foreground outline-none";
 
 type TransactionType = 'expense' | 'income' | 'transfer';
 
@@ -36,6 +35,7 @@ const TONE_TEXT: Record<TransactionType, string> = {
 
 interface ManagementPanelProps {
 	mode: PanelMode | null;
+	wallet?: PanelWallet;
 	onClose: () => void;
 	onSwitch: (mode: PanelMode) => void;
 }
@@ -48,7 +48,7 @@ const TITLES: Record<PanelMode, ReactNode> = {
 	edit: 'Edit wallet',
 };
 
-const ManagementPanel: FC<ManagementPanelProps> = ({ mode, onClose, onSwitch }) => {
+const ManagementPanel: FC<ManagementPanelProps> = ({ mode, wallet, onClose, onSwitch }) => {
 	if (!mode) return null;
 
 	return (
@@ -61,9 +61,9 @@ const ManagementPanel: FC<ManagementPanelProps> = ({ mode, onClose, onSwitch }) 
 				</div>
 				{mode === 'add' ? <AddForm onSwitch={onSwitch} onClose={onClose} /> : null}
 				{mode === 'scan' ? <ScanForm onClose={onClose} /> : null}
-				{mode === 'wallet' ? <WalletForm onClose={onClose} submitLabel="Create wallet" /> : null}
-				{mode === 'edit' ? <WalletForm onClose={onClose} submitLabel="Save changes" editing /> : null}
-				{mode === 'transfer' ? <TransferForm onClose={onClose} /> : null}
+				{mode === 'wallet' ? <CreateWalletForm onClose={onClose} /> : null}
+				{mode === 'edit' && wallet ? <EditWalletForm wallet={wallet} onClose={onClose} /> : null}
+				{mode === 'transfer' ? <TransferForm wallet={wallet} onClose={onClose} /> : null}
 			</div>
 		</>
 	);
@@ -145,12 +145,10 @@ const AddForm: FC<{ onSwitch: (mode: PanelMode) => void; onClose: () => void }> 
 		);
 	};
 
-	const walletOptions = (excludeId?: string) =>
+	const walletOptions = (excludeId?: string): WalletSelectOption[] =>
 		wallets
 			.filter((wallet) => wallet.id !== excludeId)
-			.map((wallet) => (
-				<option key={wallet.id} value={wallet.id}>{wallet.name} · {wallet.balance.currency}</option>
-			));
+			.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: gradientFromId(wallet.id) }));
 
 	return (
 		<>
@@ -197,10 +195,13 @@ const AddForm: FC<{ onSwitch: (mode: PanelMode) => void; onClose: () => void }> 
 				</div>
 
 				<Label>{isTransfer ? 'From wallet' : 'Wallet'}</Label>
-				<select value={fromId} onChange={(event) => { setFromId(event.target.value); }} className={cn(walletSelectClass, isTransfer ? "mb-2" : "mb-3.5")}>
-					{wallets.length === 0 ? <option value="">No wallets yet</option> : null}
-					{walletOptions()}
-				</select>
+				<WalletSelect
+					options={walletOptions()}
+					value={fromId}
+					onChange={setFromId}
+					emptyLabel="No wallets yet"
+					className={isTransfer ? "mb-2" : "mb-3.5"}
+				/>
 
 				{isTransfer ? (
 					<>
@@ -208,10 +209,13 @@ const AddForm: FC<{ onSwitch: (mode: PanelMode) => void; onClose: () => void }> 
 							<span className="flex size-[30px] items-center justify-center rounded-full border border-border bg-secondary text-[15px] text-primary">↓</span>
 						</div>
 						<Label>To wallet</Label>
-						<select value={toId} onChange={(event) => { setToId(event.target.value); }} className={cn(walletSelectClass, "mb-1")}>
-							{walletOptions(fromId).length === 0 ? <option value="">Add another wallet</option> : null}
-							{walletOptions(fromId)}
-						</select>
+						<WalletSelect
+							options={walletOptions(fromId)}
+							value={toId}
+							onChange={setToId}
+							emptyLabel="Add another wallet"
+							className="mb-1"
+						/>
 						{toId === fromId && wallets.length > 1 ? (
 							<div className="mt-1 text-[11.5px] text-neg">Choose a different destination wallet.</div>
 						) : null}
@@ -294,22 +298,76 @@ const ScanForm: FC<{ onClose: () => void }> = ({ onClose }) => (
 	</>
 );
 
-// Edit mode is still a TODO (panel isn't passed the selected wallet yet); create is wired.
-const WalletForm: FC<{ onClose: () => void; submitLabel: string; editing?: boolean }> = ({ onClose, submitLabel, editing = false }) => {
+const WalletFormFields: FC<{
+	name: string;
+	setName: (value: string) => void;
+	type: string;
+	setType: (value: string) => void;
+	currency: string;
+	setCurrency: (value: string) => void;
+	balance: string;
+	setBalance: (value: string) => void;
+	gradient: string;
+	editing: boolean;
+}> = ({ name, setName, type, setType, currency, setCurrency, balance, setBalance, gradient, editing }) => (
+	<div className="flex-1 overflow-auto p-5">
+		<div
+			className="mb-5 flex h-[120px] flex-col justify-between rounded-[12px] p-4 shadow-[var(--shadow-lg)]"
+			style={{ background: gradient }}
+		>
+			<div className="flex items-center justify-between text-white/90">
+				<span className="text-xs font-semibold tracking-[0.04em]">{type}</span>
+				<span className="font-numeric text-[11px] opacity-85">{currency}</span>
+			</div>
+			<div className="font-display text-[19px] font-semibold tracking-[-0.01em] text-white">{name || 'Wallet name'}</div>
+		</div>
+
+		<Label>Wallet name</Label>
+		<FinanceInput value={name} onChange={(event) => { setName(event.target.value); }} placeholder="e.g. Travel Card" className="mb-4" />
+
+		<Label>Type</Label>
+		<FinanceSegmented value={type} onValueChange={(value) => { if (value) setType(value); }} className="mb-4 w-full">
+			{MOCK_WALLET_TYPES.map((option) => (
+				<FinanceSegmentedItem key={option} value={option} className="flex-1 text-[11px]">{option}</FinanceSegmentedItem>
+			))}
+		</FinanceSegmented>
+
+		<Label>Currency</Label>
+		<FinanceSegmented value={currency} onValueChange={(value) => { if (value) setCurrency(value); }} className="mb-4 w-full">
+			{MOCK_CURRENCIES.map((option) => (
+				<FinanceSegmentedItem key={option} value={option} className="flex-1">{option}</FinanceSegmentedItem>
+			))}
+		</FinanceSegmented>
+
+		{editing ? (
+			<div className="flex items-start gap-2.5 rounded-[var(--radius-md)] border border-border bg-secondary px-3 py-2.5">
+				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 flex-none">
+					<rect x="3" y="11" width="18" height="11" rx="2" />
+					<path d="M7 11V7a5 5 0 0 1 10 0v4" />
+				</svg>
+				<span className="text-[11.5px] leading-snug text-text-2">Balance is posted automatically from transactions and can’t be edited here.</span>
+			</div>
+		) : (
+			<>
+				<Label>Opening balance</Label>
+				<FinanceInput value={balance} onChange={(event) => { setBalance(event.target.value); }} placeholder="0.00" />
+			</>
+		)}
+	</div>
+);
+
+const CreateWalletForm: FC<{ onClose: () => void }> = ({ onClose }) => {
 	const { meta } = useWalletsListMethods();
-	const [name, setName] = useState(editing ? MOCK_WALLETS[0].name : '');
-	const [type, setType] = useState(editing ? MOCK_WALLETS[0].type : MOCK_WALLET_TYPES[0]);
-	const [currency, setCurrency] = useState(editing ? MOCK_WALLETS[0].currency : MOCK_CURRENCIES[0]);
+	const [name, setName] = useState('');
+	const [type, setType] = useState(MOCK_WALLET_TYPES[0]);
+	const [currency, setCurrency] = useState(MOCK_CURRENCIES[0]);
 	const [balance, setBalance] = useState('');
 
 	const trimmedName = name.trim();
 	const canSubmit = trimmedName !== '' && !meta.createMutation.isPending;
 
 	const onSubmit = () => {
-		if (editing || !canSubmit) {
-			onClose();
-			return;
-		}
+		if (!canSubmit) return;
 		meta.createMutation.mutate(
 			{
 				data: {
@@ -324,80 +382,108 @@ const WalletForm: FC<{ onClose: () => void; submitLabel: string; editing?: boole
 
 	return (
 		<>
-			<div className="flex-1 overflow-auto p-5">
-				<div
-					className="mb-5 flex h-[120px] flex-col justify-between rounded-[12px] p-4 shadow-[var(--shadow-lg)]"
-					style={{ background: editing ? MOCK_WALLETS[0].gradient : 'linear-gradient(135deg,#6366f1,#4f46e5)' }}
-				>
-					<div className="flex items-center justify-between text-white/90">
-						<span className="text-xs font-semibold tracking-[0.04em]">{type}</span>
-						<span className="font-numeric text-[11px] opacity-85">{currency}</span>
-					</div>
-					<div className="font-display text-[19px] font-semibold tracking-[-0.01em] text-white">{name || 'Wallet name'}</div>
-				</div>
-
-				<Label>Wallet name</Label>
-				<FinanceInput value={name} onChange={(event) => { setName(event.target.value); }} placeholder="e.g. Travel Card" className="mb-4" />
-
-				<Label>Type</Label>
-				<FinanceSegmented value={type} onValueChange={(value) => { if (value) setType(value); }} className="mb-4 w-full">
-					{MOCK_WALLET_TYPES.map((option) => (
-						<FinanceSegmentedItem key={option} value={option} className="flex-1 text-[11px]">{option}</FinanceSegmentedItem>
-					))}
-				</FinanceSegmented>
-
-				<Label>Currency</Label>
-				<FinanceSegmented value={currency} onValueChange={(value) => { if (value) setCurrency(value); }} className="mb-4 w-full">
-					{MOCK_CURRENCIES.map((option) => (
-						<FinanceSegmentedItem key={option} value={option} className="flex-1">{option}</FinanceSegmentedItem>
-					))}
-				</FinanceSegmented>
-
-				{editing ? (
-					<div className="flex items-start gap-2.5 rounded-[var(--radius-md)] border border-border bg-secondary px-3 py-2.5">
-						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 flex-none">
-							<rect x="3" y="11" width="18" height="11" rx="2" />
-							<path d="M7 11V7a5 5 0 0 1 10 0v4" />
-						</svg>
-						<span className="text-[11.5px] leading-snug text-text-2">Balance is posted automatically from transactions and can’t be edited here.</span>
-					</div>
-				) : (
-					<>
-						<Label>Opening balance</Label>
-						<FinanceInput value={balance} onChange={(event) => { setBalance(event.target.value); }} placeholder="0.00" />
-					</>
-				)}
-			</div>
+			<WalletFormFields
+				name={name} setName={setName}
+				type={type} setType={setType}
+				currency={currency} setCurrency={setCurrency}
+				balance={balance} setBalance={setBalance}
+				gradient="linear-gradient(135deg,#6366f1,#4f46e5)"
+				editing={false}
+			/>
 			<Footer
-				submitLabel={meta.createMutation.isPending ? 'Creating…' : submitLabel}
+				submitLabel={meta.createMutation.isPending ? 'Creating…' : 'Create wallet'}
 				onClose={onClose}
 				onSubmit={onSubmit}
-				submitDisabled={!editing && !canSubmit}
+				submitDisabled={!canSubmit}
 			/>
 		</>
 	);
 };
 
-// TODO wire to backend
-const TransferForm: FC<{ onClose: () => void }> = ({ onClose }) => {
-	const from = MOCK_WALLETS[0];
-	const [toId, setToId] = useState(MOCK_WALLETS[1].id);
+const EditWalletForm: FC<{ wallet: PanelWallet; onClose: () => void }> = ({ wallet, onClose }) => {
+	const { updateWallet, meta } = useWalletMethods(wallet.id);
+	const [name, setName] = useState(wallet.name);
+	const [type, setType] = useState(wallet.credit ? CREDIT_TYPE : MOCK_WALLET_TYPES[0]);
+	const [currency, setCurrency] = useState(wallet.currency);
+
+	const trimmedName = name.trim();
+	const canSubmit = trimmedName !== '' && !meta.updateMutation.isPending;
+
+	const onSubmit = () => {
+		if (!canSubmit) return;
+		updateWallet({
+			name: trimmedName,
+			balance: { amount: wallet.balance.amount, currency },
+			credit: type === CREDIT_TYPE,
+		})
+			.then(() => { onClose(); })
+			.catch((error: unknown) => { console.error(error); });
+	};
+
+	return (
+		<>
+			<WalletFormFields
+				name={name} setName={setName}
+				type={type} setType={setType}
+				currency={currency} setCurrency={setCurrency}
+				balance="" setBalance={() => undefined}
+				gradient={wallet.gradient}
+				editing
+			/>
+			<Footer
+				submitLabel={meta.updateMutation.isPending ? 'Saving…' : 'Save changes'}
+				onClose={onClose}
+				onSubmit={onSubmit}
+				submitDisabled={!canSubmit}
+			/>
+		</>
+	);
+};
+
+const TransferForm: FC<{ wallet?: PanelWallet; onClose: () => void }> = ({ wallet, onClose }) => {
+	const { wallets } = useWalletsList();
+	const { meta } = useTransactionsListMethods();
+	const formatCurrency = useLocaleCurrency();
+
+	const fromId = wallet?.id ?? (wallets.length > 0 ? wallets[0].id : '');
+	const from = wallets.find((entry) => entry.id === fromId);
+	const [toId, setToId] = useState('');
 	const [amount, setAmount] = useState('');
-	const to = MOCK_WALLETS.find((wallet) => wallet.id === toId) ?? MOCK_WALLETS[1];
+
+	useEffect(() => {
+		setToId((prev) => prev || (wallets.find((entry) => entry.id !== fromId)?.id ?? ''));
+	}, [wallets, fromId]);
+
+	const to = wallets.find((entry) => entry.id === toId);
+	const numericAmount = parseFloat(amount);
+	const amountValid = !Number.isNaN(numericAmount) && numericAmount > 0;
+	const canSubmit = Boolean(from) && Boolean(to) && toId !== fromId && amountValid && !meta.createMutation.isPending;
+	const fromCurrency = from?.balance.currency ?? 'USD';
+
+	const onSubmit = () => {
+		if (!canSubmit) return;
+		const abs = Math.abs(numericAmount).toFixed(2);
+		Promise.all([
+			meta.createMutation.mutateAsync({ data: { source_wallet_id: fromId, amount: `-${abs}` } }),
+			meta.createMutation.mutateAsync({ data: { source_wallet_id: toId, amount: abs } }),
+		])
+			.then(() => { onClose(); })
+			.catch((error: unknown) => { console.error(error); });
+	};
 
 	return (
 		<>
 			<div className="flex-1 overflow-auto p-5">
 				<Label>From</Label>
 				<div className="mb-3 flex items-center gap-3 rounded-[var(--radius-md)] border border-border-strong px-3.5 py-3">
-					<span className="h-[23px] w-[34px] flex-none rounded-[5px]" style={{ background: from.gradient }} />
+					<span className="h-[23px] w-[34px] flex-none rounded-[5px]" style={{ background: wallet?.gradient ?? gradientFromId(fromId) }} />
 					<div className="min-w-0 flex-1">
-						<div className="text-[13.5px] font-semibold">{from.name}</div>
-						<div className="text-[11px] text-text-3">{from.type} · {from.currency}</div>
+						<div className="text-[13.5px] font-semibold">{from?.name ?? 'No wallet'}</div>
+						<div className="text-[11px] text-text-3">{fromCurrency}</div>
 					</div>
 					<div className="text-right">
 						<div className="text-[10px] text-text-3">Available</div>
-						<div className="font-display text-[13.5px] font-semibold">{from.balance}</div>
+						<div className="font-display text-[13.5px] font-semibold">{from ? formatCurrency(from.balance.amount, from.balance.currency) : '—'}</div>
 					</div>
 				</div>
 
@@ -406,23 +492,31 @@ const TransferForm: FC<{ onClose: () => void }> = ({ onClose }) => {
 				</div>
 
 				<Label>To</Label>
-				<div className="mb-4 flex items-center gap-3 rounded-[var(--radius-md)] border border-border-strong px-3 py-2">
-					<span className="h-[23px] w-[34px] flex-none rounded-[5px]" style={{ background: to.gradient }} />
-					<select value={toId} onChange={(event) => { setToId(event.target.value); }} className="min-w-0 flex-1 cursor-pointer border-none bg-transparent text-[13.5px] font-semibold outline-none">
-						{MOCK_WALLETS.filter((wallet) => wallet.id !== from.id).map((wallet) => (
-							<option key={wallet.id} value={wallet.id}>{wallet.name} · {wallet.currency}</option>
-						))}
-					</select>
-				</div>
+				<WalletSelect
+					options={wallets.filter((entry) => entry.id !== fromId).map((entry) => ({ id: entry.id, name: entry.name, currency: entry.balance.currency, gradient: gradientFromId(entry.id) }))}
+					value={toId}
+					onChange={setToId}
+					emptyLabel="Add another wallet"
+					className="mb-2"
+				/>
 
 				<Label>Amount</Label>
 				<div className="mb-3 flex items-center gap-2 rounded-[var(--radius-md)] border-[1.5px] border-primary px-4 py-3.5 shadow-[0_0_0_3px_var(--accent-soft)]">
-					<span className="font-display text-2xl text-text-2">$</span>
+					<span className="font-display text-2xl text-text-2">{currencySymbol(fromCurrency)}</span>
 					<input value={amount} onChange={(event) => { setAmount(sanitizeAmountInput(event.target.value)); }} inputMode="decimal" placeholder="0.00" className="min-w-0 flex-1 border-none bg-transparent font-display text-3xl font-semibold outline-none placeholder:text-[var(--text-3)]" />
 				</div>
-				<div className="text-xs leading-snug text-text-3">Moves money from {from.name} to {to.name}. Posts a balanced transfer to the ledger.</div>
+				{from && to ? (
+					<div className="text-xs leading-snug text-text-3">Moves money from {from.name} to {to.name}. Posts a balanced transfer to the ledger.</div>
+				) : (
+					<div className="text-xs leading-snug text-text-3">Add a second wallet to transfer between accounts.</div>
+				)}
 			</div>
-			<Footer submitLabel="Send transfer" onClose={onClose} />
+			<Footer
+				submitLabel={meta.createMutation.isPending ? 'Sending…' : 'Send transfer'}
+				onClose={onClose}
+				onSubmit={onSubmit}
+				submitDisabled={!canSubmit}
+			/>
 		</>
 	);
 };

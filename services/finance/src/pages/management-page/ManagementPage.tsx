@@ -9,14 +9,15 @@ import {
 	ChartOfAccountsSection,
 	ManagementPanel,
 } from "@widget/management";
-import type { PanelMode } from "@widget/management";
+import type { PanelMode, PanelWallet } from "@widget/management";
 
 
 const ManagementPage: FC = () => {
-	const [panelMode, setPanelMode] = useState<PanelMode | null>(null);
+	const [panel, setPanel] = useState<{ mode: PanelMode; wallet?: PanelWallet } | null>(null);
 
-	const openPanel = (mode: PanelMode) => { setPanelMode(mode); };
-	const closePanel = () => { setPanelMode(null); };
+	const openPanel = (mode: PanelMode, wallet?: PanelWallet) => { setPanel({ mode, wallet }); };
+	const closePanel = () => { setPanel(null); };
+	const switchPanel = (mode: PanelMode) => { setPanel({ mode }); };
 
 	return (
 		<div className="mx-auto flex max-w-[1320px] flex-col gap-6 px-[22px] pb-[70px] pt-[22px]">
@@ -25,7 +26,7 @@ const ManagementPage: FC = () => {
 			<WalletsSection onOpenPanel={openPanel} className="fx-rise [animation-delay:0.18s]" />
 			<TransactionsSection onOpenPanel={openPanel} className="fx-rise [animation-delay:0.24s]" />
 			<ChartOfAccountsSection className="fx-rise [animation-delay:0.3s]" />
-			<ManagementPanel mode={panelMode} onClose={closePanel} onSwitch={openPanel} />
+			<ManagementPanel mode={panel?.mode ?? null} wallet={panel?.wallet} onClose={closePanel} onSwitch={switchPanel} />
 		</div>
 	);
 };

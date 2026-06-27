@@ -4,15 +4,21 @@ import { Link } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
 import { cn, FinanceCard, FinanceMoney } from "@internal/ui-library";
 
-import { useTransactionsList, getMonthGroupedTransactions } from "@feature/transaction";
+import { useTransactionsList } from "@feature/transaction";
 import { useWalletsList } from "@feature/wallet";
 import { useConvertMoney } from "@feature/fx";
 import { toTransactionRow } from "@widget/management/adapters";
 import { useLocaleCurrency } from "@shared/utils";
+import { MoneyInOriginal } from "@shared/components";
+import type { TransactionPreviewDto } from "@entity/transaction";
 
 interface RecentActivityPanelProps {
 	className?: string;
 }
+
+// Cap recent activity to the 2 most recent days with activity, and never more than 8 transactions.
+const DAYS_CAP = 2;
+const TXN_CAP = 8;
 
 const RecentActivityPanel: FC<RecentActivityPanelProps> = ({ className }) => {
 	const { transactions, isPending } = useTransactionsList();
@@ -26,22 +32,35 @@ const RecentActivityPanel: FC<RecentActivityPanelProps> = ({ className }) => {
 	);
 
 	const groups = useMemo(() => {
-		const grouped = getMonthGroupedTransactions(transactions);
-		return Object.entries(grouped)
-			.sort(([a], [b]) => Date.parse(b) - Date.parse(a))
-			.slice(0, 2)
-			.map(([date, items]) => {
-				const rows = [...items]
-					.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))
-					.map((item) => toTransactionRow(item, walletById, formatCurrency));
-				// Sum in the display currency — rows can come from wallets of differing currencies.
-				const sum = rows.reduce((total, row) => total + convert({ amount: row.amount, currency: row.currency }).amount, 0);
-				return {
-					label: new Date(date).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' }),
-					sum,
-					rows,
-				};
-			});
+		const dayOf = (txn: TransactionPreviewDto) => new Date(txn.created_at).toDateString();
+		const sorted = [...transactions].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+
+		// Keep only the most recent DAYS_CAP distinct activity days…
+		const allowedDays = new Set<string>();
+		for (const txn of sorted) {
+			const day = dayOf(txn);
+			if (allowedDays.size >= DAYS_CAP && !allowedDays.has(day)) break;
+			allowedDays.add(day);
+		}
+		// …then cap the total transactions shown.
+		const limited = sorted.filter((txn) => allowedDays.has(dayOf(txn))).slice(0, TXN_CAP);
+
+		const byDay = new Map<string, TransactionPreviewDto[]>();
+		for (const txn of limited) {
+			const bucket = byDay.get(dayOf(txn));
+			if (bucket) bucket.push(txn); else byDay.set(dayOf(txn), [txn]);
+		}
+
+		return [...byDay.entries()].map(([day, items]) => {
+			const rows = items.map((item) => toTransactionRow(item, walletById, formatCurrency));
+			// Sum in the display currency — rows can come from wallets of differing currencies.
+			const sum = rows.reduce((total, row) => total + convert({ amount: row.amount, currency: row.currency }).amount, 0);
+			return {
+				label: new Date(day).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' }),
+				sum,
+				rows,
+			};
+		});
 	}, [transactions, walletById, formatCurrency, convert]);
 
 	return (
@@ -79,9 +98,7 @@ const RecentActivityPanel: FC<RecentActivityPanelProps> = ({ className }) => {
 									</div>
 								</div>
 								<div className="text-right">
-									<FinanceMoney tone={row.tone} size="sm" className="block">
-										{convert({ amount: row.amount, currency: row.currency }).formatted}
-									</FinanceMoney>
+									<MoneyInOriginal amount={row.amount} currency={row.currency} tone={row.tone} size="sm" align="end" convert={convert} format={formatCurrency} />
 									<div className="font-numeric text-[10.5px] text-text-3">{row.date}</div>
 								</div>
 							</div>

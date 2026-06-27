@@ -16,9 +16,12 @@ function FinanceTooltip({ content, children, side = "top", className }: FinanceT
 			<TooltipTrigger asChild>{children}</TooltipTrigger>
 			<TooltipContent
 				side={side}
+				// Colors are set inline (reading the `finance-theme` tokens this element re-establishes)
+				// so they don't depend on Tailwind generating ambiguous `text-[var(--…)]` utilities.
+				style={{ background: "var(--text)", color: "var(--surface)" }}
 				className={cn(
 					// `finance-theme` re-establishes design tokens — Radix portals this to body.
-					"finance-theme rounded-lg bg-[var(--text)] px-2.5 py-1.5 text-[11.5px] font-medium leading-snug text-[var(--surface)] shadow-[var(--shadow-lg)] [&_svg]:bg-[var(--text)] [&_svg]:fill-[var(--text)]",
+					"finance-theme rounded-lg px-2.5 py-1.5 text-[11.5px] font-medium leading-snug shadow-[var(--shadow-lg)] [&_svg]:bg-[var(--text)] [&_svg]:fill-[var(--text)]",
 					className
 				)}
 			>
