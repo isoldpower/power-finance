@@ -3,7 +3,8 @@ import { FinanceButton, FinanceTooltip } from "@internal/ui-library";
 
 import { useActions } from "@feature/actions";
 import { NeedsActionPanel } from "@widget/dashboard";
-import { AutomationsCard, GoalsCard, WhatIfCard, PlanningAiAssistant, NewGoalPanel } from "@widget/planning";
+import { AutomationsCard, GoalsCard, WhatIfCard, PlanningAiAssistant } from "@widget/planning";
+import { NewGoalPanel } from "@process/planning";
 
 
 const PlanningPage: FC = () => {

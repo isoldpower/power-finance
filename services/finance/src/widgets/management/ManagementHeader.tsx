@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { cn, FinanceButton } from "@internal/ui-library";
 
-import type { PanelMode } from "./mock.ts";
+import type { PanelMode } from "@feature/management";
 
 interface ManagementHeaderProps {
 	onOpenPanel: (mode: PanelMode) => void;

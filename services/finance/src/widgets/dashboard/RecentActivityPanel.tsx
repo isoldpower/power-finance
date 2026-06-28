@@ -1,67 +1,17 @@
 import type { FC } from "react";
-import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
-import { cn, FinanceCard, FinanceMoney } from "@internal/ui-library";
+import { cn, FinanceCard } from "@internal/ui-library";
 
-import { useTransactionsList } from "@feature/transaction";
-import { useWalletsList } from "@feature/wallet";
-import { useConvertMoney } from "@feature/fx";
-import { toTransactionRow } from "@widget/management/adapters";
-import { useLocaleCurrency } from "@shared/utils";
-import { MoneyInOriginal } from "@shared/components";
-import type { TransactionPreviewDto } from "@entity/transaction";
+import { useRecentActivityGroups } from "@feature/transaction";
+import { ActivityRow, ActivityDayHeader } from "@entity/transaction";
 
 interface RecentActivityPanelProps {
 	className?: string;
 }
 
-// Cap recent activity to the 2 most recent days with activity, and never more than 8 transactions.
-const DAYS_CAP = 2;
-const TXN_CAP = 8;
-
 const RecentActivityPanel: FC<RecentActivityPanelProps> = ({ className }) => {
-	const { transactions, isPending } = useTransactionsList();
-	const { wallets } = useWalletsList();
-	const { convert, targetCurrency } = useConvertMoney();
-	const formatCurrency = useLocaleCurrency();
-
-	const walletById = useMemo(
-		() => new Map(wallets.map((wallet) => [wallet.id, { name: wallet.name, currency: wallet.balance.currency }])),
-		[wallets]
-	);
-
-	const groups = useMemo(() => {
-		const dayOf = (txn: TransactionPreviewDto) => new Date(txn.created_at).toDateString();
-		const sorted = [...transactions].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
-
-		// Keep only the most recent DAYS_CAP distinct activity days…
-		const allowedDays = new Set<string>();
-		for (const txn of sorted) {
-			const day = dayOf(txn);
-			if (allowedDays.size >= DAYS_CAP && !allowedDays.has(day)) break;
-			allowedDays.add(day);
-		}
-		// …then cap the total transactions shown.
-		const limited = sorted.filter((txn) => allowedDays.has(dayOf(txn))).slice(0, TXN_CAP);
-
-		const byDay = new Map<string, TransactionPreviewDto[]>();
-		for (const txn of limited) {
-			const bucket = byDay.get(dayOf(txn));
-			if (bucket) bucket.push(txn); else byDay.set(dayOf(txn), [txn]);
-		}
-
-		return [...byDay.entries()].map(([day, items]) => {
-			const rows = items.map((item) => toTransactionRow(item, walletById, formatCurrency));
-			// Sum in the display currency — rows can come from wallets of differing currencies.
-			const sum = rows.reduce((total, row) => total + convert({ amount: row.amount, currency: row.currency }).amount, 0);
-			return {
-				label: new Date(day).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' }),
-				sum,
-				rows,
-			};
-		});
-	}, [transactions, walletById, formatCurrency, convert]);
+	const { groups, isPending, convert, formatCurrency, targetCurrency } = useRecentActivityGroups();
 
 	return (
 		<FinanceCard className={cn("overflow-hidden", className)}>
@@ -80,28 +30,26 @@ const RecentActivityPanel: FC<RecentActivityPanelProps> = ({ className }) => {
 			) : (
 				groups.map((group) => (
 					<div key={group.label}>
-						<div className="flex items-center justify-between border-b border-border bg-secondary px-[18px] py-2.5">
-							<span className="font-numeric text-[10px] uppercase tracking-[0.1em] text-text-3">{group.label}</span>
-							<FinanceMoney tone={group.sum >= 0 ? 'pos' : 'neg'} size="sm">
-								{formatCurrency(group.sum, targetCurrency)}
-							</FinanceMoney>
-						</div>
+						<ActivityDayHeader
+							label={group.label}
+							sumFormatted={formatCurrency(group.sum, targetCurrency)}
+							positive={group.sum >= 0}
+						/>
 						{group.rows.map((row) => (
-							<div key={row.id} className="flex cursor-pointer items-center gap-3 border-b border-border px-[18px] py-2.5 last:border-b-0 hover:bg-secondary">
-								<div className={`flex size-8 flex-none items-center justify-center rounded-[8px] ${row.iconClass}`}>{row.icon}</div>
-								<div className="min-w-0 flex-1">
-									<div className="text-[13.5px] font-semibold">{row.walletName}</div>
-									<div className="flex items-center gap-1.5 text-[11.5px] text-text-3">
-										<span>{row.category}</span>
-										<span className="size-[3px] rounded-full bg-text-3" />
-										<span>{row.time}</span>
-									</div>
-								</div>
-								<div className="text-right">
-									<MoneyInOriginal amount={row.amount} currency={row.currency} tone={row.tone} size="sm" align="end" convert={convert} format={formatCurrency} />
-									<div className="font-numeric text-[10.5px] text-text-3">{row.date}</div>
-								</div>
-							</div>
+							<ActivityRow
+								key={row.id}
+								icon={row.icon}
+								iconClass={row.iconClass}
+								walletName={row.walletName}
+								category={row.category}
+								time={row.time}
+								date={row.date}
+								amount={row.amount}
+								currency={row.currency}
+								tone={row.tone}
+								convert={convert}
+								format={formatCurrency}
+							/>
 						))}
 					</div>
 				))

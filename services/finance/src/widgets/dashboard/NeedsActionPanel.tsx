@@ -1,17 +1,10 @@
 import type { FC } from "react";
-import { FinanceCard, FinanceButton, UiSkeleton, cn } from "@internal/ui-library";
+import { FinanceCard, UiSkeleton, cn } from "@internal/ui-library";
 
 import { useActions, useResolveAction } from "@feature/actions";
+import { NeedsActionRow, NeedsActionSkeletonRow, actionVisual } from "@entity/actions";
 
 const SKELETON_ROWS = ['s1', 's2', 's3'];
-
-const ICON_BY_KIND: Record<string, { icon: string; className: string }> = {
-	recurring: { icon: '↻', className: 'bg-[var(--accent-soft)] text-primary' },
-	duplicate: { icon: '⧉', className: 'bg-[var(--warn-soft)] text-warn' },
-	uncategorized: { icon: '?', className: 'bg-[var(--viol-soft)] text-viol' },
-};
-
-const fallbackIcon = { icon: '!', className: 'bg-[var(--accent-soft)] text-primary' };
 
 interface NeedsActionPanelProps {
 	className?: string;
@@ -40,36 +33,22 @@ const NeedsActionPanel: FC<NeedsActionPanelProps> = ({ className }) => {
 			</div>
 
 			{isPending ? (
-				SKELETON_ROWS.map((id) => (
-					<div key={id} className="flex items-center gap-3.5 border-b border-border px-[18px] py-3.5 last:border-b-0">
-						<UiSkeleton className="size-[34px] flex-none rounded-[9px]" />
-						<div className="min-w-0 flex-1 space-y-1.5">
-							<UiSkeleton className="h-3.5 w-1/2" />
-							<UiSkeleton className="h-3 w-3/4" />
-						</div>
-						<UiSkeleton className="h-8 w-16 flex-none rounded-[var(--radius-md)]" />
-						<UiSkeleton className="h-8 w-16 flex-none rounded-[var(--radius-md)]" />
-					</div>
-				))
+				SKELETON_ROWS.map((id) => <NeedsActionSkeletonRow key={id} />)
 			) : (
 				actions.map((action) => {
-					const visual = ICON_BY_KIND[action.kind] ?? fallbackIcon;
+					const visual = actionVisual(action.kind);
 					return (
-						<div key={action.id} className="flex items-center gap-3.5 border-b border-border px-[18px] py-3.5 last:border-b-0 hover:bg-secondary">
-							<div className={`flex size-[34px] flex-none items-center justify-center rounded-[9px] text-[15px] font-semibold ${visual.className}`}>
-								{visual.icon}
-							</div>
-							<div className="min-w-0 flex-1">
-								<div className="text-[13.5px] font-semibold">{action.title}</div>
-								<div className="mt-px text-xs text-text-2">{action.subtitle}</div>
-							</div>
-							<FinanceButton variant="outline" size="sm" className="flex-none" disabled={resolve.isPending} onClick={() => { resolve.mutate(action.id); }}>
-								{action.secondaryLabel}
-							</FinanceButton>
-							<FinanceButton size="sm" className="flex-none" disabled={resolve.isPending} onClick={() => { resolve.mutate(action.id); }}>
-								{action.primaryLabel}
-							</FinanceButton>
-						</div>
+						<NeedsActionRow
+							key={action.id}
+							icon={visual.icon}
+							iconClass={visual.className}
+							title={action.title}
+							subtitle={action.subtitle}
+							primaryLabel={action.primaryLabel}
+							secondaryLabel={action.secondaryLabel}
+							disabled={resolve.isPending}
+							onResolve={() => { resolve.mutate(action.id); }}
+						/>
 					);
 				})
 			)}

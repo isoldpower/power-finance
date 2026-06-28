@@ -1,19 +1,14 @@
 import type { FC } from "react";
-import { useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { cn, FinanceCard, FinanceMoney, FinanceButton } from "@internal/ui-library";
+import { FinanceCard, FinanceMoney, FinanceButton } from "@internal/ui-library";
 
-import { useWalletsList } from "@feature/wallet";
-import { useTransactionsList } from "@feature/transaction";
-import { useConvertMoney } from "@feature/fx";
-import { useLocaleCurrency } from "@shared/utils";
+import { useWalletBrowser } from "@feature/wallet";
+import type { PanelMode, PanelWallet } from "@feature/management";
+import { MoneyInOriginal } from "@entity/money";
+import { SectionHeader } from "@entity/management";
+import { WalletListRow, WalletRecentRow } from "@entity/wallet";
 
-import { MoneyInOriginal } from "@shared/components";
-
-import { SectionHeader } from "./SectionHeader.tsx";
-import { TRANSACTIONS_SECTION_ID } from "./constants.ts";
-import { gradientFromId, walletTypeLabel, relativeTime, toTransactionRow } from "./adapters.ts";
-import type { PanelMode, PanelWallet } from "./mock.ts";
+import { TRANSACTIONS_SECTION_ID, WALLET_RECENT_SLOTS } from "./config.ts";
 
 interface WalletsSectionProps {
 	onOpenPanel: (mode: PanelMode, wallet?: PanelWallet) => void;
@@ -23,14 +18,29 @@ interface WalletsSectionProps {
 const selectClass =
 	"min-w-0 flex-1 cursor-pointer rounded-[var(--radius-md)] border border-border-strong bg-card px-2 py-1.5 text-xs font-semibold text-text-2 outline-none";
 
-// Recent list is always padded to this many rows so the card height never shifts.
-const RECENT_SLOTS = 3;
-
 const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel, className }) => {
-	const { wallets: rawWallets, isPending } = useWalletsList();
-	const { transactions } = useTransactionsList();
-	const { convert } = useConvertMoney();
-	const formatCurrency = useLocaleCurrency();
+	const {
+		isPending,
+		convert,
+		formatCurrency,
+		query,
+		setQuery,
+		typeFilter,
+		setTypeFilter,
+		sort,
+		setSort,
+		pins,
+		togglePin,
+		types,
+		wallets,
+		selected,
+		setSelectedId,
+		recent,
+		monthFlow,
+		total,
+		recentSlots,
+	} = useWalletBrowser(WALLET_RECENT_SLOTS);
+
 	const navigate = useNavigate();
 
 	const seeAllInTransactions = (walletId: string) => {
@@ -41,71 +51,11 @@ const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel, className }) => 
 			.catch((error: unknown) => { console.error(error); });
 	};
 
-	const [query, setQuery] = useState('');
-	const [typeFilter, setTypeFilter] = useState('all');
-	const [sort, setSort] = useState('name');
-	const [pins, setPins] = useState<Record<string, boolean>>({});
-	const [selectedId, setSelectedId] = useState<string | null>(null);
-
-	const decorated = useMemo(() => rawWallets.map((wallet) => ({
-		id: wallet.id,
-		name: wallet.name,
-		type: walletTypeLabel(wallet),
-		currency: wallet.balance.currency,
-		balance: wallet.balance,
-		gradient: gradientFromId(wallet.id),
-		credit: wallet.credit,
-		updated: wallet.updatedAt ? relativeTime(wallet.updatedAt) : '',
-	})), [rawWallets]);
-
-	const types = useMemo(() => [...new Set(decorated.map((wallet) => wallet.type))], [decorated]);
-
-	const wallets = useMemo(() => {
-		const filtered = decorated.filter((wallet) => {
-			const matchesQuery = wallet.name.toLowerCase().includes(query.toLowerCase());
-			const matchesType = typeFilter === 'all' || wallet.type === typeFilter;
-			return matchesQuery && matchesType;
-		});
-		const sorted = sort === 'balance-desc'
-			? [...filtered].sort((a, b) => b.balance.amount - a.balance.amount)
-			: [...filtered].sort((a, b) => a.name.localeCompare(b.name));
-		return [...sorted].sort((a, b) => Number(pins[b.id] ?? false) - Number(pins[a.id] ?? false));
-	}, [decorated, query, typeFilter, sort, pins]);
-
-	const selected = decorated.find((wallet) => wallet.id === selectedId) ?? wallets[0] ?? decorated[0];
-
-	const walletById = useMemo(
-		() => new Map(rawWallets.map((wallet) => [wallet.id, { name: wallet.name, currency: wallet.balance.currency }])),
-		[rawWallets]
-	);
-
-	const recent = useMemo(() => {
-		if (!selected) return [];
-		return transactions
-			.filter((txn) => txn.source_wallet_id === selected.id)
-			.sort((a, b) => b.created_at.localeCompare(a.created_at))
-			.slice(0, RECENT_SLOTS)
-			.map((txn) => toTransactionRow(txn, walletById, formatCurrency));
-	}, [transactions, selected, walletById, formatCurrency]);
-
-	const monthFlow = useMemo(() => {
-		if (!selected) return { in: 0, out: 0 };
-		return transactions
-			.filter((txn) => txn.source_wallet_id === selected.id)
-			.reduce((flow, txn) => {
-				const value = parseFloat(txn.amount);
-				if (value >= 0) flow.in += value; else flow.out += Math.abs(value);
-				return flow;
-			}, { in: 0, out: 0 });
-	}, [transactions, selected]);
-
-	const togglePin = (id: string) => { setPins((prev) => ({ ...prev, [id]: !prev[id] })); };
-
 	return (
 		<section className={className}>
 			<SectionHeader
 				title="Wallets"
-				caption={`${decorated.length.toString()} accounts`}
+				caption={`${total.toString()} accounts`}
 				action={
 					<button type="button" onClick={() => { onOpenPanel('wallet'); }} className="text-xs font-semibold text-primary hover:underline">
 						＋ New wallet
@@ -149,35 +99,21 @@ const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel, className }) => 
 							<div className="px-4 py-[26px] text-center text-[13px] text-text-3">No wallets match your filters.</div>
 						) : (
 							wallets.map((wallet) => (
-								<div
+								<WalletListRow
 									key={wallet.id}
-									onClick={() => { setSelectedId(wallet.id); }}
-									className={cn(
-										"flex cursor-pointer items-center gap-3 border-b border-border px-3 py-2.5 hover:bg-secondary",
-										wallet.id === selected?.id && "bg-[var(--accent-soft)]"
-									)}
-								>
-									<div className="h-[26px] w-[38px] flex-none rounded-[6px]" style={{ background: wallet.gradient }} />
-									<div className="min-w-0 flex-1">
-										<div className="truncate text-[13.5px] font-semibold">{wallet.name}</div>
-										<div className="text-[11px] text-text-3">{wallet.type} · {wallet.currency}</div>
-									</div>
-									<MoneyInOriginal amount={wallet.balance.amount} currency={wallet.balance.currency} tone={wallet.balance.amount >= 0 ? 'neutral' : 'neg'} size="sm" align="end" convert={convert} format={formatCurrency} />
-									<button
-										type="button"
-										title="Pin wallet"
-										onClick={(event) => { event.stopPropagation(); togglePin(wallet.id); }}
-										className={cn(
-											"flex size-[26px] flex-none items-center justify-center rounded-[7px] hover:bg-surface-3",
-											pins[wallet.id] ? "text-primary" : "text-text-3"
-										)}
-									>
-										<svg width="14" height="14" viewBox="0 0 24 24" fill={pins[wallet.id] ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-											<path d="M9 4h6l-1 7 3 3v1H7v-1l3-3z" />
-											<line x1="12" y1="15" x2="12" y2="21" />
-										</svg>
-									</button>
-								</div>
+									name={wallet.name}
+									type={wallet.type}
+									currency={wallet.currency}
+									gradient={wallet.gradient}
+									balanceAmount={wallet.balance.amount}
+									balanceCurrency={wallet.balance.currency}
+									active={wallet.id === selected?.id}
+									pinned={Boolean(pins[wallet.id])}
+									convert={convert}
+									format={formatCurrency}
+									onSelect={() => { setSelectedId(wallet.id); }}
+									onTogglePin={() => { togglePin(wallet.id); }}
+								/>
 							))
 						)}
 						{!isPending && wallets.length > 0 ? (
@@ -223,16 +159,21 @@ const WalletsSection: FC<WalletsSectionProps> = ({ onOpenPanel, className }) => 
 								<span className="text-[13.5px] font-semibold">Recent in this wallet</span>
 							</div>
 							{recent.map((txn) => (
-								<div key={txn.id} className="flex items-center gap-3 border-b border-border px-[18px] py-2.5 hover:bg-secondary">
-									<div className={`flex size-[30px] flex-none items-center justify-center rounded-[8px] ${txn.iconClass}`}>{txn.icon}</div>
-									<div className="min-w-0 flex-1">
-										<div className="text-[13px] font-semibold">{txn.category}</div>
-										<div className="text-[11px] text-text-3">{txn.date} · {txn.time}</div>
-									</div>
-									<MoneyInOriginal amount={txn.amount} currency={txn.currency} tone={txn.tone} size="sm" align="end" convert={convert} format={formatCurrency} />
-								</div>
+								<WalletRecentRow
+									key={txn.id}
+									icon={txn.icon}
+									iconClass={txn.iconClass}
+									category={txn.category}
+									date={txn.date}
+									time={txn.time}
+									amount={txn.amount}
+									currency={txn.currency}
+									tone={txn.tone}
+									convert={convert}
+									format={formatCurrency}
+								/>
 							))}
-							{Array.from({ length: Math.max(0, RECENT_SLOTS - recent.length) }).map((_, index) => (
+							{Array.from({ length: Math.max(0, recentSlots - recent.length) }).map((_, index) => (
 								<div key={`empty-${index.toString()}`} className="flex items-center gap-3 border-b border-border px-[18px] py-2.5">
 									<div className="size-[30px] flex-none rounded-[8px] border border-dashed border-border-strong" />
 									<div className="min-w-0 flex-1">

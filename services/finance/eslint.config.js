@@ -47,7 +47,15 @@ export default tseslint.config(
 				{allowConstantExport: true},
 			],
 			'react-x/no-clone-element': 'off',
-			'react-x/no-children-to-array': 'off'
+			'react-x/no-children-to-array': 'off',
+			// Allow intentionally-widened boolean feature flags (e.g. `const USE_X: boolean = false`),
+			// whose annotation is required so toggling them doesn't trip no-unnecessary-condition.
+			'@typescript-eslint/no-inferrable-types': 'off',
+			// Honour the `_`-prefix convention for deliberately-unused bindings (interface params, etc.).
+			'@typescript-eslint/no-unused-vars': [
+				'error',
+				{ argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+			],
 		},
 	},
 )

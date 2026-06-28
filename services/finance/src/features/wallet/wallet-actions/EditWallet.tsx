@@ -40,7 +40,7 @@ function EditWallet({
 			...rest
 		};
 
-		updateWallet(walletData);
+		void updateWallet(walletData);
 		if (onSuccess) onSuccess(data);
 		reset();
 	}, [onSuccess, reset, updateWallet]);

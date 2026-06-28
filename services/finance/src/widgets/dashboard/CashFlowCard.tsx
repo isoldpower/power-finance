@@ -1,16 +1,12 @@
 import type { FC } from "react";
 import { FinanceCard, FinanceTooltip, cn } from "@internal/ui-library";
 
-import { AnimatedMoney } from "@shared/components";
+import { AnimatedMoney } from "@entity/money";
+import { CashFlowSkeleton } from "@entity/summary";
 import { useInsights } from "@feature/summary";
 import { useConvertMoney } from "@feature/fx";
 
-const RANGE_LABELS: Record<string, string> = {
-	'1W': 'This week',
-	'1M': 'This month',
-	'3M': 'This quarter',
-	'1Y': 'This year',
-};
+import { CASH_FLOW_RANGE_LABELS as RANGE_LABELS } from "./config.ts";
 
 interface CashFlowCardProps {
 	range?: string;
@@ -22,8 +18,8 @@ const CashFlowCard: FC<CashFlowCardProps> = ({ range = '1M', className }) => {
 	const { convert } = useConvertMoney();
 
 	const total = cashFlow ? cashFlow.in.amount + cashFlow.out.amount : 0;
-	const incomeShare = total > 0 ? (cashFlow!.in.amount / total) * 100 : 0;
-	const expenseShare = total > 0 ? (cashFlow!.out.amount / total) * 100 : 0;
+	const incomeShare = cashFlow && total > 0 ? (cashFlow.in.amount / total) * 100 : 0;
+	const expenseShare = cashFlow && total > 0 ? (cashFlow.out.amount / total) * 100 : 0;
 
 	return (
 		<FinanceCard className={cn("flex flex-col px-6 py-[22px]", className)}>
@@ -82,21 +78,6 @@ const CashFlowCard: FC<CashFlowCardProps> = ({ range = '1M', className }) => {
 		</FinanceCard>
 	);
 };
-
-const CashFlowSkeleton: FC = () => (
-	<div className="mt-[18px] flex flex-1 flex-col animate-pulse">
-		<div className="grid grid-cols-2 gap-3.5">
-			<div className="h-[42px] rounded-[var(--radius-md)] bg-secondary" />
-			<div className="h-[42px] rounded-[var(--radius-md)] bg-secondary" />
-		</div>
-		<div className="mt-[18px] h-2 rounded-full bg-secondary" />
-		<div className="flex-1" />
-		<div className="mt-[18px] flex items-center justify-between border-t border-border pt-3.5">
-			<div className="h-4 w-24 rounded bg-secondary" />
-			<div className="h-6 w-28 rounded bg-secondary" />
-		</div>
-	</div>
-);
 
 CashFlowCard.displayName = 'CashFlowCard';
 

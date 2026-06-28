@@ -1,5 +1,4 @@
 import type { FC } from "react";
-import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
 import {
@@ -10,92 +9,35 @@ import {
 	FinanceButton,
 } from "@internal/ui-library";
 
-import { useWalletsList } from "@feature/wallet";
-import { useTransactionsListMethods } from "@feature/transaction";
-import { currencySymbol, sanitizeAmountInput } from "@shared/utils";
-import { WalletSelect } from "@shared/components";
-import { gradientFromId } from "@widget/management/adapters";
-
-type QuickAddType = 'expense' | 'income' | 'transfer';
-
-const TYPE_OPTIONS: { key: QuickAddType; label: string }[] = [
-	{ key: 'expense', label: 'Expense' },
-	{ key: 'income', label: 'Income' },
-	{ key: 'transfer', label: 'Transfer' },
-];
-
-const SIGN_COLOR: Record<QuickAddType, string> = {
-	expense: 'text-neg',
-	income: 'text-pos',
-	transfer: 'text-primary',
-};
-
-
-const TransferGlyph: FC<{ className?: string }> = ({ className }) => (
-	<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-		<path d="M7 10l-4 4 4 4" />
-		<path d="M3 14h13a4 4 0 0 0 4-4V6" />
-	</svg>
-);
-
-const FromIcon: FC<{ className?: string }> = ({ className }) => (
-	<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-		<line x1="7" y1="17" x2="17" y2="7" />
-		<polyline points="7 7 17 7 17 17" />
-	</svg>
-);
-
-const ToIcon: FC<{ className?: string }> = ({ className }) => (
-	<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-		<line x1="7" y1="7" x2="17" y2="17" />
-		<polyline points="17 7 17 17 7 17" />
-	</svg>
-);
+import { useQuickAdd } from "@feature/transaction";
+import type { QuickAddType } from "@feature/transaction";
+import { currencySymbol, sanitizeAmountInput, TRANSACTION_TYPE_TONE as SIGN_COLOR, TRANSACTION_TYPE_OPTIONS as TYPE_OPTIONS } from "@shared/utils";
+import { WalletSelect } from "@entity/wallet";
+import { TransferGlyph, FromIcon, ToIcon } from "@entity/transaction";
 
 interface QuickAddPanelProps {
 	className?: string;
 }
 
 const QuickAddPanel: FC<QuickAddPanelProps> = ({ className }) => {
-	const { wallets } = useWalletsList();
-	const { createTransaction, meta } = useTransactionsListMethods();
+	const {
+		type,
+		setType,
+		amount,
+		setAmount,
+		walletId,
+		setWalletId,
+		toWalletId,
+		setToWalletId,
+		isTransfer,
+		currency,
+		walletOptions,
+		canSubmit,
+		isPending,
+		onAdd,
+	} = useQuickAdd();
 
-	const [type, setType] = useState<QuickAddType>('expense');
-	const [amount, setAmount] = useState('');
-	const [walletId, setWalletId] = useState('');
-	const [toWalletId, setToWalletId] = useState('');
-
-	useEffect(() => {
-		if (wallets.length === 0) return;
-		setWalletId((prev) => prev || wallets[0].id);
-		setToWalletId((prev) => prev || (wallets.find((wallet) => wallet.id !== wallets[0].id)?.id ?? ''));
-	}, [wallets]);
-
-	const isTransfer = type === 'transfer';
 	const signColor = SIGN_COLOR[type];
-	const currency = wallets.find((wallet) => wallet.id === walletId)?.balance.currency ?? 'USD';
-	const walletOptions = wallets.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: gradientFromId(wallet.id) }));
-	const numericAmount = parseFloat(amount);
-	const amountValid = !Number.isNaN(numericAmount) && numericAmount > 0;
-	const transferValid = !isTransfer || (toWalletId !== '' && toWalletId !== walletId);
-	const canSubmit = walletId !== '' && amountValid && transferValid && !meta.createMutation.isPending;
-
-	const onAdd = () => {
-		if (!canSubmit) return;
-		const abs = Math.abs(numericAmount).toFixed(2);
-
-		if (isTransfer) {
-			Promise.all([
-				meta.createMutation.mutateAsync({ data: { source_wallet_id: walletId, amount: `-${abs}` } }),
-				meta.createMutation.mutateAsync({ data: { source_wallet_id: toWalletId, amount: abs } }),
-			]).then(() => { setAmount(''); }).catch((error: unknown) => { console.error(error); });
-			return;
-		}
-
-		const signed = type === 'income' ? abs : `-${abs}`;
-		createTransaction({ source_wallet_id: walletId, amount: signed });
-		setAmount('');
-	};
 
 	return (
 		<FinanceCard className={cn("p-4", className)}>
@@ -154,7 +96,7 @@ const QuickAddPanel: FC<QuickAddPanelProps> = ({ className }) => {
 			) : null}
 
 			<FinanceButton size="lg" className="mt-3.5 w-full" disabled={!canSubmit} onClick={onAdd}>
-				{meta.createMutation.isPending ? 'Adding…' : `Add ${type}`}
+				{isPending ? 'Adding…' : `Add ${type}`}
 			</FinanceButton>
 
 			<Link to={getFinanceRoute('management')} className="mt-2.5 block text-center text-xs text-text-3">

@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
 import { FinanceCard, FinanceStat, FinanceBadge, FinanceTooltip, cn } from "@internal/ui-library";
 
-import { AnimatedMoney } from "@shared/components";
+import { AnimatedMoney } from "@entity/money";
 import { useLedgerBalance } from "@feature/summary";
 import { useConvertMoney } from "@feature/fx";
 import type { Money } from "@feature/fx";

@@ -7,9 +7,9 @@ import {
 	WalletsSection,
 	TransactionsSection,
 	ChartOfAccountsSection,
-	ManagementPanel,
 } from "@widget/management";
-import type { PanelMode, PanelWallet } from "@widget/management";
+import { ManagementPanel } from "@process/management";
+import type { PanelMode, PanelWallet } from "@feature/management";
 
 
 const ManagementPage: FC = () => {

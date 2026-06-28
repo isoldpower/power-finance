@@ -9,10 +9,11 @@ import {
 	NeedsActionPanel,
 	RecentActivityPanel,
 	QuickAddPanel,
-	PeriodSelector,
 	CurrencySelector,
+	PERIODS,
 } from "@widget/dashboard";
-import type { Period } from "@widget/dashboard";
+import { PeriodSelector } from "@entity/dashboard";
+import type { Period } from "@entity/dashboard";
 
 
 const DashboardPage: FC = () => {
@@ -34,7 +35,7 @@ const DashboardPage: FC = () => {
 					{dateLabel}
 				</span>
 				<div className="flex-1" />
-				<PeriodSelector value={period} onChange={setPeriod} />
+				<PeriodSelector periods={PERIODS} value={period} onChange={setPeriod} />
 				<CurrencySelector />
 			</div>
 

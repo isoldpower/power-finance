@@ -1,6 +1,13 @@
 export * from './api-clients';
 export * from './data-presenters';
 
+export { gradientFromId, walletTypeLabel } from './adapters';
+export { useWalletBrowser } from './wallet-browser/use-wallet-browser.ts';
+export { CreateWalletForm } from './wallet-entry/CreateWalletForm.tsx';
+export type { CreateWalletFormProps } from './wallet-entry/CreateWalletForm.tsx';
+export { EditWalletForm } from './wallet-entry/EditWalletForm.tsx';
+export type { EditWalletFormProps } from './wallet-entry/EditWalletForm.tsx';
+
 export { useTotalBalance } from './total-balance/useTotalBalance.ts';
 export { useCardBalance } from './total-balance/useCardBalance.ts';
 export { WalletBalanceFx } from './total-balance/WalletBalanceFx.tsx';

@@ -1,5 +1,11 @@
 export { CurrencyPicker } from './currency-picker/CurrencyPicker.tsx';
 export { LocalePicker } from './locale-picker/LocalePicker.tsx';
+export { WalletSelect } from './wallet-select/WalletSelect.tsx';
+export type { WalletSelectProps, WalletSelectOption } from './wallet-select/WalletSelect.tsx';
+export { WalletListRow } from './wallet-list/WalletListRow.tsx';
+export type { WalletListRowProps } from './wallet-list/WalletListRow.tsx';
+export { WalletRecentRow } from './wallet-list/WalletRecentRow.tsx';
+export type { WalletRecentRowProps } from './wallet-list/WalletRecentRow.tsx';
 export { FieldLayout } from './form-fields/FieldLayout.tsx';
 
 export { CardAccessibleWrapper } from './card/CardAccessibleWrapper.tsx';

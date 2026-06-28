@@ -1,56 +1,30 @@
 import type { FC } from "react";
-import { useState } from "react";
-import { cn, FinanceCard, FinanceMoney, FinanceBadge } from "@internal/ui-library";
+import { FinanceCard, FinanceMoney, FinanceBadge } from "@internal/ui-library";
 
-import { useConvertMoney } from "@feature/fx";
-
-import { SectionHeader } from "./SectionHeader.tsx";
-import { MOCK_ACCOUNT_CATEGORIES, MOCK_ACCOUNT_HISTORY } from "./mock.ts";
-import type { MockAccount } from "./mock.ts";
+import { useChartOfAccounts } from "@feature/account";
+import { SectionHeader } from "@entity/management";
+import { CategoryRow, AccountListItem, AccountHistoryRow } from "@entity/account";
 
 interface ChartOfAccountsSectionProps {
 	className?: string;
 }
 
-const SHADE_MIN = 42;
-
-interface AccountSegment {
-	accountId: string;
-	name: string;
-	width: string;
-	shade: number;
-}
-
-// Segments are derived from accounts so each maps 1:1 to one, sized by share of the category
-// total and tinted as a shade of the category color.
-const segmentsFor = (accounts: MockAccount[]): AccountSegment[] => {
-	const total = accounts.reduce((sum, account) => sum + Math.abs(account.balanceUsd), 0) || 1;
-	return accounts.map((account, index) => ({
-		accountId: account.id,
-		name: account.name,
-		width: `${((Math.abs(account.balanceUsd) / total) * 100).toFixed(1)}%`,
-		shade: accounts.length === 1 ? 100 : Math.round(100 - (index * (100 - SHADE_MIN)) / (accounts.length - 1)),
-	}));
-};
-
 const ChartOfAccountsSection: FC<ChartOfAccountsSectionProps> = ({ className }) => {
-	const { convert } = useConvertMoney();
-	// Accounts are stored in USD; display them in the user's selected main currency.
-	const money = (usd: number) => convert({ amount: usd, currency: 'USD' }).formatted;
-	const signedMoney = (usd: number) => `${usd >= 0 ? '+' : '−'}${convert({ amount: Math.abs(usd), currency: 'USD' }).formatted}`;
-
-	const [categoryId, setCategoryId] = useState(MOCK_ACCOUNT_CATEGORIES[0].id);
-	const category = MOCK_ACCOUNT_CATEGORIES.find((entry) => entry.id === categoryId) ?? MOCK_ACCOUNT_CATEGORIES[0];
-	const [accountId, setAccountId] = useState(category.accounts[0].id);
-	const account = category.accounts.find((entry) => entry.id === accountId) ?? category.accounts[0];
-
-	const selectCategory = (id: string) => {
-		setCategoryId(id);
-		const next = MOCK_ACCOUNT_CATEGORIES.find((entry) => entry.id === id);
-		if (next) setAccountId(next.accounts[0].id);
-	};
-
-	const accountCount = MOCK_ACCOUNT_CATEGORIES.reduce((sum, entry) => sum + entry.accounts.length, 0);
+	const {
+		categories,
+		history,
+		categoryId,
+		accountId,
+		category,
+		account,
+		accountCount,
+		selectCategory,
+		selectSegment,
+		setAccountId,
+		money,
+		signedMoney,
+		segmentsFor,
+	} = useChartOfAccounts();
 
 	return (
 		<section className={className}>
@@ -82,48 +56,19 @@ const ChartOfAccountsSection: FC<ChartOfAccountsSectionProps> = ({ className }) 
 					<span className="hidden font-numeric text-[10px] text-text-3 sm:block">select a category to drill in</span>
 				</div>
 				<div className="px-[18px] pb-3.5 pt-2">
-					{MOCK_ACCOUNT_CATEGORIES.map((entry) => (
-						<div
+					{categories.map((entry) => (
+						<CategoryRow
 							key={entry.id}
-							onClick={() => { selectCategory(entry.id); }}
-							className={cn(
-								"-mx-2 cursor-pointer rounded-[var(--radius-md)] px-2 py-2 hover:bg-secondary",
-								entry.id === categoryId && "bg-secondary"
-							)}
-						>
-							<div className="mb-1.5 flex items-center gap-2.5">
-								<span className="size-[9px] flex-none rounded-[2px]" style={{ background: entry.color }} />
-								<span className="text-[13px] font-semibold">{entry.label}</span>
-								<div className="flex-1" />
-								<FinanceMoney size="sm">{money(entry.totalUsd)}</FinanceMoney>
-								<span className="text-[11px] text-text-3">›</span>
-							</div>
-							<div className="flex h-6 w-full items-stretch gap-0.5 rounded-[6px] bg-secondary">
-								{segmentsFor(entry.accounts).map((segment) => {
-									const isSelected = entry.id === categoryId && segment.accountId === accountId;
-									return (
-										<div
-											key={segment.accountId}
-											title={segment.name}
-											onClick={(event) => {
-												event.stopPropagation();
-												setCategoryId(entry.id);
-												setAccountId(segment.accountId);
-											}}
-											className={cn(
-												"relative h-full min-w-[7px] cursor-pointer rounded-[3px] transition-transform",
-												isSelected && "z-10 scale-y-110"
-											)}
-											style={{
-												width: segment.width,
-												background: `color-mix(in srgb, ${entry.color} ${segment.shade.toString()}%, white)`,
-												boxShadow: isSelected ? '0 2px 6px rgba(17,20,28,0.22)' : undefined,
-											}}
-										/>
-									);
-								})}
-							</div>
-						</div>
+							label={entry.label}
+							color={entry.color}
+							totalFormatted={money(entry.totalUsd)}
+							active={entry.id === categoryId}
+							segments={segmentsFor(entry.accounts)}
+							isCurrentCategory={entry.id === categoryId}
+							selectedAccountId={accountId}
+							onSelectCategory={() => { selectCategory(entry.id); }}
+							onSelectSegment={(accId) => { selectSegment(entry.id, accId); }}
+						/>
 					))}
 				</div>
 			</FinanceCard>
@@ -143,21 +88,16 @@ const ChartOfAccountsSection: FC<ChartOfAccountsSectionProps> = ({ className }) 
 					</div>
 					<div className="h-[270px] overflow-y-auto">
 						{category.accounts.map((entry) => (
-							<div
+							<AccountListItem
 								key={entry.id}
-								onClick={() => { setAccountId(entry.id); }}
-								className={cn(
-									"flex cursor-pointer items-center gap-2.5 border-b border-border px-4 py-3 hover:bg-secondary",
-									entry.id === accountId && "bg-[var(--accent-soft)]"
-								)}
-							>
-								<span className="size-2 flex-none rounded-[2px]" style={{ background: category.color }} />
-								<div className="min-w-0 flex-1">
-									<div className="truncate text-[13px] font-semibold">{entry.name}</div>
-									<div className="text-[10.5px] text-text-3">{entry.kind}</div>
-								</div>
-								<FinanceMoney tone={entry.balanceTone} size="sm">{money(entry.balanceUsd)}</FinanceMoney>
-							</div>
+								name={entry.name}
+								kind={entry.kind}
+								color={category.color}
+								active={entry.id === accountId}
+								balanceFormatted={money(entry.balanceUsd)}
+								balanceTone={entry.balanceTone}
+								onSelect={() => { setAccountId(entry.id); }}
+							/>
 						))}
 					</div>
 				</FinanceCard>
@@ -181,20 +121,22 @@ const ChartOfAccountsSection: FC<ChartOfAccountsSectionProps> = ({ className }) 
 					</div>
 					<div className="flex items-center gap-2.5 border-b border-border px-[18px] py-3">
 						<span className="text-[13.5px] font-semibold">Transaction history</span>
-						<FinanceBadge tone="neutral" appearance="outline" size="sm">{MOCK_ACCOUNT_HISTORY.length} ENTRIES</FinanceBadge>
+						<FinanceBadge tone="neutral" appearance="outline" size="sm">{history.length} ENTRIES</FinanceBadge>
 						<div className="flex-1" />
 						<span className="hidden font-numeric text-[10px] text-text-3 sm:block">postings that hit this account</span>
 					</div>
-					{MOCK_ACCOUNT_HISTORY.map((entry) => (
-						<div key={entry.id} className="flex items-center gap-3 border-b border-border px-[18px] py-2.5 last:border-b-0 hover:bg-secondary">
-							<div className={`flex size-[30px] flex-none items-center justify-center rounded-[8px] ${entry.iconClass}`}>{entry.icon}</div>
-							<div className="min-w-0 flex-1">
-								<div className="truncate text-[13px] font-semibold">{entry.description}</div>
-								<div className="font-numeric text-[10.5px] text-text-3">{entry.date}</div>
-							</div>
-							<FinanceBadge tone={entry.sideTone === 'pos' ? 'pos' : 'neg'} appearance="soft" size="sm">{entry.side}</FinanceBadge>
-							<FinanceMoney tone={entry.amountTone} size="sm" className="min-w-[78px] text-right">{signedMoney(entry.amountUsd)}</FinanceMoney>
-						</div>
+					{history.map((entry) => (
+						<AccountHistoryRow
+							key={entry.id}
+							icon={entry.icon}
+							iconClass={entry.iconClass}
+							description={entry.description}
+							date={entry.date}
+							side={entry.side}
+							sideTone={entry.sideTone}
+							amountFormatted={signedMoney(entry.amountUsd)}
+							amountTone={entry.amountTone}
+						/>
 					))}
 				</FinanceCard>
 			</div>

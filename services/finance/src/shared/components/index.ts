@@ -1,6 +1,5 @@
 export { HeaderBox } from './global-layout/HeaderBox.tsx';
 export { HeaderBoxOffset } from './global-layout/HeaderBoxOffset.tsx';
-export { GlobalLayout } from './global-layout/GlobalLayout.tsx';
 
 export { BreadcrumbItem } from './breadcrumbs/BreadcrumbItem.tsx';
 export { RelativeBreadcrumbs } from './breadcrumbs/RelativeBreadcrumbs.tsx';
@@ -12,13 +11,17 @@ export { ShowOnValue } from './form-helpers/ShowOnValue.tsx';
 export { InputField } from './form-helpers/InputField.tsx';
 export { SelectField } from './form-helpers/SelectField.tsx';
 export { SingleToggleField } from './form-helpers/SingleToggleField.tsx';
+export { FieldLabel } from './form-helpers/FieldLabel.tsx';
 export { TabsWithSearchParam } from './tabs-with-search-param/TabsWithSearchParam.tsx';
-export { AnimatedMoney } from './money/AnimatedMoney.tsx';
-export type { AnimatedMoneyProps } from './money/AnimatedMoney.tsx';
-export { MoneyInOriginal } from './money/MoneyInOriginal.tsx';
-export type { MoneyInOriginalProps } from './money/MoneyInOriginal.tsx';
-export { WalletSelect } from './wallet/WalletSelect.tsx';
-export type { WalletSelectProps, WalletSelectOption } from './wallet/WalletSelect.tsx';
+
+export { SlideOver } from './overlay/SlideOver.tsx';
+export { ModalShell } from './overlay/ModalShell.tsx';
+export { DisclosureTrigger } from './overlay/DisclosureTrigger.tsx';
+
+export type { FieldLabelProps } from './form-helpers/FieldLabel.tsx';
+export type { SlideOverProps } from './overlay/SlideOver.tsx';
+export type { ModalShellProps } from './overlay/ModalShell.tsx';
+export type { DisclosureTriggerProps } from './overlay/DisclosureTrigger.tsx';
 
 export type { HeaderBoxProps } from './global-layout/HeaderBox.tsx';
 export type { HeaderBoxOffsetProps } from './global-layout/HeaderBoxOffset.tsx';

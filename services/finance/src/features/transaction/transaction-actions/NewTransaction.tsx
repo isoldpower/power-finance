@@ -21,7 +21,7 @@ function NewTransaction({
 }: NewTransactionProps) {
 	const { createTransaction } = useTransactionsListMethods();
 
-	const onSubmit = useCallback(async (data: TransactionSchema) => {
+	const onSubmit = useCallback((data: TransactionSchema) => {
 		const createData: TransactionMinimalPayload = buildCreateData(data);
 
 		createTransaction(createData);

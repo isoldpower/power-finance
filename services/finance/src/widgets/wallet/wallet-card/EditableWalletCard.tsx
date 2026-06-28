@@ -15,9 +15,8 @@ import {
 	CardPending,
 	CardError
 } from "@entity/wallet";
-import { EditWalletModalProcess } from "@process/wallet";
+import { EditWalletModalProcess, DeleteWalletModalProcess } from "@process/wallet";
 import type { Wallet } from "@entity/wallet";
-import { DeleteWalletModalProcess } from "@process/wallet/edit-wallet-modal/DeleteWalletModalProcess.tsx";
 
 
 interface EditableWalletCardProps {

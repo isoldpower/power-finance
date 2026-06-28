@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { cn, FinanceCard, FinanceStat, FinanceBadge, FinanceTooltip } from "@internal/ui-library";
 
-import { AnimatedMoney } from "@shared/components";
+import { AnimatedMoney } from "@entity/money";
 import { useLedgerBalance } from "@feature/summary";
 import { useConvertMoney } from "@feature/fx";
 import type { Money } from "@feature/fx";
