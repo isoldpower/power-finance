@@ -1,3 +1,5 @@
+import type { WalletType, WalletGoalMeta } from "@entity/wallet";
+
 interface WalletValuableFields {
 	name: string
 	balance: {
@@ -5,6 +7,8 @@ interface WalletValuableFields {
 		currency: string
 	}
 	credit: boolean
+	type?: WalletType
+	goal?: WalletGoalMeta
 }
 
 interface WalletMeta {
@@ -21,6 +25,8 @@ interface WalletDetailed {
 		currency: string
 	}
 	credit: boolean
+	type?: WalletType
+	goal?: WalletGoalMeta
 	meta: WalletMeta
 }
 
@@ -32,6 +38,8 @@ interface WalletPreview {
 		currency: string
 	}
 	credit: boolean
+	type?: WalletType
+	goal?: WalletGoalMeta
 }
 
 type WalletMinimalPayload = WalletValuableFields;

@@ -11,7 +11,7 @@ import {
 
 import { useWalletsListMethods, useWalletsList, useWalletMethods } from "@feature/wallet";
 import { useTransactionsListMethods } from "@feature/transaction";
-import { currencySymbol, sanitizeAmountInput, useLocaleCurrency } from "@shared/utils";
+import { currencySymbol, sanitizeAmountInput } from "@shared/utils";
 import { WalletSelect } from "@shared/components";
 import type { WalletSelectOption } from "@shared/components";
 
@@ -102,6 +102,20 @@ const TransferGlyph: FC<{ className?: string }> = ({ className }) => (
 	</svg>
 );
 
+const FromIcon: FC<{ className?: string }> = ({ className }) => (
+	<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+		<line x1="7" y1="17" x2="17" y2="7" />
+		<polyline points="7 7 17 7 17 17" />
+	</svg>
+);
+
+const ToIcon: FC<{ className?: string }> = ({ className }) => (
+	<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+		<line x1="7" y1="7" x2="17" y2="17" />
+		<polyline points="17 7 17 17 7 17" />
+	</svg>
+);
+
 const AddForm: FC<{ onSwitch: (mode: PanelMode) => void; onClose: () => void }> = ({ onSwitch, onClose }) => {
 	const { wallets } = useWalletsList();
 	const { meta } = useTransactionsListMethods();
@@ -156,7 +170,7 @@ const AddForm: FC<{ onSwitch: (mode: PanelMode) => void; onClose: () => void }> 
 				<button
 					type="button"
 					onClick={() => { onSwitch('scan'); }}
-					className="mb-[18px] flex w-full items-center gap-2.5 rounded-[var(--radius-md)] border border-dashed border-[var(--accent-border)] bg-[var(--accent-soft)] px-3.5 py-2.5 text-left hover:brightness-[0.98]"
+					className="mb-[18px] flex w-full items-center gap-2.5 rounded-[var(--radius-md)] border border-dashed border-[var(--accent-border)] bg-[var(--accent-soft)] px-3.5 py-2.5 text-left transition-colors hover:border-primary"
 				>
 					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
 						<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
@@ -194,22 +208,20 @@ const AddForm: FC<{ onSwitch: (mode: PanelMode) => void; onClose: () => void }> 
 					/>
 				</div>
 
-				<Label>{isTransfer ? 'From wallet' : 'Wallet'}</Label>
+				<Label>{isTransfer ? 'Wallets' : 'Wallet'}</Label>
 				<WalletSelect
+					leadingIcon={isTransfer ? <FromIcon className="flex-none text-text-3" /> : undefined}
 					options={walletOptions()}
 					value={fromId}
 					onChange={setFromId}
 					emptyLabel="No wallets yet"
-					className={isTransfer ? "mb-2" : "mb-3.5"}
+					className="mb-2"
 				/>
 
 				{isTransfer ? (
 					<>
-						<div className="my-1 flex justify-center">
-							<span className="flex size-[30px] items-center justify-center rounded-full border border-border bg-secondary text-[15px] text-primary">↓</span>
-						</div>
-						<Label>To wallet</Label>
 						<WalletSelect
+							leadingIcon={<ToIcon className="flex-none text-text-3" />}
 							options={walletOptions(fromId)}
 							value={toId}
 							onChange={setToId}
@@ -443,22 +455,31 @@ const EditWalletForm: FC<{ wallet: PanelWallet; onClose: () => void }> = ({ wall
 const TransferForm: FC<{ wallet?: PanelWallet; onClose: () => void }> = ({ wallet, onClose }) => {
 	const { wallets } = useWalletsList();
 	const { meta } = useTransactionsListMethods();
-	const formatCurrency = useLocaleCurrency();
 
-	const fromId = wallet?.id ?? (wallets.length > 0 ? wallets[0].id : '');
-	const from = wallets.find((entry) => entry.id === fromId);
+	const [fromId, setFromId] = useState(wallet?.id ?? '');
 	const [toId, setToId] = useState('');
 	const [amount, setAmount] = useState('');
 
 	useEffect(() => {
-		setToId((prev) => prev || (wallets.find((entry) => entry.id !== fromId)?.id ?? ''));
+		if (wallets.length === 0) return;
+		setFromId((prev) => prev || wallets[0].id);
+	}, [wallets]);
+
+	useEffect(() => {
+		setToId((prev) => (prev !== '' && prev !== fromId) ? prev : (wallets.find((entry) => entry.id !== fromId)?.id ?? ''));
 	}, [wallets, fromId]);
 
+	const from = wallets.find((entry) => entry.id === fromId);
 	const to = wallets.find((entry) => entry.id === toId);
 	const numericAmount = parseFloat(amount);
 	const amountValid = !Number.isNaN(numericAmount) && numericAmount > 0;
 	const canSubmit = Boolean(from) && Boolean(to) && toId !== fromId && amountValid && !meta.createMutation.isPending;
 	const fromCurrency = from?.balance.currency ?? 'USD';
+
+	const walletOptions = (excludeId?: string): WalletSelectOption[] =>
+		wallets
+			.filter((entry) => entry.id !== excludeId)
+			.map((entry) => ({ id: entry.id, name: entry.name, currency: entry.balance.currency, gradient: gradientFromId(entry.id) }));
 
 	const onSubmit = () => {
 		if (!canSubmit) return;
@@ -474,26 +495,19 @@ const TransferForm: FC<{ wallet?: PanelWallet; onClose: () => void }> = ({ walle
 	return (
 		<>
 			<div className="flex-1 overflow-auto p-5">
-				<Label>From</Label>
-				<div className="mb-3 flex items-center gap-3 rounded-[var(--radius-md)] border border-border-strong px-3.5 py-3">
-					<span className="h-[23px] w-[34px] flex-none rounded-[5px]" style={{ background: wallet?.gradient ?? gradientFromId(fromId) }} />
-					<div className="min-w-0 flex-1">
-						<div className="text-[13.5px] font-semibold">{from?.name ?? 'No wallet'}</div>
-						<div className="text-[11px] text-text-3">{fromCurrency}</div>
-					</div>
-					<div className="text-right">
-						<div className="text-[10px] text-text-3">Available</div>
-						<div className="font-display text-[13.5px] font-semibold">{from ? formatCurrency(from.balance.amount, from.balance.currency) : '—'}</div>
-					</div>
-				</div>
-
-				<div className="my-1.5 flex justify-center">
-					<span className="flex size-[30px] items-center justify-center rounded-full border border-border bg-secondary text-[15px] text-primary">↓</span>
-				</div>
-
-				<Label>To</Label>
+				<Label>Wallets</Label>
 				<WalletSelect
-					options={wallets.filter((entry) => entry.id !== fromId).map((entry) => ({ id: entry.id, name: entry.name, currency: entry.balance.currency, gradient: gradientFromId(entry.id) }))}
+					leadingIcon={<FromIcon className="flex-none text-text-3" />}
+					options={walletOptions()}
+					value={fromId}
+					onChange={setFromId}
+					emptyLabel="No wallets yet"
+					className="mb-2"
+				/>
+
+				<WalletSelect
+					leadingIcon={<ToIcon className="flex-none text-text-3" />}
+					options={walletOptions(fromId)}
 					value={toId}
 					onChange={setToId}
 					emptyLabel="Add another wallet"

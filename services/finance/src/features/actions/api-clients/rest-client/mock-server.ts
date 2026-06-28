@@ -9,6 +9,8 @@ import type {
 
 const MOCK_DELAY_MS = 250;
 
+const STORAGE_KEY = 'mock:actions';
+
 const delay = <T>(value: T): Promise<T> =>
 	new Promise((resolve) => setTimeout(() => { resolve(value); }, MOCK_DELAY_MS));
 
@@ -18,9 +20,29 @@ const SEED: Action[] = [
 	{ id: 'a3', kind: 'uncategorized', title: '3 transactions need a category', subtitle: 'Categorize to keep reports accurate', primaryLabel: 'Review', secondaryLabel: 'Later' },
 ];
 
+const loadActions = (): Action[] => {
+	if (typeof window === 'undefined') return SEED.map((action) => ({ ...action }));
+	try {
+		const stored = window.localStorage.getItem(STORAGE_KEY);
+		if (stored === null) return SEED.map((action) => ({ ...action }));
+		return JSON.parse(stored) as Action[];
+	} catch {
+		return SEED.map((action) => ({ ...action }));
+	}
+};
+
+const saveActions = (actions: Action[]): void => {
+	if (typeof window === 'undefined') return;
+	try {
+		window.localStorage.setItem(STORAGE_KEY, JSON.stringify(actions));
+	} catch {
+		// Ignore storage failures (private mode, quota) — falls back to in-memory only.
+	}
+};
+
 
 class ActionsMockRESTApiClient implements IActionsRESTApiClient {
-	private actions: Action[] = [...SEED];
+	private actions: Action[] = loadActions();
 
 	public list(request: ActionListRequest): Promise<ActionListResponse> {
 		const limit = request.params?.limit ?? this.actions.length;
@@ -34,6 +56,7 @@ class ActionsMockRESTApiClient implements IActionsRESTApiClient {
 
 	public resolve(request: ActionResolveRequest): Promise<ActionResolveResponse> {
 		this.actions = this.actions.filter((action) => action.id !== request.id);
+		saveActions(this.actions);
 
 		return delay({
 			message: `Resolved action ${request.id}`,

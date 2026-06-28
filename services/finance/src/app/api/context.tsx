@@ -6,6 +6,7 @@ import { useTransactionsApi } from "./servers/useTransactionsApi.ts";
 import { useWebhooksApi } from "./servers/useWebhooksApi.ts";
 import { useSummaryApi } from "./servers/useSummaryApi.ts";
 import { useActionsApi } from "./servers/useActionsApi.ts";
+import { useAutomationsApi } from "./servers/useAutomationsApi.ts";
 import { useNotificationsApi } from "./servers/useNotificationsApi.ts";
 import { useFxApi } from "./servers/useFxApi.ts";
 import type { FC } from 'react';
@@ -14,6 +15,7 @@ import type { ITransactionsRESTApiClient } from "@feature/transaction";
 import type { IWebhookRESTApiClient } from "@feature/settings";
 import type { ISummaryRESTApiClient } from "@feature/summary";
 import type { IActionsRESTApiClient } from "@feature/actions";
+import type { IAutomationsRESTApiClient } from "@feature/automations";
 import type { INotificationsRESTApiClient } from "@feature/notifications";
 import type { IFxRESTApiClient } from "@feature/fx";
 
@@ -33,6 +35,9 @@ interface ApiContextType {
 	},
 	actionServers: {
 		readonly rest: IActionsRESTApiClient
+	},
+	automationServers: {
+		readonly rest: IAutomationsRESTApiClient
 	},
 	notificationServers: {
 		readonly rest: INotificationsRESTApiClient
@@ -58,6 +63,7 @@ const ApiProvider: FC<ApiProviderProps> = ({
 	const webhookServers = useWebhooksApi(envVariables.CLIENT_API_BASE_URL);
 	const summaryServers = useSummaryApi(envVariables.CLIENT_API_BASE_URL);
 	const actionServers = useActionsApi(envVariables.CLIENT_API_BASE_URL);
+	const automationServers = useAutomationsApi(envVariables.CLIENT_API_BASE_URL);
 	const notificationServers = useNotificationsApi(envVariables.CLIENT_API_BASE_URL);
 	const fxServers = useFxApi(envVariables.CLIENT_API_BASE_URL);
 
@@ -67,9 +73,10 @@ const ApiProvider: FC<ApiProviderProps> = ({
 		webhookServers,
 		summaryServers,
 		actionServers,
+		automationServers,
 		notificationServers,
 		fxServers
-	}), [transactionServers, walletServers, webhookServers, summaryServers, actionServers, notificationServers, fxServers]);
+	}), [transactionServers, walletServers, webhookServers, summaryServers, actionServers, automationServers, notificationServers, fxServers]);
 
 	return (
 		<ApiContext value={contextValue}>

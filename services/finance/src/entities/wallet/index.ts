@@ -16,5 +16,5 @@ export { CardsListPending } from './cards-list/CardsListPending.tsx';
 export { WALLET_TYPES } from './constants.ts';
 export type { CurrencyPickerProps } from './currency-picker/CurrencyPicker.tsx';
 export type { LocalePickerProps } from './locale-picker/LocalePicker.tsx';
-export type { Wallet } from './model.ts';
+export type { Wallet, WalletType, WalletGoalMeta } from './model.ts';
 

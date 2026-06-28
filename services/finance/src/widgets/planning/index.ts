@@ -2,3 +2,8 @@ export { AutomationsCard } from './AutomationsCard.tsx';
 export { GoalsCard } from './GoalsCard.tsx';
 export { WhatIfCard } from './WhatIfCard.tsx';
 export { AiAssistantPanel } from './AiAssistantPanel.tsx';
+export { PlanningAiAssistant } from './PlanningAiAssistant.tsx';
+export { NewRulePanel } from './NewRulePanel.tsx';
+export { DeleteRuleDialog } from './DeleteRuleDialog.tsx';
+export { NewGoalPanel } from './NewGoalPanel.tsx';
+export { DeleteGoalDialog } from './DeleteGoalDialog.tsx';

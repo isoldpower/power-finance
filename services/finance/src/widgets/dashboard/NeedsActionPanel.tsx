@@ -1,7 +1,9 @@
 import type { FC } from "react";
-import { FinanceCard, FinanceButton, cn } from "@internal/ui-library";
+import { FinanceCard, FinanceButton, UiSkeleton, cn } from "@internal/ui-library";
 
 import { useActions, useResolveAction } from "@feature/actions";
+
+const SKELETON_ROWS = ['s1', 's2', 's3'];
 
 const ICON_BY_KIND: Record<string, { icon: string; className: string }> = {
 	recurring: { icon: '↻', className: 'bg-[var(--accent-soft)] text-primary' },
@@ -19,6 +21,8 @@ const NeedsActionPanel: FC<NeedsActionPanelProps> = ({ className }) => {
 	const { actions, isPending } = useActions();
 	const resolve = useResolveAction();
 
+	if (!isPending && actions.length === 0) return null;
+
 	return (
 		<FinanceCard variant="accent" className={cn("overflow-hidden", className)}>
 			<div className="flex items-center gap-2.5 border-b border-border bg-[var(--accent-soft)] px-[18px] py-3.5">
@@ -28,20 +32,25 @@ const NeedsActionPanel: FC<NeedsActionPanelProps> = ({ className }) => {
 					<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
 				</svg>
 				<span className="text-[14.5px] font-semibold">Needs your action</span>
-				<span className="rounded-full bg-primary px-2.5 py-0.5 text-[11.5px] font-semibold text-white">
-					{actions.length}
+				<span className="inline-flex items-center rounded-full bg-primary px-2.5 py-0.5 text-[11.5px] font-semibold text-white">
+					{isPending ? <UiSkeleton className="my-0.5 h-3 w-2.5 rounded-sm bg-white/50" /> : actions.length}
 				</span>
 				<div className="flex-1" />
 				<span className="hidden font-numeric text-[11px] text-text-3 sm:block">approvals before money moves</span>
 			</div>
 
 			{isPending ? (
-				<div className="px-[18px] py-6 text-center text-[13px] text-text-3">Loading…</div>
-			) : actions.length === 0 ? (
-				<div className="flex items-center justify-center gap-2.5 px-[18px] py-6 text-sm font-semibold text-pos">
-					<span className="flex size-5 items-center justify-center rounded-full bg-pos-soft">✓</span>
-					All clear — nothing needs you right now.
-				</div>
+				SKELETON_ROWS.map((id) => (
+					<div key={id} className="flex items-center gap-3.5 border-b border-border px-[18px] py-3.5 last:border-b-0">
+						<UiSkeleton className="size-[34px] flex-none rounded-[9px]" />
+						<div className="min-w-0 flex-1 space-y-1.5">
+							<UiSkeleton className="h-3.5 w-1/2" />
+							<UiSkeleton className="h-3 w-3/4" />
+						</div>
+						<UiSkeleton className="h-8 w-16 flex-none rounded-[var(--radius-md)]" />
+						<UiSkeleton className="h-8 w-16 flex-none rounded-[var(--radius-md)]" />
+					</div>
+				))
 			) : (
 				actions.map((action) => {
 					const visual = ICON_BY_KIND[action.kind] ?? fallbackIcon;

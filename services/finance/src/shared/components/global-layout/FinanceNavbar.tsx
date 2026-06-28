@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { getFinanceRoute, getIsEmbedded } from "@internal/shared";
 import {
@@ -41,6 +42,9 @@ const FinanceNavbar: FC = () => {
 	const activeTab = resolveActiveTab(pathname);
 	const { notifications } = useNotifications({ limit: 8 });
 	const { count: unreadCount } = useNotificationsCount(false);
+	const [navMenuOpen, setNavMenuOpen] = useState(false);
+
+	const activeLabel = TABS.find((tab) => tab.key === activeTab)?.label ?? 'Dashboard';
 
 	const onTabChange = (value: string) => {
 		if (!value) return;
@@ -61,13 +65,43 @@ const FinanceNavbar: FC = () => {
 				<span className="font-display text-base font-semibold tracking-[-0.01em]">Finance</span>
 			</Link>
 
-			<FinanceSegmented value={activeTab} onValueChange={onTabChange}>
-				{TABS.map((tab) => (
-					<FinanceSegmentedItem key={tab.key} value={tab.key} className="h-7">
-						{tab.label}
-					</FinanceSegmentedItem>
-				))}
-			</FinanceSegmented>
+			<div className="hidden md:block">
+				<FinanceSegmented value={activeTab} onValueChange={onTabChange}>
+					{TABS.map((tab) => (
+						<FinanceSegmentedItem key={tab.key} value={tab.key} className="h-7">
+							{tab.label}
+						</FinanceSegmentedItem>
+					))}
+				</FinanceSegmented>
+			</div>
+
+			<div className="md:hidden">
+				<FinanceMenu open={navMenuOpen} onOpenChange={setNavMenuOpen}>
+					<FinanceMenuTrigger asChild>
+						<button
+							type="button"
+							aria-label="Navigation"
+							className="inline-flex items-center gap-1.5 rounded-[var(--radius-md)] border border-border-strong bg-card px-3 py-1.5 text-[13px] font-semibold"
+						>
+							{activeLabel}
+							<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+								<polyline points="6 9 12 15 18 9" />
+							</svg>
+						</button>
+					</FinanceMenuTrigger>
+					<FinanceMenuContent align="start" className="w-44 p-1">
+						{TABS.map((tab) => (
+							<FinanceMenuItem
+								key={tab.key}
+								onClick={() => { setNavMenuOpen(false); onTabChange(tab.key); }}
+								className={cn(tab.key === activeTab && "text-primary")}
+							>
+								{tab.label}
+							</FinanceMenuItem>
+						))}
+					</FinanceMenuContent>
+				</FinanceMenu>
+			</div>
 
 			<div className="flex-1" />
 
