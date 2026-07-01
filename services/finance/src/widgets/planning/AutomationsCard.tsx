@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { FinanceCard } from "@internal/ui-library";
 
-import { useAutomationsBrowser } from "@feature/automations";
+import { useAutomationsBrowser } from "@feature/assistance";
 import { NewRulePanel, DeleteRuleDialog } from "@process/planning";
 import { ListFilterBar, ListPager, AutomationRow, AutomationSkeletonRow, RowDeleteButton } from "@entity/planning";
 

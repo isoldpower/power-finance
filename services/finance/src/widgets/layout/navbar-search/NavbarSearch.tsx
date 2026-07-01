@@ -2,7 +2,7 @@ import type { FC } from "react";
 import { FinanceIconButton } from "@internal/ui-library";
 
 import { SearchField, SearchResultsPanel, SearchIcon } from "@entity/layout";
-import { useGlobalSearch, useSearchResults } from "@feature/search";
+import { useGlobalSearch, useSearchResults } from "@feature/navigation/website-search";
 import { useIsDesktop } from "@shared/utils";
 
 import { PAGES } from "../config.ts";

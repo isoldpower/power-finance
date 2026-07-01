@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FinanceButton, FinanceInput } from "@internal/ui-library";
 
-import { useCreateAutomation } from "@feature/automations";
+import { useCreateAutomation } from "@feature/assistance";
 import { useDisclosure } from "@shared/utils";
 import { SlideOver, DisclosureTrigger, FieldLabel } from "@shared/components";
 

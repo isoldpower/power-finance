@@ -1,10 +1,10 @@
 import type { FC } from "react";
 import { FinanceButton, FinanceTooltip } from "@internal/ui-library";
 
-import { useActions } from "@feature/actions";
-import { NeedsActionPanel } from "@widget/dashboard";
 import { AutomationsCard, GoalsCard, WhatIfCard, PlanningAiAssistant } from "@widget/planning";
 import { NewGoalPanel } from "@process/planning";
+import {NeedsActionPanel} from "@process/dashboard/ledger-status/NeedsActionPanel.tsx";
+import {useActions} from "@feature/assistance";
 
 
 const PlanningPage: FC = () => {

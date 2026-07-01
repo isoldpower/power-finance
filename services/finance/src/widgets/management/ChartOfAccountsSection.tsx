@@ -1,9 +1,14 @@
 import type { FC } from "react";
 import { FinanceCard, FinanceMoney, FinanceBadge } from "@internal/ui-library";
 
-import { useChartOfAccounts } from "@feature/account";
 import { SectionHeader } from "@entity/management";
 import { CategoryRow, AccountListItem, AccountHistoryRow } from "@entity/account";
+import {
+	calculateAccountsShare,
+	useAccountHistory,
+	useAccountsCategorySelection,
+	useAccountsConvertion
+} from "@feature/accounts";
 
 interface ChartOfAccountsSectionProps {
 	className?: string;
@@ -12,7 +17,6 @@ interface ChartOfAccountsSectionProps {
 const ChartOfAccountsSection: FC<ChartOfAccountsSectionProps> = ({ className }) => {
 	const {
 		categories,
-		history,
 		categoryId,
 		accountId,
 		category,
@@ -21,10 +25,12 @@ const ChartOfAccountsSection: FC<ChartOfAccountsSectionProps> = ({ className }) 
 		selectCategory,
 		selectSegment,
 		setAccountId,
-		money,
-		signedMoney,
-		segmentsFor,
-	} = useChartOfAccounts();
+	} = useAccountsCategorySelection();
+	const {
+		convertToUserCurrencyWithSign,
+		convertToUserCurrency,
+	} = useAccountsConvertion();
+	const { history } = useAccountHistory();
 
 	return (
 		<section className={className}>
@@ -61,9 +67,9 @@ const ChartOfAccountsSection: FC<ChartOfAccountsSectionProps> = ({ className }) 
 							key={entry.id}
 							label={entry.label}
 							color={entry.color}
-							totalFormatted={money(entry.totalUsd)}
+							totalFormatted={convertToUserCurrency(entry.totalUsd)}
 							active={entry.id === categoryId}
-							segments={segmentsFor(entry.accounts)}
+							segments={calculateAccountsShare(entry.accounts)}
 							isCurrentCategory={entry.id === categoryId}
 							selectedAccountId={accountId}
 							onSelectCategory={() => { selectCategory(entry.id); }}
@@ -94,7 +100,7 @@ const ChartOfAccountsSection: FC<ChartOfAccountsSectionProps> = ({ className }) 
 								kind={entry.kind}
 								color={category.color}
 								active={entry.id === accountId}
-								balanceFormatted={money(entry.balanceUsd)}
+								balanceFormatted={convertToUserCurrency(entry.balanceUsd)}
 								balanceTone={entry.balanceTone}
 								onSelect={() => { setAccountId(entry.id); }}
 							/>
@@ -115,7 +121,7 @@ const ChartOfAccountsSection: FC<ChartOfAccountsSectionProps> = ({ className }) 
 							</div>
 							<div className="flex-none text-right">
 								<div className="font-numeric text-[10px] uppercase tracking-[0.1em] text-text-3">Balance</div>
-								<FinanceMoney tone={account.balanceTone} size="xl">{money(account.balanceUsd)}</FinanceMoney>
+								<FinanceMoney tone={account.balanceTone} size="xl">{convertToUserCurrency(account.balanceUsd)}</FinanceMoney>
 							</div>
 						</div>
 					</div>
@@ -134,7 +140,7 @@ const ChartOfAccountsSection: FC<ChartOfAccountsSectionProps> = ({ className }) 
 							date={entry.date}
 							side={entry.side}
 							sideTone={entry.sideTone}
-							amountFormatted={signedMoney(entry.amountUsd)}
+							amountFormatted={convertToUserCurrencyWithSign(entry.amountUsd)}
 							amountTone={entry.amountTone}
 						/>
 					))}

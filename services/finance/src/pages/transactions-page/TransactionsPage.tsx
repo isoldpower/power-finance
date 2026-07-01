@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import type { FC } from 'react';
 
-import { useWalletSelection, useWalletsList } from "@feature/wallet";
-import {
-	OpenTransactionCreation,
-	OpenTransactionFilters
-} from "@feature/transaction";
+import { useWalletSelection, useWalletsList } from "@feature/wallets";
+import { OpenTransactionCreation, OpenTransactionFilters } from "@feature/transactions";
 import {
 	NewTransactionForm,
 	RecentTransaction,

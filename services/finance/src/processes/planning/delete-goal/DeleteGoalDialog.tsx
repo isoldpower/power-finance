@@ -2,9 +2,9 @@ import type { FC, ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { cn, FinanceButton, Icons } from "@internal/ui-library";
 
-import { useWalletsList, gradientFromId } from "@feature/wallet";
-import { useTransactionsListMethods } from "@feature/transaction";
-import { useDeleteGoal } from "@feature/goals";
+import { useWalletsList } from "@feature/wallets";
+import { useTransactionsListMethods } from "@feature/transactions";
+import { useDeleteGoal } from "@feature/wallets";
 import { WalletSelect } from "@entity/wallet";
 import { useDisclosure } from "@shared/utils";
 import { ModalShell, DisclosureTrigger } from "@shared/components";
@@ -37,7 +37,7 @@ const DeleteGoalDialog: FC<DeleteGoalDialogProps> = ({ id, name, saved, children
 		setToWalletId((prev) => prev || wallets[0].id);
 	}, [wallets]);
 
-	const walletOptions = wallets.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: gradientFromId(wallet.id) }));
+	const walletOptions = wallets.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: 'rgba(0, 0, 0, 1)' }));
 
 	const pending = meta.createMutation.isPending || deleteGoal.isPending;
 	const transferReady = mode !== 'transfer' || !hasSavings || toWalletId !== '';

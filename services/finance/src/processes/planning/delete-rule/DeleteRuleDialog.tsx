@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from "react";
 import { FinanceButton, Icons } from "@internal/ui-library";
 
-import { useDeleteAutomation } from "@feature/automations";
+import { useDeleteAutomation } from "@feature/assistance";
 import { useDisclosure } from "@shared/utils";
 import { ModalShell, DisclosureTrigger } from "@shared/components";
 

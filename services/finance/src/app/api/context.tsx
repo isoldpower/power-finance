@@ -14,10 +14,9 @@ import type { IWalletsRESTApiClient } from "@feature/wallet";
 import type { ITransactionsRESTApiClient } from "@feature/transaction";
 import type { IWebhookRESTApiClient } from "@feature/settings";
 import type { ISummaryRESTApiClient } from "@feature/summary";
-import type { IActionsRESTApiClient } from "@feature/actions";
-import type { IAutomationsRESTApiClient } from "@feature/automations";
 import type { INotificationsRESTApiClient } from "@feature/notifications";
 import type { IFxRESTApiClient } from "@feature/fx";
+import type { IActionsRESTApiClient, IAutomationsRESTApiClient } from "@feature/assistance";
 
 
 interface ApiContextType {

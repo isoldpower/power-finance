@@ -1,53 +1,48 @@
 import type { FC } from "react";
-import { useMemo, useState } from "react";
-import { useSettingsContext } from "@internal/shared";
 
 import {
-	NetWorthHero,
-	CashFlowCard,
-	LedgerStatusBar,
-	NeedsActionPanel,
 	RecentActivityPanel,
 	QuickAddPanel,
 	CurrencySelector,
-	PERIODS,
+	PeriodSelector,
 } from "@widget/dashboard";
-import { PeriodSelector } from "@entity/dashboard";
-import type { Period } from "@entity/dashboard";
+import { searchSchema } from "./searchSchema.ts";
+import { LongDateLabel } from "@entity/dashboard/date-label/LongDateLabel.tsx";
+import { MainTitle } from "@entity/dashboard/typography/MainTitle.tsx";
+import { NetWorthHeroWithFx } from "@process/dashboard/net-worth/NetWorthWithFx.tsx";
+import { CashFlowCardWithFx } from "@process/dashboard/cash-flow/CashFlowWithFx.tsx";
+import type { DashboardSearchSchema } from "./searchSchema.ts";
+import {LedgerStatusSummary} from "@process/dashboard/ledger-status/LedgerStatusSummary.tsx";
+import {NeedsActionPanel} from "@process/dashboard/ledger-status/NeedsActionPanel.tsx";
+import {useSearchProtected} from "@feature/navigation";
 
 
 const DashboardPage: FC = () => {
-	const [period, setPeriod] = useState<Period>('1M');
-	const { locale } = useSettingsContext();
-
-	const dateLabel = useMemo(() => {
-		const now = new Date();
-		const weekday = now.toLocaleDateString(locale, { weekday: 'short' }).toUpperCase();
-		const month = now.toLocaleDateString(locale, { month: 'short' }).toUpperCase();
-		return `${weekday} · ${month} ${now.getDate().toString()} · ${now.getFullYear().toString()}`;
-	}, [locale]);
+	const [search, setSearch] = useSearchProtected<DashboardSearchSchema>(searchSchema);
 
 	return (
 		<div className="mx-auto flex max-w-[1320px] flex-col gap-4 px-[22px] pb-[70px] pt-[22px]">
 			<div className="fx-rise [animation-delay:0.05s] flex flex-wrap items-center gap-3.5">
-				<h1 className="font-display text-2xl font-semibold tracking-[-0.01em]">Dashboard</h1>
-				<span className="font-numeric text-[11px] uppercase tracking-[0.08em] text-text-3">
-					{dateLabel}
-				</span>
+				<MainTitle>Dashboard</MainTitle>
+				<LongDateLabel />
 				<div className="flex-1" />
-				<PeriodSelector periods={PERIODS} value={period} onChange={setPeriod} />
+				<PeriodSelector
+					period={search.period}
+					onPeriodChange={setSearch}  />
 				<CurrencySelector />
 			</div>
-
 			<div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.15fr_1fr]">
-				<NetWorthHero range={period} className="fx-rise [animation-delay:0.12s]" />
-				<CashFlowCard range={period} className="fx-rise [animation-delay:0.18s]" />
+				<NetWorthHeroWithFx 
+					period={search.period} 
+					className="fx-rise [animation-delay:0.12s]" />
+				<CashFlowCardWithFx
+					period={search.period}
+					className="fx-rise [animation-delay:0.18s]" />
 			</div>
-
-			<LedgerStatusBar className="fx-rise [animation-delay:0.22s]" />
-
+			<div className="fx-rise [animation-delay:0.22s]">
+				<LedgerStatusSummary />	
+			</div>
 			<NeedsActionPanel className="fx-rise [animation-delay:0.26s]" />
-
 			<div className="fx-rise [animation-delay:0.34s] grid grid-cols-1 items-start gap-4 lg:grid-cols-[1fr_360px]">
 				<RecentActivityPanel className="order-2 lg:order-1" />
 				<QuickAddPanel className="order-1 lg:order-2" />

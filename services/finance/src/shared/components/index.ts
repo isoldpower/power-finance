@@ -18,6 +18,8 @@ export { SlideOver } from './overlay/SlideOver.tsx';
 export { ModalShell } from './overlay/ModalShell.tsx';
 export { DisclosureTrigger } from './overlay/DisclosureTrigger.tsx';
 
+export { useAmbientParticles } from './ambient-background/useAmbientParticles.ts';
+
 export type { FieldLabelProps } from './form-helpers/FieldLabel.tsx';
 export type { SlideOverProps } from './overlay/SlideOver.tsx';
 export type { ModalShellProps } from './overlay/ModalShell.tsx';

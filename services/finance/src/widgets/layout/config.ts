@@ -1,5 +1,5 @@
 import type { NavTab } from "@feature/navigation";
-import type { PageEntry } from "@feature/search";
+import type { PageEntry } from "@feature/navigation/website-search";
 
 // Navbar tabs.
 const TABS: NavTab[] = [

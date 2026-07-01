@@ -7,7 +7,7 @@ import {
 	useCardBalance,
 	WalletCardFx,
 	WalletCardBoundaries
-} from "@feature/wallet";
+} from "@feature/wallets";
 import {
 	CardUnavailableWrapper,
 	CardErrorWrapper,

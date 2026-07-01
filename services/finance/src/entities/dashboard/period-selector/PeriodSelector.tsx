@@ -1,9 +1,9 @@
 import type { FC } from "react";
 import { cn } from "@internal/ui-library";
 
-// The selectable comparison periods. Kept as a domain type; the actual list is config supplied
-// by the dashboard widget layer.
+
 type Period = '1W' | '1M' | '3M' | '1Y';
+const PERIODS = ['1W', '1M', '3M', '1Y'] as const
 
 interface PeriodSelectorProps {
 	periods: readonly Period[];
@@ -34,5 +34,5 @@ const PeriodSelector: FC<PeriodSelectorProps> = ({ periods, value, onChange, cla
 
 PeriodSelector.displayName = 'PeriodSelector';
 
-export { PeriodSelector };
+export { PeriodSelector, PERIODS };
 export type { PeriodSelectorProps, Period };
