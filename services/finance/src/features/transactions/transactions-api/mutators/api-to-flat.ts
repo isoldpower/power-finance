@@ -1,5 +1,5 @@
 import type { TransactionDetailed, TransactionPreview } from "../types.ts";
-import type { TransactionDto, TransactionPreviewDto } from "@entity/transaction";
+import type { TransactionDto, TransactionPreviewDto } from "@entity/transactions";
 
 
 const parseWallet = (wallet: TransactionDetailed['source_wallet']) => ({

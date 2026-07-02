@@ -1,4 +1,4 @@
-import type { TransactionPreviewDto } from "@entity/transaction";
+import type { TransactionPreviewDto } from "@entity/transactions";
 
 
 const getMonthGroupedTransactions = (

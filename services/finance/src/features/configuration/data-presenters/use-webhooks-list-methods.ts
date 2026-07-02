@@ -6,14 +6,14 @@ import { useApiContext } from "@app/api";
 import {
 	createWebhookEndpoint as createWebhookEndpointApi,
 	listWebhooks as listWebhooksApi
-} from "@feature/settings";
+} from "@feature/configuration";
 import { CACHE_KEYS } from "./cache-config.ts";
 import type {
 	CreateWebhookRequest,
 	CreateWebhookResponse,
 	WebhookValuableFields,
 	ListWebhooksResponse
-} from "@feature/settings";
+} from "@feature/configuration";
 
 
 interface UseWebhooksReturn {

@@ -1,15 +1,8 @@
-import type { TransactionPreviewDto, TransactionRowView } from "@entity/transaction";
-import type { Tone } from "@shared/utils";
+import { toneFromAmount, iconClassFromAmount, iconFromAmount } from "@entity/transactions";
+import type { TransactionPreviewDto, TransactionRowView } from "@entity/transactions";
 
 import type { WalletRef } from "./types.ts";
 
-
-const toneFromAmount = (amount: number): Tone => (amount >= 0 ? 'pos' : 'neg');
-
-const iconClassFromAmount = (amount: number): string =>
-	amount >= 0 ? 'bg-pos-soft text-pos' : 'bg-[var(--accent-soft)] text-primary';
-
-const iconFromAmount = (amount: number): string => (amount >= 0 ? '↓' : '↑');
 
 const toTransactionRow = (
 	dto: TransactionPreviewDto,
@@ -51,4 +44,4 @@ const toTransactionRow = (
 	};
 };
 
-export { toTransactionRow, toneFromAmount, iconClassFromAmount, iconFromAmount };
+export { toTransactionRow };

@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
-import { listAllWallets } from "@feature/wallet";
+import { listAllWallets } from "@feature/wallets";
 import { useApiContext } from "@app/api";
 import { WALLETS_CACHE_KEYS } from "./cache-config.ts";
 import { useMemo } from "react";
-import type { Wallet, WalletType } from "@entity/wallet";
-import type { ListAllWalletsResponse } from "@feature/wallet";
+import type { Wallet, WalletType } from "@entity/wallets";
+import type { ListAllWalletsResponse } from "@feature/wallets";
 
 
 type UseWalletsListOptions = Omit<UseQueryOptions<ListAllWalletsResponse>, 'queryKey' | 'queryFn'> & {};

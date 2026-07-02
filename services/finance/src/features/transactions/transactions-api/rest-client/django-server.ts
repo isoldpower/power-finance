@@ -1,4 +1,4 @@
-import type { ITransactionsRESTApiClient } from "@feature/transaction";
+import type { ITransactionsRESTApiClient } from "@feature/transactions";
 import type {
 	TransactionDeleteRequest, TransactionDeleteResponse,
 	TransactionGetRequest, TransactionGetResponse,

@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { useAxiosInstance } from "@internal/shared";
 
-import { SummaryMockRESTApiClient, SummaryDjangoRESTApiClient } from "@feature/summary";
-import type { ISummaryRESTApiClient } from "@feature/summary";
+import { SummaryMockRESTApiClient, SummaryDjangoRESTApiClient } from "@feature/metrics";
+import type { ISummaryRESTApiClient } from "@feature/metrics";
 
 const USE_DJANGO_BACKEND: boolean = false;
 

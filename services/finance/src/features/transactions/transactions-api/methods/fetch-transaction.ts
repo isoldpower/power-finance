@@ -1,4 +1,4 @@
-import type { TransactionDto } from "src/entities/transaction";
+import type { TransactionDto } from "@entity/transactions";
 import type { ITransactionsRESTApiClient } from "../rest-client";
 import type { TransactionGetRequest } from "../rest-client/types.ts";
 import { transactionDetailedResponseToFlat } from "../mutators/api-to-flat.ts";

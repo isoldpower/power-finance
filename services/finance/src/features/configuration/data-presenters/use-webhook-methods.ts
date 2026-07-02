@@ -7,12 +7,12 @@ import {
 	fetchWebhookEndpoint as fetchWebhookApi,
 	updateWebhookEndpoint as updateWebhookApi,
 	UpdateWebhookRequest, UpdateWebhookResponse, WebhookValuableFields,
-} from "@feature/settings";
+} from "@feature/configuration";
 import { useApiContext } from "@app/api";
 import { CACHE_KEYS } from "./cache-config.ts";
-import type { DeleteWebhookResponse } from "../api-clients";
-import type { FetchWebhookResponse, ListWebhooksResponse } from "../api-clients";
-import type { WebhookDeleteRequest } from "../api-clients/rest-client/types.ts";
+import type { DeleteWebhookResponse } from "../webhooks-api";
+import type { FetchWebhookResponse, ListWebhooksResponse } from "../webhooks-api";
+import type { WebhookDeleteRequest } from "../webhooks-api/rest-client/types.ts";
 
 
 interface UseWebhookReturn {

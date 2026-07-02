@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { getFinanceRoute } from "@internal/shared";
 
-import { useWalletsList } from "@feature/wallet";
+import { useWalletsList } from "@feature/wallets";
 
 import type { PageEntry, ResultItem } from "./types.ts";
 

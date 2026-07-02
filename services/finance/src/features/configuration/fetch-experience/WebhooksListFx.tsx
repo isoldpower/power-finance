@@ -19,14 +19,14 @@ const WebhooksListFx: FC<WebhooksListFxProps> = ({
 			return Array.from({ length: fxSampleSize }).map((_, index) => {
 				return cloneElement(
 					pendingElement,
-					{ ...(pendingElement.props ?? {}), key: index }
+					{ ...(pendingElement.props ?? {}), key: `pending-${index.toString()}` }
 				);
 			});
 		case 'error':
 			return Array.from({ length: fxSampleSize }).map((_, index) => {
 				return cloneElement(
 					errorElement,
-					{ ...(errorElement.props ?? {}), key: index }
+					{ ...(errorElement.props ?? {}), key: `error-${index.toString()}` }
 				);
 			});
 		case 'success':

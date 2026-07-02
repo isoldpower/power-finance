@@ -1,6 +1,6 @@
 import type { MutationCompareArgument, MutationReaction } from "./use-query-reactions.ts";
 import { useCallback } from "react";
-import { useTransactionsListMethods } from "@feature/transaction";
+import { useTransactionsListMethods } from "@feature/transactions";
 
 
 const useWalletDeleteReaction = (): MutationReaction => {

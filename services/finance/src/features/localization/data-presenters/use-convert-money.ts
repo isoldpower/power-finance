@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import { useSettingsContext } from "@internal/shared";
 
 import { useLocaleCurrency } from "@shared/utils";
-import { useFxRates } from "./use-fx-rates.ts";
+import { useCurrencyRates } from "./use-currency-rates.ts";
 
 
 interface Money {
@@ -25,7 +25,7 @@ interface UseConvertMoneyReturn {
 
 const useConvertMoney = (): UseConvertMoneyReturn => {
 	const { mainCurrency } = useSettingsContext();
-	const { rates, isPending } = useFxRates(mainCurrency);
+	const { rates, isPending } = useCurrencyRates(mainCurrency);
 	const formatCurrency = useLocaleCurrency();
 
 	const convert = useCallback((money: Money): ConvertedMoney => {

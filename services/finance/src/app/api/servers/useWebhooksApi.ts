@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { IWebhookRESTApiClient, WebhookDjangoRESTApiClient } from "@feature/settings";
+import { IWebhookRESTApiClient, WebhookDjangoRESTApiClient } from "@feature/configuration";
 import { useAxiosInstance } from "@internal/shared";
 
 

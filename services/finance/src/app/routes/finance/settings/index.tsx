@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { z } from "zod";
 
 import { SettingsPage } from "@page/settings-page";
-import { SETTINGS_SECTIONS } from "@entity/settings";
+import { SETTINGS_SECTIONS } from "@entity/configuration";
 
 const optionsArray = Object.keys(SETTINGS_SECTIONS);
 

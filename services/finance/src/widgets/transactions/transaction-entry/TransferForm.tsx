@@ -1,0 +1,102 @@
+import type { FC } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useWalletsList } from "@feature/wallets";
+import { TransferForm as TransferFormWrapper, transferSchema } from "@feature/transactions/transaction-entry";
+import type { TransferSchema } from "@feature/transactions/transaction-entry";
+import { currencySymbol, sanitizeAmountInput } from "@shared/utils";
+import { WalletSelect, DEFAULT_WALLET_GRADIENT } from "@entity/wallets";
+import type { WalletSelectOption } from "@entity/wallets";
+import { FromIcon, ToIcon } from "@entity/transactions";
+import { PanelFooter, FieldLabel } from "@shared/components";
+import type { PanelWallet } from "@feature/wallets";
+
+interface TransferFormProps {
+	wallet?: PanelWallet;
+	onClose: () => void;
+}
+
+const TransferForm: FC<TransferFormProps> = ({ wallet, onClose }) => {
+	const { wallets } = useWalletsList();
+	const form = useForm<TransferSchema>({
+		resolver: zodResolver(transferSchema),
+		defaultValues: { fromId: wallet?.id ?? '', toId: '', amount: '' },
+	});
+	const { fromId, toId, amount } = form.watch();
+
+	useEffect(() => {
+		if (wallets.length === 0) return;
+		if (form.getValues('fromId') === '') form.setValue('fromId', wallets[0].id);
+	}, [wallets, form]);
+
+	useEffect(() => {
+		const current = form.getValues('toId');
+		if (current !== '' && current !== fromId) return;
+		form.setValue('toId', wallets.find((entry) => entry.id !== fromId)?.id ?? '');
+	}, [wallets, fromId, form]);
+
+	const from = wallets.find((entry) => entry.id === fromId);
+	const to = wallets.find((entry) => entry.id === toId);
+	const numericAmount = parseFloat(amount);
+	const amountValid = !Number.isNaN(numericAmount) && numericAmount > 0;
+	const canSubmit = Boolean(from) && Boolean(to) && toId !== fromId && amountValid;
+	const fromCurrency = from?.balance.currency ?? 'USD';
+
+	const walletOptions = (excludeId?: string): WalletSelectOption[] =>
+		wallets
+			.filter((entry) => entry.id !== excludeId)
+			.map((entry) => ({ id: entry.id, name: entry.name, currency: entry.balance.currency, gradient: DEFAULT_WALLET_GRADIENT }));
+
+	return (
+		<TransferFormWrapper handleSubmit={form.handleSubmit} onSuccess={onClose}>
+			<div className="flex-1 overflow-auto p-5">
+				<FieldLabel>Wallets</FieldLabel>
+				<WalletSelect
+					leadingIcon={<FromIcon className="flex-none text-text-3" />}
+					options={walletOptions()}
+					value={fromId}
+					onChange={(value) => { form.setValue('fromId', value); }}
+					emptyLabel="No wallets yet"
+					className="mb-2"
+				/>
+
+				<WalletSelect
+					leadingIcon={<ToIcon className="flex-none text-text-3" />}
+					options={walletOptions(fromId)}
+					value={toId}
+					onChange={(value) => { form.setValue('toId', value); }}
+					emptyLabel="Add another wallet"
+					className="mb-2"
+				/>
+
+				<FieldLabel>Amount</FieldLabel>
+				<div className="mb-3 flex items-center gap-2 rounded-[var(--radius-md)] border-[1.5px] border-primary px-4 py-3.5 shadow-[0_0_0_3px_var(--accent-soft)]">
+					<span className="font-display text-2xl text-text-2">{currencySymbol(fromCurrency)}</span>
+					<input value={amount} onChange={(event) => { form.setValue('amount', sanitizeAmountInput(event.target.value)); }} inputMode="decimal" placeholder="0.00" className="min-w-0 flex-1 border-none bg-transparent font-display text-3xl font-semibold outline-none placeholder:text-[var(--text-3)]" />
+				</div>
+				{from && to ? (
+					<div className="text-xs leading-snug text-text-3">
+						Moves money from {from.name} to {to.name}. Posts a balanced transfer to the ledger.
+					</div>
+				) : (
+					<div className="text-xs leading-snug text-text-3">
+						Add a second wallet to transfer between accounts.
+					</div>
+				)}
+			</div>
+			<PanelFooter
+				submitType="submit"
+				submitLabel="Send transfer"
+				onClose={onClose}
+				submitDisabled={!canSubmit}
+			/>
+		</TransferFormWrapper>
+	);
+};
+
+TransferForm.displayName = 'TransferForm';
+
+export { TransferForm };
+export type { TransferFormProps };

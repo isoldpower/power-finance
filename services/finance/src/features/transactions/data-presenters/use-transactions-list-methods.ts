@@ -6,14 +6,14 @@ import { useApiContext } from "@app/api";
 import {
 	createTransaction as createTransactionApi,
 	listAllTransactions as listAllTransactionsApi
-} from "@feature/transaction";
+} from "@feature/transactions";
 import { CACHE_KEYS } from "./config.ts";
 import type {
 	CreateTransactionRequest,
 	CreateTransactionResponse,
 	TransactionMinimalPayload,
 	ListAllTransactionsResponse
-} from "@feature/transaction";
+} from "@feature/transactions";
 
 interface UseTransactionsReturn {
 	meta: {

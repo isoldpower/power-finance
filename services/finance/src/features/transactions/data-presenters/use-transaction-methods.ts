@@ -5,14 +5,14 @@ import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import {
 	deleteTransaction as deleteTransactionApi,
 	fetchTransaction as fetchTransactionApi,
-} from "@feature/transaction";
+} from "@feature/transactions";
 import { useApiContext } from "@app/api";
 import { CACHE_KEYS } from "./config.ts";
 import type {
 	FetchTransactionResponse,
 	DeleteTransactionRequest, DeleteTransactionResponse,
 	ListAllTransactionsResponse
-} from "@feature/transaction";
+} from "@feature/transactions";
 
 
 interface UseTransactionReturn {

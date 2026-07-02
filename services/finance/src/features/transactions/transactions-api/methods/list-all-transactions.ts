@@ -1,5 +1,5 @@
 import { transactionPreviewResponseToFlat } from "../mutators/api-to-flat.ts";
-import type { TransactionPreviewDto } from "src/entities/transaction";
+import type { TransactionPreviewDto } from "@entity/transactions";
 import type { ITransactionsRESTApiClient } from "../rest-client";
 
 interface ListAllTransactionsRequest {

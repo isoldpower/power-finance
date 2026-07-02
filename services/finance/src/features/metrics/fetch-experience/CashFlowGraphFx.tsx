@@ -1,6 +1,8 @@
 import type {FC, ReactNode} from "react";
 import type { CashFlowInsight } from "@feature/metrics";
 
+import { CashFlowGraphSkeleton } from "@entity/metrics";
+
 
 interface CashFlowGraphFxProps {
 	isPending: boolean;
@@ -23,10 +25,6 @@ const CashFlowGraphFx: FC<CashFlowGraphFxProps> = ({
 
 	return children(cashFlow);
 };
-
-const CashFlowGraphSkeleton: FC = () => (
-	<div className="mt-[18px] h-2 rounded-full bg-secondary animate-pulse" />
-);
 
 const CashFlowGraphFailed: FC = () => (
 	<div className="mt-4 text-[13px] text-text-3">

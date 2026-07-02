@@ -5,7 +5,7 @@ import { useWalletsList } from "@feature/wallets";
 import { useConvertMoney } from "@feature/localization";
 import { useLocaleCurrency } from "@shared/utils";
 
-import { toTransactionRow } from './to-transaction-row.ts';
+import { toTransactionRow } from '../to-transaction-row.ts';
 import { useTransactionsList } from "../data-presenters";
 
 

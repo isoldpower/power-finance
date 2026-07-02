@@ -1,4 +1,4 @@
-import { Wallet } from "@entity/wallet";
+import { Wallet } from "@entity/wallets";
 import type { WalletDetailed, WalletPreview } from "../types.ts";
 
 const flatToWalletPreview = (

@@ -1,5 +1,5 @@
 import type { TransactionMinimalPayload } from "../types.ts";
-import type { TransactionDto } from "@entity/transaction";
+import type { TransactionDto } from "@entity/transactions";
 
 
 const transactionDtoToPayload = (

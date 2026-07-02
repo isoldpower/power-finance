@@ -1,0 +1,1 @@
+export { MainPageTitle } from './MainPageTitle.tsx';

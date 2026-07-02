@@ -1,8 +1,8 @@
 import { currencySymbol } from "@shared/utils";
 
-import type { Wallet } from "@entity/wallet";
+import type { Wallet } from "@entity/wallets";
 import type { Goal } from "../types";
-import { DEFAULT_GOAL_COLOR } from "../../config";
+import { DEFAULT_GOAL_COLOR } from "@entity/wallets";
 
 
 const parseAmount = (value: string): number => {

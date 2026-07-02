@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { useAxiosInstance } from "@internal/shared";
 
-import { NotificationsMockRESTApiClient, NotificationsDjangoRESTApiClient } from "@feature/notifications";
-import type { INotificationsRESTApiClient } from "@feature/notifications";
+import { NotificationsMockRESTApiClient, NotificationsDjangoRESTApiClient } from "@feature/assistance";
+import type { INotificationsRESTApiClient } from "@feature/assistance";
 
 const USE_DJANGO_BACKEND: boolean = false;
 

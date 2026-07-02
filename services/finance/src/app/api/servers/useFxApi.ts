@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { useAxiosInstance } from "@internal/shared";
 
-import { FxMockRESTApiClient, FxDjangoRESTApiClient } from "@feature/fx";
-import type { IFxRESTApiClient } from "@feature/fx";
+import { FxMockRESTApiClient, FxDjangoRESTApiClient } from "@feature/localization";
+import type { IFxRESTApiClient } from "@feature/localization";
 
 const USE_DJANGO_BACKEND: boolean = false;
 

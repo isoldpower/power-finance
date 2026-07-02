@@ -1,6 +1,6 @@
 import {v4 as uuidv4} from "uuid";
 
-import type {Wallet} from "@entity/wallet";
+import type {Wallet} from "@entity/wallets";
 import type {IStorage} from "@internal/shared";
 import {LocalStorageMock} from "@internal/shared";
 

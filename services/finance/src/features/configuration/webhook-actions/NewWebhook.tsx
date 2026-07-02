@@ -1,10 +1,10 @@
 import { FormEvent, ReactNode, useCallback } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
 
-import { useWebhooksListMethods } from "@feature/settings";
-import type { CreateWebhookResponse } from "@feature/settings";
+import { useWebhooksListMethods } from "@feature/configuration";
+import type { CreateWebhookResponse } from "@feature/configuration";
 import type { WebhookSchema } from "./schemas.ts";
-import type { WebhookValuableFields } from "@feature/settings";
+import type { WebhookValuableFields } from "@feature/configuration";
 
 
 interface NewWebhookProps {

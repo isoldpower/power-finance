@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useWalletsList } from "@feature/wallets";
 import { useConvertMoney } from "@feature/localization";
 import { useLocaleCurrency } from "@shared/utils";
-import type { TransactionPreviewDto } from "@entity/transaction";
+import type { TransactionPreviewDto } from "@entity/transactions";
 
 import { useTransactionsList } from "../data-presenters";
 import { toTransactionRow } from "../to-transaction-row.ts";

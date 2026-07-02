@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
 import { GOALS_CACHE_KEYS } from "./cache-config.ts";
-import { DEFAULT_GOAL_COLOR } from "../config.ts";
+import { DEFAULT_GOAL_COLOR } from "@entity/wallets";
 import { createWallet } from "../wallets-api";
 import type { GoalCreatePayload } from "../wallets-api";
 

@@ -1,5 +1,5 @@
 import {useMemo} from "react";
-import type {Wallet} from "@entity/wallet";
+import type {Wallet} from "@entity/wallets";
 
 
 const useCardBalance = (wallet: Wallet) => {

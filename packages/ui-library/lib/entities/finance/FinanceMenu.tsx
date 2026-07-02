@@ -17,8 +17,6 @@ function FinanceMenuContent({
 			align={align}
 			sideOffset={sideOffset}
 			className={cn(
-				// `finance-theme` re-establishes the design tokens because Radix portals
-				// this content to document.body, outside the themed app root.
 				"finance-theme w-auto min-w-44 overflow-hidden rounded-[var(--radius-md)] border-border-strong bg-popover p-1 text-foreground shadow-[var(--shadow-lg)]",
 				className
 			)}

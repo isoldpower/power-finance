@@ -1,5 +1,5 @@
 import { transactionDetailedResponseToFlat } from "../mutators/api-to-flat.ts";
-import type { TransactionDto } from "@entity/transaction";
+import type { TransactionDto } from "@entity/transactions";
 import type { ITransactionsRESTApiClient } from "../rest-client";
 import type { TransactionPostRequest } from "../rest-client/types.ts";
 

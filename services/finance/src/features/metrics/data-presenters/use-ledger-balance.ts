@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
-import { getLedgerBalance } from "@feature/summary";
+import { getLedgerBalance } from "@feature/metrics";
 import { CACHE_KEYS } from "./cache-config.ts";
-import type { LedgerBalance } from "@feature/summary";
+import type { LedgerBalance } from "@feature/metrics";
 
 type UseLedgerBalanceOptions = Omit<UseQueryOptions<LedgerBalance>, 'queryKey' | 'queryFn'>;
 

@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
-import { listWebhooks } from "@feature/settings";
+import { listWebhooks } from "@feature/configuration";
 import { useApiContext } from "@app/api";
 import { CACHE_KEYS } from "./cache-config.ts";
 import { useMemo } from "react";
-import type { WebhookEndpoint } from "@entity/settings";
-import type { ListWebhooksResponse } from "@feature/settings";
+import type { WebhookEndpoint } from "@entity/configuration";
+import type { ListWebhooksResponse } from "@feature/configuration";
 
 
 type UseWebhooksListOptions = Omit<UseQueryOptions<ListWebhooksResponse>, 'queryKey' | 'queryFn'> & {};

@@ -1,5 +1,5 @@
 import type { MutationCompareArgument, MutationReaction } from "./use-query-reactions.ts";
-import { useWalletsListMethods } from "@feature/wallet";
+import { useWalletsListMethods } from "@feature/wallets";
 import { useCallback } from "react";
 
 

@@ -1,10 +1,12 @@
 import { useMemo, useState } from "react";
 
 import { useConvertMoney } from "@feature/localization";
-import { useTransactionsList, toTransactionRow } from "@feature/transaction";
+import { useTransactionsList, toTransactionRow } from "@feature/transactions";
 import { useLocaleCurrency, relativeTime } from "@shared/utils";
+import { DEFAULT_WALLET_GRADIENT } from "@entity/wallets";
 
 import { useWalletsList } from "../data-presenters";
+import type { BrowserWallet } from "./types.ts";
 
 
 const useWalletsBrowser = (recentSlots: number) => {
@@ -19,12 +21,13 @@ const useWalletsBrowser = (recentSlots: number) => {
 	const [pins, setPins] = useState<Record<string, boolean>>({});
 	const [selectedId, setSelectedId] = useState<string | null>(null);
 
-	const decorated = useMemo(() => rawWallets.map((wallet) => ({
+	const decorated = useMemo((): BrowserWallet[] => rawWallets.map((wallet) => ({
 		id: wallet.id,
 		name: wallet.name,
 		currency: wallet.balance.currency,
 		balance: wallet.balance,
 		credit: wallet.credit,
+		gradient: DEFAULT_WALLET_GRADIENT,
 		updated: wallet.updatedAt ? relativeTime(wallet.updatedAt) : '',
 	})), [rawWallets]);
 

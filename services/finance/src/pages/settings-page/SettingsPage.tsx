@@ -6,11 +6,12 @@ import {
 	UiTabsTrigger,
 } from "@internal/ui-library";
 
-import { PreferencesModalBox } from "@entity/settings";
-import { useWebhooksList, WebhooksListFx, WebhooksListEmptyUX } from "@feature/settings";
-import { GlobalLocaleSelection, PreferredCurrencySelection } from "@widget/settings";
-import { WebhookWithControls, CreateWebhookProcess } from "@process/settings";
-import { TabsWithSearchParam } from "@shared/components";
+import { PreferencesModalBox } from "@entity/configuration";
+import { useWebhooksList } from "@feature/configuration";
+import { WebhooksListFx, WebhooksListEmptyUX } from "@feature/configuration";
+import { GlobalLocaleSelection, PreferredCurrencySelection } from "@widget/configuration";
+import { WebhookWithControls, CreateWebhookProcess } from "@process/configuration";
+import { TabsWithSearchParam } from "@feature/navigation";
 
 
 // TODO: Implement Webhooks pagination and filtering

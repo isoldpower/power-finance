@@ -5,8 +5,8 @@ import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import { useApiContext } from "@app/api";
 import { fetchWallet } from "../wallets-api";
 import { WALLETS_CACHE_KEYS } from "./cache-config.ts";
-import type { Wallet } from "@entity/wallet";
-import type { FetchWalletResponse } from "@feature/wallet";
+import type { Wallet } from "@entity/wallets";
+import type { FetchWalletResponse } from "@feature/wallets";
 
 type UseWalletOptions = Omit<UseQueryOptions<FetchWalletResponse>, 'queryKey' | 'queryFn'> & {};
 

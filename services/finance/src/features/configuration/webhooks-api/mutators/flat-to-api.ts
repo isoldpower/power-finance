@@ -1,4 +1,4 @@
-import type { WebhookEndpoint } from "@entity/settings/webhook";
+import type { WebhookEndpoint } from "@entity/configuration/webhook";
 import type { WebhookPreview, WebhookDetailed } from "../types.ts";
 
 const flatToWebhookPreview = (

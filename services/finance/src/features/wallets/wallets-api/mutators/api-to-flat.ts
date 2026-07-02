@@ -1,5 +1,5 @@
 import {WalletDetailed, WalletPreview} from "@feature/wallets/wallets-api/types.ts";
-import {Wallet} from "@entity/wallet";
+import {Wallet} from "@entity/wallets";
 
 const walletPreviewResponseToFlat = (
 	response: WalletPreview

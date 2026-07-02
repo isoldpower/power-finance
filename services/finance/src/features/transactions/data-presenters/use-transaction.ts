@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
-import { fetchTransaction } from "@feature/transaction";
+import { fetchTransaction } from "@feature/transactions";
 import { useApiContext } from "@app/api";
 import { CACHE_KEYS } from "./config.ts";
-import type { TransactionDto } from "@entity/transaction";
-import type { FetchTransactionResponse } from "@feature/transaction";
+import type { TransactionDto } from "@entity/transactions";
+import type { FetchTransactionResponse } from "@feature/transactions";
 
 type UseTransactionOptions = Omit<UseQueryOptions<FetchTransactionResponse>, 'queryKey' | 'queryFn'> & {};
 

@@ -1,62 +1,44 @@
-import type { FC } from "react";
-import { useState } from "react";
-
-import { WalletFormFields, PanelFooter } from "@entity/management";
-import { MOCK_WALLET_TYPES, MOCK_CURRENCIES } from "@feature/management";
+import { useCallback } from "react";
+import type { FormEvent, ReactNode } from "react";
+import type { UseFormHandleSubmit } from "react-hook-form";
 
 import { useWalletsListMethods } from "@feature/wallets/data-presenters/use-wallets-list-methods.ts";
+import type { WalletEntrySchema } from "./schemas.ts";
 
 const CREDIT_TYPE = 'Credit card';
 
 interface CreateWalletFormProps {
-	onClose: () => void;
+	handleSubmit: UseFormHandleSubmit<WalletEntrySchema>;
+	onSuccess?: () => void;
+	children?: ReactNode;
 }
 
-const CreateWalletForm: FC<CreateWalletFormProps> = ({ onClose }) => {
+function CreateWalletForm({ handleSubmit, onSuccess, children }: CreateWalletFormProps) {
 	const { meta } = useWalletsListMethods();
-	const [name, setName] = useState('');
-	const [type, setType] = useState(MOCK_WALLET_TYPES[0]);
-	const [currency, setCurrency] = useState(MOCK_CURRENCIES[0]);
-	const [balance, setBalance] = useState('');
 
-	const trimmedName = name.trim();
-	const canSubmit = trimmedName !== '' && !meta.createMutation.isPending;
-
-	const onSubmit = () => {
-		if (!canSubmit) return;
+	const onSubmit = useCallback((data: WalletEntrySchema) => {
 		meta.createMutation.mutate(
 			{
 				data: {
-					name: trimmedName,
-					balance: { amount: parseFloat(balance) || 0, currency },
-					credit: type === CREDIT_TYPE,
+					name: data.name.trim(),
+					balance: { amount: parseFloat(data.balance) || 0, currency: data.currency },
+					credit: data.type === CREDIT_TYPE,
 				},
 			},
-			{ onSuccess: () => { onClose(); } }
+			{ onSuccess }
 		);
-	};
+	}, [meta, onSuccess]);
+
+	const handleSubmitForm = useCallback((e: FormEvent<HTMLFormElement>) => {
+		handleSubmit(onSubmit)(e).catch(console.error);
+	}, [handleSubmit, onSubmit]);
 
 	return (
-		<>
-			<WalletFormFields
-				name={name} setName={setName}
-				type={type} setType={setType}
-				currency={currency} setCurrency={setCurrency}
-				balance={balance} setBalance={setBalance}
-				gradient="linear-gradient(135deg,#6366f1,#4f46e5)"
-				editing={false}
-				walletTypes={MOCK_WALLET_TYPES}
-				currencies={MOCK_CURRENCIES}
-			/>
-			<PanelFooter
-				submitLabel={meta.createMutation.isPending ? 'Creating…' : 'Create wallet'}
-				onClose={onClose}
-				onSubmit={onSubmit}
-				submitDisabled={!canSubmit}
-			/>
-		</>
+		<form onSubmit={handleSubmitForm} className="flex flex-1 flex-col overflow-hidden">
+			{children}
+		</form>
 	);
-};
+}
 
 CreateWalletForm.displayName = 'CreateWalletForm';
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { PERIODS } from "@entity/dashboard/period-selector/PeriodSelector.tsx";
+import { PERIODS } from "@widget/metrics";
 
 const searchSchema = z.object({
 	selectedWallet: z.string().default('all'),

@@ -1,60 +1,43 @@
-import type { FC } from "react";
-import { useState } from "react";
-
-import { WalletFormFields, PanelFooter } from "@entity/management";
-import { MOCK_WALLET_TYPES, MOCK_CURRENCIES } from "@feature/management";
-import type { PanelWallet } from "@feature/management";
+import { useCallback } from "react";
+import type { FormEvent, ReactNode } from "react";
+import type { UseFormHandleSubmit } from "react-hook-form";
 
 import { useWalletMethods } from "@feature/wallets/data-presenters/use-wallet-methods.ts";
+import type { PanelWallet } from "../types.ts";
+import type { WalletEntrySchema } from "./schemas.ts";
 
 const CREDIT_TYPE = 'Credit card';
 
 interface EditWalletFormProps {
 	wallet: PanelWallet;
-	onClose: () => void;
+	handleSubmit: UseFormHandleSubmit<WalletEntrySchema>;
+	onSuccess?: () => void;
+	children?: ReactNode;
 }
 
-const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, onClose }) => {
-	const { updateWallet, meta } = useWalletMethods(wallet.id);
-	const [name, setName] = useState(wallet.name);
-	const [type, setType] = useState(wallet.credit ? CREDIT_TYPE : MOCK_WALLET_TYPES[0]);
-	const [currency, setCurrency] = useState(wallet.currency);
+function EditWalletForm({ wallet, handleSubmit, onSuccess, children }: EditWalletFormProps) {
+	const { updateWallet } = useWalletMethods(wallet.id);
 
-	const trimmedName = name.trim();
-	const canSubmit = trimmedName !== '' && !meta.updateMutation.isPending;
-
-	const onSubmit = () => {
-		if (!canSubmit) return;
+	const onSubmit = useCallback((data: WalletEntrySchema) => {
 		updateWallet({
-			name: trimmedName,
-			balance: { amount: wallet.balance.amount, currency },
-			credit: type === CREDIT_TYPE,
+			name: data.name.trim(),
+			balance: { amount: wallet.balance.amount, currency: data.currency },
+			credit: data.type === CREDIT_TYPE,
 		})
-			.then(() => { onClose(); })
+			.then(() => { onSuccess?.(); })
 			.catch((error: unknown) => { console.error(error); });
-	};
+	}, [updateWallet, wallet.balance.amount, onSuccess]);
+
+	const handleSubmitForm = useCallback((e: FormEvent<HTMLFormElement>) => {
+		handleSubmit(onSubmit)(e).catch(console.error);
+	}, [handleSubmit, onSubmit]);
 
 	return (
-		<>
-			<WalletFormFields
-				name={name} setName={setName}
-				type={type} setType={setType}
-				currency={currency} setCurrency={setCurrency}
-				balance="" setBalance={() => undefined}
-				gradient={wallet.gradient}
-				editing
-				walletTypes={MOCK_WALLET_TYPES}
-				currencies={MOCK_CURRENCIES}
-			/>
-			<PanelFooter
-				submitLabel={meta.updateMutation.isPending ? 'Saving…' : 'Save changes'}
-				onClose={onClose}
-				onSubmit={onSubmit}
-				submitDisabled={!canSubmit}
-			/>
-		</>
+		<form onSubmit={handleSubmitForm} className="flex flex-1 flex-col overflow-hidden">
+			{children}
+		</form>
 	);
-};
+}
 
 EditWalletForm.displayName = 'EditWalletForm';
 

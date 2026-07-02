@@ -1,4 +1,4 @@
-import type { WalletType, WalletGoalMeta } from "@entity/wallet";
+import type { WalletType, WalletGoalMeta } from "@entity/wallets";
 
 interface WalletValuableFields {
 	name: string

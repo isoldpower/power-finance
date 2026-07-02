@@ -1,4 +1,4 @@
-import type { ITransactionsRESTApiClient } from "@feature/transaction";
+import type { ITransactionsRESTApiClient } from "@feature/transactions";
 import { IStorage, LocalStorageMock } from "@internal/shared";
 import type {
 	TransactionDeleteRequest, TransactionDeleteResponse,

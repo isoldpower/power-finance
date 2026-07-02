@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { useConvertMoney } from "@feature/fx";
+import { useConvertMoney } from "@feature/localization";
 
 
 const useAccountsConvertion = () => {

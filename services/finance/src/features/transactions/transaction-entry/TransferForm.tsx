@@ -1,109 +1,43 @@
-import type { FC } from "react";
-import { useEffect, useState } from "react";
-
-import { currencySymbol, sanitizeAmountInput } from "@shared/utils";
-import { WalletSelect } from "@entity/wallet";
-import type { WalletSelectOption } from "@entity/wallet";
-import { FromIcon, ToIcon } from "@entity/transaction";
-import { PanelFooter } from "@entity/management";
-import { FieldLabel } from "@shared/components";
+import { useCallback } from "react";
+import type { FormEvent, ReactNode } from "react";
+import type { UseFormHandleSubmit } from "react-hook-form";
 
 import { useTransactionsListMethods } from "../data-presenters";
-import { useWalletsList } from "@feature/wallets";
-import { PanelWallet } from "@feature/TODO";
-
+import type { TransferSchema } from "./schemas.ts";
 
 interface TransferFormProps {
-	wallet?: PanelWallet;
-	onClose: () => void;
+	handleSubmit: UseFormHandleSubmit<TransferSchema>;
+	onSuccess?: () => void;
+	children?: ReactNode;
 }
 
-const TransferForm: FC<TransferFormProps> = ({ wallet, onClose }) => {
-	const { wallets } = useWalletsList();
+function TransferForm({ handleSubmit, onSuccess, children }: TransferFormProps) {
 	const { meta } = useTransactionsListMethods();
 
-	const [fromId, setFromId] = useState(wallet?.id ?? '');
-	const [toId, setToId] = useState('');
-	const [amount, setAmount] = useState('');
+	const onSubmit = useCallback((data: TransferSchema) => {
+		const numeric = parseFloat(data.amount);
+		if (Number.isNaN(numeric) || numeric <= 0) return;
+		if (data.fromId === '' || data.toId === '' || data.toId === data.fromId) return;
+		const abs = Math.abs(numeric).toFixed(2);
 
-	useEffect(() => {
-		if (wallets.length === 0) return;
-		setFromId((prev) => prev || wallets[0].id);
-	}, [wallets]);
-
-	useEffect(() => {
-		setToId((prev) => (prev !== '' && prev !== fromId) ? prev : (wallets.find((entry) => entry.id !== fromId)?.id ?? ''));
-	}, [wallets, fromId]);
-
-	const from = wallets.find((entry) => entry.id === fromId);
-	const to = wallets.find((entry) => entry.id === toId);
-	const numericAmount = parseFloat(amount);
-	const amountValid = !Number.isNaN(numericAmount) && numericAmount > 0;
-	const canSubmit = Boolean(from) && Boolean(to) && toId !== fromId && amountValid && !meta.createMutation.isPending;
-	const fromCurrency = from?.balance.currency ?? 'USD';
-
-	const walletOptions = (excludeId?: string): WalletSelectOption[] =>
-		wallets
-			.filter((entry) => entry.id !== excludeId)
-			.map((entry) => ({ id: entry.id, name: entry.name, currency: entry.balance.currency, gradient: 'rgba(0, 0, 0, 1)' }));
-
-	const onSubmit = () => {
-		if (!canSubmit) return;
-		const abs = Math.abs(numericAmount).toFixed(2);
 		Promise.all([
-			meta.createMutation.mutateAsync({ data: { source_wallet_id: fromId, amount: `-${abs}` } }),
-			meta.createMutation.mutateAsync({ data: { source_wallet_id: toId, amount: abs } }),
+			meta.createMutation.mutateAsync({ data: { source_wallet_id: data.fromId, amount: `-${abs}` } }),
+			meta.createMutation.mutateAsync({ data: { source_wallet_id: data.toId, amount: abs } }),
 		])
-			.then(() => { onClose(); })
+			.then(() => { onSuccess?.(); })
 			.catch((error: unknown) => { console.error(error); });
-	};
+	}, [meta, onSuccess]);
+
+	const handleSubmitForm = useCallback((e: FormEvent<HTMLFormElement>) => {
+		handleSubmit(onSubmit)(e).catch(console.error);
+	}, [handleSubmit, onSubmit]);
 
 	return (
-		<>
-			<div className="flex-1 overflow-auto p-5">
-				<FieldLabel>Wallets</FieldLabel>
-				<WalletSelect
-					leadingIcon={<FromIcon className="flex-none text-text-3" />}
-					options={walletOptions()}
-					value={fromId}
-					onChange={setFromId}
-					emptyLabel="No wallets yet"
-					className="mb-2"
-				/>
-
-				<WalletSelect
-					leadingIcon={<ToIcon className="flex-none text-text-3" />}
-					options={walletOptions(fromId)}
-					value={toId}
-					onChange={setToId}
-					emptyLabel="Add another wallet"
-					className="mb-2"
-				/>
-
-				<FieldLabel>Amount</FieldLabel>
-				<div className="mb-3 flex items-center gap-2 rounded-[var(--radius-md)] border-[1.5px] border-primary px-4 py-3.5 shadow-[0_0_0_3px_var(--accent-soft)]">
-					<span className="font-display text-2xl text-text-2">{currencySymbol(fromCurrency)}</span>
-					<input value={amount} onChange={(event) => { setAmount(sanitizeAmountInput(event.target.value)); }} inputMode="decimal" placeholder="0.00" className="min-w-0 flex-1 border-none bg-transparent font-display text-3xl font-semibold outline-none placeholder:text-[var(--text-3)]" />
-				</div>
-				{from && to ? (
-					<div className="text-xs leading-snug text-text-3">
-						Moves money from {from.name} to {to.name}. Posts a balanced transfer to the ledger.
-					</div>
-				) : (
-					<div className="text-xs leading-snug text-text-3">
-						Add a second wallet to transfer between accounts.
-					</div>
-				)}
-			</div>
-			<PanelFooter
-				submitLabel={meta.createMutation.isPending ? 'Sending…' : 'Send transfer'}
-				onClose={onClose}
-				onSubmit={onSubmit}
-				submitDisabled={!canSubmit}
-			/>
-		</>
+		<form onSubmit={handleSubmitForm} className="flex flex-1 flex-col overflow-hidden">
+			{children}
+		</form>
 	);
-};
+}
 
 TransferForm.displayName = 'TransferForm';
 

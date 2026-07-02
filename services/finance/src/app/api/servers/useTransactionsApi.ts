@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
-import { TransactionDjangoRESTApiClient, TransactionMockRESTApiClient } from "@feature/transaction";
-import type { ITransactionsRESTApiClient } from "@feature/transaction";
+import { TransactionDjangoRESTApiClient, TransactionMockRESTApiClient } from "@feature/transactions";
+import type { ITransactionsRESTApiClient } from "@feature/transactions";
 import { useAxiosInstance } from "@internal/shared";
 
 const USE_DJANGO_BACKEND: boolean = false;

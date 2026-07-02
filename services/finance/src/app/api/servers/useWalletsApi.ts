@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { IWalletsRESTApiClient, WalletsDjangoRESTApiClient, WalletsMockRESTApiClient } from "@feature/wallet";
+import { IWalletsRESTApiClient, WalletsDjangoRESTApiClient, WalletsMockRESTApiClient } from "@feature/wallets";
 import { useAxiosInstance } from "@internal/shared";
 
 const USE_DJANGO_BACKEND: boolean = false;

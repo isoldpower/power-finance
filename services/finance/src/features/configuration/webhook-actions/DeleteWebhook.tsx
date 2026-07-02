@@ -2,8 +2,8 @@ import { useCallback } from "react";
 import type { FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
 
-import { useWebhookMethods } from "@feature/settings";
-import type { DeleteWebhookResponse } from "@feature/settings";
+import { useWebhookMethods } from "@feature/configuration";
+import type { DeleteWebhookResponse } from "@feature/configuration";
 import type { DeletedWebhookSchema } from "./schemas.ts";
 
 

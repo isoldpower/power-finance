@@ -10,7 +10,8 @@ import reactDom from 'eslint-plugin-react-dom'
 export default tseslint.config(
   {
 	  ignores: [
-		'dist'
+		'dist',
+		'coverage'
 	  ]
 	},
 	{

@@ -12,10 +12,21 @@ interface MockAccount {
 interface MockAccountCategory {
 	id: string;
 	label: string;
-	color: string;
 	totalUsd: number;
 	accounts: MockAccount[];
 }
 
+interface AccountHistoryEntry {
+	id: string;
+	icon: string;
+	iconClass: string;
+	description: string;
+	date: string;
+	side: string;
+	sideTone: Tone;
+	amountUsd: number;
+	amountTone: Tone;
+}
 
-export type { MockAccount, MockAccountCategory };
+
+export type { MockAccount, MockAccountCategory, AccountHistoryEntry };
