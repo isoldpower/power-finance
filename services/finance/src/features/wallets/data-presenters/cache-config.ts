@@ -5,6 +5,7 @@ export const WALLETS_CACHE_KEYS = {
 	update: 'updateWallet',
 	replace: 'replaceWallet',
 	create: 'createWallet',
+	search: 'searchWallet',
 };
 
 export const GOALS_CACHE_KEYS = {

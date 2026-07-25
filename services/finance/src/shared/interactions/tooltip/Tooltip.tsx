@@ -1,13 +1,18 @@
 import type { FC, ReactNode } from "react";
 import { FinanceTooltip } from "@internal/ui-library";
 
+
 interface TooltipProps {
 	content: ReactNode;
 	children: ReactNode;
 }
 
 const Tooltip: FC<TooltipProps> = ({ content, children }) => (
-	<FinanceTooltip content={content}>{children}</FinanceTooltip>
+	<FinanceTooltip content={content}>
+		<div className="cursor-help">
+			{children}
+		</div>
+	</FinanceTooltip>
 );
 
 Tooltip.displayName = 'Tooltip';

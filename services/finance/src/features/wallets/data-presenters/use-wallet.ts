@@ -8,6 +8,7 @@ import { WALLETS_CACHE_KEYS } from "./cache-config.ts";
 import type { Wallet } from "@entity/wallets";
 import type { FetchWalletResponse } from "@feature/wallets";
 
+
 type UseWalletOptions = Omit<UseQueryOptions<FetchWalletResponse>, 'queryKey' | 'queryFn'> & {};
 
 type UseWalletReturn = UseQueryResult & {

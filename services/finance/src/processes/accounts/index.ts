@@ -1,1 +1,1 @@
-export * from './chart-of-accounts';
+export * from './browse-accounts';

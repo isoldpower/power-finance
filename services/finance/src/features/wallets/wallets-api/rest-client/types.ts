@@ -4,16 +4,26 @@ import type {
 	ListRequest, ListResponse, IListHandler,
 	PatchRequest, PatchResponse, IPatchHandler,
 	PostRequest, PostResponse, IPostHandler,
-	PutRequest, PutResponse, IPutHandler
+	PutRequest, PutResponse, IPutHandler, ListParams,
 } from "@internal/shared";
-import type { WalletDetailed, WalletMinimalPayload, WalletPreview, WalletValuableFields } from "../types.ts";
+import type {
+	WalletDetailed,
+	WalletMinimalPayload,
+	WalletPreview,
+	WalletSearchRoot,
+	WalletValuableFields
+} from "../types.ts";
 
-interface IWalletsRESTApiClient extends IGetHandler<object, WalletDetailed>,
+
+interface IWalletsRESTApiClient extends 
+	IGetHandler<object, WalletDetailed>,
 	IPostHandler<WalletMinimalPayload, WalletDetailed>,
 	IListHandler<WalletPreview>,
 	IPatchHandler<WalletMinimalPayload, WalletDetailed>,
 	IPutHandler<WalletMinimalPayload, WalletDetailed>,
-	IDeleteHandler {
+	IDeleteHandler 
+{
+	search: (request: PostRequest<WalletSearchRoot, ListParams>) => Promise<ListResponse<WalletPreview>>
 }
 
 type WalletGetRequest = GetRequest<object>;
@@ -21,6 +31,9 @@ type WalletGetResponse = GetResponse<WalletDetailed>;
 
 type WalletPostRequest = PostRequest<WalletValuableFields, object>;
 type WalletPostResponse = PostResponse<WalletDetailed>;
+
+type WalletsSearchRequest = PostRequest<WalletSearchRoot, ListParams>;
+type WalletsSearchResponse = ListResponse<WalletPreview>;
 
 type WalletListRequest = ListRequest;
 type WalletListResponse = ListResponse<WalletPreview>;
@@ -40,4 +53,5 @@ export type {WalletListRequest, WalletListResponse};
 export type {WalletPatchRequest, WalletPatchResponse};
 export type {WalletPutRequest, WalletPutResponse};
 export type {WalletDeleteRequest, WalletDeleteResponse};
+export type {WalletsSearchRequest, WalletsSearchResponse};
 export type {IWalletsRESTApiClient};

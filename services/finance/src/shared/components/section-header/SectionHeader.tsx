@@ -1,27 +1,49 @@
 import type { FC, ReactNode } from "react";
 
+
 interface SectionHeaderProps {
-	title: ReactNode;
-	caption?: ReactNode;
-	action?: ReactNode;
+	children: ReactNode;
 }
 
-const SectionHeader: FC<SectionHeaderProps> = ({ title, caption, action }) => {
+const SectionHeader: FC<SectionHeaderProps> = ({ children }) => {
 	return (
 		<div className="mx-0.5 mb-3 flex items-baseline gap-3">
-			<span className="font-display text-base font-semibold tracking-[-0.01em]">{title}</span>
-			{caption ? (
-				<span className="hidden font-numeric text-[10.5px] uppercase tracking-[0.08em] text-text-3 sm:block">
-					{caption}
-				</span>
-			) : null}
-			<div className="h-px flex-1 bg-border" />
-			{action}
+			{children}
 		</div>
+	);
+};
+
+const SectionHeaderBorder: FC = () => {
+	return (
+		<div className="h-px flex-1 bg-border" />
+	);
+};
+
+interface SectionHeaderTitleProps {
+	children: ReactNode;
+}
+
+const SectionHeaderTitle: FC<SectionHeaderTitleProps> = ({ children }) => {
+	return (
+		<span className="font-display text-base font-semibold tracking-[-0.01em]">
+			{children}
+		</span>
+	);
+};
+
+interface SectionHeaderCaptionProps {
+	children: ReactNode;
+}
+
+const SectionHeaderCaption: FC<SectionHeaderCaptionProps> = ({ children }) => {
+	return (
+		<span className="hidden font-numeric text-[10.5px] uppercase tracking-[0.08em] text-text-3 sm:flex">
+			{children}
+		</span>
 	);
 };
 
 SectionHeader.displayName = 'SectionHeader';
 
-export { SectionHeader };
-export type { SectionHeaderProps };
+export { SectionHeader, SectionHeaderTitle, SectionHeaderCaption, SectionHeaderBorder };
+export type { SectionHeaderProps, SectionHeaderTitleProps, SectionHeaderCaptionProps };

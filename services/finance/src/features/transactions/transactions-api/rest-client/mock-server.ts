@@ -28,7 +28,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 					id: value.id,
 					amount: value.amount,
 					currency_code: value.currency_code,
-					source_wallet: {
+					wallet: {
 						id: value.source_wallet_id,
 						name: '',
 						balance: { amount: 0, currency: '' },
@@ -50,7 +50,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 				id: stored.id,
 				amount: stored.amount,
 				currency_code: stored.currency_code,
-				source_wallet: {
+				wallet: {
 					id: stored.source_wallet_id,
 					name: '',
 					balance: { amount: 0, currency: '' },
@@ -76,7 +76,11 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 					id: v.id,
 					amount: v.amount,
 					currency_code: v.currency_code,
-					source_wallet_id: v.source_wallet_id,
+					wallet: {
+						id: v.source_wallet_id,
+						name: '',
+						balance: { amount: 0, currency: '' },
+					},
 					created_at: v.created_at,
 				})),
 				meta: {

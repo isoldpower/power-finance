@@ -1,22 +1,26 @@
 import type { LedgerBalance } from "@feature/metrics";
-import {FC} from "react";
-import {FinanceBadge} from "@internal/ui-library";
+import { FinanceBadge } from "@internal/ui-library";
+
+import type { FC } from "react";
+import { BalanceBadgeFx } from "@feature/metrics";
 
 
 interface LedgerBalanceBadgeProps {
 	ledger: LedgerBalance | undefined;
+	isPending: boolean;
 }
 
 const LedgerBalanceBadge: FC<LedgerBalanceBadgeProps> = ({
-	ledger
+	isPending,
+	ledger,
 }) => {
-	return ledger?.balanced
-		? (
-			<FinanceBadge tone="pos" appearance="soft" dot>balanced</FinanceBadge>
-		)
-		: (
-			<FinanceBadge tone="neg" appearance="soft" dot>out-of-balance</FinanceBadge>
-		);
+	return (
+		<BalanceBadgeFx isPending={isPending}>
+			<FinanceBadge tone={ledger?.balanced ? "pos" : "neg"} appearance="soft" dot>
+				{ledger?.balanced ? "balanced" : "out-of-balance"}
+			</FinanceBadge>
+		</BalanceBadgeFx>
+	);
 }
 
 export { LedgerBalanceBadge };

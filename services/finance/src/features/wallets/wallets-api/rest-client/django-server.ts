@@ -11,7 +11,7 @@ import {
 	WalletPostRequest,
 	WalletPostResponse,
 	WalletPutRequest,
-	WalletPutResponse
+	WalletPutResponse, WalletsSearchRequest, WalletsSearchResponse
 } from "./types.ts";
 import { AxiosInstance } from "axios";
 import type { WalletDetailed, WalletPreview } from "../types.ts";
@@ -51,6 +51,19 @@ class WalletsDjangoRESTApiClient implements IWalletsRESTApiClient {
 		}
 
 		return requestPostfix;
+	}
+	
+	public search(
+		request: WalletsSearchRequest,
+	): Promise<WalletsSearchResponse> {
+		const postfix = this.resolvePostfix(request.params);
+		const searchPayload = { 'filter_body': request.data };
+		
+		return this.axiosInstance.post<WalletsSearchResponse>(`/search/${postfix}`, searchPayload)
+			.then((response) => ({
+				...response.data,
+				data: response.data.data.map(parseWalletPreview),
+			}));
 	}
 
 	public get(

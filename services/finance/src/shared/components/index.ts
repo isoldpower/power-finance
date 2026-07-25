@@ -6,6 +6,8 @@ export * from './fx';
 export * from './global-layout';
 export * from './list';
 export * from './overlay';
+export * from './paginated-browser';
 export * from './section-header';
 export * from './typography';
 export * from './containers';
+export * from './slide-over';

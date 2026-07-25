@@ -68,6 +68,7 @@ const TransactionsTable: FC<TransactionsTableProps> = ({
 			) : (
 				pageRows.map((row) => {
 					const main = convert({ amount: row.amount, currency: row.currency });
+					
 					return (
 						<TransactionRow
 							key={row.id}

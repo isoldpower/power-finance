@@ -3,5 +3,5 @@ import { lazy } from "react";
 export const ManagementPageLazy = lazy(() => import('./ManagementPage.tsx'));
 
 export { ManagementPage } from './ManagementPage.tsx';
-export { searchSchema } from './searchSchema.ts';
-export type { ManagementSearch } from './searchSchema.ts';
+export { searchSchema } from './search-schema.ts';
+export type { ManagementSearch } from './search-schema.ts';

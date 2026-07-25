@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import type { PanelMode, PanelWallet } from "@feature/wallets";
+import type { PanelWallet } from "@feature/wallets";
 import { AddTransactionForm } from "@widget/transactions/transaction-entry/AddTransactionForm.tsx";
 import { ScanReceiptForm } from "@widget/transactions/transaction-entry/ScanReceiptForm.tsx";
 import { TransferForm } from "@widget/transactions/transaction-entry/TransferForm.tsx";
@@ -11,7 +11,7 @@ interface TransactionEntryPanelProps {
 	mode: TransactionEntryMode;
 	wallet?: PanelWallet;
 	onClose: () => void;
-	onSwitch: (mode: PanelMode) => void;
+	onSwitch: (newPanel: string) => void;
 }
 
 const TransactionEntryPanel: FC<TransactionEntryPanelProps> = ({ mode, wallet, onClose, onSwitch }) => {

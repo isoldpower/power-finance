@@ -14,7 +14,7 @@ const meta = {
 			},
 		},
 	},
-	args: { label: "Balance", value: "$4,820.50" },
+	args: { label: "Balance", children: "$4,820.50" },
 	argTypes: {
 		size: { control: "inline-radio", options: ["sm", "md", "lg"] },
 	},
@@ -28,11 +28,17 @@ export const Ledger: Story = {
 	parameters: { docs: { description: { story: "The double-entry identity rendered as three stats." } } },
 	render: () => (
 		<div className="flex flex-wrap items-center gap-5">
-			<FinanceStat size="md" label="Assets" value="$18,880.50" />
+			<FinanceStat size="md" label="Assets">
+				$18,880.50
+			</FinanceStat>
 			<span className="text-lg text-text-3">−</span>
-			<FinanceStat size="md" label="Liabilities" value="$640.20" />
+			<FinanceStat size="md" label="Liabilities">
+				$640.20
+			</FinanceStat>
 			<span className="text-lg text-text-3">=</span>
-			<FinanceStat size="md" label="Equity" value="$18,240.30" />
+			<FinanceStat size="md" label="Equity">
+				$18,240.30
+			</FinanceStat>
 		</div>
 	),
 };

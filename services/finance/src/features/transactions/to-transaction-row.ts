@@ -11,7 +11,7 @@ const toTransactionRow = (
 ): TransactionRowView => {
 	const amount = parseFloat(dto.amount);
 	const created = new Date(dto.created_at);
-	const wallet = walletById.get(dto.source_wallet_id);
+	const wallet = walletById.get(dto.source_wallet.id);
 	const walletName = wallet?.name ?? 'Unknown wallet';
 	const currency = wallet?.currency ?? (dto.currency_code || 'USD');
 	const absFormatted = formatMoney(Math.abs(amount), currency);
@@ -21,7 +21,7 @@ const toTransactionRow = (
 		id: dto.id,
 		amount,
 		currency,
-		walletId: dto.source_wallet_id,
+		walletId: dto.source_wallet.id,
 		walletName,
 		createdAt: dto.created_at,
 		date: created.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),

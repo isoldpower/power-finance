@@ -44,6 +44,18 @@ interface WalletPreview {
 
 type WalletMinimalPayload = WalletValuableFields;
 
+interface WalletSearchLeaf {
+	field_name: string;
+	operator: string;
+	value: string;
+}
+
+type WalletSearchNode = WalletSearchLeaf | WalletSearchRoot;
+
+type WalletSearchRoot =
+	| { AND: WalletSearchNode[]; OR?: never }
+	| { OR: WalletSearchNode[]; AND?: never };
+
 interface Goal {
 	id: string;
 	icon: string;
@@ -64,5 +76,5 @@ interface GoalCreatePayload {
 	color?: string;
 }
 
-export type { WalletPreview, WalletDetailed, WalletMeta, WalletValuableFields, WalletMinimalPayload };
+export type { WalletPreview, WalletDetailed, WalletMeta, WalletValuableFields, WalletMinimalPayload, WalletSearchRoot, WalletSearchNode, WalletSearchLeaf };
 export type { Goal, GoalCreatePayload };

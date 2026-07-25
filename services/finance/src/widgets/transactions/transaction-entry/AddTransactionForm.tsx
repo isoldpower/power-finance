@@ -14,10 +14,10 @@ import type { WalletSelectOption } from "@entity/wallets";
 import { TransferGlyph, FromIcon, ToIcon, ScanReceiptIcon } from "@entity/transactions";
 import { PanelFooter, FieldLabel } from "@shared/components";
 import { MOCK_TXN_CATEGORIES } from "@feature/transactions";
-import type { PanelMode } from "@feature/wallets";
+
 
 interface AddTransactionFormProps {
-	onSwitch: (mode: PanelMode) => void;
+	onSwitch: (newPanel: string) => void;
 	onClose: () => void;
 }
 
@@ -53,7 +53,7 @@ const AddTransactionForm: FC<AddTransactionFormProps> = ({ onSwitch, onClose }) 
 			<div className="flex-1 overflow-auto p-5">
 				<button
 					type="button"
-					onClick={() => { onSwitch('scan'); }}
+					onClick={() => { onSwitch('scan-receipt'); }}
 					className="mb-[18px] flex w-full items-center gap-2.5 rounded-[var(--radius-md)] border border-dashed border-[var(--accent-border)] bg-[var(--accent-soft)] px-3.5 py-2.5 text-left transition-colors hover:border-primary"
 				>
 					<ScanReceiptIcon size={18} className="flex-none text-primary" />
@@ -139,4 +139,3 @@ const AddTransactionForm: FC<AddTransactionFormProps> = ({ onSwitch, onClose }) 
 AddTransactionForm.displayName = 'AddTransactionForm';
 
 export { AddTransactionForm };
-export type { AddTransactionFormProps };

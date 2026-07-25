@@ -12,7 +12,7 @@ interface TransactionPreviewDto {
 	id: string;
 	amount: string;
 	currency_code: string;
-	source_wallet_id: string;
+	source_wallet: Wallet;
 	created_at: string;
 }
 

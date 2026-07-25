@@ -1,0 +1,1 @@
+export { WalletSwatch } from './WalletSwatch.tsx';

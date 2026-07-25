@@ -7,7 +7,7 @@ const filterRelatedTransactions = (
 ) => {
 	return transactions.filter((transaction) => {
 		const displayAll = !walletId;
-		const isSource = transaction.source_wallet_id === walletId;
+		const isSource = transaction.source_wallet.id === walletId;
 
 		return displayAll || isSource;
 	});

@@ -44,9 +44,13 @@ function FinanceWalletCard({
 					</FinanceBadge>
 				) : null}
 			</div>
-			<FinanceStat size="lg" label="Balance" value={balance} />
+			<FinanceStat size="lg" label="Balance">
+				{balance}
+			</FinanceStat>
 			{updatedAgo ? (
-				<div className="border-t border-border pt-2.5 text-[11.5px] text-text-3">{updatedAgo}</div>
+				<div className="border-t border-border pt-2.5 text-[11.5px] text-text-3">
+					{updatedAgo}
+				</div>
 			) : null}
 		</FinanceCard>
 	);

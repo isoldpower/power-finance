@@ -1,6 +1,7 @@
 import {v4 as uuidv4} from "uuid";
 
 import type {Wallet} from "@entity/wallets";
+import type {WalletSearchLeaf, WalletSearchNode, WalletSearchRoot} from "../types.ts";
 import type {IStorage} from "@internal/shared";
 import {LocalStorageMock} from "@internal/shared";
 
@@ -18,7 +19,7 @@ import {
 	WalletPostRequest,
 	WalletPostResponse,
 	WalletPutRequest,
-	WalletPutResponse
+	WalletPutResponse, WalletsSearchRequest, WalletsSearchResponse
 } from "./types.ts";
 
 
@@ -28,14 +29,70 @@ interface StoredTransaction {
 	amount: string;
 }
 
+function resolveField(wallet: Wallet, path: string): unknown {
+	return path.split(".").reduce<unknown>(
+		(node, key) => (node && typeof node === "object") ? (node as Record<string, unknown>)[key] : undefined,
+		wallet,
+	);
+}
+
+function matchesLeaf(wallet: Wallet, leaf: WalletSearchLeaf): boolean {
+	const field = resolveField(wallet, leaf.field_name);
+	if (field === undefined || field === null) return false;
+
+	const fieldString = String(field);
+	const fieldNumber = typeof field === "number" ? field : parseFloat(fieldString);
+	const valueNumber = parseFloat(leaf.value);
+	const bothNumeric = !Number.isNaN(fieldNumber) && !Number.isNaN(valueNumber);
+
+	switch (leaf.operator) {
+		case "exact":
+		case "eq":
+			return bothNumeric ? fieldNumber === valueNumber : fieldString === leaf.value;
+		case "iexact":
+			return fieldString.toLowerCase() === leaf.value.toLowerCase();
+		case "contains":
+			return fieldString.includes(leaf.value);
+		case "icontains":
+			return fieldString.toLowerCase().includes(leaf.value.toLowerCase());
+		case "startswith":
+			return fieldString.startsWith(leaf.value);
+		case "istartswith":
+			return fieldString.toLowerCase().startsWith(leaf.value.toLowerCase());
+		case "endswith":
+			return fieldString.endsWith(leaf.value);
+		case "iendswith":
+			return fieldString.toLowerCase().endsWith(leaf.value.toLowerCase());
+		case "gt":
+			return bothNumeric && fieldNumber > valueNumber;
+		case "gte":
+			return bothNumeric && fieldNumber >= valueNumber;
+		case "lt":
+			return bothNumeric && fieldNumber < valueNumber;
+		case "lte":
+			return bothNumeric && fieldNumber <= valueNumber;
+		default:
+			return false;
+	}
+}
+
+function matchesNode(wallet: Wallet, node: WalletSearchNode): boolean {
+	if ("AND" in node && node.AND) return node.AND.every((child) => matchesNode(wallet, child));
+	if ("OR" in node && node.OR) return node.OR.some((child) => matchesNode(wallet, child));
+	return matchesLeaf(wallet, node as WalletSearchLeaf);
+}
+
+function matchesSearch(wallet: Wallet, root: WalletSearchRoot | undefined): boolean {
+	if (!root) return true;
+	return matchesNode(wallet, root);
+}
+
 class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 	private readonly storage: IStorage<Wallet>;
 	private readonly transactions: IStorage<StoredTransaction>;
 
 	constructor(_key: string) {
 		this.storage = new LocalStorageMock<Wallet>(_key);
-		// Balances are derived from the transactions ledger so they stay in sync once
-		// a transaction is created and the wallets query is re-fetched.
 		this.transactions = new LocalStorageMock<StoredTransaction>('transactions');
 	}
 
@@ -44,7 +101,10 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 			(sum, txn) => txn.source_wallet_id === wallet.id ? sum + (parseFloat(txn.amount) || 0) : sum,
 			0
 		);
-		return { ...wallet, balance: { ...wallet.balance, amount: wallet.balance.amount + delta } };
+		return { 
+			...wallet,
+			balance: { ...wallet.balance, amount: wallet.balance.amount + delta } 
+		};
 	}
 
 	public get(
@@ -57,6 +117,29 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 
 				return flatToWalletDetailed(this.withLiveBalance(value));
 			});
+	}
+	
+	public search(
+		request: WalletsSearchRequest,
+	): Promise<WalletsSearchResponse> {
+		const filteredItems = this.storage.list()
+			.map((value) => this.withLiveBalance(value))
+			.filter((value) => matchesSearch(value, request.data));
+		const start = request.params?.offset ?? 0;
+		const end = request.params?.limit
+			? start + request.params.limit
+			: filteredItems.length;
+
+		return new Promise((resolve) => setTimeout(resolve, 250))
+			.then(() => filteredItems.slice(start, end))
+			.then((values) => ({
+				data: values.map((value) => flatToWalletPreview(value)),
+				meta: {
+					total: filteredItems.length,
+					offset: request.params?.offset ?? 0,
+					limit: end - start,
+				}
+			}));
 	}
 
 	public post(

@@ -3,6 +3,7 @@ import type { FC } from "react";
 import { MoneyInOriginal } from "@entity/localization";
 import type { Tone } from "@shared/utils";
 
+
 interface ActivityRowData {
 	id: string;
 	icon: string;
@@ -34,7 +35,7 @@ const ActivityRow: FC<ActivityRowProps> = ({ row, convert, format }) => (
 			</div>
 		</div>
 		<div className="text-right">
-			<MoneyInOriginal amount={row.amount} currency={row.currency} tone={row.tone} size="sm" align="end" convert={convert} format={format} />
+			<MoneyInOriginal currency={row.currency} tone={row.tone} size="sm" align="end" convert={convert} format={format}>{row.amount}</MoneyInOriginal>
 			<div className="font-numeric text-[10.5px] text-text-3">{row.date}</div>
 		</div>
 	</div>

@@ -1,6 +1,7 @@
 import type { FC, ReactNode } from "react";
+import { createPortal } from "react-dom";
 
-import { SlideOver, DisclosureTrigger } from "@shared/components";
+import { DisclosureTrigger } from "@shared/components";
 import { useDisclosure } from "../disclosure/use-disclosure.ts";
 
 interface SlideOverPanelProps {
@@ -23,9 +24,26 @@ const SlideOverPanel: FC<SlideOverPanelProps> = ({ trigger, title, onClose, chil
 	return (
 		<>
 			<DisclosureTrigger onOpen={onOpen}>{trigger}</DisclosureTrigger>
-			<SlideOver open={open} onClose={close} title={title}>
-				{children({ close })}
-			</SlideOver>
+			{open ? createPortal(
+				<div className="finance-theme">
+					<div onClick={close} className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px]" />
+					<div className="fixed inset-y-0 right-0 z-[41] flex w-[440px] max-w-[92vw] flex-col border-l border-border bg-card shadow-[var(--shadow-lg)] animate-in slide-in-from-right duration-200">
+						<div className="flex items-center gap-2.5 border-b border-border px-5 py-4">
+							<span className="flex-1 font-display text-[17px] font-semibold">{title}</span>
+							<button
+								type="button"
+								onClick={close}
+								aria-label="Close"
+								className="text-text-3 transition-colors hover:text-foreground"
+							>
+								✕
+							</button>
+						</div>
+						{children({ close })}
+					</div>
+				</div>,
+				document.body
+			) : null}
 		</>
 	);
 };

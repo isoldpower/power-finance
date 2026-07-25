@@ -1,8 +1,29 @@
-import type { PanelWallet } from "../types.ts";
-
-interface BrowserWallet extends PanelWallet {
-	type?: string;
-	updated: string;
+interface WalletsSearch {
+	search?: string;
+	caseSensitive: boolean;
 }
 
-export type { BrowserWallet };
+interface WalletsFiltering {
+	typeFilter: string;
+}
+
+type OrderingType = 'ASC' | 'DESC';
+
+interface WalletsOrdering {
+	field: string;
+	direction: OrderingType;
+}
+
+interface WalletsBrowseSetup {
+	search: WalletsSearch;
+	filters: WalletsFiltering;
+	ordering: WalletsOrdering;
+}
+
+export type {
+	WalletsSearch,
+	WalletsFiltering,
+	WalletsOrdering,
+	OrderingType,
+	WalletsBrowseSetup,
+};
