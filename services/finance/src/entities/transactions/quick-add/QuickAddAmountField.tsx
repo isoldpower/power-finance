@@ -11,28 +11,34 @@ interface QuickAddAmountFieldProps {
 	currency: string;
 	value: string;
 	onChange: (value: string) => void;
+	label?: string;
 	className?: string;
 }
 
-const QuickAddAmountField: FC<QuickAddAmountFieldProps> = ({ type, currency, value, onChange, className }) => {
+const QuickAddAmountField: FC<QuickAddAmountFieldProps> = ({ type, currency, value, onChange, label, className }) => {
 	const signColor = TRANSACTION_TYPE_TONE[type];
 	const isTransfer = type === 'transfer';
 
 	return (
-		<div className={cn("flex items-center gap-2 rounded-[var(--radius-md)] border border-border-strong px-3.5 py-2.5", className)}>
-			{isTransfer ? (
-				<TransferGlyph className={signColor} />
-			) : (
-				<span className={cn("font-display text-2xl", signColor)}>{type === 'income' ? '+' : '−'}</span>
-			)}
-			<span className={cn("font-display text-3xl font-semibold", signColor)}>{currencySymbol(currency)}</span>
-			<input
-				value={value}
-				onChange={(event) => { onChange(sanitizeAmountInput(event.target.value)); }}
-				inputMode="decimal"
-				placeholder="0.00"
-				className={cn("w-full min-w-0 flex-1 border-none bg-transparent p-0 font-display text-3xl font-semibold outline-none placeholder:text-[var(--text-3)]", signColor)}
-			/>
+		<div className={className}>
+			{label ? (
+				<span className="mb-1 block font-numeric text-[10px] uppercase text-text-3">{label}</span>
+			) : null}
+			<div className="flex items-center gap-2 rounded-[var(--radius-md)] border border-border-strong px-3.5 py-2.5">
+				{isTransfer ? (
+					<TransferGlyph className={signColor} />
+				) : (
+					<span className={cn("font-display text-2xl", signColor)}>{type === 'income' ? '+' : '−'}</span>
+				)}
+				<span className={cn("font-display text-3xl font-semibold", signColor)}>{currencySymbol(currency)}</span>
+				<input
+					value={value}
+					onChange={(event) => { onChange(sanitizeAmountInput(event.target.value)); }}
+					inputMode="decimal"
+					placeholder="0.00"
+					className={cn("w-full min-w-0 flex-1 border-none bg-transparent p-0 font-display text-3xl font-semibold outline-none placeholder:text-[var(--text-3)]", signColor)}
+				/>
+			</div>
 		</div>
 	);
 };

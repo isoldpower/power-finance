@@ -2,6 +2,7 @@ import type { ITransactionsRESTApiClient } from "@feature/transactions";
 import type { Wallet } from "@entity/wallets";
 import { IStorage, LocalStorageMock } from "@internal/shared";
 import type {
+	TransactionChainRequest, TransactionChainResponse,
 	TransactionDeleteRequest, TransactionDeleteResponse,
 	TransactionGetRequest, TransactionGetResponse,
 	TransactionListRequest, TransactionListResponse,
@@ -10,7 +11,8 @@ import type {
 } from "./types.ts";
 import type { TransactionDetailed, TransactionPreview, TransactionPreviewWallet } from "../types.ts";
 import type { WalletPreview } from "@feature/wallets/wallets-api/types.ts";
-import { StorageTransaction, createTransactionFromMinimalPayload, directionFromAmount } from "./utils.ts";
+import { v4 as uuidv4 } from "uuid";
+import { StorageTransaction, createTransactionFromMinimalPayload, directionFromAmount, orderChain } from "./utils.ts";
 
 
 class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
@@ -72,6 +74,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 			note: value.note ?? '',
 			receipt: value.receipt,
 			wallet: this.walletPreview(value.source_wallet_id),
+			chain_id: value.chain_id,
 			meta: {
 				id: value.id,
 				created_at: value.created_at,
@@ -101,6 +104,25 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => { this.storage.add(stored); })
 			.then(() => this.toDetailed(stored));
+	}
+
+	public chain(
+		request: TransactionChainRequest
+	): Promise<TransactionChainResponse> {
+		const chainId = uuidv4();
+		const legs = orderChain(request.data.transactions).map((item) => {
+			const stored = createTransactionFromMinimalPayload(item);
+			stored.chain_id = chainId;
+			stored.currency_code = this.wallets.get(item.source_wallet_id)?.balance.currency ?? '';
+			return stored;
+		});
+
+		return new Promise((resolve) => setTimeout(resolve, 250))
+			.then(() => { legs.forEach((leg) => { this.storage.add(leg); }); })
+			.then(() => ({
+				chain_id: chainId,
+				transactions: legs.map((leg) => this.toDetailed(leg)),
+			}));
 	}
 
 	public list(

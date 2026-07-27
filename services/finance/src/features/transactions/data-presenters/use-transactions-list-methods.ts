@@ -5,23 +5,29 @@ import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import { useApiContext, DERIVED_KEYS } from "@app/api";
 import {
 	createTransaction as createTransactionApi,
-	listAllTransactions as listAllTransactionsApi
+	createTransactionChain as createTransactionChainApi,
+	listAllTransactions as listAllTransactionsApi,
 } from "@feature/transactions";
 import { CACHE_KEYS } from "./config.ts";
 import type {
 	CreateTransactionRequest,
 	CreateTransactionResponse,
+	CreateTransactionChainResponse,
 	TransactionMinimalPayload,
+	TransactionChainPayload,
 	ListAllTransactionsResponse
 } from "@feature/transactions";
+
 
 interface UseTransactionsReturn {
 	meta: {
 		query: UseQueryResult<ListAllTransactionsResponse>;
 		createMutation: UseMutationResult<CreateTransactionResponse, Error, CreateTransactionRequest['payload']>;
+		chainMutation: UseMutationResult<CreateTransactionChainResponse, Error, TransactionChainPayload>;
 	}
-	createTransaction: (data: TransactionMinimalPayload) => void;
-	fetchAllTransactions: () => void;
+	createTransaction: (data: TransactionMinimalPayload) => Promise<CreateTransactionResponse>;
+	createTransactionChain: (data: TransactionChainPayload) => Promise<CreateTransactionChainResponse>;
+	fetchAllTransactions: () => Promise<ListAllTransactionsResponse | undefined>;
 }
 
 const useTransactionsListMethods = (): UseTransactionsReturn => {
@@ -38,42 +44,62 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 		})
 	});
 
+	const settleLedger = useCallback(() => {
+		query.refetch().catch((err: unknown) => {
+			console.error(err)
+		});
+		for (const key of DERIVED_KEYS.onLedgerChange) {
+			void client.invalidateQueries({ queryKey: [key] });
+		}
+	}, [query, client]);
+
 	const createMutation = useMutation({
 		mutationFn: (data: CreateTransactionRequest['payload']) => createTransactionApi({
 			payload: data,
 			handler: apiContext.transactionServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.create],
-		onSettled: () => {
-			query.refetch().catch((err: unknown) => {
-				console.error(err)
-			});
-			for (const key of DERIVED_KEYS.onLedgerChange) {
-				void client.invalidateQueries({ queryKey: [key] });
-			}
-		}
+		onSettled: settleLedger
+	});
+
+	const chainMutation = useMutation({
+		mutationFn: (data: TransactionChainPayload) => createTransactionChainApi({
+			payload: { data },
+			handler: apiContext.transactionServers.rest
+		}),
+		mutationKey: [CACHE_KEYS.chain],
+		onSettled: settleLedger
 	});
 
 	const createTransaction = useCallback((
 		data: TransactionMinimalPayload
-	) => {
-		createMutation.mutate({ data });
+	): Promise<CreateTransactionResponse> => {
+		return createMutation.mutateAsync({ data });
 	}, [createMutation]);
 
+	const createTransactionChain = useCallback((
+		data: TransactionChainPayload
+	): Promise<CreateTransactionChainResponse> => {
+		return chainMutation.mutateAsync(data);
+	}, [chainMutation]);
+
 	const fetchAllTransactions = useCallback(() => {
-		return query.refetch();
+		return query.refetch()
+			.then((response) => response.data);
 	}, [query]);
 
 	const meta = useMemo(() => ({
 		createMutation,
+		chainMutation,
 		query
-	}), [createMutation, query]);
+	}), [createMutation, chainMutation, query]);
 
 	return useMemo(() => ({
 		createTransaction,
+		createTransactionChain,
 		fetchAllTransactions,
 		meta
-	}), [meta, createTransaction, fetchAllTransactions]);
+	}), [meta, createTransaction, createTransactionChain, fetchAllTransactions]);
 }
 
 export { useTransactionsListMethods };

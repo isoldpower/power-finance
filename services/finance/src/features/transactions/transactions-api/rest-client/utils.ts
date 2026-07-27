@@ -1,4 +1,4 @@
-import type { TransactionDirection, TransactionMinimalPayload, TransactionReceipt } from "../types.ts";
+import type { TransactionChainItem, TransactionDirection, TransactionMinimalPayload, TransactionReceipt } from "../types.ts";
 import { v4 as uuidv4 } from "uuid";
 
 interface StorageTransaction {
@@ -13,6 +13,7 @@ interface StorageTransaction {
 	note: string;
 	created_at: string;
 	receipt?: TransactionReceipt;
+	chain_id?: string;
 }
 
 const directionFromAmount = (amount: string): TransactionDirection => {
@@ -38,5 +39,26 @@ const createTransactionFromMinimalPayload = (
 	};
 };
 
-export { createTransactionFromMinimalPayload, directionFromAmount };
+const orderChain = (items: TransactionChainItem[]): TransactionChainItem[] => {
+	const byTemporaryId = new Map(items.map((item) => [item.temporary_id, item]));
+	const ordered: TransactionChainItem[] = [];
+	const visited = new Set<string>();
+
+	const visit = (item: TransactionChainItem): void => {
+		if (visited.has(item.temporary_id)) return;
+		visited.add(item.temporary_id);
+
+		if (item.after !== null) {
+			const parent = byTemporaryId.get(item.after);
+			if (parent) visit(parent);
+		}
+		ordered.push(item);
+	};
+
+	items.forEach(visit);
+
+	return ordered;
+};
+
+export { createTransactionFromMinimalPayload, directionFromAmount, orderChain };
 export type { StorageTransaction };

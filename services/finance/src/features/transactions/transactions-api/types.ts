@@ -46,6 +46,7 @@ interface TransactionDetailed {
 	receipt?: TransactionReceipt
 	wallet: WalletPreview
 	counterparty_wallet?: TransactionPreviewWallet
+	chain_id?: string
 	meta: TransactionMeta
 }
 
@@ -64,5 +65,20 @@ interface TransactionPatchFields {
 	note: string
 }
 
+type TransactionChainItem = TransactionMinimalPayload & {
+	temporary_id: string
+	after: string | null
+};
+
+interface TransactionChainPayload {
+	transactions: TransactionChainItem[]
+}
+
+interface TransactionChainResult {
+	chain_id: string
+	transactions: TransactionDetailed[]
+}
+
 export type { TransactionDirection, TransactionReceipt, TransactionMeta, TransactionPreviewWallet };
 export type { TransactionPreview, TransactionDetailed, TransactionMinimalPayload, TransactionPatchFields };
+export type { TransactionChainItem, TransactionChainPayload, TransactionChainResult };

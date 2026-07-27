@@ -4,6 +4,7 @@ import { cn, FinanceSegmented, FinanceSegmentedItem } from "@internal/ui-library
 import { TRANSACTION_TYPE_OPTIONS } from "@shared/utils";
 import type { TransactionEntryType } from "@shared/utils";
 
+
 interface QuickAddTypeSelectorProps {
 	value: TransactionEntryType;
 	onChange: (value: TransactionEntryType) => void;

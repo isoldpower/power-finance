@@ -1,5 +1,6 @@
 import type { ITransactionsRESTApiClient } from "@feature/transactions";
 import type {
+	TransactionChainRequest, TransactionChainResponse,
 	TransactionDeleteRequest, TransactionDeleteResponse,
 	TransactionGetRequest, TransactionGetResponse,
 	TransactionListRequest, TransactionListResponse,
@@ -73,6 +74,16 @@ class TransactionDjangoRESTApiClient implements ITransactionsRESTApiClient {
 
 		return this.axiosInstance.patch<TransactionPatchResponse>(`/${request.id}/${postfix}`, request.data)
 			.then((response) => parseTransactionDetailed(response.data));
+	}
+
+	public chain(
+		request: TransactionChainRequest
+	): Promise<TransactionChainResponse> {
+		return this.axiosInstance.post<TransactionChainResponse>(`/chain/`, request.data)
+			.then((response) => ({
+				chain_id: response.data.chain_id,
+				transactions: response.data.transactions.map(parseTransactionDetailed),
+			}));
 	}
 
 	delete(

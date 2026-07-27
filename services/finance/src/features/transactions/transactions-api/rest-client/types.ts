@@ -5,7 +5,7 @@ import type {
 	PatchRequest, PatchResponse, IPatchHandler,
 	PostRequest, PostResponse, IPostHandler
 } from "@internal/shared";
-import type { TransactionDetailed, TransactionPreview, TransactionMinimalPayload, TransactionPatchFields } from "../types.ts";
+import type { TransactionDetailed, TransactionPreview, TransactionMinimalPayload, TransactionPatchFields, TransactionChainPayload, TransactionChainResult } from "../types.ts";
 
 interface TransactionListParams extends ListParams {
 	wallet_id?: string
@@ -17,7 +17,9 @@ interface ITransactionsRESTApiClient extends
 	IListHandler<TransactionPreview, TransactionListParams>,
 	IPatchHandler<TransactionPatchFields, TransactionDetailed>,
 	IDeleteHandler
-{}
+{
+	chain: (request: TransactionChainRequest) => Promise<TransactionChainResponse>
+}
 
 type TransactionGetRequest = GetRequest<object>;
 type TransactionGetResponse = GetResponse<TransactionDetailed>;
@@ -31,6 +33,9 @@ type TransactionListResponse = ListResponse<TransactionPreview>;
 type TransactionPatchRequest = PatchRequest<TransactionPatchFields, object>;
 type TransactionPatchResponse = PatchResponse<TransactionDetailed>;
 
+type TransactionChainRequest = PostRequest<TransactionChainPayload, object>;
+type TransactionChainResponse = TransactionChainResult;
+
 type TransactionDeleteRequest = DeleteRequest<object>;
 type TransactionDeleteResponse = DeleteResponse;
 
@@ -38,5 +43,6 @@ export type { TransactionGetRequest, TransactionGetResponse };
 export type { TransactionPostRequest, TransactionPostResponse };
 export type { TransactionListRequest, TransactionListResponse, TransactionListParams };
 export type { TransactionPatchRequest, TransactionPatchResponse };
+export type { TransactionChainRequest, TransactionChainResponse };
 export type { TransactionDeleteRequest, TransactionDeleteResponse };
 export type { ITransactionsRESTApiClient };
