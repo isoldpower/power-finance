@@ -6,13 +6,12 @@ import {
 	AutomationStatusBadge,
 	AutomationConditionLine,
 	AutomationFrequencyBadge,
+	automationStatus,
 } from "@entity/assistance";
 
 interface AutomationRowProps {
 	icon: string;
 	name: string;
-	statusText: string;
-	statusTone: string;
 	trigger: string;
 	action: string;
 	frequency: string;
@@ -26,8 +25,6 @@ interface AutomationRowProps {
 const AutomationRow: FC<AutomationRowProps> = ({
 	icon,
 	name,
-	statusText,
-	statusTone,
 	trigger,
 	action,
 	frequency,
@@ -36,13 +33,16 @@ const AutomationRow: FC<AutomationRowProps> = ({
 	onToggle,
 	style,
 	deleteSlot,
-}) => (
+}) => {
+	const status = automationStatus(enabled);
+
+	return (
 	<div style={style} className="fx-slidein flex items-center gap-3 border-b border-border px-[18px] py-3.5 last:border-b-0 hover:bg-secondary">
 		<AutomationIcon icon={icon} />
 		<div className="min-w-0 flex-1">
 			<div className="flex items-center gap-2 text-[13.5px] font-semibold">
 				{name}
-				<AutomationStatusBadge text={statusText} tone={statusTone} />
+				<AutomationStatusBadge text={status.text} tone={status.tone} />
 			</div>
 			<AutomationConditionLine trigger={trigger} action={action} />
 		</div>
@@ -54,7 +54,8 @@ const AutomationRow: FC<AutomationRowProps> = ({
 		/>
 		{deleteSlot}
 	</div>
-);
+	);
+};
 
 AutomationRow.displayName = 'AutomationRow';
 

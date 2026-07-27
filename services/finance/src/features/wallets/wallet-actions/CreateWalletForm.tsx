@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import type { FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
 
+import { NEW_WALLET_GRADIENT } from "@entity/wallets";
 import { useWalletsListMethods } from "@feature/wallets/data-presenters/use-wallets-list-methods.ts";
 import type { WalletEntrySchema } from "./schemas.ts";
 
@@ -21,6 +22,7 @@ function CreateWalletForm({ handleSubmit, onSuccess, children }: CreateWalletFor
 			{
 				data: {
 					name: data.name.trim(),
+					color: NEW_WALLET_GRADIENT,
 					balance: { amount: parseFloat(data.balance) || 0, currency: data.currency },
 					credit: data.type === CREDIT_TYPE,
 				},

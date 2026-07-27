@@ -1,13 +1,13 @@
-import {DEFAULT_WALLET_GRADIENT} from "@entity/wallets";
 import {FC} from "react";
 import {cn} from '@internal/ui-library';
 
 
 interface WalletSwatchProps {
 	size: 'lg' | 'md'
+	color: string
 }
 
-const WalletSwatch: FC<WalletSwatchProps> = ({ size }) => {
+const WalletSwatch: FC<WalletSwatchProps> = ({ size, color }) => {
 	return (
 		<div
 			className={cn(
@@ -15,7 +15,7 @@ const WalletSwatch: FC<WalletSwatchProps> = ({ size }) => {
 				size === 'lg' && "h-11 w-16 rounded-[9px]",
 				"flex-none shadow-[var(--shadow)]"
 			)}
-			style={{ background: DEFAULT_WALLET_GRADIENT }}
+			style={{ background: color }}
 		/>
 	);
 }

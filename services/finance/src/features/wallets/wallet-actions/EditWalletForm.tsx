@@ -21,6 +21,7 @@ function EditWalletForm({ wallet, handleSubmit, onSuccess, children }: EditWalle
 	const onSubmit = useCallback((data: WalletEntrySchema) => {
 		updateWallet({
 			name: data.name.trim(),
+			color: wallet.gradient,
 			balance: { amount: wallet.balance.amount, currency: data.currency },
 			credit: data.type === CREDIT_TYPE,
 		})

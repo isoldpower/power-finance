@@ -8,7 +8,7 @@ import { AccountsDrillDown } from "@widget/accounts/drill-down/AccountsDrillDown
 const AccountsDrillDownDetails: FC = () => {
 	const { category, account, accountId, setAccountId } = useAccountsBrowser();
 	const { convertToUserCurrency, convertToUserCurrencyWithSign } = useAccountsConvertion();
-	const { history } = useAccountHistory();
+	const { history } = useAccountHistory(accountId);
 
 	return (
 		<>

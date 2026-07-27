@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import { NeedsActionRow, actionVisual } from "@entity/assistance";
+import { NeedsActionRow, actionVisual, actionLabels } from "@entity/assistance";
 import { ActionsListFx } from "@feature/assistance/fetch-experience/ActionsListFx.tsx";
 import {Action, useResolveAction} from "@feature/assistance";
 
@@ -21,21 +21,26 @@ const ActionsListWidget: FC<ActionsListWidgetProps> = ({
 	return (
 		<ActionsListFx isPending={isPending} isError={isError} actions={actions}>
 			{(actions) => (
-				<>{actions.map((action) => (
-					<NeedsActionRow
-						key={action.id}
-						icon={actionVisual(action.kind).icon}
-						iconClass={actionVisual(action.kind).className}
-						title={action.title}
-						subtitle={action.subtitle}
-						primaryLabel={action.primaryLabel}
-						secondaryLabel={action.secondaryLabel}
-						disabled={resolve.isPending}
-						onResolve={() => {
-							resolve.mutate(action.id);
-						}}
-					/>
-				))}</>
+				<>{actions.map((action) => {
+					const visual = actionVisual(action.kind);
+					const labels = actionLabels(action.kind);
+
+					return (
+						<NeedsActionRow
+							key={action.id}
+							icon={visual.icon}
+							iconClass={visual.className}
+							title={action.title}
+							subtitle={action.subtitle}
+							primaryLabel={labels.primary}
+							secondaryLabel={labels.secondary}
+							disabled={resolve.isPending}
+							onResolve={() => {
+								resolve.mutate(action.id);
+							}}
+						/>
+					);
+				})}</>
 			)}
 		</ActionsListFx>
 	);

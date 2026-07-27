@@ -3,10 +3,14 @@ import type {
 	AutomationRule,
 	AutomationListRequest,
 	AutomationListResponse,
+	AutomationGetRequest,
+	AutomationGetResponse,
 	AutomationToggleRequest,
 	AutomationToggleResponse,
 	AutomationCreateRequest,
 	AutomationCreateResponse,
+	AutomationUpdateRequest,
+	AutomationUpdateResponse,
 	AutomationDeleteRequest,
 	AutomationDeleteResponse,
 } from "../types.ts";
@@ -19,11 +23,11 @@ const delay = <T>(value: T): Promise<T> =>
 	new Promise((resolve) => setTimeout(() => { resolve(value); }, MOCK_DELAY_MS));
 
 const SEED: AutomationRule[] = [
-	{ id: 'r1', icon: '🏷', name: 'Auto-categorize coffee shops', statusText: 'active', statusTone: 'pos', trigger: 'merchant ~ "coffee"', action: 'set category Dining', frequency: 'realtime', enabled: true },
-	{ id: 'r2', icon: '💸', name: 'Sweep to Emergency Fund', statusText: 'active', statusTone: 'pos', trigger: 'balance > $8,000', action: 'transfer $250', frequency: 'monthly', enabled: true },
-	{ id: 'r3', icon: '🔔', name: 'Alert on large charge', statusText: 'active', statusTone: 'pos', trigger: 'expense > $500', action: 'notify me', frequency: 'realtime', enabled: true },
-	{ id: 'r4', icon: '📊', name: 'Weekly spending digest', statusText: 'paused', statusTone: 'warn', trigger: 'every Monday', action: 'email summary', frequency: 'weekly', enabled: false },
-	{ id: 'r5', icon: '🧾', name: 'Flag missing receipts', statusText: 'active', statusTone: 'pos', trigger: 'expense > $75 no receipt', action: 'add to needs-action', frequency: 'daily', enabled: true },
+	{ id: 'r1', icon: '🏷', name: 'Auto-categorize coffee shops', trigger: 'merchant ~ "coffee"', action: 'set category Dining', frequency: 'realtime', enabled: true },
+	{ id: 'r2', icon: '💸', name: 'Sweep to Emergency Fund', trigger: 'balance > $8,000', action: 'transfer $250', frequency: 'monthly', enabled: true },
+	{ id: 'r3', icon: '🔔', name: 'Alert on large charge', trigger: 'expense > $500', action: 'notify me', frequency: 'realtime', enabled: true },
+	{ id: 'r4', icon: '📊', name: 'Weekly spending digest', trigger: 'every Monday', action: 'email summary', frequency: 'weekly', enabled: false },
+	{ id: 'r5', icon: '🧾', name: 'Flag missing receipts', trigger: 'expense > $75 no receipt', action: 'add to needs-action', frequency: 'daily', enabled: true },
 ];
 
 const loadRules = (): AutomationRule[] => {
@@ -63,14 +67,16 @@ class AutomationsMockRESTApiClient implements IAutomationsRESTApiClient {
 		});
 	}
 
+	public get(request: AutomationGetRequest): Promise<AutomationGetResponse> {
+		const rule = this.rules.find((entry) => entry.id === request.id);
+		if (!rule) throw new Error("Not found");
+
+		return delay({ data: { ...rule } });
+	}
+
 	public toggle(request: AutomationToggleRequest): Promise<AutomationToggleResponse> {
 		this.rules = this.rules.map((rule) => rule.id === request.id
-			? {
-				...rule,
-				enabled: request.enabled,
-				statusText: request.enabled ? 'active' : 'paused',
-				statusTone: request.enabled ? 'pos' : 'warn',
-			}
+			? { ...rule, enabled: request.enabled }
 			: rule);
 		saveRules(this.rules);
 
@@ -84,8 +90,6 @@ class AutomationsMockRESTApiClient implements IAutomationsRESTApiClient {
 			id: `r${String(Date.now())}`,
 			icon: request.data.icon ?? '⚙',
 			name: request.data.name,
-			statusText: 'active',
-			statusTone: 'pos',
 			trigger: request.data.trigger,
 			action: request.data.action,
 			frequency: request.data.frequency,
@@ -95,6 +99,17 @@ class AutomationsMockRESTApiClient implements IAutomationsRESTApiClient {
 		saveRules(this.rules);
 
 		return delay({ data: { ...rule } });
+	}
+
+	public update(request: AutomationUpdateRequest): Promise<AutomationUpdateResponse> {
+		this.rules = this.rules.map((rule) => rule.id === request.id
+			? { ...rule, ...request.data }
+			: rule);
+		saveRules(this.rules);
+
+		const updated = this.rules.find((rule) => rule.id === request.id) ?? SEED[0];
+
+		return delay({ data: { ...updated } });
 	}
 
 	public delete(request: AutomationDeleteRequest): Promise<AutomationDeleteResponse> {

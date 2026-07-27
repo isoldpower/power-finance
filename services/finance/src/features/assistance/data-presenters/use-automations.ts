@@ -1,8 +1,8 @@
-import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
+import type { UseQueryOptions } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
+import { useResourceQuery } from "@shared/data";
+import type { UseResourceQueryResult } from "@shared/data";
 import { listAutomations } from "../automations-api";
 import { AUTOMATIONS_CACHE_KEYS } from "./cache-config.ts";
 import type { AutomationRule, ListAutomationsResponse } from "../automations-api";
@@ -15,29 +15,30 @@ interface UseAutomationsParams {
 
 type UseAutomationsOptions = Omit<UseQueryOptions<ListAutomationsResponse>, 'queryKey' | 'queryFn'>;
 
-type UseAutomationsReturn = UseQueryResult<ListAutomationsResponse> & {
+type UseAutomationsReturn = UseResourceQueryResult<ListAutomationsResponse, AutomationRule[]> & {
 	rules: AutomationRule[];
 };
+
+const EMPTY_RULES: AutomationRule[] = [];
 
 const useAutomations = (
 	params?: UseAutomationsParams,
 	options?: UseAutomationsOptions
 ): UseAutomationsReturn => {
 	const apiContext = useApiContext();
-	const query = useQuery<ListAutomationsResponse>({
-		queryKey: [AUTOMATIONS_CACHE_KEYS.list, params?.enabled ?? 'all', params?.limit ?? 'all'],
-		queryFn: () => listAutomations({
+	const query = useResourceQuery<ListAutomationsResponse, AutomationRule[]>({
+		key: [AUTOMATIONS_CACHE_KEYS.list, params?.enabled ?? 'all', params?.limit ?? 'all'],
+		fetch: () => listAutomations({
 			handler: apiContext.automationServers.rest,
 			enabled: params?.enabled,
 			limit: params?.limit,
 		}),
-		...options ?? {},
+		select: (response) => response.data,
+		fallback: EMPTY_RULES,
+		options,
 	});
 
-	return useMemo(() => ({
-		...query,
-		rules: query.data?.data ?? [],
-	}), [query]);
+	return { ...query, rules: query.value };
 };
 
 export { useAutomations };

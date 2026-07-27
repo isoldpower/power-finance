@@ -1,8 +1,8 @@
-import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
+import type { UseQueryOptions } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
+import { useResourceQuery } from "@shared/data";
+import type { UseResourceQueryResult } from "@shared/data";
 import { listActions } from "../actions-api";
 import { ACTIONS_CACHE_KEYS } from "./cache-config.ts";
 import type { Action, ListActionsResponse } from "../actions-api";
@@ -15,29 +15,30 @@ interface UseActionsParams {
 
 type UseActionsOptions = Omit<UseQueryOptions<ListActionsResponse>, 'queryKey' | 'queryFn'>;
 
-type UseActionsReturn = UseQueryResult<ListActionsResponse> & {
+type UseActionsReturn = UseResourceQueryResult<ListActionsResponse, Action[]> & {
 	actions: Action[];
 };
+
+const EMPTY_ACTIONS: Action[] = [];
 
 const useActions = (
 	params?: UseActionsParams,
 	options?: UseActionsOptions
 ): UseActionsReturn => {
 	const apiContext = useApiContext();
-	const query = useQuery<ListActionsResponse>({
-		queryKey: [ACTIONS_CACHE_KEYS.list, params?.resolved ?? false, params?.limit ?? 'all'],
-		queryFn: () => listActions({
+	const query = useResourceQuery<ListActionsResponse, Action[]>({
+		key: [ACTIONS_CACHE_KEYS.list, params?.resolved ?? false, params?.limit ?? 'all'],
+		fetch: () => listActions({
 			handler: apiContext.actionServers.rest,
 			resolved: params?.resolved,
 			limit: params?.limit,
 		}),
-		...options ?? {},
+		select: (response) => response.data,
+		fallback: EMPTY_ACTIONS,
+		options,
 	});
 
-	return useMemo(() => ({
-		...query,
-		actions: query.data?.data ?? [],
-	}), [query]);
+	return { ...query, actions: query.value };
 };
 
 export { useActions };

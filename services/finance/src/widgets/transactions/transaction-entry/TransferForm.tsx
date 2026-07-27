@@ -7,7 +7,7 @@ import { useWalletsList } from "@feature/wallets";
 import { TransferForm as TransferFormWrapper, transferSchema } from "@feature/transactions/transaction-entry";
 import type { TransferSchema } from "@feature/transactions/transaction-entry";
 import { currencySymbol, sanitizeAmountInput } from "@shared/utils";
-import { WalletSelect, DEFAULT_WALLET_GRADIENT } from "@entity/wallets";
+import { WalletSelect } from "@entity/wallets";
 import type { WalletSelectOption } from "@entity/wallets";
 import { FromIcon, ToIcon } from "@entity/transactions";
 import { PanelFooter, FieldLabel } from "@shared/components";
@@ -47,7 +47,7 @@ const TransferForm: FC<TransferFormProps> = ({ wallet, onClose }) => {
 	const walletOptions = (excludeId?: string): WalletSelectOption[] =>
 		wallets
 			.filter((entry) => entry.id !== excludeId)
-			.map((entry) => ({ id: entry.id, name: entry.name, currency: entry.balance.currency, gradient: DEFAULT_WALLET_GRADIENT }));
+			.map((entry) => ({ id: entry.id, name: entry.name, currency: entry.balance.currency, gradient: entry.color }));
 
 	return (
 		<TransferFormWrapper handleSubmit={form.handleSubmit} onSuccess={onClose}>

@@ -1,10 +1,9 @@
 import { useMemo } from "react";
 import { useAxiosInstance } from "@internal/shared";
 
-import { SummaryMockRESTApiClient, SummaryDjangoRESTApiClient } from "@feature/metrics";
+import { SummaryMockRESTApiClient } from "@feature/metrics";
 import type { ISummaryRESTApiClient } from "@feature/metrics";
 
-const USE_DJANGO_BACKEND: boolean = false;
 
 interface UseSummaryApiResponse {
 	rest: ISummaryRESTApiClient;
@@ -16,9 +15,7 @@ function useSummaryApi(baseUrl: string): UseSummaryApiResponse {
 	});
 
 	const restSummaryClient = useMemo<ISummaryRESTApiClient>(() => {
-		return USE_DJANGO_BACKEND
-			? new SummaryDjangoRESTApiClient(summaryAxiosInstance)
-			: new SummaryMockRESTApiClient();
+		return new SummaryMockRESTApiClient();
 	}, [summaryAxiosInstance]);
 
 	return useMemo(() => ({

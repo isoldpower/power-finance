@@ -5,8 +5,8 @@ import { useWalletsList } from "@feature/wallets";
 import { useConvertMoney } from "@feature/localization";
 import { useLocaleCurrency } from "@shared/utils";
 
-import { toTransactionRow } from '../to-transaction-row.ts';
 import { useTransactionsList } from "../data-presenters";
+import { useTransactionRowsView } from "../data-selectors";
 
 
 interface FilterOption {
@@ -48,14 +48,10 @@ const useTransactionBrowser = ({ pageSize, sortOptions }: TransactionBrowserConf
 	const [selected, setSelected] = useState<Set<string>>(new Set());
 	const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
-	const walletById = useMemo(
-		() => new Map(wallets.map((wallet) => [wallet.id, { name: wallet.name, currency: wallet.balance.currency }])),
-		[wallets]
-	);
+	const allRows = useTransactionRowsView(transactions);
 
 	const rows = useMemo(() => {
-		const mapped = transactions.map((txn) => toTransactionRow(txn, walletById, formatCurrency));
-		const filtered = mapped.filter((row) => {
+		const filtered = allRows.filter((row) => {
 			const haystack = `${row.walletName} ${row.amount.toString()} ${row.category}`.toLowerCase();
 			const matchesQuery = haystack.includes(query.toLowerCase());
 			const matchesWallet = walletFilter === 'all' || row.walletId === walletFilter;
@@ -66,7 +62,7 @@ const useTransactionBrowser = ({ pageSize, sortOptions }: TransactionBrowserConf
 		});
 		if (sort === 'amount') return [...filtered].sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount));
 		return [...filtered].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-	}, [transactions, walletById, formatCurrency, query, walletFilter, typeFilter, sort]);
+	}, [allRows, query, walletFilter, typeFilter, sort]);
 
 	const hasFilters = query !== '' || walletFilter !== 'all' || typeFilter !== 'all';
 
@@ -81,7 +77,7 @@ const useTransactionBrowser = ({ pageSize, sortOptions }: TransactionBrowserConf
 
 	const walletLabel = walletFilter === 'all'
 		? 'All wallets'
-		: walletById.get(walletFilter)?.name ?? 'All wallets';
+		: wallets.find((wallet) => wallet.id === walletFilter)?.name ?? 'All wallets';
 	const sortLabel = sortOptions.find((option) => option.value === sort)?.label ?? '';
 	const walletOptions = [
 		{ value: 'all', label: 'All wallets' },

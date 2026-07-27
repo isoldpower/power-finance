@@ -1,5 +1,5 @@
 import { Wallet } from "@entity/wallets";
-import type { WalletDetailed, WalletPreview } from "../types.ts";
+import type { WalletDetailed, WalletPreview, WalletStats } from "../types.ts";
 
 const flatToWalletPreview = (
 	flat: Wallet
@@ -10,7 +10,8 @@ const flatToWalletPreview = (
 }
 
 const flatToWalletDetailed = (
-	flat: Wallet
+	flat: Wallet,
+	stats: WalletStats
 ): WalletDetailed => {
 	const {id, createdAt, updatedAt, ...data} = flat;
 
@@ -21,7 +22,8 @@ const flatToWalletDetailed = (
 			created_at: createdAt ?? '',
 			updated_at: updatedAt ?? '',
 			id
-		}
+		},
+		stats
 	};
 }
 

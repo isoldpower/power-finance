@@ -19,7 +19,7 @@ const useLedgerTransactionView = (transaction: TransactionPreviewDto): LedgerTra
 
 	return useMemo(() => {
 		const wallet = transaction.source_wallet;
-		const currency = wallet.balance.currency;
+		const currency = transaction.currency_code;
 		const amount = parseFloat(transaction.amount);
 		const main = convert({ amount, currency });
 

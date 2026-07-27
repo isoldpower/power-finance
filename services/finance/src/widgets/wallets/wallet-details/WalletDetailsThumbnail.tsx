@@ -1,4 +1,4 @@
-import {DEFAULT_WALLET_GRADIENT, Wallet, walletTypeLabel} from "@entity/wallets";
+import {Wallet, walletTypeLabel} from "@entity/wallets";
 import {SlideOverTrigger} from "@shared/components";
 import type { FC } from "react";
 import { FinanceButton } from "@internal/ui-library";
@@ -19,7 +19,7 @@ const WalletDetailsThumbnail: FC<WalletDetailsThumbnailProps> = ({
 		<div className="flex items-start gap-3.5">
 			<div
 				className="h-11 w-16 flex-none rounded-[9px] shadow-[var(--shadow)]"
-				style={{ background: DEFAULT_WALLET_GRADIENT }}
+				style={{ background: wallet.color }}
 			/>
 			<div className="min-w-0 flex-1">
 				<div className="truncate font-display text-lg font-semibold">

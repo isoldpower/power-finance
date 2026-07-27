@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import { useWalletsList } from "@feature/wallets";
-import { DEFAULT_WALLET_GRADIENT } from "@entity/wallets";
 import type { WalletSelectOption } from "@entity/wallets";
 
 import { useTransactionsListMethods } from "../data-presenters";
@@ -26,7 +25,7 @@ const useQuickAdd = () => {
 
 	const isTransfer = type === 'transfer';
 	const currency = wallets.find((wallet) => wallet.id === walletId)?.balance.currency ?? 'USD';
-	const walletOptions: WalletSelectOption[] = wallets.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: DEFAULT_WALLET_GRADIENT }));
+	const walletOptions: WalletSelectOption[] = wallets.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: wallet.color }));
 	const numericAmount = parseFloat(amount);
 	const amountValid = !Number.isNaN(numericAmount) && numericAmount > 0;
 	const transferValid = !isTransfer || (toWalletId !== '' && toWalletId !== walletId);

@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback , useMemo } from "react";
 import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 
-import { useApiContext } from "@app/api";
+import { useApiContext, DERIVED_KEYS } from "@app/api";
 import {
 	deleteWallet as deleteWalletApi,
 	fetchWallet as fetchWalletApi,
@@ -32,8 +32,6 @@ interface UseWalletReturn {
 	fetchWallet: () => void;
 }
 
-const SUMMARY_KEYS = ['summary-insights', 'summary-ledger-balance'];
-
 const useWalletMethods = (
 	id: string
 ): UseWalletReturn => {
@@ -41,7 +39,7 @@ const useWalletMethods = (
 	const client = useQueryClient();
 
 	const invalidateSummary = useCallback(() => {
-		for (const key of SUMMARY_KEYS) {
+		for (const key of DERIVED_KEYS.onWalletChange) {
 			void client.invalidateQueries({ queryKey: [key] });
 		}
 	}, [client]);

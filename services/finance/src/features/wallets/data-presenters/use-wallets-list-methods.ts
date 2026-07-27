@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 
-import { useApiContext } from "@app/api";
+import { useApiContext, DERIVED_KEYS } from "@app/api";
 import {
 	createWallet as createWalletApi,
 	listAllWallets as listAllWalletsApi
@@ -24,8 +24,6 @@ interface UseWalletsReturn {
 	createWallet: (data: WalletValuableFields) => void;
 	fetchAllWallets: () => void;
 }
-
-const SUMMARY_KEYS = ['summary-insights', 'summary-ledger-balance'];
 
 const useWalletsListMethods = (): UseWalletsReturn => {
 	const apiContext = useApiContext();
@@ -49,7 +47,7 @@ const useWalletsListMethods = (): UseWalletsReturn => {
 		mutationKey: [WALLETS_CACHE_KEYS.create],
 		onSettled: () => {
 			void query.refetch();
-			for (const key of SUMMARY_KEYS) {
+			for (const key of DERIVED_KEYS.onWalletChange) {
 				void client.invalidateQueries({ queryKey: [key] });
 			}
 		}

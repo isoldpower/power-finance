@@ -1,21 +1,21 @@
+import { useMemo } from "react";
+
+import { useLocaleCurrency } from "@shared/utils";
 import { toneFromAmount, iconClassFromAmount, iconFromAmount } from "@entity/transactions";
 import type { TransactionPreviewDto, TransactionRowView } from "@entity/transactions";
-
-import type { WalletRef } from "./types.ts";
 
 
 const toTransactionRow = (
 	dto: TransactionPreviewDto,
-	walletById: Map<string, WalletRef>,
 	formatMoney: (amount: number, currency: string) => string
 ): TransactionRowView => {
 	const amount = parseFloat(dto.amount);
 	const created = new Date(dto.created_at);
-	const wallet = walletById.get(dto.source_wallet.id);
-	const walletName = wallet?.name ?? 'Unknown wallet';
-	const currency = wallet?.currency ?? (dto.currency_code || 'USD');
+	const walletName = dto.source_wallet.name;
+	const currency = dto.currency_code || 'USD';
 	const absFormatted = formatMoney(Math.abs(amount), currency);
-	const isIncome = amount >= 0;
+	const category = dto.category || 'Uncategorized';
+	const isIncome = dto.direction === 'in';
 
 	return {
 		id: dto.id,
@@ -29,7 +29,7 @@ const toTransactionRow = (
 		icon: iconFromAmount(amount),
 		iconClass: iconClassFromAmount(amount),
 		tone: toneFromAmount(amount),
-		category: 'Uncategorized',
+		category,
 		kind: isIncome ? 'Income' : 'Expense',
 		lines: isIncome
 			? [
@@ -37,11 +37,22 @@ const toTransactionRow = (
 				{ type: 'CR', account: 'Income', side: 'credit', amount: absFormatted },
 			]
 			: [
-				{ type: 'DR', account: 'Uncategorized', side: 'debit', amount: absFormatted },
+				{ type: 'DR', account: category, side: 'debit', amount: absFormatted },
 				{ type: 'CR', account: walletName, side: 'credit', amount: absFormatted },
 			],
 		provenance: `Imported · ${created.toLocaleString()}`,
 	};
 };
 
-export { toTransactionRow };
+const useTransactionRowsView = (
+	transactions: TransactionPreviewDto[]
+): TransactionRowView[] => {
+	const formatMoney = useLocaleCurrency();
+
+	return useMemo(
+		() => transactions.map((dto) => toTransactionRow(dto, formatMoney)),
+		[transactions, formatMoney]
+	);
+};
+
+export { useTransactionRowsView };

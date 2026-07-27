@@ -1,19 +1,83 @@
 import type { ITransactionsRESTApiClient } from "@feature/transactions";
+import type { Wallet } from "@entity/wallets";
 import { IStorage, LocalStorageMock } from "@internal/shared";
 import type {
 	TransactionDeleteRequest, TransactionDeleteResponse,
 	TransactionGetRequest, TransactionGetResponse,
 	TransactionListRequest, TransactionListResponse,
+	TransactionPatchRequest, TransactionPatchResponse,
 	TransactionPostRequest, TransactionPostResponse,
 } from "./types.ts";
-import { StorageTransaction, createTransactionFromMinimalPayload } from "./utils.ts";
+import type { TransactionDetailed, TransactionPreview, TransactionPreviewWallet } from "../types.ts";
+import type { WalletPreview } from "@feature/wallets/wallets-api/types.ts";
+import { StorageTransaction, createTransactionFromMinimalPayload, directionFromAmount } from "./utils.ts";
 
 
 class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 	private readonly storage: IStorage<StorageTransaction>;
+	private readonly wallets: IStorage<Wallet>;
 
 	constructor(_key: string) {
 		this.storage = new LocalStorageMock<StorageTransaction>(_key);
+		this.wallets = new LocalStorageMock<Wallet>('wallets');
+	}
+
+	private walletRef(walletId: string): TransactionPreviewWallet {
+		const wallet = this.wallets.get(walletId);
+
+		return {
+			id: walletId,
+			name: wallet?.name ?? 'Unknown wallet',
+			color: wallet?.color ?? '',
+		};
+	}
+
+	private walletPreview(walletId: string): WalletPreview {
+		const wallet = this.wallets.get(walletId);
+
+		return {
+			id: walletId,
+			name: wallet?.name ?? 'Unknown wallet',
+			color: wallet?.color ?? '',
+			balance: wallet?.balance ?? { amount: 0, currency: '' },
+			credit: wallet?.credit ?? false,
+			type: wallet?.type,
+			goal: wallet?.goal,
+		};
+	}
+
+	private toPreview(value: StorageTransaction): TransactionPreview {
+		return {
+			id: value.id,
+			amount: value.amount,
+			currency_code: value.currency_code,
+			direction: value.direction ?? directionFromAmount(value.amount),
+			merchant: value.merchant ?? '',
+			category: value.category ?? 'Uncategorized',
+			occurred_at: value.occurred_at ?? value.created_at,
+			created_at: value.created_at,
+			wallet: this.walletRef(value.source_wallet_id),
+		};
+	}
+
+	private toDetailed(value: StorageTransaction): TransactionDetailed {
+		return {
+			id: value.id,
+			amount: value.amount,
+			currency_code: value.currency_code,
+			direction: value.direction ?? directionFromAmount(value.amount),
+			merchant: value.merchant ?? '',
+			category: value.category ?? 'Uncategorized',
+			occurred_at: value.occurred_at ?? value.created_at,
+			note: value.note ?? '',
+			receipt: value.receipt,
+			wallet: this.walletPreview(value.source_wallet_id),
+			meta: {
+				id: value.id,
+				created_at: value.created_at,
+				updated_at: value.created_at,
+			},
+		};
 	}
 
 	public get(
@@ -24,18 +88,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 			.then((value) => {
 				if (!value) throw new Error("Not found");
 
-				return {
-					id: value.id,
-					amount: value.amount,
-					currency_code: value.currency_code,
-					wallet: {
-						id: value.source_wallet_id,
-						name: '',
-						balance: { amount: 0, currency: '' },
-						credit: false,
-					},
-					created_at: value.created_at,
-				};
+				return this.toDetailed(value);
 			});
 	}
 
@@ -43,27 +96,20 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		request: TransactionPostRequest
 	): Promise<TransactionPostResponse> {
 		const stored = createTransactionFromMinimalPayload(request.data);
+		stored.currency_code = this.wallets.get(stored.source_wallet_id)?.balance.currency ?? '';
 
 		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => { this.storage.add(stored); })
-			.then(() => ({
-				id: stored.id,
-				amount: stored.amount,
-				currency_code: stored.currency_code,
-				wallet: {
-					id: stored.source_wallet_id,
-					name: '',
-					balance: { amount: 0, currency: '' },
-					credit: false,
-				},
-				created_at: stored.created_at,
-			}));
+			.then(() => this.toDetailed(stored));
 	}
 
 	public list(
 		request: TransactionListRequest
 	): Promise<TransactionListResponse> {
-		const items = this.storage.list();
+		const walletId = request.params?.wallet_id;
+		const items = walletId
+			? this.storage.list().filter((value) => value.source_wallet_id === walletId)
+			: this.storage.list();
 		const start = request.params?.offset ?? 0;
 		const end = request.params?.limit
 			? start + request.params.limit
@@ -72,23 +118,28 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => items.slice(start, end))
 			.then((values) => ({
-				data: values.map((v) => ({
-					id: v.id,
-					amount: v.amount,
-					currency_code: v.currency_code,
-					wallet: {
-						id: v.source_wallet_id,
-						name: '',
-						balance: { amount: 0, currency: '' },
-					},
-					created_at: v.created_at,
-				})),
+				data: values.map((value) => this.toPreview(value)),
 				meta: {
 					total: items.length,
 					offset: start,
 					limit: end - start,
 				}
 			}));
+	}
+
+	patch(
+		request: TransactionPatchRequest
+	): Promise<TransactionPatchResponse> {
+		return new Promise((resolve) => setTimeout(resolve, 250))
+			.then(() => this.storage.get(request.id))
+			.then((value) => {
+				if (!value) throw new Error("Not found");
+
+				this.storage.remove(value);
+				const updated = Object.assign(value, request.data);
+				this.storage.add(updated);
+				return this.toDetailed(updated);
+			});
 	}
 
 	delete(

@@ -61,8 +61,6 @@ const AutomationsCard: FC = () => {
 						style={{ animationDelay: `${(index * 0.04).toString()}s` }}
 						icon={rule.icon}
 						name={rule.name}
-						statusText={rule.statusText}
-						statusTone={rule.statusTone}
 						trigger={rule.trigger}
 						action={rule.action}
 						frequency={rule.frequency}

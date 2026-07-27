@@ -1,10 +1,9 @@
 import { useMemo } from "react";
 import { useAxiosInstance } from "@internal/shared";
 
-import { FxMockRESTApiClient, FxDjangoRESTApiClient } from "@feature/localization";
+import { FxMockRESTApiClient } from "@feature/localization";
 import type { IFxRESTApiClient } from "@feature/localization";
 
-const USE_DJANGO_BACKEND: boolean = false;
 
 interface UseFxApiResponse {
 	rest: IFxRESTApiClient;
@@ -16,9 +15,7 @@ function useFxApi(baseUrl: string): UseFxApiResponse {
 	});
 
 	const restFxClient = useMemo<IFxRESTApiClient>(() => {
-		return USE_DJANGO_BACKEND
-			? new FxDjangoRESTApiClient(fxAxiosInstance)
-			: new FxMockRESTApiClient();
+		return new FxMockRESTApiClient();
 	}, [fxAxiosInstance]);
 
 	return useMemo(() => ({

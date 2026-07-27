@@ -2,6 +2,7 @@ import type { WalletType, WalletGoalMeta } from "@entity/wallets";
 
 interface WalletValuableFields {
 	name: string
+	color: string
 	balance: {
 		amount: number
 		currency: string
@@ -17,22 +18,15 @@ interface WalletMeta {
 	id: string
 }
 
-interface WalletDetailed {
-	id: string
-	name: string
-	balance: {
-		amount: number
-		currency: string
-	}
-	credit: boolean
-	type?: WalletType
-	goal?: WalletGoalMeta
-	meta: WalletMeta
+interface WalletStats {
+	transaction_count: number
+	last_activity_at: string | null
 }
 
 interface WalletPreview {
 	id: string
 	name: string
+	color: string
 	balance: {
 		amount: number
 		currency: string
@@ -40,6 +34,11 @@ interface WalletPreview {
 	credit: boolean
 	type?: WalletType
 	goal?: WalletGoalMeta
+}
+
+interface WalletDetailed extends WalletPreview {
+	meta: WalletMeta
+	stats: WalletStats
 }
 
 type WalletMinimalPayload = WalletValuableFields;
@@ -76,5 +75,5 @@ interface GoalCreatePayload {
 	color?: string;
 }
 
-export type { WalletPreview, WalletDetailed, WalletMeta, WalletValuableFields, WalletMinimalPayload, WalletSearchRoot, WalletSearchNode, WalletSearchLeaf };
+export type { WalletPreview, WalletDetailed, WalletMeta, WalletStats, WalletValuableFields, WalletMinimalPayload, WalletSearchRoot, WalletSearchNode, WalletSearchLeaf };
 export type { Goal, GoalCreatePayload };

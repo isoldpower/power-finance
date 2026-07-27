@@ -10,8 +10,6 @@ interface Action {
 	kind: string;
 	title: string;
 	subtitle: string;
-	primaryLabel: string;
-	secondaryLabel: string;
 }
 
 interface ActionListParams {

@@ -1,17 +1,18 @@
-import { currencySymbol } from "@shared/utils";
+import { useMemo } from "react";
 
-import type { Wallet } from "@entity/wallets";
-import type { Goal } from "../types";
+import { currencySymbol } from "@shared/utils";
 import { DEFAULT_GOAL_COLOR } from "@entity/wallets";
+import type { Wallet } from "@entity/wallets";
+import type { Goal } from "../wallets-api";
 
 
 const parseAmount = (value: string): number => {
 	return Number(value.replace(/[^0-9.]/g, '')) || 0;
-}
+};
 
 const formatMoney = (amount: number, currency: string): string => {
 	const grouped = Math.round(amount).toLocaleString('en-US');
-	
+
 	return `${currencySymbol(currency)}${grouped}`;
 };
 
@@ -43,4 +44,8 @@ const walletToGoal = (wallet: Wallet): Goal => {
 	};
 };
 
-export { walletToGoal };
+const useWalletGoalsView = (wallets: Wallet[]): Goal[] => {
+	return useMemo(() => wallets.map(walletToGoal), [wallets]);
+};
+
+export { useWalletGoalsView };

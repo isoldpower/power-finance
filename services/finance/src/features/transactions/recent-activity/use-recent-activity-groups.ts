@@ -1,12 +1,11 @@
 import { useMemo } from "react";
 
-import { useWalletsList } from "@feature/wallets";
 import { useConvertMoney } from "@feature/localization";
 import { useLocaleCurrency } from "@shared/utils";
-import type { TransactionPreviewDto } from "@entity/transactions";
+import type { TransactionRowView } from "@entity/transactions";
 
 import { useTransactionsList } from "../data-presenters";
-import { toTransactionRow } from "../to-transaction-row.ts";
+import { useTransactionRowsView } from "../data-selectors";
 
 
 const DAYS_CAP = 2;
@@ -14,35 +13,29 @@ const TXN_CAP = 8;
 
 const useRecentActivityGroups = () => {
 	const { transactions, isPending } = useTransactionsList();
-	const { wallets } = useWalletsList();
 	const { convert, targetCurrency } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
-
-	const walletById = useMemo(
-		() => new Map(wallets.map((wallet) => [wallet.id, { name: wallet.name, currency: wallet.balance.currency }])),
-		[wallets]
-	);
+	const allRows = useTransactionRowsView(transactions);
 
 	const groups = useMemo(() => {
-		const dayOf = (txn: TransactionPreviewDto) => new Date(txn.created_at).toDateString();
-		const sorted = [...transactions].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+		const dayOf = (row: TransactionRowView) => new Date(row.createdAt).toDateString();
+		const sorted = [...allRows].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 
 		const allowedDays = new Set<string>();
-		for (const txn of sorted) {
-			const day = dayOf(txn);
+		for (const row of sorted) {
+			const day = dayOf(row);
 			if (allowedDays.size >= DAYS_CAP && !allowedDays.has(day)) break;
 			allowedDays.add(day);
 		}
-		const limited = sorted.filter((txn) => allowedDays.has(dayOf(txn))).slice(0, TXN_CAP);
+		const limited = sorted.filter((row) => allowedDays.has(dayOf(row))).slice(0, TXN_CAP);
 
-		const byDay = new Map<string, TransactionPreviewDto[]>();
-		for (const txn of limited) {
-			const bucket = byDay.get(dayOf(txn));
-			if (bucket) bucket.push(txn); else byDay.set(dayOf(txn), [txn]);
+		const byDay = new Map<string, TransactionRowView[]>();
+		for (const row of limited) {
+			const bucket = byDay.get(dayOf(row));
+			if (bucket) bucket.push(row); else byDay.set(dayOf(row), [row]);
 		}
 
-		return [...byDay.entries()].map(([day, items]) => {
-			const rows = items.map((item) => toTransactionRow(item, walletById, formatCurrency));
+		return [...byDay.entries()].map(([day, rows]) => {
 			const sum = rows.reduce((total, row) => total + convert({ amount: row.amount, currency: row.currency }).amount, 0);
 			return {
 				label: new Date(day).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' }),
@@ -50,7 +43,7 @@ const useRecentActivityGroups = () => {
 				rows,
 			};
 		});
-	}, [transactions, walletById, formatCurrency, convert]);
+	}, [allRows, convert]);
 
 	return { groups, isPending, convert, formatCurrency, targetCurrency };
 };

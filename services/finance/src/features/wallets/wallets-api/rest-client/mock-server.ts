@@ -1,7 +1,8 @@
 import {v4 as uuidv4} from "uuid";
 
 import type {Wallet} from "@entity/wallets";
-import type {WalletSearchLeaf, WalletSearchNode, WalletSearchRoot} from "../types.ts";
+import {DEFAULT_WALLET_GRADIENT} from "@entity/wallets";
+import type {WalletSearchLeaf, WalletSearchNode, WalletSearchRoot, WalletStats} from "../types.ts";
 import type {IStorage} from "@internal/shared";
 import {LocalStorageMock} from "@internal/shared";
 
@@ -27,6 +28,7 @@ interface StoredTransaction {
 	id: string;
 	source_wallet_id: string;
 	amount: string;
+	created_at?: string;
 }
 
 function resolveField(wallet: Wallet, path: string): unknown {
@@ -101,10 +103,21 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 			(sum, txn) => txn.source_wallet_id === wallet.id ? sum + (parseFloat(txn.amount) || 0) : sum,
 			0
 		);
-		return { 
+		return {
 			...wallet,
-			balance: { ...wallet.balance, amount: wallet.balance.amount + delta } 
+			color: wallet.color || DEFAULT_WALLET_GRADIENT,
+			balance: { ...wallet.balance, amount: wallet.balance.amount + delta }
 		};
+	}
+
+	private statsFor(walletId: string): WalletStats {
+		const owned = this.transactions.list().filter((txn) => txn.source_wallet_id === walletId);
+		const lastActivity = owned.reduce<string | null>(
+			(latest, txn) => txn.created_at && (!latest || txn.created_at > latest) ? txn.created_at : latest,
+			null
+		);
+
+		return { transaction_count: owned.length, last_activity_at: lastActivity };
 	}
 
 	public get(
@@ -115,7 +128,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 			.then((value) => {
 				if (!value) throw new Error("Not found");
 
-				return flatToWalletDetailed(this.withLiveBalance(value));
+				return flatToWalletDetailed(this.withLiveBalance(value), this.statsFor(value.id));
 			});
 	}
 	
@@ -154,7 +167,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 
 		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => { this.storage.add(filledPayload); })
-			.then(() => flatToWalletDetailed(filledPayload));
+			.then(() => flatToWalletDetailed(filledPayload, this.statsFor(filledPayload.id)));
 	}
 
 	public list(
@@ -193,7 +206,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 				// the transaction ledger, so a client write must never overwrite it (that double-counts).
 				updatedValue.balance = { ...updatedValue.balance, amount: openingAmount };
 				this.storage.add(updatedValue);
-				return flatToWalletDetailed(this.withLiveBalance(updatedValue));
+				return flatToWalletDetailed(this.withLiveBalance(updatedValue), this.statsFor(updatedValue.id));
 			});
 	}
 
@@ -213,7 +226,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 				// Opening balance is server-owned (live balance derives from the ledger); keep the stored amount.
 				updatedValue.balance = { ...updatedValue.balance, amount: value.balance.amount };
 				this.storage.add(updatedValue);
-				return flatToWalletDetailed(this.withLiveBalance(updatedValue));
+				return flatToWalletDetailed(this.withLiveBalance(updatedValue), this.statsFor(updatedValue.id));
 			});
 	}
 

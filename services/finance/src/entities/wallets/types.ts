@@ -12,6 +12,7 @@ interface WalletGoalMeta {
 interface Wallet {
 	id: string;
 	name: string;
+	color: string;
 	balance: {
 		amount: number;
 		currency: string;

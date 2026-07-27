@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
+import { useResourceMutation } from "@shared/data";
 import { toggleAutomation } from "../automations-api";
 import { AUTOMATIONS_CACHE_KEYS } from "./cache-config.ts";
+import type { AutomationToggleResponse, ListAutomationsResponse } from "../automations-api";
 
 
 interface ToggleAutomationVariables {
@@ -12,17 +12,24 @@ interface ToggleAutomationVariables {
 
 const useToggleAutomation = () => {
 	const apiContext = useApiContext();
-	const queryClient = useQueryClient();
 
-	return useMutation({
-		mutationKey: [AUTOMATIONS_CACHE_KEYS.toggle],
-		mutationFn: (variables: ToggleAutomationVariables) => toggleAutomation({
+	return useResourceMutation<ToggleAutomationVariables, AutomationToggleResponse, ListAutomationsResponse>({
+		key: [AUTOMATIONS_CACHE_KEYS.toggle],
+		mutate: (variables) => toggleAutomation({
 			handler: apiContext.automationServers.rest,
 			id: variables.id,
 			enabled: variables.enabled,
 		}),
-		onSuccess: () => {
-			void queryClient.invalidateQueries({ queryKey: [AUTOMATIONS_CACHE_KEYS.list] });
+		optimistic: {
+			key: [AUTOMATIONS_CACHE_KEYS.list],
+			apply: (previous, variables) => previous
+				? {
+					...previous,
+					data: previous.data.map((rule) => rule.id === variables.id
+						? { ...rule, enabled: variables.enabled }
+						: rule),
+				}
+				: previous,
 		},
 	});
 };

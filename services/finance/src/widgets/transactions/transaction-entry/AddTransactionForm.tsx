@@ -9,7 +9,7 @@ import { AddTransactionForm as AddTransactionFormWrapper, addTransactionSchema }
 import type { AddTransactionSchema } from "@feature/transactions/transaction-entry";
 import { currencySymbol, sanitizeAmountInput } from "@shared/utils";
 import { TRANSACTION_TYPE_TONE as TONE_TEXT } from "@shared/utils";
-import { WalletSelect, DEFAULT_WALLET_GRADIENT } from "@entity/wallets";
+import { WalletSelect } from "@entity/wallets";
 import type { WalletSelectOption } from "@entity/wallets";
 import { TransferGlyph, FromIcon, ToIcon, ScanReceiptIcon } from "@entity/transactions";
 import { PanelFooter, FieldLabel } from "@shared/components";
@@ -46,7 +46,7 @@ const AddTransactionForm: FC<AddTransactionFormProps> = ({ onSwitch, onClose }) 
 	const walletOptions = (excludeId?: string): WalletSelectOption[] =>
 		wallets
 			.filter((wallet) => wallet.id !== excludeId)
-			.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: DEFAULT_WALLET_GRADIENT }));
+			.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: wallet.color }));
 
 	return (
 		<AddTransactionFormWrapper handleSubmit={form.handleSubmit} onSuccess={onClose}>

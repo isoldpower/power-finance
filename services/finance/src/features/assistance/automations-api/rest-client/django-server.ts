@@ -4,10 +4,14 @@ import type {
 	IAutomationsRESTApiClient,
 	AutomationListRequest,
 	AutomationListResponse,
+	AutomationGetRequest,
+	AutomationGetResponse,
 	AutomationToggleRequest,
 	AutomationToggleResponse,
 	AutomationCreateRequest,
 	AutomationCreateResponse,
+	AutomationUpdateRequest,
+	AutomationUpdateResponse,
 	AutomationDeleteRequest,
 	AutomationDeleteResponse,
 } from "../types.ts";
@@ -30,8 +34,18 @@ class AutomationsDjangoRESTApiClient implements IAutomationsRESTApiClient {
 			.then((response) => response.data);
 	}
 
+	public get(request: AutomationGetRequest): Promise<AutomationGetResponse> {
+		return this.axiosInstance.get<AutomationGetResponse>(`/${request.id}/`)
+			.then((response) => response.data);
+	}
+
 	public toggle(request: AutomationToggleRequest): Promise<AutomationToggleResponse> {
 		return this.axiosInstance.patch<AutomationToggleResponse>(`/${request.id}/`, { enabled: request.enabled })
+			.then((response) => response.data);
+	}
+
+	public update(request: AutomationUpdateRequest): Promise<AutomationUpdateResponse> {
+		return this.axiosInstance.patch<AutomationUpdateResponse>(`/${request.id}/`, request.data)
 			.then((response) => response.data);
 	}
 

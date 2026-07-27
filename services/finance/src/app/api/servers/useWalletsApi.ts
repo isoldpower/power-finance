@@ -1,8 +1,7 @@
 import { useMemo } from "react";
-import { IWalletsRESTApiClient, WalletsDjangoRESTApiClient, WalletsMockRESTApiClient } from "@feature/wallets";
+import { IWalletsRESTApiClient, WalletsMockRESTApiClient } from "@feature/wallets";
 import { useAxiosInstance } from "@internal/shared";
 
-const USE_DJANGO_BACKEND: boolean = false;
 
 interface UseWalletsApiResponse {
 	rest: IWalletsRESTApiClient;
@@ -14,9 +13,7 @@ function useWalletsApi(baseUrl: string): UseWalletsApiResponse {
 	});
 
 	const restWalletsClient = useMemo<IWalletsRESTApiClient>(() => {
-		return USE_DJANGO_BACKEND
-			? new WalletsDjangoRESTApiClient(walletsAxiosInstance)
-			: new WalletsMockRESTApiClient('wallets');
+		return new WalletsMockRESTApiClient('wallets');
 	}, [walletsAxiosInstance]);
 
 	return useMemo(() => ({

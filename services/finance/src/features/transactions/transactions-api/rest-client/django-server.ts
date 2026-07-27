@@ -3,9 +3,23 @@ import type {
 	TransactionDeleteRequest, TransactionDeleteResponse,
 	TransactionGetRequest, TransactionGetResponse,
 	TransactionListRequest, TransactionListResponse,
+	TransactionPatchRequest, TransactionPatchResponse,
 	TransactionPostRequest, TransactionPostResponse
 } from "./types.ts";
+import type { TransactionDetailed } from "../types.ts";
 import type { AxiosInstance } from "axios";
+
+
+const parseTransactionDetailed = (transaction: TransactionDetailed): TransactionDetailed => ({
+	...transaction,
+	wallet: {
+		...transaction.wallet,
+		balance: {
+			...transaction.wallet.balance,
+			amount: parseFloat(transaction.wallet.balance.amount as unknown as string),
+		},
+	},
+});
 
 
 class TransactionDjangoRESTApiClient implements ITransactionsRESTApiClient {
@@ -31,7 +45,7 @@ class TransactionDjangoRESTApiClient implements ITransactionsRESTApiClient {
 		const postfix = this.resolvePostfix(request.params);
 
 		return this.axiosInstance.get<TransactionGetResponse>(`/${request.id}/${postfix}`)
-			.then((response) => response.data);
+			.then((response) => parseTransactionDetailed(response.data));
 	}
 
 	public post(
@@ -40,7 +54,7 @@ class TransactionDjangoRESTApiClient implements ITransactionsRESTApiClient {
 		const postfix = this.resolvePostfix(request.params);
 
 		return this.axiosInstance.post<TransactionPostResponse>(`/${postfix}`, request.data)
-			.then((response) => response.data);
+			.then((response) => parseTransactionDetailed(response.data));
 	}
 
 	public list(
@@ -50,6 +64,15 @@ class TransactionDjangoRESTApiClient implements ITransactionsRESTApiClient {
 
 		return this.axiosInstance.get<TransactionListResponse>(`/${postfix}`)
 			.then((response) => response.data);
+	}
+
+	public patch(
+		request: TransactionPatchRequest
+	): Promise<TransactionPatchResponse> {
+		const postfix = this.resolvePostfix(request.params);
+
+		return this.axiosInstance.patch<TransactionPatchResponse>(`/${request.id}/${postfix}`, request.data)
+			.then((response) => parseTransactionDetailed(response.data));
 	}
 
 	delete(

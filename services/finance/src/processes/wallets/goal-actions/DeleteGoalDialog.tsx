@@ -5,7 +5,7 @@ import { cn, FinanceButton } from "@internal/ui-library";
 import { useWalletsList } from "@feature/wallets";
 import { useTransactionsListMethods } from "@feature/transactions";
 import { useDeleteGoal } from "@feature/wallets";
-import { WalletSelect, DEFAULT_WALLET_GRADIENT } from "@entity/wallets";
+import { WalletSelect } from "@entity/wallets";
 import { ConfirmModal } from "@shared/interactions";
 import { DangerIconBadge } from "@shared/components";
 
@@ -36,7 +36,7 @@ const DeleteGoalDialog: FC<DeleteGoalDialogProps> = ({ id, name, saved, children
 		setToWalletId((prev) => prev || wallets[0].id);
 	}, [wallets]);
 
-	const walletOptions = wallets.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: DEFAULT_WALLET_GRADIENT }));
+	const walletOptions = wallets.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: wallet.color }));
 
 	const pending = meta.createMutation.isPending || deleteGoal.isPending;
 	const transferReady = mode !== 'transfer' || !hasSavings || toWalletId !== '';

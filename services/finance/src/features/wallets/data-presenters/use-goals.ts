@@ -1,7 +1,5 @@
-import { useMemo } from "react";
-
 import { useWalletsList } from "./use-wallets-list.ts";
-import { walletToGoal } from "../wallets-api";
+import { useWalletGoalsView } from "../data-selectors";
 import type { Goal } from "../wallets-api";
 
 
@@ -13,10 +11,7 @@ interface UseGoalsReturn {
 
 const useGoals = (): UseGoalsReturn => {
 	const { wallets, isPending, isError } = useWalletsList(undefined, 'long-term-goal');
-
-	const goals = useMemo(() => {
-		return wallets.map(walletToGoal);
-	}, [wallets]);
+	const goals = useWalletGoalsView(wallets);
 
 	return { goals, isPending, isError };
 };

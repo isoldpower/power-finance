@@ -1,31 +1,28 @@
-import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import type { UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
+import { useResourceQuery } from "@shared/data";
+import type { UseResourceQueryResult } from "@shared/data";
 import { countNotifications } from "../notifications-api";
 import { NOTIFICATIONS_CACHE_KEYS } from "./cache-config.ts";
 import type { NotificationCountResponse } from "../notifications-api";
 
 
-type UseNotificationsCountReturn = UseQueryResult<NotificationCountResponse> & {
+type UseNotificationsCountReturn = UseResourceQueryResult<NotificationCountResponse, number> & {
 	count: number;
 };
 
 const useNotificationsCount = (ack = false): UseNotificationsCountReturn => {
 	const apiContext = useApiContext();
-	const query = useQuery<NotificationCountResponse>({
-		queryKey: [NOTIFICATIONS_CACHE_KEYS.count, ack],
-		queryFn: () => countNotifications({
+	const query = useResourceQuery<NotificationCountResponse, number>({
+		key: [NOTIFICATIONS_CACHE_KEYS.count, ack],
+		fetch: () => countNotifications({
 			handler: apiContext.notificationServers.rest,
 			ack,
 		}),
+		select: (response) => response.count,
+		fallback: 0,
 	});
 
-	return useMemo(() => ({
-		...query,
-		count: query.data?.count ?? 0,
-	}), [query]);
+	return { ...query, count: query.value };
 };
 
 export { useNotificationsCount };

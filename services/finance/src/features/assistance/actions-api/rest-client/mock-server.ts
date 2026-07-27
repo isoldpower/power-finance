@@ -14,9 +14,9 @@ const delay = <T>(value: T): Promise<T> =>
 	new Promise((resolve) => setTimeout(() => { resolve(value); }, MOCK_DELAY_MS));
 
 const SEED: Action[] = [
-	{ id: 'a1', kind: 'recurring', title: 'Confirm recurring rent — $1,450.00', subtitle: 'Detected on Main Checking · due Jun 30', primaryLabel: 'Approve', secondaryLabel: 'Skip' },
-	{ id: 'a2', kind: 'duplicate', title: 'Possible duplicate — Coffee $4.80', subtitle: 'Two matching charges 2 minutes apart', primaryLabel: 'Merge', secondaryLabel: 'Keep both' },
-	{ id: 'a3', kind: 'uncategorized', title: '3 transactions need a category', subtitle: 'Categorize to keep reports accurate', primaryLabel: 'Review', secondaryLabel: 'Later' },
+	{ id: 'a1', kind: 'recurring', title: 'Confirm recurring rent — $1,450.00', subtitle: 'Detected on Main Checking · due Jun 30' },
+	{ id: 'a2', kind: 'duplicate', title: 'Possible duplicate — Coffee $4.80', subtitle: 'Two matching charges 2 minutes apart' },
+	{ id: 'a3', kind: 'uncategorized', title: '3 transactions need a category', subtitle: 'Categorize to keep reports accurate' },
 ];
 
 const loadActions = (): Action[] => {

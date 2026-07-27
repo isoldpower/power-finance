@@ -1,19 +1,34 @@
-import type { Wallet } from "@entity/wallets";
+type TransactionDirection = 'in' | 'out';
 
-interface TransactionDto {
+interface TransactionWalletRef {
 	id: string;
-	amount: string;
-	currency_code: string;
-	source_wallet: Wallet;
-	created_at: string;
+	name: string;
+	color: string;
+}
+
+interface TransactionReceipt {
+	merchant: string;
+	date: string;
+	category: string;
+	confidence: number;
 }
 
 interface TransactionPreviewDto {
 	id: string;
 	amount: string;
 	currency_code: string;
-	source_wallet: Wallet;
+	direction: TransactionDirection;
+	merchant: string;
+	category: string;
+	occurred_at: string;
 	created_at: string;
+	source_wallet: TransactionWalletRef;
 }
 
-export type { TransactionDto, TransactionPreviewDto };
+interface TransactionDto extends TransactionPreviewDto {
+	note: string;
+	receipt?: TransactionReceipt;
+	counterparty_wallet?: TransactionWalletRef;
+}
+
+export type { TransactionDto, TransactionPreviewDto, TransactionDirection, TransactionWalletRef, TransactionReceipt };

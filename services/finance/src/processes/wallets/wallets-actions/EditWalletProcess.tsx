@@ -6,7 +6,6 @@ import { z } from "zod";
 import { useSearchProtected } from "@feature/navigation";
 import { EditWalletDetailsFx } from "@feature/wallets/fetch-experience/EditWalletDetailsFx.tsx";
 import { EditWalletForm } from "@widget/wallets";
-import { DEFAULT_WALLET_GRADIENT } from "@entity/wallets";
 
 
 const requiredSearch = z.object({
@@ -26,7 +25,7 @@ const EditWalletProcess: FC = () => {
 				<EditWalletForm
 					wallet={{
 						...loadedWallet,
-						gradient: DEFAULT_WALLET_GRADIENT,
+						gradient: loadedWallet.color,
 						currency: loadedWallet.balance.currency,
 					}}
 					onClose={onClose}

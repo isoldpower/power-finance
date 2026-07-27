@@ -39,7 +39,7 @@ const PinnableWalletRow: FC<PinnableWalletRowProps> = ({ wallet }) => {
 					: "border-l-transparent hover:bg-surface-2"
 			)}
 		>
-			<WalletSwatch size='md' />
+			<WalletSwatch size='md' color={wallet.color} />
 			<div className="min-w-0 flex-1">
 				<div className="truncate text-[13.5px] font-semibold">
 					{wallet.name}

@@ -5,7 +5,7 @@ import { Tooltip, RevealMotion } from "@shared/interactions";
 import { WhatIfCard, CheckIcon } from "@widget/assistance";
 import { AutomationsCard, PlanningAiAssistant, NeedsActionPanel } from "@process/assistance";
 import { GoalsCard, NewGoalPanel } from "@process/wallets";
-import {useActions} from "@feature/assistance";
+import { useActions } from "@feature/assistance";
 
 
 const PlanningPage: FC = () => {
@@ -15,7 +15,9 @@ const PlanningPage: FC = () => {
 	return (
 		<div className="mx-auto flex max-w-[1320px] flex-col gap-4 px-[22px] pb-[70px] pt-[22px]">
 			<RevealMotion delay={0.05} className="flex flex-wrap items-center gap-3.5">
-				<h1 className="font-display text-2xl font-semibold tracking-[-0.01em]">Planning</h1>
+				<h1 className="font-display text-2xl font-semibold tracking-[-0.01em]">
+					Planning
+				</h1>
 				{inSync ? (
 					<Tooltip content="Everything is in sync — nothing needs your approval right now.">
 						<span className="fx-slidein inline-flex cursor-default items-center gap-1.5 rounded-full bg-pos-soft px-2.5 py-1 text-[11.5px] font-semibold text-pos">
@@ -30,7 +32,9 @@ const PlanningPage: FC = () => {
 				)}
 				<div className="flex-1" />
 				<NewGoalPanel>
-					<FinanceButton className="shadow-[0_4px_14px_var(--glow)]">＋ New goal</FinanceButton>
+					<FinanceButton className="shadow-[0_4px_14px_var(--glow)]">
+						＋ New goal
+					</FinanceButton>
 				</NewGoalPanel>
 			</RevealMotion>
 			<RevealMotion delay={0.12}>

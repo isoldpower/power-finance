@@ -5,8 +5,10 @@ const ACTIONS_CACHE_KEYS = {
 
 const AUTOMATIONS_CACHE_KEYS = {
 	list: 'automations',
+	fetch: 'automation',
 	toggle: 'toggleAutomation',
 	create: 'createAutomation',
+	update: 'updateAutomation',
 	delete: 'deleteAutomation',
 };
 

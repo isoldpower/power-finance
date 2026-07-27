@@ -13,5 +13,20 @@ const fallbackIcon: ActionVisual = { icon: '!', className: 'bg-[var(--accent-sof
 
 const actionVisual = (kind: string): ActionVisual => ICON_BY_KIND[kind] ?? fallbackIcon;
 
-export { actionVisual };
-export type { ActionVisual };
+interface ActionLabels {
+	primary: string;
+	secondary: string;
+}
+
+const LABELS_BY_KIND: Record<string, ActionLabels> = {
+	recurring: { primary: 'Approve', secondary: 'Skip' },
+	duplicate: { primary: 'Merge', secondary: 'Keep both' },
+	uncategorized: { primary: 'Review', secondary: 'Later' },
+};
+
+const fallbackLabels: ActionLabels = { primary: 'Resolve', secondary: 'Dismiss' };
+
+const actionLabels = (kind: string): ActionLabels => LABELS_BY_KIND[kind] ?? fallbackLabels;
+
+export { actionVisual, actionLabels };
+export type { ActionVisual, ActionLabels };
