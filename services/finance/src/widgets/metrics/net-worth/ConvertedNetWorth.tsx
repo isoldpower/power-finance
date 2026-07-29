@@ -2,7 +2,6 @@ import { cn } from "@internal/ui-library";
 import { useMemo } from "react";
 import { AnimatedMoney } from "@entity/localization";
 import { NetWorthInsight } from "@feature/metrics";
-import { NET_WORTH_RANGE_LABELS } from "../config.ts";
 
 import type { FC } from "react";
 import type { Period } from "@entity/metrics";
@@ -19,9 +18,9 @@ const ConvertedNetWorth: FC<ConvertedNetWorthProps> = ({ netWorth, period }) => 
 	const { netWorthDiff, convertedNetWorth } = useConvertedNetWorth(netWorth);
 	const { netDiffConverted, netDiffSign } = useConvertedNetDiff(netWorth);
 	
-	const netWorthLabel = useMemo(() => {
-		return NET_WORTH_RANGE_LABELS[period] ?? 'vs last period';
-	}, [period]);
+	// const netWorthLabel = useMemo(() => {
+	// 	return NET_WORTH_RANGE_LABELS[period] ?? 'vs last period';
+	// }, [period]);
 
 	return (
 		<>
@@ -45,7 +44,8 @@ const ConvertedNetWorth: FC<ConvertedNetWorthProps> = ({ netWorth, period }) => 
 			<div className="mt-2 text-[13px] text-text-2">
 				{netDiffSign}{netDiffConverted.formatted} 
 				<span className="text-text-3">
-					{netWorthLabel}
+					FIXME
+					{/*{netWorthLabel}*/}
 				</span>
 			</div>
 		</>

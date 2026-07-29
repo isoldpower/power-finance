@@ -1,5 +1,5 @@
 export * from './currencies-api';
 export * from './data-presenters';
 export * from './date-label';
-
-export { MOCK_CURRENCIES } from './mock.ts';
+export * from './select-currency';
+export * from './select-locale';

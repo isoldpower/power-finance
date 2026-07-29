@@ -9,7 +9,10 @@ interface RevealMotionProps {
 }
 
 const RevealMotion: FC<RevealMotionProps> = ({ delay = 0, className, children }) => (
-	<div className={cn("fx-rise", className)} style={delay ? { animationDelay: `${delay.toString()}s` } : undefined}>
+	<div 
+		className={cn("fx-rise", className)} 
+		style={delay ? { animationDelay: `${delay.toString()}s` } : undefined
+	}>
 		{children}
 	</div>
 );

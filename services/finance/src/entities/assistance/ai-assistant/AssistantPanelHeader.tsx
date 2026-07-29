@@ -2,6 +2,7 @@ import type { FC } from "react";
 
 import { SparkleIcon } from "../icons/SparkleIcon.tsx";
 
+
 interface AssistantPanelHeaderProps {
 	onClose?: () => void;
 }

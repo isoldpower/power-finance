@@ -47,6 +47,13 @@ describe('useLocaleDate', () => {
 		expect(typeof result.current).toBe('string');
 		expect(result.current).toContain('2023');
 	});
+
+	test('handles an empty locale gracefully', () => {
+		mockedUseSettingsContext.mockReturnValue({ locale: '' });
+
+		const { result } = renderHook(() => useLocaleDate('2023-10-15'));
+		expect(result.current).toBe('Oct 15, 2023');
+	});
 });
 
 describe('useLocaleDateTransform', () => {

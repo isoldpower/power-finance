@@ -1,16 +1,16 @@
 import { useMemo } from "react";
-import { useSettingsContext } from "@internal/shared";
+import { resolveLocale, useSettingsContext } from "@internal/shared";
 
 
-const useLongDateLabel = () => {
+const useLongDateLabel = (date: Date) => {
 	const { locale } = useSettingsContext();
 
 	return useMemo(() => {
-		const now = new Date();
-		const weekday = now.toLocaleDateString(locale, { weekday: 'short' }).toUpperCase();
-		const month = now.toLocaleDateString(locale, { month: 'short' }).toUpperCase();
-		return `${weekday} · ${month} ${now.getDate().toString()} · ${now.getFullYear().toString()}`;
-	}, [locale]);
+		const safeLocale = resolveLocale(locale);
+		const weekday = date.toLocaleDateString(safeLocale, { weekday: 'short' }).toUpperCase();
+		const month = date.toLocaleDateString(safeLocale, { month: 'short' }).toUpperCase();
+		return `${weekday} · ${month} ${date.getDate().toString()} · ${date.getFullYear().toString()}`;
+	}, [date, locale]);
 };
 
 export { useLongDateLabel };

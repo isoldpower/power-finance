@@ -6,6 +6,7 @@ import { useTransactionsListMethods } from "../data-presenters";
 import { buildTransferChain } from "../transaction-actions";
 import type { TransferSchema } from "./schemas.ts";
 
+
 interface TransferFormProps {
 	handleSubmit: UseFormHandleSubmit<TransferSchema>;
 	onSuccess?: () => void;

@@ -1,5 +1,6 @@
 import type { FC } from "react";
 
+
 interface WalletPreviewCardProps {
 	gradient: string;
 	type: string;

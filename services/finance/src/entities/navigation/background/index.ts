@@ -1,3 +1,3 @@
-export { AmbientBackdrop } from './AmbientBackdrop.tsx';
-
-export type { AmbientBackdropProps } from './AmbientBackdrop.tsx';
+export { BackgroundDotGrid } from './BackgroundDotGrid.tsx';
+export { ParticlesCanvas } from './ParticlesCanvas.tsx';
+export { BackgroundAurora } from './BackgroundAurora.tsx';

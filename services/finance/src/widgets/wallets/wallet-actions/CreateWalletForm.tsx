@@ -8,16 +8,19 @@ import { PanelFooter } from "@shared/components";
 import { CreateWalletForm as CreateWalletFormWrapper, walletEntrySchema } from "@feature/wallets/wallet-actions";
 import type { WalletEntrySchema } from "@feature/wallets/wallet-actions";
 import { MOCK_WALLET_TYPES } from "@feature/wallets";
-import { MOCK_CURRENCIES } from "@feature/localization";
+import { useCurrencies } from "@feature/localization";
+import { useSettingsContext } from "@internal/shared";
 
 interface CreateWalletFormProps {
 	onClose: () => void;
 }
 
 const CreateWalletForm: FC<CreateWalletFormProps> = ({ onClose }) => {
+	const { mainCurrency } = useSettingsContext();
+	const { currencies } = useCurrencies();
 	const form = useForm<WalletEntrySchema>({
 		resolver: zodResolver(walletEntrySchema),
-		defaultValues: { name: '', type: MOCK_WALLET_TYPES[0], currency: MOCK_CURRENCIES[0], balance: '' },
+		defaultValues: { name: '', type: MOCK_WALLET_TYPES[0], currency: mainCurrency, balance: '' },
 	});
 	const values = form.watch();
 
@@ -31,7 +34,7 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({ onClose }) => {
 				gradient={NEW_WALLET_GRADIENT}
 				editing={false}
 				walletTypes={MOCK_WALLET_TYPES}
-				currencies={MOCK_CURRENCIES}
+				currencies={currencies}
 			/>
 			<PanelFooter submitType="submit" submitLabel="Create wallet" onClose={onClose} />
 		</CreateWalletFormWrapper>

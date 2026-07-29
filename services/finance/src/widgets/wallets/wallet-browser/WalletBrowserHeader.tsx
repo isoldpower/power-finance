@@ -2,11 +2,6 @@ import { SectionHeader, SlideOverTrigger } from "@shared/components";
 import { cn } from "@internal/ui-library";
 
 import type { FC } from "react";
-import {
-	SectionHeaderBorder,
-	SectionHeaderCaption,
-	SectionHeaderTitle
-} from "@shared/components/section-header/SectionHeader.tsx";
 
 
 interface WalletBrowserHeaderProps {
@@ -20,13 +15,13 @@ const WalletBrowserHeader: FC<WalletBrowserHeaderProps> = ({
 }) => {
 	return (
 		<SectionHeader>
-			<SectionHeaderTitle>
+			<SectionHeader.Title>
 				Wallets
-			</SectionHeaderTitle>
-			<SectionHeaderCaption>
+			</SectionHeader.Title>
+			<SectionHeader.Caption>
 				{total.toString()} wallets
-			</SectionHeaderCaption>
-			<SectionHeaderBorder />
+			</SectionHeader.Caption>
+			<SectionHeader.Border />
 			<SlideOverTrigger panelId={createWalletPanel}>
 				<button 
 					type="button"

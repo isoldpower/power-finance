@@ -11,7 +11,14 @@ interface CategorySegmentBlockProps {
 	onClick?: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
-const CategorySegmentBlock: FC<CategorySegmentBlockProps> = ({ color, width, shade, selected = false, title, onClick }) => (
+const CategorySegmentBlock: FC<CategorySegmentBlockProps> = ({
+	color,
+	width,
+	shade,
+	selected = false,
+	title,
+	onClick
+}) => (
 	<div
 		title={title}
 		onClick={onClick}

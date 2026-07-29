@@ -1,5 +1,6 @@
 export * from './modal-box';
 export * from './preferences-button';
 export * from './webhook';
+export * from './header-popover';
 
-export { SETTINGS_SECTIONS } from './constants.ts';
+export * from './constants.ts';

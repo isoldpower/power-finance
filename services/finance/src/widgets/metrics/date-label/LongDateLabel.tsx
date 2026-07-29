@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import type { FC } from "react";
 
 import { DateLabel } from "@entity/metrics";
@@ -5,7 +6,10 @@ import { useLongDateLabel } from "@feature/localization";
 
 
 const LongCurrentDateLabel: FC = () => {
-	const dateLabel = useLongDateLabel();
+	const nowDate = useMemo(() => {
+		return new Date();
+	}, []);
+	const dateLabel = useLongDateLabel(nowDate);
 
 	return (
 		<DateLabel>

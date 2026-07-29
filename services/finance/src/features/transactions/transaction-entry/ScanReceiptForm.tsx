@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import type { FormEvent, ReactNode } from "react";
 
+
 interface ScanReceiptFormProps {
 	onSuccess?: () => void;
 	children?: ReactNode;

@@ -1,34 +1,37 @@
-import { useCallback } from "react";
 import type { FC } from "react";
 
-import { PeriodSelector as PeriodSelectorView } from "@entity/metrics";
+import { PeriodButton, PeriodTabsContainer } from "@entity/metrics";
+import { useMetricsPreferences } from "@feature/metrics";
+import { useShallow } from "zustand/react/shallow";
 import type { Period } from "@entity/metrics";
-
-import { PERIODS } from "../config.ts";
 
 
 interface PeriodSelectorProps {
-	className?: string;
-	period: Period
-	onPeriodChange: (change: { period: Period }) => void
+	fullList: readonly Period[];
 }
 
 const PeriodSelector: FC<PeriodSelectorProps> = ({ 
-	period,
-	onPeriodChange,
-	className,
+	fullList,
 }) => {
-	const onSelectorPeriodChange = useCallback((period: Period) => {
-		onPeriodChange({ period });
-	}, [onPeriodChange]);
+	const { metricsPeriod, changePeriod } = useMetricsPreferences(
+		useShallow((state) => ({ 
+			metricsPeriod: state.metricsPeriod,
+			changePeriod: state.changePeriod,
+		}))
+	);
 	
 	return (
-		<PeriodSelectorView
-			periods={PERIODS} 
-			value={period} 
-			onChange={onSelectorPeriodChange} 
-			className={className} 
-		/>
+		<PeriodTabsContainer>
+			{fullList.map((iterationPeriod) => (
+				<PeriodButton
+					onClick={() => { changePeriod(iterationPeriod); }} 
+					isSelected={metricsPeriod === iterationPeriod} 
+					key={iterationPeriod}
+				>
+					{iterationPeriod}
+				</PeriodButton>
+			))}
+		</PeriodTabsContainer>
 	);
 };
 

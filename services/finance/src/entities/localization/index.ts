@@ -1,5 +1,6 @@
 export * from './animated-money';
+export * from './currency-picker';
+export * from './locale-picker';
 export * from './money-in-original';
-export * from './selectable-currency';
 
-export type { CurrencyMeta } from './types.ts';
+export type * from './types.ts';

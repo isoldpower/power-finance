@@ -2,7 +2,9 @@ import type { FC } from "react";
 import { FinanceInput, FinanceSegmented, FinanceSegmentedItem } from "@internal/ui-library";
 
 import { WalletPreviewCard, BalanceLockedNotice } from "@entity/wallets";
+import { CurrencyCombobox } from "@widget/localization";
 import { FieldLabel } from "@shared/components";
+import type { CurrencyMeta } from "@entity/localization";
 
 interface WalletFormFieldsProps {
 	name: string;
@@ -16,7 +18,7 @@ interface WalletFormFieldsProps {
 	gradient: string;
 	editing: boolean;
 	walletTypes: string[];
-	currencies: string[];
+	currencies: CurrencyMeta[];
 }
 
 const WalletFormFields: FC<WalletFormFieldsProps> = ({
@@ -47,11 +49,12 @@ const WalletFormFields: FC<WalletFormFieldsProps> = ({
 		</FinanceSegmented>
 
 		<FieldLabel>Currency</FieldLabel>
-		<FinanceSegmented value={currency} onValueChange={(value) => { if (value) setCurrency(value); }} className="mb-4 w-full">
-			{currencies.map((option) => (
-				<FinanceSegmentedItem key={option} value={option} className="flex-1">{option}</FinanceSegmentedItem>
-			))}
-		</FinanceSegmented>
+		<CurrencyCombobox
+			currencies={currencies}
+			value={currency}
+			onSelected={setCurrency}
+			className="mb-4"
+		/>
 
 		{editing ? (
 			<BalanceLockedNotice />

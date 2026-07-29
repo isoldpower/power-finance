@@ -1,9 +1,10 @@
-import {FC, useMemo} from "react";
+import { useMemo } from "react";
 import { cn } from "@internal/ui-library";
-
 import { CategoryHeader, CompositionBar, CategorySegmentBlock, categoryColor } from "@entity/accounts";
-import { MockAccountCategory, calculateAccountsShare, useAccountsConvertion } from "@feature/accounts";
-import {useAccountsBrowser} from "@feature/accounts/browse-accounts/BrowseAccountsContext.tsx";
+import { calculateAccountsShare, useAccountsConvertion, useAccountsBrowser } from "@feature/accounts";
+
+import type { FC } from "react";
+import type { MockAccountCategory } from "@feature/accounts";
 
 
 interface CategoryRowProps {
@@ -28,7 +29,11 @@ const CategoryRow: FC<CategoryRowProps> = ({ categoryEntry }) => {
 				active && "bg-secondary",
 			)}
 		>
-			<CategoryHeader label={categoryEntry.label} color={color} totalFormatted={totalFormatted}/>
+			<CategoryHeader 
+				label={categoryEntry.label}
+				color={color}
+				totalFormatted={totalFormatted} 
+			/>
 			<CompositionBar>
 				{segments.map((segment) => (
 					<CategorySegmentBlock

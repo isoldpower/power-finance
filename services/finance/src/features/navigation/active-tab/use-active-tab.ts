@@ -13,7 +13,7 @@ const useActiveTab = (tabs: NavTab[]) => {
 	});
 	
 	const activeTab = useMemo(() => {
-		return resolveActiveTab(pathname);
+		return resolveActiveTab(pathname, 'dashboard');
 	}, [pathname]);
 	const activeLabel = useMemo(() => {
 		return tabs.find((tab) => tab.key === activeTab)?.label ?? 'Dashboard';

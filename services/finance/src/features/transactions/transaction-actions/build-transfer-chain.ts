@@ -1,7 +1,6 @@
 import type { TransactionChainItem } from "../transactions-api";
+import { IN_TEMPORARY_ID, OUT_TEMPORARY_ID } from "./constants";
 
-const OUT_TEMPORARY_ID = 'transfer-out';
-const IN_TEMPORARY_ID = 'transfer-in';
 
 function buildTransferChain(
 	fromId: string,

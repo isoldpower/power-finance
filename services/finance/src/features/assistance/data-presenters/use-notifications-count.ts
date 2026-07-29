@@ -1,8 +1,9 @@
 import { useApiContext } from "@app/api";
 import { useResourceQuery } from "@shared/data";
-import type { UseResourceQueryResult } from "@shared/data";
-import { countNotifications } from "../notifications-api";
 import { NOTIFICATIONS_CACHE_KEYS } from "./cache-config.ts";
+import { countNotifications } from "../notifications-api";
+
+import type { UseResourceQueryResult } from "@shared/data";
 import type { NotificationCountResponse } from "../notifications-api";
 
 

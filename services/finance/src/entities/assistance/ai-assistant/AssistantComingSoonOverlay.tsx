@@ -1,6 +1,7 @@
 import type { FC } from "react";
 
-import { SparkleIcon } from "../icons/SparkleIcon.tsx";
+import { SparkleIcon } from "@entity/assistance";
+
 
 const AssistantComingSoonOverlay: FC = () => (
 	<div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-card/30 backdrop-blur-[3px]">
@@ -8,7 +9,9 @@ const AssistantComingSoonOverlay: FC = () => (
 			<SparkleIcon size={14} accent />
 			Coming soon
 		</span>
-		<span className="text-[11.5px] text-text-2">AI assistant is on the way</span>
+		<span className="text-[11.5px] text-text-2">
+			AI assistant is on the way
+		</span>
 	</div>
 );
 

@@ -3,19 +3,19 @@ import {
 	FinanceIconButton,
 	FinanceMenu,
 	FinanceMenuTrigger,
-	FinanceMenuContent,
+	FinanceMenuContent, 
+	FinanceNotification,
 } from "@internal/ui-library";
 
 import { RouteLink } from "@feature/navigation";
-import { NotificationBell, NotificationList } from "@entity/assistance";
-import type { NotificationListItem } from "@entity/assistance";
+import { NotificationBell, NotificationEmpty, NotificationList } from "@entity/assistance";
+import { useNotifications, useNotificationsCount, NotificationsEmptyGuard } from "@feature/assistance";
 
-interface NavbarNotificationsProps {
-	notifications: NotificationListItem[];
-	unreadCount: number;
-}
 
-const NavbarNotifications: FC<NavbarNotificationsProps> = ({ notifications, unreadCount }) => {
+const NavbarNotifications: FC = () => {
+	const { notifications } = useNotifications({ limit: 8 });
+	const { count: unreadCount } = useNotificationsCount(false);
+	
 	return (
 		<FinanceMenu>
 			<FinanceMenuTrigger asChild>
@@ -25,12 +25,27 @@ const NavbarNotifications: FC<NavbarNotificationsProps> = ({ notifications, unre
 			</FinanceMenuTrigger>
 			<FinanceMenuContent className="w-[340px] p-0">
 				<div className="flex items-center justify-between border-b border-border px-4 py-3">
-					<span className="text-sm font-semibold">Notifications</span>
+					<span className="text-sm font-semibold">
+						Notifications
+					</span>
 					<RouteLink to="settings" className="text-xs font-semibold text-primary">
 						Manage
 					</RouteLink>
 				</div>
-				<NotificationList notifications={notifications} />
+				<NotificationList>
+					<NotificationsEmptyGuard notifications={notifications} empty={<NotificationEmpty />}>
+						{notifications.map((notification) => (
+							<FinanceNotification
+								key={notification.id}
+								level={notification.level}
+								title={notification.title}
+								subtitle={notification.body}
+								time={notification.time}
+							/>
+						))}
+					</NotificationsEmptyGuard>
+					{notifications.length}
+				</NotificationList>
 			</FinanceMenuContent>
 		</FinanceMenu>
 	);
@@ -39,4 +54,3 @@ const NavbarNotifications: FC<NavbarNotificationsProps> = ({ notifications, unre
 NavbarNotifications.displayName = 'NavbarNotifications';
 
 export { NavbarNotifications };
-export type { NavbarNotificationsProps };

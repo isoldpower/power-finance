@@ -7,6 +7,7 @@ export * from "./FinanceSearchInput.tsx";
 export * from "./FinanceSegmented.tsx";
 export * from "./FinanceMenu.tsx";
 export * from "./FinanceSelect.tsx";
+export * from "./FinanceCombobox.tsx";
 export * from "./FinanceToggle.tsx";
 export * from "./FinanceTooltip.tsx";
 export * from "./FinanceAvatar.tsx";

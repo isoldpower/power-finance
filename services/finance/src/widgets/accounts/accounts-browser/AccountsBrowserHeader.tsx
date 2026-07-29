@@ -2,12 +2,7 @@ import type { FC } from "react";
 import { FinanceBadge } from "@internal/ui-library";
 
 import { SectionHeader } from "@shared/components";
-import {
-	SectionHeaderBorder,
-	SectionHeaderCaption,
-	SectionHeaderTitle,
-} from "@shared/components/section-header/SectionHeader.tsx";
-import { useAccountsBrowser } from "@feature/accounts/browse-accounts/BrowseAccountsContext.tsx";
+import { useAccountsBrowser } from "@feature/accounts";
 
 
 const AccountsBrowserHeader: FC = () => {
@@ -15,17 +10,19 @@ const AccountsBrowserHeader: FC = () => {
 
 	return (
 		<SectionHeader>
-			<SectionHeaderTitle>
+			<SectionHeader.Title>
 				<span className="flex items-center gap-2.5">
 					Chart of accounts
 				</span>
-			</SectionHeaderTitle>
-			<SectionHeaderCaption>
+			</SectionHeader.Title>
+			<SectionHeader.Caption>
 				{accountCount} accounts
-			</SectionHeaderCaption>
-			<SectionHeaderBorder />
+			</SectionHeader.Caption>
+			<SectionHeader.Border />
 			<span className="font-numeric text-[10.5px] tracking-[0.08em] text-text-3">
-				<FinanceBadge tone="neutral" appearance="outline" size="sm">🔒 Read-only</FinanceBadge>
+				<FinanceBadge tone="neutral" appearance="outline" size="sm">
+					🔒 Read-only
+				</FinanceBadge>
 			</span>
 		</SectionHeader>
 	);

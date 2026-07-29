@@ -1,2 +1,1 @@
-export * from './global-layout';
-export * from './navbar';
+export * from './website-navbar';

@@ -5,13 +5,13 @@ interface SectionHeaderProps {
 	children: ReactNode;
 }
 
-const SectionHeader: FC<SectionHeaderProps> = ({ children }) => {
+function SectionHeader({ children }: SectionHeaderProps) {
 	return (
 		<div className="mx-0.5 mb-3 flex items-baseline gap-3">
 			{children}
 		</div>
 	);
-};
+}
 
 const SectionHeaderBorder: FC = () => {
 	return (
@@ -44,6 +44,9 @@ const SectionHeaderCaption: FC<SectionHeaderCaptionProps> = ({ children }) => {
 };
 
 SectionHeader.displayName = 'SectionHeader';
+SectionHeader.Border = SectionHeaderBorder;
+SectionHeader.Title = SectionHeaderTitle;
+SectionHeader.Caption = SectionHeaderCaption;
 
-export { SectionHeader, SectionHeaderTitle, SectionHeaderCaption, SectionHeaderBorder };
+export { SectionHeader };
 export type { SectionHeaderProps, SectionHeaderTitleProps, SectionHeaderCaptionProps };

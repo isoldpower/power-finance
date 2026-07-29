@@ -1,6 +1,7 @@
 import { UiButton, Icons } from "@internal/ui-library";
 import type { ComponentProps, FC } from "react";
 
+
 type PreferencesButtonProps = ComponentProps<'button'> & object;
 
 const PreferencesButton: FC<PreferencesButtonProps> = ({ ...props }) => {

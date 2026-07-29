@@ -5,6 +5,7 @@ import type { UseFormHandleSubmit } from "react-hook-form";
 import { useTransactionsListMethods } from "../data-presenters";
 import type { AddTransactionSchema } from "./schemas.ts";
 
+
 interface AddTransactionFormProps {
 	handleSubmit: UseFormHandleSubmit<AddTransactionSchema>;
 	onSuccess?: () => void;

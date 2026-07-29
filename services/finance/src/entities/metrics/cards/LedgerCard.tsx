@@ -1,5 +1,5 @@
 import { FinanceCard } from "@internal/ui-library";
-import type {FC, ReactNode} from "react";
+import type { FC, ReactNode } from "react";
 
 
 interface LedgerCardProps {

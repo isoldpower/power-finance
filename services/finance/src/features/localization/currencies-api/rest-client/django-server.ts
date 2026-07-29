@@ -2,6 +2,7 @@ import type { AxiosInstance } from "axios";
 
 import type {
 	IFxRESTApiClient,
+	FxCurrenciesGetResponse,
 	FxRatesGetRequest,
 	FxRatesGetResponse,
 } from "../types.ts";
@@ -18,6 +19,11 @@ class FxDjangoRESTApiClient implements IFxRESTApiClient {
 		const params = new URLSearchParams({ base: request.params.base });
 
 		return this.axiosInstance.get<FxRatesGetResponse>(`/rates/?${params.toString()}`)
+			.then((response) => response.data);
+	}
+
+	public getCurrencies(): Promise<FxCurrenciesGetResponse> {
+		return this.axiosInstance.get<FxCurrenciesGetResponse>('/currencies/')
 			.then((response) => response.data);
 	}
 }

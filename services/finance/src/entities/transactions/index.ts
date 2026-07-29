@@ -10,5 +10,5 @@ export * from './transactions-list';
 export * from './transactions-table';
 export * from './type-card';
 
-export { toneFromAmount, iconClassFromAmount, iconFromAmount, toneTextClass } from './transaction-visual.ts';
+export * from './transaction-visual.ts';
 export type * from './types.ts';

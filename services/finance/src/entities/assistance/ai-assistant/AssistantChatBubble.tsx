@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { cn } from "@internal/ui-library";
 
+
 interface AssistantMessage {
 	id: string;
 	role: 'assistant' | 'user';
@@ -24,7 +25,9 @@ const AssistantChatBubble: FC<AssistantChatBubbleProps> = ({ role, text, refs })
 					: "border border-border bg-secondary text-foreground"
 			)}
 		>
-			<div className="text-[12.5px] leading-relaxed">{text}</div>
+			<div className="text-[12.5px] leading-relaxed">
+				{text}
+			</div>
 			{refs ? (
 				<div className="mt-2 flex flex-wrap gap-1.5">
 					{refs.map((ref) => (

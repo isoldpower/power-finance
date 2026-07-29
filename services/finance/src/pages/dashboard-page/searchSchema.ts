@@ -1,9 +1,8 @@
 import { z } from "zod";
-import { PERIODS } from "@widget/metrics";
+
 
 const searchSchema = z.object({
-	selectedWallet: z.string().default('all'),
-	period: z.enum(PERIODS).default('1M'),
+	wallet: z.string().default('all'),
 });
 
 type DashboardSearchSchema = z.infer<typeof searchSchema>;

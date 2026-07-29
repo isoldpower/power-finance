@@ -7,7 +7,7 @@ import { PanelFooter } from "@shared/components";
 import { EditWalletForm as EditWalletFormWrapper, walletEntrySchema } from "@feature/wallets/wallet-actions";
 import type { WalletEntrySchema } from "@feature/wallets/wallet-actions";
 import { MOCK_WALLET_TYPES } from "@feature/wallets";
-import { MOCK_CURRENCIES } from "@feature/localization";
+import { useCurrencies } from "@feature/localization";
 import type { PanelWallet } from "@feature/wallets";
 
 const CREDIT_TYPE = 'Credit card';
@@ -18,6 +18,7 @@ interface EditWalletFormProps {
 }
 
 const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, onClose }) => {
+	const { currencies } = useCurrencies();
 	const form = useForm<WalletEntrySchema>({
 		resolver: zodResolver(walletEntrySchema),
 		defaultValues: {
@@ -39,7 +40,7 @@ const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, onClose }) => {
 				gradient={wallet.gradient}
 				editing
 				walletTypes={MOCK_WALLET_TYPES}
-				currencies={MOCK_CURRENCIES}
+				currencies={currencies}
 			/>
 			<PanelFooter submitType="submit" submitLabel="Save changes" onClose={onClose} />
 		</EditWalletFormWrapper>

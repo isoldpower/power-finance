@@ -2,12 +2,7 @@ import { SectionHeader, SlideOverTrigger } from "@shared/components";
 import { cn } from "@internal/ui-library";
 
 import type { FC } from "react";
-import {
-	SectionHeaderBorder,
-	SectionHeaderCaption,
-	SectionHeaderTitle
-} from "@shared/components/section-header/SectionHeader.tsx";
-import {useTransactionsPaginationContext} from "@feature/transactions/search-and-filtering/TransactionsPaginationContext.tsx";
+import { useTransactionsPaginationContext } from "@feature/transactions";
 
 
 interface TransactionsBrowserHeaderProps {
@@ -21,13 +16,13 @@ const TransactionsBrowserHeader: FC<TransactionsBrowserHeaderProps> = ({
 
 	return (
 		<SectionHeader>
-			<SectionHeaderTitle>
+			<SectionHeader.Title>
 				Transactions
-			</SectionHeaderTitle>
-			<SectionHeaderCaption>
+			</SectionHeader.Title>
+			<SectionHeader.Caption>
 				{total.toString()} transactions
-			</SectionHeaderCaption>
-			<SectionHeaderBorder />
+			</SectionHeader.Caption>
+			<SectionHeader.Border />
 			<SlideOverTrigger panelId={createTransactionPanel}>
 				<button
 					type="button"

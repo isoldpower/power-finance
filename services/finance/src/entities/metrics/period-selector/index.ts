@@ -1,3 +1,2 @@
-export { PeriodSelector } from './PeriodSelector.tsx';
-
-export type { PeriodSelectorProps, Period } from './PeriodSelector.tsx';
+export { PeriodButton } from './PeriodButton.tsx';
+export { PeriodTabsContainer } from './PeriodTabsContainer.tsx';

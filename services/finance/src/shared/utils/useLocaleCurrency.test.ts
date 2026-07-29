@@ -69,6 +69,15 @@ describe('useLocaleCurrency', () => {
 		expect(formatted).toBe('$0.00');
 	});
 
+	test('falls back gracefully for an empty locale', () => {
+		mockedUseSettingsContext.mockReturnValue({ locale: '' });
+
+		const { result } = renderHook(() => useLocaleCurrency());
+		const formatted = result.current(1234.56, 'USD');
+
+		expect(formatted).toBe('$1,234.56');
+	});
+
 	test('falls back gracefully for unknown/invalid locale', () => {
 		mockedUseSettingsContext.mockReturnValue({ locale: 'INVALID' });
 

@@ -1,8 +1,7 @@
 import type { Period } from "@entity/metrics";
 import type { FC } from "react";
 
-import { useInsights } from "@feature/metrics";
-import { NetWorthHeroFx } from "@feature/metrics/fetch-experience/NetWorthHeroFx.tsx";
+import { useInsights, NetWorthHeroFx } from "@feature/metrics";
 import { cn, FinanceCard } from "@internal/ui-library";
 import { ConvertedNetWorth } from "@widget/metrics/net-worth/ConvertedNetWorth.tsx";
 import { ConvertedNetWorthChart } from "@widget/metrics/net-worth/ConvertedNetWorthChart.tsx";

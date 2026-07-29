@@ -4,4 +4,10 @@ interface CurrencyMeta {
 	name: string;
 }
 
-export type { CurrencyMeta };
+interface LocaleMeta {
+	tag: string;
+	name: string;
+	region: string;
+}
+
+export type { CurrencyMeta, LocaleMeta };

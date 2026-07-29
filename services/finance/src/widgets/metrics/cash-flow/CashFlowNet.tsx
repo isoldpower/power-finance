@@ -4,7 +4,7 @@ import { useConvertMoney } from "@feature/localization";
 import { useMemo } from "react";
 import { AnimatedMoney } from "@entity/localization";
 import { CashFlowPeriod } from "@entity/metrics";
-import { CASH_FLOW_RANGE_LABELS } from "@widget/metrics/config.ts";
+
 
 interface CashFlowNetProps {
 	period: Period;
@@ -27,7 +27,7 @@ const CashFlowNet = ({
 
 	return (
 		<div className="mt-[18px] flex items-center justify-between border-t border-border pt-3.5">
-			<CashFlowPeriod label={(CASH_FLOW_RANGE_LABELS[period] ?? 'This month').toLowerCase()} />
+			<CashFlowPeriod period={period} />
 			<AnimatedMoney
 				amount={cashNetAmount}
 				currency={cashNetCurrency}

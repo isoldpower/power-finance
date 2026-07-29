@@ -13,7 +13,15 @@ interface AccountListItemProps {
 	onSelect: () => void;
 }
 
-const AccountListItem: FC<AccountListItemProps> = ({ name, kind, color, active, balanceFormatted, balanceTone, onSelect }) => (
+const AccountListItem: FC<AccountListItemProps> = ({
+	name,
+	kind,
+	color,
+	active,
+	balanceFormatted,
+	balanceTone,
+	onSelect
+}) => (
 	<div
 		onClick={onSelect}
 		className={cn(

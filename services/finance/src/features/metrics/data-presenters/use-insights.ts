@@ -4,7 +4,7 @@ import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
 import { getInsights } from "@feature/metrics";
-import { CACHE_KEYS } from "./cache-config.ts";
+import { METRICS_CACHE_KEYS } from "./cache-config.ts";
 import type { Insights, InsightMetric, NetWorthInsight, CashFlowInsight } from "@feature/metrics";
 
 interface UseInsightsParams {
@@ -25,7 +25,7 @@ const useInsights = (
 ): UseInsightsReturn => {
 	const apiContext = useApiContext();
 	const query = useQuery<Insights>({
-		queryKey: [CACHE_KEYS.insights, params.metrics.join(','), params.range ?? 'default'],
+		queryKey: [METRICS_CACHE_KEYS.insights, params.metrics.join(','), params.range ?? 'default'],
 		queryFn: () => getInsights({
 			handler: apiContext.summaryServers.rest,
 			metrics: params.metrics,

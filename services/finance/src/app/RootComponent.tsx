@@ -3,10 +3,9 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { AuthGuard, AuthProvider, getIsEmbedded, useIsClerkProvided, ClerkProvider } from "@internal/shared";
 import { useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
 
-import { GlobalLayout } from "@process/navigation";
-
-import { checkEnvVariables } from "./env/checkEnv.ts";
 import { ApiProvider } from "./api";
+import { checkEnvVariables } from "./env/checkEnv.ts";
+import { GlobalLayout } from "./layouts/GlobalLayout.tsx";
 import type { FC, ReactNode } from "react";
 
 
