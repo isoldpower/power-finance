@@ -1,7 +1,10 @@
-import {useCallback, useEffect, useRef} from "react";
-import {UseFormReturn, useWatch} from "react-hook-form";
-import {QuickAddSchema} from "@feature/transactions";
-import {useCurrencyPairRate} from "@feature/localization";
+import { useCallback, useEffect, useRef } from "react";
+import { useWatch } from "react-hook-form";
+
+import { useCurrencyPairRate } from "@feature/localization";
+
+import type { Control, FieldValues, UseFormReturn } from "react-hook-form";
+import type { TransactionEntryValues } from "./types.ts";
 
 
 interface UseCrossCurrencyTransferReturn {
@@ -9,15 +12,15 @@ interface UseCrossCurrencyTransferReturn {
 	handleReceivedChange: (value: string) => void;
 }
 
-const useCrossCurrencyTransfer = (
+const useCrossCurrencyTransfer = <T extends TransactionEntryValues & FieldValues>(
 	fromCurrency: string,
 	toCurrency: string,
-	form: UseFormReturn<QuickAddSchema>,
+	form: UseFormReturn<T>,
 ): UseCrossCurrencyTransferReturn => {
 	const { rate } = useCurrencyPairRate(fromCurrency, toCurrency);
-	const { getValues, setValue } = form;
+	const { getValues, setValue } = form as unknown as UseFormReturn<TransactionEntryValues>;
 	const type = useWatch({
-		control: form.control,
+		control: form.control as unknown as Control<TransactionEntryValues>,
 		name: 'type'
 	});
 	const lastEditedSide = useRef<'sent' | 'received'>('sent');

@@ -1,0 +1,3 @@
+const DEFAULT_ENTRY_CATEGORY = 'Groceries';
+
+export { DEFAULT_ENTRY_CATEGORY };

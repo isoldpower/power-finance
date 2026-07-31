@@ -21,7 +21,9 @@ const PanelFooter: FC<PanelFooterProps> = ({ submitLabel, cancelLabel = 'Cancel'
 		>
 			{submitLabel}
 		</FinanceButton>
-		<FinanceButton type="button" size="lg" variant="outline" onClick={onClose}>{cancelLabel}</FinanceButton>
+		<FinanceButton type="button" size="lg" variant="outline" onClick={onClose}>
+			{cancelLabel}
+		</FinanceButton>
 	</div>
 );
 

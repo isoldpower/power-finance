@@ -1,7 +1,7 @@
-import { AiBadge, SlideOver } from "@shared/components";
-import type { FC } from "react";
+import { AiBadge, SlideOver, useSlideOverContext } from "@shared/components";
 import { ScanReceiptForm } from "@widget/transactions";
-import {useSlideOverContext} from "@shared/components/slide-over/context/use-context-value.ts";
+
+import type { FC } from "react";
 
 
 const ScanReceiptProcess: FC = () => {

@@ -45,6 +45,7 @@ const useWalletMethods = (
 	}, [client]);
 	const singleQuery = useQuery({
 		queryKey: [WALLETS_CACHE_KEYS.fetch, id],
+		enabled: id !== '',
 		refetchOnMount: false,
 		refetchOnReconnect: false,
 		refetchOnWindowFocus: false,

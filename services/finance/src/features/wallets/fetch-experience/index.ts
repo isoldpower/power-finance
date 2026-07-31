@@ -1,3 +1,4 @@
-export { BrowserListFx } from './BrowserListFx';
-export { EditWalletDetailsFx } from './EditWalletDetailsFx';
-export { WalletDetailsFx } from './WalletDetailsFx';
+export { BrowserListFx } from './BrowserListFx.tsx';
+export { EditWalletDetailsFx } from './EditWalletDetailsFx.tsx';
+export { WalletCurrenciesFx } from './WalletCurrenciesFx.tsx';
+export { WalletDetailsFx } from './WalletDetailsFx.tsx';

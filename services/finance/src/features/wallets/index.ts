@@ -1,7 +1,7 @@
 export * from './wallets-api';
 export * from './data-presenters';
 export * from './search-and-filtering';
-export * from './wallet-actions';
+export * from './wallet-forms';
 export * from './wallet-browser';
 export * from './fetch-experience';
 

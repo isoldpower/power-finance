@@ -5,13 +5,13 @@ import { TRANSACTION_TYPE_OPTIONS } from "@shared/utils";
 import type { TransactionEntryType } from "@shared/utils";
 
 
-interface QuickAddTypeSelectorProps {
+interface EntryTypeSelectorProps {
 	value: TransactionEntryType;
 	onChange: (value: TransactionEntryType) => void;
 	className?: string;
 }
 
-const QuickAddTypeSelector: FC<QuickAddTypeSelectorProps> = ({ value, onChange, className }) => (
+const EntryTypeSelector: FC<EntryTypeSelectorProps> = ({ value, onChange, className }) => (
 	<FinanceSegmented value={value} onValueChange={(next) => { if (next) onChange(next as TransactionEntryType); }} className={cn("w-full", className)}>
 		{TRANSACTION_TYPE_OPTIONS.map((option) => (
 			<FinanceSegmentedItem key={option.key} value={option.key} accent className="flex-1">
@@ -21,7 +21,7 @@ const QuickAddTypeSelector: FC<QuickAddTypeSelectorProps> = ({ value, onChange, 
 	</FinanceSegmented>
 );
 
-QuickAddTypeSelector.displayName = 'QuickAddTypeSelector';
+EntryTypeSelector.displayName = 'EntryTypeSelector';
 
-export { QuickAddTypeSelector };
-export type { QuickAddTypeSelectorProps };
+export { EntryTypeSelector };
+export type { EntryTypeSelectorProps };

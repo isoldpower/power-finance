@@ -1,43 +1,111 @@
-import type { FC } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
+import { CurrencyCombobox } from "@widget/localization";
+import {
+	NEW_WALLET_GRADIENT,
+	WalletPreviewCard,
+	WalletTypeSelector,
+} from "@entity/wallets";
+import {
+	WalletFormOnSubmit,
+	useWalletFormInitials,
+	useWalletFormState,
+	walletFormSchema,
+	MOCK_WALLET_TYPES
+} from "@feature/wallets";
+import { FieldLabel, PanelFooter } from "@shared/components";
 
-import { NEW_WALLET_GRADIENT } from "@entity/wallets";
-import { WalletFormFields } from "./WalletFormFields.tsx";
-import { PanelFooter } from "@shared/components";
-import { CreateWalletForm as CreateWalletFormWrapper, walletEntrySchema } from "@feature/wallets/wallet-actions";
-import type { WalletEntrySchema } from "@feature/wallets/wallet-actions";
-import { MOCK_WALLET_TYPES } from "@feature/wallets";
-import { useCurrencies } from "@feature/localization";
-import { useSettingsContext } from "@internal/shared";
+import type { FC } from "react";
+import type { WalletFormSchema } from "@feature/wallets";
+import type { CurrencyMeta } from "@entity/localization";
+
 
 interface CreateWalletFormProps {
 	onClose: () => void;
+	currencies: CurrencyMeta[];
 }
 
-const CreateWalletForm: FC<CreateWalletFormProps> = ({ onClose }) => {
-	const { mainCurrency } = useSettingsContext();
-	const { currencies } = useCurrencies();
-	const form = useForm<WalletEntrySchema>({
-		resolver: zodResolver(walletEntrySchema),
-		defaultValues: { name: '', type: MOCK_WALLET_TYPES[0], currency: mainCurrency, balance: '' },
+const CreateWalletForm: FC<CreateWalletFormProps> = ({ 
+	onClose,
+	currencies,
+}) => {
+	const defaultValues = useWalletFormInitials();
+	const form = useForm<WalletFormSchema>({
+		defaultValues,
+		mode: 'onChange',
+		resolver: zodResolver(walletFormSchema),
 	});
-	const values = form.watch();
 
+	const { loading, canSubmit, methods } = useWalletFormState(form);
+	const { name, type, currency } = useWatch({ control: form.control });
+	
 	return (
-		<CreateWalletFormWrapper handleSubmit={form.handleSubmit} onSuccess={onClose}>
-			<WalletFormFields
-				name={values.name} setName={(value) => { form.setValue('name', value); }}
-				type={values.type} setType={(value) => { form.setValue('type', value); }}
-				currency={values.currency} setCurrency={(value) => { form.setValue('currency', value); }}
-				balance={values.balance} setBalance={(value) => { form.setValue('balance', value); }}
-				gradient={NEW_WALLET_GRADIENT}
-				editing={false}
-				walletTypes={MOCK_WALLET_TYPES}
-				currencies={currencies}
-			/>
-			<PanelFooter submitType="submit" submitLabel="Create wallet" onClose={onClose} />
-		</CreateWalletFormWrapper>
+		<UiForm {...form}>
+			<WalletFormOnSubmit
+				className="flex flex-1 flex-col overflow-hidden"
+				handleSubmit={form.handleSubmit}
+				onBeforeEdit={methods.handleLoading}
+				onSuccess={() => { methods.handleDoneLoading(); onClose(); }}
+				onError={methods.handleFailedLoading}
+			>
+				<div className="flex-1 overflow-auto p-5">
+					<WalletPreviewCard 
+						gradient={NEW_WALLET_GRADIENT}
+						type={type ?? ''}
+						currency={currency ?? ''}
+						name={name ?? ''}
+					/>
+					<FieldLabel>
+						Wallet name
+					</FieldLabel>
+					<UiFormField
+						disabled={loading}
+						control={form.control}
+						name="name"
+						render={({ field }) => (
+							<FinanceInput placeholder="e.g. Travel Card" className="mb-4" {...field} />
+						)} />
+					<FieldLabel>Type</FieldLabel>
+					<UiFormField
+						disabled={loading}
+						control={form.control}
+						name="type"
+						render={({ field }) => (
+							<WalletTypeSelector options={MOCK_WALLET_TYPES} className="mb-4" {...field} />
+						)} />
+					<FieldLabel>
+						Currency
+					</FieldLabel>
+					<UiFormField
+						disabled={loading}
+						control={form.control}
+						name="currency"
+						render={({ field }) => (
+							<CurrencyCombobox
+								currencies={currencies}
+								value={field.value}
+								onSelected={field.onChange}
+								className="mb-4"
+							/>
+						)} />
+					<FieldLabel>Opening balance</FieldLabel>
+					<UiFormField
+						disabled={loading}
+						control={form.control}
+						name="balance"
+						render={({ field }) => (
+							<FinanceInput placeholder="0.00" {...field} />
+						)} />
+				</div>
+				<PanelFooter
+					submitType="submit"
+					submitLabel={loading ? 'Creating…' : 'Create wallet'}
+					onClose={onClose}
+					submitDisabled={!canSubmit}
+				/>
+			</WalletFormOnSubmit>
+		</UiForm>
 	);
 };
 

@@ -1,31 +1,9 @@
 import { z } from "zod";
 
+import { entryFieldsShape, isCompleteEntry } from "../entry-forms";
 
-const quickAddSchema = z.object({
-	fromWallet: z.string(),
-	toWallet: z.string(),
-	amount: z.string(),
-	receiveAmount: z.string(),
-	type: z.enum(['transfer', 'expense', 'income']),
-}).refine((data) => {
-	const isPositive = (value: string): boolean => {
-		const numeric = parseFloat(value);
-		return !Number.isNaN(numeric) && numeric > 0;
-	};
 
-	if (!isPositive(data.amount)) return false;
-
-	const typeBasedChecks = {
-		'income': () => data.toWallet !== '',
-		'expense': () => data.fromWallet !== '',
-		'transfer': () => data.fromWallet !== ''
-			&& data.toWallet !== ''
-			&& data.fromWallet !== data.toWallet
-			&& isPositive(data.receiveAmount),
-	};
-
-	return typeBasedChecks[data.type]();
-});
+const quickAddSchema = z.object(entryFieldsShape).refine(isCompleteEntry);
 
 type QuickAddSchema = z.infer<typeof quickAddSchema>;
 

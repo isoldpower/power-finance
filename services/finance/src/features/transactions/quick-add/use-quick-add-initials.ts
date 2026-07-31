@@ -1,18 +1,13 @@
 import { useMemo } from "react";
 
+import { useEntryWalletDefaults } from "../entry-forms";
+
 import type { Wallet } from "@entity/wallets";
 import type { QuickAddSchema } from "./quick-add-schema.ts";
 
 
 const useQuickAddInitials = (wallets: Wallet[]): QuickAddSchema => {
-	const [fromWallet, toWallet] = useMemo(() => {
-		if (wallets.length === 0) return ['', ''];
-
-		const first = wallets[0];
-		const second = wallets.find((wallet) => wallet.id !== first.id);
-
-		return [first.id, second?.id ?? ''];
-	}, [wallets]);
+	const { fromWallet, toWallet } = useEntryWalletDefaults(wallets);
 
 	return useMemo(() => ({
 		fromWallet,

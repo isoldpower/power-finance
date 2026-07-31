@@ -10,8 +10,8 @@ const useContextState = (panelsRegistry: SlideOverPanelsRegistry) => {
 		setCurrentSlide(null);
 	}, []);
 	const handleSlideSwitch = useCallback((newSlide: string) => {
-		setCurrentSlide(newSlide in panelsRegistry ? newSlide : currentSlide);
-	}, [currentSlide, panelsRegistry]);
+		setCurrentSlide((current) => newSlide in panelsRegistry ? newSlide : current);
+	}, [panelsRegistry]);
 
 	const contextValue = useMemo<SlideOverContextType>(() => ({
 		onClose: handleSlideClose,

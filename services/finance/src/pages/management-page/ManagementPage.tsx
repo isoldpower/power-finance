@@ -7,7 +7,7 @@ import {
 	MainPageTitle,
 	PageDescription,
 	SpaceOccupant,
-	SlideOverTrigger,
+	SlideOverTrigger, PageContainer,
 } from "@shared/components";
 import { RevealMotion } from "@shared/interactions";
 import { ScanReceiptIcon } from "@entity/transactions";
@@ -37,91 +37,91 @@ import {BrowseAccountsContextProvider} from "@feature/accounts/browse-accounts/B
 
 const ManagementPage: FC = () => {
 	return (
-		<div className="mx-auto flex max-w-[1320px] flex-col gap-6 px-[22px] pb-[70px] pt-[22px]">
-			<RevealMotion delay={0.05}>
-				<CenteredList>
-					<MainPageTitle>
-						Management
-					</MainPageTitle>
-					<PageDescription>
-						Wallets · Transactions · Ledger
-					</PageDescription>
-					<SpaceOccupant />
-					<SlideOverTrigger asChild={true} panelId={managementSlides.scanReceipt}>
-						<FinanceButton variant="secondary">
-							<div className="hidden items-center gap-2 sm:flex">
-								<ScanReceiptIcon />
-								Scan receipt
-								<AiBadge />
-							</div>
-						</FinanceButton>
-					</SlideOverTrigger>
-					<SlideOverTrigger asChild={true} panelId={managementSlides.createTransaction}>
-						<FinanceButton className="shadow-[0_4px_14px_var(--glow)]" variant="primary">
-							<div className="hidden items-center gap-2 sm:flex">
-								<span>＋</span>
-								<span>Add</span>
-							</div>
-						</FinanceButton>
-					</SlideOverTrigger>
-				</CenteredList>
-			</RevealMotion>
-			<RevealMotion delay={0.12}>
-				<LedgerBalanceBand />
-			</RevealMotion>
-			<RevealMotion delay={0.18}>
-				<WalletBrowserHeader 
-					createWalletPanel={managementSlides.createWallet}
-					total={5}
-				/>
-				<div className="grid grid-cols-1 items-start gap-4 md:grid-cols-[340px_1fr]">
-					<WalletBrowserContextProvider>
-						<FinanceCard className="overflow-hidden">
-							<BrowseAndSelectWallets />
-						</FinanceCard>
-						<BrowserWalletDetails
-							editWalletPanel={managementSlides.editWallet}
-							transferPanel={managementSlides.createTransaction}
-						/>
-					</WalletBrowserContextProvider>
-				</div>
-			</RevealMotion>
-			<RevealMotion delay={0.24}>
-				<TransactionBrowserContextProvider>
-					<TransactionsBrowserHeader createTransactionPanel={managementSlides.createTransaction} />
-					<FinanceCard className="overflow-hidden">
-						<TransactionBrowserFilters />
-						<BrowseTransactionEntries>
-							{(transaction) => (
-								<LedgerBasedTransaction transaction={transaction} />
-							)}
-						</BrowseTransactionEntries>
-						<TransactionsBrowserPagination />
-					</FinanceCard>
-				</TransactionBrowserContextProvider>
-			</RevealMotion>
-			<RevealMotion delay={0.3}>
-				<BrowseAccountsContextProvider>
-					<AccountsBrowserHeader />
-					<ReadOnlyNotice>
-						Balances here are
-						<b className="text-foreground">&nbsp;posted automatically&nbsp;</b>
-						from your transactions — this view can’t be edited directly.
-						To change a balance, edit the underlying transaction.
-					</ReadOnlyNotice>
-					<FinanceCard className="mb-4 overflow-hidden">
-						<BalanceCompositionToolbar />
-						<BrowseAccountCategories>
-							{(category) => (
-								<CategoryRow key={category.id} categoryEntry={category} />
-							)}
-						</BrowseAccountCategories>
-					</FinanceCard>
-					<AccountsDrillDownDetails />
-				</BrowseAccountsContextProvider>
-			</RevealMotion>
+		<PageContainer>
+			{/*<RevealMotion delay={0.05}>*/}
+			{/*	<CenteredList>*/}
+			{/*		<MainPageTitle>*/}
+			{/*			Management*/}
+			{/*		</MainPageTitle>*/}
+			{/*		<PageDescription>*/}
+			{/*			Wallets · Transactions · Ledger*/}
+			{/*		</PageDescription>*/}
+			{/*		<SpaceOccupant />*/}
+			{/*		<SlideOverTrigger asChild={true} panelId={managementSlides.scanReceipt}>*/}
+			{/*			<FinanceButton variant="secondary">*/}
+			{/*				<div className="hidden items-center gap-2 sm:flex">*/}
+			{/*					<ScanReceiptIcon />*/}
+			{/*					Scan receipt*/}
+			{/*					<AiBadge />*/}
+			{/*				</div>*/}
+			{/*			</FinanceButton>*/}
+			{/*		</SlideOverTrigger>*/}
+			{/*		<SlideOverTrigger asChild={true} panelId={managementSlides.createTransaction}>*/}
+			{/*			<FinanceButton className="shadow-[0_4px_14px_var(--glow)]" variant="primary">*/}
+			{/*				<div className="hidden items-center gap-2 sm:flex">*/}
+			{/*					<span>＋</span>*/}
+			{/*					<span>Add</span>*/}
+			{/*				</div>*/}
+			{/*			</FinanceButton>*/}
+			{/*		</SlideOverTrigger>*/}
+			{/*	</CenteredList>*/}
+			{/*</RevealMotion>*/}
+			{/*<RevealMotion delay={0.12}>*/}
+			{/*	<LedgerBalanceBand />*/}
+			{/*</RevealMotion>*/}
+			{/*<RevealMotion delay={0.18}>*/}
+			{/*	<WalletBrowserHeader */}
+			{/*		createWalletPanel={managementSlides.createWallet}*/}
+			{/*		total={5}*/}
+			{/*	/>*/}
+			{/*	<div className="grid grid-cols-1 items-start gap-4 md:grid-cols-[340px_1fr]">*/}
+			{/*		<WalletBrowserContextProvider>*/}
+			{/*			<FinanceCard className="overflow-hidden">*/}
+			{/*				<BrowseAndSelectWallets />*/}
+			{/*			</FinanceCard>*/}
+			{/*			<BrowserWalletDetails*/}
+			{/*				editWalletPanel={managementSlides.editWallet}*/}
+			{/*				transferPanel={managementSlides.createTransaction}*/}
+			{/*			/>*/}
+			{/*		</WalletBrowserContextProvider>*/}
+			{/*	</div>*/}
+			{/*</RevealMotion>*/}
+			{/*<RevealMotion delay={0.24}>*/}
+			{/*	<TransactionBrowserContextProvider>*/}
+			{/*		<TransactionsBrowserHeader createTransactionPanel={managementSlides.createTransaction} />*/}
+			{/*		<FinanceCard className="overflow-hidden">*/}
+			{/*			<TransactionBrowserFilters />*/}
+			{/*			<BrowseTransactionEntries>*/}
+			{/*				{(transaction) => (*/}
+			{/*					<LedgerBasedTransaction transaction={transaction} />*/}
+			{/*				)}*/}
+			{/*			</BrowseTransactionEntries>*/}
+			{/*			<TransactionsBrowserPagination />*/}
+			{/*		</FinanceCard>*/}
+			{/*	</TransactionBrowserContextProvider>*/}
+			{/*</RevealMotion>*/}
+			{/*<RevealMotion delay={0.3}>*/}
+			{/*	<BrowseAccountsContextProvider>*/}
+			{/*		<AccountsBrowserHeader />*/}
+			{/*		<ReadOnlyNotice>*/}
+			{/*			Balances here are*/}
+			{/*			<b className="text-foreground">&nbsp;posted automatically&nbsp;</b>*/}
+			{/*			from your transactions — this view can’t be edited directly.*/}
+			{/*			To change a balance, edit the underlying transaction.*/}
+			{/*		</ReadOnlyNotice>*/}
+			{/*		<FinanceCard className="mb-4 overflow-hidden">*/}
+			{/*			<BalanceCompositionToolbar />*/}
+			{/*			<BrowseAccountCategories>*/}
+			{/*				{(category) => (*/}
+			{/*					<CategoryRow key={category.id} categoryEntry={category} />*/}
+			{/*				)}*/}
+			{/*			</BrowseAccountCategories>*/}
+			{/*		</FinanceCard>*/}
+			{/*		<AccountsDrillDownDetails />*/}
+			{/*	</BrowseAccountsContextProvider>*/}
+			{/*</RevealMotion>*/}
 			<SlideOver panelsRegistry={managementSlidesRegistry} />
-		</div>
+		</PageContainer>
 	);
 };
 

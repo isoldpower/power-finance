@@ -1,141 +1,183 @@
-import type { FC } from "react";
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { cn, FinanceChip, FinanceSegmented, FinanceSegmentedItem } from "@internal/ui-library";
+import { UiForm, UiFormField } from "@internal/ui-library";
 
+import {
+	EntryAmountField,
+	EntryCategoryField,
+	EntryTypeSelector,
+	FromIcon,
+	ScanReceiptCta,
+	ToIcon,
+} from "@entity/transactions";
+import { WalletSelect, toWalletSelectOptions } from "@entity/wallets";
+import {
+	MOCK_TXN_CATEGORIES,
+	TransactionEntryOnSubmit,
+	addTransactionSchema,
+	useAddTransactionInitials,
+	useCrossCurrencyTransfer,
+	useEntryFormState,
+	useEntryTypeEffects,
+	useEntryWalletOptions,
+	useWalletsCurrencies,
+} from "@feature/transactions";
 import { useWalletsList } from "@feature/wallets";
-import { AddTransactionForm as AddTransactionFormWrapper, addTransactionSchema } from "@feature/transactions/transaction-entry";
-import type { AddTransactionSchema } from "@feature/transactions/transaction-entry";
-import { currencySymbol, sanitizeAmountInput } from "@shared/utils";
-import { TRANSACTION_TYPE_TONE as TONE_TEXT } from "@shared/utils";
-import { WalletSelect } from "@entity/wallets";
-import type { WalletSelectOption } from "@entity/wallets";
-import { TransferGlyph, FromIcon, ToIcon, ScanReceiptIcon } from "@entity/transactions";
-import { PanelFooter, FieldLabel } from "@shared/components";
-import { MOCK_TXN_CATEGORIES } from "@feature/transactions";
+import { HideOnFormValue, ShowOnFormValue, PanelFooter, FieldLabel } from "@shared/components";
+
+import type { FC } from "react";
+import type { AddTransactionSchema } from "@feature/transactions";
 
 
 interface AddTransactionFormProps {
-	onSwitch: (newPanel: string) => void;
+	onScanReceipt: () => void;
 	onClose: () => void;
 }
 
-const AddTransactionForm: FC<AddTransactionFormProps> = ({ onSwitch, onClose }) => {
+const AddTransactionForm: FC<AddTransactionFormProps> = ({ onScanReceipt, onClose }) => {
 	const { wallets } = useWalletsList();
+	const defaultValues = useAddTransactionInitials(wallets);
 	const form = useForm<AddTransactionSchema>({
+		defaultValues,
+		mode: 'onChange',
 		resolver: zodResolver(addTransactionSchema),
-		defaultValues: { type: 'expense', amount: '', fromId: '', toId: '', category: 'Groceries' },
 	});
-	const { type, amount, fromId, toId } = form.watch();
 
-	useEffect(() => {
-		if (wallets.length === 0) return;
-		if (form.getValues('fromId') === '') form.setValue('fromId', wallets[0].id);
-		if (form.getValues('toId') === '') form.setValue('toId', wallets.find((wallet) => wallet.id !== wallets[0].id)?.id ?? '');
-	}, [wallets, form]);
-
-	const isTransfer = type === 'transfer';
-	const fromWallet = wallets.find((wallet) => wallet.id === fromId);
-	const currency = fromWallet?.balance.currency ?? 'USD';
-	const numericAmount = parseFloat(amount);
-	const amountValid = !Number.isNaN(numericAmount) && numericAmount > 0;
-	const transferValid = !isTransfer || (toId !== '' && toId !== fromId);
-	const canSubmit = fromId !== '' && amountValid && transferValid;
-
-	const walletOptions = (excludeId?: string): WalletSelectOption[] =>
-		wallets
-			.filter((wallet) => wallet.id !== excludeId)
-			.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: wallet.color }));
+	const { currency, fromCurrency, toCurrency, type } = useWalletsCurrencies(wallets, form);
+	const { loading, canSubmit, methods } = useEntryFormState(form);
+	
+	const walletOptions = useMemo(() => {
+		return toWalletSelectOptions(wallets);
+	}, [wallets]);
+	const { fromOptions, toOptions } = useEntryWalletOptions(walletOptions, form);
+	const { handleSentChange, handleReceivedChange } = useCrossCurrencyTransfer(fromCurrency, toCurrency, form);
+	useEntryTypeEffects(defaultValues, form);
 
 	return (
-		<AddTransactionFormWrapper handleSubmit={form.handleSubmit} onSuccess={onClose}>
-			<div className="flex-1 overflow-auto p-5">
-				<button
-					type="button"
-					onClick={() => { onSwitch('scan-receipt'); }}
-					className="mb-[18px] flex w-full items-center gap-2.5 rounded-[var(--radius-md)] border border-dashed border-[var(--accent-border)] bg-[var(--accent-soft)] px-3.5 py-2.5 text-left transition-colors hover:border-primary"
-				>
-					<ScanReceiptIcon size={18} className="flex-none text-primary" />
-					<div className="flex-1">
-						<div className="text-[13px] font-semibold text-primary">Scan a receipt instead</div>
-						<div className="text-[11.5px] text-text-2">Let AI fill the details for you</div>
-					</div>
-					<span className="text-primary">→</span>
-				</button>
-
-				<FinanceSegmented value={type} onValueChange={(value) => { if (value) form.setValue('type', value as AddTransactionSchema['type']); }} className="mb-4 w-full">
-					<FinanceSegmentedItem value="expense" accent className="flex-1">Expense</FinanceSegmentedItem>
-					<FinanceSegmentedItem value="income" accent className="flex-1">Income</FinanceSegmentedItem>
-					<FinanceSegmentedItem value="transfer" accent className="flex-1">Transfer</FinanceSegmentedItem>
-				</FinanceSegmented>
-
-				<div className="mb-3.5 flex items-center gap-2 rounded-[var(--radius-md)] border-[1.5px] border-primary px-4 py-3.5 shadow-[0_0_0_3px_var(--accent-soft)]">
-					{isTransfer ? (
-						<TransferGlyph className={TONE_TEXT[type]} size={26} />
-					) : (
-						<span className={cn("font-display text-2xl", TONE_TEXT[type])}>{type === 'income' ? '+' : '−'}</span>
-					)}
-					<span className={cn("font-display text-3xl font-semibold", TONE_TEXT[type])}>{currencySymbol(currency)}</span>
-					<input
-						value={amount}
-						onChange={(event) => { form.setValue('amount', sanitizeAmountInput(event.target.value)); }}
-						inputMode="decimal"
-						placeholder="0.00"
-						className={cn(
-							"w-full min-w-0 flex-1 border-none bg-transparent p-0 font-display text-3xl font-semibold outline-none placeholder:text-[var(--text-3)]",
-							TONE_TEXT[type]
-						)}
+		<UiForm {...form}>
+			<TransactionEntryOnSubmit
+				className="flex flex-1 flex-col overflow-hidden"
+				handleSubmit={form.handleSubmit}
+				onBeforeEdit={methods.handleLoading}
+				onSuccess={() => { methods.handleDoneLoading(); onClose(); }}
+				onError={methods.handleFailedLoading}
+			>
+				<div className="flex-1 overflow-auto p-5">
+					<ScanReceiptCta
+						className="mb-[18px] w-full"
+						onClick={onScanReceipt}
 					/>
-				</div>
-
-				<FieldLabel>{isTransfer ? 'Wallets' : 'Wallet'}</FieldLabel>
-				<WalletSelect
-					leadingIcon={isTransfer ? <FromIcon className="flex-none text-text-3" /> : undefined}
-					options={walletOptions()}
-					value={fromId}
-					onChange={(value) => { form.setValue('fromId', value); }}
-					emptyLabel="No wallets yet"
-					className="mb-2"
-				/>
-
-				{isTransfer ? (
-					<>
-						<WalletSelect
-							leadingIcon={<ToIcon className="flex-none text-text-3" />}
-							options={walletOptions(fromId)}
-							value={toId}
-							onChange={(value) => { form.setValue('toId', value); }}
-							emptyLabel="Add another wallet"
-							className="mb-1"
-						/>
-						{toId === fromId && wallets.length > 1 ? (
-							<div className="mt-1 text-[11.5px] text-neg">Choose a different destination wallet.</div>
-						) : null}
-					</>
-				) : (
-					<>
+					<UiFormField
+						disabled={loading}
+						control={form.control}
+						name="type"
+						render={({ field }) => (
+							<EntryTypeSelector className="mb-4" {...field} />
+						)} />
+					<HideOnFormValue valueKey='type' hideOn={['transfer']} control={form.control}>
+						<UiFormField
+							disabled={loading}
+							control={form.control}
+							name="amount"
+							render={({ field }) => (
+								<EntryAmountField
+									type={type}
+									currency={currency}
+									emphasis="accent"
+									className="mb-3.5"
+									{...field}
+								/>
+							)} />
+					</HideOnFormValue>
+					<ShowOnFormValue valueKey='type' showOn={['transfer']} control={form.control}>
+						<UiFormField
+							disabled={loading}
+							control={form.control}
+							name="amount"
+							render={({ field }) => (
+								<EntryAmountField
+									type={type}
+									currency={fromCurrency}
+									label="Send"
+									emphasis="accent"
+									className="mb-2.5"
+									{...field}
+									onChange={handleSentChange}
+								/>
+							)} />
+						<UiFormField
+							disabled={loading}
+							control={form.control}
+							name="receiveAmount"
+							render={({ field }) => (
+								<EntryAmountField
+									type={type}
+									currency={toCurrency}
+									label="Receive"
+									emphasis="accent"
+									className="mb-3.5"
+									{...field}
+									onChange={handleReceivedChange}
+								/>
+							)} />
+					</ShowOnFormValue>
+					<FieldLabel>{type === 'transfer' ? 'Wallets' : 'Wallet'}</FieldLabel>
+					<HideOnFormValue valueKey='type' hideOn={['income']} control={form.control}>
+						<UiFormField
+							disabled={loading}
+							control={form.control}
+							name="fromWallet"
+							render={({ field }) => (
+								<WalletSelect
+									leadingIcon={type === 'transfer' ? <FromIcon className="flex-none text-text-3" /> : undefined}
+									options={fromOptions}
+									emptyLabel="No wallets yet"
+									className="mb-2"
+									{...field} />
+							)} />
+					</HideOnFormValue>
+					<HideOnFormValue valueKey='type' hideOn={['expense']} control={form.control}>
+						<UiFormField
+							disabled={loading}
+							control={form.control}
+							name="toWallet"
+							render={({ field }) => (
+								<WalletSelect
+									leadingIcon={type === 'transfer' ? <ToIcon className="flex-none text-text-3" /> : undefined}
+									options={toOptions}
+									emptyLabel="Add another wallet"
+									className="mb-2"
+									{...field} />
+							)} />
+					</HideOnFormValue>
+					<ShowOnFormValue valueKey='type' showOn={['expense', 'income']} control={form.control}>
 						<FieldLabel>Category</FieldLabel>
-						<div className="flex flex-wrap gap-1.5">
-							{MOCK_TXN_CATEGORIES.map((option) => (
-								<FinanceChip key={option} pressed={form.watch('category') === option} onPressedChange={() => { form.setValue('category', option); }}>
-									{option}
-								</FinanceChip>
-							))}
-						</div>
-					</>
-				)}
-			</div>
-			<PanelFooter
-				submitType="submit"
-				submitLabel={isTransfer ? 'Send transfer' : 'Save transaction'}
-				onClose={onClose}
-				submitDisabled={!canSubmit}
-			/>
-		</AddTransactionFormWrapper>
+						<UiFormField
+							disabled={loading}
+							control={form.control}
+							name="category"
+							render={({ field }) => (
+								<EntryCategoryField options={MOCK_TXN_CATEGORIES} {...field} />
+							)} />
+					</ShowOnFormValue>
+				</div>
+				<PanelFooter
+					submitType="submit"
+					submitLabel={loading 
+						? 'Saving…' 
+						: type === 'transfer' 
+							? 'Send transfer' 
+							: 'Save transaction'}
+					onClose={onClose}
+					submitDisabled={!canSubmit}
+				/>
+			</TransactionEntryOnSubmit>
+		</UiForm>
 	);
 };
 
 AddTransactionForm.displayName = 'AddTransactionForm';
 
 export { AddTransactionForm };
+export type { AddTransactionFormProps };

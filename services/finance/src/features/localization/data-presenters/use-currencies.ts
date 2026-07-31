@@ -14,6 +14,7 @@ interface UseCurrenciesReturn {
 	codes: string[];
 	byCode: Record<string, CurrencyMeta | undefined>;
 	isPending: boolean;
+	isError: boolean;
 }
 
 const toCurrencyMeta = (currency: FxCurrency): CurrencyMeta => ({
@@ -39,8 +40,9 @@ const useCurrencies = (): UseCurrenciesReturn => {
 			codes: currencies.map((currency) => currency.code),
 			byCode: Object.fromEntries(currencies.map((currency) => [currency.code, currency])),
 			isPending: query.isPending,
+			isError: query.isError,
 		};
-	}, [query.data, query.isPending]);
+	}, [query.data, query.isError, query.isPending]);
 };
 
 export { useCurrencies };

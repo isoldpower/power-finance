@@ -1,13 +1,22 @@
-import { SlideOver } from "@shared/components";
+import { useCallback } from "react";
+
+import { SlideOver, useSlideOverContext } from "@shared/components";
+import { AddTransactionForm } from "@widget/transactions";
 
 import type { FC } from "react";
-import { AddTransactionForm } from "@widget/transactions";
-import { useSlideOverContext } from "@shared/components/slide-over/context/use-context-value.ts";
 
 
-const CreateTransactionProcess: FC = () => {
+interface CreateTransactionProcessProps {
+	scanPanelId: string;
+}
+
+const CreateTransactionProcess: FC<CreateTransactionProcessProps> = ({ scanPanelId }) => {
 	const { onClose, onSwitch } = useSlideOverContext();
-	
+
+	const handleScanReceipt = useCallback(() => {
+		onSwitch(scanPanelId);
+	}, [onSwitch, scanPanelId]);
+
 	return (
 		<>
 			<SlideOver.Heading>
@@ -18,9 +27,12 @@ const CreateTransactionProcess: FC = () => {
 					✕
 				</SlideOver.Collapse>
 			</SlideOver.Heading>
-			<AddTransactionForm onClose={onClose} onSwitch={onSwitch} />
+			<AddTransactionForm onClose={onClose} onScanReceipt={handleScanReceipt} />
 		</>
 	);
 }
 
+CreateTransactionProcess.displayName = 'CreateTransactionProcess';
+
 export { CreateTransactionProcess };
+export type { CreateTransactionProcessProps };

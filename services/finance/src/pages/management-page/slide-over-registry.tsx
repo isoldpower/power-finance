@@ -1,25 +1,31 @@
 import type { ReactNode } from "react";
-import { ScanReceiptProcess } from "@process/transactions/scan-receipt";
-import { CreateTransactionProcess } from "@process/transactions/add-transaction";
-import { CreateWalletProcess } from "@process/wallets/wallets-actions";
-import { EditWalletProcess } from "@process/wallets/wallets-actions/EditWalletProcess.tsx";
+
+import {
+	ScanReceiptProcess,
+	CreateTransactionProcess,
+} from "@process/transactions";
+import {
+	CreateWalletProcess,
+	EditWalletProcess,
+} from "@process/wallets";
 
 
 const managementSlides = {
-	scanReceipt: 'scan-receipt', 
+	scanReceipt: 'scan-receipt',
 	createTransaction: 'create-transaction',
 	createWallet: 'create-wallet',
 	editWallet: 'edit-wallet'
-};
+} as const;
 
-type SlideOverPanelType<T = typeof managementSlides> = T[keyof T];
+type SlideOverPanelType = typeof managementSlides[keyof typeof managementSlides];
 
 const managementSlidesRegistry: Record<SlideOverPanelType, ReactNode> = {
-	[managementSlides.scanReceipt]: <ScanReceiptProcess />,
-	[managementSlides.createTransaction]: <CreateTransactionProcess />,
-	[managementSlides.createWallet]: <CreateWalletProcess />,
-	[managementSlides.editWallet]: <EditWalletProcess />
+	[managementSlides.scanReceipt]: <ScanReceiptProcess/>,
+	[managementSlides.createTransaction]: <CreateTransactionProcess scanPanelId={managementSlides.scanReceipt} />,
+	[managementSlides.createWallet]: <CreateWalletProcess/>,
+	[managementSlides.editWallet]: <EditWalletProcess/>
 }
 
 
-export { managementSlidesRegistry, managementSlides };
+export {managementSlidesRegistry, managementSlides};
+export type { SlideOverPanelType };

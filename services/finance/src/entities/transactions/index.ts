@@ -7,6 +7,7 @@ export * from './form-fields';
 export * from './icons';
 export * from './quick-add';
 export * from './receipt-scan';
+export * from './transaction-entry';
 export * from './transactions-list';
 export * from './transactions-table';
 export * from './type-card';

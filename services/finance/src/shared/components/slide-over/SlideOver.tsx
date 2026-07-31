@@ -6,15 +6,16 @@ import { SlideOverCollapse } from "./SlideOverCollapse.tsx";
 import { SlideOverHeading } from "./SlideOverHeading.tsx";
 import { SlideOverTitle } from "./SlideOverTitle.tsx";
 import { SlideOverContext } from "./context/context.ts";
-import type { SlideOverPanelsRegistry, SlideOverProps } from "./types.ts";
 import { useContextState } from "./context/use-context-state.ts";
+
+import type { SlideOverPanelsRegistry, SlideOverProps } from "./types.ts";
 
 
 function SlideOver<T extends SlideOverPanelsRegistry>({ 
 	panelsRegistry,
 }: SlideOverProps<T>) {
 	const slideOverState = useContextState(panelsRegistry);
-	
+
 	return slideOverState.currentPanel ? createPortal(
 		<SlideOverContext value={slideOverState.contextValue}>
 			<div className="finance-theme">

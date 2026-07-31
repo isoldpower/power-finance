@@ -15,11 +15,11 @@ vi.mock("@feature/localization", () => ({
 }));
 
 
-const { useCrossCurrencyTransfer } = await import("./use-cross-currency-transfer.ts");
-const { useWalletsCurrencies } = await import("./use-wallets-currencies.ts");
-const { useFormTypeEffects } = await import("./use-form-type-effects.ts");
-const { useFormLoadingState } = await import("./use-form-loading-state.ts");
-const { useFormWalletsList } = await import("./use-form-wallets-list.tsx");
+const { useCrossCurrencyTransfer } = await import("../entry-forms/use-cross-currency-transfer.ts");
+const { useWalletsCurrencies } = await import("../entry-forms/use-wallets-currencies.ts");
+const { useEntryTypeEffects } = await import("../entry-forms/use-entry-type-effects.ts");
+const { useEntryFormState } = await import("../entry-forms/use-entry-form-state.ts");
+const { useEntryWalletOptions } = await import("../entry-forms/use-entry-wallet-options.ts");
 const { useQuickAddInitials } = await import("./use-quick-add-initials.ts");
 
 const WALLETS = [
@@ -47,10 +47,10 @@ const renderQuickAddHooks = (counter: { renders: number }) => renderHook(() => {
 	useWatch({ control: form.control, name: 'type' });
 
 	const { toCurrency, fromCurrency } = useWalletsCurrencies(WALLETS, form);
-	useFormLoadingState(form);
-	useFormWalletsList(WALLET_OPTIONS, form);
+	useEntryFormState(form);
+	useEntryWalletOptions(WALLET_OPTIONS, form);
 	const transfer = useCrossCurrencyTransfer(fromCurrency, toCurrency, form);
-	useFormTypeEffects(defaultValues, form);
+	useEntryTypeEffects(defaultValues, form);
 
 	return { form, transfer };
 });

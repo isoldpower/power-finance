@@ -1,17 +1,19 @@
 import { FinanceButton, UiForm, UiFormField } from "@internal/ui-library";
 import { useMemo } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FromIcon, QuickAddAmountField, QuickAddTypeSelector, ToIcon } from "@entity/transactions";
+import { EntryAmountField, EntryTypeSelector, FromIcon, ToIcon } from "@entity/transactions";
 import { WalletSelect, toWalletSelectOptions } from "@entity/wallets";
 import {
-	useWalletsCurrencies,
+	TransactionEntryOnSubmit,
 	useCrossCurrencyTransfer,
-	useFormTypeEffects,
-	useFormLoadingState,
-	useFormWalletsList
+	useEntryFormState,
+	useEntryTypeEffects,
+	useEntryWalletOptions,
+	useWalletsCurrencies,
+	quickAddSchema,
+	useQuickAddInitials,
 } from "@feature/transactions";
-import { AddTransactionOnSubmit, quickAddSchema, useQuickAddInitials } from "@feature/transactions";
 import { HideOnFormValue, ShowOnFormValue } from "@shared/components";
 
 import type { FC } from "react";
@@ -30,21 +32,17 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 		mode: 'onChange',
 		resolver: zodResolver(quickAddSchema)
 	});
-	const type = useWatch({
-		control: form.control,
-		name: 'type'
-	});
 
-	const { toCurrency, fromCurrency, currency } = useWalletsCurrencies(wallets, form);
-	const { loading, canSubmit, methods } = useFormLoadingState(form);
+	const { toCurrency, fromCurrency, currency, type } = useWalletsCurrencies(wallets, form);
+	const { loading, canSubmit, methods } = useEntryFormState(form);
 	const walletOptions = useMemo(() => toWalletSelectOptions(wallets), [wallets]);
-	const { fromWalletOptions, toWalletOptions } = useFormWalletsList(walletOptions, form);
+	const { fromOptions, toOptions } = useEntryWalletOptions(walletOptions, form);
 	const { handleSentChange, handleReceivedChange } = useCrossCurrencyTransfer(fromCurrency, toCurrency, form);
-	useFormTypeEffects(defaultValues, form);
+	useEntryTypeEffects(defaultValues, form);
 
 	return (
 		<UiForm {...form}>
-			<AddTransactionOnSubmit
+			<TransactionEntryOnSubmit
 				handleSubmit={form.handleSubmit}
 				onBeforeEdit={methods.handleLoading}
 				onSuccess={methods.handleDoneLoading}
@@ -55,7 +53,7 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 					control={form.control}
 					name="type"
 					render={({field}) => (
-						<QuickAddTypeSelector className="mb-3.5" {...field} />
+						<EntryTypeSelector className="mb-3.5" {...field} />
 					)} />
 				<HideOnFormValue valueKey='type' hideOn={['income']} control={form.control}>
 					<UiFormField
@@ -66,7 +64,7 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 							<WalletSelect
 								showSwatch={false}
 								leadingIcon={<FromIcon className="flex-none text-text-3" />}
-								options={fromWalletOptions}
+								options={fromOptions}
 								emptyLabel="No wallets yet"
 								className="mt-2"
 								{...field} />
@@ -81,7 +79,7 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 							<WalletSelect
 								showSwatch={false}
 								leadingIcon={<ToIcon className="flex-none text-text-3" />}
-								options={toWalletOptions}
+								options={toOptions}
 								emptyLabel="Add another wallet"
 								className="mt-2"
 								{...field} />
@@ -93,7 +91,7 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 						control={form.control}
 						name="amount"
 						render={({ field }) => (
-							<QuickAddAmountField
+							<EntryAmountField
 								type={type}
 								currency={currency}
 								className="mt-2"
@@ -107,7 +105,7 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 						control={form.control}
 						name="amount"
 						render={({ field }) => (
-							<QuickAddAmountField
+							<EntryAmountField
 								type={type}
 								currency={fromCurrency}
 								label="Send"
@@ -121,7 +119,7 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 						control={form.control}
 						name="receiveAmount"
 						render={({ field }) => (
-							<QuickAddAmountField
+							<EntryAmountField
 								type={type}
 								currency={toCurrency}
 								label="Receive"
@@ -139,7 +137,7 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 				>
 					{loading ? 'Adding…' : `Add ${type}`}
 				</FinanceButton>
-			</AddTransactionOnSubmit>
+			</TransactionEntryOnSubmit>
 		</UiForm>
 	);
 };
