@@ -6,10 +6,8 @@ import {
 	UiTabsTrigger,
 } from "@internal/ui-library";
 
-import { PreferencesModalBox } from "@entity/configuration";
 import { useWebhooksList } from "@feature/configuration";
 import { WebhooksListFx, WebhooksListEmptyUX } from "@feature/configuration";
-import { GlobalLocaleSelection, PreferredCurrencySelection } from "@widget/configuration";
 import { WebhookWithControls, CreateWebhookProcess } from "@process/configuration";
 import { TabsWithSearchParam } from "@feature/navigation";
 
@@ -35,10 +33,10 @@ const SettingsPage: FC = () => {
 				</UiTabsList>
 				<div className="p-6 w-full">
 					<UiTabsContent value="preferences">
-						<PreferencesModalBox>
-							<PreferredCurrencySelection/>
-							<GlobalLocaleSelection/>
-						</PreferencesModalBox>
+						{/*<PreferencesModalBox>*/}
+						{/*	<PreferredCurrencySelection/>*/}
+						{/*	<GlobalLocaleSelection/>*/}
+						{/*</PreferencesModalBox>*/}
 					</UiTabsContent>
 					<UiTabsContent value="webhooks">
 						<div className="grid grid-cols-1 gap-4">

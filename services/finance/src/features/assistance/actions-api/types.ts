@@ -5,12 +5,8 @@ import type {
 	DeleteResponse,
 } from "@internal/shared";
 
-interface Action {
-	id: string;
-	kind: string;
-	title: string;
-	subtitle: string;
-}
+import type { Action } from "@entity/assistance";
+
 
 interface ActionListParams {
 	resolved?: boolean;

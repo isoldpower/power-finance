@@ -4,7 +4,7 @@ import { cn } from "@internal/ui-library";
 import { currencySymbol, sanitizeAmountInput, TRANSACTION_TYPE_TONE } from "@shared/utils";
 import type { TransactionEntryType } from "@shared/utils";
 
-import { TransferGlyph } from "../direction-icons/DirectionIcons.tsx";
+import { TransferGlyph } from "../icons/DirectionIcons.tsx";
 
 interface QuickAddAmountFieldProps {
 	type: TransactionEntryType;

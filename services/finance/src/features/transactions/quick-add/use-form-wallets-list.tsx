@@ -1,15 +1,14 @@
-import {useWalletSelectOptions} from "@feature/wallets";
-import {Wallet} from "@entity/wallets";
 import {useMemo} from "react";
 import {UseFormReturn, useWatch} from "react-hook-form";
 import {QuickAddSchema} from "@feature/transactions";
 
+import type {WalletSelectOption} from "@entity/wallets";
+
 
 const useFormWalletsList = (
-	wallets: Wallet[],
+	walletOptions: WalletSelectOption[],
 	form: UseFormReturn<QuickAddSchema>,
 ) => {
-	const walletOptions = useWalletSelectOptions(wallets);
 	const toWallet = useWatch({
 		control: form.control,
 		name: 'toWallet',

@@ -1,1 +1,1 @@
-export { CashFlowCardWithFx } from './CashFlowWithFx.tsx';
+export { CashFlowWithFx } from './CashFlowWithFx.tsx';

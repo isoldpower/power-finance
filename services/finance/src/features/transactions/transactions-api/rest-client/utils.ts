@@ -1,5 +1,7 @@
-import type { TransactionChainItem, TransactionDirection, TransactionMinimalPayload, TransactionReceipt } from "../types.ts";
+import type { TransactionChainItem, TransactionDirection, TransactionEntry, TransactionMinimalPayload, TransactionOrigin, TransactionReceipt } from "../types.ts";
 import { v4 as uuidv4 } from "uuid";
+
+const INCOME_ACCOUNT = 'Income';
 
 interface StorageTransaction {
 	id: string;
@@ -12,12 +14,32 @@ interface StorageTransaction {
 	occurred_at: string;
 	note: string;
 	created_at: string;
+	origin?: TransactionOrigin;
 	receipt?: TransactionReceipt;
 	chain_id?: string;
 }
 
 const directionFromAmount = (amount: string): TransactionDirection => {
 	return parseFloat(amount) < 0 ? 'out' : 'in';
+};
+
+const buildEntries = (
+	direction: TransactionDirection,
+	amount: string,
+	walletName: string,
+	category: string
+): TransactionEntry[] => {
+	const posted = Math.abs(parseFloat(amount) || 0).toFixed(2);
+
+	return direction === 'in'
+		? [
+			{ account: walletName, side: 'debit', amount: posted },
+			{ account: INCOME_ACCOUNT, side: 'credit', amount: posted },
+		]
+		: [
+			{ account: category, side: 'debit', amount: posted },
+			{ account: walletName, side: 'credit', amount: posted },
+		];
 };
 
 const createTransactionFromMinimalPayload = (
@@ -36,6 +58,7 @@ const createTransactionFromMinimalPayload = (
 		occurred_at: payload.occurred_at ?? now,
 		note: '',
 		created_at: now,
+		origin: 'manual',
 	};
 };
 
@@ -60,5 +83,5 @@ const orderChain = (items: TransactionChainItem[]): TransactionChainItem[] => {
 	return ordered;
 };
 
-export { createTransactionFromMinimalPayload, directionFromAmount, orderChain };
+export { buildEntries, createTransactionFromMinimalPayload, directionFromAmount, orderChain };
 export type { StorageTransaction };

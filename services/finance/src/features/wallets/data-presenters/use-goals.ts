@@ -1,17 +1,21 @@
+import { useMemo } from "react";
+
+import { isGoalWallet } from "@entity/wallets";
 import { useWalletsList } from "./use-wallets-list.ts";
-import { useWalletGoalsView } from "../data-selectors";
-import type { Goal } from "../wallets-api";
+
+import type { GoalWallet } from "@entity/wallets";
 
 
 interface UseGoalsReturn {
-	goals: Goal[];
+	goals: GoalWallet[];
 	isPending: boolean;
 	isError: boolean;
 }
 
 const useGoals = (): UseGoalsReturn => {
 	const { wallets, isPending, isError } = useWalletsList(undefined, 'long-term-goal');
-	const goals = useWalletGoalsView(wallets);
+
+	const goals = useMemo(() => wallets.filter(isGoalWallet), [wallets]);
 
 	return { goals, isPending, isError };
 };

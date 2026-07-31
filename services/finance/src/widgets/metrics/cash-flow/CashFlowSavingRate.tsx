@@ -1,7 +1,6 @@
-import { Tooltip } from "@shared/interactions";
+import { ShowSavingRateTooltip } from "@feature/metrics";
+import { MetricCardDescriptor, MetricCardIntext } from "@entity/metrics";
 
-import { useMemo } from "react";
-import { useConvertMoney } from "@feature/localization";
 import type { FC } from "react";
 import type { CashFlowInsight } from "@feature/metrics";
 
@@ -13,24 +12,15 @@ interface NetWorthSavingRateProps {
 const CashFlowSavingRate: FC<NetWorthSavingRateProps> = ({
 	cashFlow,
 }) => {
-	const { convert } = useConvertMoney();
-	const tooltipContent = useMemo(() => {
-		const netFormatted = convert(cashFlow.net).formatted;
-		const inflowFormatted = convert(cashFlow.in).formatted;
-		
-		return `Net ${netFormatted} kept of ${inflowFormatted} income`;
-	}, [convert, cashFlow]);
-	
 	return (
-		<Tooltip content={tooltipContent}>
-			<span className="cursor-help text-xs text-text-3">
-				Savings rate 
-				<span> </span>
-				<b className="text-pos">
-					{Math.round(cashFlow.savingsRate * 100)}%
-				</b>
-			</span>
-		</Tooltip>
+		<ShowSavingRateTooltip cashFlow={cashFlow}>
+			<MetricCardDescriptor>
+				Savings rate
+				<MetricCardIntext tone={cashFlow.savingsRate >= 0 ? 'positive' : 'negative'}>
+					&nbsp;{Math.round(cashFlow.savingsRate * 100)}%
+				</MetricCardIntext>
+			</MetricCardDescriptor>
+		</ShowSavingRateTooltip>
 	);
 }
 

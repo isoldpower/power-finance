@@ -1,7 +1,7 @@
 import {v4 as uuidv4} from "uuid";
 
-import type {Wallet} from "@entity/wallets";
-import {DEFAULT_WALLET_GRADIENT} from "@entity/wallets";
+import type {Wallet, WalletGoalMeta} from "@entity/wallets";
+import {DEFAULT_GOAL_COLOR, DEFAULT_GOAL_ICON, DEFAULT_WALLET_GRADIENT} from "@entity/wallets";
 import type {WalletSearchLeaf, WalletSearchNode, WalletSearchRoot, WalletStats} from "../types.ts";
 import type {IStorage} from "@internal/shared";
 import {LocalStorageMock} from "@internal/shared";
@@ -30,6 +30,16 @@ interface StoredTransaction {
 	amount: string;
 	created_at?: string;
 }
+
+// Goals stored before amounts became numeric kept them as "$1,234" strings.
+interface LegacyGoalAmounts {
+	target?: string;
+	monthly?: string;
+}
+
+const parseLegacyAmount = (value: string | undefined): number => {
+	return Number((value ?? '').replace(/[^0-9.]/g, '')) || 0;
+};
 
 function resolveField(wallet: Wallet, path: string): unknown {
 	return path.split(".").reduce<unknown>(
@@ -98,16 +108,32 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 		this.transactions = new LocalStorageMock<StoredTransaction>('transactions');
 	}
 
+	private withCompleteGoal(wallet: Wallet): Wallet {
+		if (wallet.type !== 'long-term-goal') return wallet;
+
+		const legacy = wallet.goal as (WalletGoalMeta & LegacyGoalAmounts) | undefined;
+
+		return {
+			...wallet,
+			goal: {
+				icon: wallet.goal?.icon ?? DEFAULT_GOAL_ICON,
+				color: wallet.goal?.color ?? DEFAULT_GOAL_COLOR,
+				targetAmount: wallet.goal?.targetAmount ?? parseLegacyAmount(legacy?.target),
+				monthlyAmount: wallet.goal?.monthlyAmount ?? parseLegacyAmount(legacy?.monthly),
+			},
+		};
+	}
+
 	private withLiveBalance(wallet: Wallet): Wallet {
 		const delta = this.transactions.list().reduce(
 			(sum, txn) => txn.source_wallet_id === wallet.id ? sum + (parseFloat(txn.amount) || 0) : sum,
 			0
 		);
-		return {
+		return this.withCompleteGoal({
 			...wallet,
 			color: wallet.color || DEFAULT_WALLET_GRADIENT,
 			balance: { ...wallet.balance, amount: wallet.balance.amount + delta }
-		};
+		});
 	}
 
 	private statsFor(walletId: string): WalletStats {

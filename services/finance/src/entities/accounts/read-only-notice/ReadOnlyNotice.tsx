@@ -1,6 +1,6 @@
 import type { FC, ReactNode } from "react";
 
-import { LockIcon } from "@entity/accounts";
+import { LockIcon } from "../icons/LockIcon.tsx";
 import { cn } from "@internal/ui-library";
 
 

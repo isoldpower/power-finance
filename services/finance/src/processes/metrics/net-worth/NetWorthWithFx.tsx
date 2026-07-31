@@ -1,45 +1,37 @@
-import type { Period } from "@entity/metrics";
-import type { FC } from "react";
+import { ConvertedNetWorth, ConvertedNetWorthChart, MetricPeriodTitle } from "@widget/metrics";
+import { useInsights, NetWorthHeroFx, useMetricsPreferences } from "@feature/metrics";
+import { NetWorthElevatedCard } from "@entity/metrics";
 
-import { useInsights, NetWorthHeroFx } from "@feature/metrics";
-import { cn, FinanceCard } from "@internal/ui-library";
-import { ConvertedNetWorth } from "@widget/metrics/net-worth/ConvertedNetWorth.tsx";
-import { ConvertedNetWorthChart } from "@widget/metrics/net-worth/ConvertedNetWorthChart.tsx";
+import type { FC } from "react";
 
 
 interface NetWorthHeroWithFxProps {
-	period: Period;
 	className?: string;
 }
 
 const NetWorthHeroWithFx: FC<NetWorthHeroWithFxProps> = ({
-	period,
 	className,
 }) => {
+	const period = useMetricsPreferences((state) => state.metricsPeriod);
 	const { netWorth, isPending, isError } = useInsights({
 		metrics: ['net_worth'],
 		range: period,
 	});
 
 	return (
-		<FinanceCard className={cn("relative overflow-hidden px-6 py-[22px]", className)}>
+		<NetWorthElevatedCard className={className}>
 			<div className="relative">
-				<div className="font-numeric text-[11px] uppercase tracking-[0.14em] text-text-3">
-					Total net worth
-				</div>
+				<MetricPeriodTitle label="Net worth change" period={period} relative />
 				<NetWorthHeroFx isPending={isPending} isError={isError} netWorth={netWorth}>
 					{(netWorth) => (
-						<>
-							<ConvertedNetWorth
-								netWorth={netWorth}
-								period={period} />
-							<ConvertedNetWorthChart
-								netWorth={netWorth} />
-						</>
+						<div className='mt-6'>
+							<ConvertedNetWorth netWorth={netWorth} />
+							<ConvertedNetWorthChart netWorth={netWorth} />
+						</div>
 					)}
 				</NetWorthHeroFx>
 			</div>
-		</FinanceCard>
+		</NetWorthElevatedCard>
 	);
 };
 

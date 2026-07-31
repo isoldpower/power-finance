@@ -1,20 +1,27 @@
 import {cn} from "@internal/ui-library";
 
-interface CashPercentageGraphProps {
+import type { ComponentProps } from "react";
+
+type CashPercentageGraphProps = ComponentProps<"div"> & {
 	percentage: number;
 	isPositive?: boolean;
 }
 
 const CashPercentageGraph = ({
 	percentage,
-	isPositive
+	isPositive,
+	className,
+	style,
+	...props
 }: CashPercentageGraphProps) => {
 	return (
 		<div
-			className={cn(isPositive ? "bg-pos" : "bg-neg")}
-			style={{ width: `${percentage.toFixed(1)}%` }}
+			className={cn(isPositive ? "bg-pos" : "bg-neg", className)}
+			style={{ width: `${percentage.toFixed(1)}%`, ...style }}
+			{...props}
 		/>
 	);
 }
 
 export { CashPercentageGraph };
+export type { CashPercentageGraphProps };

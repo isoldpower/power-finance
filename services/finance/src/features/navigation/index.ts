@@ -5,3 +5,5 @@ export * from './route-link';
 export * from './route-navigate';
 export * from './breadcrumbs';
 export * from './tabs-with-search-param';
+
+export type * from './types.ts';

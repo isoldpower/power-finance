@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 
+import { goalProgressPercent } from "@entity/wallets";
+
 import { useGoals } from "../data-presenters";
 
 
@@ -14,7 +16,8 @@ const useGoalsBrowser = (pageSize: number) => {
 		
 		return goals.filter((goal) => {
 			const matchesQuery = normalizedQuery === '' || goal.name.toLowerCase().includes(normalizedQuery);
-			const matchesStatus = status === 'all' || (status === 'reached' ? goal.percent >= 100 : goal.percent < 100);
+			const reached = goalProgressPercent(goal) >= 100;
+			const matchesStatus = status === 'all' || (status === 'reached' ? reached : !reached);
 			
 			return matchesQuery && matchesStatus;
 		});

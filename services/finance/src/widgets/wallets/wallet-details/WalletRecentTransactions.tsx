@@ -1,6 +1,7 @@
-import type {FC} from "react";
+import {useMemo} from "react";
 
 import {MoneyInOriginal} from "@entity/localization";
+import {AmountDirectionIcon, directionIconClass, toneByDirection, toTransactionRowViews} from "@entity/transactions";
 import {Wallet, WalletTransactionIcon} from "@entity/wallets";
 import {useConvertMoney} from "@feature/localization";
 import {useLocaleCurrency} from "@shared/utils";
@@ -10,6 +11,8 @@ import {RecentTransactionContainer} from "@entity/wallets/wallet-details/RecentT
 import {RecentTransactionMeta} from "@entity/wallets/wallet-details/RecentTransactionMeta.tsx";
 import {FulfillWithPlaceholder} from "@feature/wallets/wallet-browser/FulfillWithPlaceholder.tsx";
 
+import type {FC} from "react";
+
 
 interface WalletRecentRowProps {
 	wallet: Wallet;
@@ -18,14 +21,19 @@ interface WalletRecentRowProps {
 const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ wallet }) => {
 	const { convert } = useConvertMoney();
 	const format = useLocaleCurrency();
-	const recentRows = useWalletRecentTransactions(wallet);
-	
+	const recentTransactions = useWalletRecentTransactions(wallet);
+
+	const recentRows = useMemo(
+		() => toTransactionRowViews(recentTransactions, format),
+		[recentTransactions, format]
+	);
+
 	return (
 		<div className='flex flex-col'>
 			{recentRows.map((row) => (
 				<RecentTransactionContainer key={row.id}>
-					<WalletTransactionIcon className={row.iconClass}>
-						{row.icon}
+					<WalletTransactionIcon className={directionIconClass[row.direction]}>
+						<AmountDirectionIcon direction={row.direction} />
 					</WalletTransactionIcon>
 					<RecentTransactionMeta
 						category={row.category}
@@ -34,7 +42,7 @@ const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ wallet }) => {
 					/>
 					<MoneyInOriginal
 						currency={row.currency}
-						tone={row.tone}
+						tone={toneByDirection[row.direction]}
 						size="sm"
 						align="end"
 						convert={convert}

@@ -23,7 +23,8 @@
       "import": "./dist/main.js",
       "require": "./dist/main.umd.cjs"
     },
-    "./css": "./dist/ui-library.css"
+    "./css": "./dist/ui-library.css",
+    "./preset.css": "./lib/styles/preset.css"
   },
   "scripts": {
     "watch:build": "vite build --watch",

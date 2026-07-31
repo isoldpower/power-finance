@@ -55,25 +55,13 @@ type WalletSearchRoot =
 	| { AND: WalletSearchNode[]; OR?: never }
 	| { OR: WalletSearchNode[]; AND?: never };
 
-interface Goal {
-	id: string;
-	icon: string;
-	color: string;
-	name: string;
-	monthly: string;
-	eta: string;
-	saved: string;
-	target: string;
-	percent: number;
-}
-
 interface GoalCreatePayload {
 	name: string;
-	target: string;
-	monthly: string;
+	targetAmount: number;
+	monthlyAmount: number;
 	icon?: string;
 	color?: string;
 }
 
 export type { WalletPreview, WalletDetailed, WalletMeta, WalletStats, WalletValuableFields, WalletMinimalPayload, WalletSearchRoot, WalletSearchNode, WalletSearchLeaf };
-export type { Goal, GoalCreatePayload };
+export type { GoalCreatePayload };

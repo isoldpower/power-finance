@@ -1,8 +1,9 @@
-import type { FC, ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
 
-type FinanceRouteKey = Parameters<typeof getFinanceRoute>[0];
+import type { FC, ReactNode } from "react";
+import type { FinanceRouteKey } from "../types";
+
 
 interface RouteLinkProps {
 	to: FinanceRouteKey;

@@ -27,7 +27,8 @@ function FinanceSegmentedItem({
 	return (
 		<ToggleGroupItem
 			className={cn(
-				"flex-none rounded-[calc(var(--radius-md)-3px)] px-3 text-[13px] font-semibold text-text-2",
+				"flex-none px-3 text-[13px] font-semibold text-text-2",
+				"rounded-[calc(var(--radius-md)-4px)] first:rounded-l-[calc(var(--radius-md)-4px)] last:rounded-r-[calc(var(--radius-md)-4px)]",
 				"hover:bg-transparent hover:text-foreground",
 				accent
 					? "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"

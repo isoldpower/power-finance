@@ -2,7 +2,8 @@ import { useCallback } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
 
-import type { FinanceRouteKey } from "../route-link/RouteLink.tsx";
+import type { FinanceRouteKey } from "../types.ts";
+
 
 const useRouteNavigate = () => {
 	const navigate = useNavigate();

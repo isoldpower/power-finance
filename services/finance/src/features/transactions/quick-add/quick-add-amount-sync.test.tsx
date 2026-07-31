@@ -14,10 +14,6 @@ vi.mock("@feature/localization", () => ({
 	}),
 }));
 
-vi.mock("@feature/wallets", () => ({
-	useWalletSelectOptions: (wallets: { id: string; name: string; balance: { currency: string }; color: string }[]) =>
-		wallets.map((wallet) => ({ id: wallet.id, name: wallet.name, currency: wallet.balance.currency, gradient: wallet.color })),
-}));
 
 const { useCrossCurrencyTransfer } = await import("./use-cross-currency-transfer.ts");
 const { useWalletsCurrencies } = await import("./use-wallets-currencies.ts");
@@ -30,6 +26,11 @@ const WALLETS = [
 	{ id: 'a', name: 'A', balance: { amount: 0, currency: 'USD' }, color: 'x' },
 	{ id: 'b', name: 'B', balance: { amount: 0, currency: 'EUR' }, color: 'y' },
 ] as never[];
+
+const WALLET_OPTIONS = [
+	{ id: 'a', name: 'A', currency: 'USD', gradient: 'x' },
+	{ id: 'b', name: 'B', currency: 'EUR', gradient: 'y' },
+];
 
 const RATE = 1.087;
 
@@ -47,7 +48,7 @@ const renderQuickAddHooks = (counter: { renders: number }) => renderHook(() => {
 
 	const { toCurrency, fromCurrency } = useWalletsCurrencies(WALLETS, form);
 	useFormLoadingState(form);
-	useFormWalletsList(WALLETS, form);
+	useFormWalletsList(WALLET_OPTIONS, form);
 	const transfer = useCrossCurrencyTransfer(fromCurrency, toCurrency, form);
 	useFormTypeEffects(defaultValues, form);
 

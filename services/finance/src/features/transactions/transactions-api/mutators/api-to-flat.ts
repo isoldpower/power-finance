@@ -20,6 +20,8 @@ const transactionPreviewResponseToFlat = (
 		category: response.category,
 		occurred_at: response.occurred_at,
 		created_at: response.created_at,
+		origin: response.origin,
+		entries: response.entries,
 		source_wallet: toWalletRef(response.wallet),
 	};
 }
@@ -36,6 +38,8 @@ const transactionDetailedResponseToFlat = (
 		category: response.category,
 		occurred_at: response.occurred_at,
 		created_at: response.meta.created_at,
+		origin: response.origin,
+		entries: response.entries,
 		note: response.note,
 		receipt: response.receipt,
 		source_wallet: { id: response.wallet.id, name: response.wallet.name, color: response.wallet.color },

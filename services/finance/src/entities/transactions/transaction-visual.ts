@@ -1,16 +1,15 @@
 import type { Tone } from "@shared/utils";
+import type { TransactionDirection } from "./types.ts";
 
-const toneFromAmount = (amount: number): Tone => {
-	return (amount >= 0 ? 'pos' : 'neg');
-}
+const toneByDirection: Record<TransactionDirection, Tone> = {
+	in: 'pos',
+	out: 'neg',
+};
 
-const iconClassFromAmount = (amount: number): string => {
-	return amount >= 0 ? 'bg-pos-soft text-pos' : 'bg-[var(--accent-soft)] text-primary';
-}
-
-const iconFromAmount = (amount: number): string => {
-	return (amount >= 0 ? '↓' : '↑');
-}
+const directionIconClass: Record<TransactionDirection, string> = {
+	in: 'bg-pos-soft text-pos',
+	out: 'bg-[var(--accent-soft)] text-primary',
+};
 
 const toneTextClass: Record<Tone, string> = {
 	pos: 'text-pos',
@@ -19,4 +18,4 @@ const toneTextClass: Record<Tone, string> = {
 	muted: 'text-text-2',
 };
 
-export { toneFromAmount, iconClassFromAmount, iconFromAmount, toneTextClass };
+export { directionIconClass, toneByDirection, toneTextClass };

@@ -15,4 +15,3 @@ export type { RowSelectCheckboxProps } from './RowSelectCheckbox.tsx';
 export type { TransactionAmountStackProps } from './TransactionAmountStack.tsx';
 export type { LedgerLineRowProps } from './LedgerLineRow.tsx';
 export type { JournalPostingHeaderProps } from './JournalPostingHeader.tsx';
-export type { LedgerLine, TransactionRowView } from './types.ts';

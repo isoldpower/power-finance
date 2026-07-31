@@ -3,6 +3,16 @@ import type { WalletPreview } from "@feature/wallets/wallets-api/types.ts";
 
 type TransactionDirection = 'in' | 'out';
 
+type TransactionOrigin = 'manual' | 'imported' | 'recurring';
+
+type TransactionEntrySide = 'debit' | 'credit';
+
+interface TransactionEntry {
+	account: string
+	side: TransactionEntrySide
+	amount: string
+}
+
 interface TransactionReceipt {
 	merchant: string
 	date: string
@@ -31,6 +41,8 @@ interface TransactionPreview {
 	category: string
 	occurred_at: string
 	created_at: string
+	origin: TransactionOrigin
+	entries: TransactionEntry[]
 	wallet: TransactionPreviewWallet
 }
 
@@ -42,6 +54,8 @@ interface TransactionDetailed {
 	merchant: string
 	category: string
 	occurred_at: string
+	origin: TransactionOrigin
+	entries: TransactionEntry[]
 	note: string
 	receipt?: TransactionReceipt
 	wallet: WalletPreview
@@ -79,6 +93,7 @@ interface TransactionChainResult {
 	transactions: TransactionDetailed[]
 }
 
-export type { TransactionDirection, TransactionReceipt, TransactionMeta, TransactionPreviewWallet };
+export type { TransactionDirection, TransactionOrigin, TransactionEntry, TransactionEntrySide };
+export type { TransactionReceipt, TransactionMeta, TransactionPreviewWallet };
 export type { TransactionPreview, TransactionDetailed, TransactionMinimalPayload, TransactionPatchFields };
 export type { TransactionChainItem, TransactionChainPayload, TransactionChainResult };

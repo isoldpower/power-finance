@@ -57,16 +57,9 @@ const GoalsCard: FC = () => {
 					<GoalRow
 						key={`${page.toString()}-${goal.id}`}
 						style={{ animationDelay: `${(index * 0.04).toString()}s` }}
-						icon={goal.icon}
-						color={goal.color}
-						name={goal.name}
-						monthly={goal.monthly}
-						eta={goal.eta}
-						saved={goal.saved}
-						target={goal.target}
-						percent={goal.percent}
+						wallet={goal}
 						deleteSlot={
-							<DeleteGoalDialog id={goal.id} name={goal.name} saved={goal.saved}>
+							<DeleteGoalDialog wallet={goal}>
 								<RowDeleteButton label={`Delete ${goal.name}`} />
 							</DeleteGoalDialog>
 						}

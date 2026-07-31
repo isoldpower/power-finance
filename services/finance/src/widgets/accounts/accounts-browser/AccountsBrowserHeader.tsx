@@ -3,6 +3,7 @@ import { FinanceBadge } from "@internal/ui-library";
 
 import { SectionHeader } from "@shared/components";
 import { useAccountsBrowser } from "@feature/accounts";
+import { LockIcon } from "@entity/accounts";
 
 
 const AccountsBrowserHeader: FC = () => {
@@ -21,7 +22,7 @@ const AccountsBrowserHeader: FC = () => {
 			<SectionHeader.Border />
 			<span className="font-numeric text-[10.5px] tracking-[0.08em] text-text-3">
 				<FinanceBadge tone="neutral" appearance="outline" size="sm">
-					🔒 Read-only
+					<LockIcon /> Read-only
 				</FinanceBadge>
 			</span>
 		</SectionHeader>

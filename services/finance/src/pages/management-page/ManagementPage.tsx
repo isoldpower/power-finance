@@ -13,7 +13,7 @@ import { RevealMotion } from "@shared/interactions";
 import { ScanReceiptIcon } from "@entity/transactions";
 import {managementSlides, managementSlidesRegistry} from "./slide-over-registry";
 import {FinanceButton, FinanceCard} from "@internal/ui-library";
-import {LedgerBalanceBand} from "@process/metrics/ledger-status/LedgerBalanceBand.tsx";
+import {LedgerBalanceBand} from "@process/accounts/ledger-status/LedgerBalanceBand.tsx";
 import {WalletBrowserHeader} from "@widget/wallets/wallet-browser/WalletBrowserHeader.tsx";
 import {BrowseAndSelectWallets} from "@process/wallets/browse-wallets/BrowseAndSelectWallets.tsx";
 import {BrowserWalletDetails} from "@process/wallets/browse-wallets/BrowserWalletDetails.tsx";

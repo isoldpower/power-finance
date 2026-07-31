@@ -29,6 +29,10 @@ const formatCurrencyInput = (raw: string): string => {
 	return dotIndex === -1 ? `$${grouped}` : `$${grouped}.${sanitized.slice(dotIndex + 1)}`;
 };
 
+const parseAmountInput = (formatted: string): number => {
+	return Number(sanitizeAmountInput(formatted)) || 0;
+};
+
 const goalSchema = z.object({
 	name: z.string().min(1, "Name is required"),
 	target: z.string().min(1, "Target is required"),
@@ -104,8 +108,8 @@ const NewGoalPanel: FC<NewGoalPanelProps> = ({ children }) => {
 					createGoal.mutate(
 						{
 							name: data.name,
-							target: data.target,
-							monthly: data.monthly,
+							targetAmount: parseAmountInput(data.target),
+							monthlyAmount: parseAmountInput(data.monthly),
 							icon: data.icon?.trim() ? data.icon.trim() : undefined,
 						},
 						{ onSuccess: close }

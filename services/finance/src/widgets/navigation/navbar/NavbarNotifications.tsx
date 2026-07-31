@@ -8,8 +8,8 @@ import {
 } from "@internal/ui-library";
 
 import { RouteLink } from "@feature/navigation";
-import { NotificationBell, NotificationEmpty, NotificationList } from "@entity/assistance";
 import { useNotifications, useNotificationsCount, NotificationsEmptyGuard } from "@feature/assistance";
+import { NotificationBell, NotificationEmpty, NotificationList } from "@entity/assistance";
 
 
 const NavbarNotifications: FC = () => {
@@ -44,7 +44,6 @@ const NavbarNotifications: FC = () => {
 							/>
 						))}
 					</NotificationsEmptyGuard>
-					{notifications.length}
 				</NotificationList>
 			</FinanceMenuContent>
 		</FinanceMenu>

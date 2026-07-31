@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from "react";
 import type { NetWorthInsight } from "@feature/metrics";
 
-import { HeroSkeleton } from "@entity/metrics";
+import { NetWorthSkeleton } from "@entity/metrics";
 
 
 interface NetWorthHeroFxProps {
@@ -18,7 +18,7 @@ const NetWorthHeroFx: FC<NetWorthHeroFxProps> = ({
 	children,
 }) => {
 	if (isPending) {
-		return <HeroSkeleton />;
+		return <NetWorthSkeleton />;
 	} else if (isError || !netWorth) {
 		return <NetWorthHeroFailed />;
 	}

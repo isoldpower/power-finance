@@ -1,9 +1,21 @@
-import { FC, useCallback, useMemo } from "react";
-import { buildSparkline, ChartPoint, NetWorthInsight, useSparklineHover } from "@feature/metrics";
-import { SparklineSvg, SparklineTooltip } from "@entity/metrics";
+import { useMemo } from "react";
+import {
+	NetWorthActivePoint,
+	NetWorthSparkline,
+	NetWorthSparklineTip,
+	NetWorthTooltip,
+} from "@entity/metrics";
+import {
+	buildSparkline,
+	useSparklineHover,
+	useConvertedNetWorth,
+	useFormattedChartData,
+	useChartHoverData,
+} from "@feature/metrics";
 import { relativeAgo } from "@shared/utils";
-import { useConvertMoney } from "@feature/localization";
-import { useConvertedNetWorth } from "@feature/metrics/convert-currency/use-converted-net-worth.ts";
+
+import type { FC } from "react";
+import type { NetWorthInsight } from "@feature/metrics";
 
 
 interface NetWorthChartProps {
@@ -11,59 +23,37 @@ interface NetWorthChartProps {
 }
 
 const ConvertedNetWorthChart: FC<NetWorthChartProps> = ({ netWorth }) => {
-	const { convert } = useConvertMoney();
-	const { netWorthSeries, netWorthValue } = useConvertedNetWorth(netWorth);
+	const netWorthData = useConvertedNetWorth(netWorth);
 	const sparklineData = useMemo(() => {
-		return buildSparkline(netWorthSeries);
-	}, [netWorthSeries]);
-	const { ref, hover, tip, active, onMove, onLeave } = useSparklineHover(sparklineData.points);
-
-	const currentValue = useMemo(() => {
-		return netWorthSeries.length > 0 
-			? netWorthSeries[netWorthSeries.length - 1].v 
-			: netWorthValue.amount;
-	}, [netWorthSeries, netWorthValue]);
-	const { currentDiff, isDiffPositive, isCurrentNow } = useMemo(() => ({
-		currentDiff: active ? active.value - currentValue : 0,
-		isDiffPositive: (active ? active.value - currentValue : 0) >= 0,
-		isCurrentNow: active 
-			? (hover === sparklineData.points.length - 1 || Math.abs(active.value - currentValue) < 0.5) 
-			: false
-	}), [active, currentValue, hover, sparklineData.points]);
+		return buildSparkline(netWorthData.netWorthSeries);
+	}, [netWorthData.netWorthSeries]);
+	const sparklineHover = useSparklineHover(sparklineData.points);
 	
-	const formatValue = useCallback((active: ChartPoint) => {
-		return convert({
-			amount: active.value,
-			currency: netWorthValue.currency
-		}).formatted;
-	}, [convert, netWorthValue.currency]);
-	const formatDiff = useCallback((diff: number) => {
-		return convert({
-			amount: Math.abs(diff),
-			currency: netWorthValue.currency,
-		}).formatted;
-	}, [convert, netWorthValue.currency]);
+	const { formatValue, formatDiff } = useFormattedChartData(netWorthData.netWorthValue);
+	const { currentDiff, isDiffPositive, isCurrentNow } = useChartHoverData(netWorthData, { 
+		...sparklineHover,
+		pointsCount: netWorthData.netWorthSeries.length,
+	});
 
 	return (
 		<div
-			ref={ref}
+			ref={sparklineHover.ref}
 			className="relative mt-3.5 h-[92px] cursor-crosshair"
-			onMouseMove={onMove}
-			onMouseLeave={onLeave}
+			onMouseMove={sparklineHover.onMove}
+			onMouseLeave={sparklineHover.onLeave}
 		>
-			<SparklineSvg 
-				stroke={sparklineData.stroke}
-				fill={sparklineData.fill}
-				lastY={sparklineData.lastY}
-				active={active} />
-			{active && tip ? (
-				<SparklineTooltip {...tip}
-					onLeft={tip.onLeft}
-					valueFormatted={formatValue(active)}
+			<NetWorthSparkline stroke={sparklineData.stroke} fill={sparklineData.fill} />
+			<NetWorthSparklineTip lastY={sparklineData.lastY} active={sparklineHover.active} />
+			<NetWorthActivePoint active={sparklineHover.active} />
+			{sparklineHover.active && sparklineHover.tip ? (
+				<NetWorthTooltip
+					{...sparklineHover.tip}
+					onLeft={sparklineHover.tip.onLeft}
+					valueFormatted={formatValue(sparklineHover.active)}
 					isNow={isCurrentNow}
 					diffPositive={isDiffPositive}
 					diffFormatted={formatDiff(currentDiff)}
-					ago={relativeAgo(active.date)}
+					ago={relativeAgo(sparklineHover.active.date)}
 				/>
 			) : null}
 		</div>

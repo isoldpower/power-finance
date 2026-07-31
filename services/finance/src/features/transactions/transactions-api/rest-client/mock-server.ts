@@ -9,10 +9,10 @@ import type {
 	TransactionPatchRequest, TransactionPatchResponse,
 	TransactionPostRequest, TransactionPostResponse,
 } from "./types.ts";
-import type { TransactionDetailed, TransactionPreview, TransactionPreviewWallet } from "../types.ts";
+import type { TransactionDetailed, TransactionEntry, TransactionPreview, TransactionPreviewWallet } from "../types.ts";
 import type { WalletPreview } from "@feature/wallets/wallets-api/types.ts";
 import { v4 as uuidv4 } from "uuid";
-import { StorageTransaction, createTransactionFromMinimalPayload, directionFromAmount, orderChain } from "./utils.ts";
+import { StorageTransaction, buildEntries, createTransactionFromMinimalPayload, directionFromAmount, orderChain } from "./utils.ts";
 
 
 class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
@@ -48,6 +48,15 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		};
 	}
 
+	private entries(value: StorageTransaction): TransactionEntry[] {
+		return buildEntries(
+			value.direction,
+			value.amount,
+			this.walletRef(value.source_wallet_id).name,
+			value.category
+		);
+	}
+
 	private toPreview(value: StorageTransaction): TransactionPreview {
 		return {
 			id: value.id,
@@ -58,6 +67,8 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 			category: value.category ?? 'Uncategorized',
 			occurred_at: value.occurred_at ?? value.created_at,
 			created_at: value.created_at,
+			origin: value.origin ?? 'imported',
+			entries: this.entries(value),
 			wallet: this.walletRef(value.source_wallet_id),
 		};
 	}
@@ -71,6 +82,8 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 			merchant: value.merchant ?? '',
 			category: value.category ?? 'Uncategorized',
 			occurred_at: value.occurred_at ?? value.created_at,
+			origin: value.origin ?? 'imported',
+			entries: this.entries(value),
 			note: value.note ?? '',
 			receipt: value.receipt,
 			wallet: this.walletPreview(value.source_wallet_id),
@@ -99,7 +112,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		request: TransactionPostRequest
 	): Promise<TransactionPostResponse> {
 		const stored = createTransactionFromMinimalPayload(request.data);
-		stored.currency_code = this.wallets.get(stored.source_wallet_id)?.balance.currency ?? '';
+		stored.currency_code = this.wallets.get(stored.source_wallet_id)?.balance.currency ?? 'USD';
 
 		return new Promise((resolve) => setTimeout(resolve, 250))
 			.then(() => { this.storage.add(stored); })
@@ -113,7 +126,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		const legs = orderChain(request.data.transactions).map((item) => {
 			const stored = createTransactionFromMinimalPayload(item);
 			stored.chain_id = chainId;
-			stored.currency_code = this.wallets.get(item.source_wallet_id)?.balance.currency ?? '';
+			stored.currency_code = this.wallets.get(item.source_wallet_id)?.balance.currency ?? 'USD';
 			return stored;
 		});
 

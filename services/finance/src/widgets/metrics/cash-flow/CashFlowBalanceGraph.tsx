@@ -1,5 +1,8 @@
-import type {CashFlowInsight} from "@feature/metrics";
-import {CashPercentageGraph} from "@entity/metrics";
+import { ShowCashBalanceTip, useCashFlowShare, useConvertedCashFlow } from "@feature/metrics";
+import { CashPercentageGraph } from "@entity/metrics";
+
+import type { CashFlowInsight } from "@feature/metrics";
+
 
 interface CashFlowBalanceGraphProps {
 	cashFlow: CashFlowInsight;
@@ -8,15 +11,18 @@ interface CashFlowBalanceGraphProps {
 const CashFlowBalanceGraph = ({
 	cashFlow
 }: CashFlowBalanceGraphProps) => {
-	const total = cashFlow.in.amount + cashFlow.out.amount;
-	const incomeShare = (cashFlow.in.amount / total) * 100;
-	const expenseShare = (cashFlow.out.amount / total) * 100;
-
+	const { convertedInflow, convertedOutflow } = useConvertedCashFlow(cashFlow);
+	const { inflowShare, outflowShare } = useCashFlowShare(cashFlow);
+	
 	return (
-		<div className="fx-grow-x [animation-delay:0.4s] mt-[18px] flex h-2 overflow-hidden rounded-full bg-secondary">
-			<CashPercentageGraph percentage={incomeShare} isPositive={true} />
+		<div className="cursor-help fx-grow-x [animation-delay:0.4s] mt-[18px] flex h-2 overflow-hidden rounded-full bg-secondary">
+			<ShowCashBalanceTip cashFlow={convertedInflow} percentsShare={inflowShare}>
+				<CashPercentageGraph percentage={inflowShare} isPositive={true} />
+			</ShowCashBalanceTip>
 			<div style={{ width: "1.5%" }} />
-			<CashPercentageGraph percentage={expenseShare} isPositive={false} />
+			<ShowCashBalanceTip cashFlow={convertedOutflow} percentsShare={outflowShare}>
+				<CashPercentageGraph percentage={outflowShare} isPositive={false} />
+			</ShowCashBalanceTip>
 		</div>
 	);
 }

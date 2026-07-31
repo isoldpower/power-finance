@@ -1,20 +1,22 @@
-import { FC } from "react";
 import { FinanceButton, UiForm, UiFormField } from "@internal/ui-library";
+import { useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { AddTransactionOnSubmit, quickAddSchema, useQuickAddInitials } from "@feature/transactions";
-import type { QuickAddSchema } from "@feature/transactions";
 import { FromIcon, QuickAddAmountField, QuickAddTypeSelector, ToIcon } from "@entity/transactions";
-import { HideOnFormValue } from "@shared/components/form/HideOnFormValue.tsx";
-import { ShowOnFormValue } from "@shared/components/form/ShowOnFormValue.tsx";
-import { WalletSelect } from "@entity/wallets";
+import { WalletSelect, toWalletSelectOptions } from "@entity/wallets";
+import {
+	useWalletsCurrencies,
+	useCrossCurrencyTransfer,
+	useFormTypeEffects,
+	useFormLoadingState,
+	useFormWalletsList
+} from "@feature/transactions";
+import { AddTransactionOnSubmit, quickAddSchema, useQuickAddInitials } from "@feature/transactions";
+import { HideOnFormValue, ShowOnFormValue } from "@shared/components";
+
+import type { FC } from "react";
+import type { QuickAddSchema } from "@feature/transactions";
 import type { Wallet } from "@entity/wallets";
-import {useWalletsCurrencies} from "@feature/transactions/quick-add/use-wallets-currencies.ts";
-import {useCrossCurrencyTransfer} from "@feature/transactions/quick-add/use-cross-currency-transfer.ts";
-import {useFormTypeEffects} from "@feature/transactions/quick-add/use-form-type-effects.ts";
-import {useFormLoadingState} from "@feature/transactions/quick-add/use-form-loading-state.ts";
-import {useFormWalletsList} from "@feature/transactions/quick-add/use-form-wallets-list.tsx";
 
 
 interface QuickAddFormProps {
@@ -35,7 +37,8 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 
 	const { toCurrency, fromCurrency, currency } = useWalletsCurrencies(wallets, form);
 	const { loading, canSubmit, methods } = useFormLoadingState(form);
-	const { fromWalletOptions, toWalletOptions } = useFormWalletsList(wallets, form);
+	const walletOptions = useMemo(() => toWalletSelectOptions(wallets), [wallets]);
+	const { fromWalletOptions, toWalletOptions } = useFormWalletsList(walletOptions, form);
 	const { handleSentChange, handleReceivedChange } = useCrossCurrencyTransfer(fromCurrency, toCurrency, form);
 	useFormTypeEffects(defaultValues, form);
 

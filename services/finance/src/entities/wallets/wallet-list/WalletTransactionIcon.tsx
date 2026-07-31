@@ -1,8 +1,8 @@
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import { cn } from "@internal/ui-library";
 
 interface WalletTxnIconProps {
-	children: string;
+	children: ReactNode;
 	className: string;
 }
 

@@ -1,5 +1,15 @@
 type TransactionDirection = 'in' | 'out';
 
+type TransactionOrigin = 'manual' | 'imported' | 'recurring';
+
+type TransactionEntrySide = 'debit' | 'credit';
+
+interface TransactionEntryDto {
+	account: string;
+	side: TransactionEntrySide;
+	amount: string;
+}
+
 interface TransactionWalletRef {
 	id: string;
 	name: string;
@@ -22,6 +32,8 @@ interface TransactionPreviewDto {
 	category: string;
 	occurred_at: string;
 	created_at: string;
+	origin: TransactionOrigin;
+	entries: TransactionEntryDto[];
 	source_wallet: TransactionWalletRef;
 }
 
@@ -32,3 +44,4 @@ interface TransactionDto extends TransactionPreviewDto {
 }
 
 export type { TransactionDto, TransactionPreviewDto, TransactionDirection, TransactionWalletRef, TransactionReceipt };
+export type { TransactionOrigin, TransactionEntryDto, TransactionEntrySide };

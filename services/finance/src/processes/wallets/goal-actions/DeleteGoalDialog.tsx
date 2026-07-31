@@ -8,24 +8,26 @@ import { useDeleteGoal } from "@feature/wallets";
 import { WalletSelect } from "@entity/wallets";
 import { ConfirmModal } from "@shared/interactions";
 import { DangerIconBadge } from "@shared/components";
+import { useLocaleCurrency } from "@shared/utils";
+
+import type { GoalWallet } from "@entity/wallets";
 
 type Disposition = 'transfer' | 'spent';
 
 interface DeleteGoalDialogProps {
-	id: string;
-	name: string;
-	saved: string;
+	wallet: GoalWallet;
 	children: ReactNode;
 }
 
-const parseAmount = (value: string): number => Number(value.replace(/[^0-9.]/g, '')) || 0;
-
-const DeleteGoalDialog: FC<DeleteGoalDialogProps> = ({ id, name, saved, children }) => {
+const DeleteGoalDialog: FC<DeleteGoalDialogProps> = ({ wallet, children }) => {
 	const { wallets } = useWalletsList();
 	const { meta } = useTransactionsListMethods();
 	const deleteGoal = useDeleteGoal();
+	const formatCurrency = useLocaleCurrency();
 
-	const savedAmount = parseAmount(saved);
+	const { id, name } = wallet;
+	const savedAmount = wallet.balance.amount;
+	const saved = formatCurrency(savedAmount, wallet.balance.currency);
 	const hasSavings = savedAmount > 0;
 
 	const [mode, setMode] = useState<Disposition>(hasSavings ? 'transfer' : 'spent');

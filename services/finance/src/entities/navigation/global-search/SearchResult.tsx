@@ -1,4 +1,5 @@
-import { SearchResultLabel, SearchResultMeta } from "@entity/navigation";
+import { SearchResultLabel } from "./SearchResultLabel.tsx";
+import { SearchResultMeta } from "./SearchResultMeta.tsx";
 import { UiCommandItem } from "@internal/ui-library";
 
 import type { FC } from "react";

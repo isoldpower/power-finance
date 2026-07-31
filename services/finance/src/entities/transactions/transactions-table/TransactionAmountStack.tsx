@@ -2,13 +2,13 @@ import type { FC } from "react";
 import { cn } from "@internal/ui-library";
 
 import { toneTextClass } from "../transaction-visual.ts";
-import type { TransactionRowView } from "./types.ts";
+import type { Tone } from "@shared/utils";
 
 interface TransactionAmountStackProps {
 	original: string;
 	main: string;
 	converted: boolean;
-	tone: TransactionRowView['tone'];
+	tone: Tone;
 }
 
 const TransactionAmountStack: FC<TransactionAmountStackProps> = ({ original, main, converted, tone }) => (

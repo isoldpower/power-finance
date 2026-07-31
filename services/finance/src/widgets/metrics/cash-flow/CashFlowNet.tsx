@@ -1,9 +1,10 @@
-import type {Period} from "@entity/metrics";
-import type {CashFlowInsight} from "@feature/metrics";
 import { useConvertMoney } from "@feature/localization";
 import { useMemo } from "react";
 import { AnimatedMoney } from "@entity/localization";
 import { CashFlowPeriod } from "@entity/metrics";
+
+import type { Period } from "@entity/metrics";
+import type { CashFlowInsight } from "@feature/metrics";
 
 
 interface CashFlowNetProps {

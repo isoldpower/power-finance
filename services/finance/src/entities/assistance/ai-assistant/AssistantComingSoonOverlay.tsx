@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import { SparkleIcon } from "@entity/assistance";
+import { SparkleIcon } from "../icons/SparkleIcon.tsx";
 
 
 const AssistantComingSoonOverlay: FC = () => (

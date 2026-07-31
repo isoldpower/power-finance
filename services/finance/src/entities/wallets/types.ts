@@ -1,12 +1,12 @@
 type WalletType = 'wallet' | 'long-term-goal';
 
-// Presentation metadata carried only by `long-term-goal` wallets so they can be
-// rendered as goals while still being full wallets under the hood.
+// Goal data carried only by `long-term-goal` wallets so they can be rendered as
+// goals while still being full wallets under the hood.
 interface WalletGoalMeta {
 	icon: string;
 	color: string;
-	target: string;
-	monthly: string;
+	targetAmount: number;
+	monthlyAmount: number;
 }
 
 interface Wallet {
@@ -25,4 +25,11 @@ interface Wallet {
 	updatedAt?: string;
 }
 
-export type { Wallet, WalletType, WalletGoalMeta };
+// A `long-term-goal` wallet always carries its goal data, so goal consumers can
+// rely on it without re-filling defaults the API already guarantees.
+interface GoalWallet extends Wallet {
+	type: 'long-term-goal';
+	goal: WalletGoalMeta;
+}
+
+export type { Wallet, WalletType, WalletGoalMeta, GoalWallet };

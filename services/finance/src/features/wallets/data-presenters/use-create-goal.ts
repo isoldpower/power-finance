@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
 import { GOALS_CACHE_KEYS } from "./cache-config.ts";
-import { DEFAULT_GOAL_COLOR, DEFAULT_WALLET_GRADIENT } from "@entity/wallets";
+import { DEFAULT_GOAL_COLOR, DEFAULT_GOAL_ICON, DEFAULT_WALLET_GRADIENT } from "@entity/wallets";
 import { createWallet } from "../wallets-api";
 import type { GoalCreatePayload } from "../wallets-api";
 
@@ -23,10 +23,10 @@ const useCreateGoal = () => {
 					credit: false,
 					type: 'long-term-goal',
 					goal: {
-						icon: data.icon ?? '🎯',
+						icon: data.icon ?? DEFAULT_GOAL_ICON,
 						color: data.color ?? DEFAULT_GOAL_COLOR,
-						target: data.target,
-						monthly: data.monthly,
+						targetAmount: data.targetAmount,
+						monthlyAmount: data.monthlyAmount,
 					},
 				},
 			},
