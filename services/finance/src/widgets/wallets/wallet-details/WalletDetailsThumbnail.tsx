@@ -1,7 +1,10 @@
-import {Wallet, walletTypeLabel} from "@entity/wallets";
-import {SlideOverTrigger} from "@shared/components";
-import type { FC } from "react";
 import { FinanceButton } from "@internal/ui-library";
+import { WalletDetailsTitle, WalletDetailsParagraph, WalletSwatch, walletTypeLabel } from "@entity/wallets";
+import { SlideOverTrigger } from "@shared/components";
+
+import type { FC } from "react";
+import type { Wallet } from "@entity/wallets";
+import {ShowWhenUpdated} from "@feature/wallets";
 
 
 interface WalletDetailsThumbnailProps {
@@ -17,18 +20,19 @@ const WalletDetailsThumbnail: FC<WalletDetailsThumbnailProps> = ({
 }) => {
 	return (
 		<div className="flex items-start gap-3.5">
-			<div
-				className="h-11 w-16 flex-none rounded-[9px] shadow-[var(--shadow)]"
-				style={{ background: wallet.color }}
-			/>
+			<WalletSwatch size='lg' color={wallet.color} />
 			<div className="min-w-0 flex-1">
-				<div className="truncate font-display text-lg font-semibold">
+				<WalletDetailsTitle>
 					{wallet.name}
-				</div>
-				<div className="text-[12.5px] text-text-3">
+				</WalletDetailsTitle>
+				<WalletDetailsParagraph>
 					{walletTypeLabel(wallet)} · {wallet.balance.currency}
-					{wallet.updatedAt ? ` · updated ${new Date(wallet.updatedAt).toLocaleDateString()}` : null}
-				</div>
+					<ShowWhenUpdated wallet={wallet}>
+						{(updatedAt) => {
+							return `· updated ${updatedAt.toLocaleDateString()}`;
+						}}
+					</ShowWhenUpdated>
+				</WalletDetailsParagraph>
 			</div>
 			<div className="flex gap-2">
 				<SlideOverTrigger asChild={true} panelId={transferPanelId}>

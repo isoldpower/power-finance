@@ -1,9 +1,10 @@
-import type { FC } from "react";
 import { FinanceBadge } from "@internal/ui-library";
 
 import { SectionHeader } from "@shared/components";
 import { useAccountsBrowser } from "@feature/accounts";
 import { LockIcon } from "@entity/accounts";
+
+import type { FC } from "react";
 
 
 const AccountsBrowserHeader: FC = () => {

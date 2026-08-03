@@ -1,8 +1,8 @@
+import { NewWalletButton } from "@entity/wallets";
+import { useTransactionsPaginationContext } from "@feature/transactions";
 import { SectionHeader, SlideOverTrigger } from "@shared/components";
-import { cn } from "@internal/ui-library";
 
 import type { FC } from "react";
-import { useTransactionsPaginationContext } from "@feature/transactions";
 
 
 interface TransactionsBrowserHeaderProps {
@@ -24,16 +24,10 @@ const TransactionsBrowserHeader: FC<TransactionsBrowserHeaderProps> = ({
 			</SectionHeader.Caption>
 			<SectionHeader.Border />
 			<SlideOverTrigger panelId={createTransactionPanel}>
-				<button
-					type="button"
-					className={cn(
-						"flex flex-row gap-2 items-center",
-						"text-xs font-semibold text-primary hover:underline"
-					)}
-				>
+				<NewWalletButton>
 					<span>＋</span>
 					<span>New transaction</span>
-				</button>
+				</NewWalletButton>
 			</SlideOverTrigger>
 		</SectionHeader>
 	);

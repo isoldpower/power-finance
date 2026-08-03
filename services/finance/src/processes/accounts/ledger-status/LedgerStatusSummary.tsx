@@ -4,9 +4,8 @@ import { MoneyWithFx } from "@widget/localization";
 import { LedgerBalanceBadge } from "@widget/metrics";
 import { useLedgerBalance } from "@feature/metrics";
 import { RouteLink } from "@feature/navigation";
-import { LedgerTitle } from "@entity/metrics";
 import { UnderlinedLink } from "@entity/navigation";
-import {BalanceIcon, LedgerBalanceCard} from "@entity/accounts";
+import { BalanceIcon, LedgerBalanceCard, LedgerTitle } from "@entity/accounts";
 import { Tooltip } from "@shared/interactions";
 
 import type { FC } from "react";

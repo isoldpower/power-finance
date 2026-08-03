@@ -1,21 +1,22 @@
+import { BalanceComposition } from "@entity/accounts";
+
 import type { FC } from "react";
-import { FinanceBadge } from "@internal/ui-library";
 
 
 const BalanceCompositionToolbar: FC = () => {
 	return (
-		<div className="flex flex-wrap items-center gap-2.5 border-b border-border px-[18px] py-3.5">
-			<span className="text-sm font-semibold">
+		<BalanceComposition.Container>
+			<BalanceComposition.Title>
 				Balance composition
-			</span>
-			<FinanceBadge tone="pos" appearance="soft" dot>
+			</BalanceComposition.Title>
+			<BalanceComposition.Formula>
 				Assets = Liabilities + Equity
-			</FinanceBadge>
+			</BalanceComposition.Formula>
 			<div className="flex-1" />
-			<span className="hidden font-numeric text-[10px] text-text-3 sm:block">
+			<BalanceComposition.Hint>
 				select a category to drill in
-			</span>
-		</div>
+			</BalanceComposition.Hint>
+		</BalanceComposition.Container>
 	);
 };
 

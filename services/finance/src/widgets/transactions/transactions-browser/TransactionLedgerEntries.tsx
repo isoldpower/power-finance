@@ -4,14 +4,16 @@ import {
 	AmountDirectionIcon,
 	JournalPostingHeader,
 	LedgerLineRow,
+	PostingsContainer,
+	PostingsDirectionIcon,
+	PostingsKind,
+	PostingsWalletName,
 	TransactionAmountStack,
-	directionIconClass,
-	toneByDirection,
 	toTransactionMoneyView,
 	toTransactionRowView,
+	resolveToneWithDirection,
 } from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
-import { cn } from "@internal/ui-library";
 import { useLocaleCurrency } from "@shared/utils";
 
 import type { FC } from "react";
@@ -32,25 +34,31 @@ const TransactionLedgerEntries: FC<LedgerTransactionEntriesProps> = ({ transacti
 	return (
 		<div className="max-w-[600px] py-1 pl-[52px] pr-4 pb-4">
 			<JournalPostingHeader balancedAmount={money.amountAbsolute} />
-			<div className="flex items-center gap-2.5 rounded-[9px] border border-border-strong bg-card px-3 py-2.5">
-				<div className={cn("flex size-7 flex-none items-center justify-center rounded-[7px]", directionIconClass[row.direction])}>
+			<PostingsContainer>
+				<PostingsDirectionIcon tone={resolveToneWithDirection(transaction.direction)}>
 					<AmountDirectionIcon direction={row.direction} size={14} />
-				</div>
+				</PostingsDirectionIcon>
 				<div className="min-w-0 flex-1">
-					<div className="truncate text-[12.5px] font-semibold">{row.walletName}</div>
-					<div className="font-numeric text-[9px] tracking-[0.08em] text-text-3">TRANSACTION · {row.kind}</div>
+					<PostingsWalletName>
+						{row.walletName}
+					</PostingsWalletName>
+					<PostingsKind>
+						TRANSACTION · {row.kind}
+					</PostingsKind>
 				</div>
 				<TransactionAmountStack
 					original={money.amountOriginal}
 					main={money.amountMain}
 					converted={money.converted}
-					tone={toneByDirection[row.direction]}
+					tone={resolveToneWithDirection(transaction.direction)}
 				/>
-			</div>
+			</PostingsContainer>
 			{row.entries.map((entry, index) => (
 				<LedgerLineRow key={`${row.id}-${entry.account}-${index.toString()}`} line={entry} />
 			))}
-			<div className="mt-3 font-numeric text-[10.5px] text-text-3">{row.provenance}</div>
+			<div className="mt-3 font-numeric text-[10.5px] text-text-3">
+				{row.provenance}
+			</div>
 		</div>
 	);
 };

@@ -1,7 +1,7 @@
-import type { FC, ReactNode } from "react";
+import { useAccountsBrowser } from "@feature/accounts";
 
+import type { FC, ReactNode } from "react";
 import type { MockAccountCategory } from "@feature/accounts";
-import { useAccountsBrowser } from "@feature/accounts/browse-accounts/BrowseAccountsContext.tsx";
 
 
 interface BrowseAccountCategoriesProps {

@@ -1,7 +1,6 @@
-import {Icons} from "@internal/ui-library";
-
-import {PagerButton, PaginationRange} from "@shared/components";
-import {useTransactionsPaginationContext} from "@feature/transactions/search-and-filtering/TransactionsPaginationContext.tsx";
+import { Icons } from "@internal/ui-library";
+import { PagerButton, PaginationRange } from "@shared/components";
+import { useTransactionsPaginationContext } from "@feature/transactions";
 
 
 const TransactionsBrowserPagination = () => {

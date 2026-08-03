@@ -4,6 +4,7 @@ export * from './recent-activity';
 export * from './table';
 export * from './toolbar';
 export * from './transaction-entry';
+export * from './transactions-browser';
 
 export {
 	TRANSACTIONS_SECTION_ID,

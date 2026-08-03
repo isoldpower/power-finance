@@ -1,7 +1,9 @@
-import type {FC, ReactNode} from "react";
-import type {TransactionPreviewDto} from "@entity/transactions";
-import {List} from "@shared/components";
-import {useTransactionsPaginationContext} from "@feature/transactions/search-and-filtering/TransactionsPaginationContext.tsx";
+import { List } from "@shared/components";
+import { useTransactionsPaginationContext } from "@feature/transactions";
+import { ProtectBrowseSpace } from "@feature/wallets";
+
+import type { FC, ReactNode } from "react";
+import type { TransactionPreviewDto } from "@entity/transactions";
 
 
 interface BrowseTransactionEntriesProps {
@@ -29,11 +31,9 @@ const BrowseTransactionEntries: FC<BrowseTransactionEntriesProps> = ({
 			<List className="divide-y divide-border">
 				{paginatedTransactions.map((transaction) => children(transaction))}
 			</List>
-			{paginatedTransactions.length < pageSize && (
-				<div className="flex min-h-14 flex-1 items-center justify-center border-t border-border px-4 text-[11px] text-text-3">
-					This is all we found.
-				</div>
-			)}
+			<ProtectBrowseSpace resources={paginatedTransactions} pageSize={pageSize}>
+				This is all we found.
+			</ProtectBrowseSpace>
 		</div>
 	);
 }

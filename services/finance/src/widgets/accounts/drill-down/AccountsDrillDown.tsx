@@ -1,7 +1,13 @@
-import type { FC } from "react";
-import { FinanceCard, FinanceMoney, FinanceBadge } from "@internal/ui-library";
+import {
+	AccountHistoryRow,
+	AccountListItem,
+	AccountSummary,
+	CategoryPanel,
+	categoryColor,
+	HistoryToolbar,
+} from "@entity/accounts";
 
-import { AccountListItem, AccountHistoryRow, categoryColor } from "@entity/accounts";
+import type { FC } from "react";
 import type { AccountHistoryEntry, MockAccount, MockAccountCategory } from "@feature/accounts";
 
 
@@ -26,63 +32,78 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 }) => {
 	return (
 		<div className="grid grid-cols-1 items-start gap-4 md:grid-cols-[320px_1fr]">
-			<FinanceCard className="overflow-hidden">
-				<div className="flex items-center gap-2.5 border-b border-border px-4 py-3">
-					<span 
-						className="size-[9px] flex-none rounded-[2px]" 
-						style={{ background: categoryColor(category.id) }} 
-					/>
-					<span className="flex-1 text-sm font-semibold">
+			<CategoryPanel.Card>
+				<CategoryPanel.Header>
+					<CategoryPanel.Swatch color={categoryColor(category.id)} />
+					<CategoryPanel.Title>
 						{category.label}
-					</span>
-					<span className="font-numeric text-[10px] text-text-3">
+					</CategoryPanel.Title>
+					<CategoryPanel.Hint>
 						tap to view history
-					</span>
-				</div>
-				<div className="h-[270px] overflow-y-auto">
+					</CategoryPanel.Hint>
+				</CategoryPanel.Header>
+				<CategoryPanel.List>
 					{category.accounts.map((entry) => (
-						<AccountListItem
+						<AccountListItem.Container
 							key={entry.id}
-							name={entry.name}
-							kind={entry.kind}
-							color={categoryColor(category.id)}
 							active={entry.id === accountId}
-							balanceFormatted={convertToUserCurrency(entry.balanceUsd)}
-							balanceTone={entry.balanceTone}
-							onSelect={() => { setAccountId(entry.id); }}
-						/>
-					))}
-				</div>
-			</FinanceCard>
-			<FinanceCard className="overflow-hidden">
-				<div className="relative overflow-hidden border-b border-border px-6 py-5">
-					<div className="pointer-events-none absolute -right-10 -top-[60px] size-[200px] rounded-full bg-[radial-gradient(circle,var(--glow),transparent_68%)]" />
-					<div className="relative flex items-start gap-3.5">
-						<div className="min-w-0 flex-1">
-							<div className="mb-0.5 flex items-center gap-2.5">
-								<span className="font-display text-[19px] font-semibold tracking-[-0.01em]">
-									{account.name}
-								</span>
-								<span className="rounded-[4px] border border-border bg-secondary px-1.5 py-0.5 font-numeric text-[9.5px] font-semibold uppercase tracking-[0.04em] text-text-2">{account.accountType}</span>
+							onClick={() => { setAccountId(entry.id); }}
+						>
+							<AccountListItem.Swatch color={categoryColor(category.id)} />
+							<div className="min-w-0 flex-1">
+								<AccountListItem.Name>
+									{entry.name}
+								</AccountListItem.Name>
+								<AccountListItem.Kind>
+									{entry.kind}
+								</AccountListItem.Kind>
 							</div>
-							<div className="text-[12.5px] text-text-3">{account.kind}</div>
+							<AccountListItem.Balance tone={entry.balanceTone}>
+								{convertToUserCurrency(entry.balanceUsd)}
+							</AccountListItem.Balance>
+						</AccountListItem.Container>
+					))}
+				</CategoryPanel.List>
+			</CategoryPanel.Card>
+			<AccountSummary.Card>
+				<AccountSummary.Hero>
+					<AccountSummary.Glow />
+					<AccountSummary.HeroRow>
+						<div className="min-w-0 flex-1">
+							<AccountSummary.NameRow>
+								<AccountSummary.Name>
+									{account.name}
+								</AccountSummary.Name>
+								<AccountSummary.Type>
+									{account.accountType}
+								</AccountSummary.Type>
+							</AccountSummary.NameRow>
+							<AccountSummary.Kind>
+								{account.kind}
+							</AccountSummary.Kind>
 						</div>
 						<div className="flex-none text-right">
-							<div className="font-numeric text-[10px] uppercase tracking-[0.1em] text-text-3">
+							<AccountSummary.BalanceLabel>
 								Balance
-							</div>
-							<FinanceMoney tone={account.balanceTone} size="xl">
+							</AccountSummary.BalanceLabel>
+							<AccountSummary.Balance tone={account.balanceTone}>
 								{convertToUserCurrency(account.balanceUsd)}
-							</FinanceMoney>
+							</AccountSummary.Balance>
 						</div>
-					</div>
-				</div>
-				<div className="flex items-center gap-2.5 border-b border-border px-[18px] py-3">
-					<span className="text-[13.5px] font-semibold">Transaction history</span>
-					<FinanceBadge tone="neutral" appearance="outline" size="sm">{history.length} ENTRIES</FinanceBadge>
+					</AccountSummary.HeroRow>
+				</AccountSummary.Hero>
+				<HistoryToolbar.Container>
+					<HistoryToolbar.Title>
+						Transaction history
+					</HistoryToolbar.Title>
+					<HistoryToolbar.Count>
+						{history.length} ENTRIES
+					</HistoryToolbar.Count>
 					<div className="flex-1" />
-					<span className="hidden font-numeric text-[10px] text-text-3 sm:block">postings that hit this account</span>
-				</div>
+					<HistoryToolbar.Hint>
+						postings that hit this account
+					</HistoryToolbar.Hint>
+				</HistoryToolbar.Container>
 				{history.map((entry) => (
 					<AccountHistoryRow key={entry.id}>
 						<AccountHistoryRow.Icon className={entry.iconClass}>
@@ -104,7 +125,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 						</AccountHistoryRow.Value>
 					</AccountHistoryRow>
 				))}
-			</FinanceCard>
+			</AccountSummary.Card>
 		</div>
 	);
 };

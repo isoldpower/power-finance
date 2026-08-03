@@ -1,5 +1,5 @@
+import { NewWalletButton } from "@entity/wallets";
 import { SectionHeader, SlideOverTrigger } from "@shared/components";
-import { cn } from "@internal/ui-library";
 
 import type { FC } from "react";
 
@@ -23,16 +23,10 @@ const WalletBrowserHeader: FC<WalletBrowserHeaderProps> = ({
 			</SectionHeader.Caption>
 			<SectionHeader.Border />
 			<SlideOverTrigger panelId={createWalletPanel}>
-				<button 
-					type="button"
-					className={cn(
-						"flex flex-row gap-2 items-center",
-						"text-xs font-semibold text-primary hover:underline"
-					)}
-				>
+				<NewWalletButton>
 					<span>＋</span>
 					<span>New wallet</span>
-				</button>
+				</NewWalletButton>
 			</SlideOverTrigger>
 		</SectionHeader>
 	);

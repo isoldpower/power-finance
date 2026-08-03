@@ -4,6 +4,7 @@ export * from './goal';
 export * from './icons';
 export * from './wallet-list';
 export * from './wallet-select';
+export * from './no-activity-placeholder';
 export * from './wallet-details';
 
 export * from './constants.ts';

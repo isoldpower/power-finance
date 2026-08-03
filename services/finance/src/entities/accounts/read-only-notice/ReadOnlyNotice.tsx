@@ -1,7 +1,7 @@
-import type { FC, ReactNode } from "react";
-
-import { LockIcon } from "../icons/LockIcon.tsx";
+import { LockIcon } from "../icons";
 import { cn } from "@internal/ui-library";
+
+import type { FC, ReactNode } from "react";
 
 
 interface ReadOnlyNoticeProps {

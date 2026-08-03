@@ -1,5 +1,7 @@
-import {createContext, FC, ReactNode, use, useCallback, useMemo, useState} from "react";
-import type {OrderingType} from "./types.ts";
+import { createContext, use, useCallback, useMemo, useState } from "react";
+
+import type { OrderingType } from "./types.ts";
+import type { FC, ReactNode } from "react";
 
 
 interface WalletsFiltersContextType {

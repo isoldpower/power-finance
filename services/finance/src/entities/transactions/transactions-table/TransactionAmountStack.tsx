@@ -1,7 +1,6 @@
 import type { FC } from "react";
 import { cn } from "@internal/ui-library";
 
-import { toneTextClass } from "../transaction-visual.ts";
 import type { Tone } from "@shared/utils";
 
 interface TransactionAmountStackProps {
@@ -12,7 +11,12 @@ interface TransactionAmountStackProps {
 }
 
 const TransactionAmountStack: FC<TransactionAmountStackProps> = ({ original, main, converted, tone }) => (
-	<div className={cn("flex flex-col items-end font-numeric text-[12px] leading-tight", toneTextClass[tone])}>
+	<div className={cn(
+		"flex flex-col items-end font-numeric text-[12px] leading-tight",
+		tone === 'pos' && 'text-pos',
+		tone === 'neg' && 'text-neg',
+		(tone === 'neutral' || tone === 'muted') && 'text-text-2',
+	)}>
 		<span>{original}</span>
 		{converted ? <span>{main}</span> : null}
 	</div>

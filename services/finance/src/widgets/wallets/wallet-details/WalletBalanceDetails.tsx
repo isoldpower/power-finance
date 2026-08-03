@@ -1,10 +1,12 @@
-import {MoneyInOriginal} from "@entity/localization";
-import {Wallet} from "@entity/wallets";
-import {FC} from "react";
-import {useLocaleCurrency} from "@shared/utils";
-import {useConvertMoney} from "@feature/localization";
-import {FinanceMoney} from "@internal/ui-library";
-import {useWalletsPeriodFlow} from "@feature/wallets/wallet-browser/use-wallets-period-flow.ts";
+import { FinanceMoney } from "@internal/ui-library";
+import { MoneyInOriginal } from "@entity/localization";
+import { WalletBalance } from "@entity/wallets";
+import { useConvertMoney } from "@feature/localization";
+import { useWalletsPeriodFlow } from "@feature/wallets";
+import { useLocaleCurrency } from "@shared/utils";
+
+import type { FC } from "react";
+import type { Wallet } from "@entity/wallets";
 
 
 interface WalletBalanceDetailsProps {
@@ -18,10 +20,10 @@ const WalletBalanceDetails: FC<WalletBalanceDetailsProps> = ({ wallet }) => {
 	
 	return (
 		<div className="mt-[18px] flex items-end gap-5">
-			<div>
-				<div className="font-numeric text-[10px] uppercase tracking-[0.1em] text-text-3">
+			<div className="flex flex-col">
+				<WalletBalance>
 					Balance
-				</div>
+				</WalletBalance>
 				<MoneyInOriginal
 					currency={wallet.balance.currency}
 					tone={wallet.balance.amount >= 0 ? 'neutral' : 'neg'}

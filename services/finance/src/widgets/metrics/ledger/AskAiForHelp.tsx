@@ -1,6 +1,6 @@
 import { RouteLink } from "@feature/navigation";
 import { CenteredList } from "@shared/components";
-import { FinanceBadge } from "@internal/ui-library";
+import { ForwardIcon } from "@entity/transactions";
 
 import type { FC } from "react";
 
@@ -13,12 +13,12 @@ const AskAiForHelp: FC<AskAiForHelpProps> = ({ reason }) => (
 	<CenteredList gap={1}>
 		Consult
 		<RouteLink to="planning">
-			<FinanceBadge tone="pos">
-				<div className="flex gap-1 hover:gap-2 text-primary-foreground">
-					<span>AI</span>
-					<span>→</span>
-				</div>
-			</FinanceBadge>
+			<div className="underline flex items-center gap-1 group text-primary-foreground">
+				<span>AI</span>
+				<span className="group-hover:translate-x-0.5">
+					<ForwardIcon size={12} />
+				</span>
+			</div>
 		</RouteLink>
 		if {reason}
 	</CenteredList>

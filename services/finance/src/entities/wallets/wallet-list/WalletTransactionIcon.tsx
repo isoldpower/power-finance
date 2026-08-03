@@ -1,16 +1,19 @@
-import type { FC, ReactNode } from "react";
 import { cn } from "@internal/ui-library";
+
+import type { FC, ReactNode } from "react";
+import type { Tone } from "@shared/utils";
 
 interface WalletTxnIconProps {
 	children: ReactNode;
-	className: string;
+	tone: Tone;
 }
 
-const WalletTransactionIcon: FC<WalletTxnIconProps> = ({ children, className }) => (
-	<div 
+const WalletTransactionIcon: FC<WalletTxnIconProps> = ({ children, tone }) => (
+	<div
 		className={cn(
 			`flex size-[30px] flex-none items-center justify-center rounded-[8px]`,
-			className
+			tone === 'pos' && 'bg-pos-soft text-pos',
+			tone === 'neg' && 'bg-[var(--accent-soft)] text-primary',
 		)}
 	>
 		{children}

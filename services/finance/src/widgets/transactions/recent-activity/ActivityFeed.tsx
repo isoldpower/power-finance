@@ -1,4 +1,4 @@
-import { ActivityGroupHeader, ActivityRow, AmountDirectionIcon, toneByDirection, toTransactionDayView } from "@entity/transactions";
+import { ActivityGroupHeader, ActivityRow, AmountDirectionIcon, resolveToneWithDirection, toTransactionDayView } from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
 import { ProtectActivityEmpty } from "@feature/transactions";
 import { useLocaleCurrency } from "@shared/utils";
@@ -50,7 +50,7 @@ const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 							</div>
 							<div className="text-right">
 								<ActivityRow.Money
-									tone={toneByDirection[transaction.direction]}
+									tone={resolveToneWithDirection(transaction.direction)}
 									currency={transaction.currency}
 									convert={convert}
 									format={formatCurrency}

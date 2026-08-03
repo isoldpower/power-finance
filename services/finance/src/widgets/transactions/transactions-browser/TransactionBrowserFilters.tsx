@@ -9,10 +9,13 @@ import {
 	FinanceToggle,
 } from "@internal/ui-library";
 
-import {SearchIcon} from "@entity/transactions";
-import {useWalletsList} from "@feature/wallets";
-import {useTransactionsFiltersContext} from "@feature/transactions/search-and-filtering/TransactionsFiltersContext.tsx";
-import {ChangeEvent, useCallback, useMemo} from "react";
+import { SearchIcon } from "@entity/transactions";
+import { useWalletsList } from "@feature/wallets";
+import { useTransactionsFiltersContext } from "@feature/transactions";
+import { useCallback, useMemo } from "react";
+
+import type { ChangeEvent } from "react";
+
 
 const TransactionBrowserFilters = () => {
 	const { wallets } = useWalletsList();

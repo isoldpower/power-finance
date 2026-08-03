@@ -1,5 +1,7 @@
-import {createContext, FC, ReactNode, use, useCallback, useMemo, useState} from "react";
-import { Wallet } from "@entity/wallets";
+import { createContext, use, useCallback, useMemo, useState } from "react";
+
+import type { Wallet } from "@entity/wallets";
+import type { FC, ReactNode } from "react";
 
 
 interface WalletsPaginationContextType {

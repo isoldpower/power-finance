@@ -1,10 +1,10 @@
-import {FC, useMemo} from "react";
-import {TransactionPreviewDto} from "@entity/transactions";
+import { cn } from "@internal/ui-library";
+import { useMemo } from "react";
+import { useTransactionsSelectionContext } from "@feature/transactions";
+import { LedgerTransactionRow, TransactionLedgerEntries } from "@widget/transactions";
 
-import { useTransactionsSelectionContext } from "@feature/transactions/search-and-filtering/TransactionsSelectionContext.tsx";
-import {cn} from "@internal/ui-library";
-import {LedgerTransactionRow} from "@widget/transactions/transactions-browser/LedgerTransactionRow.tsx";
-import {TransactionLedgerEntries} from "@widget/transactions/transactions-browser/TransactionLedgerEntries.tsx";
+import type { FC } from "react";
+import type { TransactionPreviewDto } from "@entity/transactions";
 
 
 interface LedgerBasedTransactionProps {

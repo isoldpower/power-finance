@@ -7,8 +7,9 @@ import {
 	EntryAmountField,
 	EntryCategoryField,
 	EntryTypeSelector,
+	ForwardIcon,
 	FromIcon,
-	ScanReceiptCta,
+	ScanReceiptCta, ScanReceiptIcon,
 	ToIcon,
 } from "@entity/transactions";
 import { WalletSelect, toWalletSelectOptions } from "@entity/wallets";
@@ -53,7 +54,7 @@ const AddTransactionForm: FC<AddTransactionFormProps> = ({ onScanReceipt, onClos
 	const { fromOptions, toOptions } = useEntryWalletOptions(walletOptions, form);
 	const { handleSentChange, handleReceivedChange } = useCrossCurrencyTransfer(fromCurrency, toCurrency, form);
 	useEntryTypeEffects(defaultValues, form);
-
+	
 	return (
 		<UiForm {...form}>
 			<TransactionEntryOnSubmit
@@ -64,10 +65,20 @@ const AddTransactionForm: FC<AddTransactionFormProps> = ({ onScanReceipt, onClos
 				onError={methods.handleFailedLoading}
 			>
 				<div className="flex-1 overflow-auto p-5">
-					<ScanReceiptCta
-						className="mb-[18px] w-full"
-						onClick={onScanReceipt}
-					/>
+					<button type="button" onClick={onScanReceipt} className="mb-[18px] w-full">
+						<ScanReceiptCta.Container>
+							<ScanReceiptIcon size={18} className="flex-none text-primary" />
+							<span className="flex-1">
+								<ScanReceiptCta.Title>
+									Scan a receipt instead
+								</ScanReceiptCta.Title>
+								<ScanReceiptCta.Paragraph>
+									Let AI fill the details for you
+								</ScanReceiptCta.Paragraph>
+							</span>
+							<ForwardIcon className="flex-none text-primary" />
+						</ScanReceiptCta.Container>
+					</button>
 					<UiFormField
 						disabled={loading}
 						control={form.control}

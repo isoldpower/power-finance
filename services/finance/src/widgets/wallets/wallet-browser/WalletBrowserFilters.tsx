@@ -9,9 +9,12 @@ import {
 	FinanceToggle,
 } from "@internal/ui-library";
 
-import {SearchIcon} from "@entity/wallets";
-import {useWalletsFiltersContext} from "@feature/wallets/search-and-filtering/WalletsFiltersContext.tsx";
-import {ChangeEvent, useCallback, useRef} from "react";
+import { SearchIcon } from "@entity/wallets";
+import { useWalletsFiltersContext } from "@feature/wallets";
+import { useCallback, useRef } from "react";
+
+import type { ChangeEvent } from "react";
+
 
 const WalletBrowserFilters = () => {
 	const types = useRef<string[]>(['all', 'Debit Card', 'Credit Card']);

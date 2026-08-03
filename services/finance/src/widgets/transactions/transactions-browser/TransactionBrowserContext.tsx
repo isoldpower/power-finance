@@ -1,15 +1,12 @@
-import type { FC, ReactNode } from "react";
 import {
 	useTransactionsFiltersContext,
-	TransactionsFiltersContextProvider
-} from "@feature/transactions/search-and-filtering/TransactionsFiltersContext.tsx";
-import {
-	TransactionsPaginationContextProvider
-} from "@feature/transactions/search-and-filtering/TransactionsPaginationContext.tsx";
-import {
-	TransactionsSelectionContextProvider
-} from "@feature/transactions/search-and-filtering/TransactionsSelectionContext.tsx";
-import {useTransactionsBrowser} from "@feature/transactions/search-and-filtering/use-transactions-browser.ts";
+	TransactionsFiltersContextProvider,
+	TransactionsPaginationContextProvider,
+	TransactionsSelectionContextProvider,
+	useTransactionsBrowser,
+} from "@feature/transactions";
+
+import type { FC, ReactNode } from "react";
 
 
 interface TransactionBrowserContextProviderProps {

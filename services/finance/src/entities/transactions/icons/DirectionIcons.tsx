@@ -40,11 +40,16 @@ const ExpenseIcon: FC<AmountDirectionIconProps> = ({ size = 16, className }) => 
 	<Icons.ArrowUpRight size={size} className={className} />
 );
 
+const ForwardIcon: FC<AmountDirectionIconProps> = ({ size = 16, className }) => (
+	<Icons.ArrowRight size={size} className={className} />
+);
+
 TransferGlyph.displayName = 'TransferGlyph';
 FromIcon.displayName = 'FromIcon';
 ToIcon.displayName = 'ToIcon';
 IncomeIcon.displayName = 'IncomeIcon';
 ExpenseIcon.displayName = 'ExpenseIcon';
+ForwardIcon.displayName = 'ForwardIcon';
 
-export { TransferGlyph, FromIcon, ToIcon, IncomeIcon, ExpenseIcon };
+export { TransferGlyph, FromIcon, ToIcon, IncomeIcon, ExpenseIcon, ForwardIcon };
 export type { AmountDirectionIconProps };

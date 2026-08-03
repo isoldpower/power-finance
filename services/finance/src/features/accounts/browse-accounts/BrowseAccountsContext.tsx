@@ -1,6 +1,8 @@
-import {createContext, FC, ReactNode, useContext} from "react";
-import {useAccountsCategorySelection} from "@feature/accounts";
-import {BrowseAccountsContextType} from "@feature/accounts/browse-accounts/types.ts";
+import { createContext, useContext } from "react";
+import { useAccountsCategorySelection } from "@feature/accounts";
+
+import { FC, ReactNode } from "react";
+import type { BrowseAccountsContextType } from "@feature/accounts";
 
 
 const BrowseAccountsContext = createContext<BrowseAccountsContextType | null>(null);

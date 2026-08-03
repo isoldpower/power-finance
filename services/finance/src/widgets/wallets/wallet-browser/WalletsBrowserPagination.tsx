@@ -1,11 +1,19 @@
-import {Icons} from "@internal/ui-library";
+import { Icons } from "@internal/ui-library";
 
-import {useWalletsPaginationContext} from "@feature/wallets/search-and-filtering/WalletsPaginationContext.tsx";
-import {PagerButton, PaginationRange} from "@shared/components";
+import { useWalletsPaginationContext } from "@feature/wallets";
+import { PagerButton, PaginationRange } from "@shared/components";
 
 
 const WalletsBrowserPagination = () => {
-	const { from, to, total, scrollForward, scrollBackward, pageNumber, pageCount } = useWalletsPaginationContext();
+	const {
+		from,
+		to,
+		total,
+		scrollForward,
+		scrollBackward,
+		pageNumber,
+		pageCount
+	} = useWalletsPaginationContext();
 
 	return (
 		<div className="flex items-center gap-2 border-t border-border px-[18px] py-2.5">

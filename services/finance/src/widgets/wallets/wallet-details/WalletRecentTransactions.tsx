@@ -1,17 +1,23 @@
-import {useMemo} from "react";
+import { useMemo } from "react";
 
-import {MoneyInOriginal} from "@entity/localization";
-import {AmountDirectionIcon, directionIconClass, toneByDirection, toTransactionRowViews} from "@entity/transactions";
-import {Wallet, WalletTransactionIcon} from "@entity/wallets";
-import {useConvertMoney} from "@feature/localization";
-import {useLocaleCurrency} from "@shared/utils";
-import {useWalletRecentTransactions} from "@feature/wallets/wallet-browser/use-wallet-recent-transactions.ts";
-import {NoActivityPlaceholder} from "@entity/wallets/wallet-details/NoActivityPlaceholder.tsx";
-import {RecentTransactionContainer} from "@entity/wallets/wallet-details/RecentTransactionContainer.tsx";
-import {RecentTransactionMeta} from "@entity/wallets/wallet-details/RecentTransactionMeta.tsx";
-import {FulfillWithPlaceholder} from "@feature/wallets/wallet-browser/FulfillWithPlaceholder.tsx";
+import { MoneyInOriginal } from "@entity/localization";
+import {
+	AmountDirectionIcon,
+	resolveToneWithDirection,
+	toTransactionRowViews,
+} from "@entity/transactions";
+import {
+	NoActivityPlaceholder,
+	RecentTransactionMeta,
+	RecentTransactionContainer,
+	WalletTransactionIcon
+} from "@entity/wallets";
+import { useConvertMoney } from "@feature/localization";
+import { useWalletRecentTransactions, FulfillWithPlaceholder } from "@feature/wallets";
+import { useLocaleCurrency } from "@shared/utils";
 
-import type {FC} from "react";
+import type { FC } from "react";
+import type { Wallet } from "@entity/wallets";
 
 
 interface WalletRecentRowProps {
@@ -32,7 +38,7 @@ const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ wallet }) => {
 		<div className='flex flex-col'>
 			{recentRows.map((row) => (
 				<RecentTransactionContainer key={row.id}>
-					<WalletTransactionIcon className={directionIconClass[row.direction]}>
+					<WalletTransactionIcon tone={resolveToneWithDirection(row.direction)}>
 						<AmountDirectionIcon direction={row.direction} />
 					</WalletTransactionIcon>
 					<RecentTransactionMeta
@@ -42,7 +48,7 @@ const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ wallet }) => {
 					/>
 					<MoneyInOriginal
 						currency={row.currency}
-						tone={toneByDirection[row.direction]}
+						tone={resolveToneWithDirection(row.direction)}
 						size="sm"
 						align="end"
 						convert={convert}
@@ -53,7 +59,20 @@ const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ wallet }) => {
 				</RecentTransactionContainer>
 			))}
 			<FulfillWithPlaceholder current={recentRows.length} minimum={3}>
-				<NoActivityPlaceholder />
+				<NoActivityPlaceholder.Container>
+					<NoActivityPlaceholder.Border />
+					<div className="min-w-0 flex-1 relative">
+						<NoActivityPlaceholder.Original>
+							&nbsp;
+						</NoActivityPlaceholder.Original>
+						<NoActivityPlaceholder.Converted>
+							&nbsp;
+						</NoActivityPlaceholder.Converted>
+						<NoActivityPlaceholder.Title>
+							No activity yet
+						</NoActivityPlaceholder.Title>
+					</div>
+				</NoActivityPlaceholder.Container>
 			</FulfillWithPlaceholder>
 		</div>
 	);

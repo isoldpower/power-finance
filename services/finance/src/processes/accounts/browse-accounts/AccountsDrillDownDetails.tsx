@@ -1,8 +1,8 @@
-import type { FC } from "react";
+import { DrillDownHeader } from "@entity/accounts";
+import { useAccountsConvertion, useAccountHistory, useAccountsBrowser } from "@feature/accounts";
+import { AccountsDrillDown } from "@widget/accounts";
 
-import { useAccountsConvertion, useAccountHistory } from "@feature/accounts";
-import { useAccountsBrowser } from "@feature/accounts/browse-accounts/BrowseAccountsContext.tsx";
-import { AccountsDrillDown } from "@widget/accounts/drill-down/AccountsDrillDown.tsx";
+import type { FC } from "react";
 
 
 const AccountsDrillDownDetails: FC = () => {
@@ -12,11 +12,15 @@ const AccountsDrillDownDetails: FC = () => {
 
 	return (
 		<>
-			<div className="mx-0.5 mb-2.5 flex items-center gap-2.5">
-				<span className="font-numeric text-[10px] uppercase tracking-[0.12em] text-text-3">Drill-down</span>
-				<span className="text-[12.5px] text-text-3">{category.label} → account → history</span>
-				<div className="h-px flex-1 bg-border" />
-			</div>
+			<DrillDownHeader.Container>
+				<DrillDownHeader.Label>
+					Drill-down
+				</DrillDownHeader.Label>
+				<DrillDownHeader.Caption>
+					{category.label} → account → history
+				</DrillDownHeader.Caption>
+				<DrillDownHeader.Rule />
+			</DrillDownHeader.Container>
 			<AccountsDrillDown
 				category={category}
 				account={account}
