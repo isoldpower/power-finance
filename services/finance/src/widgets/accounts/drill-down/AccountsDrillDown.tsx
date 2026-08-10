@@ -6,6 +6,7 @@ import {
 	categoryColor,
 	HistoryToolbar,
 } from "@entity/accounts";
+import { SidebarColumnsContainer } from "@shared/components";
 
 import type { FC } from "react";
 import type { AccountHistoryEntry, MockAccount, MockAccountCategory } from "@feature/accounts";
@@ -31,7 +32,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 	convertToUserCurrencyWithSign,
 }) => {
 	return (
-		<div className="grid grid-cols-1 items-start gap-4 md:grid-cols-[320px_1fr]">
+		<SidebarColumnsContainer sidebar="start" sidebarWidth="320px" from="md">
 			<CategoryPanel.Card>
 				<CategoryPanel.Header>
 					<CategoryPanel.Swatch color={categoryColor(category.id)} />
@@ -126,7 +127,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 					</AccountHistoryRow>
 				))}
 			</AccountSummary.Card>
-		</div>
+		</SidebarColumnsContainer>
 	);
 };
 

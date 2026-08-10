@@ -1,3 +1,3 @@
-export { GoalsCard } from './GoalsCard.tsx';
-export { DeleteGoalDialog } from './DeleteGoalDialog.tsx';
-export { NewGoalPanel } from './NewGoalPanel.tsx';
+export { DeletableGoalRow } from './DeletableGoalRow.tsx';
+
+export type { DeletableGoalRowProps } from './DeletableGoalRow.tsx';

@@ -24,6 +24,7 @@ import {
 	PageContainer,
 	SpaceBetween,
 	CenteredList,
+	SidebarColumnsContainer,
 } from "@shared/components";
 import { FinanceButton, FinanceCard } from "@internal/ui-library";
 
@@ -67,7 +68,7 @@ const ManagementPage: FC = () => {
 			</RevealMotion>
 			<RevealMotion delay={0.18}>
 				<WalletBrowserHeader createWalletPanel={managementSlides.createWallet} total={5} />
-				<div className="grid grid-cols-1 items-start gap-4 md:grid-cols-[340px_1fr]">
+				<SidebarColumnsContainer sidebar="start" sidebarWidth="340px" from="md">
 					<WalletBrowserContextProvider>
 						<FinanceCard className="overflow-hidden">
 							<BrowseAndSelectWallets />
@@ -77,7 +78,7 @@ const ManagementPage: FC = () => {
 							transferPanel={managementSlides.createTransaction}
 						/>
 					</WalletBrowserContextProvider>
-				</div>
+				</SidebarColumnsContainer>
 			</RevealMotion>
 			<RevealMotion delay={0.24}>
 				<TransactionBrowserContextProvider>

@@ -1,54 +1,137 @@
-import type { FC } from "react";
-import { FinanceButton } from "@internal/ui-library";
 import { Tooltip, RevealMotion } from "@shared/interactions";
+import {
+	CenteredList,
+	MainPageTitle,
+	PageContainer,
+	SidebarColumnsContainer,
+	SpaceOccupant,
+	StackedList,
+} from "@shared/components";
+import { FinanceButton, FinanceCard } from "@internal/ui-library";
 
-import { WhatIfCard, CheckIcon } from "@widget/assistance";
-import { AutomationsCard, PlanningAiAssistant, NeedsActionPanel } from "@process/assistance";
-import { GoalsCard, NewGoalPanel } from "@process/wallets";
-import { useActions } from "@feature/assistance";
+import { PlanningAiAssistant, NeedsActionPanel, ToggleableAutomationRow } from "@process/assistance";
+import { DeletableGoalRow } from "@process/wallets";
+import {
+	AutomationsBrowserContextProvider,
+	AutomationsBrowserFilters,
+	AutomationsBrowserHeader, AutomationsBrowserPagination,
+	FilteredAutomationsDirectory,
+	NewRulePanel,
+	WhatIfCard
+} from "@widget/assistance";
+import {
+	FilteredGoalsDirectory,
+	GoalsBrowserContextProvider,
+	GoalsBrowserFilters,
+	GoalsBrowserHeader,
+	GoalsBrowserPagination,
+	NewGoalPanel,
+} from "@widget/wallets";
+import {
+	AutomationsListFx,
+	ShowOnResolved,
+	ShowOnUnresolved,
+} from "@feature/assistance";
+import { GoalsListFx } from "@feature/wallets";
+import {
+	AutomationsToolbar,
+	CheckIcon,
+	PlanningStatus,
+} from "@entity/assistance";
+import { GoalsToolbar } from "@entity/wallets";
+
+import { assistantContent } from "./config.ts";
+
+import type { FC } from "react";
 
 
 const PlanningPage: FC = () => {
-	const { actions, isPending } = useActions();
-	const inSync = !isPending && actions.length === 0;
-
 	return (
-		<div className="mx-auto flex max-w-[1320px] flex-col gap-4 px-[22px] pb-[70px] pt-[22px]">
-			<RevealMotion delay={0.05} className="flex flex-wrap items-center gap-3.5">
-				<h1 className="font-display text-2xl font-semibold tracking-[-0.01em]">
-					Planning
-				</h1>
-				{inSync ? (
-					<Tooltip content="Everything is in sync — nothing needs your approval right now.">
-						<span className="fx-slidein inline-flex cursor-default items-center gap-1.5 rounded-full bg-pos-soft px-2.5 py-1 text-[11.5px] font-semibold text-pos">
-							<CheckIcon />
-							In sync
-						</span>
-					</Tooltip>
-				) : (
-					<span className="hidden font-numeric text-[11px] uppercase tracking-[0.08em] text-text-3 sm:block">
-						Set intent · Model · Discuss
-					</span>
-				)}
-				<div className="flex-1" />
-				<NewGoalPanel>
-					<FinanceButton className="shadow-[0_4px_14px_var(--glow)]">
-						＋ New goal
-					</FinanceButton>
-				</NewGoalPanel>
+		<PageContainer>
+			<RevealMotion delay={0.1}>
+				<CenteredList gap={3.5}>
+					<MainPageTitle>
+						Planning
+					</MainPageTitle>
+					<ShowOnResolved>
+						<Tooltip content="Everything is in sync — nothing needs your approval right now.">
+							<PlanningStatus.SyncBadge>
+								<CheckIcon />
+								In sync
+							</PlanningStatus.SyncBadge>
+						</Tooltip>
+					</ShowOnResolved>
+					<ShowOnUnresolved>
+						<PlanningStatus.Steps>
+							Set intent · Model · Discuss
+						</PlanningStatus.Steps>
+					</ShowOnUnresolved>
+					<SpaceOccupant />
+					<NewGoalPanel>
+						<FinanceButton className="shadow-[0_4px_14px_var(--glow)]">
+							＋ New goal
+						</FinanceButton>
+					</NewGoalPanel>
+				</CenteredList>
 			</RevealMotion>
-			<RevealMotion delay={0.12}>
+			<RevealMotion delay={0.1}>
 				<NeedsActionPanel />
 			</RevealMotion>
-			<RevealMotion delay={0.2} className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[1fr_380px]">
-				<div className="flex flex-col gap-4">
-					<AutomationsCard />
-					<GoalsCard />
-					<WhatIfCard />
-				</div>
-				<PlanningAiAssistant />
+			<RevealMotion delay={0.1}>
+				<SidebarColumnsContainer sidebarWidth="380px">
+					<StackedList>
+						<AutomationsBrowserContextProvider>
+							<FinanceCard className="overflow-hidden">
+								<AutomationsBrowserHeader>
+									<NewRulePanel>
+										<AutomationsToolbar.Action>
+											＋ New rule
+										</AutomationsToolbar.Action>
+									</NewRulePanel>
+								</AutomationsBrowserHeader>
+								<AutomationsListFx>
+									<AutomationsBrowserFilters />
+									<FilteredAutomationsDirectory>
+										{(rule, index) => (
+											<ToggleableAutomationRow
+												rule={rule}
+												order={index}
+											/>
+										)}
+									</FilteredAutomationsDirectory>
+									<AutomationsBrowserPagination />
+								</AutomationsListFx>
+							</FinanceCard>
+						</AutomationsBrowserContextProvider>
+						<GoalsBrowserContextProvider>
+							<FinanceCard className="overflow-hidden">
+								<GoalsBrowserHeader>
+									<NewGoalPanel>
+										<GoalsToolbar.Action>
+											＋ Add goal
+										</GoalsToolbar.Action>
+									</NewGoalPanel>
+								</GoalsBrowserHeader>
+								<GoalsListFx>
+									<GoalsBrowserFilters />
+									<FilteredGoalsDirectory>
+										{(goal, index) => (
+											<DeletableGoalRow
+												wallet={goal}
+												order={index}
+											/>
+										)}
+									</FilteredGoalsDirectory>
+									<GoalsBrowserPagination />
+								</GoalsListFx>
+							</FinanceCard>
+						</GoalsBrowserContextProvider>
+						<WhatIfCard />
+					</StackedList>
+					<PlanningAiAssistant {...assistantContent} />
+				</SidebarColumnsContainer>
 			</RevealMotion>
-		</div>
+		</PageContainer>
 	);
 };
 

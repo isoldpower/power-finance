@@ -1,43 +1,42 @@
-import { useState } from "react";
+import { useMemo } from "react";
 
-import { useAutomations, useToggleAutomation } from "../data-presenters";
+import { useAutomations } from "../data-presenters";
+
+import type { AutomationsBrowseSetup } from "./types.ts";
+import type { AutomationRule } from "../automations-api";
 
 
-const useAutomationsBrowser = (pageSize: number) => {
-	const { rules, isPending } = useAutomations();
-	const toggle = useToggleAutomation();
-	const [page, setPage] = useState(0);
-	const [query, setQuery] = useState('');
-	const [status, setStatus] = useState('all');
+function matchesSearch(rule: AutomationRule, search: string): boolean {
+	if (search === '') {
+		return true;
+	}
 
-	const normalizedQuery = query.trim().toLowerCase();
-	const filteredRules = rules.filter((rule) => {
-		const matchesQuery = normalizedQuery === ''
-			|| rule.name.toLowerCase().includes(normalizedQuery)
-			|| rule.trigger.toLowerCase().includes(normalizedQuery)
-			|| rule.action.toLowerCase().includes(normalizedQuery);
-		const matchesStatus = status === 'all' || (status === 'active' ? rule.enabled : !rule.enabled);
-		return matchesQuery && matchesStatus;
-	});
+	return rule.name.toLowerCase().includes(search)
+		|| rule.trigger.toLowerCase().includes(search)
+		|| rule.action.toLowerCase().includes(search);
+}
 
-	const pageCount = Math.max(1, Math.ceil(filteredRules.length / pageSize));
-	const safePage = Math.min(page, pageCount - 1);
-	const pagedRules = filteredRules.slice(safePage * pageSize, safePage * pageSize + pageSize);
+function matchesStatus(rule: AutomationRule, statusFilter: string): boolean {
+	if (statusFilter === 'all') {
+		return true;
+	}
 
-	return {
-		isPending,
-		togglePending: toggle.isPending,
-		setEnabled: (id: string, enabled: boolean) => { toggle.mutate({ id, enabled }); },
-		totalCount: rules.length,
-		filteredRules,
-		pagedRules,
-		page: safePage,
-		setPage,
-		query,
-		setQuery,
-		status,
-		setStatus,
-	};
-};
+	return statusFilter === 'active' ? rule.enabled : !rule.enabled;
+}
+
+const useAutomationsBrowser = (setup: AutomationsBrowseSetup) => {
+	const { rules, isPending, isError } = useAutomations();
+
+	const searchResults = useMemo(() => {
+		const search = setup.search.search?.trim().toLowerCase() ?? '';
+		const filtered = rules.filter((rule) => {
+			return matchesSearch(rule, search) && matchesStatus(rule, setup.filters.statusFilter);
+		});
+
+		return { rules: filtered, total: filtered.length, totalCount: rules.length };
+	}, [rules, setup.filters.statusFilter, setup.search.search]);
+
+	return { searchResults, isPending, isError };
+}
 
 export { useAutomationsBrowser };

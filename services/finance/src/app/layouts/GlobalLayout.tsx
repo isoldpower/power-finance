@@ -18,38 +18,50 @@ interface GlobalLayoutProps {
 
 const GlobalLayout: FC<GlobalLayoutProps> = ({ children }) => {
 	return (
-		<div className="finance-theme relative flex min-h-screen flex-col bg-background text-foreground">
-			<FinanceBackground />
-			<div className="relative z-[1] flex min-h-screen flex-col">
-				<HeaderNavbar>
-					<div className="flex w-full justify-between items-center">
-						<div className="flex items-center gap-4">
-							<RouteLink to="dashboard" className="flex items-center gap-2.5">
-								<BrandIcon />
-							</RouteLink>
-							<div className="hidden md:block">
-								<NavbarGroupTabs>
-									{(tab) => <>{tab.label}</>}
-								</NavbarGroupTabs>
+		<>
+			<div
+				id='layout-front'
+				aria-description='Dynamic layout area for priority elements'
+				style={{ zIndex: 99 }} 
+			/>
+			<div className="finance-theme relative flex min-h-screen flex-col bg-background text-foreground">
+				<FinanceBackground />
+				<div className="relative z-[1] flex min-h-screen flex-col">
+					<HeaderNavbar>
+						<div className="flex w-full justify-between items-center">
+							<div className="flex items-center gap-4">
+								<RouteLink to="dashboard" className="flex items-center gap-2.5">
+									<BrandIcon />
+								</RouteLink>
+								<div className="hidden md:block">
+									<NavbarGroupTabs>
+										{(tab) => <>{tab.label}</>}
+									</NavbarGroupTabs>
+								</div>
+								<div className="md:hidden">
+									<NavbarDropdownTabs>
+										{(tab) => <>{tab.label}</>}
+									</NavbarDropdownTabs>
+								</div>
 							</div>
-							<div className="md:hidden">
-								<NavbarDropdownTabs>
-									{(tab) => <>{tab.label}</>}
-								</NavbarDropdownTabs>
+							<div className="flex gap-2">
+								<NavbarSearch />
+								<NavbarNotifications />
+								<NavbarAccountMenu />
 							</div>
 						</div>
-						<div className="flex gap-2">
-							<NavbarSearch />
-							<NavbarNotifications />
-							<NavbarAccountMenu />
-						</div>
-					</div>
-				</HeaderNavbar>
-				<main className="flex-1">
-					{children}
-				</main>
+					</HeaderNavbar>
+					<main className="flex-1">
+						{children}
+					</main>
+				</div>
 			</div>
-		</div>
+			<div
+				id='layout-back'
+				aria-description='Dynamic layout area for background elements'
+				style={{ zIndex: 0 }}
+			/>
+		</>
 	)
 }
 

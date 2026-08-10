@@ -20,10 +20,26 @@ interface WalletsBrowseSetup {
 	ordering: WalletsOrdering;
 }
 
+interface GoalsSearch {
+	search?: string;
+}
+
+interface GoalsFiltering {
+	statusFilter: string;
+}
+
+interface GoalsBrowseSetup {
+	search: GoalsSearch;
+	filters: GoalsFiltering;
+}
+
 export type {
 	WalletsSearch,
 	WalletsFiltering,
 	WalletsOrdering,
 	OrderingType,
 	WalletsBrowseSetup,
+	GoalsSearch,
+	GoalsFiltering,
+	GoalsBrowseSetup,
 };

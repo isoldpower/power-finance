@@ -13,3 +13,4 @@ export * from './typography';
 export * from './containers';
 export * from './slide-over';
 export * from './desktop-guards';
+export * from './render-guards';

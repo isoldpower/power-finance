@@ -1,0 +1,33 @@
+import { Fragment } from "react";
+
+import {
+	ProtectAutomationsEmpty,
+	useAutomations,
+	useAutomationsPaginationContext,
+} from "@feature/assistance";
+
+import type { FC, ReactNode } from "react";
+import type { AutomationRule } from "@feature/assistance";
+
+
+interface FilteredAutomationsDirectoryProps {
+	children: (rule: AutomationRule, index: number) => ReactNode;
+}
+
+const FilteredAutomationsDirectory: FC<FilteredAutomationsDirectoryProps> = ({ children }) => {
+	const { paginatedRules, total, pageNumber } = useAutomationsPaginationContext();
+	const { rules } = useAutomations();
+
+	return (
+		<ProtectAutomationsEmpty rules={rules} total={total}>
+			{paginatedRules.map((rule, index) => (
+				<Fragment key={`${pageNumber.toString()}-${rule.id}`}>
+					{children(rule, index)}
+				</Fragment>
+			))}
+		</ProtectAutomationsEmpty>
+	);
+}
+
+export { FilteredAutomationsDirectory };
+export type { FilteredAutomationsDirectoryProps };

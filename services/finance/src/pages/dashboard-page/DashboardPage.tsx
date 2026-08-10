@@ -8,7 +8,7 @@ import { CurrencySelector } from "@widget/localization";
 import { PeriodSelector, LongCurrentDateLabel } from "@widget/metrics";
 import { MetricsPreferencesProvider } from "@feature/metrics";
 import { RevealMotion } from "@shared/interactions";
-import { PageContainer, MainPageTitle, TwoColumnsContainer } from "@shared/components";
+import { PageContainer, MainPageTitle, TwoColumnsContainer, SidebarColumnsContainer } from "@shared/components";
 
 import { PERIODS } from "./config";
 
@@ -46,10 +46,10 @@ const DashboardPage: FC = () => {
 					<NeedsActionPanel />
 				</RevealMotion>
 				<RevealMotion delay={0.1}>
-					<div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[1fr_360px]">
+					<SidebarColumnsContainer>
 						<RecentActivityPanel className="order-2 lg:order-1" />
 						<QuickAddPanel className="order-1 lg:order-2" />
-					</div>
+					</SidebarColumnsContainer>
 				</RevealMotion>
 			</PageContainer>
 		</MetricsPreferencesProvider>

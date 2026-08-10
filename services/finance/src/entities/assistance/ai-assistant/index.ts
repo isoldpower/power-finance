@@ -1,9 +1,5 @@
-export { AssistantPanelHeader } from './AssistantPanelHeader.tsx';
-export { AssistantSignalTile } from './AssistantSignalTile.tsx';
-export { AssistantChatBubble } from './AssistantChatBubble.tsx';
-export { AssistantPromptChip } from './AssistantPromptChip.tsx';
-export { AssistantChatInput } from './AssistantChatInput.tsx';
-export { AssistantComingSoonOverlay } from './AssistantComingSoonOverlay.tsx';
+export { AssistantPanel } from './AssistantPanel.tsx';
+export { AssistantOverlay } from './AssistantOverlay.tsx';
 
 export type { AssistantPanelHeaderProps } from './AssistantPanelHeader.tsx';
 export type { AssistantSignal } from './AssistantSignalTile.tsx';
