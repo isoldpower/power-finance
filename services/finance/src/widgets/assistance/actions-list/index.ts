@@ -1,1 +1,1 @@
-export { ActionsListWidget } from './ActionsListWidget.tsx';
+export { ActionsList } from './ActionsList.tsx';

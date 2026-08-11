@@ -10,12 +10,12 @@ import type { WebhookEndpoint } from "@entity/configuration";
 import type { DeletedWebhookSchema } from "@feature/configuration";
 
 
-type DeleteWebhookModalProps = PropsWithChildren<{
+type DeleteWebhookFormProps = PropsWithChildren<{
 	targetWebhook: WebhookEndpoint
 	closeModal: () => void;
 }>;
 
-const DeleteWebhookForm: FC<DeleteWebhookModalProps> = ({
+const DeleteWebhookForm: FC<DeleteWebhookFormProps> = ({
 	targetWebhook,
 	closeModal,
 }) => {
@@ -56,4 +56,4 @@ const DeleteWebhookForm: FC<DeleteWebhookModalProps> = ({
 } 
 
 export { DeleteWebhookForm };
-export type { DeleteWebhookModalProps };
+export type { DeleteWebhookFormProps };

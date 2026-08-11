@@ -1,7 +1,7 @@
 import { useAutomationsFiltersContext } from "@feature/assistance";
 import { ListFilterBar } from "@shared/pure-components/collections";
 
-import { AUTOMATIONS_STATUS_OPTIONS } from "../config.ts";
+import { AUTOMATIONS_STATUS_OPTIONS } from "./config.ts";
 
 
 const AutomationsBrowserFilters = () => {

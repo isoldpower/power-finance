@@ -8,7 +8,7 @@ import { FinanceButton, FinanceCard } from "@internal/ui-library";
 import { PlanningAiAssistant, NeedsActionPanel, ToggleableAutomationRow } from "@process/assistance";
 import { DeletableGoalRow } from "@process/wallets";
 import {
-	AutomationsBrowserContextProvider,
+	AutomationsBrowserProvider,
 	AutomationsBrowserFilters,
 	AutomationsBrowserHeader, AutomationsBrowserPagination,
 	FilteredAutomationsDirectory,
@@ -17,7 +17,7 @@ import {
 } from "@widget/assistance";
 import {
 	FilteredGoalsDirectory,
-	GoalsBrowserContextProvider,
+	GoalsBrowserProvider,
 	GoalsBrowserFilters,
 	GoalsBrowserHeader,
 	GoalsBrowserPagination,
@@ -74,7 +74,7 @@ const PlanningPage: FC = () => {
 			<RevealMotion delay={0.1}>
 				<SidebarColumnsContainer sidebarWidth="380px">
 					<StackedList>
-						<AutomationsBrowserContextProvider>
+						<AutomationsBrowserProvider>
 							<FinanceCard className="overflow-hidden">
 								<AutomationsBrowserHeader>
 									<NewRulePanel>
@@ -96,8 +96,8 @@ const PlanningPage: FC = () => {
 									<AutomationsBrowserPagination />
 								</AutomationsListFx>
 							</FinanceCard>
-						</AutomationsBrowserContextProvider>
-						<GoalsBrowserContextProvider>
+						</AutomationsBrowserProvider>
+						<GoalsBrowserProvider>
 							<FinanceCard className="overflow-hidden">
 								<GoalsBrowserHeader>
 									<NewGoalPanel>
@@ -119,7 +119,7 @@ const PlanningPage: FC = () => {
 									<GoalsBrowserPagination />
 								</GoalsListFx>
 							</FinanceCard>
-						</GoalsBrowserContextProvider>
+						</GoalsBrowserProvider>
 						<WhatIfCard />
 					</StackedList>
 					<PlanningAiAssistant />
@@ -132,4 +132,3 @@ const PlanningPage: FC = () => {
 PlanningPage.displayName = 'PlanningPage';
 
 export { PlanningPage };
-export default PlanningPage;

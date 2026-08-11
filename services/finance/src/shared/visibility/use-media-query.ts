@@ -25,4 +25,4 @@ const useMediaQuery = (query: string): boolean => {
 
 const useIsDesktop = (): boolean => useMediaQuery('(min-width: 1024px)');
 
-export { useMediaQuery, useIsDesktop };
+export { useIsDesktop };

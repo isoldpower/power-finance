@@ -5,7 +5,7 @@ import {
 	UiTabsTrigger,
 } from "@internal/ui-library";
 
-import { WebhookWithControls, CreateWebhookProcess } from "@process/configuration";
+import { WebhookWithControls, CreateWebhook } from "@process/configuration";
 import {
 	SettingsPreferencesProvider,
 	useSettingsPreferences,
@@ -66,7 +66,7 @@ const SettingsTabs: FC = () => {
 						</WebhooksListFx>
 					</div>
 					<hr className="my-4" />
-					<CreateWebhookProcess />
+					<CreateWebhook />
 				</UiTabsContent>
 			</div>
 		</UiTabs>
@@ -88,4 +88,3 @@ const SettingsPage: FC = () => {
 SettingsPage.displayName = 'SettingsPage';
 
 export { SettingsPage };
-export default SettingsPage;

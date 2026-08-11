@@ -1,3 +1,3 @@
 export * from './browse-wallets';
 export * from './goal-actions';
-export * from './wallets-actions';
+export * from './wallet-actions';

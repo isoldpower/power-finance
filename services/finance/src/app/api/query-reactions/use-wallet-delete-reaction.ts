@@ -7,7 +7,7 @@ const useWalletDeleteReaction = (): MutationReaction => {
 	const { fetchAllTransactions } = useTransactionsListMethods();
 
 	const refetchTransactions = () => {
-		fetchAllTransactions();
+		void fetchAllTransactions();
 	};
 
 	const compare = useCallback((event: MutationCompareArgument) => {

@@ -28,4 +28,4 @@ const buildWalletPayload = (
 	credit: isCreditKind(values.type, kinds),
 });
 
-export { walletFieldsShape, isCreditKind, buildWalletPayload };
+export { walletFieldsShape, buildWalletPayload };

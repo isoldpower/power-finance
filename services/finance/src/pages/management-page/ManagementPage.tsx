@@ -3,15 +3,15 @@ import type { FC } from "react";
 
 import { AccountsDrillDownDetails, BrowseAccountCategories, LedgerBalanceBand } from "@process/accounts";
 import { BrowseTransactionEntries, LedgerBasedTransaction } from "@process/transactions";
-import { BrowseAndSelectWallets, BrowserWalletDetails } from "@process/wallets";
+import { BrowseAndSelectWallets, SelectedWalletDetails } from "@process/wallets";
 import { AccountsBrowserHeader, BalanceCompositionToolbar, CategoryRow } from "@widget/accounts";
 import {
-	TransactionBrowserContextProvider,
+	TransactionBrowserProvider,
 	TransactionBrowserFilters,
 	TransactionsBrowserHeader,
 	TransactionsBrowserPagination,
 } from "@widget/transactions";
-import { WalletBrowserContextProvider, WalletBrowserHeader } from "@widget/wallets";
+import { WalletBrowserProvider, WalletBrowserHeader } from "@widget/wallets";
 import { BrowseAccountsContextProvider } from "@feature/accounts";
 import { TransactionsSelectionProvider } from "@feature/transactions";
 import { WalletsSelectionProvider } from "@feature/wallets";
@@ -66,19 +66,19 @@ const ManagementPage: FC = () => {
 					<RevealMotion delay={0.18}>
 						<WalletBrowserHeader createWalletPanel={managementSlides.createWallet} total={5} />
 						<SidebarColumnsContainer sidebar="start" sidebarWidth="340px" from="md">
-							<WalletBrowserContextProvider>
+							<WalletBrowserProvider>
 								<FinanceCard className="overflow-hidden">
 									<BrowseAndSelectWallets />
 								</FinanceCard>
-								<BrowserWalletDetails
+								<SelectedWalletDetails
 									editWalletPanel={managementSlides.editWallet}
 									transferPanel={managementSlides.createTransaction}
 								/>
-							</WalletBrowserContextProvider>
+							</WalletBrowserProvider>
 						</SidebarColumnsContainer>
 					</RevealMotion>
 					<RevealMotion delay={0.24}>
-						<TransactionBrowserContextProvider>
+						<TransactionBrowserProvider>
 							<TransactionsBrowserHeader createTransactionPanel={managementSlides.createTransaction} />
 							<FinanceCard className="overflow-hidden">
 								<TransactionBrowserFilters />
@@ -89,7 +89,7 @@ const ManagementPage: FC = () => {
 								</BrowseTransactionEntries>
 								<TransactionsBrowserPagination />
 							</FinanceCard>
-						</TransactionBrowserContextProvider>
+						</TransactionBrowserProvider>
 					</RevealMotion>
 					<RevealMotion delay={0.3}>
 						<BrowseAccountsContextProvider>
@@ -121,4 +121,3 @@ const ManagementPage: FC = () => {
 ManagementPage.displayName = 'ManagementPage';
 
 export { ManagementPage };
-export default ManagementPage;

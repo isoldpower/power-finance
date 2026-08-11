@@ -1,15 +1,3 @@
-const relativeTime = (iso?: string): string => {
-	if (!iso) return '—';
-	const then = new Date(iso).getTime();
-	const diffMs = Date.now() - then;
-	const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-	if (diffHours < 1) return 'just now';
-	if (diffHours < 24) return `${diffHours.toString()}h ago`;
-	const diffDays = Math.floor(diffHours / 24);
-	if (diffDays < 7) return `${diffDays.toString()}d ago`;
-	return `${Math.floor(diffDays / 7).toString()}w ago`;
-};
-
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 const relativeAgo = (iso: string): string => {
@@ -23,4 +11,4 @@ const relativeAgo = (iso: string): string => {
 	return `${months.toString()} month${months === 1 ? '' : 's'} ago`;
 };
 
-export { relativeTime, relativeAgo };
+export { relativeAgo };

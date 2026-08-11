@@ -11,7 +11,7 @@ import { RevealMotion } from "@shared/motion";
 import { PageContainer, SidebarColumnsContainer, TwoColumnsContainer } from "@shared/pure-components/layout";
 import { PageTitle } from "@shared/pure-components/typography";
 
-import { PERIODS } from "./config";
+import { PERIODS } from "./config.ts";
 
 
 const DashboardPage: FC = () => {
@@ -60,4 +60,3 @@ const DashboardPage: FC = () => {
 DashboardPage.displayName = 'DashboardPage';
 
 export { DashboardPage };
-export default DashboardPage;

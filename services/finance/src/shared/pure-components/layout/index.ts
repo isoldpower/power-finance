@@ -8,8 +8,6 @@ export { StackedList } from './containers/StackedList.tsx';
 export { TwoColumnsContainer } from './containers/TwoColumnsContainer.tsx';
 
 export { AttachToLayout } from './global-layout/AttachToLayout.tsx';
-export { HeaderBox } from './global-layout/HeaderBox.tsx';
-export { HeaderBoxOffset } from './global-layout/HeaderBoxOffset.tsx';
 export { HEADER_HEIGHT } from './global-layout/config.ts';
 
 export { SectionHeader } from './section-header/SectionHeader.tsx';

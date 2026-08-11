@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 
 import {
-	ScanReceiptProcess,
-	CreateTransactionProcess,
+	ScanReceipt,
+	CreateTransaction,
 } from "@process/transactions";
 import {
-	CreateWalletProcess,
-	EditWalletProcess,
+	CreateWallet,
+	EditWallet,
 } from "@process/wallets";
 
 
@@ -20,10 +20,10 @@ const managementSlides = {
 type SlideOverPanelType = typeof managementSlides[keyof typeof managementSlides];
 
 const managementSlidesRegistry: Record<SlideOverPanelType, ReactNode> = {
-	[managementSlides.scanReceipt]: <ScanReceiptProcess/>,
-	[managementSlides.createTransaction]: <CreateTransactionProcess scanPanelId={managementSlides.scanReceipt} />,
-	[managementSlides.createWallet]: <CreateWalletProcess/>,
-	[managementSlides.editWallet]: <EditWalletProcess/>
+	[managementSlides.scanReceipt]: <ScanReceipt/>,
+	[managementSlides.createTransaction]: <CreateTransaction scanPanelId={managementSlides.scanReceipt} />,
+	[managementSlides.createWallet]: <CreateWallet/>,
+	[managementSlides.editWallet]: <EditWallet/>
 }
 
 

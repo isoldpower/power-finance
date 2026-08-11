@@ -27,4 +27,4 @@ const toAccountCategoryViews = (accounts: Account[]): AccountCategoryView[] => {
 		.filter((category) => category.accounts.length > 0);
 };
 
-export { toAccountView, toAccountCategoryViews };
+export { toAccountCategoryViews };

@@ -21,4 +21,4 @@ const DERIVED_KEYS = {
 	onWalletChange: [QUERY_KEYS.summaryInsights, QUERY_KEYS.summaryLedgerBalance],
 } as const;
 
-export { QUERY_KEYS, DERIVED_KEYS };
+export { DERIVED_KEYS };

@@ -1,1 +1,0 @@
-export { AdjustableBrandIcon } from './AdjustableBrandIcon.tsx';

@@ -64,4 +64,4 @@ interface ReceiptScan {
 	fields: ReceiptScanField[];
 }
 
-export type { TransactionCategory, ReceiptScanField, ReceiptScan };
+export type { TransactionCategory, ReceiptScan };

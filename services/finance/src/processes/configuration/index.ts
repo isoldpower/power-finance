@@ -1,2 +1,1 @@
-export * from './create-webhook';
-export * from './manage-webhook';
+export * from './webhook-actions';

@@ -2,7 +2,7 @@ import { AlertIcon } from "@shared/pure-components/icons";
 import type { FC } from "react";
 import { FinanceCard, cn } from "@internal/ui-library";
 
-import { ActionsListWidget } from "@widget/assistance";
+import { ActionsList } from "@widget/assistance";
 import { useActions, NeedsActionBadgeFx, HideOnActionsEmpty } from "@feature/assistance";
 import { NeedsActionHeader } from "@entity/assistance";
 import { RowTitle } from "@shared/pure-components/typography";
@@ -30,7 +30,7 @@ const NeedsActionPanel: FC = () => {
 					</NeedsActionHeader.Descriptor>
 				</NeedsActionHeader.Container>
 				<div className="flex flex-col">
-					<ActionsListWidget 
+					<ActionsList 
 						actions={actions}
 						isPending={isPending}
 						isError={isError} 
