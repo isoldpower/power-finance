@@ -8,6 +8,7 @@ import type { TransactionsSelection, TransactionsSelectionState } from "./types.
 
 const initialState: TransactionsSelection = {
 	selectedTransactionId: null,
+	checkedTransactionIds: [],
 };
 
 const persistenceStorageConfig: PersistOptions<TransactionsSelectionState> = {
@@ -26,6 +27,16 @@ const createTransactionsSelectionStore = (
 		...initialValues,
 		selectTransaction: (transactionId: string | null) => {
 			setState(() => ({ selectedTransactionId: transactionId }));
+		},
+		toggleChecked: (transactionId: string) => {
+			setState((state) => ({
+				checkedTransactionIds: state.checkedTransactionIds.includes(transactionId)
+					? state.checkedTransactionIds.filter((id) => id !== transactionId)
+					: [...state.checkedTransactionIds, transactionId],
+			}));
+		},
+		clearChecked: () => {
+			setState(() => ({ checkedTransactionIds: [] }));
 		},
 	}), persistenceStorageConfig));
 }

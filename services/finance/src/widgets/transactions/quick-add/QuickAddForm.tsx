@@ -3,7 +3,7 @@ import { FinanceButton, UiForm, UiFormField } from "@internal/ui-library";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EntryAmountField, EntryTypeSelector } from "@entity/transactions";
+import { EntryAmountField, EntryCategoryField, EntryTypeSelector } from "@entity/transactions";
 import { WalletSelect, toWalletSelectOptions } from "@entity/wallets";
 import {
 	TransactionEntryOnSubmit,
@@ -12,6 +12,7 @@ import {
 	useEntryTypeEffects,
 	useEntryWalletOptions,
 	useWalletsCurrencies,
+	useTransactionCategories,
 	quickAddSchema,
 	useQuickAddInitials,
 } from "@feature/transactions";
@@ -36,6 +37,8 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 
 	const { toCurrency, fromCurrency, currency, type } = useWalletsCurrencies(wallets, form);
 	const { loading, canSubmit, methods } = useEntryFormState(form);
+	const { categories } = useTransactionCategories();
+	const categoryLabels = useMemo(() => categories.map((category) => category.label), [categories]);
 	const walletOptions = useMemo(() => toWalletSelectOptions(wallets), [wallets]);
 	const { fromOptions, toOptions } = useEntryWalletOptions(walletOptions, form);
 	const { handleSentChange, handleReceivedChange } = useCrossCurrencyTransfer(fromCurrency, toCurrency, form);
@@ -56,6 +59,20 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 					render={({field}) => (
 						<EntryTypeSelector className="mb-3.5" {...field} />
 					)} />
+				<HideOnFormValue valueKey='type' hideOn={['transfer']} control={form.control}>
+					<UiFormField
+						disabled={loading}
+						control={form.control}
+						name="amount"
+						render={({ field }) => (
+							<EntryAmountField
+								type={type}
+								currency={currency}
+								className="mt-2"
+								{...field}
+							/>
+						)} />
+				</HideOnFormValue>
 				<HideOnFormValue valueKey='type' hideOn={['income']} control={form.control}>
 					<UiFormField
 						disabled={loading}
@@ -84,20 +101,6 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 								emptyLabel="Add another wallet"
 								className="mt-2"
 								{...field} />
-						)} />
-				</HideOnFormValue>
-				<HideOnFormValue valueKey='type' hideOn={['transfer']} control={form.control}>
-					<UiFormField
-						disabled={loading}
-						control={form.control}
-						name="amount"
-						render={({ field }) => (
-							<EntryAmountField
-								type={type}
-								currency={currency}
-								className="mt-2"
-								{...field}
-							/>
 						)} />
 				</HideOnFormValue>
 				<ShowOnFormValue valueKey='type' showOn={['transfer']} control={form.control}>
@@ -130,13 +133,26 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 							/>
 						)} />
 				</ShowOnFormValue>
+				<HideOnFormValue valueKey='type' hideOn={['transfer']} control={form.control}>
+					<UiFormField
+						disabled={loading}
+						control={form.control}
+						name="category"
+						render={({ field }) => (
+							<EntryCategoryField
+								options={categoryLabels}
+								className="mt-3.5"
+								{...field}
+							/>
+						)} />
+				</HideOnFormValue>
 				<FinanceButton
 					type='submit'
 					size="lg"
 					className="mt-3.5 w-full"
 					disabled={!canSubmit}
 				>
-					{loading ? 'Adding…' : `Add ${type}`}
+					{loading ? 'Adding…' : '＋ Add transaction'}
 				</FinanceButton>
 			</TransactionEntryOnSubmit>
 		</UiForm>

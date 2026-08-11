@@ -4,10 +4,11 @@ import type { INotificationsRESTApiClient, NotificationAckResponse } from "../ty
 interface AckNotificationRequest {
 	handler: Pick<INotificationsRESTApiClient, 'ack'>;
 	id: string;
+	ack: boolean;
 }
 
 async function ackNotification(request: AckNotificationRequest): Promise<NotificationAckResponse> {
-	return request.handler.ack({ id: request.id });
+	return request.handler.ack({ id: request.id, ack: request.ack });
 }
 
 export { ackNotification };

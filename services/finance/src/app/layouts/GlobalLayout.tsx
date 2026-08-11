@@ -10,6 +10,7 @@ import {
 } from "@widget/navigation";
 import { RouteLink } from "@shared/routing";
 import { BrandIcon, HeaderNavbar } from "@entity/navigation";
+import {NavbarNotificationItem} from "@widget/navigation/navbar/NavbarNotificationItem.tsx";
 
 
 interface GlobalLayoutProps {
@@ -46,7 +47,14 @@ const GlobalLayout: FC<GlobalLayoutProps> = ({ children }) => {
 							</div>
 							<div className="flex gap-2">
 								<NavbarSearch />
-								<NavbarNotifications />
+								<NavbarNotifications>
+									{(notification) => (
+										<NavbarNotificationItem
+											key={notification.id}
+											notification={notification}
+										/>
+									)}
+								</NavbarNotifications>
 								<NavbarAccountMenu />
 							</div>
 						</div>

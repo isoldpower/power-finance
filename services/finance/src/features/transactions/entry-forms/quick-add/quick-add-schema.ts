@@ -4,7 +4,10 @@ import { isCompleteEntry } from "../entry-fields.ts";
 import { entryFieldsShape } from "../entry-fields.ts";
 
 
-const quickAddSchema = z.object(entryFieldsShape).refine(isCompleteEntry);
+const quickAddSchema = z.object({
+	...entryFieldsShape,
+	category: z.string(),
+}).refine(isCompleteEntry);
 
 type QuickAddSchema = z.infer<typeof quickAddSchema>;
 

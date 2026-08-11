@@ -36,7 +36,7 @@ class NotificationsDjangoRESTApiClient implements INotificationsRESTApiClient {
 	}
 
 	public ack(request: NotificationAckRequest): Promise<NotificationAckResponse> {
-		return this.axiosInstance.post<NotificationAckResponse>(`/${request.id}/ack/`)
+		return this.axiosInstance.post<NotificationAckResponse>(`/${request.id}/ack/`, { ack: request.ack })
 			.then((response) => response.data);
 	}
 }

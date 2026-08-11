@@ -10,7 +10,7 @@ const CurrencyPickerOptionSymbol: FC<CurrencyPickerOptionSymbolProps> = ({
 	children,
 }) => {
 	return (
-		<DisplayText as="span" truncate className="inline-block w-6 shrink-0 text-center">
+		<DisplayText as="span" size="13" truncate className="inline-block w-6 shrink-0 text-center">
 			{children}
 		</DisplayText>
 	);

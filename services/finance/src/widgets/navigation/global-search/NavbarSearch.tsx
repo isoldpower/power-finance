@@ -35,7 +35,7 @@ const NavbarSearch: FC = () => {
 			</ShowOnMobile>
 			<UiDialog open={open} onOpenChange={setOpen}>
 				<UiDialogContent className={cn(
-					"finance-theme overflow-hidden border-border-strong bg-popover p-0",
+					"finance-theme overflow-hidden border-border-strong bg-popover p-4",
 					"text-foreground shadow-[var(--shadow-lg)]"
 				)}>
 					<UiDialogTitle className="sr-only">

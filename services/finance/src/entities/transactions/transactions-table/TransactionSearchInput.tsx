@@ -17,7 +17,7 @@ const TransactionSearchInput: FC<TransactionSearchInputProps> = ({ value, onValu
 		<input
 			value={value}
 			onChange={(event) => { onValueChange(event.target.value); }}
-			placeholder="Search wallet, amount…"
+			placeholder="Search description, amount, note…"
 			className={cn(textClass({ size: '13' }), "min-w-0 flex-1 border-none bg-transparent outline-none placeholder:text-[var(--text-3)]")}
 		/>
 		{value ? (

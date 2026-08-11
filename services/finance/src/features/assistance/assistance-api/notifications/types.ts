@@ -34,6 +34,7 @@ interface NotificationCountResponse {
 
 interface NotificationAckRequest {
 	id: string;
+	ack: boolean;
 }
 
 type NotificationAckResponse = DeleteResponse;

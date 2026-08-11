@@ -12,7 +12,7 @@ const useWalletFormInitials = (wallet?: PanelWallet): WalletFormSchema => {
 	const { kinds } = useWalletKinds();
 
 	return useMemo(() => {
-		const defaultKind = kinds.find((kind) => !kind.credit)?.label ?? '';
+		const defaultKind = kinds[0]?.label ?? '';
 		const creditKind = kinds.find((kind) => kind.credit)?.label ?? defaultKind;
 
 		if (!wallet) {

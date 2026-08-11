@@ -9,16 +9,26 @@ import type { FC } from "react";
 
 
 const ResetTransactionOnBrowse: FC = () => {
-	const { search, caseSensitive, walletFilter, sortBy, sortDirection } = useTransactionsFiltersContext();
+	const {
+		search,
+		caseSensitive,
+		walletFilter,
+		categoryFilter,
+		typeFilter,
+		sortBy,
+		sortDirection,
+	} = useTransactionsFiltersContext();
 	const { pageNumber } = useTransactionsPaginationContext();
 	const selectTransaction = useTransactionsSelection((state) => state.selectTransaction);
+	const clearChecked = useTransactionsSelection((state) => state.clearChecked);
 
 	const resetSelection = useCallback(() => {
 		selectTransaction(null);
-	}, [selectTransaction]);
+		clearChecked();
+	}, [clearChecked, selectTransaction]);
 
 	useOnValuesChange(
-		[search, caseSensitive, walletFilter, sortBy, sortDirection, pageNumber],
+		[search, caseSensitive, walletFilter, categoryFilter, typeFilter, sortBy, sortDirection, pageNumber],
 		resetSelection
 	);
 

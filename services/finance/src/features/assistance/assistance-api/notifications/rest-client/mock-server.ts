@@ -10,6 +10,7 @@ import type {
 } from "../types.ts";
 
 const MOCK_DELAY_MS = 250;
+const STORAGE_KEY = 'mock:notifications';
 
 const delay = <T>(value: T): Promise<T> =>
 	new Promise((resolve) => setTimeout(() => { resolve(value); }, MOCK_DELAY_MS));
@@ -21,9 +22,29 @@ const SEED: Notification[] = [
 	{ id: 'n4', level: 'info', title: 'Salary received', body: '+$4,200.00 deposited to Main Checking.', time: 'Yesterday', ack: true },
 ];
 
+const loadNotifications = (): Notification[] => {
+	if (typeof window === 'undefined') return SEED.map((notification) => ({ ...notification }));
+	try {
+		const stored = window.localStorage.getItem(STORAGE_KEY);
+		if (stored === null) return SEED.map((notification) => ({ ...notification }));
+		return JSON.parse(stored) as Notification[];
+	} catch {
+		return SEED.map((notification) => ({ ...notification }));
+	}
+};
+
+const saveNotifications = (notifications: Notification[]): void => {
+	if (typeof window === 'undefined') return;
+	try {
+		window.localStorage.setItem(STORAGE_KEY, JSON.stringify(notifications));
+	} catch {
+		// Ignore storage failures (private mode, quota) — falls back to in-memory only.
+	}
+};
+
 
 class NotificationsMockRESTApiClient implements INotificationsRESTApiClient {
-	private notifications: Notification[] = SEED.map((notification) => ({ ...notification }));
+	private notifications: Notification[] = loadNotifications();
 
 	public list(request: NotificationListRequest): Promise<NotificationListResponse> {
 		const filtered = request.params?.ack === undefined
@@ -47,11 +68,12 @@ class NotificationsMockRESTApiClient implements INotificationsRESTApiClient {
 
 	public ack(request: NotificationAckRequest): Promise<NotificationAckResponse> {
 		this.notifications = this.notifications.map((notification) =>
-			notification.id === request.id ? { ...notification, ack: true } : notification
+			notification.id === request.id ? { ...notification, ack: request.ack } : notification
 		);
+		saveNotifications(this.notifications);
 
 		return delay({
-			message: `Acknowledged notification ${request.id}`,
+			message: `Notification ${request.id} marked as ${request.ack ? 'seen' : 'unseen'}`,
 			meta: { id: request.id, success: true },
 		});
 	}

@@ -1,22 +1,31 @@
-import type { FC } from "react";
 import {
 	FinanceIconButton,
 	FinanceMenu,
 	FinanceMenuTrigger,
-	FinanceMenuContent, 
-	FinanceNotification,
+	FinanceMenuContent,
 } from "@internal/ui-library";
 
 import { RouteLink } from "@shared/routing";
-import { useNotifications, useNotificationsCount, NotificationsEmptyGuard } from "@feature/assistance";
+import {
+	useNotifications,
+	useNotificationsCount,
+	NotificationsEmptyGuard,
+} from "@feature/assistance";
 import { NotificationBell, NotificationEmpty, NotificationList } from "@entity/assistance";
 import { CardTitle, textClass } from "@shared/pure-components/typography";
 
+import type { ReactNode, FC } from "react";
+import type { Notification } from "@feature/assistance";
 
-const NavbarNotifications: FC = () => {
+
+interface NavbarNotificationsProps {
+	children: ((notification: Notification, order: number) => ReactNode) | ReactNode;
+}
+
+const NavbarNotifications: FC<NavbarNotificationsProps> = ({ children }) => {
 	const { notifications } = useNotifications({ limit: 8 });
 	const { count: unreadCount } = useNotificationsCount(false);
-	
+
 	return (
 		<FinanceMenu>
 			<FinanceMenuTrigger asChild>
@@ -35,15 +44,10 @@ const NavbarNotifications: FC = () => {
 				</div>
 				<NotificationList>
 					<NotificationsEmptyGuard notifications={notifications} empty={<NotificationEmpty />}>
-						{notifications.map((notification) => (
-							<FinanceNotification
-								key={notification.id}
-								level={notification.level}
-								title={notification.title}
-								subtitle={notification.body}
-								time={notification.time}
-							/>
-						))}
+						{notifications.map((notification, index) => typeof children === 'function'
+							? children(notification, index)
+							: children
+						)}
 					</NotificationsEmptyGuard>
 				</NotificationList>
 			</FinanceMenuContent>

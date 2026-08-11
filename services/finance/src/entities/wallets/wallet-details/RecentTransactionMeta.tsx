@@ -2,22 +2,22 @@ import type { FC } from "react";
 import { Caption, RowTitle } from "@shared/pure-components/typography";
 
 interface RecentTransactionMetaProps {
+	description: string;
 	category: string;
 	date: string;
-	time: string;
 }
 
-const RecentTransactionMeta: FC<RecentTransactionMetaProps> = ({ 
+const RecentTransactionMeta: FC<RecentTransactionMetaProps> = ({
+	description,
 	category,
 	date,
-	time,
 }) => (
 	<div className="min-w-0 flex-1">
 		<RowTitle size="13" truncate>
-			{category}
+			{description}
 		</RowTitle>
 		<Caption size="11">
-			{date} · {time}
+			{category} · {date}
 		</Caption>
 	</div>
 );

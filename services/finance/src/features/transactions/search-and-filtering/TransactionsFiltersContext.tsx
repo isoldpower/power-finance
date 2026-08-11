@@ -5,6 +5,10 @@ import type { OrderingType } from "@shared/data";
 interface TransactionsFiltersContextType {
 	walletFilter: string;
 	setWalletFilter: (walletFilter: string | null) => void;
+	categoryFilter: string;
+	setCategoryFilter: (categoryFilter: string | null) => void;
+	typeFilter: string;
+	setTypeFilter: (typeFilter: string | null) => void;
 	sortBy: string;
 	setSortBy: (sortBy: string | null) => void;
 	sortDirection: OrderingType;
@@ -26,6 +30,8 @@ const TransactionsFiltersContextProvider: FC<TransactionsFiltersContextProviderP
 	children,
 }) => {
 	const [walletFilter, setWalletFilter] = useState<string>('all');
+	const [categoryFilter, setCategoryFilter] = useState<string>('all');
+	const [typeFilter, setTypeFilter] = useState<string>('all');
 	const [sortBy, setSortBy] = useState<string>('created_at');
 	const [sortDirection, setSortDirection] = useState<OrderingType>('DESC');
 	const [search, setSearch] = useState<string>('');
@@ -37,9 +43,17 @@ const TransactionsFiltersContextProvider: FC<TransactionsFiltersContextProviderP
 	const setSortByProtected = useCallback((sortBy: string | null) => {
 		setSortBy(sortBy ?? 'created_at');
 	}, []);
+	const setCategoryFilterProtected = useCallback((category: string | null) => {
+		setCategoryFilter(category ?? 'all');
+	}, []);
+	const setTypeFilterProtected = useCallback((type: string | null) => {
+		setTypeFilter(type ?? 'all');
+	}, []);
 
 	const filterValues = useMemo<TransactionsFiltersContextType>(() => ({
 		walletFilter,
+		categoryFilter,
+		typeFilter,
 		sortBy,
 		sortDirection,
 		search,
@@ -48,8 +62,22 @@ const TransactionsFiltersContextProvider: FC<TransactionsFiltersContextProviderP
 		setCaseSensitive,
 		setSortDirection,
 		setWalletFilter: setWalletFilterProtected,
+		setCategoryFilter: setCategoryFilterProtected,
+		setTypeFilter: setTypeFilterProtected,
 		setSortBy: setSortByProtected,
-	}), [caseSensitive, search, setSortByProtected, setWalletFilterProtected, sortBy, sortDirection, walletFilter]);
+	}), [
+		caseSensitive,
+		categoryFilter,
+		search,
+		setCategoryFilterProtected,
+		setSortByProtected,
+		setTypeFilterProtected,
+		setWalletFilterProtected,
+		sortBy,
+		sortDirection,
+		typeFilter,
+		walletFilter,
+	]);
 
 	return (
 		<TransactionsFiltersContext value={filterValues}>

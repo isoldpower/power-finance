@@ -4,7 +4,7 @@ import { cn } from "@internal/ui-library";
 import { Text } from "@shared/pure-components/typography";
 
 
-const NeedsActionHeaderBadge: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'>> = ({ 
+const NeedsActionHeaderBadge: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'>> = ({
 	children,
 	...props
 }) => (

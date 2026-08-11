@@ -88,6 +88,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 			occurred_at: value.occurred_at ?? value.created_at,
 			created_at: value.created_at,
 			origin: value.origin ?? 'imported',
+			scanned: Boolean(value.receipt),
 			entries: this.entries(value),
 			wallet: this.walletRef(value.source_wallet_id),
 		};

@@ -11,24 +11,32 @@ import {
 
 import { SearchIcon } from "@shared/pure-components/icons";
 import { useWalletsFiltersContext } from "@feature/wallets";
-import { useCallback, useRef } from "react";
+import { useCallback } from "react";
+
+import { WALLET_SORT_OPTIONS, WALLET_TYPE_OPTIONS, fromSortKey, toSortKey } from "./config.ts";
 
 import type { ChangeEvent } from "react";
 
 
 const WalletBrowserFilters = () => {
-	const types = useRef<string[]>(['all', 'Debit Card', 'Credit Card']);
 	const {
 		search, setSearch,
 		caseSensitive, setCaseSensitive,
 		typeFilter, setTypeFilter,
 		sortBy, setSortBy,
+		sortDirection, setSortDirection,
 	} = useWalletsFiltersContext();
 
 	const setSearchCallback = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		setSearch(event.target.value);
 	}, [setSearch]);
-	
+	const setSortCallback = useCallback((key: string) => {
+		const { field, direction } = fromSortKey(key);
+
+		setSortBy(field);
+		setSortDirection(direction);
+	}, [setSortBy, setSortDirection]);
+
 	return (
 		<div className="border-b border-border px-3 pb-2 pt-2.5">
 			<FinanceSearchInput
@@ -53,24 +61,23 @@ const WalletBrowserFilters = () => {
 						<FinanceSelectValue />
 					</FinanceSelectTrigger>
 					<FinanceSelectContent>
-						{types.current.map((type) => (
-							<FinanceSelectItem key={type} value={type}>
-								{type === 'all' ? 'All types' : type}
+						{WALLET_TYPE_OPTIONS.map((option) => (
+							<FinanceSelectItem key={option.value} value={option.value}>
+								{option.label}
 							</FinanceSelectItem>
 						))}
 					</FinanceSelectContent>
 				</FinanceSelect>
-				<FinanceSelect value={sortBy} onValueChange={setSortBy}>
+				<FinanceSelect value={toSortKey(sortBy, sortDirection)} onValueChange={setSortCallback}>
 					<FinanceSelectTrigger className="flex-1">
 						<FinanceSelectValue />
 					</FinanceSelectTrigger>
 					<FinanceSelectContent>
-						<FinanceSelectItem value="name">
-							Name A–Z
-						</FinanceSelectItem>
-						<FinanceSelectItem value="balance-desc">
-							Balance: high → low
-						</FinanceSelectItem>
+						{WALLET_SORT_OPTIONS.map((option) => (
+							<FinanceSelectItem key={option.value} value={option.value}>
+								{option.label}
+							</FinanceSelectItem>
+						))}
 					</FinanceSelectContent>
 				</FinanceSelect>
 			</div>

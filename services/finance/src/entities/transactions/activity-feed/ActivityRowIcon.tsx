@@ -17,7 +17,7 @@ const ActivityRowIcon: FC<ActivityRowIconProps> = ({
 			className={cn(
 				`flex size-8 flex-none items-center justify-center rounded-[8px]`,
 				tone === 'positive' && 'bg-pos-soft text-pos',
-				tone === 'negative' && 'bg-[var(--accent-soft)] text-primary',
+				tone === 'negative' && 'bg-[var(--neg-soft)] text-neg',
 			)} 
 			{...props}
 		>

@@ -13,7 +13,13 @@ function matchesSearch(transaction: TransactionPreviewDto, setup: TransactionsBr
 	const needle = setup.search.caseSensitive
 		? setup.search.search
 		: setup.search.search.toLowerCase();
-	const haystack = `${transaction.amount} ${transaction.currency_code}`;
+	const haystack = [
+		transaction.merchant,
+		transaction.category,
+		transaction.source_wallet.name,
+		transaction.amount,
+		transaction.currency_code,
+	].join(' ');
 	const normalizedHaystack = setup.search.caseSensitive ? haystack : haystack.toLowerCase();
 
 	return normalizedHaystack.includes(needle);
@@ -22,6 +28,16 @@ function matchesSearch(transaction: TransactionPreviewDto, setup: TransactionsBr
 function matchesWallet(transaction: TransactionPreviewDto, setup: TransactionsBrowseSetup): boolean {
 	return setup.filters.walletFilter === 'all'
 		|| transaction.source_wallet.id === setup.filters.walletFilter;
+}
+
+function matchesCategory(transaction: TransactionPreviewDto, setup: TransactionsBrowseSetup): boolean {
+	return setup.filters.categoryFilter === 'all'
+		|| transaction.category === setup.filters.categoryFilter;
+}
+
+function matchesType(transaction: TransactionPreviewDto, setup: TransactionsBrowseSetup): boolean {
+	return setup.filters.typeFilter === 'all'
+		|| transaction.direction === setup.filters.typeFilter;
 }
 
 function compareBy(field: string, first: TransactionPreviewDto, second: TransactionPreviewDto): number {
@@ -37,7 +53,10 @@ const useTransactionsBrowser = (setup: TransactionsBrowseSetup) => {
 
 	const searchResults = useMemo(() => {
 		const filtered = transactions.filter((transaction) => {
-			return matchesSearch(transaction, setup) && matchesWallet(transaction, setup);
+			return matchesSearch(transaction, setup)
+				&& matchesWallet(transaction, setup)
+				&& matchesCategory(transaction, setup)
+				&& matchesType(transaction, setup);
 		});
 
 		const ordered = [...filtered].sort((first, second) => {

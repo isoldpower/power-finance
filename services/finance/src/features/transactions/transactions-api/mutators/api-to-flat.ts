@@ -21,6 +21,7 @@ const transactionPreviewResponseToFlat = (
 		occurred_at: response.occurred_at,
 		created_at: response.created_at,
 		origin: response.origin,
+		scanned: response.scanned,
 		entries: response.entries,
 		source_wallet: toWalletRef(response.wallet),
 	};
@@ -39,6 +40,7 @@ const transactionDetailedResponseToFlat = (
 		occurred_at: response.occurred_at,
 		created_at: response.meta.created_at,
 		origin: response.origin,
+		scanned: Boolean(response.receipt),
 		entries: response.entries,
 		note: response.note,
 		receipt: response.receipt,

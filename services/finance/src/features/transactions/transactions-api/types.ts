@@ -42,6 +42,7 @@ interface TransactionPreview {
 	occurred_at: string
 	created_at: string
 	origin: TransactionOrigin
+	scanned: boolean
 	entries: TransactionEntry[]
 	wallet: TransactionPreviewWallet
 }

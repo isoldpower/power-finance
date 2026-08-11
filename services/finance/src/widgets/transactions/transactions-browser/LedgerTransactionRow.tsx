@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import {
 	AmountDirectionIcon,
 	LedgerRow,
+	RowSelectCheckbox,
 	resolveToneWithDirection,
 	toTransactionMoneyView,
 	toTransactionRowView,
@@ -11,20 +12,24 @@ import { useConvertMoney } from "@feature/localization";
 import { useLocaleCurrency } from "@shared/formatting";
 import { Caption, RowTitle, Text } from "@shared/pure-components/typography";
 
-import type { FC } from "react";
+import type { FC, MouseEventHandler } from "react";
 import type { TransactionPreviewDto } from "@entity/transactions";
 
 
 interface LedgerTransactionRowProps {
 	transaction: TransactionPreviewDto;
 	expanded: boolean;
+	checked: boolean;
 	onToggle: () => void;
+	onCheck: MouseEventHandler<HTMLButtonElement>;
 }
 
 const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 	transaction,
 	expanded,
+	checked,
 	onToggle,
+	onCheck,
 }) => {
 	const { convert } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
@@ -35,6 +40,9 @@ const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 
 	return (
 		<LedgerRow.Container expanded={expanded} onClick={onToggle}>
+			<LedgerRow.SelectCell>
+				<RowSelectCheckbox selected={checked} onClick={onCheck} />
+			</LedgerRow.SelectCell>
 			<LedgerRow.DateCell>
 				<Text as="time" dateTime={row.createdAt} size="xs" className="block">
 					{row.date}
@@ -47,9 +55,16 @@ const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 				<LedgerRow.Icon tone={tone}>
 					<AmountDirectionIcon direction={row.direction} />
 				</LedgerRow.Icon>
-				<RowTitle truncate className="min-w-0">
-					{row.kind}
-				</RowTitle>
+				<div className="min-w-0">
+					<RowTitle truncate>
+						{row.description}
+					</RowTitle>
+					{row.scanned ? (
+						<Text as="div" size="10.5" tone="accent" className="flex items-center gap-1">
+							⛶ scanned receipt
+						</Text>
+					) : null}
+				</div>
 			</LedgerRow.Description>
 			<LedgerRow.Wallet>
 				{row.walletName}

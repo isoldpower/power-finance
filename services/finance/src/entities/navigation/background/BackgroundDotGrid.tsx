@@ -3,8 +3,9 @@ import type { FC } from "react";
 
 const BackgroundDotGrid: FC = () => (
 	<div
+		className="size-full"
 		style={{
-			backgroundImage: 'radial-gradient(rgba(26,34,64,0.05) 1px, transparent 1.4px)',
+			backgroundImage: 'radial-gradient(var(--backdrop-dots) 1px, transparent 1.4px)',
 			backgroundSize: '22px 22px',
 			backgroundAttachment: 'fixed',
 		}}

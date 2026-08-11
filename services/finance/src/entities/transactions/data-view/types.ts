@@ -3,7 +3,7 @@ import type { TransactionDirection, TransactionEntrySide } from "../types.ts";
 
 type ConvertMoney = (
 	money: { amount: number; currency: string }
-) => { amount: number; formatted: string; converted: boolean };
+) => { amount: number; currency: string; formatted: string; converted: boolean };
 
 interface LedgerEntryView {
 	label: string;
@@ -23,6 +23,8 @@ interface TransactionRowView {
 	date: string;
 	time: string;
 	category: string;
+	description: string;
+	scanned: boolean;
 	kind: string;
 	entries: LedgerEntryView[];
 	provenance: string;

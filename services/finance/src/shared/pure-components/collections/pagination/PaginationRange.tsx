@@ -18,7 +18,7 @@ const PaginationRange: FC<PaginationRangeProps> = ({
 
 	return (
 		<MetaText size="11">
-			{rangeStart}–{rangeEnd} of {total}
+			Showing {rangeStart}–{rangeEnd} of {total}
 		</MetaText>
 	);
 }

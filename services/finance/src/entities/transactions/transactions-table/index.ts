@@ -3,7 +3,6 @@ export { FilterChip } from './FilterChip.tsx';
 export { JournalPostingHeader } from './JournalPostingHeader.tsx';
 export { LedgerLineRow } from './LedgerLineRow.tsx';
 export { LedgerRow } from './LedgerRow.tsx';
-export { Pagination } from './Pagination.tsx';
 export { RowSelectCheckbox } from './RowSelectCheckbox.tsx';
 export { TransactionAmountStack } from './TransactionAmountStack.tsx';
 export { TransactionSearchInput } from './TransactionSearchInput.tsx';

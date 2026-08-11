@@ -20,7 +20,7 @@ const CashFlowPeriod: FC<CashFlowPeriodProps> = ({ period }) => {
 	
 	return (
 		<BodyText as="span" size="13">
-			Net · {verbosePeriod}
+			Net {verbosePeriod}
 		</BodyText>
 	);
 }

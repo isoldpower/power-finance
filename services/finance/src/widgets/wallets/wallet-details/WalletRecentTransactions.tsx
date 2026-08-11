@@ -43,9 +43,9 @@ const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ wallet }) => {
 						<AmountDirectionIcon direction={row.direction} />
 					</WalletTransactionIcon>
 					<RecentTransactionMeta
+						description={row.description}
 						category={row.category}
 						date={row.date}
-						time={row.time}
 					/>
 					<MoneyInOriginal
 						currency={row.currency}

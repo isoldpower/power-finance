@@ -7,6 +7,8 @@ interface TransactionsSearch {
 
 interface TransactionsFiltering {
 	walletFilter: string;
+	categoryFilter: string;
+	typeFilter: string;
 }
 
 interface TransactionsOrdering {

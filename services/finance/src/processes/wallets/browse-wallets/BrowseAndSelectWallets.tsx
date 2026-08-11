@@ -3,12 +3,14 @@ import {
 	FilteredWalletsDirectory,
 	PinnableWalletRow,
 	WalletsBrowserPagination,
+	WalletsListHeader,
 } from "@widget/wallets";
 
 
 const BrowseAndSelectWallets = () => {
 	return (
 		<>
+			<WalletsListHeader />
 			<WalletBrowserFilters />
 			<FilteredWalletsDirectory>
 				{(wallet) => (

@@ -17,7 +17,7 @@ const WalletBalanceDetails: FC<WalletBalanceDetailsProps> = ({ wallet }) => {
 	const format = useLocaleCurrency();
 	const { convert } = useConvertMoney();
 	const totalPeriodFlow = useWalletsPeriodFlow(wallet);
-	
+
 	return (
 		<div className="mt-[18px] flex items-end gap-5">
 			<div className="flex flex-col">
@@ -37,13 +37,13 @@ const WalletBalanceDetails: FC<WalletBalanceDetailsProps> = ({ wallet }) => {
 			</div>
 			<div className="flex-1" />
 			<div>
-				<Caption size="11">In</Caption>
+				<Caption size="11">In · {totalPeriodFlow.periodLabel}</Caption>
 				<FinanceMoney tone="pos" size="md">
 					{format(totalPeriodFlow.in, wallet.balance.currency)}
 				</FinanceMoney>
 			</div>
 			<div>
-				<Caption size="11">Out</Caption>
+				<Caption size="11">Out · {totalPeriodFlow.periodLabel}</Caption>
 				<FinanceMoney tone="neg" size="md">
 					{format(totalPeriodFlow.out, wallet.balance.currency)}
 				</FinanceMoney>

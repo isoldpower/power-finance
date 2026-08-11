@@ -17,7 +17,7 @@ const PostingsDirectionIcon: FC<PostingsDirectionIconProps> = ({
 			className={cn(
 				"flex size-7 flex-none items-center justify-center rounded-[7px]", 
 				tone === 'pos' && 'bg-pos-soft text-pos',
-				tone === 'neg' && 'bg-[var(--accent-soft)] text-primary'
+				tone === 'neg' && 'bg-[var(--neg-soft)] text-neg'
 			)}
 			{...props}
 		>

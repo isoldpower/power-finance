@@ -11,6 +11,7 @@ interface TransactionsPaginationContextType {
 	pageCount: number;
 	scrollForward: () => void;
 	scrollBackward: () => void;
+	goToPage: (page: number) => void;
 	paginatedTransactions: TransactionPreviewDto[];
 }
 
@@ -39,6 +40,11 @@ const TransactionsPaginationContextProvider: FC<TransactionsPaginationContextPro
 		setPage((previous) => Math.max(0, previous - 1));
 	}, []);
 
+	const goToPage = useCallback((nextPage: number) => {
+		const totalPagesAvailable = Math.max(1, Math.ceil(total / pageSize));
+		setPage(Math.min(totalPagesAvailable, Math.max(1, nextPage)));
+	}, [pageSize, total]);
+
 	const startIndex = useMemo(() => {
 		return (page - 1) * pageSize;
 	}, [page, pageSize]);
@@ -55,6 +61,7 @@ const TransactionsPaginationContextProvider: FC<TransactionsPaginationContextPro
 	const paginationValues = useMemo<TransactionsPaginationContextType>(() => ({
 		scrollBackward,
 		scrollForward,
+		goToPage,
 		paginatedTransactions,
 		total,
 		pageSize,
@@ -62,7 +69,7 @@ const TransactionsPaginationContextProvider: FC<TransactionsPaginationContextPro
 		pageNumber: page,
 		from: startIndex,
 		to: endIndex,
-	}), [scrollBackward, scrollForward, paginatedTransactions, total, pageSize, pageCount, page, startIndex, endIndex]);
+	}), [scrollBackward, scrollForward, goToPage, paginatedTransactions, total, pageSize, pageCount, page, startIndex, endIndex]);
 
 	return (
 		<TransactionsPaginationContext value={paginationValues}>

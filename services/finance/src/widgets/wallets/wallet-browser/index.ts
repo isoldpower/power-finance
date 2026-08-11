@@ -4,3 +4,4 @@ export { WalletBrowserFilters } from './WalletBrowserFilters.tsx';
 export { WalletBrowserHeader } from './WalletBrowserHeader.tsx';
 export { WalletBrowserProvider } from './WalletBrowserProviders.tsx';
 export { WalletsBrowserPagination } from './WalletsBrowserPagination.tsx';
+export { WalletsListHeader } from './WalletsListHeader.tsx';

@@ -1,3 +1,18 @@
+.finance-theme {
+	--backdrop-dots: rgba(26, 34, 64, 0.05);
+	--backdrop-aurora-accent: rgba(79, 70, 229, 0.11);
+	--backdrop-aurora-violet: rgba(139, 92, 246, 0.075);
+	--backdrop-aurora-teal: rgba(20, 184, 166, 0.06);
+}
+
+.dark .finance-theme,
+.finance-theme.dark {
+	--backdrop-dots: rgba(255, 255, 255, 0.035);
+	--backdrop-aurora-accent: rgba(129, 140, 248, 0.22);
+	--backdrop-aurora-violet: rgba(139, 92, 246, 0.17);
+	--backdrop-aurora-teal: rgba(20, 184, 166, 0.15);
+}
+
 @keyframes auroraDrift {
 	0% { transform: translate3d(0, 0, 0) scale(1.02); opacity: 0.82; }
 	50% { transform: translate3d(-1.6%, 1.1%, 0) scale(1.08); opacity: 1; }

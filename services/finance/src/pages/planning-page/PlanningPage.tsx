@@ -69,7 +69,7 @@ const PlanningPage: FC = () => {
 				</CenteredList>
 			</RevealMotion>
 			<RevealMotion delay={0.1}>
-				<NeedsActionPanel />
+				<NeedsActionPanel descriptor="mirrored from Dashboard" />
 			</RevealMotion>
 			<RevealMotion delay={0.1}>
 				<SidebarColumnsContainer sidebarWidth="380px">

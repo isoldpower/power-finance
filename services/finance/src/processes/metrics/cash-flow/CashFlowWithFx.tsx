@@ -51,7 +51,7 @@ const CashFlowWithFx: FC<CashFlowCardProps> = ({ className }) => {
 						/>
 						<CashFlowBalance
 							isPositive={false}
-							title="Expense"
+							title="Expenses"
 							cashFlow={cashFlow}
 						/>
 					</div>

@@ -1,10 +1,10 @@
 import { useApiContext } from "@app/api";
 import { useResourceQuery } from "@shared/data";
 import { NOTIFICATIONS_CACHE_KEYS } from "../cache-config.ts";
-import { countNotifications } from "../../assistance-api/notifications";
+import { countNotifications } from "../../assistance-api";
 
 import type { UseResourceQueryResult } from "@shared/data";
-import type { NotificationCountResponse } from "../../assistance-api/notifications";
+import type { NotificationCountResponse } from "../../assistance-api";
 
 
 type UseNotificationsCountReturn = UseResourceQueryResult<NotificationCountResponse, number> & {
@@ -13,6 +13,7 @@ type UseNotificationsCountReturn = UseResourceQueryResult<NotificationCountRespo
 
 const useNotificationsCount = (ack = false): UseNotificationsCountReturn => {
 	const apiContext = useApiContext();
+	
 	const query = useResourceQuery<NotificationCountResponse, number>({
 		key: [NOTIFICATIONS_CACHE_KEYS.count, ack],
 		fetch: () => countNotifications({

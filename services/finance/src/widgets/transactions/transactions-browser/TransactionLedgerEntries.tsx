@@ -39,7 +39,7 @@ const TransactionLedgerEntries: FC<LedgerTransactionEntriesProps> = ({ transacti
 				</PostingsDirectionIcon>
 				<div className="min-w-0 flex-1">
 					<RowTitle size="12.5" truncate>
-						{row.walletName}
+						{row.description}
 					</RowTitle>
 					<MetaText as="div" size="9" tracking="0.08em">
 						TRANSACTION · {row.kind}

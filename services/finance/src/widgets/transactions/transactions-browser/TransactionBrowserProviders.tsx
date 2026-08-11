@@ -10,6 +10,8 @@ import {
 	ResetTransactionOnBrowse,
 } from "@feature/transactions";
 
+import { TRANSACTIONS_PAGE_SIZE } from "./config.ts";
+
 import type { FC, ReactNode } from "react";
 
 
@@ -32,7 +34,15 @@ interface TransactionBrowserInternalContextProps {
 }
 
 const TransactionBrowserInternalContext: FC<TransactionBrowserInternalContextProps> = ({ children }) => {
-	const { sortBy, sortDirection, walletFilter, search, caseSensitive } = useTransactionsFiltersContext();
+	const {
+		sortBy,
+		sortDirection,
+		walletFilter,
+		categoryFilter,
+		typeFilter,
+		search,
+		caseSensitive,
+	} = useTransactionsFiltersContext();
 	const { selectedTransactionId, selectTransaction } = useTransactionsSelection(
 		useShallow((state) => ({
 			selectedTransactionId: state.selectedTransactionId,
@@ -41,7 +51,7 @@ const TransactionBrowserInternalContext: FC<TransactionBrowserInternalContextPro
 	);
 	const { searchResults: { transactions, total } } = useTransactionsBrowser({
 		search: { search, caseSensitive },
-		filters: { walletFilter },
+		filters: { walletFilter, categoryFilter, typeFilter },
 		ordering: { field: sortBy, direction: sortDirection },
 	});
 
@@ -57,7 +67,7 @@ const TransactionBrowserInternalContext: FC<TransactionBrowserInternalContextPro
 
 	return (
 		<TransactionsPaginationContextProvider
-			pageSize={5}
+			pageSize={TRANSACTIONS_PAGE_SIZE}
 			total={total}
 			transactions={transactions}
 		>

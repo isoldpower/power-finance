@@ -38,6 +38,7 @@ type FinanceNotificationProps = Omit<React.ComponentProps<"div">, "title"> &
 		subtitle?: React.ReactNode;
 		time?: React.ReactNode;
 		icon?: React.ReactNode;
+		action?: React.ReactNode;
 	};
 
 function FinanceNotification({
@@ -47,6 +48,7 @@ function FinanceNotification({
 	subtitle,
 	time,
 	icon,
+	action,
 	...props
 }: FinanceNotificationProps) {
 	return (
@@ -70,7 +72,12 @@ function FinanceNotification({
 					<div className="mt-0.5 font-numeric text-[11.5px] text-text-2">{subtitle}</div>
 				) : null}
 			</div>
-			{time ? <div className="flex-none text-[11.5px] text-text-3">{time}</div> : null}
+			{time || action ? (
+				<div className="flex flex-none flex-col items-end gap-1.5">
+					{time ? <div className="text-[11.5px] text-text-3">{time}</div> : null}
+					{action}
+				</div>
+			) : null}
 		</div>
 	);
 }

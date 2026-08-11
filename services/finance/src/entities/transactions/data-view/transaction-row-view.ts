@@ -47,6 +47,8 @@ const toTransactionRowView = (
 		date: created.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
 		time: created.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }),
 		category: transaction.category,
+		description: transaction.merchant || KIND_BY_DIRECTION[transaction.direction],
+		scanned: transaction.scanned,
 		kind: KIND_BY_DIRECTION[transaction.direction],
 		entries: transaction.entries.map((entry) => toLedgerEntryView(entry, transaction.currency_code, formatMoney)),
 		provenance: `${ORIGIN_VERBOSE[transaction.origin]} · ${created.toLocaleString()}`,

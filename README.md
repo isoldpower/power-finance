@@ -99,10 +99,11 @@ This is the list of known issues. It means that they are in the priority list to
  	- [ ] Cover with unit tests
 
 Finance TODO:
-- merge common elements in layers;
+- (DONE) merge common elements in layers;
 - (DONE) decide on navigation (move to shared?);
-- drop unused code;
-- adjust according to Claude Design;
+- (DONE) drop unused code;
+- (DONE) adjust according to Claude Design;
+-----
 - implement better loading states;
 - review API data fetching (by-layer fetching patterns);
 - review each file manually one more time;

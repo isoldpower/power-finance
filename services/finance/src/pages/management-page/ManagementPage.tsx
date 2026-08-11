@@ -10,6 +10,8 @@ import {
 	TransactionBrowserFilters,
 	TransactionsBrowserHeader,
 	TransactionsBrowserPagination,
+	TransactionsBulkActions,
+	TransactionsTableColumns,
 } from "@widget/transactions";
 import { WalletBrowserProvider, WalletBrowserHeader } from "@widget/wallets";
 import { BrowseAccountsContextProvider } from "@feature/accounts";
@@ -64,7 +66,7 @@ const ManagementPage: FC = () => {
 						<LedgerBalanceBand />
 					</RevealMotion>
 					<RevealMotion delay={0.18}>
-						<WalletBrowserHeader createWalletPanel={managementSlides.createWallet} total={5} />
+						<WalletBrowserHeader createWalletPanel={managementSlides.createWallet} />
 						<SidebarColumnsContainer sidebar="start" sidebarWidth="340px" from="md">
 							<WalletBrowserProvider>
 								<FinanceCard className="overflow-hidden">
@@ -80,8 +82,10 @@ const ManagementPage: FC = () => {
 					<RevealMotion delay={0.24}>
 						<TransactionBrowserProvider>
 							<TransactionsBrowserHeader createTransactionPanel={managementSlides.createTransaction} />
-							<FinanceCard className="overflow-hidden">
+							<FinanceCard className="overflow-visible">
 								<TransactionBrowserFilters />
+								<TransactionsBulkActions />
+								<TransactionsTableColumns />
 								<BrowseTransactionEntries>
 									{(transaction) => (
 										<LedgerBasedTransaction transaction={transaction} />

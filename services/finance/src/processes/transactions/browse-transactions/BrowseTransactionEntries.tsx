@@ -1,5 +1,5 @@
-import { Caption } from "@shared/pure-components/typography";
 import { List } from "@shared/pure-components/collections";
+import { TransactionsEmptyState } from "@entity/transactions";
 import { useTransactionsPaginationContext } from "@feature/transactions";
 import { ProtectBrowseSpace } from "@feature/wallets";
 
@@ -21,9 +21,7 @@ const BrowseTransactionEntries: FC<BrowseTransactionEntriesProps> = ({
 
 	if (paginatedTransactions.length === 0) {
 		return (
-			<Caption size="13" className="px-4 py-[26px] text-center">
-				No transactions match your filters.
-			</Caption>
+			<TransactionsEmptyState />
 		);
 	}
 

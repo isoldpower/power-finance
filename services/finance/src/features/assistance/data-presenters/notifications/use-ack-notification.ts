@@ -1,25 +1,33 @@
-// @reserved-api - wired to the API and intentionally not consumed yet; awaiting post-MVP flows. NOT dead code: do not delete, do not drop from barrels.
 import { useApiContext } from "@app/api";
 import { useResourceMutation } from "@shared/data";
-import { ackNotification } from "../../assistance-api/notifications";
+import { ackNotification } from "../../assistance-api";
 import { NOTIFICATIONS_CACHE_KEYS } from "../cache-config.ts";
-import type { NotificationAckResponse, ListNotificationsResponse } from "../../assistance-api/notifications";
+
+import type { NotificationAckResponse, ListNotificationsResponse } from "../../assistance-api";
 
 
-const useAckNotification = () => {
+interface AckNotificationVariables {
+	ack: boolean;
+}
+
+const useAckNotification = (id: string) => {
 	const apiContext = useApiContext();
 
-	return useResourceMutation<string, NotificationAckResponse, ListNotificationsResponse>({
+	return useResourceMutation<AckNotificationVariables, NotificationAckResponse, ListNotificationsResponse>({
 		key: [NOTIFICATIONS_CACHE_KEYS.ack],
-		mutate: (id) => ackNotification({ handler: apiContext.notificationServers.rest, id }),
+		mutate: ({ ack }) => ackNotification({ 
+			handler: apiContext.notificationServers.rest,
+			id,
+			ack,
+		}),
 		invalidates: [[NOTIFICATIONS_CACHE_KEYS.count]],
 		optimistic: {
 			key: [NOTIFICATIONS_CACHE_KEYS.list],
-			apply: (previous, id) => previous
+			apply: (previous, { ack }) => previous
 				? {
 					...previous,
 					data: previous.data.map((notification) => notification.id === id
-						? { ...notification, ack: true }
+						? { ...notification, ack }
 						: notification),
 				}
 				: previous,
@@ -28,3 +36,4 @@ const useAckNotification = () => {
 };
 
 export { useAckNotification };
+export type { AckNotificationVariables };

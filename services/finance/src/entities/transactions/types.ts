@@ -33,6 +33,7 @@ interface TransactionPreviewDto {
 	occurred_at: string;
 	created_at: string;
 	origin: TransactionOrigin;
+	scanned: boolean;
 	entries: TransactionEntryDto[];
 	source_wallet: TransactionWalletRef;
 }

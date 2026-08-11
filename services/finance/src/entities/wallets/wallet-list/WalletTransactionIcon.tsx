@@ -13,7 +13,7 @@ const WalletTransactionIcon: FC<WalletTxnIconProps> = ({ children, tone }) => (
 		className={cn(
 			`flex size-[30px] flex-none items-center justify-center rounded-[8px]`,
 			tone === 'pos' && 'bg-pos-soft text-pos',
-			tone === 'neg' && 'bg-[var(--accent-soft)] text-primary',
+			tone === 'neg' && 'bg-[var(--neg-soft)] text-neg',
 		)}
 	>
 		{children}
