@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import { cn } from "@internal/ui-library";
-import { CategoryHeader, CompositionBar, CategorySegmentBlock, categoryColor } from "@entity/accounts";
-import { calculateAccountsShare, useAccountsConvertion, useAccountsBrowser } from "@feature/accounts";
+import { CategoryHeader, CompositionBar, CategorySegmentBlock, categoryColor, toAccountSegments } from "@entity/accounts";
+import { useAccountsConvertion, useAccountsBrowser } from "@feature/accounts";
 
 import type { FC } from "react";
-import type { MockAccountCategory } from "@feature/accounts";
+import type { AccountCategoryView } from "@entity/accounts";
 
 
 interface CategoryRowProps {
-	categoryEntry: MockAccountCategory;
+	categoryEntry: AccountCategoryView;
 }
 
 const CategoryRow: FC<CategoryRowProps> = ({ categoryEntry }) => {
@@ -19,7 +19,7 @@ const CategoryRow: FC<CategoryRowProps> = ({ categoryEntry }) => {
 	const active = categoryEntry.id === category.id;
 	const selectedAccountId = account.id;
 	const totalFormatted = convertToUserCurrency(categoryEntry.totalUsd);
-	const segments = useMemo(() => calculateAccountsShare(categoryEntry.accounts), [categoryEntry.accounts]);
+	const segments = useMemo(() => toAccountSegments(categoryEntry.accounts), [categoryEntry.accounts]);
 
 	return (
 		<div

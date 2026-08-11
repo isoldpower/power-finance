@@ -8,7 +8,8 @@ import {
 	toTransactionRowView,
 } from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
-import { useLocaleCurrency } from "@shared/utils";
+import { useLocaleCurrency } from "@shared/formatting";
+import { Caption, RowTitle, Text } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 import type { TransactionPreviewDto } from "@entity/transactions";
@@ -35,20 +36,20 @@ const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 	return (
 		<LedgerRow.Container expanded={expanded} onClick={onToggle}>
 			<LedgerRow.DateCell>
-				<LedgerRow.Date>
+				<Text as="time" dateTime={row.createdAt} size="xs" className="block">
 					{row.date}
-				</LedgerRow.Date>
-				<LedgerRow.Time>
+				</Text>
+				<Caption as="time" dateTime={row.createdAt} size="10" className="block">
 					{row.time}
-				</LedgerRow.Time>
+				</Caption>
 			</LedgerRow.DateCell>
 			<LedgerRow.Description>
 				<LedgerRow.Icon tone={tone}>
 					<AmountDirectionIcon direction={row.direction} />
 				</LedgerRow.Icon>
-				<LedgerRow.Title>
+				<RowTitle truncate className="min-w-0">
 					{row.kind}
-				</LedgerRow.Title>
+				</RowTitle>
 			</LedgerRow.Description>
 			<LedgerRow.Wallet>
 				{row.walletName}

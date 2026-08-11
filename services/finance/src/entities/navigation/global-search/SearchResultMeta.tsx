@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from "react";
+import { MetaText } from "@shared/pure-components/typography";
 
 
 interface SearchResultMetaProps {
@@ -6,9 +7,9 @@ interface SearchResultMetaProps {
 }
 
 const SearchResultMeta: FC<SearchResultMetaProps> = ({ children }) => (
-	<span className="ml-auto truncate pl-2 font-numeric text-[11px] text-text-3">
+	<MetaText size="11" truncate className="ml-auto pl-2">
 		{children}
-	</span>
+	</MetaText>
 );
 
 SearchResultMeta.displayName = 'SearchResultMeta';

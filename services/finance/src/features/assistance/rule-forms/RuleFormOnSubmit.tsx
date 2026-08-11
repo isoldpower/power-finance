@@ -5,7 +5,7 @@ import { useCreateAutomation } from "../data-presenters";
 import type { FC, FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
 import type { RuleFormSchema } from "./rule-form-schema.ts";
-import type { AutomationCreateResponse } from "../automations-api";
+import type { AutomationCreateResponse } from "../assistance-api/automations";
 
 
 interface RuleFormOnSubmitProps {

@@ -2,10 +2,10 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
-import { getCurrencies } from "@feature/localization";
+import { getCurrencies } from "../currencies-api/methods/get-currencies.ts";
 import { CURRENCY_CACHE_KEYS } from "./cache-config.ts";
 import type { CurrencyMeta } from "@entity/localization";
-import type { FxCurrency } from "@feature/localization";
+import type { FxCurrency } from "../currencies-api/types.ts";
 
 const CATALOG_STALE_TIME = 24 * 60 * 60 * 1000;
 

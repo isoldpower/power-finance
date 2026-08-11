@@ -7,9 +7,10 @@ import {
 	FinanceNotification,
 } from "@internal/ui-library";
 
-import { RouteLink } from "@feature/navigation";
+import { RouteLink } from "@shared/routing";
 import { useNotifications, useNotificationsCount, NotificationsEmptyGuard } from "@feature/assistance";
 import { NotificationBell, NotificationEmpty, NotificationList } from "@entity/assistance";
+import { CardTitle, textClass } from "@shared/pure-components/typography";
 
 
 const NavbarNotifications: FC = () => {
@@ -25,10 +26,10 @@ const NavbarNotifications: FC = () => {
 			</FinanceMenuTrigger>
 			<FinanceMenuContent className="w-[340px] p-0">
 				<div className="flex items-center justify-between border-b border-border px-4 py-3">
-					<span className="text-sm font-semibold">
+					<CardTitle>
 						Notifications
-					</span>
-					<RouteLink to="settings" className="text-xs font-semibold text-primary">
+					</CardTitle>
+					<RouteLink to="settings" className={textClass({ size: 'xs', weight: 'semibold', tone: 'accent' })}>
 						Manage
 					</RouteLink>
 				</div>

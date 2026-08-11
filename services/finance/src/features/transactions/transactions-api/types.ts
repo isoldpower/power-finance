@@ -97,3 +97,23 @@ export type { TransactionDirection, TransactionOrigin, TransactionEntry, Transac
 export type { TransactionReceipt, TransactionMeta, TransactionPreviewWallet };
 export type { TransactionPreview, TransactionDetailed, TransactionMinimalPayload, TransactionPatchFields };
 export type { TransactionChainItem, TransactionChainPayload, TransactionChainResult };
+
+interface CategoryDto {
+	id: string;
+	label: string;
+}
+
+interface ReceiptScanFieldDto {
+	label: string;
+	value: string;
+	ai: boolean;
+}
+
+interface ReceiptScanDto {
+	amount: string;
+	currency: string;
+	confidence: number;
+	fields: ReceiptScanFieldDto[];
+}
+
+export type { CategoryDto, ReceiptScanFieldDto, ReceiptScanDto };

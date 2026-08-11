@@ -1,5 +1,5 @@
 import { ProtectBrowseSpace, ProtectEmptyBrowse, useWalletsPaginationContext } from "@feature/wallets";
-import { List } from "@shared/components";
+import { List } from "@shared/pure-components/collections";
 
 import type { Wallet } from "@entity/wallets";
 import type { FC, ReactNode } from "react";

@@ -1,5 +1,6 @@
 import { ShowSavingRateTooltip } from "@feature/metrics";
-import { MetricCardDescriptor, MetricCardIntext } from "@entity/metrics";
+import { MetricCardDescriptor } from "@entity/metrics";
+import { BodyText } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 import type { CashFlowInsight } from "@feature/metrics";
@@ -16,9 +17,9 @@ const CashFlowSavingRate: FC<NetWorthSavingRateProps> = ({
 		<ShowSavingRateTooltip cashFlow={cashFlow}>
 			<MetricCardDescriptor>
 				Savings rate
-				<MetricCardIntext tone={cashFlow.savingsRate >= 0 ? 'positive' : 'negative'}>
+				<BodyText as="span" tone={cashFlow.savingsRate >= 0 ? 'positive' : 'negative'}>
 					&nbsp;{Math.round(cashFlow.savingsRate * 100)}%
-				</MetricCardIntext>
+				</BodyText>
 			</MetricCardDescriptor>
 		</ShowSavingRateTooltip>
 	);

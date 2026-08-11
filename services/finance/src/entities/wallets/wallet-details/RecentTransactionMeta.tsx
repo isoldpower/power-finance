@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { Caption, RowTitle } from "@shared/pure-components/typography";
 
 interface RecentTransactionMetaProps {
 	category: string;
@@ -12,12 +13,12 @@ const RecentTransactionMeta: FC<RecentTransactionMetaProps> = ({
 	time,
 }) => (
 	<div className="min-w-0 flex-1">
-		<div className="truncate text-[13px] font-semibold">
+		<RowTitle size="13" truncate>
 			{category}
-		</div>
-		<div className="text-[11px] text-text-3">
+		</RowTitle>
+		<Caption size="11">
 			{date} · {time}
-		</div>
+		</Caption>
 	</div>
 );
 

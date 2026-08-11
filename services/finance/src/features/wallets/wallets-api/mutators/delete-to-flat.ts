@@ -1,4 +1,4 @@
-import { WalletDeleteResponse } from "../rest-client/types.ts";
+import { WalletDeleteResponse } from "../rest-client";
 
 
 interface WalletDeleteFlat {

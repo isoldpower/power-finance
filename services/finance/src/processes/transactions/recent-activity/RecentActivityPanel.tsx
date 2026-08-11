@@ -2,6 +2,7 @@ import { cn, FinanceCard } from "@internal/ui-library";
 import { ActivityFeed } from "@widget/transactions";
 import { useRecentActivity, RecentActivityFx } from "@feature/transactions";
 import { ActivityFeedHeader, ActivityFeedSkeleton } from "@entity/transactions";
+import { CardTitle } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 
@@ -16,9 +17,9 @@ const RecentActivityPanel: FC<RecentActivityPanelProps> = ({ className }) => {
 	return (
 		<FinanceCard className={cn("overflow-hidden", className)}>
 			<ActivityFeedHeader.Container>
-				<ActivityFeedHeader.Title>
+				<CardTitle as="h2">
 					Recent activity
-				</ActivityFeedHeader.Title>
+				</CardTitle>
 				<ActivityFeedHeader.Link to="management">
 					View all in Management →
 				</ActivityFeedHeader.Link>

@@ -1,5 +1,5 @@
 import { walletDeletedToFlat } from "../mutators/delete-to-flat.ts";
-import type { IWalletsRESTApiClient } from "../rest-client/types.ts";
+import type { IWalletsRESTApiClient } from "../rest-client";
 
 interface DeleteWalletRequest {
 	handler: Pick<IWalletsRESTApiClient, 'delete'>

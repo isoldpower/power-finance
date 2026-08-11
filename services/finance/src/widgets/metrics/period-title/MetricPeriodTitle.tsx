@@ -1,4 +1,5 @@
-import { MetricCardTitle, rangeCodeToRelativeVerbose, rangeVerbose } from "@entity/metrics";
+import { rangeCodeToRelativeVerbose, rangeVerbose } from "@entity/metrics";
+import { Overline } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 
@@ -13,9 +14,9 @@ const MetricPeriodTitle: FC<MetricPeriodTitleProps> = ({ label, period, relative
 	const periodLabel = relative ? rangeCodeToRelativeVerbose(period) : rangeVerbose(period);
 
 	return (
-		<MetricCardTitle>
+		<Overline as="h2" tracking="0.14em">
 			{label} · {periodLabel}
-		</MetricCardTitle>
+		</Overline>
 	);
 };
 

@@ -1,6 +1,8 @@
 import type { FC, ReactNode } from "react";
 import { cn } from "@internal/ui-library";
 
+import { Text } from "@shared/pure-components/typography";
+
 
 interface PeriodTabsContainerProps {
 	children: ReactNode;
@@ -8,12 +10,16 @@ interface PeriodTabsContainerProps {
 
 const PeriodTabsContainer: FC<PeriodTabsContainerProps> = ({ children }) => {
 	return (
-		<div className={cn(
-			"hidden overflow-hidden rounded-[var(--radius-sm)] border border-border-strong",
-			"text-[12.5px] font-semibold sm:flex",
-		)}>
+		<Text
+			as="div"
+			size="12.5"
+			weight="semibold"
+			className={cn(
+				"hidden overflow-hidden rounded-[var(--radius-sm)] border border-border-strong sm:flex",
+			)}
+		>
 			{children}
-		</div>
+		</Text>
 	);
 };
 

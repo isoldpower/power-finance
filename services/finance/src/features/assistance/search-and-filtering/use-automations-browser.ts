@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useAutomations } from "../data-presenters";
 
 import type { AutomationsBrowseSetup } from "./types.ts";
-import type { AutomationRule } from "../automations-api";
+import type { AutomationRule } from "../assistance-api/automations";
 
 
 function matchesSearch(rule: AutomationRule, search: string): boolean {

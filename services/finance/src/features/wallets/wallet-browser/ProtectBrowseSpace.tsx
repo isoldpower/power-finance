@@ -1,4 +1,5 @@
 import type { BaseHTMLAttributes, FC } from "react";
+import { Caption } from "@shared/pure-components/typography";
 
 
 interface ProtectBrowseSpaceProps extends Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> {
@@ -13,9 +14,9 @@ const ProtectBrowseSpace: FC<ProtectBrowseSpaceProps> = ({
 	...props
 }) => {
 	return resources.length < pageSize && (
-		<div className="border-t border-border px-4 py-3 text-center text-[11px] text-text-3" {...props}>
+		<Caption size="11" className="border-t border-border px-4 py-3 text-center" {...props}>
 			{children}
-		</div>
+		</Caption>
 	);
 }
 

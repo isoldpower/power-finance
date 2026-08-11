@@ -6,6 +6,7 @@ import {
 	resolveSecondaryLabel,
 	resolvePrimaryLabel
 } from "@entity/assistance";
+import { RowTitle } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 import type { Action } from "@feature/assistance";
@@ -30,9 +31,9 @@ const ActionsListWidget: FC<ActionsListWidgetProps> = ({
 						<ActionKindIcon kind={action.kind} />
 					</NeedsActionRow.Icon>
 					<div className="min-w-0 flex-1">
-						<NeedsActionRow.Title>
+						<RowTitle>
 							{action.title}
-						</NeedsActionRow.Title>
+						</RowTitle>
 						<NeedsActionRow.Subtitle>
 							{action.subtitle}
 						</NeedsActionRow.Subtitle>

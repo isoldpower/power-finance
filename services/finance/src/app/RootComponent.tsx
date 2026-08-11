@@ -4,7 +4,7 @@ import { AuthGuard, AuthProvider, getIsEmbedded, useIsClerkProvided, ClerkProvid
 import { useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
 
 import { ApiProvider } from "./api";
-import { checkEnvVariables } from "./env/checkEnv.ts";
+import { checkEnvVariables } from "./env/check-env.ts";
 import { GlobalLayout } from "./layouts/GlobalLayout.tsx";
 import type { FC, ReactNode } from "react";
 

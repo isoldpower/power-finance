@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import type { FC } from "react";
 
-import { DateLabel } from "@entity/metrics";
 import { useLongDateLabel } from "@feature/localization";
+import { Overline } from "@shared/pure-components/typography";
 
 
 const LongCurrentDateLabel: FC = () => {
@@ -12,9 +12,9 @@ const LongCurrentDateLabel: FC = () => {
 	const dateLabel = useLongDateLabel(nowDate);
 
 	return (
-		<DateLabel>
+		<Overline as="span">
 			{dateLabel}
-		</DateLabel>
+		</Overline>
 	);
 };
 

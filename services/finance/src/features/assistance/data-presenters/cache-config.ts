@@ -24,3 +24,7 @@ export {
 	AUTOMATIONS_CACHE_KEYS,
 	NOTIFICATIONS_CACHE_KEYS,
 };
+
+export const ASSISTANT_CACHE_KEYS = {
+	content: 'assistantContent',
+};

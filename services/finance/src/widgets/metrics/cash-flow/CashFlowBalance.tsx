@@ -4,6 +4,7 @@ import { useConvertedCashFlow } from "@feature/metrics";
 import { useMemo } from "react";
 
 import type { CashFlowInsight } from "@feature/metrics";
+import { Text, textClass } from "@shared/pure-components/typography";
 
 
 interface CashFlowBalanceProps {
@@ -24,18 +25,18 @@ const CashFlowBalance = ({
 	
 	return (
 		<div className='flex flex-col'>
-			<div className="flex items-center gap-1.5 text-xs text-text-2">
+			<Text as="div" size="xs" tone="muted" className="flex items-center gap-1.5">
 				<span className={cn(
 					"size-[7px] rounded-[2px]",
 					isPositive ? "bg-pos" : "bg-neg",
 				)} />
 				{title}
-			</div>
+			</Text>
 			<AnimatedMoney
 				{...relatedFlow}
 				tone={isPositive ? "pos" : "neg"}
 				size="xl"
-				className="mt-1 block text-[26px]"
+				className={cn(textClass({ size: '26' }), "mt-1 block")}
 			/>
 		</div>
 	);

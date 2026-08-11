@@ -1,15 +1,16 @@
 import { createContext, useMemo } from 'react';
 
 import { ApiQueryReactions } from "./query-reactions";
-import { useWalletsApi } from "./servers/useWalletsApi.ts";
-import { useTransactionsApi } from "./servers/useTransactionsApi.ts";
-import { useWebhooksApi } from "./servers/useWebhooksApi.ts";
-import { useSummaryApi } from "./servers/useSummaryApi.ts";
-import { useActionsApi } from "./servers/useActionsApi.ts";
-import { useAutomationsApi } from "./servers/useAutomationsApi.ts";
-import { useNotificationsApi } from "./servers/useNotificationsApi.ts";
-import { useFxApi } from "./servers/useFxApi.ts";
-import { useAccountsApi } from "./servers/useAccountsApi.ts";
+import { useWalletsApi } from "./servers/use-wallets-api.ts";
+import { useTransactionsApi } from "./servers/use-transactions-api.ts";
+import { useWebhooksApi } from "./servers/use-webhooks-api.ts";
+import { useSummaryApi } from "./servers/use-summary-api.ts";
+import { useActionsApi } from "./servers/use-actions-api.ts";
+import { useAutomationsApi } from "./servers/use-automations-api.ts";
+import { useNotificationsApi } from "./servers/use-notifications-api.ts";
+import { useAssistantApi } from "./servers/use-assistant-api.ts";
+import { useFxApi } from "./servers/use-fx-api.ts";
+import { useAccountsApi } from "./servers/use-accounts-api.ts";
 import type { FC } from 'react';
 import type { IWalletsRESTApiClient } from "@feature/wallets";
 import type { ITransactionsRESTApiClient } from "@feature/transactions";
@@ -18,7 +19,7 @@ import type { IWebhookRESTApiClient } from "@feature/configuration";
 import type { ISummaryRESTApiClient } from "@feature/metrics";
 import type { INotificationsRESTApiClient } from "@feature/assistance";
 import type { IFxRESTApiClient } from "@feature/localization";
-import type { IActionsRESTApiClient, IAutomationsRESTApiClient } from "@feature/assistance";
+import type { IActionsRESTApiClient, IAutomationsRESTApiClient, IAssistantRESTApiClient } from "@feature/assistance";
 
 
 interface ApiContextType {
@@ -46,6 +47,9 @@ interface ApiContextType {
 	notificationServers: {
 		readonly rest: INotificationsRESTApiClient
 	},
+	assistantServers: {
+		readonly rest: IAssistantRESTApiClient
+	},
 	fxServers: {
 		readonly rest: IFxRESTApiClient
 	}
@@ -70,6 +74,7 @@ const ApiProvider: FC<ApiProviderProps> = ({
 	const actionServers = useActionsApi(envVariables.CLIENT_API_BASE_URL);
 	const automationServers = useAutomationsApi(envVariables.CLIENT_API_BASE_URL);
 	const notificationServers = useNotificationsApi(envVariables.CLIENT_API_BASE_URL);
+	const assistantServers = useAssistantApi(envVariables.CLIENT_API_BASE_URL);
 	const fxServers = useFxApi(envVariables.CLIENT_API_BASE_URL);
 
 	const contextValue = useMemo<ApiContextType>(() => ({
@@ -79,6 +84,7 @@ const ApiProvider: FC<ApiProviderProps> = ({
 		webhookServers,
 		summaryServers,
 		actionServers,
+		assistantServers,
 		automationServers,
 		notificationServers,
 		fxServers

@@ -1,7 +1,8 @@
-import { goalProgressPercent, goalRemainingAmount } from "../goal-progress.ts";
+import { goalProgressPercent, goalRemainingAmount } from "./goal-progress.ts";
 
 import type { GoalWallet } from "../types.ts";
-import type { FormatMoney, GoalView } from "./types.ts";
+import type { GoalView } from "./types.ts";
+import type { FormatMoney } from "@shared/formatting";
 
 
 const toEtaLabel = (remaining: number, monthlyAmount: number, percent: number): string => {
@@ -29,8 +30,4 @@ const toGoalView = (wallet: GoalWallet, formatMoney: FormatMoney): GoalView => {
 	};
 };
 
-const toGoalViews = (wallets: GoalWallet[], formatMoney: FormatMoney): GoalView[] => {
-	return wallets.map((wallet) => toGoalView(wallet, formatMoney));
-};
-
-export { toGoalView, toGoalViews };
+export { toGoalView };

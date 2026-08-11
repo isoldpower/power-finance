@@ -8,3 +8,7 @@ interface WebhookEndpoint {
 }
 
 export type { WebhookEndpoint };
+
+type SettingsTab = 'preferences' | 'webhooks';
+
+export type { SettingsTab };

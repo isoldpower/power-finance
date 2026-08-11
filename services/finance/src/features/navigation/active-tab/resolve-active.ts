@@ -1,4 +1,4 @@
-import type { TabKey } from "./types.ts";
+import type { TabKey } from "@entity/navigation";
 
 
 const resolveActiveTab = (

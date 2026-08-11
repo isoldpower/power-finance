@@ -4,9 +4,9 @@ import { GoalFormField } from "./GoalFormField.tsx";
 import { GoalFormNameRow } from "./GoalFormNameRow.tsx";
 import { GoalFormAmountsGrid } from "./GoalFormAmountsGrid.tsx";
 import { GoalFormFieldError } from "./GoalFormFieldError.tsx";
-import { GoalFormEmojiGrid } from "./GoalFormEmojiGrid.tsx";
-import { GoalEmojiTrigger } from "./GoalEmojiTrigger.tsx";
-import { GoalEmojiOption } from "./GoalEmojiOption.tsx";
+import { GoalFormIconGrid } from "./GoalFormIconGrid.tsx";
+import { GoalIconTrigger } from "./GoalIconTrigger.tsx";
+import { GoalIconOption } from "./GoalIconOption.tsx";
 
 
 function GoalForm() {
@@ -20,8 +20,8 @@ GoalForm.Field = GoalFormField;
 GoalForm.NameRow = GoalFormNameRow;
 GoalForm.AmountsGrid = GoalFormAmountsGrid;
 GoalForm.FieldError = GoalFormFieldError;
-GoalForm.EmojiGrid = GoalFormEmojiGrid;
-GoalForm.EmojiTrigger = GoalEmojiTrigger;
-GoalForm.EmojiOption = GoalEmojiOption;
+GoalForm.IconGrid = GoalFormIconGrid;
+GoalForm.IconTrigger = GoalIconTrigger;
+GoalForm.IconOption = GoalIconOption;
 
 export { GoalForm };

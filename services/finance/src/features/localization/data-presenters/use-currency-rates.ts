@@ -4,9 +4,9 @@ import type { UseQueryResult } from "@tanstack/react-query";
 import { useSettingsContext } from "@internal/shared";
 
 import { useApiContext } from "@app/api";
-import { getRates } from "@feature/localization";
+import { getRates } from "../currencies-api/methods/get-rates.ts";
 import { CURRENCY_CACHE_KEYS } from "./cache-config.ts";
-import type { FxRates } from "@feature/localization";
+import type { FxRates } from "../currencies-api/types.ts";
 
 type UseCurrencyRatesReturn = UseQueryResult<FxRates> & {
 	base: string;

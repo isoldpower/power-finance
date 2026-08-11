@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import type { TransactionPreviewDto } from "@entity/transactions";
 
-import { TransactionsBrowseSetup } from "@feature/transactions/search-and-filtering/types.ts";
+import type { TransactionsBrowseSetup } from "./types.ts";
 import { useTransactionsList } from "../data-presenters";
 
 

@@ -8,7 +8,7 @@ import {
 	NavbarNotifications,
 	NavbarSearch
 } from "@widget/navigation";
-import { RouteLink } from "@feature/navigation";
+import { RouteLink } from "@shared/routing";
 import { BrandIcon, HeaderNavbar } from "@entity/navigation";
 
 

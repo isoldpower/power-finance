@@ -4,4 +4,5 @@ export const CACHE_KEYS = {
 	create: 'createWebhook',
 	delete: 'deleteWebhook',
 	update: 'updateWebhook',
+	rotate: 'rotateWebhookSecret',
 } as const;

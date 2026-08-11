@@ -1,5 +1,6 @@
-import { AssistantOverlay, SparkleIcon } from "@entity/assistance";
-import { AttachToLayout } from "@shared/components";
+import { SparkleIcon } from "@shared/pure-components/icons";
+import { AssistantOverlay } from "@entity/assistance";
+import { AttachToLayout } from "@shared/pure-components/layout";
 
 import type { FC } from "react";
 

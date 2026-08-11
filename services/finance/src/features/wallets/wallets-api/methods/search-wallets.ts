@@ -1,7 +1,7 @@
 import type {
 	IWalletsRESTApiClient,
 	WalletsSearchRequest,
-} from "../rest-client/types.ts";
+} from "../rest-client";
 import type { Wallet } from "@entity/wallets";
 
 

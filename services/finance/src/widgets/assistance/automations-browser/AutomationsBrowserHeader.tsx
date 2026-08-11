@@ -1,5 +1,7 @@
 import { AutomationsToolbar } from "@entity/assistance";
-import { AiBadge, SpaceOccupant } from "@shared/components";
+import { AiBadge } from "@shared/pure-components/badges";
+import { CardTitle } from "@shared/pure-components/typography";
+import { SpaceOccupant } from "@shared/pure-components/layout";
 
 import type { FC, ReactNode } from "react";
 
@@ -11,9 +13,9 @@ interface AutomationsBrowserHeaderProps {
 const AutomationsBrowserHeader: FC<AutomationsBrowserHeaderProps> = ({ children }) => {
 	return (
 		<AutomationsToolbar.Container>
-			<AutomationsToolbar.Title>
+			<CardTitle as="h2">
 				Automations &amp; rules
-			</AutomationsToolbar.Title>
+			</CardTitle>
 			<AiBadge />
 			<SpaceOccupant />
 			{children}

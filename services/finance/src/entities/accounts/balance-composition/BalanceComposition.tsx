@@ -1,5 +1,4 @@
 import { BalanceCompositionContainer } from "./BalanceCompositionContainer.tsx";
-import { BalanceCompositionTitle } from "./BalanceCompositionTitle.tsx";
 import { BalanceCompositionFormula } from "./BalanceCompositionFormula.tsx";
 import { BalanceCompositionHint } from "./BalanceCompositionHint.tsx";
 
@@ -10,7 +9,6 @@ function BalanceComposition() {
 
 BalanceComposition.displayName = 'BalanceComposition';
 BalanceComposition.Container = BalanceCompositionContainer;
-BalanceComposition.Title = BalanceCompositionTitle;
 BalanceComposition.Formula = BalanceCompositionFormula;
 BalanceComposition.Hint = BalanceCompositionHint;
 

@@ -1,4 +1,4 @@
-import type {NavTab} from "@feature/navigation";
+import type { NavTab } from "@entity/navigation";
 
 const NAVIGATION_TABS: NavTab[] = [
 	{ key: 'dashboard', label: 'Dashboard' },

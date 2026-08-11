@@ -10,7 +10,7 @@ import type {FC, PropsWithChildren} from "react";
 
 import type { WebhookEndpoint } from "@entity/configuration";
 import { DeleteWebhookForm } from "@widget/configuration";
-import { useDisclosure } from "@shared/interactions";
+import { useDisclosure } from "@shared/overlays";
 
 
 type DeleteWebhookModalProps = PropsWithChildren<{

@@ -1,12 +1,14 @@
 import { useCallback } from "react";
 
 import { NEW_WALLET_GRADIENT } from "@entity/wallets";
-import { useWalletMethods, useWalletsListMethods } from "../data-presenters";
+import { useWalletsListMethods } from "../data-presenters";
+import { useWalletMethods } from "../data-presenters";
+import { useWalletKinds } from "../data-presenters";
 import { buildWalletPayload } from "./wallet-fields.ts";
 
 import type { FC, FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
-import type { PanelWallet } from "../types.ts";
+import type { PanelWallet } from "@entity/wallets";
 import type { CreateWalletResponse, UpdateWalletResponse } from "../wallets-api";
 import type { WalletFormSchema } from "./wallet-form-schema.ts";
 
@@ -32,11 +34,12 @@ const WalletFormOnSubmit: FC<WalletFormOnSubmitProps> = ({
 }) => {
 	const { meta } = useWalletsListMethods();
 	const { updateWallet } = useWalletMethods(wallet?.id ?? '');
+	const { kinds } = useWalletKinds();
 
 	const onSubmit = useCallback(async (data: WalletFormSchema) => {
 		if (wallet) {
 			return await updateWallet(
-				buildWalletPayload(data, wallet.gradient, wallet.balance.amount)
+				buildWalletPayload(data, wallet.gradient, wallet.balance.amount, kinds)
 			);
 		}
 
@@ -45,9 +48,10 @@ const WalletFormOnSubmit: FC<WalletFormOnSubmitProps> = ({
 				data,
 				NEW_WALLET_GRADIENT,
 				parseFloat(data.balance) || 0,
+				kinds,
 			),
 		});
-	}, [wallet, updateWallet, meta]);
+	}, [wallet, updateWallet, meta, kinds]);
 
 	const wrappedOnSubmit = useCallback(async (data: WalletFormSchema) => {
 		if (onBeforeEdit) onBeforeEdit();

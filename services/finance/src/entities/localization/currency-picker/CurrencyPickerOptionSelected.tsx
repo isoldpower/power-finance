@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { Text } from "@shared/pure-components/typography";
 
 
 interface CurrencyPickerOptionSelectedProps {
@@ -9,9 +10,9 @@ const CurrencyPickerOptionSelected: FC<CurrencyPickerOptionSelectedProps> = ({
 	children,
 }) => {
 	return (
-		<span className="ml-auto w-3 text-center font-semibold text-primary">
+		<Text weight="semibold" tone="accent" className="ml-auto w-3 text-center">
 			{children ? '✓' : ''}
-		</span>
+		</Text>
 	);
 }
 

@@ -6,6 +6,7 @@ export const WALLETS_CACHE_KEYS = {
 	replace: 'replaceWallet',
 	create: 'createWallet',
 	search: 'searchWallet',
+	kinds: 'walletKinds',
 };
 
 export const GOALS_CACHE_KEYS = {

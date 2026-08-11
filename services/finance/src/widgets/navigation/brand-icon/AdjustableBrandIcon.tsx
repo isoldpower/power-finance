@@ -1,5 +1,7 @@
+import { BrandIcon } from "@entity/navigation";
+import { Heading } from "@shared/pure-components/typography";
+
 import type { FC } from "react";
-import { BrandIcon, BrandIconTitle } from "@entity/navigation";
 
 
 interface AdjustedBrandIconProps {
@@ -12,9 +14,9 @@ const AdjustableBrandIcon: FC<AdjustedBrandIconProps> = ({
 	<div className="flex items-center gap-2.5">
 		<BrandIcon />
 		{withTitle && (
-			<BrandIconTitle>
+			<Heading as="span" size="base">
 				Finance
-			</BrandIconTitle>
+			</Heading>
 		)}
 	</div>
 );

@@ -1,4 +1,4 @@
-import type { ITransactionsRESTApiClient } from "@feature/transactions";
+import type { ITransactionsRESTApiClient } from "./types.ts";
 import type { Wallet } from "@entity/wallets";
 import { IStorage, LocalStorageMock } from "@internal/shared";
 import type {
@@ -8,12 +8,32 @@ import type {
 	TransactionListRequest, TransactionListResponse,
 	TransactionPatchRequest, TransactionPatchResponse,
 	TransactionPostRequest, TransactionPostResponse,
+	TransactionCategoriesRequest,
+	TransactionCategoriesResponse,
+	TransactionScanRequest,
+	TransactionScanResponse,
 } from "./types.ts";
-import type { TransactionDetailed, TransactionEntry, TransactionPreview, TransactionPreviewWallet } from "../types.ts";
+import type { TransactionDetailed, TransactionEntry, TransactionPreview, TransactionPreviewWallet, ReceiptScanDto } from "../types.ts";
 import type { WalletPreview } from "@feature/wallets/wallets-api/types.ts";
 import { v4 as uuidv4 } from "uuid";
 import { StorageTransaction, buildEntries, createTransactionFromMinimalPayload, directionFromAmount, orderChain } from "./utils.ts";
 
+
+const SEED_CATEGORIES = ['Groceries', 'Dining', 'Transport', 'Bills', 'Shopping', 'Income'];
+
+const SEED_SCAN: ReceiptScanDto = {
+	amount: '86.40',
+	currency: 'USD',
+	confidence: 0.98,
+	fields: [
+		{ label: 'Merchant', value: 'Whole Foods Market', ai: true },
+		{ label: 'Date', value: 'Jun 18, 2026', ai: true },
+		{ label: 'Category', value: 'Groceries', ai: true },
+		{ label: 'Wallet', value: 'Main Checking', ai: false },
+	],
+};
+
+const toCategoryId = (label: string): string => label.toLowerCase().replace(/\s+/g, '-');
 
 class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 	private readonly storage: IStorage<StorageTransaction>;
@@ -194,6 +214,29 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 					}
 				};
 			});
+	}
+
+	listCategories(
+		_request: TransactionCategoriesRequest
+	): Promise<TransactionCategoriesResponse> {
+		return new Promise<TransactionCategoriesResponse>((resolve) => {
+			const stored = this.storage.list()
+				.map((transaction) => transaction.category)
+				.filter((category): category is string => Boolean(category));
+			const labels = [...new Set([...SEED_CATEGORIES, ...stored])];
+
+			setTimeout(() => {
+				resolve({ data: labels.map((label) => ({ id: toCategoryId(label), label })) });
+			}, 250);
+		});
+	}
+
+	scanReceipt(
+		_request: TransactionScanRequest
+	): Promise<TransactionScanResponse> {
+		return new Promise<TransactionScanResponse>((resolve) => {
+			setTimeout(() => { resolve(SEED_SCAN); }, 250);
+		});
 	}
 }
 

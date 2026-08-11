@@ -1,5 +1,6 @@
 import type { TransactionPreviewDto } from "../types.ts";
-import type { ConvertMoney, FormatMoney, TransactionMoneyView } from "./types.ts";
+import type { ConvertMoney, TransactionMoneyView } from "./types.ts";
+import type { FormatMoney } from "@shared/formatting";
 
 
 const toTransactionMoneyView = (

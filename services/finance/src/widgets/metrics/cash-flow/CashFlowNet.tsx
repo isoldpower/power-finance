@@ -5,6 +5,7 @@ import { CashFlowPeriod } from "@entity/metrics";
 
 import type { Period } from "@entity/metrics";
 import type { CashFlowInsight } from "@feature/metrics";
+import { textClass } from "@shared/pure-components/typography";
 
 
 interface CashFlowNetProps {
@@ -34,7 +35,7 @@ const CashFlowNet = ({
 				currency={cashNetCurrency}
 				tone={cashFlow.net.amount >= 0 ? "pos" : "neg"}
 				size="lg"
-				className="text-[20px]"
+				className={textClass({ size: '20' })}
 			/>
 		</div>
 	);

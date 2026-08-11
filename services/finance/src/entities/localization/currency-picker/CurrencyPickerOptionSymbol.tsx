@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from "react";
+import { DisplayText } from "@shared/pure-components/typography";
 
 
 interface CurrencyPickerOptionSymbolProps {
@@ -9,9 +10,9 @@ const CurrencyPickerOptionSymbol: FC<CurrencyPickerOptionSymbolProps> = ({
 	children,
 }) => {
 	return (
-		<span className="inline-block w-6 shrink-0 truncate text-center font-display font-semibold">
+		<DisplayText as="span" truncate className="inline-block w-6 shrink-0 text-center">
 			{children}
-		</span>
+		</DisplayText>
 	);
 }
 

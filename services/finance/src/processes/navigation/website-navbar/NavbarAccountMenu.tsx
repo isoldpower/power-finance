@@ -14,10 +14,9 @@ import {
 	PopoverSettingHeading,
 	PopoverSettingRow,
 	PopoverSettingsContainer,
-	PopoverHeading,
-	PopoverDescription,
 	PopoverBottom,
 } from "@entity/configuration";
+import { Caption, CardTitle } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 
@@ -43,12 +42,12 @@ const NavbarAccountMenu: FC = () => {
 						size="lg"
 					/>
 					<div className="min-w-0">
-						<PopoverHeading>
+						<CardTitle truncate>
 							Your account
-						</PopoverHeading>
-						<PopoverDescription>
+						</CardTitle>
+						<Caption size="11.5" truncate>
 							Manage preferences
-						</PopoverDescription>
+						</Caption>
 					</div>
 				</div>
 				<PopoverSettingsContainer>

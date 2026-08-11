@@ -3,20 +3,14 @@ import { useCallback, useMemo } from "react";
 import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 
 import { useApiContext, DERIVED_KEYS } from "@app/api";
-import {
-	createTransaction as createTransactionApi,
-	createTransactionChain as createTransactionChainApi,
-	listAllTransactions as listAllTransactionsApi,
-} from "@feature/transactions";
+import { createTransaction as createTransactionApi } from "../transactions-api/methods/create-transaction.ts";
+import { createTransactionChain as createTransactionChainApi } from "../transactions-api/methods/create-transaction-chain.ts";
+import { listAllTransactions as listAllTransactionsApi } from "../transactions-api/methods/list-all-transactions.ts";
 import { CACHE_KEYS } from "./config.ts";
-import type {
-	CreateTransactionRequest,
-	CreateTransactionResponse,
-	CreateTransactionChainResponse,
-	TransactionMinimalPayload,
-	TransactionChainPayload,
-	ListAllTransactionsResponse
-} from "@feature/transactions";
+import type { CreateTransactionRequest, CreateTransactionResponse } from "../transactions-api/methods/create-transaction.ts";
+import type { CreateTransactionChainResponse } from "../transactions-api/methods/create-transaction-chain.ts";
+import type { TransactionMinimalPayload, TransactionChainPayload } from "../transactions-api/types.ts";
+import type { ListAllTransactionsResponse } from "../transactions-api/methods/list-all-transactions.ts";
 
 
 interface UseTransactionsReturn {

@@ -1,3 +1,5 @@
+import { Heading, MetaText, Text } from "@shared/pure-components/typography";
+
 import type { FC } from "react";
 
 
@@ -14,10 +16,10 @@ const WalletPreviewCard: FC<WalletPreviewCardProps> = ({ gradient, type, currenc
 		style={{ background: gradient }}
 	>
 		<div className="flex items-center justify-between text-white/90">
-			<span className="text-xs font-semibold tracking-[0.04em]">{type}</span>
-			<span className="font-numeric text-[11px] opacity-85">{currency}</span>
+			<Text size="xs" weight="semibold" tracking="0.04em">{type}</Text>
+			<MetaText tone="default" className="opacity-85">{currency}</MetaText>
 		</div>
-		<div className="font-display text-[19px] font-semibold tracking-[-0.01em] text-white">{name || 'Wallet name'}</div>
+		<Heading as="div" size="19" tone="inverted">{name || 'Wallet name'}</Heading>
 	</div>
 );
 

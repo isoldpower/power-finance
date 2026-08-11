@@ -1,10 +1,9 @@
 import { z } from "zod";
 
+import type { WalletKind } from "@entity/wallets";
 import type { WalletValuableFields } from "../wallets-api";
 import type { WalletFormSchema } from "./wallet-form-schema.ts";
 
-
-const CREDIT_TYPE = 'Credit card';
 
 const walletFieldsShape = {
 	name: z.string().min(1, "Please enter a name"),
@@ -13,19 +12,20 @@ const walletFieldsShape = {
 	balance: z.string(),
 };
 
-const isCreditType = (type: string): boolean => {
-	return type === CREDIT_TYPE;
+const isCreditKind = (type: string, kinds: WalletKind[]): boolean => {
+	return kinds.find((kind) => kind.label === type)?.credit ?? false;
 };
 
 const buildWalletPayload = (
 	values: WalletFormSchema,
 	gradient: string,
-	balanceAmount: number
+	balanceAmount: number,
+	kinds: WalletKind[]
 ): WalletValuableFields => ({
 	name: values.name.trim(),
 	color: gradient,
 	balance: { amount: balanceAmount, currency: values.currency },
-	credit: isCreditType(values.type),
+	credit: isCreditKind(values.type, kinds),
 });
 
-export { CREDIT_TYPE, walletFieldsShape, isCreditType, buildWalletPayload };
+export { walletFieldsShape, isCreditKind, buildWalletPayload };

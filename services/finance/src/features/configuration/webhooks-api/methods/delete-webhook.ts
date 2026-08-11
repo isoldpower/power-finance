@@ -1,4 +1,4 @@
-import type { IWebhookRESTApiClient } from "../rest-client/types.ts";
+import type { IWebhookRESTApiClient } from "../rest-client";
 import { deleteToFlat } from "../mutators/delete-to-flat.ts";
 
 

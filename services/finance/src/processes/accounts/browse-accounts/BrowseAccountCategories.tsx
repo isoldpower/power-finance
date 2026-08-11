@@ -1,11 +1,11 @@
 import { useAccountsBrowser } from "@feature/accounts";
 
 import type { FC, ReactNode } from "react";
-import type { MockAccountCategory } from "@feature/accounts";
+import type { AccountCategoryView } from "@entity/accounts";
 
 
 interface BrowseAccountCategoriesProps {
-	children: (category: MockAccountCategory) => ReactNode;
+	children: (category: AccountCategoryView) => ReactNode;
 }
 
 const BrowseAccountCategories: FC<BrowseAccountCategoriesProps> = ({ children }) => {

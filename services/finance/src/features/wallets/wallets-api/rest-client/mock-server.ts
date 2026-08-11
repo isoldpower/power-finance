@@ -1,5 +1,6 @@
 import {v4 as uuidv4} from "uuid";
 
+import type { WalletKindDto } from "../types.ts";
 import type {Wallet, WalletGoalMeta} from "@entity/wallets";
 import {DEFAULT_GOAL_COLOR, DEFAULT_GOAL_ICON, DEFAULT_WALLET_GRADIENT} from "@entity/wallets";
 import type {WalletSearchLeaf, WalletSearchNode, WalletSearchRoot, WalletStats} from "../types.ts";
@@ -21,6 +22,9 @@ import {
 	WalletPostResponse,
 	WalletPutRequest,
 	WalletPutResponse, WalletsSearchRequest, WalletsSearchResponse
+,
+	WalletKindsRequest,
+	WalletKindsResponse,
 } from "./types.ts";
 
 
@@ -98,6 +102,13 @@ function matchesSearch(wallet: Wallet, root: WalletSearchRoot | undefined): bool
 	if (!root) return true;
 	return matchesNode(wallet, root);
 }
+
+const SEED_KINDS: WalletKindDto[] = [
+	{ id: 'debit-card', label: 'Debit card', credit: false },
+	{ id: 'savings', label: 'Savings', credit: false },
+	{ id: 'credit-card', label: 'Credit card', credit: true },
+	{ id: 'cash', label: 'Cash', credit: false },
+];
 
 class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 	private readonly storage: IStorage<Wallet>;
@@ -273,6 +284,14 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 					}
 				};
 			});
+	}
+
+	listKinds(
+		_request: WalletKindsRequest
+	): Promise<WalletKindsResponse> {
+		return new Promise<WalletKindsResponse>((resolve) => {
+			setTimeout(() => { resolve({ data: SEED_KINDS }); }, 250);
+		});
 	}
 }
 

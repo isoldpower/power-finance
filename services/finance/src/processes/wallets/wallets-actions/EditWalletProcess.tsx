@@ -1,22 +1,22 @@
-import { z } from "zod";
 import { EditWalletForm } from "@widget/wallets";
-import { useWallet, EditWalletDetailsFx, WalletCurrenciesFx } from "@feature/wallets";
+import {
+	EditWalletDetailsFx,
+	useWallet,
+	useWalletsSelection,
+	WalletCurrenciesFx,
+} from "@feature/wallets";
 import { useCurrencies } from "@feature/localization";
-import { useSearchProtected } from "@feature/navigation";
-import { SlideOver, useSlideOverContext } from "@shared/components";
+import { SlideOver } from "@shared/overlays";
+import { useSlideOverContext } from "@shared/overlays";
 
 import type { FC } from "react";
 
 
-const requiredSearch = z.object({
-	wallet: z.string().min(1)
-});
-
-type RequiredSearchTypes = z.infer<typeof requiredSearch>;
-
 const EditWalletProcess: FC = () => {
-	const [{ wallet }] = useSearchProtected<RequiredSearchTypes>(requiredSearch);
-	const { isPending, isError, wallet: fetchedWallet } = useWallet(wallet);
+	const selectedWalletId = useWalletsSelection((state) => state.selectedWalletId);
+	const { isPending, isError, wallet: fetchedWallet } = useWallet(selectedWalletId ?? 'none', {
+		enabled: selectedWalletId !== null,
+	});
 	const currenciesQuery = useCurrencies();
 	const { onClose } = useSlideOverContext();
 

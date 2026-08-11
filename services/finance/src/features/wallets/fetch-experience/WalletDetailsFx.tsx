@@ -1,6 +1,7 @@
-import { FinanceCard } from "@internal/ui-library";
+import { FinanceCard, cn } from "@internal/ui-library";
 import type { Wallet } from "@entity/wallets";
 import type { FC, ReactNode } from "react";
+import { textClass } from "@shared/pure-components/typography";
 
 
 interface WalletDetailsFxProps {
@@ -18,7 +19,7 @@ const WalletDetailsFx: FC<WalletDetailsFxProps> = ({
 }) => {
 	if (isError) {
 		return (
-			<FinanceCard className="px-6 py-16 text-center text-[13px] text-neg">
+			<FinanceCard className={cn(textClass({ size: '13', tone: 'negative' }), "px-6 py-16 text-center")}>
 				Couldn't load this wallet.
 			</FinanceCard>
 		);

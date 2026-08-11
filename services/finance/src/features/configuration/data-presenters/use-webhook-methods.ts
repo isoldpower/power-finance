@@ -2,12 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback , useMemo } from "react";
 import type { UseMutationResult } from "@tanstack/react-query";
 
-import {
-	deleteWebhookEndpoint as deleteWebhookApi,
-	fetchWebhookEndpoint as fetchWebhookApi,
-	updateWebhookEndpoint as updateWebhookApi,
-	UpdateWebhookRequest, UpdateWebhookResponse, WebhookValuableFields,
-} from "@feature/configuration";
+import { deleteWebhookEndpoint as deleteWebhookApi } from "../webhooks-api/methods/delete-webhook.ts";
+import { fetchWebhookEndpoint as fetchWebhookApi } from "../webhooks-api/methods/fetch-webhook.ts";
+import { updateWebhookEndpoint as updateWebhookApi, UpdateWebhookRequest, UpdateWebhookResponse } from "../webhooks-api/methods/update-webhook.ts";
+import { WebhookValuableFields } from "../webhooks-api/types.ts";
 import { useApiContext } from "@app/api";
 import { CACHE_KEYS } from "./cache-config.ts";
 import type { DeleteWebhookResponse } from "../webhooks-api";

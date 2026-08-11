@@ -1,5 +1,6 @@
 import type { Wallet } from "@entity/wallets";
 import type { FC, ReactNode } from "react";
+import { Caption } from "@shared/pure-components/typography";
 
 
 interface ProtectEmptyBrowseProps {
@@ -13,9 +14,9 @@ const ProtectEmptyBrowse: FC<ProtectEmptyBrowseProps> = ({
 }) => {
 	if (wallets.length === 0) {
 		return (
-			<div className="px-4 py-[26px] text-center text-[13px] text-text-3">
+			<Caption size="13" className="px-4 py-[26px] text-center">
 				No wallets match your filters.
-			</div>
+			</Caption>
 		);
 	}
 	

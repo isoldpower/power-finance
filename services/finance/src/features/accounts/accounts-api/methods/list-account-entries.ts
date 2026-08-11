@@ -1,6 +1,6 @@
 import type { LedgerEntryDto } from "@entity/accounts";
 import type { IAccountsRESTApiClient } from "../rest-client";
-import type { AccountEntriesRequest } from "../rest-client/types.ts";
+import type { AccountEntriesRequest } from "../rest-client";
 import { ledgerEntryToFlat } from "../mutators/api-to-flat.ts";
 
 

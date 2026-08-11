@@ -3,7 +3,7 @@ import { getFinanceRoute } from "@internal/shared";
 import { useCallback, useMemo } from "react";
 import { resolveActiveTab } from "./resolve-active.ts";
 
-import type { TabKey, NavTab } from "./types.ts";
+import type { TabKey, NavTab } from "@entity/navigation";
 
 
 const useActiveTab = (tabs: NavTab[]) => {
@@ -31,5 +31,4 @@ const useActiveTab = (tabs: NavTab[]) => {
 	return { tabs, activeTab, activeLabel, onTabChange };
 };
 
-export { useActiveTab, resolveActiveTab };
-export type { TabKey, NavTab };
+export { useActiveTab };

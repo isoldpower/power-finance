@@ -1,6 +1,6 @@
-import { RouteLink } from "@feature/navigation";
-import { CenteredList } from "@shared/components";
-import { ForwardIcon } from "@entity/transactions";
+import { ForwardIcon } from "@shared/pure-components/icons";
+import { RouteLink } from "@shared/routing";
+import { CenteredList } from "@shared/pure-components/layout";
 
 import type { FC } from "react";
 

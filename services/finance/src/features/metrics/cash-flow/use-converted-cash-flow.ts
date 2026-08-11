@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useConvertMoney } from "@feature/localization";
 
-import type { CashFlowInsight } from "@feature/metrics";
+import type { CashFlowInsight } from "../metrics-api/types.ts";
 
 
 const useConvertedCashFlow = (

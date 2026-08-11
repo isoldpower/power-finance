@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
-import { getInsights } from "@feature/metrics";
+import { getInsights } from "../metrics-api/methods/get-insights.ts";
 import { METRICS_CACHE_KEYS } from "./cache-config.ts";
-import type { Insights, InsightMetric, NetWorthInsight, CashFlowInsight } from "@feature/metrics";
+import type { Insights, InsightMetric, NetWorthInsight, CashFlowInsight } from "../metrics-api/types.ts";
 
 interface UseInsightsParams {
 	metrics: InsightMetric[];

@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { useConvertMoney } from "@feature/localization";
-import { Tooltip } from "@shared/interactions";
+import { Tooltip } from "@shared/overlays";
 
-import type { CashFlowInsight } from "@feature/metrics";
+import type { CashFlowInsight } from "../metrics-api/types.ts";
 import type { ReactNode, FC } from "react";
 
 

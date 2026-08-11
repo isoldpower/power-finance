@@ -1,7 +1,7 @@
 import { createContext, use, useCallback, useMemo, useState } from "react";
 
 import type { FC, ReactNode } from "react";
-import type { AutomationRule } from "../automations-api";
+import type { AutomationRule } from "../assistance-api/automations";
 
 
 interface AutomationsPaginationContextType {

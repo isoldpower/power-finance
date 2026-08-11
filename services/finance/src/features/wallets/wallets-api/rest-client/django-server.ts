@@ -12,6 +12,9 @@ import {
 	WalletPostResponse,
 	WalletPutRequest,
 	WalletPutResponse, WalletsSearchRequest, WalletsSearchResponse
+,
+	WalletKindsRequest,
+	WalletKindsResponse,
 } from "./types.ts";
 import { AxiosInstance } from "axios";
 import type { WalletDetailed, WalletPreview } from "../types.ts";
@@ -141,6 +144,13 @@ class WalletsDjangoRESTApiClient implements IWalletsRESTApiClient {
 		const postfix = this.resolvePostfix(request.params);
 
 		return this.axiosInstance.delete<WalletDeleteResponse>(`/${request.id}/${postfix}`)
+			.then((response) => response.data);
+	}
+
+	listKinds(
+		request: WalletKindsRequest
+	): Promise<WalletKindsResponse> {
+		return this.axiosInstance.get<WalletKindsResponse>('/kinds/', { params: request.params })
 			.then((response) => response.data);
 	}
 }

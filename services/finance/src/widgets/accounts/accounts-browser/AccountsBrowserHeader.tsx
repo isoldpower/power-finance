@@ -1,8 +1,9 @@
+import { LockIcon } from "@shared/pure-components/icons";
 import { FinanceBadge } from "@internal/ui-library";
 
-import { SectionHeader } from "@shared/components";
+import { MetaText } from "@shared/pure-components/typography";
+import { SectionHeader } from "@shared/pure-components/layout";
 import { useAccountsBrowser } from "@feature/accounts";
-import { LockIcon } from "@entity/accounts";
 
 import type { FC } from "react";
 
@@ -21,11 +22,11 @@ const AccountsBrowserHeader: FC = () => {
 				{accountCount} accounts
 			</SectionHeader.Caption>
 			<SectionHeader.Border />
-			<span className="font-numeric text-[10.5px] tracking-[0.08em] text-text-3">
+			<MetaText size="10.5" tracking="0.08em">
 				<FinanceBadge tone="neutral" appearance="outline" size="sm">
 					<LockIcon /> Read-only
 				</FinanceBadge>
-			</span>
+			</MetaText>
 		</SectionHeader>
 	);
 };

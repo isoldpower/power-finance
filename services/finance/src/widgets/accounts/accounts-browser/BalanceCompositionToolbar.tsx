@@ -1,4 +1,5 @@
 import { BalanceComposition } from "@entity/accounts";
+import { CardTitle } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 
@@ -6,9 +7,9 @@ import type { FC } from "react";
 const BalanceCompositionToolbar: FC = () => {
 	return (
 		<BalanceComposition.Container>
-			<BalanceComposition.Title>
+			<CardTitle>
 				Balance composition
-			</BalanceComposition.Title>
+			</CardTitle>
 			<BalanceComposition.Formula>
 				Assets = Liabilities + Equity
 			</BalanceComposition.Formula>

@@ -33,3 +33,34 @@ interface GoalWallet extends Wallet {
 }
 
 export type { Wallet, WalletType, WalletGoalMeta, GoalWallet };
+
+interface WalletKind {
+	id: string;
+	label: string;
+	credit: boolean;
+}
+
+export type { WalletKind };
+
+type PanelMode = 'add' | 'scan' | 'wallet' | 'transfer' | 'edit';
+
+interface PanelWallet {
+	id: string;
+	name: string;
+	currency: string;
+	credit: boolean;
+	gradient: string;
+	balance: {
+		amount: number;
+		currency: string;
+	};
+}
+
+type GoalDispositionMode = 'transfer' | 'spent';
+
+interface GoalDisposition {
+	mode: GoalDispositionMode;
+	toWalletId: string;
+}
+
+export type { PanelMode, PanelWallet, GoalDispositionMode, GoalDisposition };

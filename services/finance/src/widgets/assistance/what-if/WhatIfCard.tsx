@@ -1,5 +1,6 @@
 import { FinanceBadge } from "@internal/ui-library";
 import { WhatIf } from "@entity/assistance";
+import { BodyText, RowTitle, Text } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 
@@ -9,9 +10,9 @@ const WhatIfCard: FC = () => {
 		<WhatIf.Container>
 			<WhatIf.Head>
 				<WhatIf.Icon />
-				<WhatIf.Title>
+				<RowTitle as="h2" size="14.5">
 					Draft / What-if mode
-				</WhatIf.Title>
+				</RowTitle>
 				<FinanceBadge tone="warn" appearance="soft" size="sm">
 					SOON
 				</FinanceBadge>
@@ -24,10 +25,10 @@ const WhatIfCard: FC = () => {
 				<FinanceBadge tone="accent" appearance="soft" size="sm">
 					EXAMPLE
 				</FinanceBadge>
-				<WhatIf.ExampleText>
+				<BodyText as="span" size="12.5">
 					“Cut dining by $150/mo” → Emergency fund
-					<WhatIf.Highlight> 2 months sooner</WhatIf.Highlight>
-				</WhatIf.ExampleText>
+					<Text as="b" tone="positive"> 2 months sooner</Text>
+				</BodyText>
 			</WhatIf.Example>
 			<WhatIf.NotifyButton disabled={true}>
 				🔔 Notify me when it ships

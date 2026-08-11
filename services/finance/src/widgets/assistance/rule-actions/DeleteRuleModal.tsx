@@ -1,8 +1,9 @@
 import { FinanceButton } from "@internal/ui-library";
 
 import { RuleDialog } from "@entity/assistance";
-import { ConfirmModal } from "@shared/interactions";
-import { DangerIconBadge } from "@shared/components";
+import { ConfirmModal } from "@shared/overlays";
+import { DangerIconBadge } from "@shared/pure-components/badges";
+import { Heading } from "@shared/pure-components/typography";
 
 import type { FC, ReactNode } from "react";
 
@@ -20,9 +21,9 @@ const DeleteRuleModal: FC<DeleteRuleModalProps> = ({ name, pending, onConfirm, c
 			{({ close }) => (
 				<>
 					<DangerIconBadge className="mx-auto mb-4 size-12" iconSize={22} />
-					<RuleDialog.Title>
+					<Heading>
 						Delete automation
-					</RuleDialog.Title>
+					</Heading>
 					<RuleDialog.Description>
 						Permanently delete “{name}”? This can’t be undone.
 					</RuleDialog.Description>

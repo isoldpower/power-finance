@@ -1,3 +1,4 @@
+import { ForwardIcon, FromIcon, ScanReceiptIcon, ToIcon } from "@shared/pure-components/icons";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,25 +8,12 @@ import {
 	EntryAmountField,
 	EntryCategoryField,
 	EntryTypeSelector,
-	ForwardIcon,
-	FromIcon,
-	ScanReceiptCta, ScanReceiptIcon,
-	ToIcon,
+	ScanReceiptCta,
 } from "@entity/transactions";
 import { WalletSelect, toWalletSelectOptions } from "@entity/wallets";
-import {
-	MOCK_TXN_CATEGORIES,
-	TransactionEntryOnSubmit,
-	addTransactionSchema,
-	useAddTransactionInitials,
-	useCrossCurrencyTransfer,
-	useEntryFormState,
-	useEntryTypeEffects,
-	useEntryWalletOptions,
-	useWalletsCurrencies,
-} from "@feature/transactions";
+import { TransactionEntryOnSubmit, addTransactionSchema, useAddTransactionInitials, useCrossCurrencyTransfer, useEntryFormState, useEntryTypeEffects, useEntryWalletOptions, useTransactionCategories, useWalletsCurrencies } from "@feature/transactions";
 import { useWalletsList } from "@feature/wallets";
-import { HideOnFormValue, ShowOnFormValue, PanelFooter, FieldLabel } from "@shared/components";
+import { FieldLabel, HideOnFormValue, PanelFooter, ShowOnFormValue } from "@shared/forms";
 
 import type { FC } from "react";
 import type { AddTransactionSchema } from "@feature/transactions";
@@ -37,6 +25,8 @@ interface AddTransactionFormProps {
 }
 
 const AddTransactionForm: FC<AddTransactionFormProps> = ({ onScanReceipt, onClose }) => {
+	const { categories } = useTransactionCategories();
+	const categoryLabels = useMemo(() => categories.map((category) => category.label), [categories]);
 	const { wallets } = useWalletsList();
 	const defaultValues = useAddTransactionInitials(wallets);
 	const form = useForm<AddTransactionSchema>({
@@ -169,7 +159,7 @@ const AddTransactionForm: FC<AddTransactionFormProps> = ({ onScanReceipt, onClos
 							control={form.control}
 							name="category"
 							render={({ field }) => (
-								<EntryCategoryField options={MOCK_TXN_CATEGORIES} {...field} />
+								<EntryCategoryField options={categoryLabels} {...field} />
 							)} />
 					</ShowOnFormValue>
 				</div>

@@ -1,1 +1,2 @@
-export { resolveSecondaryLabel, resolvePrimaryLabel } from './resolve-action-labels.ts';
+export { resolvePrimaryLabel, resolveSecondaryLabel } from './resolve-action-labels.ts';
+

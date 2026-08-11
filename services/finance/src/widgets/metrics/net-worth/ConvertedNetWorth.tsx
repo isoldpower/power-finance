@@ -1,6 +1,7 @@
 import { FinanceMoney } from "@internal/ui-library";
 import { AnimatedMoney } from "@entity/localization";
-import { NetWorthDeltaBadge, MetricCardDescriptor, MetricCardIntext } from "@entity/metrics";
+import { MetricCardDescriptor, NetWorthDeltaBadge } from "@entity/metrics";
+import { BodyText, textClass } from "@shared/pure-components/typography";
 import { useConvertedNetWorth, useConvertedNetDiff } from "@feature/metrics";
 
 import type { FC } from "react";
@@ -20,7 +21,7 @@ const ConvertedNetWorth: FC<ConvertedNetWorthProps> = ({ netWorth }) => {
 			<div className="mt-2.5 flex items-end gap-3.5">
 				<FinanceMoney
 					size="display"
-					className="text-[42px] leading-[0.95]"
+					className={textClass({ size: '42', leading: '0.95' })}
 					style={{ fontVariantNumeric: 'normal' }}
 				>
 					{netDiffSign}
@@ -35,9 +36,9 @@ const ConvertedNetWorth: FC<ConvertedNetWorthProps> = ({ netWorth }) => {
 				</NetWorthDeltaBadge>
 			</div>
 			<MetricCardDescriptor>
-				<MetricCardIntext tone={netWorthDiff.direction === 'up' ? 'positive' : 'negative'}>
+				<BodyText as="span" tone={netWorthDiff.direction === 'up' ? 'positive' : 'negative'}>
 					{convertedNetWorth.formatted}
-				</MetricCardIntext>
+				</BodyText>
 				&nbsp;since start
 			</MetricCardDescriptor>
 		</>

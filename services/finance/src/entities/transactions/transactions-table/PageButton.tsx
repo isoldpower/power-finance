@@ -1,5 +1,6 @@
 import type { FC, ReactNode } from "react";
 import { cn } from "@internal/ui-library";
+import { textClass } from "@shared/pure-components/typography";
 
 interface PageButtonProps {
 	active?: boolean;
@@ -14,7 +15,7 @@ const PageButton: FC<PageButtonProps> = ({ active = false, disabled = false, onC
 		disabled={disabled}
 		onClick={onClick}
 		className={cn(
-			"flex h-7 min-w-7 items-center justify-center rounded-[var(--radius-md)] border px-2 text-xs font-semibold transition-colors",
+			textClass({ size: 'xs', weight: 'semibold' }), "flex h-7 min-w-7 items-center justify-center rounded-[var(--radius-md)] border px-2 transition-colors",
 			active ? "border-primary bg-primary text-white" : "border-border-strong text-text-2 hover:bg-secondary",
 			disabled && "cursor-not-allowed opacity-40 hover:bg-transparent"
 		)}

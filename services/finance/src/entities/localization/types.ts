@@ -11,3 +11,17 @@ interface LocaleMeta {
 }
 
 export type { CurrencyMeta, LocaleMeta };
+
+interface Money {
+	amount: number;
+	currency: string;
+}
+
+interface ConvertedMoney {
+	amount: number;
+	currency: string;
+	formatted: string;
+	converted: boolean;
+}
+
+export type { Money, ConvertedMoney };

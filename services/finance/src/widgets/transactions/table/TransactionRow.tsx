@@ -5,12 +5,11 @@ import {
 	LedgerRow,
 	PostingsContainer,
 	PostingsDirectionIcon,
-	PostingsKind,
-	PostingsWalletName,
 	resolveToneWithDirection,
 	RowSelectCheckbox,
 	TransactionAmountStack,
 } from "@entity/transactions";
+import { Caption, MetaText, RowTitle, Text } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 import type { TransactionRowView } from "@entity/transactions";
@@ -38,20 +37,20 @@ const TransactionRow: FC<TransactionRowProps> = ({ row, amountOriginal, amountMa
 					<RowSelectCheckbox selected={selected} onClick={(event) => { event.stopPropagation(); onSelect(); }} />
 				</LedgerRow.SelectCell>
 				<LedgerRow.DateCell>
-					<LedgerRow.Date>
+					<Text as="time" dateTime={row.createdAt} size="xs" className="block">
 						{row.date}
-					</LedgerRow.Date>
-					<LedgerRow.Time>
+					</Text>
+					<Caption as="time" dateTime={row.createdAt} size="10" className="block">
 						{row.time}
-					</LedgerRow.Time>
+					</Caption>
 				</LedgerRow.DateCell>
 				<LedgerRow.Description>
 					<LedgerRow.Icon tone={tone}>
 						<AmountDirectionIcon direction={row.direction} />
 					</LedgerRow.Icon>
-					<LedgerRow.Title>
+					<RowTitle truncate className="min-w-0">
 						{row.kind}
-					</LedgerRow.Title>
+					</RowTitle>
 				</LedgerRow.Description>
 				<LedgerRow.Wallet>
 					{row.walletName}
@@ -75,19 +74,19 @@ const TransactionRow: FC<TransactionRowProps> = ({ row, amountOriginal, amountMa
 							<AmountDirectionIcon direction={row.direction} size={14} />
 						</PostingsDirectionIcon>
 						<div className="min-w-0 flex-1">
-							<PostingsWalletName>
+							<RowTitle size="12.5" truncate>
 								{row.walletName}
-							</PostingsWalletName>
-							<PostingsKind>
+							</RowTitle>
+							<MetaText as="div" size="9" tracking="0.08em">
 								TRANSACTION · {row.kind}
-							</PostingsKind>
+							</MetaText>
 						</div>
 						<TransactionAmountStack original={amountOriginal} main={amountMain} converted={converted} tone={tone} />
 					</PostingsContainer>
 					{row.entries.map((entry, index) => (
 						<LedgerLineRow key={`${row.id}-${entry.account}-${index.toString()}`} line={entry} />
 					))}
-					<div className="mt-3 font-numeric text-[10.5px] text-text-3">{row.provenance}</div>
+					<MetaText as="div" size="10.5" className="mt-3">{row.provenance}</MetaText>
 				</div>
 			) : null}
 		</div>

@@ -1,5 +1,6 @@
 import type { TransactionEntryDto, TransactionOrigin, TransactionPreviewDto } from "../types.ts";
-import type { FormatMoney, LedgerEntryView, TransactionRowView } from "./types.ts";
+import type { LedgerEntryView, TransactionRowView } from "./types.ts";
+import type { FormatMoney } from "@shared/formatting";
 
 
 const KIND_BY_DIRECTION = {

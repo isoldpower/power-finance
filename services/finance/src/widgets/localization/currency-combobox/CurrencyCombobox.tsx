@@ -9,6 +9,7 @@ import {
 	FinanceComboboxTrigger,
 } from "@internal/ui-library";
 import { CurrencyPicker } from "@entity/localization";
+import { MetaText } from "@shared/pure-components/typography";
 
 import type { FinanceComboboxPivot } from "@internal/ui-library";
 import type { CurrencyPickerVariant } from "@entity/localization";
@@ -62,9 +63,9 @@ const CurrencyCombobox: FC<CurrencyComboboxProps> = ({
 							<CurrencyPicker.OptionCode>
 								{currency.code}
 							</CurrencyPicker.OptionCode>
-							<CurrencyPicker.OptionTitle>
+							<MetaText size="10.5">
 								{currency.name}
-							</CurrencyPicker.OptionTitle>
+							</MetaText>
 							<CurrencyPicker.OptionSelected>
 								{value === currency.code}
 							</CurrencyPicker.OptionSelected>

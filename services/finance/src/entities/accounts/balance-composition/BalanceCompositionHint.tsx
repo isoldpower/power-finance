@@ -1,6 +1,6 @@
-import { cn } from "@internal/ui-library";
 
 import type { BaseHTMLAttributes, FC } from "react";
+import { MetaText } from "@shared/pure-components/typography";
 
 
 const BalanceCompositionHint: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'>> = ({
@@ -8,14 +8,14 @@ const BalanceCompositionHint: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'clas
 	...props
 }) => {
 	return (
-		<span
-			className={cn(
-				"hidden font-numeric text-[10px] text-text-3 sm:block"
-			)}
+		<MetaText
+			size="10"
+			tone="subtle"
+			className="hidden sm:block"
 			{...props}
 		>
 			{children}
-		</span>
+		</MetaText>
 	);
 }
 

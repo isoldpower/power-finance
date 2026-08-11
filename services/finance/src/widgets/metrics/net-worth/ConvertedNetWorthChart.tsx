@@ -12,7 +12,7 @@ import {
 	useFormattedChartData,
 	useChartHoverData,
 } from "@feature/metrics";
-import { relativeAgo } from "@shared/utils";
+import { relativeAgo } from "@shared/formatting";
 
 import type { FC } from "react";
 import type { NetWorthInsight } from "@feature/metrics";

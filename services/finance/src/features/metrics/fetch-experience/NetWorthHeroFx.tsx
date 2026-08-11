@@ -1,7 +1,8 @@
 import type { FC, ReactNode } from "react";
-import type { NetWorthInsight } from "@feature/metrics";
+import type { NetWorthInsight } from "../metrics-api/types.ts";
 
 import { NetWorthSkeleton } from "@entity/metrics";
+import { Caption } from "@shared/pure-components/typography";
 
 
 interface NetWorthHeroFxProps {
@@ -27,9 +28,9 @@ const NetWorthHeroFx: FC<NetWorthHeroFxProps> = ({
 };
 
 const NetWorthHeroFailed: FC = () => (
-	<div className="mt-3 text-[13px] text-text-3">
+	<Caption size="13" className="mt-3">
 		Couldn’t load net worth.
-	</div>
+	</Caption>
 );
 
 export { NetWorthHeroFx };

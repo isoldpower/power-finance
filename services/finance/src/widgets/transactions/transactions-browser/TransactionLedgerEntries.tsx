@@ -6,15 +6,14 @@ import {
 	LedgerLineRow,
 	PostingsContainer,
 	PostingsDirectionIcon,
-	PostingsKind,
-	PostingsWalletName,
 	TransactionAmountStack,
 	toTransactionMoneyView,
 	toTransactionRowView,
 	resolveToneWithDirection,
 } from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
-import { useLocaleCurrency } from "@shared/utils";
+import { useLocaleCurrency } from "@shared/formatting";
+import { MetaText, RowTitle } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 import type { TransactionPreviewDto } from "@entity/transactions";
@@ -39,12 +38,12 @@ const TransactionLedgerEntries: FC<LedgerTransactionEntriesProps> = ({ transacti
 					<AmountDirectionIcon direction={row.direction} size={14} />
 				</PostingsDirectionIcon>
 				<div className="min-w-0 flex-1">
-					<PostingsWalletName>
+					<RowTitle size="12.5" truncate>
 						{row.walletName}
-					</PostingsWalletName>
-					<PostingsKind>
+					</RowTitle>
+					<MetaText as="div" size="9" tracking="0.08em">
 						TRANSACTION · {row.kind}
-					</PostingsKind>
+					</MetaText>
 				</div>
 				<TransactionAmountStack
 					original={money.amountOriginal}
@@ -56,9 +55,9 @@ const TransactionLedgerEntries: FC<LedgerTransactionEntriesProps> = ({ transacti
 			{row.entries.map((entry, index) => (
 				<LedgerLineRow key={`${row.id}-${entry.account}-${index.toString()}`} line={entry} />
 			))}
-			<div className="mt-3 font-numeric text-[10.5px] text-text-3">
+			<MetaText as="div" size="10.5" className="mt-3">
 				{row.provenance}
-			</div>
+			</MetaText>
 		</div>
 	);
 };

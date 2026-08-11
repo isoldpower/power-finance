@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 
-import { SlideOver, useSlideOverContext } from "@shared/components";
+import { SlideOver } from "@shared/overlays";
+import { useSlideOverContext } from "@shared/overlays";
 import { AddTransactionForm } from "@widget/transactions";
 
 import type { FC } from "react";

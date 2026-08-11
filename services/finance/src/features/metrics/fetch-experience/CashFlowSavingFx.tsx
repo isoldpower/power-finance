@@ -1,5 +1,5 @@
 import type {FC, ReactNode} from "react";
-import type { CashFlowInsight } from "@feature/metrics";
+import type { CashFlowInsight } from "../metrics-api/types.ts";
 
 
 interface CashFlowCardFxProps {

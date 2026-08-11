@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FinanceInput } from "@internal/ui-library";
 import { RuleForm } from "@entity/assistance";
-import { SlideOverPanel } from "@shared/interactions";
-import { FieldLabel, PanelFooter } from "@shared/components";
+import { SlideOverPanel } from "@shared/overlays";
+import { FieldLabel, PanelFooter } from "@shared/forms";
 import { 
 	RULE_FORM_DEFAULTS,
 	RuleFormOnSubmit,

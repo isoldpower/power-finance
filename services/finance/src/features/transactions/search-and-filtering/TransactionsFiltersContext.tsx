@@ -1,5 +1,5 @@
 import {createContext, FC, ReactNode, use, useCallback, useMemo, useState} from "react";
-import type {OrderingType} from "./types.ts";
+import type { OrderingType } from "@shared/data";
 
 
 interface TransactionsFiltersContextType {

@@ -1,27 +1,20 @@
 import { AiAssistantFab, AiAssistantPanel, AiAssistantSheet } from "@widget/assistance";
-import { ShowOnDesktop, ShowOnMobile } from "@shared/components";
-import { useDisclosure } from "@shared/interactions";
+import { ShowOnDesktop, ShowOnMobile } from "@shared/visibility";
+import { useDisclosure } from "@shared/overlays";
+import { useAssistantContent } from "@feature/assistance";
 
 import type { FC } from "react";
-import type { AssistantMessage, AssistantSignal } from "@entity/assistance";
 
 
-interface PlanningAiAssistantProps {
-	signals: AssistantSignal[];
-	chat: AssistantMessage[];
-	prompts: string[];
-}
-
-const PlanningAiAssistant: FC<PlanningAiAssistantProps> = ({
-	...mockContent
-}) => {
+const PlanningAiAssistant: FC = () => {
 	const { open, onOpen, onClose } = useDisclosure();
+	const { content } = useAssistantContent();
 
 	return (
 		<>
 			<ShowOnDesktop>
 				<AiAssistantPanel
-					{...mockContent}
+					{...content}
 					className="sticky top-[70px]"
 					comingSoon={true}
 				/>
@@ -30,7 +23,7 @@ const PlanningAiAssistant: FC<PlanningAiAssistantProps> = ({
 				<AiAssistantFab onOpen={onOpen} />
 				<AiAssistantSheet open={open} onClose={onClose}>
 					<AiAssistantPanel
-						{...mockContent}
+						{...content}
 						className="w-full"
 						comingSoon={true}
 						onClose={onClose}

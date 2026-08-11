@@ -1,7 +1,7 @@
 import { cn, FinanceCard } from "@internal/ui-library";
 
 import { AssistantPanel } from "@entity/assistance";
-import { ShowOn } from "@shared/components";
+import { ShowOn } from "@shared/visibility";
 
 import type { FC } from "react";
 import type { AssistantMessage, AssistantSignal } from "@entity/assistance";

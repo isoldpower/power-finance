@@ -1,4 +1,5 @@
-import { List } from "@shared/components";
+import { Caption } from "@shared/pure-components/typography";
+import { List } from "@shared/pure-components/collections";
 import { useTransactionsPaginationContext } from "@feature/transactions";
 import { ProtectBrowseSpace } from "@feature/wallets";
 
@@ -20,9 +21,9 @@ const BrowseTransactionEntries: FC<BrowseTransactionEntriesProps> = ({
 
 	if (paginatedTransactions.length === 0) {
 		return (
-			<div className="px-4 py-[26px] text-center text-[13px] text-text-3">
+			<Caption size="13" className="px-4 py-[26px] text-center">
 				No transactions match your filters.
-			</div>
+			</Caption>
 		);
 	}
 

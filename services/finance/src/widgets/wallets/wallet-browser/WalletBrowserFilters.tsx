@@ -9,7 +9,7 @@ import {
 	FinanceToggle,
 } from "@internal/ui-library";
 
-import { SearchIcon } from "@entity/wallets";
+import { SearchIcon } from "@shared/pure-components/icons";
 import { useWalletsFiltersContext } from "@feature/wallets";
 import { useCallback, useRef } from "react";
 

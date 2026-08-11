@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import type { CurrencyPickerVariant } from "./types.ts";
 import type { FC } from "react";
-import type { CurrencyMeta } from "@entity/localization";
+import type { CurrencyMeta } from "../types.ts";
 
 
 interface CurrencyPickerLabelProps {

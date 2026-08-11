@@ -1,21 +1,10 @@
+import type { ConvertedMoney, Money } from "@entity/localization";
 import { useCallback, useMemo } from "react";
 import { useSettingsContext } from "@internal/shared";
 
-import { useLocaleCurrency } from "@shared/utils";
+import { useLocaleCurrency } from "@shared/formatting";
 import { useCurrencyRates } from "./use-currency-rates.ts";
 
-
-interface Money {
-	amount: number;
-	currency: string;
-}
-
-interface ConvertedMoney {
-	amount: number;
-	currency: string;
-	formatted: string;
-	converted: boolean;
-}
 
 interface UseConvertMoneyReturn {
 	convert: (money: Money) => ConvertedMoney;
@@ -57,4 +46,4 @@ const useConvertMoney = (): UseConvertMoneyReturn => {
 };
 
 export { useConvertMoney };
-export type { UseConvertMoneyReturn, ConvertedMoney, Money };
+export type {UseConvertMoneyReturn };

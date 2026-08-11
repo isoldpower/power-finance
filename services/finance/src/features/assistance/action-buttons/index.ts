@@ -1,1 +1,0 @@
-export { ResolveActionOnClick } from './ResolveActionOnClick.tsx';

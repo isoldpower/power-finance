@@ -1,5 +1,7 @@
+import { cn } from "@internal/ui-library";
 import {FC, ReactNode} from "react";
 import {FinanceCard} from "@internal/ui-library";
+import { textClass } from "@shared/pure-components/typography";
 
 interface ProtectSelectedNoneProps {
 	selectedWallet: string;
@@ -14,7 +16,7 @@ const ProtectSelectedNone: FC<ProtectSelectedNoneProps> = ({
 	
 	if (!hasSelection) {
 		return (
-			<FinanceCard className="px-6 py-16 text-center text-[13px] text-text-3">
+			<FinanceCard className={cn(textClass({ size: '13', tone: 'subtle' }), "px-6 py-16 text-center")}>
 				No wallet selected. Create one to get started.
 			</FinanceCard>
 		);

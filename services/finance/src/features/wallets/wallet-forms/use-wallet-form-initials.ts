@@ -1,21 +1,24 @@
 import { useMemo } from "react";
 import { useSettingsContext } from "@internal/shared";
 
-import { MOCK_WALLET_TYPES } from "../mock.ts";
-import { CREDIT_TYPE } from "./wallet-fields.ts";
+import { useWalletKinds } from "../data-presenters";
 
-import type { PanelWallet } from "../types.ts";
+import type { PanelWallet } from "@entity/wallets";
 import type { WalletFormSchema } from "./wallet-form-schema.ts";
 
 
 const useWalletFormInitials = (wallet?: PanelWallet): WalletFormSchema => {
 	const { mainCurrency } = useSettingsContext();
+	const { kinds } = useWalletKinds();
 
 	return useMemo(() => {
+		const defaultKind = kinds.find((kind) => !kind.credit)?.label ?? '';
+		const creditKind = kinds.find((kind) => kind.credit)?.label ?? defaultKind;
+
 		if (!wallet) {
 			return {
 				name: '',
-				type: MOCK_WALLET_TYPES[0],
+				type: defaultKind,
 				currency: mainCurrency,
 				balance: '',
 			} satisfies WalletFormSchema;
@@ -23,11 +26,11 @@ const useWalletFormInitials = (wallet?: PanelWallet): WalletFormSchema => {
 
 		return {
 			name: wallet.name,
-			type: wallet.credit ? CREDIT_TYPE : MOCK_WALLET_TYPES[0],
+			type: wallet.credit ? creditKind : defaultKind,
 			currency: wallet.currency,
 			balance: '',
 		} satisfies WalletFormSchema;
-	}, [wallet, mainCurrency]);
+	}, [wallet, mainCurrency, kinds]);
 }
 
 export { useWalletFormInitials };

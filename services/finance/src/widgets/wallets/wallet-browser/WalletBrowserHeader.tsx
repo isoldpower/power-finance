@@ -1,5 +1,6 @@
 import { NewWalletButton } from "@entity/wallets";
-import { SectionHeader, SlideOverTrigger } from "@shared/components";
+import { SectionHeader } from "@shared/pure-components/layout";
+import { SlideOverTrigger } from "@shared/overlays";
 
 import type { FC } from "react";
 

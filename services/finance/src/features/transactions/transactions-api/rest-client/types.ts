@@ -5,7 +5,7 @@ import type {
 	PatchRequest, PatchResponse, IPatchHandler,
 	PostRequest, PostResponse, IPostHandler
 } from "@internal/shared";
-import type { TransactionDetailed, TransactionPreview, TransactionMinimalPayload, TransactionPatchFields, TransactionChainPayload, TransactionChainResult } from "../types.ts";
+import type { TransactionDetailed, TransactionPreview, TransactionMinimalPayload, TransactionPatchFields, TransactionChainPayload, TransactionChainResult , CategoryDto, ReceiptScanDto } from "../types.ts";
 
 interface TransactionListParams extends ListParams {
 	wallet_id?: string
@@ -19,7 +19,15 @@ interface ITransactionsRESTApiClient extends
 	IDeleteHandler
 {
 	chain: (request: TransactionChainRequest) => Promise<TransactionChainResponse>
+	listCategories: (request: TransactionCategoriesRequest) => Promise<TransactionCategoriesResponse>
+	scanReceipt: (request: TransactionScanRequest) => Promise<TransactionScanResponse>
 }
+
+interface TransactionCategoriesRequest { params: object }
+interface TransactionCategoriesResponse { data: CategoryDto[] }
+
+interface TransactionScanRequest { params: { receiptId?: string } }
+type TransactionScanResponse = ReceiptScanDto;
 
 type TransactionGetRequest = GetRequest<object>;
 type TransactionGetResponse = GetResponse<TransactionDetailed>;
@@ -46,3 +54,10 @@ export type { TransactionPatchRequest, TransactionPatchResponse };
 export type { TransactionChainRequest, TransactionChainResponse };
 export type { TransactionDeleteRequest, TransactionDeleteResponse };
 export type { ITransactionsRESTApiClient };
+
+export type {
+	TransactionCategoriesRequest,
+	TransactionCategoriesResponse,
+	TransactionScanRequest,
+	TransactionScanResponse,
+};

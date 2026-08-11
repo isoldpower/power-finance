@@ -14,7 +14,8 @@ import {
 } from "@entity/wallets";
 import { useConvertMoney } from "@feature/localization";
 import { useWalletRecentTransactions, FulfillWithPlaceholder } from "@feature/wallets";
-import { useLocaleCurrency } from "@shared/utils";
+import { useLocaleCurrency } from "@shared/formatting";
+import { Caption } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 import type { Wallet } from "@entity/wallets";
@@ -65,9 +66,9 @@ const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ wallet }) => {
 						<NoActivityPlaceholder.Original>
 							&nbsp;
 						</NoActivityPlaceholder.Original>
-						<NoActivityPlaceholder.Converted>
+						<Caption size="11">
 							&nbsp;
-						</NoActivityPlaceholder.Converted>
+						</Caption>
 						<NoActivityPlaceholder.Title>
 							No activity yet
 						</NoActivityPlaceholder.Title>

@@ -1,3 +1,5 @@
+import type { OrderingType } from "@shared/data";
+
 interface WalletsSearch {
 	search?: string;
 	caseSensitive: boolean;
@@ -6,8 +8,6 @@ interface WalletsSearch {
 interface WalletsFiltering {
 	typeFilter: string;
 }
-
-type OrderingType = 'ASC' | 'DESC';
 
 interface WalletsOrdering {
 	field: string;
@@ -37,7 +37,6 @@ export type {
 	WalletsSearch,
 	WalletsFiltering,
 	WalletsOrdering,
-	OrderingType,
 	WalletsBrowseSetup,
 	GoalsSearch,
 	GoalsFiltering,

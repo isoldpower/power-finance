@@ -11,7 +11,8 @@ import type {
 	WalletMinimalPayload,
 	WalletPreview,
 	WalletSearchRoot,
-	WalletValuableFields
+	WalletValuableFields,
+	WalletKindDto
 } from "../types.ts";
 
 
@@ -24,7 +25,11 @@ interface IWalletsRESTApiClient extends
 	IDeleteHandler 
 {
 	search: (request: PostRequest<WalletSearchRoot, ListParams>) => Promise<ListResponse<WalletPreview>>
+	listKinds: (request: WalletKindsRequest) => Promise<WalletKindsResponse>
 }
+
+interface WalletKindsRequest { params: object }
+interface WalletKindsResponse { data: WalletKindDto[] }
 
 type WalletGetRequest = GetRequest<object>;
 type WalletGetResponse = GetResponse<WalletDetailed>;
@@ -55,3 +60,5 @@ export type {WalletPutRequest, WalletPutResponse};
 export type {WalletDeleteRequest, WalletDeleteResponse};
 export type {WalletsSearchRequest, WalletsSearchResponse};
 export type {IWalletsRESTApiClient};
+
+export type { WalletKindsRequest, WalletKindsResponse };

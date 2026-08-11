@@ -14,7 +14,7 @@ const GOAL_FORM_DEFAULTS: GoalFormSchema = {
 	name: '',
 	target: '',
 	monthly: '',
-	icon: '🎯',
+	icon: 'target',
 };
 
 export { goalFormSchema, GOAL_FORM_DEFAULTS };

@@ -1,5 +1,5 @@
 import type { Wallet } from "@entity/wallets";
-import type { IWalletsRESTApiClient } from "../rest-client/types.ts";
+import type { IWalletsRESTApiClient } from "../rest-client";
 
 
 interface ListAllWalletsRequest {

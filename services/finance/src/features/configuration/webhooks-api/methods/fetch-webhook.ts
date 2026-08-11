@@ -1,4 +1,4 @@
-import type { IWebhookRESTApiClient, WebhookGetRequest } from "../rest-client/types.ts";
+import type { IWebhookRESTApiClient, WebhookGetRequest } from "../rest-client";
 import { webhookDetailedResponseToFlat } from "../mutators/api-to-flat.ts";
 import {WebhookEndpoint} from "@entity/configuration";
 

@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from "react";
+import { Caption } from "@shared/pure-components/typography";
 
 
 interface ProtectActivityEmptyProps {
@@ -12,9 +13,9 @@ const ProtectActivityEmpty: FC<ProtectActivityEmptyProps> = ({
 }) => {
 	if (activityGroups.length === 0) {
 		return (
-			<div className="px-[18px] py-8 text-center text-[13px] text-text-3">
+			<Caption size="13" className="px-[18px] py-8 text-center">
 				No recent activity.
-			</div>
+			</Caption>
 		);
 	}
 	

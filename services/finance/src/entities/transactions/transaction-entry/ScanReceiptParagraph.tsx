@@ -1,6 +1,6 @@
-import { cn } from "@internal/ui-library";
 
 import type { BaseHTMLAttributes, FC } from "react";
+import { BodyText } from "@shared/pure-components/typography";
 
 
 interface ScanReceiptParagraphProps extends Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'> {
@@ -10,12 +10,14 @@ const ScanReceiptParagraph: FC<ScanReceiptParagraphProps> = ({
 	children,
 	...props
 }) => (
-	<span 
-		className={cn("block text-[11.5px] text-text-2")} 
-		{...props}
-	>
+	<BodyText
+			as="span"
+			size="11.5"
+			className="block"
+			{...props}
+		>
 		{children}
-	</span>
+	</BodyText>
 );
 
 ScanReceiptParagraph.displayName = 'ScanReceiptParagraph';

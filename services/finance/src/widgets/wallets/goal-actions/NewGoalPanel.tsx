@@ -11,10 +11,10 @@ import {
 	goalFormSchema,
 	useGoalFormState,
 } from "@feature/wallets";
-import { SlideOverPanel } from "@shared/interactions";
-import { FieldLabel, PanelFooter } from "@shared/components";
+import { SlideOverPanel } from "@shared/overlays";
+import { FieldLabel, PanelFooter } from "@shared/forms";
 
-import { GoalEmojiPicker } from "./GoalEmojiPicker.tsx";
+import { GoalIconPicker } from "./GoalIconPicker.tsx";
 
 import type { FC, ReactNode } from "react";
 import type { GoalFormSchema } from "@feature/wallets";
@@ -58,7 +58,7 @@ const NewGoalPanel: FC<NewGoalPanelProps> = ({ children }) => {
 									control={control}
 									name="icon"
 									render={({ field }) => (
-										<GoalEmojiPicker
+										<GoalIconPicker
 											value={field.value ?? ''}
 											onChange={field.onChange}
 										/>

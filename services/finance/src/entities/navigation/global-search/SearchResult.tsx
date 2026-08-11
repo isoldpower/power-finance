@@ -1,6 +1,7 @@
-import { SearchResultLabel } from "./SearchResultLabel.tsx";
 import { SearchResultMeta } from "./SearchResultMeta.tsx";
 import { UiCommandItem } from "@internal/ui-library";
+
+import { Text } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 
@@ -23,9 +24,9 @@ const SearchResult: FC<SearchResultProps> = ({
 			value={search}
 			onSelect={onSelect}
 		>
-			<SearchResultLabel>
+			<Text weight="medium" truncate>
 				{label}
-			</SearchResultLabel>
+			</Text>
 			<SearchResultMeta>
 				{meta}
 			</SearchResultMeta>

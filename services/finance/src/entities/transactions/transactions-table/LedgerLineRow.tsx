@@ -1,7 +1,8 @@
 import { FinanceBadge } from "@internal/ui-library";
 
-import type { LedgerEntryView } from "../data-view/types.ts";
+import type { LedgerEntryView } from "../data-view";
 import type { FC } from "react";
+import { DisplayText, Overline, RowTitle } from "@shared/pure-components/typography";
 
 
 interface LedgerLineRowProps {
@@ -13,15 +14,15 @@ const LedgerLineRow: FC<LedgerLineRowProps> = ({ line }) => (
 		<FinanceBadge tone={line.side === 'debit' ? 'accent' : 'viol'} appearance="soft" size="sm">
 			{line.label}
 		</FinanceBadge>
-		<span className="min-w-0 flex-1 truncate text-[12.5px] font-semibold">
+		<RowTitle as="span" size="12.5" truncate className="min-w-0 flex-1">
 			{line.account}
-		</span>
-		<span className="font-numeric text-[9px] uppercase tracking-[0.06em] text-text-3">
+		</RowTitle>
+		<Overline as="span" size="9" tracking="0.06em">
 			{line.side}
-		</span>
-		<span className="min-w-16 text-right font-display text-[13px] font-semibold">
+		</Overline>
+		<DisplayText as="span" size="13" className="min-w-16 text-right">
 			{line.amount}
-		</span>
+		</DisplayText>
 	</div>
 );
 

@@ -1,9 +1,11 @@
+import { AlertIcon } from "@shared/pure-components/icons";
 import type { FC } from "react";
 import { FinanceCard, cn } from "@internal/ui-library";
 
 import { ActionsListWidget } from "@widget/assistance";
 import { useActions, NeedsActionBadgeFx, HideOnActionsEmpty } from "@feature/assistance";
-import { AlertIcon, NeedsActionHeader } from "@entity/assistance";
+import { NeedsActionHeader } from "@entity/assistance";
+import { RowTitle } from "@shared/pure-components/typography";
 
 
 const NeedsActionPanel: FC = () => {
@@ -14,9 +16,9 @@ const NeedsActionPanel: FC = () => {
 			<FinanceCard variant="accent" className={cn("overflow-hidden")}>
 				<NeedsActionHeader.Container>
 					<AlertIcon />
-					<NeedsActionHeader.Title>
+					<RowTitle as="h2" size="14.5">
 						Needs your action
-					</NeedsActionHeader.Title>
+					</RowTitle>
 					<NeedsActionHeader.Badge>
 						<NeedsActionBadgeFx isPending={isPending} isError={isError}>
 							{actions.length}

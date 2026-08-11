@@ -3,7 +3,7 @@ import { useActiveTab } from "@feature/navigation";
 import { NAVIGATION_TABS } from "./config.ts";
 
 import type { FC, ReactNode } from "react";
-import type { NavTab } from "@feature/navigation";
+import type { NavTab } from "@entity/navigation";
 
 
 interface NavbarGroupTabsProps {

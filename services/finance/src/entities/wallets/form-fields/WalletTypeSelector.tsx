@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import { cn, FinanceSegmented, FinanceSegmentedItem } from "@internal/ui-library";
+import { textClass } from "@shared/pure-components/typography";
 
 
 interface WalletTypeSelectorProps {
@@ -12,7 +13,7 @@ interface WalletTypeSelectorProps {
 const WalletTypeSelector: FC<WalletTypeSelectorProps> = ({ options, value, onChange, className }) => (
 	<FinanceSegmented value={value} onValueChange={(next) => { if (next) onChange(next); }} className={cn("w-full", className)}>
 		{options.map((option) => (
-			<FinanceSegmentedItem key={option} value={option} className="flex-1 text-[11px]">
+			<FinanceSegmentedItem key={option} value={option} className={cn(textClass({ size: '11' }), "flex-1")}>
 				{option}
 			</FinanceSegmentedItem>
 		))}

@@ -1,12 +1,8 @@
 import type { FC } from "react";
-import { cn } from "@internal/ui-library";
-import type { Tone } from "@shared/utils";
+import { Caption, DisplayText } from "@shared/pure-components/typography";
 
-interface AssistantSignal {
-	label: string;
-	value: string;
-	tone: Tone;
-}
+import type { Tone } from "@shared/formatting";
+import type { AssistantSignal } from "../types.ts";
 
 const toneClass: Record<Tone, string> = {
 	pos: 'text-pos',
@@ -17,12 +13,11 @@ const toneClass: Record<Tone, string> = {
 
 const AssistantSignalTile: FC<AssistantSignal> = ({ label, value, tone }) => (
 	<div className="rounded-[var(--radius-md)] border border-border bg-card px-2.5 py-2">
-		<div className="text-[10px] text-text-3">{label}</div>
-		<div className={cn("font-display text-[15px] font-semibold", toneClass[tone])}>{value}</div>
+		<Caption size="10">{label}</Caption>
+		<DisplayText size="15" className={toneClass[tone]}>{value}</DisplayText>
 	</div>
 );
 
 AssistantSignalTile.displayName = 'AssistantSignalTile';
 
 export { AssistantSignalTile };
-export type { AssistantSignal };

@@ -1,6 +1,7 @@
 import { cn } from "@internal/ui-library";
 import { useMemo } from "react";
-import { useTransactionsSelectionContext } from "@feature/transactions";
+import { useTransactionsSelection } from "@feature/transactions";
+import { useShallow } from "zustand/react/shallow";
 import { LedgerTransactionRow, TransactionLedgerEntries } from "@widget/transactions";
 
 import type { FC } from "react";
@@ -12,7 +13,12 @@ interface LedgerBasedTransactionProps {
 }
 
 const LedgerBasedTransaction: FC<LedgerBasedTransactionProps> = ({ transaction }) => {
-	const { selectedTransactionId, selectTransaction } = useTransactionsSelectionContext();
+	const { selectedTransactionId, selectTransaction } = useTransactionsSelection(
+		useShallow((state) => ({
+			selectedTransactionId: state.selectedTransactionId,
+			selectTransaction: state.selectTransaction,
+		}))
+	);
 
 	const expanded = useMemo(() => {
 		return selectedTransactionId === transaction.id;

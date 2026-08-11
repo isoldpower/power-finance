@@ -1,8 +1,8 @@
 import type { FC } from "react";
 
-import { ScanReceiptForm as ScanReceiptFormWrapper } from "@feature/transactions/transaction-entry";
+import { ScanReceiptForm as ScanReceiptFormWrapper } from "@feature/transactions";
 import { ReceiptScanPreview } from "./ReceiptScanPreview.tsx";
-import { PanelFooter } from "@shared/components";
+import { PanelFooter } from "@shared/forms";
 
 
 interface ScanReceiptFormProps {

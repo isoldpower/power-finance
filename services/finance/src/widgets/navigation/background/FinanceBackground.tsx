@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { useRef } from "react";
 
-import { useAmbientParticles } from "@shared/components";
+import { useAmbientParticles } from "@shared/motion";
 
 import { PALETTE, PARTICLE_COUNT, MAX_ALPHA } from "./config.ts";
 import { BackgroundAurora, BackgroundDotGrid, ParticlesCanvas } from "@entity/navigation";

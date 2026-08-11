@@ -1,3 +1,5 @@
+import { MetaText } from "@shared/pure-components/typography";
+
 import type { FC } from "react";
 
 interface AutomationConditionLineProps {
@@ -6,7 +8,7 @@ interface AutomationConditionLineProps {
 }
 
 const AutomationConditionLine: FC<AutomationConditionLineProps> = ({ trigger, action }) => (
-	<div className="mt-0.5 font-numeric text-[10.5px] text-text-3">when {trigger} → {action}</div>
+	<MetaText as="div" size="10.5" className="mt-0.5">when {trigger} → {action}</MetaText>
 );
 
 AutomationConditionLine.displayName = 'AutomationConditionLine';

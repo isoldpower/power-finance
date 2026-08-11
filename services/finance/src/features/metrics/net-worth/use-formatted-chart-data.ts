@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { useConvertMoney } from "@feature/localization";
 
-import type { ChartPoint } from "@feature/metrics";
-import type { Money } from "@feature/localization";
+import type { ChartPoint } from "./build-sparkline.ts";
+import type { Money } from "@entity/localization";
 
 
 const useFormattedChartData = (netWorthValue: Money) => {

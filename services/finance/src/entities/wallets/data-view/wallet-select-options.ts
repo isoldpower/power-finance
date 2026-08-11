@@ -1,5 +1,5 @@
 import type { Wallet } from "../types.ts";
-import type { WalletSelectOption } from "../wallet-select";
+import type { WalletSelectOption } from "../form-fields";
 
 
 const toWalletSelectOptions = (wallets: Wallet[]): WalletSelectOption[] => {

@@ -1,7 +1,8 @@
 import { ActivityGroupHeader, ActivityRow, AmountDirectionIcon, resolveToneWithDirection, toTransactionDayView } from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
 import { ProtectActivityEmpty } from "@feature/transactions";
-import { useLocaleCurrency } from "@shared/utils";
+import { useLocaleCurrency } from "@shared/formatting";
+import { MetaText, Overline, RowTitle } from "@shared/pure-components/typography";
 
 import { useMemo } from "react";
 
@@ -26,9 +27,9 @@ const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 			{days.map((day) => (
 				<div key={day.dayLabel}>
 					<ActivityGroupHeader.Container>
-						<ActivityGroupHeader.Label>
+						<Overline as="span" size="10" tracking="0.1em">
 							{day.dayLabel}
-						</ActivityGroupHeader.Label>
+						</Overline>
 						<ActivityGroupHeader.Money positive={day.dayTotal >= 0}>
 							{formatCurrency(day.dayTotal, targetCurrency)}
 						</ActivityGroupHeader.Money>
@@ -39,9 +40,9 @@ const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 								<AmountDirectionIcon direction={transaction.direction} />
 							</ActivityRow.Icon>
 							<div className="min-w-0 flex-1">
-								<ActivityRow.Title>
+								<RowTitle>
 									{transaction.walletName}
-								</ActivityRow.Title>
+								</RowTitle>
 								<ActivityRow.Body>
 									<span>{transaction.category}</span>
 									<ActivityRow.Separator />
@@ -57,9 +58,9 @@ const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 								>
 									{transaction.amount}
 								</ActivityRow.Money>
-								<ActivityRow.Date>
+								<MetaText size="10.5" dateTime={transaction.createdAt}>
 									{transaction.date}
-								</ActivityRow.Date>
+								</MetaText>
 							</div>
 						</ActivityRow.Container>
 					))}

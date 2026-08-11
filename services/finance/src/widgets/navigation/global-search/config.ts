@@ -1,4 +1,4 @@
-import type { PageEntry } from "@feature/navigation/website-search";
+import type { PageEntry } from "@entity/navigation";
 
 
 const PAGES: PageEntry[] = [

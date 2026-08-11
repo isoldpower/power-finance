@@ -1,4 +1,4 @@
-import { sanitizeAmountInput } from "@shared/utils";
+import { sanitizeAmountInput } from "@shared/formatting";
 
 
 const formatCurrencyInput = (raw: string): string => {

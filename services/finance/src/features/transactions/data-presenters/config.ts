@@ -5,4 +5,6 @@ export const CACHE_KEYS = {
 	replace: 'replaceTransaction',
 	create: 'createTransaction',
 	chain: 'createTransactionChain',
+	categories: 'transactionCategories',
+	scan: 'transactionReceiptScan',
 } as const;

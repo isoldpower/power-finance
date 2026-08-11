@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from "react";
+import { Text } from "@shared/pure-components/typography";
 
 
 interface LedgerSymbolProps {
@@ -6,9 +7,9 @@ interface LedgerSymbolProps {
 }
 
 const LedgerSymbol: FC<LedgerSymbolProps> = ({ children }) => (
-	<span className="pb-0.5 text-[15px] font-medium text-text-2">
+	<Text size="15" weight="medium" tone="muted" className="pb-0.5">
 		{children}
-	</span>
+	</Text>
 );
 
 export { LedgerSymbol };

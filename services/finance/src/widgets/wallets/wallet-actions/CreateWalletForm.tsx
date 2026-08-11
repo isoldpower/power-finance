@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
@@ -7,14 +8,8 @@ import {
 	WalletPreviewCard,
 	WalletTypeSelector,
 } from "@entity/wallets";
-import {
-	WalletFormOnSubmit,
-	useWalletFormInitials,
-	useWalletFormState,
-	walletFormSchema,
-	MOCK_WALLET_TYPES
-} from "@feature/wallets";
-import { FieldLabel, PanelFooter } from "@shared/components";
+import { WalletFormOnSubmit, useWalletFormInitials, useWalletFormState, useWalletKinds, walletFormSchema } from "@feature/wallets";
+import { FieldLabel, PanelFooter } from "@shared/forms";
 
 import type { FC } from "react";
 import type { WalletFormSchema } from "@feature/wallets";
@@ -30,6 +25,8 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 	onClose,
 	currencies,
 }) => {
+	const { kinds } = useWalletKinds();
+	const kindLabels = useMemo(() => kinds.map((kind) => kind.label), [kinds]);
 	const defaultValues = useWalletFormInitials();
 	const form = useForm<WalletFormSchema>({
 		defaultValues,
@@ -72,7 +69,7 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 						control={form.control}
 						name="type"
 						render={({ field }) => (
-							<WalletTypeSelector options={MOCK_WALLET_TYPES} className="mb-4" {...field} />
+							<WalletTypeSelector options={kindLabels} className="mb-4" {...field} />
 						)} />
 					<FieldLabel>
 						Currency

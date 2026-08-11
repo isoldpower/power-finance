@@ -1,4 +1,4 @@
-import { InputField } from "@shared/components";
+import { InputField } from "@shared/forms";
 import {
 	UiCardDescription,
 	UiCardTitle,

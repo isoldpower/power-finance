@@ -4,7 +4,7 @@ import { UiSwitch } from "@internal/ui-library";
 import { AutomationRow, automationStatus } from "@entity/assistance";
 import { DeleteRuleDialog, useToggleAutomation } from "@feature/assistance";
 import { DeleteRuleModal } from "@widget/assistance";
-import { RowDeleteButton } from "@shared/components";
+import { RowDeleteButton } from "@shared/pure-components/collections";
 
 import type { FC } from "react";
 import type { AutomationRule } from "@feature/assistance";

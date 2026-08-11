@@ -1,5 +1,5 @@
-import type { WebhookEndpoint } from "@entity/configuration/webhook";
-import type { IWebhookRESTApiClient, WebhookRotateRequest } from "../rest-client/types.ts";
+import type { WebhookEndpoint } from "@entity/configuration";
+import type { IWebhookRESTApiClient, WebhookRotateRequest } from "../rest-client";
 import { webhookWithSecretResponseToFlat as webhookDetailedResponseToFlat } from "../mutators/api-to-flat.ts";
 
 

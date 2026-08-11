@@ -1,3 +1,5 @@
+import { Caption } from "@shared/pure-components/typography";
+
 import type { FC } from "react";
 
 
@@ -7,7 +9,7 @@ const BalanceLockedNotice: FC = () => (
 			<rect x="3" y="11" width="18" height="11" rx="2" />
 			<path d="M7 11V7a5 5 0 0 1 10 0v4" />
 		</svg>
-		<span className="text-[11.5px] leading-snug text-text-2">Balance is posted automatically from transactions and can’t be edited here.</span>
+		<Caption as="span" size="11.5" tone="muted" leading="snug">Balance is posted automatically from transactions and can’t be edited here.</Caption>
 	</div>
 );
 

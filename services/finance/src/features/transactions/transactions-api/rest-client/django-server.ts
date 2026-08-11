@@ -1,4 +1,4 @@
-import type { ITransactionsRESTApiClient } from "@feature/transactions";
+import type { ITransactionsRESTApiClient } from "./types.ts";
 import type {
 	TransactionChainRequest, TransactionChainResponse,
 	TransactionDeleteRequest, TransactionDeleteResponse,
@@ -6,6 +6,11 @@ import type {
 	TransactionListRequest, TransactionListResponse,
 	TransactionPatchRequest, TransactionPatchResponse,
 	TransactionPostRequest, TransactionPostResponse
+,
+	TransactionCategoriesRequest,
+	TransactionCategoriesResponse,
+	TransactionScanRequest,
+	TransactionScanResponse,
 } from "./types.ts";
 import type { TransactionDetailed } from "../types.ts";
 import type { AxiosInstance } from "axios";
@@ -92,6 +97,20 @@ class TransactionDjangoRESTApiClient implements ITransactionsRESTApiClient {
 		const postfix = this.resolvePostfix(request.params);
 
 		return this.axiosInstance.delete<TransactionDeleteResponse>(`/${request.id}/${postfix}`)
+			.then((response) => response.data);
+	}
+
+	listCategories(
+		request: TransactionCategoriesRequest
+	): Promise<TransactionCategoriesResponse> {
+		return this.axiosInstance.get<TransactionCategoriesResponse>('/categories/', { params: request.params })
+			.then((response) => response.data);
+	}
+
+	scanReceipt(
+		request: TransactionScanRequest
+	): Promise<TransactionScanResponse> {
+		return this.axiosInstance.post<TransactionScanResponse>('/scan-receipt/', request.params)
 			.then((response) => response.data);
 	}
 }

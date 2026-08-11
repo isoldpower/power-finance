@@ -12,9 +12,10 @@ import {
 	UiDialogDescription,
 	UiDialogTitle,
 } from "@internal/ui-library";
-import { SearchIcon, SearchTrigger, SearchResult } from "@entity/navigation";
+import { SearchTrigger, SearchResult } from "@entity/navigation";
+import { SearchIcon } from "@shared/pure-components/icons";
 import { useGlobalSearch, useSearchResults } from "@feature/navigation";
-import { ShowOnDesktop, ShowOnMobile } from "@shared/components";
+import { ShowOnDesktop, ShowOnMobile } from "@shared/visibility";
 import { PAGES } from "./config.ts";
 
 

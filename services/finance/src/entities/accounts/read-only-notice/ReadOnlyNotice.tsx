@@ -1,7 +1,8 @@
-import { LockIcon } from "../icons";
+import { LockIcon } from "@shared/pure-components/icons";
 import { cn } from "@internal/ui-library";
 
 import type { FC, ReactNode } from "react";
+import { BodyText } from "@shared/pure-components/typography";
 
 
 interface ReadOnlyNoticeProps {
@@ -16,9 +17,9 @@ const ReadOnlyNotice: FC<ReadOnlyNoticeProps> = ({
 		"border border-border border-l-[3px] border-l-text-3 bg-secondary px-3.5 py-2.5"
 	)}>
 		<LockIcon className="flex-none" />
-		<span className="text-[12.5px] leading-snug text-text-2">
+		<BodyText as="span" size="12.5" leading="snug">
 			{children}
-		</span>
+		</BodyText>
 	</div>
 );
 

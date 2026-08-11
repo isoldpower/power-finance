@@ -1,9 +1,13 @@
+import { useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
+
 import {
-	useTransactionsFiltersContext,
 	TransactionsFiltersContextProvider,
 	TransactionsPaginationContextProvider,
-	TransactionsSelectionContextProvider,
 	useTransactionsBrowser,
+	useTransactionsFiltersContext,
+	useTransactionsSelection,
+	ResetTransactionOnBrowse,
 } from "@feature/transactions";
 
 import type { FC, ReactNode } from "react";
@@ -29,22 +33,37 @@ interface TransactionBrowserInternalContextProps {
 
 const TransactionBrowserInternalContext: FC<TransactionBrowserInternalContextProps> = ({ children }) => {
 	const { sortBy, sortDirection, walletFilter, search, caseSensitive } = useTransactionsFiltersContext();
+	const { selectedTransactionId, selectTransaction } = useTransactionsSelection(
+		useShallow((state) => ({
+			selectedTransactionId: state.selectedTransactionId,
+			selectTransaction: state.selectTransaction,
+		}))
+	);
 	const { searchResults: { transactions, total } } = useTransactionsBrowser({
 		search: { search, caseSensitive },
 		filters: { walletFilter },
 		ordering: { field: sortBy, direction: sortDirection },
 	});
 
+	useEffect(() => {
+		if (!selectedTransactionId || transactions.length === 0) {
+			return;
+		}
+
+		if (!transactions.some((transaction) => transaction.id === selectedTransactionId)) {
+			selectTransaction(null);
+		}
+	}, [selectTransaction, selectedTransactionId, transactions]);
+
 	return (
-		<TransactionsSelectionContextProvider transactionsRegistry={transactions}>
-			<TransactionsPaginationContextProvider
-				pageSize={5}
-				total={total}
-				transactions={transactions}
-			>
-				{children}
-			</TransactionsPaginationContextProvider>
-		</TransactionsSelectionContextProvider>
+		<TransactionsPaginationContextProvider
+			pageSize={5}
+			total={total}
+			transactions={transactions}
+		>
+			<ResetTransactionOnBrowse />
+			{children}
+		</TransactionsPaginationContextProvider>
 	);
 }
 

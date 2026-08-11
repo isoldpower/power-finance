@@ -1,6 +1,6 @@
-import { cn } from "@internal/ui-library";
 
 import type { BaseHTMLAttributes, FC } from "react";
+import { Text } from "@shared/pure-components/typography";
 
 
 const AccountSummaryType: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'>> = ({
@@ -8,14 +8,18 @@ const AccountSummaryType: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'classNam
 	...props
 }) => {
 	return (
-		<span
-			className={cn(
-				"rounded-[4px] border border-border bg-secondary px-1.5 py-0.5 font-numeric text-[9.5px] font-semibold uppercase tracking-[0.04em] text-text-2"
-			)}
+		<Text
+			family="numeric"
+			size="9.5"
+			weight="semibold"
+			tone="muted"
+			tracking="0.04em"
+			uppercase
+			className="rounded-[4px] border border-border bg-secondary px-1.5 py-0.5"
 			{...props}
 		>
 			{children}
-		</span>
+		</Text>
 	);
 }
 

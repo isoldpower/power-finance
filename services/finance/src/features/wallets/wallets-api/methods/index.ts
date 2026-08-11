@@ -13,3 +13,5 @@ export type { FetchWalletResponse, FetchWalletRequest } from './fetch-wallet.ts'
 export type { UpdateWalletResponse, UpdateWalletRequest } from './update-wallet.ts';
 export type { ReplaceWalletResponse, ReplaceWalletRequest } from './replace-wallet.ts';
 export type { SearchWalletsResponse, SearchWalletsRequest } from './search-wallets.ts';
+export { listKinds } from './list-kinds.ts';
+export type { ListKindsRequest, ListKindsResponse } from './list-kinds.ts';

@@ -1,7 +1,9 @@
 import { Icons } from "@internal/ui-library";
 
 import { useAutomationsPaginationContext } from "@feature/assistance";
-import { PagerButton, PaginationRange, SpaceOccupant } from "@shared/components";
+import { MetaText } from "@shared/pure-components/typography";
+import { PagerButton, PaginationRange } from "@shared/pure-components/collections";
+import { SpaceOccupant } from "@shared/pure-components/layout";
 
 
 const AutomationsBrowserPagination = () => {
@@ -26,9 +28,9 @@ const AutomationsBrowserPagination = () => {
 			<PagerButton disabled={pageNumber <= 1} onClick={scrollBackward}>
 				<Icons.ChevronLeft size={15} />
 			</PagerButton>
-			<span className="font-numeric text-[11px] text-text-3">
+			<MetaText size="11">
 				{pageNumber} / {pageCount}
-			</span>
+			</MetaText>
 			<PagerButton disabled={pageNumber >= pageCount} onClick={scrollForward}>
 				<Icons.ChevronRight size={15} />
 			</PagerButton>

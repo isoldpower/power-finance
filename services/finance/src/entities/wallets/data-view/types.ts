@@ -1,5 +1,3 @@
-type FormatMoney = (amount: number, currency: string) => string;
-
 interface GoalView {
 	id: string;
 	icon: string;
@@ -12,4 +10,4 @@ interface GoalView {
 	percent: number;
 }
 
-export type { FormatMoney, GoalView };
+export type { GoalView };

@@ -1,8 +1,9 @@
 import { cn, FinanceCard } from "@internal/ui-library";
 
-import { QuickAddTitle, QuickAddDescriptor, QuickAddLink } from "@entity/transactions";
 import { useWalletsList } from "@feature/wallets";
 import { QuickAddForm } from "@widget/transactions";
+import { QuickAddTitle, QuickAddLink } from "@entity/transactions";
+import { MetaText, Text } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 
@@ -24,16 +25,16 @@ const QuickAddPanel: FC<QuickAddPanelProps> = ({ className }) => {
 				<QuickAddTitle>
 					Quick add
 				</QuickAddTitle>
-				<QuickAddDescriptor>
+				<MetaText size="10">
 					SIMPLE
-				</QuickAddDescriptor>
+				</MetaText>
 			</div>
 			<QuickAddForm wallets={wallets} />
 			<QuickAddLink to="management">
 				Need to scan a receipt or edit? 
-				<span className="font-semibold text-primary">
+				<Text weight="semibold" tone="accent">
 					&nbsp;Open Management →
-				</span>
+				</Text>
 			</QuickAddLink>
 		</FinanceCard>
 	);

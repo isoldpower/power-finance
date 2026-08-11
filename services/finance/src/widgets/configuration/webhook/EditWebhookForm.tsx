@@ -9,8 +9,8 @@ import {
 	useEditDefaultValues, 
 	webhookSchema,
 } from "@feature/configuration";
-import { FieldLayout } from "@entity/transactions";
-import { InputField } from "@shared/components";
+import { FieldLayout } from "@shared/forms";
+import { InputField } from "@shared/forms";
 import type { WebhookSchema } from "@feature/configuration";
 import type { WebhookEndpoint } from "@entity/configuration";
 

@@ -2,11 +2,12 @@ import {cn, FinanceMoney} from "@internal/ui-library";
 
 import { useCallback } from "react";
 import { WalletPinButton, WalletSwatch, walletTypeLabel } from "@entity/wallets";
-import { useWalletsPinsContext } from "@feature/wallets/search-and-filtering/WalletsPinsContext.tsx";
-import { useWalletsSelectionContext } from "@feature/wallets/search-and-filtering/WalletsSelectionContext.tsx";
-import { useLocaleCurrency } from "@shared/utils";
+import { useWalletsPinsContext, useWalletsSelection } from "@feature/wallets";
+import { useShallow } from "zustand/react/shallow";
+import { useLocaleCurrency } from "@shared/formatting";
 import type { Wallet } from "@entity/wallets";
 import { FC, MouseEvent } from "react";
+import { Caption, RowTitle, textClass } from "@shared/pure-components/typography";
 
 
 interface PinnableWalletRowProps {
@@ -14,7 +15,12 @@ interface PinnableWalletRowProps {
 }
 
 const PinnableWalletRow: FC<PinnableWalletRowProps> = ({ wallet }) => {
-	const { selectedWalletId, selectWallet } = useWalletsSelectionContext();
+	const { selectedWalletId, selectWallet } = useWalletsSelection(
+		useShallow((state) => ({
+			selectedWalletId: state.selectedWalletId,
+			selectWallet: state.selectWallet,
+		}))
+	);
 	const { isPinned, togglePin } = useWalletsPinsContext();
 	const format = useLocaleCurrency();
 
@@ -41,17 +47,17 @@ const PinnableWalletRow: FC<PinnableWalletRowProps> = ({ wallet }) => {
 		>
 			<WalletSwatch size='md' color={wallet.color} />
 			<div className="min-w-0 flex-1">
-				<div className="truncate text-[13.5px] font-semibold">
+				<RowTitle size="13.5" truncate>
 					{wallet.name}
-				</div>
-				<div className="text-[11px] text-text-3">
+				</RowTitle>
+				<Caption size="11">
 					{walletTypeLabel(wallet)} · {wallet.balance.currency}
-				</div>
+				</Caption>
 			</div>
 			<FinanceMoney
 				size="sm"
 				tone={wallet.balance.amount < 0 ? 'neg' : 'neutral'}
-				className="text-[13.5px]"
+				className={textClass({ size: '13.5' })}
 			>
 				{format(wallet.balance.amount, wallet.balance.currency)}
 			</FinanceMoney>

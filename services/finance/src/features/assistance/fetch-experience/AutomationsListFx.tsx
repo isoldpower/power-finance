@@ -3,6 +3,7 @@ import { AutomationSkeletonRow } from "@entity/assistance";
 import { useAutomations } from "../data-presenters";
 
 import type { FC, ReactNode } from "react";
+import { Caption } from "@shared/pure-components/typography";
 
 
 const PLACEHOLDER_KEYS = ['p1', 'p2', 'p3', 'p4', 'p5'];
@@ -32,9 +33,9 @@ const AutomationsListSkeleton: FC = () => (
 );
 
 const AutomationsListFailed: FC = () => (
-	<div className="px-[18px] py-6 text-center text-[13px] text-text-3">
+	<Caption size="13" className="px-[18px] py-6 text-center">
 		Couldn’t load automations.
-	</div>
+	</Caption>
 );
 
 AutomationsListFx.displayName = 'AutomationsListFx';

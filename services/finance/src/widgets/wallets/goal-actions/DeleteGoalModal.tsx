@@ -3,13 +3,14 @@ import { FinanceButton } from "@internal/ui-library";
 
 import { GoalDialog, toWalletSelectOptions, WalletSelect } from "@entity/wallets";
 import { useWalletsList } from "@feature/wallets";
-import { ConfirmModal } from "@shared/interactions";
-import { DangerIconBadge } from "@shared/components";
-import { useLocaleCurrency } from "@shared/utils";
+import { ConfirmModal } from "@shared/overlays";
+import { BodyText, Heading, RowTitle, Text } from "@shared/pure-components/typography";
+import { DangerIconBadge } from "@shared/pure-components/badges";
+import { useLocaleCurrency } from "@shared/formatting";
 
 import type { FC, ReactNode } from "react";
 import type { GoalWallet } from "@entity/wallets";
-import type { GoalDisposition, GoalDispositionMode } from "@feature/wallets";
+import type { GoalDisposition, GoalDispositionMode } from "@entity/wallets";
 
 
 interface DeleteGoalModalProps {
@@ -49,12 +50,12 @@ const DeleteGoalModal: FC<DeleteGoalModalProps> = ({ wallet, pending, onConfirm,
 					<GoalDialog.Header>
 						<DangerIconBadge className="size-10 flex-none" iconSize={20} />
 						<GoalDialog.Content>
-							<GoalDialog.Title>
+							<Heading>
 								Delete goal
-							</GoalDialog.Title>
+							</Heading>
 							<GoalDialog.Description>
 								{hasSavings
-									? <>“{wallet.name}” has <span className="font-semibold text-foreground">{saved}</span> saved. Choose what happens to it.</>
+									? <>“{wallet.name}” has <Text weight="semibold" tone="strong">{saved}</Text> saved. Choose what happens to it.</>
 									: <>Permanently delete “{wallet.name}”? This can’t be undone.</>}
 							</GoalDialog.Description>
 						</GoalDialog.Content>
@@ -67,12 +68,12 @@ const DeleteGoalModal: FC<DeleteGoalModalProps> = ({ wallet, pending, onConfirm,
 							>
 								<GoalDialog.Radio selected={mode === 'transfer'} />
 								<GoalDialog.Content>
-									<GoalDialog.OptionTitle>
+									<RowTitle size="13">
 										Transfer to a wallet
-									</GoalDialog.OptionTitle>
-									<GoalDialog.OptionHint>
+									</RowTitle>
+									<BodyText size="11.5">
 										Move the {saved} you saved into an account
-									</GoalDialog.OptionHint>
+									</BodyText>
 								</GoalDialog.Content>
 							</GoalDialog.Option>
 							{mode === 'transfer' ? (
@@ -90,12 +91,12 @@ const DeleteGoalModal: FC<DeleteGoalModalProps> = ({ wallet, pending, onConfirm,
 							>
 								<GoalDialog.Radio selected={mode === 'spent'} />
 								<GoalDialog.Content>
-									<GoalDialog.OptionTitle>
+									<RowTitle size="13">
 										Mark as spent
-									</GoalDialog.OptionTitle>
-									<GoalDialog.OptionHint>
+									</RowTitle>
+									<BodyText size="11.5">
 										The money was used — close this goal as fulfilled
-									</GoalDialog.OptionHint>
+									</BodyText>
 								</GoalDialog.Content>
 							</GoalDialog.Option>
 						</GoalDialog.Options>

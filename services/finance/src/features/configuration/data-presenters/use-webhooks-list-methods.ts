@@ -3,17 +3,12 @@ import { useCallback, useMemo } from "react";
 import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
-import {
-	createWebhookEndpoint as createWebhookEndpointApi,
-	listWebhooks as listWebhooksApi
-} from "@feature/configuration";
+import { createWebhookEndpoint as createWebhookEndpointApi } from "../webhooks-api/methods/create-webhook.ts";
+import { listWebhooks as listWebhooksApi } from "../webhooks-api/methods/list-webhooks.ts";
 import { CACHE_KEYS } from "./cache-config.ts";
-import type {
-	CreateWebhookRequest,
-	CreateWebhookResponse,
-	WebhookValuableFields,
-	ListWebhooksResponse
-} from "@feature/configuration";
+import type { CreateWebhookRequest, CreateWebhookResponse } from "../webhooks-api/methods/create-webhook.ts";
+import type { WebhookValuableFields } from "../webhooks-api/types.ts";
+import type { ListWebhooksResponse } from "../webhooks-api/methods/list-webhooks.ts";
 
 
 interface UseWebhooksReturn {

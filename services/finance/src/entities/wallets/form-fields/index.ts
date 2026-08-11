@@ -1,7 +1,6 @@
-export { FieldLayout } from './FieldLayout.tsx';
-export { WalletPreviewCard } from './WalletPreviewCard.tsx';
-export { WalletTypeSelector } from './WalletTypeSelector.tsx';
 export { BalanceLockedNotice } from './BalanceLockedNotice.tsx';
+export { WalletPreviewCard } from './WalletPreviewCard.tsx';
+export { WalletSelect } from './WalletSelect.tsx';
+export { WalletTypeSelector } from './WalletTypeSelector.tsx';
 
-export type { WalletPreviewCardProps } from './WalletPreviewCard.tsx';
-export type { WalletTypeSelectorProps } from './WalletTypeSelector.tsx';
+export type { WalletSelectOption } from './WalletSelect.tsx';

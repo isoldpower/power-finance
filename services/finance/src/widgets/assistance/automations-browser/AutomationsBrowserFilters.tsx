@@ -1,5 +1,5 @@
 import { useAutomationsFiltersContext } from "@feature/assistance";
-import { ListFilterBar } from "@shared/components";
+import { ListFilterBar } from "@shared/pure-components/collections";
 
 import { AUTOMATIONS_STATUS_OPTIONS } from "../config.ts";
 

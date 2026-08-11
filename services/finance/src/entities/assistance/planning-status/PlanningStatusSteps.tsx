@@ -1,20 +1,22 @@
-import { cn } from "@internal/ui-library";
 
 import type { BaseHTMLAttributes, FC } from "react";
+import { Overline } from "@shared/pure-components/typography";
 
 
 const PlanningStatusSteps: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'>> = ({
 	children,
 	...props
 }) => (
-	<span
-		className={cn(
-			"hidden font-numeric text-[11px] uppercase tracking-[0.08em] text-text-3 sm:block"
-		)}
-		{...props}
-	>
+	<Overline
+			as="span"
+			size="11"
+			tracking="0.08em"
+			tone="subtle"
+			className="hidden sm:block"
+			{...props}
+		>
 		{children}
-	</span>
+	</Overline>
 );
 
 PlanningStatusSteps.displayName = 'PlanningStatusSteps';

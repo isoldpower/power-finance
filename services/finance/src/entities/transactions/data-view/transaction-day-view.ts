@@ -1,7 +1,8 @@
 import { toTransactionRowViews } from "./transaction-row-view.ts";
 
 import type { TransactionPreviewDto } from "../types.ts";
-import type { ConvertMoney, FormatMoney, TransactionDayView, TransactionRowView } from "./types.ts";
+import type { ConvertMoney, TransactionDayView, TransactionRowView } from "./types.ts";
+import type { FormatMoney } from "@shared/formatting";
 
 
 const toDayLabel = (dayKey: string): string => {

@@ -1,7 +1,7 @@
 import { cn } from "@internal/ui-library";
 
 import type { FC, ReactNode } from "react";
-import type { Tone } from "@shared/utils";
+import type { Tone } from "@shared/formatting";
 
 interface WalletTxnIconProps {
 	children: ReactNode;

@@ -2,7 +2,8 @@ import { useMemo } from "react";
 import { getFinanceRoute } from "@internal/shared";
 import { useWalletsList } from "@feature/wallets";
 
-import type { PageEntry, ResultItem } from "./types.ts";
+import type { ResultItem } from "./types.ts";
+import type { PageEntry } from "@entity/navigation";
 
 
 const WALLET_RESULTS_LIMIT = 6;

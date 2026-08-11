@@ -3,7 +3,7 @@ import { lazy } from "react";
 import { AppError, AppLoader } from "@internal/ui-library";
 import { SettingsProvider } from "@internal/shared";
 
-import { getTanStackPageFx } from "@shared/components";
+import { getTanStackPageFx } from "@shared/pure-components/feedback";
 
 
 export const Route = createRootRoute({

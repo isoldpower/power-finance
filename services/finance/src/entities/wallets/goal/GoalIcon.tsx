@@ -1,3 +1,5 @@
+import { resolveGoalIcon } from "./goal-icons.ts";
+
 import type { FC } from "react";
 
 interface GoalIconProps {
@@ -5,9 +7,18 @@ interface GoalIconProps {
 	color: string;
 }
 
-const GoalIcon: FC<GoalIconProps> = ({ icon, color }) => (
-	<div className="flex size-9 flex-none items-center justify-center rounded-[10px] text-[15px]" style={{ background: color }}>{icon}</div>
-);
+const GoalIcon: FC<GoalIconProps> = ({ icon, color }) => {
+	const Icon = resolveGoalIcon(icon);
+
+	return (
+		<div
+			className="flex size-9 flex-none items-center justify-center rounded-[10px] text-white"
+			style={{ background: color }}
+		>
+			<Icon size={17} />
+		</div>
+	);
+};
 
 GoalIcon.displayName = 'GoalIcon';
 

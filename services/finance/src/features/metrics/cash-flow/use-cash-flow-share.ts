@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import type { CashFlowInsight } from "@feature/metrics";
+import type { CashFlowInsight } from "../metrics-api/types.ts";
 
 
 const useCashFlowShare = (

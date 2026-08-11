@@ -1,7 +1,8 @@
 import type { FC, ReactNode } from "react";
-import type { CashFlowInsight } from "@feature/metrics";
+import type { CashFlowInsight } from "../metrics-api/types.ts";
 
 import { CashFlowNetSkeleton } from "@entity/metrics";
+import { Caption } from "@shared/pure-components/typography";
 
 
 interface CashFlowNetFxProps {
@@ -27,9 +28,9 @@ const CashFlowNetFx: FC<CashFlowNetFxProps> = ({
 };
 
 const CashFlowNetFailed: FC = () => (
-	<div className="mt-4 text-[13px] text-text-3">
+	<Caption size="13" className="mt-4">
 		Couldn’t load cash flow.
-	</div>
+	</Caption>
 );
 
 export { CashFlowNetFx };

@@ -1,4 +1,5 @@
 import {FC, ReactNode} from "react";
+import { RowTitle } from "@shared/pure-components/typography";
 
 interface WalletsRecentTitleProps {
 	children: ReactNode;
@@ -6,9 +7,9 @@ interface WalletsRecentTitleProps {
 
 const WalletsRecentTitle: FC<WalletsRecentTitleProps> = ({ children }) => (
 	<div className="px-[18px] pb-1 pt-3.5">
-		<span className="text-[13.5px] font-semibold">
+		<RowTitle as="span" size="13.5">
 			{children}
-		</span>
+		</RowTitle>
 	</div>
 );
 

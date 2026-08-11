@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 
-import type { ChartPoint, SeriesPoint } from "@feature/metrics";
-import type { Money } from "@feature/localization";
+import type { SeriesPoint } from "../metrics-api/types.ts";
+import type { ChartPoint } from "./build-sparkline.ts";
+import type { Money } from "@entity/localization";
 
 
 interface HoverStateParams {

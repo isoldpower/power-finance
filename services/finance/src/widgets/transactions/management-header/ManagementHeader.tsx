@@ -1,9 +1,10 @@
+import { ScanReceiptIcon } from "@shared/pure-components/icons";
 import type { FC } from "react";
 import { cn, FinanceButton } from "@internal/ui-library";
 
-import type { PanelMode } from "@feature/wallets";
-import { ScanReceiptIcon } from "@entity/transactions";
-import { AiBadge } from "@shared/components";
+import type { PanelMode } from "@entity/wallets";
+import { AiBadge } from "@shared/pure-components/badges";
+import { Overline, PageTitle } from "@shared/pure-components/typography";
 
 interface ManagementHeaderProps {
 	onOpenPanel: (mode: PanelMode) => void;
@@ -13,10 +14,10 @@ interface ManagementHeaderProps {
 const ManagementHeader: FC<ManagementHeaderProps> = ({ onOpenPanel, className }) => {
 	return (
 		<div className={cn("flex flex-wrap items-center gap-3.5", className)}>
-			<h1 className="font-display text-2xl font-semibold tracking-[-0.01em]">Management</h1>
-			<span className="hidden font-numeric text-[11px] uppercase tracking-[0.08em] text-text-3 sm:block">
+			<PageTitle>Management</PageTitle>
+			<Overline as="span" size="11" tracking="0.08em" className="hidden sm:block">
 				Wallets · Transactions · Ledger
-			</span>
+			</Overline>
 			<div className="flex-1" />
 			<FinanceButton variant="secondary" className="hidden items-center gap-2 sm:flex" onClick={() => { onOpenPanel('scan'); }}>
 				<ScanReceiptIcon />

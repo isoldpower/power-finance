@@ -1,6 +1,6 @@
 import { AssistantOverlay } from "@entity/assistance";
-import { AttachToLayout } from "@shared/components";
-import { ShowOnOpen } from "@shared/interactions";
+import { AttachToLayout } from "@shared/pure-components/layout";
+import { ShowOnOpen } from "@shared/overlays";
 
 import type { FC, ReactNode } from "react";
 

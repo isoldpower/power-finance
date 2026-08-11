@@ -1,6 +1,7 @@
 import type { ComponentProps, FC } from "react";
 
 import { cn, FinanceMoney } from "@internal/ui-library";
+import { MetaText } from "@shared/pure-components/typography";
 
 
 type FinanceMoneyProps = ComponentProps<typeof FinanceMoney>;
@@ -30,9 +31,9 @@ const MoneyInOriginal: FC<MoneyInOriginalProps> = ({ children, currency, convert
 			<FinanceMoney tone={tone} size={size}>
 				{format(children, currency)}
 			</FinanceMoney>
-			<span className="font-numeric text-[10.5px] text-text-3">
+			<MetaText size="10.5">
 				≈ {main.formatted}
-			</span>
+			</MetaText>
 		</div>
 	);
 };

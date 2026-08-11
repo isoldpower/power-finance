@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { Caption, RowTitle, Text } from "@shared/pure-components/typography";
 
 interface ScanFieldRowProps {
 	label: string;
@@ -8,12 +9,12 @@ interface ScanFieldRowProps {
 
 const ScanFieldRow: FC<ScanFieldRowProps> = ({ label, value, ai }) => (
 	<div className="flex items-center gap-3 border-b border-border py-2.5">
-		<span className="w-24 text-[11.5px] text-text-3">{label}</span>
-		<span className="flex flex-1 items-center gap-2 text-[13.5px] font-semibold">
+		<Caption as="span" size="11.5" className="w-24">{label}</Caption>
+		<RowTitle as="span" size="13.5" className="flex flex-1 items-center gap-2">
 			{value}
-			{ai ? <span className="rounded-[4px] border border-[var(--accent-border)] px-1 font-numeric text-[8.5px] font-semibold text-primary">AI</span> : null}
-		</span>
-		<span className="cursor-pointer text-[11px] text-text-3">edit</span>
+			{ai ? <Text family="numeric" size="8.5" weight="semibold" tone="accent" className="rounded-[4px] border border-[var(--accent-border)] px-1">AI</Text> : null}
+		</RowTitle>
+		<Caption as="span" size="11" className="cursor-pointer">edit</Caption>
 	</div>
 );
 

@@ -7,8 +7,9 @@ import { NeedsActionPanel } from "@process/assistance";
 import { CurrencySelector } from "@widget/localization";
 import { PeriodSelector, LongCurrentDateLabel } from "@widget/metrics";
 import { MetricsPreferencesProvider } from "@feature/metrics";
-import { RevealMotion } from "@shared/interactions";
-import { PageContainer, MainPageTitle, TwoColumnsContainer, SidebarColumnsContainer } from "@shared/components";
+import { RevealMotion } from "@shared/motion";
+import { PageContainer, SidebarColumnsContainer, TwoColumnsContainer } from "@shared/pure-components/layout";
+import { PageTitle } from "@shared/pure-components/typography";
 
 import { PERIODS } from "./config";
 
@@ -20,7 +21,7 @@ const DashboardPage: FC = () => {
 				<RevealMotion delay={0.1}>
 					<div className='flex flex-wrap justify-between gap-3.5'>
 						<div className="flex items-center gap-4">
-							<MainPageTitle>Dashboard</MainPageTitle>
+							<PageTitle>Dashboard</PageTitle>
 							<LongCurrentDateLabel />
 						</div>
 						<div className="flex items-center gap-2">

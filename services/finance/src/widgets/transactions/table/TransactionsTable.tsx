@@ -8,7 +8,8 @@ import {
 } from "@entity/transactions";
 import { TransactionRow } from "./TransactionRow.tsx";
 import type { TransactionRowView } from "@entity/transactions";
-import type { ConvertedMoney, Money } from "@feature/localization";
+import type { ConvertedMoney, Money } from "@entity/localization";
+import { Caption, Text } from "@shared/pure-components/typography";
 
 interface TransactionsTableProps {
 	isPending: boolean;
@@ -64,7 +65,7 @@ const TransactionsTable: FC<TransactionsTableProps> = ({
 			<TransactionsTableHeader targetCurrency={targetCurrency} />
 
 			{isPending ? (
-				<div className="px-4 py-10 text-center text-[13px] text-text-3">Loading…</div>
+				<Caption size="13" className="px-4 py-10 text-center">Loading…</Caption>
 			) : (
 				pageRows.map((row) => {
 					const main = convert({ amount: row.amount, currency: row.currency });
@@ -96,9 +97,9 @@ const TransactionsTable: FC<TransactionsTableProps> = ({
 			) : null}
 
 			{!isPending && rows.length > 0 ? (
-				<div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2.5 text-xs text-text-3">
+				<Text as="div" size="xs" tone="subtle" className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2.5">
 					{hasFilters ? (
-						<span>Showing <b className="text-text-2">{rangeStart}–{rangeEnd}</b> of {rows.length} filtered · {total} total</span>
+						<span>Showing <Text as="b" tone="muted">{rangeStart}–{rangeEnd}</Text> of {rows.length} filtered · {total} total</span>
 					) : (
 						<span>Showing <b className="text-text-2">{rangeStart}–{rangeEnd}</b> of {total}</span>
 					)}
@@ -111,7 +112,7 @@ const TransactionsTable: FC<TransactionsTableProps> = ({
 							onPage={setPage}
 						/>
 					) : null}
-				</div>
+				</Text>
 			) : null}
 		</>
 	);

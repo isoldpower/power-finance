@@ -1,6 +1,6 @@
 import { cn } from "@internal/ui-library";
 import type { BaseHTMLAttributes, FC } from "react";
-import type { Tone } from "@shared/utils";
+import type { Tone } from "@shared/formatting";
 
 
 interface PostingsDirectionIconProps extends Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> {

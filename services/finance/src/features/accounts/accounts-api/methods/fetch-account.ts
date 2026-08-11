@@ -1,6 +1,6 @@
 import type { Account } from "@entity/accounts";
 import type { IAccountsRESTApiClient } from "../rest-client";
-import type { AccountGetRequest } from "../rest-client/types.ts";
+import type { AccountGetRequest } from "../rest-client";
 import { accountDetailedToFlat } from "../mutators/api-to-flat.ts";
 
 

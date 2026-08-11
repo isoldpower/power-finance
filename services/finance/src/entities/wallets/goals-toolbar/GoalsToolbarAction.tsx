@@ -1,6 +1,7 @@
 import { cn } from "@internal/ui-library";
 
 import type { ButtonHTMLAttributes, FC } from "react";
+import { textClass } from "@shared/pure-components/typography";
 
 
 const GoalsToolbarAction: FC<Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className' | 'type'>> = ({
@@ -10,7 +11,7 @@ const GoalsToolbarAction: FC<Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'clas
 	<button
 		type="button"
 		className={cn(
-			"text-[12.5px] font-semibold text-primary hover:underline"
+			textClass({ size: '12.5', weight: 'semibold', tone: 'accent' }), "hover:underline"
 		)}
 		{...props}
 	>

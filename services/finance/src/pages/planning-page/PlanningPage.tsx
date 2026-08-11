@@ -1,12 +1,8 @@
-import { Tooltip, RevealMotion } from "@shared/interactions";
-import {
-	CenteredList,
-	MainPageTitle,
-	PageContainer,
-	SidebarColumnsContainer,
-	SpaceOccupant,
-	StackedList,
-} from "@shared/components";
+import { Tooltip } from "@shared/overlays";
+import { RevealMotion } from "@shared/motion";
+import { CenteredList, PageContainer, SidebarColumnsContainer, SpaceOccupant, StackedList } from "@shared/pure-components/layout";
+import { PageTitle } from "@shared/pure-components/typography";
+import { CheckIcon } from "@shared/pure-components/icons";
 import { FinanceButton, FinanceCard } from "@internal/ui-library";
 
 import { PlanningAiAssistant, NeedsActionPanel, ToggleableAutomationRow } from "@process/assistance";
@@ -35,12 +31,10 @@ import {
 import { GoalsListFx } from "@feature/wallets";
 import {
 	AutomationsToolbar,
-	CheckIcon,
 	PlanningStatus,
 } from "@entity/assistance";
 import { GoalsToolbar } from "@entity/wallets";
 
-import { assistantContent } from "./config.ts";
 
 import type { FC } from "react";
 
@@ -50,9 +44,9 @@ const PlanningPage: FC = () => {
 		<PageContainer>
 			<RevealMotion delay={0.1}>
 				<CenteredList gap={3.5}>
-					<MainPageTitle>
+					<PageTitle>
 						Planning
-					</MainPageTitle>
+					</PageTitle>
 					<ShowOnResolved>
 						<Tooltip content="Everything is in sync — nothing needs your approval right now.">
 							<PlanningStatus.SyncBadge>
@@ -128,7 +122,7 @@ const PlanningPage: FC = () => {
 						</GoalsBrowserContextProvider>
 						<WhatIfCard />
 					</StackedList>
-					<PlanningAiAssistant {...assistantContent} />
+					<PlanningAiAssistant />
 				</SidebarColumnsContainer>
 			</RevealMotion>
 		</PageContainer>

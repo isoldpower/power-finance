@@ -1,7 +1,8 @@
 import {UiSkeleton} from "@internal/ui-library";
 
 import type { FC, ReactNode } from "react";
-import type { Action } from "../actions-api";
+import type { Action } from "../assistance-api/actions";
+import { Caption } from "@shared/pure-components/typography";
 
 
 interface ActionsListFxProps {
@@ -46,9 +47,9 @@ const ActionsListSkeleton: FC = () => (
 );
 
 const ActionsListFailed: FC = () => (
-	<div className="mt-4 text-[13px] text-text-3">
+	<Caption size="13" className="mt-4">
 		Couldn’t load cash flow.
-	</div>
+	</Caption>
 );
 
 export { ActionsListFx };

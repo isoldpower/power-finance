@@ -1,4 +1,5 @@
-import { SlideOver, useSlideOverContext } from "@shared/components";
+import { SlideOver } from "@shared/overlays";
+import { useSlideOverContext } from "@shared/overlays";
 import { CreateWalletForm } from "@widget/wallets";
 import { useCurrencies } from "@feature/localization";
 import { WalletCurrenciesFx } from "@feature/wallets";

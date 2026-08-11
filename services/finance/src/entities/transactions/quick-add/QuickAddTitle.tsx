@@ -1,13 +1,14 @@
 import type { FC, BaseHTMLAttributes } from "react";
+import { CardTitle } from "@shared/pure-components/typography";
 
 
 const QuickAddTitle: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'>> = ({
 	children,
 	...props
 }) => (
-	<span className="flex-1 text-sm font-semibold" {...props}>
+	<CardTitle as="h2" className="flex-1" {...props}>
 		{children}
-	</span>
+	</CardTitle>
 );
 
 export { QuickAddTitle };

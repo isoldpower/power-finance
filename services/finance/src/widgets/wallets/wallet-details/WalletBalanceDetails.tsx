@@ -1,9 +1,9 @@
 import { FinanceMoney } from "@internal/ui-library";
 import { MoneyInOriginal } from "@entity/localization";
-import { WalletBalance } from "@entity/wallets";
 import { useConvertMoney } from "@feature/localization";
 import { useWalletsPeriodFlow } from "@feature/wallets";
-import { useLocaleCurrency } from "@shared/utils";
+import { useLocaleCurrency } from "@shared/formatting";
+import { Caption, Overline } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 import type { Wallet } from "@entity/wallets";
@@ -21,9 +21,9 @@ const WalletBalanceDetails: FC<WalletBalanceDetailsProps> = ({ wallet }) => {
 	return (
 		<div className="mt-[18px] flex items-end gap-5">
 			<div className="flex flex-col">
-				<WalletBalance>
+				<Overline size="10" tracking="0.1em">
 					Balance
-				</WalletBalance>
+				</Overline>
 				<MoneyInOriginal
 					currency={wallet.balance.currency}
 					tone={wallet.balance.amount >= 0 ? 'neutral' : 'neg'}
@@ -37,13 +37,13 @@ const WalletBalanceDetails: FC<WalletBalanceDetailsProps> = ({ wallet }) => {
 			</div>
 			<div className="flex-1" />
 			<div>
-				<div className="text-[11px] text-text-3">In</div>
+				<Caption size="11">In</Caption>
 				<FinanceMoney tone="pos" size="md">
 					{format(totalPeriodFlow.in, wallet.balance.currency)}
 				</FinanceMoney>
 			</div>
 			<div>
-				<div className="text-[11px] text-text-3">Out</div>
+				<Caption size="11">Out</Caption>
 				<FinanceMoney tone="neg" size="md">
 					{format(totalPeriodFlow.out, wallet.balance.currency)}
 				</FinanceMoney>

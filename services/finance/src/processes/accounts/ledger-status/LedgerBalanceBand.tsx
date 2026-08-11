@@ -3,9 +3,10 @@ import { FinanceStat } from "@internal/ui-library";
 import { MoneyWithFx } from "@widget/localization";
 import { LedgerBalanceBadge, ExplanatoryNeutralBadge, AskAiForHelp } from "@widget/metrics";
 import { useLedgerBalance } from "@feature/metrics";
-import { LedgerTitle, LedgerCard, LedgerSymbol } from "@entity/accounts";
-import { Tooltip } from "@shared/interactions";
-import { CenteredList, EndList, SpaceOccupant } from "@shared/components";
+import { LedgerCard, LedgerSymbol } from "@entity/accounts";
+import { Tooltip } from "@shared/overlays";
+import { CenteredList, EndList, SpaceOccupant } from "@shared/pure-components/layout";
+import { Overline } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 
@@ -16,9 +17,9 @@ const LedgerBalanceBand: FC = () => {
 	return (
 		<LedgerCard>
 			<CenteredList>
-				<LedgerTitle>
+				<Overline as="h2" tracking="0.14em">
 					Ledger
-				</LedgerTitle>
+				</Overline>
 				<ExplanatoryNeutralBadge>
 					double-entry
 				</ExplanatoryNeutralBadge>

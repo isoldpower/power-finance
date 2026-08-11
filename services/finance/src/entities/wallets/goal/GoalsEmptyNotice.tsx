@@ -1,20 +1,19 @@
-import { cn } from "@internal/ui-library";
 
 import type { BaseHTMLAttributes, FC } from "react";
+import { Caption } from "@shared/pure-components/typography";
 
 
 const GoalsEmptyNotice: FC<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>> = ({
 	children,
 	...props
 }) => (
-	<div
-		className={cn(
-			"px-[18px] py-6 text-center text-[13px] text-text-3"
-		)}
-		{...props}
-	>
+	<Caption
+			size="13"
+			className="px-[18px] py-6 text-center"
+			{...props}
+		>
 		{children}
-	</div>
+	</Caption>
 );
 
 GoalsEmptyNotice.displayName = 'GoalsEmptyNotice';

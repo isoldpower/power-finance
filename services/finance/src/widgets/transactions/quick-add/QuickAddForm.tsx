@@ -1,8 +1,9 @@
+import { FromIcon, ToIcon } from "@shared/pure-components/icons";
 import { FinanceButton, UiForm, UiFormField } from "@internal/ui-library";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EntryAmountField, EntryTypeSelector, FromIcon, ToIcon } from "@entity/transactions";
+import { EntryAmountField, EntryTypeSelector } from "@entity/transactions";
 import { WalletSelect, toWalletSelectOptions } from "@entity/wallets";
 import {
 	TransactionEntryOnSubmit,
@@ -14,7 +15,7 @@ import {
 	quickAddSchema,
 	useQuickAddInitials,
 } from "@feature/transactions";
-import { HideOnFormValue, ShowOnFormValue } from "@shared/components";
+import { HideOnFormValue, ShowOnFormValue } from "@shared/forms";
 
 import type { FC } from "react";
 import type { QuickAddSchema } from "@feature/transactions";

@@ -1,17 +1,18 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { useAccountsList } from "../data-presenters";
-import { groupAccountsIntoCategories } from "./account-view.ts";
-import { BrowseAccountsContextType } from "@feature/accounts/browse-accounts/types.ts";
-import type { MockAccount, MockAccountCategory } from "@feature/accounts";
+import { toAccountCategoryViews } from "@entity/accounts";
+
+import type { BrowseAccountsContextType } from "./types.ts";
+import type { AccountView, AccountCategoryView } from "@entity/accounts";
 
 
-const EMPTY_ACCOUNT: MockAccount = { id: '', name: '', kind: '', balanceUsd: 0, balanceTone: 'neutral', accountType: '' };
-const EMPTY_CATEGORY: MockAccountCategory = { id: '', label: '', totalUsd: 0, accounts: [] };
+const EMPTY_ACCOUNT: AccountView = { id: '', name: '', kind: '', balanceUsd: 0, accountType: 'asset' };
+const EMPTY_CATEGORY: AccountCategoryView = { id: '', label: '', totalUsd: 0, accounts: [] };
 
 const useAccountsCategorySelection = (): BrowseAccountsContextType => {
 	const { accounts } = useAccountsList();
-	const categories = useMemo(() => groupAccountsIntoCategories(accounts), [accounts]);
+	const categories = useMemo(() => toAccountCategoryViews(accounts), [accounts]);
 
 	const [categoryId, setCategoryId] = useState('');
 	const [accountId, setAccountId] = useState('');

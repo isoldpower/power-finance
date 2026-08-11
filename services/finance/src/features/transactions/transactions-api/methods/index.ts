@@ -11,3 +11,8 @@ export type { CreateTransactionResponse, CreateTransactionRequest } from './crea
 export type { FetchTransactionResponse, FetchTransactionRequest } from './fetch-transaction.ts';
 export type { UpdateTransactionResponse, UpdateTransactionRequest } from './update-transaction.ts';
 export type { CreateTransactionChainResponse, CreateTransactionChainRequest } from './create-transaction-chain.ts';
+export { listCategories } from './list-categories.ts';
+export { scanReceipt } from './scan-receipt.ts';
+
+export type { ListCategoriesRequest, ListCategoriesResponse } from './list-categories.ts';
+export type { ScanReceiptRequest, ScanReceiptResponse } from './scan-receipt.ts';

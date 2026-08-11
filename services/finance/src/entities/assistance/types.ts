@@ -1,3 +1,5 @@
+import type { Tone } from "@shared/formatting";
+
 type ActionType = 'recurring' | 'duplicate' | 'uncategorized';
 
 interface ActionLabels {
@@ -13,3 +15,24 @@ interface Action {
 }
 
 export type { ActionType, Action, ActionLabels };
+
+interface AssistantSignal {
+	label: string;
+	value: string;
+	tone: Tone;
+}
+
+interface AssistantMessage {
+	id: string;
+	role: 'assistant' | 'user';
+	text: string;
+	refs?: string[];
+}
+
+interface AssistantContent {
+	signals: AssistantSignal[];
+	chat: AssistantMessage[];
+	prompts: string[];
+}
+
+export type { AssistantSignal, AssistantMessage, AssistantContent };

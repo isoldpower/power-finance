@@ -1,8 +1,9 @@
 import type { ComponentProps, FC } from "react";
 import { FinanceMoney } from "@internal/ui-library";
 
-import { useLocaleCurrency, useCountUp } from "@shared/utils";
-import type { CountUpOptions } from "@shared/utils";
+import { useLocaleCurrency } from "@shared/formatting";
+import { useCountUp } from "@shared/motion";
+import type { CountUpOptions } from "@shared/motion";
 
 
 type FinanceMoneyProps = ComponentProps<typeof FinanceMoney>;

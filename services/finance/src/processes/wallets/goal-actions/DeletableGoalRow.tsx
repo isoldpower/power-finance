@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 
-import { RowDeleteButton } from "@shared/components";
-import { useLocaleCurrency } from "@shared/utils";
+import { Caption, DisplayText, RowTitle } from "@shared/pure-components/typography";
+import { RowDeleteButton } from "@shared/pure-components/collections";
+import { useLocaleCurrency } from "@shared/formatting";
 import { GoalRow, toGoalView } from "@entity/wallets";
 import { DeleteGoalDialog } from "@feature/wallets";
 import { DeleteGoalModal } from "@widget/wallets";
@@ -25,17 +26,17 @@ const DeletableGoalRow: FC<DeletableGoalRowProps> = ({ wallet, order }) => {
 			<GoalRow.Head>
 				<GoalRow.Icon icon={goal.icon} color={goal.color} />
 				<GoalRow.Body>
-					<GoalRow.Name>
+					<RowTitle>
 						{goal.name}
-					</GoalRow.Name>
-					<GoalRow.Meta>
+					</RowTitle>
+					<Caption size="11">
 						{goal.monthly} · {goal.eta}
-					</GoalRow.Meta>
+					</Caption>
 				</GoalRow.Body>
 				<GoalRow.Amounts>
-					<GoalRow.Saved>
+					<DisplayText as="span" size="sm">
 						{goal.saved}
-					</GoalRow.Saved>
+					</DisplayText>
 					<GoalRow.Target>
 						{goal.target}
 					</GoalRow.Target>

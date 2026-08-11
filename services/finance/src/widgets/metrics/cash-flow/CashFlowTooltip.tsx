@@ -1,6 +1,6 @@
 import {FinanceTooltip} from "@internal/ui-library";
 import {FC, PropsWithChildren, useMemo} from "react";
-import {ConvertedMoney} from "@feature/localization";
+import type { ConvertedMoney } from "@entity/localization";
 
 
 type CashFlowTooltipProps = PropsWithChildren<{

@@ -1,7 +1,7 @@
 import {FC, useCallback, useState} from "react";
 import {UiButton, UiForm, UiFormField} from "@internal/ui-library";
-import {FieldLayout} from "@entity/wallets";
-import {InputField} from "@shared/components";
+import { FieldLayout } from "@shared/forms";
+import { InputField } from "@shared/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {

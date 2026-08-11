@@ -1,5 +1,5 @@
-import type { WebhookEndpoint } from "@entity/configuration/webhook";
-import type { IWebhookRESTApiClient, WebhookPostRequest } from "../rest-client/types.ts";
+import type { WebhookEndpoint } from "@entity/configuration";
+import type { IWebhookRESTApiClient, WebhookPostRequest } from "../rest-client";
 import { webhookWithSecretResponseToFlat } from "../mutators/api-to-flat.ts";
 
 

@@ -1,5 +1,6 @@
 import { Icons } from "@internal/ui-library";
-import { PagerButton, PaginationRange } from "@shared/components";
+import { MetaText } from "@shared/pure-components/typography";
+import { PagerButton, PaginationRange } from "@shared/pure-components/collections";
 import { useTransactionsPaginationContext } from "@feature/transactions";
 
 
@@ -17,9 +18,9 @@ const TransactionsBrowserPagination = () => {
 			<PagerButton disabled={pageNumber <= 1} onClick={scrollBackward}>
 				<Icons.ChevronLeft size={15} />
 			</PagerButton>
-			<span className="font-numeric text-[11px] text-text-3">
+			<MetaText size="11">
 				{pageNumber} / {pageCount}
-			</span>
+			</MetaText>
 			<PagerButton disabled={pageNumber >= pageCount} onClick={scrollForward}>
 				<Icons.ChevronRight size={15} />
 			</PagerButton>

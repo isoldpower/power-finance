@@ -1,7 +1,8 @@
 import { FinanceBadge } from "@internal/ui-library";
 
 import { GoalsToolbar } from "@entity/wallets";
-import { SpaceOccupant } from "@shared/components";
+import { CardTitle } from "@shared/pure-components/typography";
+import { SpaceOccupant } from "@shared/pure-components/layout";
 
 import type { FC, ReactNode } from "react";
 
@@ -13,9 +14,9 @@ interface GoalsBrowserHeaderProps {
 const GoalsBrowserHeader: FC<GoalsBrowserHeaderProps> = ({ children }) => {
 	return (
 		<GoalsToolbar.Container>
-			<GoalsToolbar.Title>
+			<CardTitle as="h2">
 				Long-term goals
-			</GoalsToolbar.Title>
+			</CardTitle>
 			<FinanceBadge tone="pos" appearance="soft" size="sm">
 				NEW
 			</FinanceBadge>

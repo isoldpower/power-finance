@@ -1,7 +1,7 @@
 import { FinanceMoney } from "@internal/ui-library";
 
 import type { FC } from "react";
-import type { Tone } from "@shared/utils";
+import type { Tone } from "@shared/formatting";
 
 
 interface AccountRowValueProps {

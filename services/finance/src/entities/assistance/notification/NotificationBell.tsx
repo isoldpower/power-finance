@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { Text } from "@shared/pure-components/typography";
 
 interface NotificationBellProps {
 	unreadCount: number;
@@ -11,9 +12,9 @@ const NotificationBell: FC<NotificationBellProps> = ({ unreadCount }) => (
 			<path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
 		</svg>
 		{unreadCount > 0 ? (
-			<span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full border-[1.5px] border-[var(--surface)] bg-neg px-1 text-[10px] font-semibold text-white">
+			<Text size="10" weight="semibold" tone="inverted" className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full border-[1.5px] border-[var(--surface)] bg-neg px-1">
 				{unreadCount}
-			</span>
+			</Text>
 		) : null}
 	</>
 );

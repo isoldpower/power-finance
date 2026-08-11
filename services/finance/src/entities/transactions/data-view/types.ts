@@ -1,8 +1,6 @@
 import type { TransactionDirection, TransactionEntrySide } from "../types.ts";
 
 
-type FormatMoney = (amount: number, currency: string) => string;
-
 type ConvertMoney = (
 	money: { amount: number; currency: string }
 ) => { amount: number; formatted: string; converted: boolean };
@@ -44,4 +42,4 @@ interface TransactionDayView {
 	transactions: TransactionRowView[];
 }
 
-export type { ConvertMoney, FormatMoney, LedgerEntryView, TransactionDayView, TransactionMoneyView, TransactionRowView };
+export type { ConvertMoney, LedgerEntryView, TransactionDayView, TransactionMoneyView, TransactionRowView };

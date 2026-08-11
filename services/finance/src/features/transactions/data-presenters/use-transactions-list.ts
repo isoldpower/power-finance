@@ -2,11 +2,11 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
-import { listAllTransactions } from "@feature/transactions";
+import { listAllTransactions } from "../transactions-api/methods/list-all-transactions.ts";
 import { useApiContext } from "@app/api";
 import { CACHE_KEYS } from "./config.ts";
 import type { TransactionPreviewDto } from "@entity/transactions";
-import type { ListAllTransactionsResponse } from "@feature/transactions";
+import type { ListAllTransactionsResponse } from "../transactions-api/methods/list-all-transactions.ts";
 
 type UseTransactionsListOptions = Omit<
 	UseQueryOptions<ListAllTransactionsResponse>,

@@ -1,4 +1,6 @@
-import { AiBadge, SlideOver, useSlideOverContext } from "@shared/components";
+import { AiBadge } from "@shared/pure-components/badges";
+import { SlideOver } from "@shared/overlays";
+import { useSlideOverContext } from "@shared/overlays";
 import { ScanReceiptForm } from "@widget/transactions";
 
 import type { FC } from "react";

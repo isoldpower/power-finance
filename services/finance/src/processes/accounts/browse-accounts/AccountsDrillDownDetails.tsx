@@ -1,6 +1,7 @@
 import { DrillDownHeader } from "@entity/accounts";
 import { useAccountsConvertion, useAccountHistory, useAccountsBrowser } from "@feature/accounts";
 import { AccountsDrillDown } from "@widget/accounts";
+import { Caption, Overline } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 
@@ -13,12 +14,12 @@ const AccountsDrillDownDetails: FC = () => {
 	return (
 		<>
 			<DrillDownHeader.Container>
-				<DrillDownHeader.Label>
+				<Overline as="span" size="10" tracking="0.12em">
 					Drill-down
-				</DrillDownHeader.Label>
-				<DrillDownHeader.Caption>
+				</Overline>
+				<Caption as="span">
 					{category.label} → account → history
-				</DrillDownHeader.Caption>
+				</Caption>
 				<DrillDownHeader.Rule />
 			</DrillDownHeader.Container>
 			<AccountsDrillDown

@@ -65,3 +65,11 @@ interface GoalCreatePayload {
 
 export type { WalletPreview, WalletDetailed, WalletMeta, WalletStats, WalletValuableFields, WalletMinimalPayload, WalletSearchRoot, WalletSearchNode, WalletSearchLeaf };
 export type { GoalCreatePayload };
+
+interface WalletKindDto {
+	id: string;
+	label: string;
+	credit: boolean;
+}
+
+export type { WalletKindDto };

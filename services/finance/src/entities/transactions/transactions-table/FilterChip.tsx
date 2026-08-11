@@ -6,6 +6,7 @@ import {
 	FinanceMenuContent,
 	FinanceMenuItem,
 } from "@internal/ui-library";
+import { Caption, textClass } from "@shared/pure-components/typography";
 
 interface FilterChipProps {
 	label: ReactNode;
@@ -20,11 +21,12 @@ const FilterChip: FC<FilterChipProps> = ({ label, active, options, onSelect }) =
 			<button
 				type="button"
 				className={cn(
-					"flex items-center gap-1.5 rounded-[var(--radius-md)] border px-3 py-2 text-xs font-semibold",
+					textClass({ size: 'xs', weight: 'semibold' }),
+					"flex items-center gap-1.5 rounded-[var(--radius-md)] border px-3 py-2",
 					active ? "border-[var(--accent-border)] bg-[var(--accent-soft)] text-primary" : "border-border-strong text-text-2"
 				)}
 			>
-				{label} <span className="text-[9px] text-text-3">▾</span>
+				{label} <Caption as="span" size="9">▾</Caption>
 			</button>
 		</FinanceMenuTrigger>
 		<FinanceMenuContent align="start" className="min-w-44">

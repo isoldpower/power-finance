@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { FinanceTooltip } from "@internal/ui-library";
 
 import type { ReactNode } from "react";
-import type { ConvertedMoney } from "@feature/localization";
+import type { ConvertedMoney } from "@entity/localization";
 import type { FC } from "react";
 
 

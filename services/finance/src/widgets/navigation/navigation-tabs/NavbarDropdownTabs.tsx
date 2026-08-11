@@ -1,6 +1,6 @@
+import { ChevronDownIcon } from "@shared/pure-components/icons";
 import { useCallback } from "react";
-import { ChevronDownIcon } from "@entity/navigation";
-import { useDisclosure } from "@shared/interactions";
+import { useDisclosure } from "@shared/overlays";
 import { useActiveTab } from "@feature/navigation";
 import {
 	cn,
@@ -12,7 +12,8 @@ import {
 import { NAVIGATION_TABS } from "./config.ts";
 
 import type { FC, ReactNode } from "react";
-import type { NavTab } from "@feature/navigation";
+import type { NavTab } from "@entity/navigation";
+import { textClass } from "@shared/pure-components/typography";
 
 
 interface NavbarDropdownTabsProps {
@@ -35,7 +36,7 @@ const NavbarDropdownTabs: FC<NavbarDropdownTabsProps> = ({ children }) => {
 					<button
 						type="button"
 						aria-label="Navigation"
-						className="inline-flex items-center gap-1.5 rounded-[var(--radius-md)] border border-border-strong bg-card px-3 py-1.5 text-[13px] font-semibold"
+						className={cn(textClass({ size: '13', weight: 'semibold' }), "inline-flex items-center gap-1.5 rounded-[var(--radius-md)] border border-border-strong bg-card px-3 py-1.5")}
 					>
 						{activeLabel}
 						<ChevronDownIcon />

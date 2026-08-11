@@ -4,20 +4,24 @@ import {
 	AccountSummary,
 	CategoryPanel,
 	categoryColor,
+	accountAmountTone,
+	ledgerIconClass,
+	ledgerSideTone,
 	HistoryToolbar,
 } from "@entity/accounts";
-import { SidebarColumnsContainer } from "@shared/components";
+import { Caption, Heading, MetaText, Overline, RowTitle } from "@shared/pure-components/typography";
+import { SidebarColumnsContainer } from "@shared/pure-components/layout";
 
 import type { FC } from "react";
-import type { AccountHistoryEntry, MockAccount, MockAccountCategory } from "@feature/accounts";
+import type { AccountHistoryView, AccountView, AccountCategoryView } from "@entity/accounts";
 
 
 interface AccountsDrillDownProps {
-	category: MockAccountCategory;
-	account: MockAccount;
+	category: AccountCategoryView;
+	account: AccountView;
 	accountId: string;
 	setAccountId: (id: string) => void;
-	history: AccountHistoryEntry[];
+	history: AccountHistoryView[];
 	convertToUserCurrency: (value: number) => string;
 	convertToUserCurrencyWithSign: (value: number) => string;
 }
@@ -39,9 +43,9 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 					<CategoryPanel.Title>
 						{category.label}
 					</CategoryPanel.Title>
-					<CategoryPanel.Hint>
+					<MetaText as="span" size="10">
 						tap to view history
-					</CategoryPanel.Hint>
+					</MetaText>
 				</CategoryPanel.Header>
 				<CategoryPanel.List>
 					{category.accounts.map((entry) => (
@@ -52,14 +56,14 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 						>
 							<AccountListItem.Swatch color={categoryColor(category.id)} />
 							<div className="min-w-0 flex-1">
-								<AccountListItem.Name>
+								<RowTitle size="13" truncate>
 									{entry.name}
-								</AccountListItem.Name>
-								<AccountListItem.Kind>
+								</RowTitle>
+								<Caption size="10.5">
 									{entry.kind}
-								</AccountListItem.Kind>
+								</Caption>
 							</div>
-							<AccountListItem.Balance tone={entry.balanceTone}>
+							<AccountListItem.Balance tone={accountAmountTone(entry.balanceUsd)}>
 								{convertToUserCurrency(entry.balanceUsd)}
 							</AccountListItem.Balance>
 						</AccountListItem.Container>
@@ -72,31 +76,31 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 					<AccountSummary.HeroRow>
 						<div className="min-w-0 flex-1">
 							<AccountSummary.NameRow>
-								<AccountSummary.Name>
+								<Heading as="h3" size="19">
 									{account.name}
-								</AccountSummary.Name>
+								</Heading>
 								<AccountSummary.Type>
 									{account.accountType}
 								</AccountSummary.Type>
 							</AccountSummary.NameRow>
-							<AccountSummary.Kind>
+							<Caption>
 								{account.kind}
-							</AccountSummary.Kind>
+							</Caption>
 						</div>
 						<div className="flex-none text-right">
-							<AccountSummary.BalanceLabel>
+							<Overline size="10" tracking="0.1em">
 								Balance
-							</AccountSummary.BalanceLabel>
-							<AccountSummary.Balance tone={account.balanceTone}>
+							</Overline>
+							<AccountSummary.Balance tone={accountAmountTone(account.balanceUsd)}>
 								{convertToUserCurrency(account.balanceUsd)}
 							</AccountSummary.Balance>
 						</div>
 					</AccountSummary.HeroRow>
 				</AccountSummary.Hero>
 				<HistoryToolbar.Container>
-					<HistoryToolbar.Title>
+					<RowTitle as="h4">
 						Transaction history
-					</HistoryToolbar.Title>
+					</RowTitle>
 					<HistoryToolbar.Count>
 						{history.length} ENTRIES
 					</HistoryToolbar.Count>
@@ -107,21 +111,21 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 				</HistoryToolbar.Container>
 				{history.map((entry) => (
 					<AccountHistoryRow key={entry.id}>
-						<AccountHistoryRow.Icon className={entry.iconClass}>
+						<AccountHistoryRow.Icon className={ledgerIconClass(entry.amountUsd)}>
 							{entry.icon}
 						</AccountHistoryRow.Icon>
 						<div className="min-w-0 flex-1">
-							<AccountHistoryRow.Description>
+							<RowTitle size="13" truncate>
 								{entry.description}
-							</AccountHistoryRow.Description>
-							<AccountHistoryRow.Date>
+							</RowTitle>
+							<MetaText as="div" size="10.5">
 								{entry.date}
-							</AccountHistoryRow.Date>
+							</MetaText>
 						</div>
-						<AccountHistoryRow.Badge sideTone={entry.sideTone}>
+						<AccountHistoryRow.Badge sideTone={ledgerSideTone(entry.side)}>
 							{entry.side}
 						</AccountHistoryRow.Badge>
-						<AccountHistoryRow.Value tone={entry.amountTone}>
+						<AccountHistoryRow.Value tone={accountAmountTone(entry.amountUsd)}>
 							{convertToUserCurrencyWithSign(entry.amountUsd)}
 						</AccountHistoryRow.Value>
 					</AccountHistoryRow>

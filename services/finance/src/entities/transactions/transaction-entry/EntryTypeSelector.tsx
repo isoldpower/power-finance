@@ -1,8 +1,8 @@
 import type { FC } from "react";
 import { cn, FinanceSegmented, FinanceSegmentedItem } from "@internal/ui-library";
 
-import { TRANSACTION_TYPE_OPTIONS } from "@shared/utils";
-import type { TransactionEntryType } from "@shared/utils";
+import { TRANSACTION_TYPE_OPTIONS } from "@shared/formatting";
+import type { TransactionEntryType } from "@shared/formatting";
 
 
 interface EntryTypeSelectorProps {

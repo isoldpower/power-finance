@@ -8,7 +8,7 @@ import {
 	useWallet,
 	WalletDetailsFx,
 	ProtectSelectedNone,
-	useWalletsSelectionContext,
+	useWalletsSelection,
 } from "@feature/wallets";
 import {
 	WalletRecentTransactions,
@@ -27,7 +27,7 @@ const BrowserWalletDetails = ({
 	editWalletPanel,
 	transferPanel,
 }: BrowserWalletDetailsProps) => {
-	const { selectedWalletId } = useWalletsSelectionContext();
+	const selectedWalletId = useWalletsSelection((state) => state.selectedWalletId);
 	const selectedWalletProtected = useMemo(() => {
 		return selectedWalletId ?? 'none';
 	}, [selectedWalletId]);

@@ -1,7 +1,8 @@
 import type { FC } from "react";
 import { cn } from "@internal/ui-library";
 
-import { SearchIcon } from "./SearchIcon.tsx";
+import { SearchIcon } from "@shared/pure-components/icons";
+import { MetaText, textClass } from "@shared/pure-components/typography";
 
 
 interface SearchTriggerProps {
@@ -16,15 +17,15 @@ const SearchTrigger: FC<SearchTriggerProps> = ({ onClick, placeholder = "Searchâ
 		onClick={onClick}
 		className={cn(
 			"flex min-w-[230px] items-center gap-2 rounded-[var(--radius-md)] border border-border-strong",
-			"px-3 py-2 text-[13px] text-text-3 transition-colors hover:border-[var(--accent-border)]",
+			textClass({ size: '13', tone: 'subtle' }), "px-3 py-2 transition-colors hover:border-[var(--accent-border)]",
 			className
 		)}
 	>
 		<SearchIcon />
 		<span className="min-w-0 flex-1 text-left">{placeholder}</span>
-		<span className="rounded-[4px] border border-border px-1.5 font-numeric text-[10px] text-text-3">
+		<MetaText size="10" className="rounded-[4px] border border-border px-1.5">
 			âŒ˜K
-		</span>
+		</MetaText>
 	</button>
 );
 

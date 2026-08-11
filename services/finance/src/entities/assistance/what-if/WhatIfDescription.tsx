@@ -1,20 +1,20 @@
-import { cn } from "@internal/ui-library";
-
 import type { BaseHTMLAttributes, FC } from "react";
+
+import { BodyText } from "@shared/pure-components/typography";
 
 
 const WhatIfDescription: FC<Omit<BaseHTMLAttributes<HTMLParagraphElement>, 'className'>> = ({
 	children,
 	...props
 }) => (
-	<p
-		className={cn(
-			"max-w-[520px] text-[13px] leading-relaxed text-text-2"
-		)}
+	<BodyText
+		size="13"
+		leading="relaxed"
+		className="max-w-[520px]"
 		{...props}
 	>
 		{children}
-	</p>
+	</BodyText>
 );
 
 WhatIfDescription.displayName = 'WhatIfDescription';

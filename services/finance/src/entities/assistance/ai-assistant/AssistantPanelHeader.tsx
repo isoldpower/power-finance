@@ -1,6 +1,8 @@
+import { SparkleIcon } from "@shared/pure-components/icons";
 import type { FC } from "react";
 
-import { SparkleIcon } from "../icons/SparkleIcon.tsx";
+
+import { CardTitle, MetaText } from "@shared/pure-components/typography";
 
 
 interface AssistantPanelHeaderProps {
@@ -13,8 +15,8 @@ const AssistantPanelHeader: FC<AssistantPanelHeaderProps> = ({ onClose }) => (
 			<SparkleIcon size={15} />
 		</div>
 		<div className="flex-1">
-			<div className="text-sm font-semibold">AI assistant</div>
-			<div className="font-numeric text-[9.5px] text-text-3">grounded in your data</div>
+			<CardTitle as="h2">AI assistant</CardTitle>
+			<MetaText as="div" size="9.5">grounded in your data</MetaText>
 		</div>
 		<span className="size-2 flex-none rounded-full bg-pos" />
 		{onClose ? (

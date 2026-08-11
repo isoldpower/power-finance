@@ -1,20 +1,20 @@
-import { cn } from "@internal/ui-library";
-
 import type { BaseHTMLAttributes, FC } from "react";
+
+import { BodyText } from "@shared/pure-components/typography";
 
 
 const GoalFormIntro: FC<Omit<BaseHTMLAttributes<HTMLParagraphElement>, 'className'>> = ({
 	children,
 	...props
 }) => (
-	<p
-		className={cn(
-			"mb-5 text-[12.5px] leading-relaxed text-text-2"
-		)}
+	<BodyText
+		size="12.5"
+		leading="relaxed"
+		className="mb-5"
 		{...props}
 	>
 		{children}
-	</p>
+	</BodyText>
 );
 
 GoalFormIntro.displayName = 'GoalFormIntro';

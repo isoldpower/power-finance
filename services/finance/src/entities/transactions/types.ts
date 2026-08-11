@@ -45,3 +45,23 @@ interface TransactionDto extends TransactionPreviewDto {
 
 export type { TransactionDto, TransactionPreviewDto, TransactionDirection, TransactionWalletRef, TransactionReceipt };
 export type { TransactionOrigin, TransactionEntryDto, TransactionEntrySide };
+
+interface TransactionCategory {
+	id: string;
+	label: string;
+}
+
+interface ReceiptScanField {
+	label: string;
+	value: string;
+	ai: boolean;
+}
+
+interface ReceiptScan {
+	amount: number;
+	currency: string;
+	confidence: number;
+	fields: ReceiptScanField[];
+}
+
+export type { TransactionCategory, ReceiptScanField, ReceiptScan };

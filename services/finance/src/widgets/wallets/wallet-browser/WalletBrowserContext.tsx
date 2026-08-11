@@ -1,20 +1,16 @@
-import type { FC, ReactNode } from "react";
 import { useMemo } from "react";
+
 import {
+	KeepWalletSelected,
+	useWalletsBrowser,
 	useWalletsFiltersContext,
-	WalletsFiltersContextProvider
-} from "@feature/wallets/search-and-filtering/WalletsFiltersContext.tsx";
-import {
-	WalletsPaginationContextProvider
-} from "@feature/wallets/search-and-filtering/WalletsPaginationContext.tsx";
-import {
 	useWalletsPinsContext,
-	WalletsPinsContextProvider
-} from "@feature/wallets/search-and-filtering/WalletsPinsContext.tsx";
-import {
-	WalletsSelectionContextProvider
-} from "@feature/wallets/search-and-filtering/WalletsSelectionContext.tsx";
-import {useWalletsBrowser} from "@feature/wallets/search-and-filtering/use-wallets-browser.ts";
+	WalletsFiltersContextProvider,
+	WalletsPaginationContextProvider,
+	WalletsPinsContextProvider,
+} from "@feature/wallets";
+
+import type { FC, ReactNode } from "react";
 
 
 interface WalletBrowserContextProviderProps {
@@ -53,15 +49,14 @@ const WalletBrowserInternalContext: FC<WalletBrowserInternalContextProps> = ({ c
 	}, [isPinned, wallets]);
 
 	return (
-		<WalletsSelectionContextProvider walletsRegistry={wallets}>
-			<WalletsPaginationContextProvider 
-				pageSize={5}
-				total={total}
-				wallets={pinnedFirstWallets}
-			>
-				{children}
-			</WalletsPaginationContextProvider>
-		</WalletsSelectionContextProvider>
+		<WalletsPaginationContextProvider
+			pageSize={5}
+			total={total}
+			wallets={pinnedFirstWallets}
+		>
+			<KeepWalletSelected wallets={pinnedFirstWallets} />
+			{children}
+		</WalletsPaginationContextProvider>
 	);
 }
 

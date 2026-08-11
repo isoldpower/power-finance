@@ -1,6 +1,7 @@
 import { FinanceButton } from "@internal/ui-library";
-import { WalletDetailsTitle, WalletDetailsParagraph, WalletSwatch, walletTypeLabel } from "@entity/wallets";
-import { SlideOverTrigger } from "@shared/components";
+import { WalletSwatch, walletTypeLabel } from "@entity/wallets";
+import { Caption, DisplayText } from "@shared/pure-components/typography";
+import { SlideOverTrigger } from "@shared/overlays";
 
 import type { FC } from "react";
 import type { Wallet } from "@entity/wallets";
@@ -22,17 +23,17 @@ const WalletDetailsThumbnail: FC<WalletDetailsThumbnailProps> = ({
 		<div className="flex items-start gap-3.5">
 			<WalletSwatch size='lg' color={wallet.color} />
 			<div className="min-w-0 flex-1">
-				<WalletDetailsTitle>
+				<DisplayText size="lg" truncate>
 					{wallet.name}
-				</WalletDetailsTitle>
-				<WalletDetailsParagraph>
+				</DisplayText>
+				<Caption>
 					{walletTypeLabel(wallet)} · {wallet.balance.currency}
 					<ShowWhenUpdated wallet={wallet}>
 						{(updatedAt) => {
 							return `· updated ${updatedAt.toLocaleDateString()}`;
 						}}
 					</ShowWhenUpdated>
-				</WalletDetailsParagraph>
+				</Caption>
 			</div>
 			<div className="flex gap-2">
 				<SlideOverTrigger asChild={true} panelId={transferPanelId}>
