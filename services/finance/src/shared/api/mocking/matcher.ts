@@ -1,5 +1,7 @@
 import { ApiError } from "../envelope";
-import type { FilterLeaf, FilterNode, FilterOperator } from "./types.ts";
+
+import type { FilterLeaf, FilterNode, FilterOperator } from "../filtration";
+
 
 type FieldPolicy<TField extends string> = Record<TField, FilterOperator[]>;
 
@@ -19,19 +21,28 @@ const scalarOf = (leaf: FilterLeaf, field: string): string => {
 	return leaf.value;
 };
 
-const compare = (actual: string | null, leaf: FilterLeaf, field: string, numeric: boolean): boolean => {
+const compare = (
+	actual: string | null,
+	leaf: FilterLeaf,
+	field: string,
+	numeric: boolean,
+): boolean => {
 	if (leaf.operator === 'in') {
 		if (!Array.isArray(leaf.value)) {
-			throw new ApiError('validation_failed', 'Filter value must be an array', [
-				{ field: `filter_body.${field}`, code: 'filter_value_type', message: 'in expects an array of scalars' },
-			]);
+			throw new ApiError('validation_failed', 'Filter value must be an array', [{
+				field: `filter_body.${field}`,
+				code: 'filter_value_type',
+				message: 'in expects an array of scalars',
+			}]);
 		}
 
 		return actual !== null && leaf.value.includes(actual);
 	}
 
 	const expected = scalarOf(leaf, field);
-	if (actual === null) return leaf.operator === 'neq';
+	if (actual === null) {
+		return leaf.operator === 'neq';
+	}
 
 	const left: string | number = numeric ? Number.parseFloat(actual) : actual;
 	const right: string | number = numeric ? Number.parseFloat(expected) : expected;
@@ -56,28 +67,25 @@ const compare = (actual: string | null, leaf: FilterLeaf, field: string, numeric
 	}
 };
 
-const assertLeaf = <TField extends string>(policy: FieldPolicy<TField>, leaf: FilterLeaf): FilterOperator[] => {
+const assertLeaf = <TField extends string>(
+	policy: FieldPolicy<TField>,
+	leaf: FilterLeaf,
+): FilterOperator[] => {
 	const whitelist: Partial<Record<string, FilterOperator[]>> = policy;
 	const allowed = whitelist[leaf.field_name];
 
 	if (!allowed) {
-		throw new ApiError('validation_failed', `Field ${leaf.field_name} is not filterable`, [
-			{
-				field: `filter_body.${leaf.field_name}`,
-				code: 'filter_unknown_field',
-				message: 'Field is not whitelisted for this resource',
-			},
-		]);
-	}
-
-	if (!allowed.includes(leaf.operator)) {
-		throw new ApiError('validation_failed', `Operator ${leaf.operator} is not allowed`, [
-			{
-				field: `filter_body.${leaf.field_name}`,
-				code: 'filter_operator_not_allowed',
-				message: `${leaf.operator} is not permitted on ${leaf.field_name}`,
-			},
-		]);
+		throw new ApiError('validation_failed', `Field ${leaf.field_name} is not filterable`, [{
+			field: `filter_body.${leaf.field_name}`,
+			code: 'filter_unknown_field',
+			message: 'Field is not whitelisted for this resource',
+		}]);
+	} else if (!allowed.includes(leaf.operator)) {
+		throw new ApiError('validation_failed', `Operator ${leaf.operator} is not allowed`, [{
+			field: `filter_body.${leaf.field_name}`,
+			code: 'filter_operator_not_allowed',
+			message: `${leaf.operator} is not permitted on ${leaf.field_name}`,
+		}]);
 	}
 
 	return allowed;

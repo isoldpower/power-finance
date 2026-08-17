@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-
 import { createWalletsSelectionStore } from "./selection-store.ts";
 import { WalletsSelectionReactContext } from "./context.ts";
 

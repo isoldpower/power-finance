@@ -1,5 +1,6 @@
 import type { FC, ReactNode } from "react";
 
+
 interface RecentActivityFxProps {
 	isPending: boolean;
 	pending: ReactNode;

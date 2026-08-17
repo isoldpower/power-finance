@@ -6,6 +6,7 @@ import type {
 	AutomationPatchBody,
 } from "../types.ts";
 
+
 interface AutomationListRequest {
 	params?: AutomationListParams;
 }

@@ -1,12 +1,13 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { fetchTransaction } from "../transactions-api";
 import { CACHE_KEYS } from "./config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { TransactionPosting } from "@entity/transactions";
 import type { FetchTransactionResponse } from "../transactions-api";
+
 
 type UseTransactionLedgerOptions = Omit<
 	UseQueryOptions<FetchTransactionResponse>,
@@ -16,8 +17,6 @@ type UseTransactionLedgerOptions = Omit<
 type UseTransactionLedgerReturn = UseQueryResult<FetchTransactionResponse> & {
 	entries: TransactionPosting[];
 };
-
-const EMPTY_ENTRIES: TransactionPosting[] = [];
 
 const useTransactionLedger = (
 	id: string,
@@ -36,7 +35,7 @@ const useTransactionLedger = (
 
 	return useMemo(() => ({
 		...query,
-		entries: query.data?.postings.items ?? EMPTY_ENTRIES,
+		entries: query.data?.postings.items ?? [],
 	}), [query]);
 };
 

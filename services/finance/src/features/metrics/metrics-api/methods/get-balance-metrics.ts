@@ -1,6 +1,8 @@
 import { balanceMetricsFromApi } from "../mutators";
+
 import type { BalanceMetrics } from "@entity/metrics";
 import type { IMetricsRESTApiClient } from "../rest-client";
+
 
 interface GetBalanceMetricsRequest {
 	handler: Pick<IMetricsRESTApiClient, 'balance'>;

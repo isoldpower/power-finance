@@ -28,6 +28,7 @@ const buildSparkline = (series: NetWorthPoint[]) => {
 		value: series[index].money.amount,
 		date: series[index].timestamp,
 	}));
+	
 	return {
 		stroke,
 		fill: `${stroke} L${VIEW_W.toString()} ${VIEW_H.toString()} L0 ${VIEW_H.toString()} Z`,

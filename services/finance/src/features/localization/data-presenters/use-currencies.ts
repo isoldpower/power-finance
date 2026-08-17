@@ -1,13 +1,12 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { listCurrencies } from "../currencies-api";
-import { CURRENCY_CACHE_KEYS } from "./cache-config.ts";
+import { CATALOG_STALE_TIME, CURRENCY_CACHE_KEYS } from "./cache-config.ts";
+
 import type { CurrencyMeta } from "@entity/localization";
 import type { ListCurrenciesResponse } from "../currencies-api";
 
-const CATALOG_STALE_TIME = 24 * 60 * 60 * 1000;
 
 interface UseCurrenciesReturn {
 	currencies: CurrencyMeta[];

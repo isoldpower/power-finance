@@ -1,13 +1,14 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { listWebhooks } from "../webhooks-api";
 import { CACHE_KEYS } from "./cache-config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { PageParams } from "@shared/api";
 import type { WebhookEndpoint } from "@entity/configuration";
 import type { ListWebhooksResponse } from "../webhooks-api";
+
 
 type UseWebhooksListOptions = Omit<UseQueryOptions<ListWebhooksResponse>, 'queryKey' | 'queryFn'>;
 

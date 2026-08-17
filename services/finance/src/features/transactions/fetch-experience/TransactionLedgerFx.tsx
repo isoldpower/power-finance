@@ -3,8 +3,6 @@ import { LedgerLineSkeleton } from "@entity/transactions";
 import type { FC, ReactNode } from "react";
 
 
-const PLACEHOLDER_LINES = ['l1', 'l2'];
-
 interface TransactionLedgerFxProps {
 	isPending: boolean;
 	children: ReactNode;
@@ -20,7 +18,7 @@ const TransactionLedgerFx: FC<TransactionLedgerFxProps> = ({ isPending, children
 
 const LedgerLinesSkeleton: FC = () => (
 	<>
-		{PLACEHOLDER_LINES.map((line) => (
+		{['l1', 'l2'].map((line) => (
 			<LedgerLineSkeleton key={line}>
 				<LedgerLineSkeleton.Side />
 				<LedgerLineSkeleton.Account />

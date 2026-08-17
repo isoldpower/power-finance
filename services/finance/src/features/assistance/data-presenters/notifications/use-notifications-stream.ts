@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-
 import { useApiContext, DERIVED_KEYS } from "@app/api";
 import { subscribeNotifications } from "../../notifications-api";
+
 
 const useNotificationsStream = (): void => {
 	const apiContext = useApiContext();
@@ -11,7 +11,9 @@ const useNotificationsStream = (): void => {
 	useEffect(() => {
 		const invalidate = (): void => {
 			for (const key of DERIVED_KEYS.onNotificationChange) {
-				void queryClient.invalidateQueries({ queryKey: [key] });
+				void queryClient.invalidateQueries({ 
+					queryKey: [key]
+				});
 			}
 		};
 

@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { countNotifications } from "../../notifications-api";
 import { NOTIFICATIONS_CACHE_KEYS } from "../cache-config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { NotificationCounts } from "@entity/assistance";
+
 
 type UseNotificationsCountOptions = Omit<UseQueryOptions<NotificationCounts>, 'queryKey' | 'queryFn'>;
 
@@ -20,7 +21,9 @@ const useNotificationsCount = (
 	const apiContext = useApiContext();
 	const countQuery = useQuery<NotificationCounts>({
 		queryKey: [NOTIFICATIONS_CACHE_KEYS.count],
-		queryFn: () => countNotifications({ handler: apiContext.notificationServers.rest }),
+		queryFn: () => countNotifications({ 
+			handler: apiContext.notificationServers.rest,
+		}),
 		...options ?? {},
 	});
 

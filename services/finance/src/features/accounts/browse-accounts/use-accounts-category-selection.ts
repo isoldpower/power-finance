@@ -4,27 +4,30 @@ import { useAccountsList } from "../data-presenters";
 import { toAccountCategoryViews } from "@entity/accounts";
 
 import type { BrowseAccountsContextType } from "./types.ts";
-import type { AccountView, AccountCategoryView } from "@entity/accounts";
 
-
-const EMPTY_ACCOUNT: AccountView = { id: '', name: '', group: 'assets', balanceUsd: 0 };
-const EMPTY_CATEGORY: AccountCategoryView = { id: '', label: '', totalUsd: 0, accounts: [] };
 
 const useAccountsCategorySelection = (): BrowseAccountsContextType => {
-	const { accounts } = useAccountsList();
-	const categories = useMemo(() => toAccountCategoryViews(accounts), [accounts]);
-
 	const [categoryId, setCategoryId] = useState('');
 	const [accountId, setAccountId] = useState('');
-
+	
+	const { accounts } = useAccountsList();
+	const categories = useMemo(() => {
+		return toAccountCategoryViews(accounts);
+	}, [accounts]);
 	const category = useMemo(() => {
-		return categories.find((entry) => entry.id === categoryId) ?? categories[0] ?? EMPTY_CATEGORY;
+		return categories.find((entry) => {
+			return entry.id === categoryId
+		}) ?? categories[0];
 	}, [categories, categoryId]);
 	const account = useMemo(() => {
-		return category.accounts.find((entry) => entry.id === accountId) ?? category.accounts[0] ?? EMPTY_ACCOUNT;
+		return category.accounts.find((entry) => {
+			return entry.id === accountId
+		}) ?? category.accounts[0];
 	}, [category, accountId]);
 	const accountCount = useMemo(() => {
-		return categories.reduce((sum, entry) => sum + entry.accounts.length, 0);
+		return categories.reduce((sum, entry) => {
+			return sum + entry.accounts.length;
+		}, 0);
 	}, [categories]);
 
 	const selectCategory = useCallback((id: string) => {

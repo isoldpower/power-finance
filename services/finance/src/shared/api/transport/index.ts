@@ -1,15 +1,15 @@
-export { IdempotencyStore } from './idempotency.ts';
 export {
-	buildQuery,
-	idempotencyHeaders,
-	request,
-	toApiError,
-	WriteVersionStore,
 	IDEMPOTENCY_HEADER,
+	LAST_EVENT_ID_HEADER,
 	READ_AT_LEAST_HEADER,
 	WRITE_VERSION_HEADER,
-} from './request.ts';
-export { LAST_EVENT_ID_HEADER, openEventStream, readEventStream } from './stream.ts';
+} from './config.ts';
+export { buildQuery } from './query.ts';
+export { idempotencyHeaders } from './idempotency-headers.ts';
+export { request } from './request.ts';
+export { toApiError } from './to-api-error.ts';
+export { WriteVersionStore } from './write-version-store.ts';
+export { openEventStream, readEventStream } from './stream';
 
-export type { QueryValue } from './request.ts';
-export type { StreamHandlers, StreamMessage, StreamRequestInit, Unsubscribe } from './stream.ts';
+export type { QueryValue } from './query.ts';
+export type { StreamHandlers, StreamMessage, StreamRequestInit, Unsubscribe } from './stream';

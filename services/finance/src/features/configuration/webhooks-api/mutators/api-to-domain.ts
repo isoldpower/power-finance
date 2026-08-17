@@ -13,6 +13,7 @@ import type {
 	WebhookSubscriptionDto,
 } from "../types.ts";
 
+
 const webhookFromApi = (dto: WebhookDto): WebhookEndpoint => ({
 	id: dto.id,
 	createdAt: dto.created_at,

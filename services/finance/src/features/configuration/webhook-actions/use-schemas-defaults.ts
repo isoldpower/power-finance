@@ -1,5 +1,5 @@
-import {DeletedWebhookSchema, WebhookSchema} from "./schemas.ts";
-import {WebhookEndpoint} from "@entity/configuration";
+import type { DeletedWebhookSchema, WebhookSchema } from "./schemas.ts";
+import type { WebhookEndpoint } from "@entity/configuration";
 
 
 const useNewDefaultValues = (): WebhookSchema => {

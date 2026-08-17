@@ -1,6 +1,7 @@
 import type { ApiEnvelope, CollectionResponse, EmbeddedMeta, PageParams } from "@shared/api";
 import type { AccountDetailDto, AccountDto, AccountListMeta, AccountListParams } from "../types.ts";
 
+
 interface AccountListRequest {
 	params?: AccountListParams;
 }
@@ -19,4 +20,10 @@ interface IAccountsRESTApiClient {
 	get: (request: AccountGetRequest) => Promise<AccountGetResponse>;
 }
 
-export type { AccountGetRequest, AccountGetResponse, AccountListRequest, AccountListResponse, IAccountsRESTApiClient };
+export type {
+	AccountGetRequest,
+	AccountGetResponse,
+	AccountListRequest,
+	AccountListResponse,
+	IAccountsRESTApiClient
+};

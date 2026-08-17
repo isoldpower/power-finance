@@ -1,11 +1,15 @@
 import { ApiError, delay, paginate, parseAmount, stringifySortedQuery } from "@shared/api";
 import { ACCOUNT_SEED, LEDGER_ENTRY_SEED } from "./mock-seed.ts";
+
 import type {
-	AccountGetRequest, AccountGetResponse,
-	AccountListRequest, AccountListResponse,
+	AccountGetRequest,
+	AccountGetResponse,
+	AccountListRequest,
+	AccountListResponse,
 	IAccountsRESTApiClient,
 } from "./types.ts";
 import type { AccountDto, AccountGroupCountsDto } from "../types.ts";
+
 
 const countGroups = (accounts: AccountDto[]): AccountGroupCountsDto => ({
 	assets: accounts.filter((account) => account.group === 'assets').length,

@@ -1,6 +1,8 @@
 import { goalFromApi, goalPatchToApi } from "../mutators";
+
 import type { Goal, GoalPatch } from "@entity/wallets";
 import type { IGoalsRESTApiClient } from "../rest-client";
+
 
 interface UpdateGoalRequest {
 	handler: Pick<IGoalsRESTApiClient, 'patch'>;

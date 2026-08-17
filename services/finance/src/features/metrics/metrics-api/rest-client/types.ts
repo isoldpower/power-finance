@@ -1,6 +1,7 @@
 import type { ApiEnvelope, CacheMeta } from "@shared/api";
 import type { BalanceMetricsDto, CashFlowDto, CashFlowParams, NetWorthDto, NetWorthParams } from "../types.ts";
 
+
 interface BalanceMetricsRequest {
 	params?: object;
 }

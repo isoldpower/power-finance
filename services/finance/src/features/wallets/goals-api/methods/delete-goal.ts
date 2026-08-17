@@ -1,6 +1,8 @@
 import { goalFromApi } from "../mutators";
+
 import type { Goal } from "@entity/wallets";
 import type { IGoalsRESTApiClient } from "../rest-client";
+
 
 interface DeleteGoalRequest {
 	handler: Pick<IGoalsRESTApiClient, 'delete'>;

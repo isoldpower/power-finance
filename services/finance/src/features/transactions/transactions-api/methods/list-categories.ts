@@ -1,6 +1,8 @@
 import { categoryFromApi } from "../mutators";
+
 import type { TransactionCategory } from "@entity/transactions";
 import type { ITransactionsRESTApiClient } from "../rest-client";
+
 
 interface ListCategoriesRequest {
 	handler: Pick<ITransactionsRESTApiClient, 'listCategories'>;
@@ -11,9 +13,13 @@ interface ListCategoriesResponse {
 }
 
 async function listCategories(request: ListCategoriesRequest): Promise<ListCategoriesResponse> {
-	const response = await request.handler.listCategories({ params: {} });
+	const response = await request.handler.listCategories({ 
+		params: {},
+	});
 
-	return { categories: response.data.map(categoryFromApi) };
+	return { 
+		categories: response.data.map(categoryFromApi)
+	};
 }
 
 export { listCategories };

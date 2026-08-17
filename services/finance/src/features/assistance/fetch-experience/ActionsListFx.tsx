@@ -1,9 +1,10 @@
-import {UiSkeleton} from "@internal/ui-library";
+import { NeedsActionFailedNotice, NeedsActionSkeletonRow } from "@entity/assistance";
 
 import type { FC, ReactNode } from "react";
 import type { Action } from "@entity/assistance";
-import { Caption } from "@shared/pure-components/typography";
 
+
+const PLACEHOLDER_KEYS = ['a1', 'a2', 'a3'];
 
 interface ActionsListFxProps {
 	isPending: boolean;
@@ -29,27 +30,29 @@ const ActionsListFx: FC<ActionsListFxProps> = ({
 
 const ActionsListSkeleton: FC = () => (
 	<div>
-		{Array.from({ length: 3 }).map((_, id) => (
-			<div
-				key={`action-skeleton-${id.toString()}`} 
-				className="flex items-center gap-3.5 border-b border-border px-[18px] py-3.5 last:border-b-0"
-			>
-				<UiSkeleton className="size-[34px] flex-none rounded-[9px]" />
-				<div className="min-w-0 flex-1 space-y-1.5">
-					<UiSkeleton className="h-3.5 w-1/2" />
-					<UiSkeleton className="h-3 w-3/4" />
-				</div>
-				<UiSkeleton className="h-8 w-16 flex-none rounded-[var(--radius-md)]" />
-				<UiSkeleton className="h-8 w-16 flex-none rounded-[var(--radius-md)]" />
-			</div>
+		{PLACEHOLDER_KEYS.map((key) => (
+			<NeedsActionSkeletonRow key={key}>
+				<NeedsActionSkeletonRow.Icon />
+				<NeedsActionSkeletonRow.Body>
+					<NeedsActionSkeletonRow.Title />
+					<NeedsActionSkeletonRow.Subtitle />
+				</NeedsActionSkeletonRow.Body>
+				<NeedsActionSkeletonRow.Action />
+				<NeedsActionSkeletonRow.Action />
+			</NeedsActionSkeletonRow>
 		))}
 	</div>
 );
 
 const ActionsListFailed: FC = () => (
-	<Caption size="13" className="mt-4">
+	<NeedsActionFailedNotice>
 		Couldn’t load the action queue.
-	</Caption>
+	</NeedsActionFailedNotice>
 );
 
+ActionsListSkeleton.displayName = 'ActionsListSkeleton';
+ActionsListFailed.displayName = 'ActionsListFailed';
+ActionsListFx.displayName = 'ActionsListFx';
+
 export { ActionsListFx };
+export type { ActionsListFxProps };

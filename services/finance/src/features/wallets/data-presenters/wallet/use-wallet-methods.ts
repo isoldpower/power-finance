@@ -1,7 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
-import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext, DERIVED_KEYS } from "@app/api";
 import {
 	deleteWallet as deleteWalletApi,
@@ -9,12 +7,15 @@ import {
 	updateWallet as updateWalletApi,
 } from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
+
+import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import type { WalletPatch } from "@entity/wallets";
 import type {
 	DeleteWalletResponse,
 	FetchWalletResponse,
 	UpdateWalletResponse,
 } from "../../wallets-api";
+
 
 interface UseWalletMethodsReturn {
 	meta: {

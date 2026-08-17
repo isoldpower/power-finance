@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
-
 import { useApiContext, DERIVED_KEYS } from "@app/api";
 import { updateWallet as updateWalletApi } from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
+
 import type { QueryKey } from "@tanstack/react-query";
 import type { Wallet } from "@entity/wallets";
 import type { ListWalletsResponse } from "../../wallets-api";
+
 
 interface FavoriteInput {
 	id: string;

@@ -6,6 +6,7 @@ import type {
 } from "@entity/assistance";
 import type { RuleFormSchema } from "./rule-form-schema.ts";
 
+
 const IN_SEPARATOR = ',';
 
 const conditionValue = (operator: RuleFormSchema['conditions'][number]['operator'], value: string): string | string[] => {

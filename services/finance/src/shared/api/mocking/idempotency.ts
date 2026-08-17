@@ -1,6 +1,7 @@
 import { ApiError } from "../envelope";
 import { stringifySorted } from "@shared/data";
 
+
 interface IdempotentRecord<TResult> {
 	bodyHash: string;
 	result: TResult;

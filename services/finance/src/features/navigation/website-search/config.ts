@@ -1,0 +1,1 @@
+export const WALLET_RESULTS_LIMIT = 6;

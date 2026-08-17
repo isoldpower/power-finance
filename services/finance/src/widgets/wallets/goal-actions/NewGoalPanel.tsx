@@ -5,14 +5,15 @@ import { FinanceInput } from "@internal/ui-library";
 
 import { GoalForm } from "@entity/wallets";
 import {
-	formatCurrencyInput,
 	GOAL_FORM_DEFAULTS,
 	GoalFormOnSubmit,
 	goalFormSchema,
 	useGoalFormState,
 } from "@feature/wallets";
+import { useConvertMoney } from "@feature/localization";
 import { SlideOverPanel } from "@shared/overlays";
 import { FieldLabel, PanelFooter } from "@shared/forms";
+import { currencySymbol, formatAmountInput } from "@shared/formatting";
 
 import type { FC, ReactNode } from "react";
 import type { GoalFormSchema } from "@feature/wallets";
@@ -28,6 +29,8 @@ const NewGoalPanel: FC<NewGoalPanelProps> = ({ children }) => {
 		defaultValues: GOAL_FORM_DEFAULTS,
 	});
 	const { loading, methods } = useGoalFormState();
+	const { targetCurrency } = useConvertMoney();
+	const symbol = currencySymbol(targetCurrency);
 
 	const resetForm = useCallback(() => {
 		reset(GOAL_FORM_DEFAULTS);
@@ -74,9 +77,9 @@ const NewGoalPanel: FC<NewGoalPanelProps> = ({ children }) => {
 										<FinanceInput
 											id="goal-target"
 											inputMode="decimal"
-											placeholder="$15,000"
+											placeholder={`${symbol}15,000`}
 											value={field.value}
-											onChange={(event) => { field.onChange(formatCurrencyInput(event.target.value)); }}
+											onChange={(event) => { field.onChange(formatAmountInput(event.target.value, symbol)); }}
 										/>
 									)}
 								/>

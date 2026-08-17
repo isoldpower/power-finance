@@ -1,4 +1,10 @@
-import type { ApiEnvelope, CollectionResponse, EmbeddedMeta, MutationResponse, PageParams } from "@shared/api";
+import type {
+	ApiEnvelope,
+	CollectionResponse,
+	EmbeddedMeta,
+	MutationResponse,
+	PageParams
+} from "@shared/api";
 import type {
 	WalletCreateBody,
 	WalletDetailDto,
@@ -7,6 +13,7 @@ import type {
 	WalletSearchBody,
 	WalletSearchParams,
 } from "../types.ts";
+
 
 interface WalletListRequest {
 	params?: PageParams;

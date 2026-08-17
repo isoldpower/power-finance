@@ -1,4 +1,5 @@
 import { buildQuery, idempotencyHeaders, request, WriteVersionStore } from "@shared/api";
+
 import type { AxiosInstance } from "axios";
 import type {
 	IGoalsRESTApiClient,
@@ -8,6 +9,7 @@ import type {
 	GoalPatchRequest, GoalPatchResponse,
 	GoalPostRequest, GoalPostResponse,
 } from "./types.ts";
+
 
 class GoalsDjangoRESTApiClient implements IGoalsRESTApiClient {
 	private readonly axiosInstance: AxiosInstance;

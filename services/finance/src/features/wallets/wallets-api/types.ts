@@ -1,5 +1,6 @@
-import type { TransactionDto } from "@feature/transactions/transactions-api";
+import type { TransactionDto } from "@feature/transactions";
 import type { MoneyDto, PageParams, ResourceTimestamps, SearchOrder, SearchPayload } from "@shared/api";
+
 
 interface WalletDto extends ResourceTimestamps {
 	id: string;

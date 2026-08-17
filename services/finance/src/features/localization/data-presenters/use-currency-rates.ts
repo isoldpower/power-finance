@@ -1,14 +1,13 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryResult } from "@tanstack/react-query";
-import { useSettingsContext } from "@internal/shared";
-
 import { useApiContext } from "@app/api";
 import { getRates } from "../currencies-api";
-import { CURRENCY_CACHE_KEYS } from "./cache-config.ts";
+import { useSettingsContext } from "@internal/shared";
+import { CURRENCY_CACHE_KEYS, RATES_STALE_TIME } from "./cache-config.ts";
+
+import type { UseQueryResult } from "@tanstack/react-query";
 import type { CurrencyRates } from "@entity/localization";
 
-const RATES_STALE_TIME = 5 * 60 * 1000;
 
 type UseCurrencyRatesReturn = UseQueryResult<CurrencyRates> & {
 	base: string;

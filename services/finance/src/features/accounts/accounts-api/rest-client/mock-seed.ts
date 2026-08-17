@@ -1,5 +1,6 @@
 import type { AccountDto, LedgerEntryDto } from "../types.ts";
 
+
 const ACCOUNT_SEED: AccountDto[] = [
 	{ id: 'a1', group: 'assets', name: 'Main Checking', money: { amount: '8420.18', currency: 'USD' } },
 	{ id: 'a2', group: 'assets', name: 'Emergency Fund', money: { amount: '9800.32', currency: 'USD' } },

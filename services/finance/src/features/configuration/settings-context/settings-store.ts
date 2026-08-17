@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 
 import type { StoreApi } from "zustand";
 import type { PersistOptions } from 'zustand/middleware';
-import type {SettingsPreferences, SettingsPreferencesState} from "./types.ts";
+import type { SettingsPreferences, SettingsPreferencesState } from "./types.ts";
 import type { SettingsTab } from "@entity/configuration";
 
 

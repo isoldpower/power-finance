@@ -1,7 +1,9 @@
 import { cn } from "@internal/ui-library";
-import {FC, ReactNode} from "react";
-import {FinanceCard} from "@internal/ui-library";
+import { FinanceCard } from "@internal/ui-library";
 import { textClass } from "@shared/pure-components/typography";
+
+import type { FC, ReactNode } from "react";
+
 
 interface ProtectSelectedNoneProps {
 	selectedWallet: string;

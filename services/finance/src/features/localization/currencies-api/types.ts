@@ -1,5 +1,6 @@
 import type { MoneyDto } from "@shared/api";
 
+
 interface CurrencyDto {
 	code: string;
 	symbol: string;

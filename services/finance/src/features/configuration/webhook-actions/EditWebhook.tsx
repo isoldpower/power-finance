@@ -1,8 +1,8 @@
 import { useCallback } from "react";
+import { useUpdateWebhook } from "../data-presenters";
+
 import type { FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
-
-import { useUpdateWebhook } from "../data-presenters";
 import type { WebhookEndpoint } from "@entity/configuration";
 import type { WebhookSchema } from "./schemas.ts";
 

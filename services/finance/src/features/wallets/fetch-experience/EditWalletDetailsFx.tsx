@@ -1,5 +1,6 @@
-import {Wallet} from "@entity/wallets";
-import {FC, ReactNode} from "react";
+import type { Wallet } from "@entity/wallets";
+import { FC, ReactNode } from "react";
+
 
 interface EditWalletDetailsFx {
 	wallet: Wallet | undefined;
@@ -8,7 +9,12 @@ interface EditWalletDetailsFx {
 	children: ((wallet: Wallet) => ReactNode) | ReactNode;
 }
 
-const EditWalletDetailsFx: FC<EditWalletDetailsFx> = ({ isError, isPending, wallet, children }) => {
+const EditWalletDetailsFx: FC<EditWalletDetailsFx> = ({
+	isError,
+	isPending,
+	wallet,
+	children
+}) => {
 	if (isPending) {
 		return (
 			<div>We are still loading...</div>

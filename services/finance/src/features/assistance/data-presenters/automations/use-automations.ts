@@ -1,13 +1,14 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { listAutomations } from "../../automations-api";
 import { AUTOMATIONS_CACHE_KEYS } from "../cache-config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { PageParams } from "@shared/api";
 import type { Automation, AutomationQuery } from "@entity/assistance";
 import type { ListAutomationsResponse } from "../../automations-api";
+
 
 type UseAutomationsOptions = Omit<UseQueryOptions<ListAutomationsResponse>, 'queryKey' | 'queryFn'>;
 

@@ -13,12 +13,6 @@ const parseAmount = (amount: string): number => {
 	return Number.isNaN(parsed) ? 0 : parsed;
 };
 
-const serializeAmount = (amount: number, decimals = 2): string => {
-	const normalized = Object.is(amount, -0) ? 0 : amount;
-
-	return normalized.toFixed(decimals);
-};
-
 const toAmountString = (amount: number): string => {
 	const normalized = Object.is(amount, -0) ? 0 : amount;
 	const plain = Math.abs(normalized) >= 1e21 || (normalized !== 0 && Math.abs(normalized) < 1e-6)
@@ -28,5 +22,5 @@ const toAmountString = (amount: number): string => {
 	return isCanonicalAmount(plain) ? plain : '0';
 };
 
-export { AMOUNT_PATTERN, isCanonicalAmount, parseAmount, serializeAmount, toAmountString };
+export { isCanonicalAmount, parseAmount, toAmountString };
 export type { MoneyDto };

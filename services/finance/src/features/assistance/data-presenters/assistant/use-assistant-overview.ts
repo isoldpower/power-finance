@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { fetchAssistantOverview } from "../../assistant-api";
 import { ASSISTANT_CACHE_KEYS } from "../cache-config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { AssistantOverview } from "@entity/assistance";
+
 
 type UseAssistantOverviewOptions = Omit<UseQueryOptions<AssistantOverview>, 'queryKey' | 'queryFn'>;
 

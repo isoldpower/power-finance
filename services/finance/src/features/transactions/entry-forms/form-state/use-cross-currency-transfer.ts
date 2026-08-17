@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useWatch } from "react-hook-form";
-
 import { useCurrencyPairRate } from "@feature/localization";
 
 import type { Control, FieldValues, UseFormReturn } from "react-hook-form";

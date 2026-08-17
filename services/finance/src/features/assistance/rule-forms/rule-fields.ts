@@ -6,7 +6,9 @@ import type { AutomationTriggerType } from "@entity/assistance";
 
 
 const ruleFieldsFor = (triggerType: AutomationTriggerType): FilterFieldOption[] => {
-	return triggerType === 'event' ? TRANSACTION_FILTER_FIELDS : WALLET_FILTER_FIELDS;
+	return triggerType === 'event' 
+		? TRANSACTION_FILTER_FIELDS 
+		: WALLET_FILTER_FIELDS;
 };
 
 export { ruleFieldsFor };

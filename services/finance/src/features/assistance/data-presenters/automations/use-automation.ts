@@ -7,6 +7,7 @@ import { fetchAutomation } from "../../automations-api";
 import { AUTOMATIONS_CACHE_KEYS } from "../cache-config.ts";
 import type { Automation } from "@entity/assistance";
 
+
 type UseAutomationOptions = Omit<UseQueryOptions<Automation>, 'queryKey' | 'queryFn'>;
 
 type UseAutomationReturn = UseQueryResult<Automation> & {

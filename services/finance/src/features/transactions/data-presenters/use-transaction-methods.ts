@@ -1,7 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
-import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import {
 	deleteTransaction as deleteTransactionApi,
@@ -9,12 +7,15 @@ import {
 	updateTransaction as updateTransactionApi,
 } from "../transactions-api";
 import { CACHE_KEYS } from "./config.ts";
+
+import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import type { TransactionPatch } from "@entity/transactions";
 import type {
 	DeleteTransactionResponse,
 	FetchTransactionResponse,
 	UpdateTransactionResponse,
 } from "../transactions-api";
+
 
 interface UseTransactionMethodsReturn {
 	meta: {
@@ -44,10 +45,14 @@ const useTransactionMethods = (
 	});
 
 	const invalidateTransaction = useCallback(() => {
-		void client.invalidateQueries({ queryKey: [CACHE_KEYS.list] });
-		void client.invalidateQueries({ queryKey: [CACHE_KEYS.search] });
-		void client.invalidateQueries({ queryKey: [CACHE_KEYS.ledger, id] });
-		void client.invalidateQueries({ queryKey: [CACHE_KEYS.fetch, id] });
+		[
+			[CACHE_KEYS.list],
+			[CACHE_KEYS.search],
+			[CACHE_KEYS.ledger, id],
+			[CACHE_KEYS.fetch, id],
+		].map((keys) => {
+			void client.invalidateQueries({ queryKey: keys });
+		})
 	}, [client, id]);
 
 	const deleteMutation = useMutation({

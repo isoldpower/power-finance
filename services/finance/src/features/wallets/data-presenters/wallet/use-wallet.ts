@@ -1,13 +1,14 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { fetchWallet } from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { Transaction } from "@entity/transactions";
 import type { WalletDetails } from "@entity/wallets";
 import type { FetchWalletResponse } from "../../wallets-api";
+
 
 type UseWalletOptions = Omit<UseQueryOptions<FetchWalletResponse>, 'queryKey' | 'queryFn'> & object;
 

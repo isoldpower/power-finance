@@ -6,6 +6,7 @@ import type {
 	NotificationListParams,
 } from "../types.ts";
 
+
 interface NotificationListRequest {
 	params?: NotificationListParams;
 }

@@ -1,6 +1,8 @@
 import { walletFromApi } from "../mutators";
+
 import type { Wallet } from "@entity/wallets";
 import type { IWalletsRESTApiClient } from "../rest-client";
+
 
 interface DeleteWalletRequest {
 	handler: Pick<IWalletsRESTApiClient, 'delete'>;

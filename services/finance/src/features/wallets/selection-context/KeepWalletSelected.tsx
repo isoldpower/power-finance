@@ -1,8 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
-
 import { useOnValuesChange } from "@shared/data";
-
 import { useWalletsFiltersContext } from "../search-and-filtering";
 import { useWalletsSelection } from "./use-wallets-selection.ts";
 

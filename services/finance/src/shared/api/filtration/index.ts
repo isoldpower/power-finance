@@ -1,4 +1,3 @@
-export { createMatcher, validateFilter } from './matcher.ts';
 export {
 	DATE_OPERATORS,
 	NUMERIC_OPERATORS,
@@ -6,7 +5,6 @@ export {
 	TEXT_OPERATORS,
 } from './operators.ts';
 
-export type { FieldPolicy, FieldResolver, MatcherOptions } from './matcher.ts';
 export type {
 	FilterAndGroup,
 	FilterFieldOption,

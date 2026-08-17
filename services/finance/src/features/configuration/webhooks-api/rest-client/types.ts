@@ -12,6 +12,7 @@ import type {
 	WebhookSubscriptionDto,
 } from "../types.ts";
 
+
 interface WebhookListRequest {
 	params?: WebhookListParams;
 }

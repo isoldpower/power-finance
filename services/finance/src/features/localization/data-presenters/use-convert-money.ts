@@ -1,9 +1,9 @@
-import type { ConvertedMoney, Money } from "@entity/localization";
 import { useCallback, useMemo } from "react";
 import { useSettingsContext } from "@internal/shared";
-
 import { useLocaleCurrency } from "@shared/formatting";
 import { useCurrencyRates } from "./use-currency-rates.ts";
+
+import type { ConvertedMoney, Money } from "@entity/localization";
 
 
 interface UseConvertMoneyReturn {

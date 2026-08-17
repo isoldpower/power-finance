@@ -1,8 +1,10 @@
 import { pageFromMeta } from "@shared/api";
 import { transactionFromApi } from "../mutators";
+
 import type { Page, PageParams } from "@shared/api";
 import type { Transaction } from "@entity/transactions";
 import type { ITransactionsRESTApiClient } from "../rest-client";
+
 
 interface ListTransactionsRequest {
 	handler: Pick<ITransactionsRESTApiClient, 'list'>;
@@ -14,9 +16,16 @@ interface ListTransactionsResponse {
 }
 
 async function listTransactions(request: ListTransactionsRequest): Promise<ListTransactionsResponse> {
-	const response = await request.handler.list({ params: request.page });
+	const response = await request.handler.list({ 
+		params: request.page,
+	});
 
-	return { page: pageFromMeta(response.data.map(transactionFromApi), response.meta) };
+	return { 
+		page: pageFromMeta(
+			response.data.map(transactionFromApi),
+			response.meta,
+		),
+	};
 }
 
 export { listTransactions };

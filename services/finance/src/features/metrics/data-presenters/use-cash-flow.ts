@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { getCashFlow } from "../metrics-api";
 import { METRICS_CACHE_KEYS } from "./cache-config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { CashFlow } from "@entity/metrics";
+
 
 interface UseCashFlowParams {
 	since?: string;

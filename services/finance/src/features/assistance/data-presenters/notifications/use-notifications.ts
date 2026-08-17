@@ -1,13 +1,14 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { listNotifications } from "../../notifications-api";
 import { NOTIFICATIONS_CACHE_KEYS } from "../cache-config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { PageParams } from "@shared/api";
 import type { Notification, NotificationQuery } from "@entity/assistance";
 import type { ListNotificationsResponse } from "../../notifications-api";
+
 
 type UseNotificationsOptions = Omit<UseQueryOptions<ListNotificationsResponse>, 'queryKey' | 'queryFn'>;
 

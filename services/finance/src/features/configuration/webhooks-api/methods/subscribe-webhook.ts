@@ -1,6 +1,8 @@
 import { subscriptionFromApi } from "../mutators";
+
 import type { WebhookSubscription } from "@entity/configuration";
 import type { IWebhookRESTApiClient } from "../rest-client";
+
 
 interface SubscribeWebhookRequest {
 	handler: Pick<IWebhookRESTApiClient, 'subscribe'>;

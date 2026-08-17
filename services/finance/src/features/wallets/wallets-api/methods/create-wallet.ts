@@ -1,6 +1,8 @@
 import { walletDraftToApi, walletFromApi } from "../mutators";
+
 import type { Wallet, WalletDraft } from "@entity/wallets";
 import type { IWalletsRESTApiClient } from "../rest-client";
+
 
 interface CreateWalletRequest {
 	handler: Pick<IWalletsRESTApiClient, 'post'>;

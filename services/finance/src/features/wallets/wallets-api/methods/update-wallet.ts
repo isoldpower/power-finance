@@ -1,6 +1,8 @@
 import { walletFromApi, walletPatchToApi } from "../mutators";
-import type { Wallet, WalletPatch } from "@entity/wallets";
+
 import type { IWalletsRESTApiClient } from "../rest-client";
+import type { Wallet, WalletPatch } from "@entity/wallets";
+
 
 interface UpdateWalletRequest {
 	handler: Pick<IWalletsRESTApiClient, 'patch'>;

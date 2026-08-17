@@ -1,5 +1,4 @@
 import { z } from "zod";
-
 import { walletFieldsShape } from "./wallet-fields.ts";
 
 

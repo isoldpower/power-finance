@@ -1,4 +1,5 @@
 import { parseAmount } from "@shared/api";
+
 import type { MoneyDto } from "@shared/api";
 import type { Money } from "@entity/localization";
 import type {
@@ -15,6 +16,7 @@ import type {
 	TransactionDetailDto,
 	TransactionDto,
 } from "../types.ts";
+
 
 const moneyFromApi = (dto: MoneyDto): Money => ({
 	amount: parseAmount(dto.amount),
@@ -38,7 +40,10 @@ const transactionFromApi = (dto: TransactionDto): Transaction => ({
 const transactionDetailsFromApi = (dto: TransactionDetailDto): TransactionDetails => ({
 	...transactionFromApi(dto),
 	evidence: dto.evidence ? { url: dto.evidence.url } : null,
-	analysis: { balanced: dto.analysis.balanced, comment: dto.analysis.comment },
+	analysis: { 
+		balanced: dto.analysis.balanced,
+		comment: dto.analysis.comment,
+	},
 });
 
 const transactionChainFromApi = (dto: TransactionChainDto): TransactionChain => ({

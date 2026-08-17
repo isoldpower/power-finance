@@ -1,12 +1,15 @@
 import { useMemo } from "react";
-
 import { useTransactionsSearch } from "../data-presenters";
 
 import type { Transaction, TransactionQuery } from "@entity/transactions";
 import type { TransactionsBrowseSetup } from "./types.ts";
 
 
-const matchesNeedle = (transaction: Transaction, needle: string, caseSensitive: boolean): boolean => {
+const matchesNeedle = (
+	transaction: Transaction,
+	needle: string,
+	caseSensitive: boolean,
+): boolean => {
 	const haystack = [transaction.name, transaction.category ?? '', transaction.wallet.name].join(' ');
 
 	return caseSensitive
@@ -29,7 +32,9 @@ const narrowTransactions = (
 	});
 };
 
-const useTransactionsBrowser = (setup: TransactionsBrowseSetup) => {
+const useTransactionsBrowser = (
+	setup: TransactionsBrowseSetup,
+) => {
 	const query = useMemo<TransactionQuery>(() => ({
 		walletIds: setup.filters.walletFilter === 'all' ? undefined : [setup.filters.walletFilter],
 	}), [setup.filters.walletFilter]);

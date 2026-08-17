@@ -1,5 +1,7 @@
-import { createContext, FC, ReactNode, use, useMemo } from "react";
-import { Transaction } from "@entity/transactions";
+import { createContext, use, useMemo } from "react";
+
+import type { FC, ReactNode } from "react";
+import type { Transaction } from "@entity/transactions";
 
 
 interface TransactionsPaginationContextType {

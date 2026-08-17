@@ -6,6 +6,7 @@ import type {
 	IAccountsRESTApiClient,
 } from "./types.ts";
 
+
 class AccountsDjangoRESTApiClient implements IAccountsRESTApiClient {
 	private readonly axiosInstance: AxiosInstance;
 	private readonly versions: WriteVersionStore;

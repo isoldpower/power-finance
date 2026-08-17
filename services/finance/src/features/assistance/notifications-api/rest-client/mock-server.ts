@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
-
 import { LocalStorageMock } from "@internal/shared";
 import { ApiError, delay, paginate, stringifySortedQuery } from "@shared/api";
 import { NOTIFICATIONS_STORAGE_KEY, SEED_NOTIFICATIONS } from "./storage.ts";
+
 import type { IStorage } from "@internal/shared";
 import type { Unsubscribe } from "@shared/api";
 import type { StoredNotification } from "./storage.ts";
@@ -13,6 +13,7 @@ import type {
 	NotificationListRequest, NotificationListResponse,
 	NotificationStreamRequest,
 } from "./types.ts";
+
 
 const SEED_OFFSETS_MS = [8 * 60 * 1000, 60 * 60 * 1000, 70 * 60 * 1000, 26 * 60 * 60 * 1000];
 

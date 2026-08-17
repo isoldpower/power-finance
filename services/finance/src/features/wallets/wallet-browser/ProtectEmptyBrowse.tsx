@@ -1,6 +1,7 @@
+import { Caption } from "@shared/pure-components/typography";
+
 import type { Wallet } from "@entity/wallets";
 import type { FC, ReactNode } from "react";
-import { Caption } from "@shared/pure-components/typography";
 
 
 interface ProtectEmptyBrowseProps {

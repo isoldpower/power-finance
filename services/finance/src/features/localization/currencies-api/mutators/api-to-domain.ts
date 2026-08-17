@@ -1,7 +1,9 @@
 import { parseAmount } from "@shared/api";
+
 import type { MoneyDto } from "@shared/api";
 import type { CurrencyMeta, CurrencyRates, Money, MoneyConversion } from "@entity/localization";
 import type { CurrencyConversionDto, CurrencyDto, CurrencyRatesDto } from "../types.ts";
+
 
 const moneyFromApi = (dto: MoneyDto): Money => ({
 	amount: parseAmount(dto.amount),

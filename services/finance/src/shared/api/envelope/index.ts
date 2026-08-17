@@ -1,4 +1,5 @@
-export { ApiError, ERROR_STATUS, isApiError, isApiErrorEnvelope, apiErrorFromEnvelope } from './errors.ts';
+export { ApiError, ERROR_STATUS } from './errors.ts';
+export { isApiError, isApiErrorEnvelope, apiErrorFromEnvelope } from './helpers.ts';
 
 export type {
 	ApiEnvelope,

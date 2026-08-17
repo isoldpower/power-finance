@@ -1,4 +1,5 @@
-import {FC, PropsWithChildren, ReactNode} from "react";
+import type { FC, PropsWithChildren, ReactNode } from "react";
+
 
 type WebhooksListEmptyUXProps = PropsWithChildren<{
 	dataset: unknown[]

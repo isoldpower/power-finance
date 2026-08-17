@@ -1,12 +1,13 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { listSubscriptions } from "../webhooks-api";
 import { CACHE_KEYS } from "./cache-config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { WebhookSubscription } from "@entity/configuration";
 import type { ListSubscriptionsResponse } from "../webhooks-api";
+
 
 type UseWebhookSubscriptionsOptions = Omit<
 	UseQueryOptions<ListSubscriptionsResponse>,

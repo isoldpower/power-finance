@@ -1,6 +1,7 @@
 import type { PageParams } from "@shared/api";
 import type { ResourceRefDto } from "@feature/assistance/actions-api";
 
+
 type SignalToneDto = 'positive' | 'negative' | 'neutral' | 'muted';
 
 type MessageRoleDto = 'user' | 'assistant';

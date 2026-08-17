@@ -17,6 +17,7 @@ import type {
 	AssistantSendRequest, AssistantSendResponse,
 } from "./types.ts";
 
+
 const ACCEPTED_EVENT = 'accepted';
 const DELTA_EVENT = 'delta';
 const MESSAGE_EVENT = 'message';
@@ -87,7 +88,10 @@ class AssistantDjangoRESTApiClient implements IAssistantRESTApiClient {
 				},
 				onError: reject,
 				onClose: () => {
-					if (!settled) reject(new ApiError('assistant_unavailable', 'Assistant closed the stream without a reply'));
+					if (!settled) reject(new ApiError(
+						'assistant_unavailable',
+						'Assistant closed the stream without a reply',
+					));
 				},
 			});
 		});

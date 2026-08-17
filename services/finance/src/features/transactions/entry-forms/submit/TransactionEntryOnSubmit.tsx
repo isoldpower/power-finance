@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-
 import { useTransactionsListMethods } from "../../data-presenters";
 import { submitEntry } from "./submit-entry.ts";
 

@@ -1,8 +1,10 @@
 import { pageFromMeta } from "@shared/api";
 import { transactionFromApi, transactionQueryToApi } from "../mutators";
+
 import type { Page, PageParams, SearchOrder } from "@shared/api";
 import type { Transaction, TransactionQuery } from "@entity/transactions";
 import type { ITransactionsRESTApiClient } from "../rest-client";
+
 
 interface SearchTransactionsRequest {
 	handler: Pick<ITransactionsRESTApiClient, 'search'>;
@@ -21,7 +23,12 @@ async function searchTransactions(request: SearchTransactionsRequest): Promise<S
 		params: { ...request.page, order: request.order },
 	});
 
-	return { page: pageFromMeta(response.data.map(transactionFromApi), response.meta) };
+	return { 
+		page: pageFromMeta(
+			response.data.map(transactionFromApi),
+			response.meta,
+		),
+	};
 }
 
 export { searchTransactions };

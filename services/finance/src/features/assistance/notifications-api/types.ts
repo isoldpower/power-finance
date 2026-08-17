@@ -1,12 +1,19 @@
 import type { PageParams, ResourceTimestamps } from "@shared/api";
-import type { ResourceRefDto, SeverityDto } from "@feature/assistance/actions-api";
+
+
+interface NotificationResourceRefDto {
+	type: string;
+	id: string;
+}
+
+type NotificationSeverityDto = 'info' | 'warning' | 'critical';
 
 interface NotificationDto extends ResourceTimestamps {
 	id: string;
-	severity: SeverityDto;
+	severity: NotificationSeverityDto;
 	title: string;
 	body: string;
-	subject: ResourceRefDto | null;
+	subject: NotificationResourceRefDto | null;
 	acknowledged_at: string | null;
 }
 
@@ -22,7 +29,7 @@ interface NotificationAcknowledgedDto {
 
 interface NotificationListParams extends PageParams {
 	acknowledged?: boolean;
-	severity?: SeverityDto;
+	severity?: NotificationSeverityDto;
 }
 
 export type {
@@ -30,4 +37,6 @@ export type {
 	NotificationCountsDto,
 	NotificationDto,
 	NotificationListParams,
+	NotificationSeverityDto,
+	NotificationResourceRefDto,
 };

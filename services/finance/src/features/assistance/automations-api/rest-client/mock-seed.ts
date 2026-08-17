@@ -1,5 +1,6 @@
 import type { AutomationDto } from "../types.ts";
 
+
 const AUTOMATIONS_STORAGE_KEY = 'automations-v1';
 
 type StoredAutomation = AutomationDto;

@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { getByTag } from "locale-codes";
+import { SUPPORTED_LOCALE_TAGS } from "./cache-config";
 
 import type { LocaleMeta } from "@entity/localization";
 
-const SUPPORTED_LOCALE_TAGS = ['en-US', 'fr-FR', 'de-DE', 'es-ES', 'it-IT'];
 
 interface UseLocalesReturn {
 	locales: LocaleMeta[];

@@ -17,9 +17,12 @@ import type {
 	ActionResolveRequest, ActionResolveResponse,
 } from "./types.ts";
 
+
 const SEED_OFFSETS_MS = [0, 45 * 60 * 1000, 3 * 60 * 60 * 1000];
 
-const compareDesc = (left: string, right: string): number => (left < right ? 1 : left > right ? -1 : 0);
+const compareDesc = (left: string, right: string): number => {
+	return (left < right ? 1 : left > right ? -1 : 0);
+}
 
 const orderActions = (actions: StoredAction[]): StoredAction[] => {
 	return [...actions].sort((left, right) => {
@@ -91,20 +94,29 @@ class ActionsMockRESTApiClient implements IActionsRESTApiClient {
 
 	public async resolve(payload: ActionResolveRequest): Promise<ActionResolveResponse> {
 		const replay = this.idempotency.replay(payload.idempotencyKey, payload.data);
-		if (replay) return { data: replay, meta: { idempotent_replay: true } };
+		if (replay) return { 
+			data: replay, 
+			meta: { idempotent_replay: true }
+		};
 
 		await delay();
 
 		const action = this.require(payload.id);
-
 		if (action.status !== 'pending') {
-			throw new ApiError('action_already_resolved', `Action ${payload.id} is no longer pending`);
+			throw new ApiError(
+				'action_already_resolved',
+				`Action ${payload.id} is no longer pending`,
+			);
 		}
 
-		const chosen = action.resolutions.find((resolution) => resolution.id === payload.data.resolution_id);
-
+		const chosen = action.resolutions.find((resolution) => {
+			return resolution.id === payload.data.resolution_id;
+		});
 		if (!chosen) {
-			throw new ApiError('unknown_resolution', `Resolution ${payload.data.resolution_id} is not offered here`);
+			throw new ApiError(
+				'unknown_resolution',
+				`Resolution ${payload.data.resolution_id} is not offered here`,
+			);
 		}
 
 		const answeredAt = new Date().toISOString();

@@ -1,4 +1,11 @@
-import type { ApiEnvelope, CollectionResponse, EmbeddedMeta, MutationMeta, MutationResponse, PageParams } from "@shared/api";
+import type {
+	ApiEnvelope,
+	CollectionResponse,
+	EmbeddedMeta,
+	MutationMeta,
+	MutationResponse,
+	PageParams
+} from "@shared/api";
 import type {
 	CategoryDto,
 	ReceiptScanDto,
@@ -11,6 +18,7 @@ import type {
 	TransactionSearchBody,
 	TransactionSearchParams,
 } from "../types.ts";
+
 
 interface TransactionListRequest {
 	params?: PageParams;

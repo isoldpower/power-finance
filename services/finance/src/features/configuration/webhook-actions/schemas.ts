@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+
 const webhookSchema = z.object({
 	title: z.string().min(1, "Enter a title for a webhook"),
 	url: z.string()

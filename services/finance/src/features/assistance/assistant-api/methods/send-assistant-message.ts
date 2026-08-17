@@ -1,6 +1,8 @@
 import { assistantMessageFromApi } from "../mutators";
+
 import type { AssistantReply } from "@entity/assistance";
 import type { IAssistantRESTApiClient } from "../rest-client";
+
 
 interface SendAssistantMessageRequest {
 	handler: Pick<IAssistantRESTApiClient, 'send'>;
@@ -28,7 +30,9 @@ async function sendAssistantMessage(
 			messageId = accepted.message_id;
 			request.onAccepted?.(accepted.user_message_id, accepted.message_id);
 		},
-		onDelta: (delta) => { request.onDelta?.(delta.text); },
+		onDelta: (delta) => { 
+			request.onDelta?.(delta.text);
+		},
 	});
 
 	return {

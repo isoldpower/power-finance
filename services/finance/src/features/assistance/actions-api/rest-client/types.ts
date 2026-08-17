@@ -1,6 +1,7 @@
 import type { CollectionResponse, MutationResponse } from "@shared/api";
 import type { ActionDto, ActionListParams, ActionResolveBody } from "../types.ts";
 
+
 interface ActionListRequest {
 	params?: ActionListParams;
 }

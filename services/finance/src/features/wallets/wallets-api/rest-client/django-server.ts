@@ -1,4 +1,5 @@
 import { buildQuery, idempotencyHeaders, request, WriteVersionStore } from "@shared/api";
+
 import type { AxiosInstance } from "axios";
 import type {
 	IWalletsRESTApiClient,
@@ -9,6 +10,7 @@ import type {
 	WalletPostRequest, WalletPostResponse,
 	WalletSearchRequest, WalletSearchResponse,
 } from "./types.ts";
+
 
 class WalletsDjangoRESTApiClient implements IWalletsRESTApiClient {
 	private readonly axiosInstance: AxiosInstance;

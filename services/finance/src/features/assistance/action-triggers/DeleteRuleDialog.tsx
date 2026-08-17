@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-
 import { useDeleteAutomation } from "../data-presenters";
 
 import type { FC, ReactNode } from "react";

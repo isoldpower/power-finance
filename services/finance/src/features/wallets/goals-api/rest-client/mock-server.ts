@@ -26,6 +26,7 @@ import type {
 	GoalPostRequest, GoalPostResponse,
 } from "./types.ts";
 
+
 const GOAL_ICON = '🎯';
 const WALLET_ICON = '💳';
 

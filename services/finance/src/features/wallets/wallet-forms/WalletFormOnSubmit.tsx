@@ -1,9 +1,7 @@
 import { useCallback } from "react";
-
 import { NEW_WALLET_GRADIENT } from "@entity/wallets";
-import { useWalletsListMethods } from "../data-presenters";
-import { useWalletMethods } from "../data-presenters";
 import { buildWalletDraft, buildWalletPatch } from "./wallet-fields.ts";
+import { useWalletsListMethods, useWalletMethods } from "../data-presenters";
 
 import type { FC, FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";

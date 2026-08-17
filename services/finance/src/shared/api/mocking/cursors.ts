@@ -2,6 +2,7 @@ import { ApiError } from "../envelope";
 
 type CursorDirection = 'next' | 'prev';
 
+
 interface CursorAnchor {
 	direction: CursorDirection;
 	index: number;

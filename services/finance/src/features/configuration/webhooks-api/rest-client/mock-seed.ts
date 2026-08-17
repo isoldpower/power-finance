@@ -1,4 +1,10 @@
-import type { WebhookDeliveryDto, WebhookEventTypeDto, WebhookSecretDto, WebhookSubscriptionDto } from "../types.ts";
+import type {
+	WebhookDeliveryDto,
+	WebhookEventTypeDto,
+	WebhookSecretDto,
+	WebhookSubscriptionDto
+} from "../types.ts";
+
 
 const WEBHOOKS_STORAGE_KEY = 'webhooks-v1';
 const SUBSCRIPTIONS_STORAGE_KEY = 'webhook-subscriptions-v1';

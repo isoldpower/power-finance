@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useSettingsContext } from "@internal/shared";
 
 import { useCreateGoal } from "../data-presenters";
-import { parseAmountInput } from "./goal-amount.ts";
+import { parseAmountInput } from "@shared/formatting";
 
 import type { FC, FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";

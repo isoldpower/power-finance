@@ -1,13 +1,14 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { listAssistantMessages } from "../../assistant-api";
 import { ASSISTANT_CACHE_KEYS } from "../cache-config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { PageParams } from "@shared/api";
 import type { AssistantMessage } from "@entity/assistance";
 import type { ListAssistantMessagesResponse } from "../../assistant-api";
+
 
 type UseAssistantMessagesOptions = Omit<
 	UseQueryOptions<ListAssistantMessagesResponse>,

@@ -1,6 +1,8 @@
 import { overviewFromApi } from "../mutators";
+
 import type { AssistantOverview } from "@entity/assistance";
 import type { IAssistantRESTApiClient } from "../rest-client";
+
 
 interface FetchAssistantOverviewRequest {
 	handler: Pick<IAssistantRESTApiClient, 'overview'>;

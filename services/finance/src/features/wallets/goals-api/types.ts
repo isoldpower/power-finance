@@ -1,6 +1,7 @@
 import type { LedgerEntryDto } from "@feature/accounts/accounts-api";
 import type { MoneyDto, ResourceTimestamps } from "@shared/api";
 
+
 interface GoalDto extends ResourceTimestamps {
 	id: string;
 	name: string;

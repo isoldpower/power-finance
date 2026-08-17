@@ -1,4 +1,4 @@
-import type {FC, ReactNode} from "react";
+import type { FC, ReactNode } from "react";
 import type { CashFlow } from "@entity/metrics";
 
 

@@ -1,6 +1,17 @@
 import { z } from "zod";
 
-const FILTER_OPERATORS = ['eq', 'neq', 'gt', 'gte', 'lt', 'lte', 'in', 'contains', 'icontains'] as const;
+
+const FILTER_OPERATORS = [
+	'eq',
+	'neq',
+	'gt',
+	'gte',
+	'lt',
+	'lte',
+	'in',
+	'contains',
+	'icontains',
+] as const;
 
 const ruleConditionSchema = z.object({
 	field: z.string().min(1, "Pick a field"),

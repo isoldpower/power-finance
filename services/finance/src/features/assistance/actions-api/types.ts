@@ -1,14 +1,15 @@
 import type { MoneyDto, PageParams, ResourceTimestamps } from "@shared/api";
 
+
 type ActionSourceDto = 'assistant' | 'scheduler';
 
-type SeverityDto = 'info' | 'warning' | 'critical';
+type ActionSeverityDto = 'info' | 'warning' | 'critical';
 
 type ActionStatusDto = 'pending' | 'resolved' | 'dismissed' | 'expired';
 
 type ResolutionIntentDto = 'primary' | 'secondary' | 'danger';
 
-interface ResourceRefDto {
+interface ActionResourceRefDto {
 	type: string;
 	id: string;
 }
@@ -24,11 +25,11 @@ interface ActionDto extends ResourceTimestamps {
 	id: string;
 	source: ActionSourceDto;
 	kind: string;
-	severity: SeverityDto;
+	severity: ActionSeverityDto;
 	status: ActionStatusDto;
 	title: string;
 	body: string;
-	subject: ResourceRefDto | null;
+	subject: ActionResourceRefDto | null;
 	money: MoneyDto | null;
 	group_key: string | null;
 	occurrences: number;
@@ -41,7 +42,7 @@ interface ActionDto extends ResourceTimestamps {
 interface ActionListParams extends PageParams {
 	status?: ActionStatusDto;
 	source?: ActionSourceDto;
-	severity?: SeverityDto;
+	severity?: ActionSeverityDto;
 }
 
 interface ActionResolveBody {
@@ -56,6 +57,6 @@ export type {
 	ActionSourceDto,
 	ActionStatusDto,
 	ResolutionIntentDto,
-	ResourceRefDto,
-	SeverityDto,
+	ActionResourceRefDto,
+	ActionSeverityDto,
 };

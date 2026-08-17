@@ -1,6 +1,8 @@
 import { transactionChainFromApi } from "../mutators";
+
 import type { TransactionChain } from "@entity/transactions";
 import type { ITransactionsRESTApiClient } from "../rest-client";
+
 
 interface DeleteTransactionChainRequest {
 	handler: Pick<ITransactionsRESTApiClient, 'deleteChain'>;

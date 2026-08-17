@@ -1,5 +1,6 @@
 import type { FilterNode, PageParams, ResourceTimestamps } from "@shared/api";
 
+
 type AutomationTriggerTypeDto = 'event' | 'schedule';
 
 type AutomationEventDto = 'transaction.created' | 'transaction.updated';

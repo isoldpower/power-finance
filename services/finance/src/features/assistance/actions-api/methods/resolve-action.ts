@@ -1,6 +1,8 @@
 import { actionFromApi } from "../mutators";
+
 import type { Action } from "@entity/assistance";
 import type { IActionsRESTApiClient } from "../rest-client";
+
 
 interface ResolveActionRequest {
 	handler: Pick<IActionsRESTApiClient, 'resolve'>;
@@ -14,7 +16,9 @@ type ResolveActionResponse = Action;
 async function resolveAction(request: ResolveActionRequest): Promise<ResolveActionResponse> {
 	const response = await request.handler.resolve({
 		id: request.id,
-		data: { resolution_id: request.resolutionId },
+		data: { 
+			resolution_id: request.resolutionId,
+		},
 		idempotencyKey: request.idempotencyKey,
 	});
 

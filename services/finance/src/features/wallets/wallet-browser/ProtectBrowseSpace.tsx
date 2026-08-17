@@ -1,5 +1,6 @@
-import type { BaseHTMLAttributes, FC } from "react";
 import { Caption } from "@shared/pure-components/typography";
+
+import type { BaseHTMLAttributes, FC } from "react";
 
 
 interface ProtectBrowseSpaceProps extends Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> {

@@ -1,4 +1,4 @@
-import { useActions } from "../data-presenters/actions/use-actions.ts";
+import { useActions } from "../data-presenters";
 
 import type { FC, ReactNode } from "react";
 

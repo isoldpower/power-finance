@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { useApiContext, DERIVED_KEYS } from "@app/api";
 import { ackNotification } from "../../notifications-api";
 import { NOTIFICATIONS_CACHE_KEYS } from "../cache-config.ts";
+
 
 const useAckNotification = () => {
 	const apiContext = useApiContext();

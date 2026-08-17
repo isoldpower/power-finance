@@ -1,13 +1,14 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { fetchGoal } from "../../goals-api";
 import { GOALS_CACHE_KEYS } from "../cache-config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { LedgerEntry } from "@entity/accounts";
 import type { Goal } from "@entity/wallets";
 import type { FetchGoalResponse } from "../../goals-api";
+
 
 type UseGoalOptions = Omit<UseQueryOptions<FetchGoalResponse>, 'queryKey' | 'queryFn'>;
 

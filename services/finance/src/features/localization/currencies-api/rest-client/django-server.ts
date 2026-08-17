@@ -1,4 +1,5 @@
 import { buildQuery, request, WriteVersionStore } from "@shared/api";
+
 import type { AxiosInstance } from "axios";
 import type {
 	CurrencyConvertRequest, CurrencyConvertResponse,
@@ -6,6 +7,7 @@ import type {
 	CurrencyRatesRequest, CurrencyRatesResponse,
 	ICurrenciesRESTApiClient,
 } from "./types.ts";
+
 
 class CurrenciesDjangoRESTApiClient implements ICurrenciesRESTApiClient {
 	private readonly axiosInstance: AxiosInstance;

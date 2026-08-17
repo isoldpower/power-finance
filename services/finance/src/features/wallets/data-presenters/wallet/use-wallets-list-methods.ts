@@ -1,12 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
-import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext, DERIVED_KEYS } from "@app/api";
-import { createWallet as createWalletApi, listWallets as listWalletsApi } from "../../wallets-api";
+import {
+	createWallet as createWalletApi, 
+	listWallets as listWalletsApi,
+} from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
+
+import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import type { WalletDraft } from "@entity/wallets";
 import type { CreateWalletResponse, ListWalletsResponse } from "../../wallets-api";
+
 
 interface UseWalletsReturn {
 	meta: {

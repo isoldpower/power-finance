@@ -1,12 +1,13 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { stringifySorted } from "@shared/data";
 import { searchWallets as searchWalletsApi } from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
+
 import type { PageParams, SearchOrder } from "@shared/api";
 import type { WalletQuery } from "@entity/wallets";
+
 
 interface UseWalletSearchParams extends PageParams {
 	order?: SearchOrder;

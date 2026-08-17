@@ -1,4 +1,7 @@
-import {cloneElement, FC, PropsWithChildren, ReactElement} from "react";
+import { cloneElement } from "react";
+
+import type { FC, PropsWithChildren, ReactElement } from "react";
+
 
 type WebhooksListFxProps = PropsWithChildren<{
 	status: 'pending' | 'error' | 'success';

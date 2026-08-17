@@ -1,12 +1,9 @@
 import { GoalSkeletonRow } from "@entity/wallets";
-
+import { Caption } from "@shared/pure-components/typography";
 import { useGoals } from "../data-presenters";
 
 import type { FC, ReactNode } from "react";
-import { Caption } from "@shared/pure-components/typography";
 
-
-const PLACEHOLDER_KEYS = ['p1', 'p2', 'p3', 'p4', 'p5'];
 
 interface GoalsListFxProps {
 	children: ReactNode;
@@ -26,7 +23,7 @@ const GoalsListFx: FC<GoalsListFxProps> = ({ children }) => {
 
 const GoalsListSkeleton: FC = () => (
 	<div>
-		{PLACEHOLDER_KEYS.map((key) => (
+		{['p1', 'p2', 'p3', 'p4', 'p5'].map((key) => (
 			<GoalSkeletonRow key={key}>
 				<GoalSkeletonRow.Head>
 					<GoalSkeletonRow.Icon />

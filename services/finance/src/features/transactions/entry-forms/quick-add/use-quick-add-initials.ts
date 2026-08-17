@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { useEntryWalletDefaults } from "../form-state/use-entry-wallet-defaults.ts";
+import { useEntryWalletDefaults } from "../form-state";
 import { DEFAULT_ENTRY_CATEGORY } from "../config.ts";
 
 import type { Wallet } from "@entity/wallets";

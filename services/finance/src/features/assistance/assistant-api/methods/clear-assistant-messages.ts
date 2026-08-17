@@ -1,5 +1,6 @@
 import type { IAssistantRESTApiClient } from "../rest-client";
 
+
 interface ClearAssistantMessagesRequest {
 	handler: Pick<IAssistantRESTApiClient, 'clear'>;
 }

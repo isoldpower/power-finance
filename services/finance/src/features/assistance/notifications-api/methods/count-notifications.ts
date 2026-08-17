@@ -1,6 +1,8 @@
 import { notificationCountsFromApi } from "../mutators";
+
 import type { NotificationCounts } from "@entity/assistance";
 import type { INotificationsRESTApiClient } from "../rest-client";
+
 
 interface CountNotificationsRequest {
 	handler: Pick<INotificationsRESTApiClient, 'count'>;

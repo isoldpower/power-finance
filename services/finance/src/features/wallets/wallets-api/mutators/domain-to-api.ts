@@ -1,7 +1,9 @@
 import { toAmountString } from "@shared/api";
+
 import type { FilterNode } from "@shared/api";
 import type { WalletDraft, WalletPatch, WalletQuery } from "@entity/wallets";
 import type { WalletCreateBody, WalletPatchBody, WalletSearchBody, WalletSearchField } from "../types.ts";
+
 
 const MATCH_ALL: FilterNode<WalletSearchField> = {
 	field_name: 'created_at',

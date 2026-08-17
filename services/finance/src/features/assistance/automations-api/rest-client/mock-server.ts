@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-
 import { LocalStorageMock } from "@internal/shared";
 import {
 	ApiError,
@@ -13,6 +12,7 @@ import {
 import { TRANSACTION_SEARCH_FIELDS } from "@feature/transactions/transactions-api";
 import { WALLET_SEARCH_FIELDS } from "@feature/wallets/wallets-api";
 import { AUTOMATIONS_STORAGE_KEY, SEED_AUTOMATIONS } from "./storage.ts";
+
 import type { IStorage } from "@internal/shared";
 import type { FilterNode } from "@shared/api";
 import type { StoredAutomation } from "./storage.ts";
@@ -31,6 +31,7 @@ import type {
 	AutomationPatchRequest, AutomationPatchResponse,
 	AutomationPostRequest, AutomationPostResponse,
 } from "./types.ts";
+
 
 type TriggerSubject = 'transaction' | 'wallet';
 

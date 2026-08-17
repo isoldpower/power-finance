@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-
 import { LocalStorageMock } from "@internal/shared";
 import { delay, paginate, stringifySortedQuery } from "@shared/api";
 import {
@@ -7,9 +6,10 @@ import {
 	MOCK_REPLY,
 	SEED_MESSAGES,
 	SEED_OVERVIEW,
-} from "./storage.ts";
+} from "./mock-seed.ts";
+
 import type { IStorage } from "@internal/shared";
-import type { StoredMessage } from "./storage.ts";
+import type { StoredMessage } from "./mock-seed.ts";
 import type {
 	IAssistantRESTApiClient,
 	AssistantClearRequest, AssistantClearResponse,
@@ -17,6 +17,7 @@ import type {
 	AssistantOverviewRequest, AssistantOverviewResponse,
 	AssistantSendRequest, AssistantSendResponse,
 } from "./types.ts";
+
 
 const DELTA_LATENCY = 120;
 const DELTA_WORDS = 6;

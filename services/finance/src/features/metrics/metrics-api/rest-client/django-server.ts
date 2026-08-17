@@ -1,11 +1,16 @@
 import { buildQuery, request, WriteVersionStore } from "@shared/api";
+
 import type { AxiosInstance } from "axios";
 import type {
-	BalanceMetricsRequest, BalanceMetricsResponse,
-	CashFlowRequest, CashFlowResponse,
+	BalanceMetricsRequest,
+	BalanceMetricsResponse,
+	CashFlowRequest,
+	CashFlowResponse,
 	IMetricsRESTApiClient,
-	NetWorthRequest, NetWorthResponse,
+	NetWorthRequest,
+	NetWorthResponse,
 } from "./types.ts";
+
 
 class MetricsDjangoRESTApiClient implements IMetricsRESTApiClient {
 	private readonly axiosInstance: AxiosInstance;

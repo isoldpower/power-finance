@@ -1,4 +1,6 @@
-import {createContext, FC, ReactNode, use, useCallback, useMemo, useState} from "react";
+import { createContext, use, useCallback, useMemo, useState } from "react";
+
+import type { FC, ReactNode } from "react";
 import type { OrderingType } from "@shared/data";
 
 

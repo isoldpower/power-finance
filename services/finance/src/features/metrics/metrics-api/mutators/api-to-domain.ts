@@ -1,8 +1,10 @@
 import { parseAmount } from "@shared/api";
+
 import type { MoneyDto } from "@shared/api";
 import type { Money } from "@entity/localization";
 import type { BalanceMetrics, CashFlow, NetWorth } from "@entity/metrics";
 import type { BalanceMetricsDto, CashFlowDto, NetWorthDto } from "../types.ts";
+
 
 const moneyFromApi = (dto: MoneyDto): Money => ({
 	amount: parseAmount(dto.amount),
@@ -19,7 +21,10 @@ const balanceMetricsFromApi = (dto: BalanceMetricsDto): BalanceMetrics => ({
 
 const netWorthFromApi = (dto: NetWorthDto): NetWorth => ({
 	money: moneyFromApi(dto.money),
-	netDiff: { percentage: dto.net_diff.percentage, direction: dto.net_diff.direction },
+	netDiff: { 
+		percentage: dto.net_diff.percentage,
+		direction: dto.net_diff.direction,
+	},
 	series: dto.series.map((point) => ({
 		timestamp: point.timestamp,
 		money: moneyFromApi(point.money),

@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-
 import { useTransactionsSearch } from "../data-presenters";
 import { DAYS_CAP, TXN_CAP } from "./config";
 
@@ -41,7 +40,9 @@ const useRecentActivity = () => {
 		limit: TXN_CAP,
 	});
 
-	const groups = useMemo(() => groupRecentByDay(transactions), [transactions]);
+	const groups = useMemo(() => {
+		return groupRecentByDay(transactions);
+	}, [transactions]);
 
 	return { groups, isPending };
 };

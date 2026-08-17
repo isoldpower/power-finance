@@ -1,7 +1,9 @@
 import { decodeCursor, encodeCursor } from "./cursors.ts";
-import { clampLimit } from "./page.ts";
+import { clampLimit } from "./page-limit.ts";
+
 import type { PaginationMeta } from "../envelope";
-import type { PageParams } from "./page.ts";
+import type { PageParams } from "../pagination";
+
 
 interface PaginatedSlice<TItem> {
 	items: TItem[];

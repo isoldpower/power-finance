@@ -1,12 +1,11 @@
 import { useMemo } from "react";
 import { getFinanceRoute } from "@internal/shared";
 import { useWalletsList } from "@feature/wallets";
+import { WALLET_RESULTS_LIMIT } from "./config.ts";
 
 import type { ResultItem } from "./types.ts";
 import type { PageEntry } from "@entity/navigation";
 
-
-const WALLET_RESULTS_LIMIT = 6;
 
 const useSearchResults = (pages: PageEntry[]) => {
 	const { wallets } = useWalletsList();

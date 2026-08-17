@@ -1,8 +1,10 @@
 import { pageFromMeta } from "@shared/api";
 import { walletFromApi } from "../mutators";
+
 import type { Page, PageParams } from "@shared/api";
 import type { Wallet } from "@entity/wallets";
 import type { IWalletsRESTApiClient } from "../rest-client";
+
 
 interface ListWalletsRequest {
 	handler: Pick<IWalletsRESTApiClient, 'list'>;

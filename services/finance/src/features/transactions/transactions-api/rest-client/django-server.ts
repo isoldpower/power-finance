@@ -1,4 +1,5 @@
 import { buildQuery, idempotencyHeaders, request, WriteVersionStore } from "@shared/api";
+
 import type { AxiosInstance } from "axios";
 import type {
 	ITransactionsRESTApiClient,
@@ -13,6 +14,7 @@ import type {
 	TransactionScanRequest, TransactionScanResponse,
 	TransactionSearchRequest, TransactionSearchResponse,
 } from "./types.ts";
+
 
 class TransactionsDjangoRESTApiClient implements ITransactionsRESTApiClient {
 	private readonly axiosInstance: AxiosInstance;

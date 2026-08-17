@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { scanReceipt } from "../transactions-api";
 import { useApiContext } from "@app/api";
 import { CACHE_KEYS } from "./config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { ReceiptScan } from "@entity/transactions";
 import type { ScanReceiptResponse } from "../transactions-api";
 
@@ -34,7 +34,10 @@ const useReceiptScan = (
 
 	const scan = useMemo(() => query.data ?? null, [query.data]);
 
-	return { ...query, scan };
+	return { 
+		...query,
+		scan,
+	};
 };
 
 export { useReceiptScan };

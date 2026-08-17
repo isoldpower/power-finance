@@ -33,14 +33,7 @@ const roundToCurrency = (amount: number, currency: string): number => {
 	return Math.round(amount * factor) / factor;
 };
 
-// Keeps only digits and a single decimal point so amount inputs can't take letters.
-const sanitizeAmountInput = (raw: string): string => {
-	const cleaned = raw.replace(/[^0-9.]/g, '');
-	const [whole, ...rest] = cleaned.split('.');
-	return rest.length > 0 ? `${whole}.${rest.join('')}` : whole;
-};
-
-export { currencySymbol, currencyFractionDigits, roundToCurrency, sanitizeAmountInput };
+export { currencySymbol, currencyFractionDigits, roundToCurrency };
 
 type FormatMoney = (amount: number, currency: string) => string;
 

@@ -1,4 +1,5 @@
 import { parseAmount } from "@shared/api";
+
 import type { FilterNode, MoneyDto } from "@shared/api";
 import type {
 	Automation,
@@ -9,6 +10,7 @@ import type {
 } from "@entity/assistance";
 import type { Money } from "@entity/localization";
 import type { AutomationDto, AutomationEffectDto, EffectParamsDto } from "../types.ts";
+
 
 const SEVERITIES: Severity[] = ['info', 'warning', 'critical'];
 
@@ -34,10 +36,20 @@ const readMoney = (params: EffectParamsDto, key: string): Money => {
 };
 
 const conditionFromApi = (node: FilterNode): RuleNode => {
-	if ('and' in node) return { combinator: 'and', nodes: node.and.map(conditionFromApi) };
-	if ('or' in node) return { combinator: 'or', nodes: node.or.map(conditionFromApi) };
+	if ('and' in node) return { 
+		combinator: 'and',
+		nodes: node.and.map(conditionFromApi),
+	};
+	if ('or' in node) return { 
+		combinator: 'or',
+		nodes: node.or.map(conditionFromApi),
+	};
 
-	return { field: node.field_name, operator: node.operator, value: node.value };
+	return { 
+		field: node.field_name,
+		operator: node.operator,
+		value: node.value,
+	};
 };
 
 const effectFromApi = (dto: AutomationEffectDto): AutomationEffect => {

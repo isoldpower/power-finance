@@ -1,6 +1,8 @@
 import { resourceRefFromApi } from "@feature/assistance/actions-api";
+
 import type { Notification, NotificationCounts } from "@entity/assistance";
 import type { NotificationCountsDto, NotificationDto } from "../types.ts";
+
 
 const notificationFromApi = (dto: NotificationDto): Notification => ({
 	id: dto.id,

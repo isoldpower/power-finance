@@ -1,6 +1,7 @@
 import type { ApiEnvelope, CollectionResponse, EmbeddedMeta, MutationResponse, PageParams } from "@shared/api";
 import type { GoalCreateBody, GoalDetailDto, GoalDto, GoalPatchBody } from "../types.ts";
 
+
 interface GoalListRequest {
 	params?: PageParams;
 }

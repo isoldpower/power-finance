@@ -1,8 +1,10 @@
 import { pageFromMeta } from "@shared/api";
 import { subscriptionFromApi } from "../mutators";
+
 import type { Page, PageParams } from "@shared/api";
 import type { WebhookSubscription } from "@entity/configuration";
 import type { IWebhookRESTApiClient } from "../rest-client";
+
 
 interface ListSubscriptionsRequest {
 	handler: Pick<IWebhookRESTApiClient, 'listSubscriptions'>;
@@ -20,7 +22,12 @@ async function listSubscriptions(request: ListSubscriptionsRequest): Promise<Lis
 		params: request.page,
 	});
 
-	return { page: pageFromMeta(response.data.map(subscriptionFromApi), response.meta) };
+	return { 
+		page: pageFromMeta(
+			response.data.map(subscriptionFromApi),
+			response.meta,
+		)
+	};
 }
 
 export { listSubscriptions };

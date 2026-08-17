@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
 import { useApiContext } from "@app/api";
 import { getBalanceMetrics } from "../metrics-api";
 import { METRICS_CACHE_KEYS } from "./cache-config.ts";
+
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { BalanceMetrics } from "@entity/metrics";
+
 
 type UseBalanceMetricsOptions = Omit<UseQueryOptions<BalanceMetrics>, 'queryKey' | 'queryFn'>;
 

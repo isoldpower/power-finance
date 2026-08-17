@@ -1,6 +1,8 @@
 import { automationFromApi, automationPatchToApi } from "../mutators";
+
 import type { Automation, AutomationPatch } from "@entity/assistance";
 import type { IAutomationsRESTApiClient } from "../rest-client";
+
 
 interface UpdateAutomationRequest {
 	handler: Pick<IAutomationsRESTApiClient, 'patch'>;

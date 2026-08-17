@@ -1,5 +1,6 @@
 import type { TransactionDto, TransactionOriginDto, TransactionTypeDto } from "../types.ts";
 
+
 const TRANSACTIONS_STORAGE_KEY = 'transactions-v1';
 
 interface StoredTransaction {
