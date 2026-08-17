@@ -1,18 +1,18 @@
 import { useMemo } from "react";
 
-import type { CashFlowInsight } from "../metrics-api/types.ts";
+import type { CashFlow } from "@entity/metrics";
 
 
 const useCashFlowShare = (
-	cashFlow: CashFlowInsight,
+	cashFlow: CashFlow,
 ) => {
 	return useMemo(() => {
-		const allFlows = [cashFlow.in, cashFlow.out];
+		const allFlows = [cashFlow.inflow, cashFlow.outflow];
 		const total = allFlows.reduce((total, flow) => total + flow.amount, 0);
 
 		return {
-			inflowShare: (cashFlow.in.amount / total) * 100,
-			outflowShare: (cashFlow.out.amount / total) * 100,
+			inflowShare: (cashFlow.inflow.amount / total) * 100,
+			outflowShare: (cashFlow.outflow.amount / total) * 100,
 		};
 	}, [cashFlow]);
 }

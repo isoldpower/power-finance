@@ -9,27 +9,29 @@ import { DangerIconBadge } from "@shared/pure-components/badges";
 import { useLocaleCurrency } from "@shared/formatting";
 
 import type { FC, ReactNode } from "react";
-import type { GoalWallet } from "@entity/wallets";
+import type { Goal } from "@entity/wallets";
 import type { GoalDisposition, GoalDispositionMode } from "@entity/wallets";
 
 
 interface DeleteGoalModalProps {
-	wallet: GoalWallet;
+	goal: Goal;
 	pending: boolean;
 	onConfirm: (disposition: GoalDisposition, onDeleted: () => void) => void;
 	children: ReactNode;
 }
 
-const DeleteGoalModal: FC<DeleteGoalModalProps> = ({ wallet, pending, onConfirm, children }) => {
+const DeleteGoalModal: FC<DeleteGoalModalProps> = ({ goal, pending, onConfirm, children }) => {
 	const { wallets } = useWalletsList();
 	const formatCurrency = useLocaleCurrency();
 
-	const savedAmount = wallet.balance.amount;
+	const walletOptions = toWalletSelectOptions(wallets);
+	const savedAmount = goal.progress.amount;
 	const hasSavings = savedAmount > 0;
-	const saved = formatCurrency(savedAmount, wallet.balance.currency);
+	const saved = formatCurrency(savedAmount, goal.progress.currency);
 
 	const [mode, setMode] = useState<GoalDispositionMode>(hasSavings ? 'transfer' : 'spent');
 	const [toWalletId, setToWalletId] = useState('');
+	const selectedWallet = walletOptions.find((option) => option.id === toWalletId);
 
 	useEffect(() => {
 		if (wallets.length === 0) return;
@@ -46,7 +48,7 @@ const DeleteGoalModal: FC<DeleteGoalModalProps> = ({ wallet, pending, onConfirm,
 	return (
 		<ConfirmModal trigger={children} className="w-[440px] p-6" onClose={resetMode}>
 			{({ close }) => (
-				<>
+				<GoalDialog>
 					<GoalDialog.Header>
 						<DangerIconBadge className="size-10 flex-none" iconSize={20} />
 						<GoalDialog.Content>
@@ -54,9 +56,14 @@ const DeleteGoalModal: FC<DeleteGoalModalProps> = ({ wallet, pending, onConfirm,
 								Delete goal
 							</Heading>
 							<GoalDialog.Description>
-								{hasSavings
-									? <>“{wallet.name}” has <Text weight="semibold" tone="strong">{saved}</Text> saved. Choose what happens to it.</>
-									: <>Permanently delete “{wallet.name}”? This can’t be undone.</>}
+								{hasSavings ? (
+									<>
+										“{goal.name}” has <Text weight="semibold" tone="strong">{saved}</Text> saved.
+										Choose what happens to it.
+									</>
+								) : (
+									<>Permanently delete “{goal.name}”? This can’t be undone.</>
+								)}
 							</GoalDialog.Description>
 						</GoalDialog.Content>
 					</GoalDialog.Header>
@@ -77,13 +84,45 @@ const DeleteGoalModal: FC<DeleteGoalModalProps> = ({ wallet, pending, onConfirm,
 								</GoalDialog.Content>
 							</GoalDialog.Option>
 							{mode === 'transfer' ? (
-								<WalletSelect
-									options={toWalletSelectOptions(wallets)}
-									value={toWalletId}
-									onChange={setToWalletId}
-									emptyLabel="No wallets to receive funds"
-									className="ml-7 w-auto"
-								/>
+								<WalletSelect>
+									<WalletSelect.Trigger className="ml-7 w-auto">
+										{selectedWallet ? (
+											<WalletSelect.Swatch gradient={selectedWallet.gradient} />
+										) : null}
+										<WalletSelect.Value placeholder={!selectedWallet}>
+											{selectedWallet ? selectedWallet.name : 'Select wallet'}
+										</WalletSelect.Value>
+										{selectedWallet ? (
+											<WalletSelect.Currency>
+												{selectedWallet.currency}
+											</WalletSelect.Currency>
+										) : null}
+										<WalletSelect.Caret />
+									</WalletSelect.Trigger>
+									<WalletSelect.Options>
+										{walletOptions.length === 0 ? (
+											<WalletSelect.Empty>
+												No wallets to receive funds
+											</WalletSelect.Empty>
+										) : (
+											walletOptions.map((option) => (
+												<WalletSelect.Option
+													key={option.id}
+													onSelect={() => { setToWalletId(option.id); }}
+												>
+													<WalletSelect.Swatch gradient={option.gradient} />
+													<WalletSelect.OptionName>
+														{option.name}
+													</WalletSelect.OptionName>
+													<WalletSelect.Currency size="10.5">
+														{option.currency}
+													</WalletSelect.Currency>
+													{option.id === toWalletId ? <WalletSelect.Selected /> : null}
+												</WalletSelect.Option>
+											))
+										)}
+									</WalletSelect.Options>
+								</WalletSelect>
 							) : null}
 							<GoalDialog.Option
 								selected={mode === 'spent'}
@@ -116,7 +155,7 @@ const DeleteGoalModal: FC<DeleteGoalModalProps> = ({ wallet, pending, onConfirm,
 							{pending ? 'Deleting…' : mode === 'transfer' && hasSavings ? 'Transfer & delete' : 'Delete goal'}
 						</FinanceButton>
 					</GoalDialog.Actions>
-				</>
+				</GoalDialog>
 			)}
 		</ConfirmModal>
 	);

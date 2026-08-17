@@ -1,31 +1,35 @@
-import { goalProgressPercent, goalRemainingAmount } from "./goal-progress.ts";
+import { DEFAULT_GOAL_COLOR, DEFAULT_GOAL_ICON } from "../visual-map";
+import { goalProgressPercent } from "./goal-progress.ts";
 
-import type { GoalWallet } from "../types.ts";
+import type { Goal } from "../types.ts";
 import type { GoalView } from "./types.ts";
 import type { FormatMoney } from "@shared/formatting";
 
 
-const toEtaLabel = (remaining: number, monthlyAmount: number, percent: number): string => {
-	if (percent >= 100) return 'reached';
-	if (monthlyAmount <= 0) return 'in progress';
+const MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
 
-	return `~${Math.ceil(remaining / monthlyAmount).toString()} mo left`;
+const toEtaLabel = (finishAt: string, percent: number): string => {
+	if (percent >= 100) return 'reached';
+
+	const remaining = new Date(finishAt).getTime() - Date.now();
+	if (Number.isNaN(remaining)) return 'in progress';
+	if (remaining <= 0) return 'overdue';
+
+	return `~${Math.ceil(remaining / MONTH_IN_MS).toString()} mo left`;
 };
 
-const toGoalView = (wallet: GoalWallet, formatMoney: FormatMoney): GoalView => {
-	const { currency } = wallet.balance;
-	const { icon, color, targetAmount, monthlyAmount } = wallet.goal;
-	const percent = goalProgressPercent(wallet);
+const toGoalView = (goal: Goal, formatMoney: FormatMoney): GoalView => {
+	const { currency } = goal.target;
+	const percent = goalProgressPercent(goal);
 
 	return {
-		id: wallet.id,
-		icon,
-		color,
-		name: wallet.name,
-		monthly: formatMoney(monthlyAmount, currency),
-		eta: toEtaLabel(goalRemainingAmount(wallet), monthlyAmount, percent),
-		saved: formatMoney(wallet.balance.amount, currency),
-		target: formatMoney(targetAmount, currency),
+		id: goal.id,
+		icon: DEFAULT_GOAL_ICON,
+		color: DEFAULT_GOAL_COLOR,
+		name: goal.name,
+		eta: toEtaLabel(goal.finishAt, percent),
+		saved: formatMoney(goal.progress.amount, currency),
+		target: formatMoney(goal.target.amount, currency),
 		percent,
 	};
 };

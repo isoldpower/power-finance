@@ -1,22 +1,40 @@
+import { WalletFormFailed, WalletFormSkeleton } from "@entity/wallets";
+
 import type { FC, ReactNode } from "react";
 import type { CurrencyMeta } from "@entity/localization";
 
 
-interface WalletCurrenciesFx {
-	currencies: CurrencyMeta[]
+interface WalletCurrenciesFxProps {
+	currencies: CurrencyMeta[];
 	isPending: boolean;
 	isError: boolean;
 	children: ((currencies: CurrencyMeta[]) => ReactNode) | ReactNode;
 }
 
-const WalletCurrenciesFx: FC<WalletCurrenciesFx> = ({ isError, isPending, currencies, children }) => {
+const WalletCurrenciesFx: FC<WalletCurrenciesFxProps> = ({ isError, isPending, currencies, children }) => {
 	if (isPending) {
 		return (
-			<div>Getting everything ready...</div>
+			<WalletFormSkeleton>
+				<WalletFormSkeleton.Body>
+					<WalletFormSkeleton.Preview />
+					<WalletFormSkeleton.Field variant="name" />
+					<WalletFormSkeleton.Field variant="type" />
+					<WalletFormSkeleton.Field variant="currency" />
+					<WalletFormSkeleton.Field variant="balance" spaced={false} />
+				</WalletFormSkeleton.Body>
+				<WalletFormSkeleton.Footer />
+			</WalletFormSkeleton>
 		);
 	} else if (isError || currencies.length === 0) {
 		return (
-			<div>Ooops, something went wrong :(</div>
+			<WalletFormFailed>
+				<WalletFormFailed.Title>
+					Something went wrong
+				</WalletFormFailed.Title>
+				<WalletFormFailed.Message>
+					We couldn&apos;t load the currency list.
+				</WalletFormFailed.Message>
+			</WalletFormFailed>
 		);
 	}
 
@@ -26,3 +44,4 @@ const WalletCurrenciesFx: FC<WalletCurrenciesFx> = ({ isError, isPending, curren
 }
 
 export { WalletCurrenciesFx };
+export type { WalletCurrenciesFxProps };

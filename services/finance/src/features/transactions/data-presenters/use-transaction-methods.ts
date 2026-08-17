@@ -1,28 +1,29 @@
-// @reserved-api - wired to the API and intentionally not consumed yet; awaiting post-MVP flows. NOT dead code: do not delete, do not drop from barrels.
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback , useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 
-import { deleteTransaction as deleteTransactionApi } from "../transactions-api/methods/delete-transaction.ts";
-import { fetchTransaction as fetchTransactionApi } from "../transactions-api/methods/fetch-transaction.ts";
-import { updateTransaction as updateTransactionApi } from "../transactions-api/methods/update-transaction.ts";
 import { useApiContext } from "@app/api";
+import {
+	deleteTransaction as deleteTransactionApi,
+	fetchTransaction as fetchTransactionApi,
+	updateTransaction as updateTransactionApi,
+} from "../transactions-api";
 import { CACHE_KEYS } from "./config.ts";
-import type { FetchTransactionResponse } from "../transactions-api/methods/fetch-transaction.ts";
-import type { DeleteTransactionRequest, DeleteTransactionResponse } from "../transactions-api/methods/delete-transaction.ts";
-import type { UpdateTransactionResponse } from "../transactions-api/methods/update-transaction.ts";
-import type { ListAllTransactionsResponse } from "../transactions-api/methods/list-all-transactions.ts";
-import type { TransactionPatchFields } from "../transactions-api/types.ts";
-
+import type { TransactionPatch } from "@entity/transactions";
+import type {
+	DeleteTransactionResponse,
+	FetchTransactionResponse,
+	UpdateTransactionResponse,
+} from "../transactions-api";
 
 interface UseTransactionMethodsReturn {
 	meta: {
 		deleteMutation: UseMutationResult<DeleteTransactionResponse, Error, string>;
-		updateMutation: UseMutationResult<UpdateTransactionResponse, Error, TransactionPatchFields>;
+		updateMutation: UseMutationResult<UpdateTransactionResponse, Error, TransactionPatch>;
 		query: UseQueryResult<FetchTransactionResponse>;
 	}
 	deleteTransaction: () => void;
-	updateTransaction: (data: TransactionPatchFields) => Promise<UpdateTransactionResponse>;
+	updateTransaction: (patch: TransactionPatch) => Promise<UpdateTransactionResponse>;
 	fetchTransaction: () => void;
 }
 
@@ -37,72 +38,43 @@ const useTransactionMethods = (
 		refetchOnReconnect: false,
 		refetchOnWindowFocus: false,
 		queryFn: () => fetchTransactionApi({
-			payload: { id },
+			id,
 			handler: apiContext.transactionServers.rest
 		})
 	});
 
-	// USED FOR PATCH/PUT REQUESTS AS OPTIMISTIC UPDATES.
-	// const synchronizeList = useCallback((
-	// 	data: FetchTransactionResponse | undefined
-	// ) => {
-	// 	if (!data) return;
-	//
-	// 	client.setQueryData([CACHE_KEYS.list], (oldData: ListAllTransactionsResponse | undefined) => {
-	// 		if (!oldData) return [];
-	//
-	// 		return {
-	// 			data: oldData.data.map((transaction) => transaction.id === data.id ? data : transaction),
-	// 			meta: oldData.meta
-	// 		};
-	// 	})
-	// }, [client]);
-
-	const filterList = useCallback((
-		data: FetchTransactionResponse | undefined
-	) => {
-		if (!data) return;
-
-		client.setQueryData([CACHE_KEYS.list], (oldData: ListAllTransactionsResponse | undefined) => {
-			if (!oldData) return [];
-
-			return {
-				data: oldData.data.filter((transaction) => transaction.id !== data.id),
-				meta: {
-					...oldData.meta,
-					total: oldData.meta.total - 1
-				}
-			};
-		})
-	}, [client]);
+	const invalidateTransaction = useCallback(() => {
+		void client.invalidateQueries({ queryKey: [CACHE_KEYS.list] });
+		void client.invalidateQueries({ queryKey: [CACHE_KEYS.search] });
+		void client.invalidateQueries({ queryKey: [CACHE_KEYS.ledger, id] });
+		void client.invalidateQueries({ queryKey: [CACHE_KEYS.fetch, id] });
+	}, [client, id]);
 
 	const deleteMutation = useMutation({
-		mutationFn: (id: DeleteTransactionRequest['id']) => deleteTransactionApi({
-			id,
+		mutationFn: (transactionId: string) => deleteTransactionApi({
+			id: transactionId,
 			handler: apiContext.transactionServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.delete, id],
-		onSettled: () => { filterList(singleQuery.data); }
+		onSettled: invalidateTransaction
 	});
-	
+
 	const fetchTransaction = useCallback(() => {
 		return singleQuery.refetch();
 	}, [singleQuery]);
 
 	const updateMutation = useMutation({
-		mutationFn: (data: TransactionPatchFields) => updateTransactionApi({
+		mutationFn: (patch: TransactionPatch) => updateTransactionApi({
 			handler: apiContext.transactionServers.rest,
-			payload: { id, data },
+			id,
+			patch,
 		}),
 		mutationKey: [CACHE_KEYS.replace, id],
-		onSuccess: () => {
-			void client.invalidateQueries({ queryKey: [CACHE_KEYS.list] });
-			void client.invalidateQueries({ queryKey: [CACHE_KEYS.fetch, id] });
-		},
+		onSettled: invalidateTransaction,
 	});
 
-	const updateTransaction = useCallback((data: TransactionPatchFields) => {
-		return updateMutation.mutateAsync(data);
+	const updateTransaction = useCallback((patch: TransactionPatch) => {
+		return updateMutation.mutateAsync(patch);
 	}, [updateMutation]);
 
 	const deleteTransaction = useCallback(() => {
@@ -121,7 +93,7 @@ const useTransactionMethods = (
 		updateTransaction,
 		fetchTransaction,
 	}), [meta, fetchTransaction, deleteTransaction, updateTransaction]);
-}
+};
 
 export { useTransactionMethods };
 export type { UseTransactionMethodsReturn };

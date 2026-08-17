@@ -1,9 +1,6 @@
 import {FinanceCard} from "@internal/ui-library";
 
-import { 
-	BackgroundGlow,
-	WalletsRecentTitle,
-} from "@entity/wallets";
+import { WalletsRecentTitle } from "@entity/wallets";
 import {
 	useWallet,
 	WalletDetailsFx,
@@ -40,7 +37,6 @@ const SelectedWalletDetails = ({
 			<WalletDetailsFx isError={isError} isPending={isPending} wallet={wallet}>
 				{(wallet) => (
 					<div className="relative">
-						<BackgroundGlow size={200} />
 						<FinanceCard className="overflow-hidden">
 							<div className="border-b border-border px-6 py-[22px]">
 								<WalletDetailsThumbnail

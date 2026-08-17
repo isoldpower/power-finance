@@ -1,22 +1,18 @@
-import { walletDeletedToFlat } from "../mutators/delete-to-flat.ts";
+import { walletFromApi } from "../mutators";
+import type { Wallet } from "@entity/wallets";
 import type { IWalletsRESTApiClient } from "../rest-client";
 
 interface DeleteWalletRequest {
-	handler: Pick<IWalletsRESTApiClient, 'delete'>
-	id: string
+	handler: Pick<IWalletsRESTApiClient, 'delete'>;
+	id: string;
 }
 
-interface DeleteWalletResponse {
-	message: string
-	success: boolean
-	id: string
-}
+type DeleteWalletResponse = Wallet;
 
-async function deleteWallet(
-	request: DeleteWalletRequest
-): Promise<DeleteWalletResponse> {
-	return request.handler.delete({ id: request.id })
-		.then(walletDeletedToFlat);
+async function deleteWallet(request: DeleteWalletRequest): Promise<DeleteWalletResponse> {
+	const response = await request.handler.delete({ id: request.id });
+
+	return walletFromApi(response.data);
 }
 
 export { deleteWallet };

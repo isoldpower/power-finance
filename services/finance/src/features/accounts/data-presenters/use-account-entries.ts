@@ -3,28 +3,29 @@ import { useQuery } from "@tanstack/react-query";
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
-import { listAccountEntries } from "../accounts-api";
+import { fetchAccount } from "../accounts-api";
 import { ACCOUNTS_CACHE_KEYS } from "./cache-config.ts";
-import type { LedgerEntryDto } from "@entity/accounts";
-import type { ListAccountEntriesResponse } from "../accounts-api";
+import type { LedgerEntry } from "@entity/accounts";
+import type { FetchAccountResponse } from "../accounts-api";
 
+type UseAccountEntriesOptions = Omit<UseQueryOptions<FetchAccountResponse>, 'queryKey' | 'queryFn'>;
 
-type UseAccountEntriesOptions = Omit<UseQueryOptions<ListAccountEntriesResponse>, 'queryKey' | 'queryFn'>;
-
-type UseAccountEntriesReturn = UseQueryResult<ListAccountEntriesResponse> & {
-	entries: LedgerEntryDto[];
+type UseAccountEntriesReturn = UseQueryResult<FetchAccountResponse> & {
+	entries: LedgerEntry[];
 };
+
+const EMPTY_ENTRIES: LedgerEntry[] = [];
 
 const useAccountEntries = (
 	accountId: string,
 	options?: UseAccountEntriesOptions
 ): UseAccountEntriesReturn => {
 	const apiContext = useApiContext();
-	const query = useQuery<ListAccountEntriesResponse>({
+	const query = useQuery<FetchAccountResponse>({
 		queryKey: [ACCOUNTS_CACHE_KEYS.entries, accountId],
-		queryFn: () => listAccountEntries({
+		queryFn: () => fetchAccount({
 			handler: apiContext.accountServers.rest,
-			payload: { id: accountId },
+			id: accountId,
 		}),
 		enabled: accountId !== '',
 		...options ?? {},
@@ -32,7 +33,7 @@ const useAccountEntries = (
 
 	return useMemo(() => ({
 		...query,
-		entries: query.data?.data ?? [],
+		entries: query.data?.history.items ?? EMPTY_ENTRIES,
 	}), [query]);
 };
 

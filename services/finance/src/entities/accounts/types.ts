@@ -1,29 +1,30 @@
-type AccountType = 'asset' | 'liability' | 'equity';
+import type { Money } from "@entity/localization";
 
-type LedgerSide = 'DR' | 'CR';
 
-interface AccountMoney {
-	amount: number;
-	currency: string;
-}
+type AccountGroup = 'assets' | 'liabilities' | 'equity';
+
+type AccountGroupFilter = AccountGroup | 'all';
 
 interface Account {
 	id: string;
+	group: AccountGroup;
 	name: string;
-	kind: string;
-	type: AccountType;
-	balance: AccountMoney;
-	createdAt?: string;
-	updatedAt?: string;
+	money: Money;
 }
 
-interface LedgerEntryDto {
-	id: string;
-	occurredAt: string;
-	description: string;
+interface LedgerEntry {
+	title: string;
+	debit: boolean;
+	createdAt: string;
+	sourceTransaction: string;
 	icon: string;
-	side: LedgerSide;
-	amount: AccountMoney;
+	money: Money;
 }
 
-export type { AccountType, LedgerSide, AccountMoney, Account, LedgerEntryDto };
+interface AccountGroupCounts {
+	assets: number;
+	liabilities: number;
+	equity: number;
+}
+
+export type { Account, AccountGroup, AccountGroupCounts, AccountGroupFilter, LedgerEntry };

@@ -1,16 +1,18 @@
-import type { ITransactionsRESTApiClient } from "../rest-client/types.ts";
-import type { ReceiptScanDto } from "../types.ts";
-
+import { receiptScanFromApi } from "../mutators";
+import type { ReceiptScan } from "@entity/transactions";
+import type { ITransactionsRESTApiClient } from "../rest-client";
 
 interface ScanReceiptRequest {
 	handler: Pick<ITransactionsRESTApiClient, 'scanReceipt'>;
 	receiptId?: string;
 }
 
-type ScanReceiptResponse = ReceiptScanDto;
+type ScanReceiptResponse = ReceiptScan;
 
 async function scanReceipt(request: ScanReceiptRequest): Promise<ScanReceiptResponse> {
-	return request.handler.scanReceipt({ params: { receiptId: request.receiptId } });
+	const response = await request.handler.scanReceipt({ params: { receiptId: request.receiptId } });
+
+	return receiptScanFromApi(response.data);
 }
 
 export { scanReceipt };

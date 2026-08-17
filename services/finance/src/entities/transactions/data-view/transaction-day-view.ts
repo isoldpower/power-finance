@@ -1,10 +1,8 @@
+import { roundToCurrency } from "@shared/formatting";
 import { toTransactionRowViews } from "./transaction-row-view.ts";
 
-import type { TransactionPreviewDto } from "../types.ts";
+import type { Transaction } from "../types.ts";
 import type { ConvertMoney, TransactionDayView, TransactionRowView } from "./types.ts";
-import { roundToCurrency } from "@shared/formatting";
-
-import type { FormatMoney } from "@shared/formatting";
 
 
 const toDayLabel = (dayKey: string): string => {
@@ -17,7 +15,7 @@ const toDayLabel = (dayKey: string): string => {
 
 const sumInTargetCurrency = (transactions: TransactionRowView[], convert: ConvertMoney): number => {
 	return transactions.reduce((total, transaction) => {
-		const converted = convert({ amount: transaction.amount, currency: transaction.currency });
+		const converted = convert({ amount: transaction.signedAmount, currency: transaction.currency });
 
 		return total + roundToCurrency(converted.amount, converted.currency);
 	}, 0);
@@ -25,11 +23,10 @@ const sumInTargetCurrency = (transactions: TransactionRowView[], convert: Conver
 
 const toTransactionDayView = (
 	dayKey: string,
-	transactions: TransactionPreviewDto[],
-	convert: ConvertMoney,
-	formatMoney: FormatMoney
+	transactions: Transaction[],
+	convert: ConvertMoney
 ): TransactionDayView => {
-	const rows = toTransactionRowViews(transactions, formatMoney);
+	const rows = toTransactionRowViews(transactions);
 
 	return {
 		dayLabel: toDayLabel(dayKey),

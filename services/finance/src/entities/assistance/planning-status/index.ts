@@ -1,2 +1,2 @@
-export { PlanningStatus } from './PlanningStatus.tsx';
-
+export { PlanningStatusSteps } from './PlanningStatusSteps.tsx';
+export { PlanningStatusSyncBadge } from './PlanningStatusSyncBadge.tsx';

@@ -3,11 +3,11 @@ import { MetricCardDescriptor } from "@entity/metrics";
 import { BodyText } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
-import type { CashFlowInsight } from "@feature/metrics";
+import type { CashFlow } from "@entity/metrics";
 
 
 interface NetWorthSavingRateProps {
-	cashFlow: CashFlowInsight;
+	cashFlow: CashFlow;
 }
 
 const CashFlowSavingRate: FC<NetWorthSavingRateProps> = ({

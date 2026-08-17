@@ -1,18 +1,17 @@
-import type { BaseHTMLAttributes, FC } from "react";
-
 import { BodyText } from "@shared/pure-components/typography";
 
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 
-const RuleDialogDescription: FC<Omit<BaseHTMLAttributes<HTMLParagraphElement>, 'className'>> = ({
+
+type RuleDialogDescriptionProps = PropsWithChildren<
+	Omit<BaseHTMLAttributes<HTMLParagraphElement>, 'className'>
+>;
+
+const RuleDialogDescription: FC<RuleDialogDescriptionProps> = ({
 	children,
 	...props
 }) => (
-	<BodyText
-		size="13"
-		leading="relaxed"
-		className="mt-1.5"
-		{...props}
-	>
+	<BodyText size="13" leading="relaxed" className="mt-1.5" {...props}>
 		{children}
 	</BodyText>
 );
@@ -20,3 +19,4 @@ const RuleDialogDescription: FC<Omit<BaseHTMLAttributes<HTMLParagraphElement>, '
 RuleDialogDescription.displayName = 'RuleDialogDescription';
 
 export { RuleDialogDescription };
+export type { RuleDialogDescriptionProps };

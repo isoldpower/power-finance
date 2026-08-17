@@ -1,15 +1,15 @@
 import type { FC, ReactNode } from "react";
-import type { CashFlowInsight } from "../metrics-api/types.ts";
+import type { CashFlow } from "@entity/metrics";
 
-import { CashFlowBalanceSkeleton } from "@entity/metrics";
+import { CashFlowSkeleton } from "@entity/metrics";
 import { Caption } from "@shared/pure-components/typography";
 
 
 interface CashFlowBalanceFxProps {
 	isPending: boolean;
 	isError: boolean;
-	cashFlow: CashFlowInsight | undefined;
-	children: (cashFlow: CashFlowInsight) => ReactNode;
+	cashFlow: CashFlow | undefined;
+	children: (cashFlow: CashFlow) => ReactNode;
 }
 
 const CashFlowBalanceFx: FC<CashFlowBalanceFxProps> = ({
@@ -19,7 +19,11 @@ const CashFlowBalanceFx: FC<CashFlowBalanceFxProps> = ({
 	children,
 }) => {
 	if (isPending) {
-		return <CashFlowBalanceSkeleton />;
+		return (
+			<CashFlowSkeleton>
+				<CashFlowSkeleton.Balance />
+			</CashFlowSkeleton>
+		);
 	} else if (isError || !cashFlow) {
 		return <CashFlowBalanceFailed />;
 	}

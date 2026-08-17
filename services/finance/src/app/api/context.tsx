@@ -2,29 +2,33 @@ import { createContext, useMemo } from 'react';
 
 import { ApiQueryReactions } from "./query-reactions";
 import { useWalletsApi } from "./servers/use-wallets-api.ts";
+import { useGoalsApi } from "./servers/use-goals-api.ts";
 import { useTransactionsApi } from "./servers/use-transactions-api.ts";
 import { useWebhooksApi } from "./servers/use-webhooks-api.ts";
-import { useSummaryApi } from "./servers/use-summary-api.ts";
+import { useMetricsApi } from "./servers/use-metrics-api.ts";
 import { useActionsApi } from "./servers/use-actions-api.ts";
 import { useAutomationsApi } from "./servers/use-automations-api.ts";
 import { useNotificationsApi } from "./servers/use-notifications-api.ts";
 import { useAssistantApi } from "./servers/use-assistant-api.ts";
-import { useFxApi } from "./servers/use-fx-api.ts";
+import { useCurrenciesApi } from "./servers/use-currencies-api.ts";
 import { useAccountsApi } from "./servers/use-accounts-api.ts";
 import type { FC } from 'react';
-import type { IWalletsRESTApiClient } from "@feature/wallets";
+import type { IGoalsRESTApiClient, IWalletsRESTApiClient } from "@feature/wallets";
 import type { ITransactionsRESTApiClient } from "@feature/transactions";
 import type { IAccountsRESTApiClient } from "@feature/accounts";
 import type { IWebhookRESTApiClient } from "@feature/configuration";
-import type { ISummaryRESTApiClient } from "@feature/metrics";
+import type { IMetricsRESTApiClient } from "@feature/metrics";
 import type { INotificationsRESTApiClient } from "@feature/assistance";
-import type { IFxRESTApiClient } from "@feature/localization";
+import type { ICurrenciesRESTApiClient } from "@feature/localization";
 import type { IActionsRESTApiClient, IAutomationsRESTApiClient, IAssistantRESTApiClient } from "@feature/assistance";
 
 
 interface ApiContextType {
 	walletServers: {
 		readonly rest: IWalletsRESTApiClient
+	},
+	goalServers: {
+		readonly rest: IGoalsRESTApiClient
 	},
 	transactionServers: {
 		readonly rest: ITransactionsRESTApiClient
@@ -35,8 +39,8 @@ interface ApiContextType {
 	webhookServers: {
 		readonly rest: IWebhookRESTApiClient
 	},
-	summaryServers: {
-		readonly rest: ISummaryRESTApiClient
+	metricsServers: {
+		readonly rest: IMetricsRESTApiClient
 	},
 	actionServers: {
 		readonly rest: IActionsRESTApiClient
@@ -50,8 +54,8 @@ interface ApiContextType {
 	assistantServers: {
 		readonly rest: IAssistantRESTApiClient
 	},
-	fxServers: {
-		readonly rest: IFxRESTApiClient
+	currencyServers: {
+		readonly rest: ICurrenciesRESTApiClient
 	}
 }
 
@@ -62,33 +66,47 @@ interface ApiProviderProps {
 
 const ApiContext = createContext<ApiContextType | null>(null);
 
-const ApiProvider: FC<ApiProviderProps> = ({ 
-	children, 
+const ApiProvider: FC<ApiProviderProps> = ({
+	children,
 	envVariables
 }) => {
 	const walletServers = useWalletsApi(envVariables.CLIENT_API_BASE_URL);
+	const goalServers = useGoalsApi(envVariables.CLIENT_API_BASE_URL);
 	const transactionServers = useTransactionsApi(envVariables.CLIENT_API_BASE_URL);
 	const accountServers = useAccountsApi(envVariables.CLIENT_API_BASE_URL);
 	const webhookServers = useWebhooksApi(envVariables.CLIENT_API_BASE_URL);
-	const summaryServers = useSummaryApi(envVariables.CLIENT_API_BASE_URL);
+	const metricsServers = useMetricsApi(envVariables.CLIENT_API_BASE_URL);
 	const actionServers = useActionsApi(envVariables.CLIENT_API_BASE_URL);
 	const automationServers = useAutomationsApi(envVariables.CLIENT_API_BASE_URL);
 	const notificationServers = useNotificationsApi(envVariables.CLIENT_API_BASE_URL);
 	const assistantServers = useAssistantApi(envVariables.CLIENT_API_BASE_URL);
-	const fxServers = useFxApi(envVariables.CLIENT_API_BASE_URL);
+	const currencyServers = useCurrenciesApi(envVariables.CLIENT_API_BASE_URL);
 
 	const contextValue = useMemo<ApiContextType>(() => ({
 		walletServers,
+		goalServers,
 		transactionServers,
 		accountServers,
 		webhookServers,
-		summaryServers,
+		metricsServers,
 		actionServers,
 		assistantServers,
 		automationServers,
 		notificationServers,
-		fxServers
-	}), [transactionServers, walletServers, accountServers, webhookServers, summaryServers, actionServers, automationServers, notificationServers, fxServers]);
+		currencyServers
+	}), [
+		transactionServers,
+		walletServers,
+		goalServers,
+		accountServers,
+		webhookServers,
+		metricsServers,
+		actionServers,
+		automationServers,
+		notificationServers,
+		assistantServers,
+		currencyServers
+	]);
 
 	return (
 		<ApiContext value={contextValue}>

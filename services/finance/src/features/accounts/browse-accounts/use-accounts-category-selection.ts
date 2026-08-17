@@ -7,7 +7,7 @@ import type { BrowseAccountsContextType } from "./types.ts";
 import type { AccountView, AccountCategoryView } from "@entity/accounts";
 
 
-const EMPTY_ACCOUNT: AccountView = { id: '', name: '', kind: '', balanceUsd: 0, accountType: 'asset' };
+const EMPTY_ACCOUNT: AccountView = { id: '', name: '', group: 'assets', balanceUsd: 0 };
 const EMPTY_CATEGORY: AccountCategoryView = { id: '', label: '', totalUsd: 0, accounts: [] };
 
 const useAccountsCategorySelection = (): BrowseAccountsContextType => {

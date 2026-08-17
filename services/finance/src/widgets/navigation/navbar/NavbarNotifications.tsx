@@ -9,13 +9,15 @@ import { RouteLink } from "@shared/routing";
 import {
 	useNotifications,
 	useNotificationsCount,
+	useNotificationsStream,
 	NotificationsEmptyGuard,
 } from "@feature/assistance";
 import { NotificationBell, NotificationEmpty, NotificationList } from "@entity/assistance";
 import { CardTitle, textClass } from "@shared/pure-components/typography";
+import { NOTIFICATIONS_PAGE_SIZE } from "./config.ts";
 
 import type { ReactNode, FC } from "react";
-import type { Notification } from "@feature/assistance";
+import type { Notification } from "@entity/assistance";
 
 
 interface NavbarNotificationsProps {
@@ -23,14 +25,16 @@ interface NavbarNotificationsProps {
 }
 
 const NavbarNotifications: FC<NavbarNotificationsProps> = ({ children }) => {
-	const { notifications } = useNotifications({ limit: 8 });
-	const { count: unreadCount } = useNotificationsCount(false);
+	const { notifications } = useNotifications(undefined, { limit: NOTIFICATIONS_PAGE_SIZE });
+	const { unacknowledged } = useNotificationsCount();
+
+	useNotificationsStream();
 
 	return (
 		<FinanceMenu>
 			<FinanceMenuTrigger asChild>
 				<FinanceIconButton aria-label="Notifications">
-					<NotificationBell unreadCount={unreadCount} />
+					<NotificationBell unreadCount={unacknowledged} />
 				</FinanceIconButton>
 			</FinanceMenuTrigger>
 			<FinanceMenuContent className="w-[340px] p-0">

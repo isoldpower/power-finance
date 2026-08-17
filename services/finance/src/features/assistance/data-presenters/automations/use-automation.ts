@@ -1,33 +1,35 @@
-// @reserved-api - wired to the API and intentionally not consumed yet; awaiting post-MVP flows. NOT dead code: do not delete, do not drop from barrels.
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { UseQueryResult } from "@tanstack/react-query";
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
-import { fetchAutomation } from "../../assistance-api/automations";
+import { fetchAutomation } from "../../automations-api";
 import { AUTOMATIONS_CACHE_KEYS } from "../cache-config.ts";
-import type { AutomationRule, FetchAutomationResponse } from "../../assistance-api/automations";
+import type { Automation } from "@entity/assistance";
 
+type UseAutomationOptions = Omit<UseQueryOptions<Automation>, 'queryKey' | 'queryFn'>;
 
-type UseAutomationReturn = UseQueryResult<FetchAutomationResponse> & {
-	rule?: AutomationRule;
+type UseAutomationReturn = UseQueryResult<Automation> & {
+	rule: Automation | undefined;
 };
 
 const useAutomation = (
-	id: string
+	id: string,
+	options?: UseAutomationOptions
 ): UseAutomationReturn => {
 	const apiContext = useApiContext();
-	const query = useQuery<FetchAutomationResponse>({
+	const automationQuery = useQuery<Automation>({
 		queryKey: [AUTOMATIONS_CACHE_KEYS.fetch, id],
 		queryFn: () => fetchAutomation({ handler: apiContext.automationServers.rest, id }),
 		enabled: id !== '',
+		...options ?? {},
 	});
 
 	return useMemo(() => ({
-		...query,
-		rule: query.data?.data,
-	}), [query]);
+		...automationQuery,
+		rule: automationQuery.data,
+	}), [automationQuery]);
 };
 
 export { useAutomation };
-export type { UseAutomationReturn };
+export type { UseAutomationOptions, UseAutomationReturn };

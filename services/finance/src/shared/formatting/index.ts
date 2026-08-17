@@ -5,5 +5,5 @@ export { relativeAgo } from './time.ts';
 export { TRANSACTION_TYPE_TONE, TRANSACTION_TYPE_OPTIONS } from './transaction-type.ts';
 
 export type { TransactionEntryType } from './transaction-type.ts';
-export type { Tone } from './tone.ts';
+export type { Tone, NonNeutralTone } from './tone.ts';
 export type { FormatMoney } from './money.ts';

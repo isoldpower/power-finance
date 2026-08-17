@@ -2,26 +2,26 @@ import { useMemo } from "react";
 import { useAxiosInstance } from "@internal/shared";
 
 import { WebhookMockRESTApiClient } from "@feature/configuration";
+import { API_BASE_PATH } from "../config.ts";
 import type { IWebhookRESTApiClient } from "@feature/configuration";
 
-
-interface UseWebhookApiResponse {
+interface UseWebhooksApiResponse {
 	rest: IWebhookRESTApiClient;
 }
 
-function useWebhooksApi(baseUrl: string): UseWebhookApiResponse {
-	const webhookAxiosInstance = useAxiosInstance({
-		baseUrl: `${baseUrl}/webhooks`
+function useWebhooksApi(baseUrl: string): UseWebhooksApiResponse {
+	const webhooksAxiosInstance = useAxiosInstance({
+		baseUrl: `${baseUrl}${API_BASE_PATH}/webhooks`
 	});
 
-	const restWebhookClient = useMemo<IWebhookRESTApiClient>(() => {
+	const restWebhooksClient = useMemo<IWebhookRESTApiClient>(() => {
 		return new WebhookMockRESTApiClient();
-	}, [webhookAxiosInstance]);
+	}, [webhooksAxiosInstance]);
 
 	return useMemo(() => ({
-		rest: restWebhookClient
-	}), [restWebhookClient]);
+		rest: restWebhooksClient
+	}), [restWebhooksClient]);
 }
 
 export { useWebhooksApi };
-export type { UseWebhookApiResponse };
+export type { UseWebhooksApiResponse };

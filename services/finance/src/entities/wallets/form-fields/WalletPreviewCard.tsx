@@ -1,28 +1,41 @@
-import { Heading, MetaText, Text } from "@shared/pure-components/typography";
+import { cn } from "@internal/ui-library";
+import { WalletPreviewCurrency } from "./preview-card/WalletPreviewCurrency.tsx";
+import { WalletPreviewHeader } from "./preview-card/WalletPreviewHeader.tsx";
+import { WalletPreviewName } from "./preview-card/WalletPreviewName.tsx";
+import { WalletPreviewType } from "./preview-card/WalletPreviewType.tsx";
 
-import type { FC } from "react";
+import type { FC, PropsWithChildren } from "react";
+import type { WalletPreviewCurrencyProps } from "./preview-card/WalletPreviewCurrency.tsx";
+import type { WalletPreviewHeaderProps } from "./preview-card/WalletPreviewHeader.tsx";
+import type { WalletPreviewNameProps } from "./preview-card/WalletPreviewName.tsx";
+import type { WalletPreviewTypeProps } from "./preview-card/WalletPreviewType.tsx";
 
 
-interface WalletPreviewCardProps {
+type WalletPreviewCardProps = PropsWithChildren<{
 	gradient: string;
-	type: string;
-	currency: string;
-	name: string;
+}>;
+type WalletPreviewCardObject = FC<WalletPreviewCardProps> & {
+	Currency: FC<WalletPreviewCurrencyProps>;
+	Header: FC<WalletPreviewHeaderProps>;
+	Name: FC<WalletPreviewNameProps>;
+	Type: FC<WalletPreviewTypeProps>;
 }
 
-const WalletPreviewCard: FC<WalletPreviewCardProps> = ({ gradient, type, currency, name }) => (
+const WalletPreviewCard: WalletPreviewCardObject = ({ children, gradient }) => (
 	<div
-		className="mb-5 flex h-[120px] flex-col justify-between rounded-[12px] p-4 shadow-[var(--shadow-lg)]"
+		className={cn(
+			"mb-5 flex h-[120px] flex-col justify-between rounded-[12px] p-4 shadow-[var(--shadow-lg)]"
+		)}
 		style={{ background: gradient }}
 	>
-		<div className="flex items-center justify-between text-white/90">
-			<Text size="xs" weight="semibold" tracking="0.04em">{type}</Text>
-			<MetaText tone="default" className="opacity-85">{currency}</MetaText>
-		</div>
-		<Heading as="div" size="19" tone="inverted">{name || 'Wallet name'}</Heading>
+		{children}
 	</div>
 );
 
+WalletPreviewCard.Currency = WalletPreviewCurrency;
+WalletPreviewCard.Header = WalletPreviewHeader;
+WalletPreviewCard.Name = WalletPreviewName;
+WalletPreviewCard.Type = WalletPreviewType;
 WalletPreviewCard.displayName = 'WalletPreviewCard';
 
 export { WalletPreviewCard };

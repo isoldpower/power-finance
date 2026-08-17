@@ -1,9 +1,8 @@
-export { NetWorthActivePoint } from './NetWorthActivePoint.tsx';
-export { NetWorthDeltaBadge } from './NetWorthDeltaBadge.tsx';
-export { NetWorthElevatedCard } from './NetWorthElevatedCard.tsx';
+export { NetWorthGraph } from './NetWorthGraph.tsx';
+export { NetWorthPanel } from './NetWorthPanel.tsx';
 export { NetWorthSkeleton } from './NetWorthSkeleton.tsx';
-export { NetWorthSparkline } from './NetWorthSparkline.tsx';
-export { NetWorthSparklineTip } from './NetWorthSparklineTip.tsx';
-export { NetWorthTooltip } from './NetWorthTooltip.tsx';
 export { VIEW_W, VIEW_H, PAD } from './sparkline.ts';
 
+export type { NetWorthGraphProps } from './NetWorthGraph.tsx';
+export type { NetWorthPanelProps } from './NetWorthPanel.tsx';
+export type { NetWorthSkeletonProps } from './NetWorthSkeleton.tsx';

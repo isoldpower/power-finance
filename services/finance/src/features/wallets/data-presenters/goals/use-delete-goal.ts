@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { useApiContext } from "@app/api";
-import { deleteWallet } from "../../wallets-api";
+import { useApiContext, DERIVED_KEYS } from "@app/api";
+import { deleteGoal } from "../../goals-api";
 import { GOALS_CACHE_KEYS } from "../cache-config.ts";
 
 const useDeleteGoal = () => {
@@ -10,12 +10,14 @@ const useDeleteGoal = () => {
 
 	return useMutation({
 		mutationKey: [GOALS_CACHE_KEYS.delete],
-		mutationFn: (id: string) => deleteWallet({
-			handler: apiContext.walletServers.rest,
+		mutationFn: (id: string) => deleteGoal({
+			handler: apiContext.goalServers.rest,
 			id,
 		}),
-		onSuccess: () => {
-			void queryClient.invalidateQueries({ queryKey: [GOALS_CACHE_KEYS.wallets] });
+		onSettled: () => {
+			for (const key of DERIVED_KEYS.onGoalChange) {
+				void queryClient.invalidateQueries({ queryKey: [key] });
+			}
 		},
 	});
 };

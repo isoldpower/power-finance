@@ -5,7 +5,7 @@ import { useTransactionsListMethods } from "@feature/transactions";
 import { useDeleteGoal } from "../data-presenters";
 
 import type { FC, ReactNode } from "react";
-import type { GoalDisposition, GoalWallet } from "@entity/wallets";
+import type { Goal, GoalDisposition } from "@entity/wallets";
 
 
 interface DeleteGoalApi {
@@ -14,37 +14,71 @@ interface DeleteGoalApi {
 }
 
 interface DeleteGoalDialogProps {
-	wallet: GoalWallet;
+	goal: Goal;
 	children: ((api: DeleteGoalApi) => ReactNode) | ReactNode;
 }
 
-const DeleteGoalDialog: FC<DeleteGoalDialogProps> = ({ wallet, children }) => {
-	const { meta } = useTransactionsListMethods();
+const DeleteGoalDialog: FC<DeleteGoalDialogProps> = ({ goal, children }) => {
+	const { createTransaction, createTransactionChain, meta } = useTransactionsListMethods();
 	const deleteGoalMutation = useDeleteGoal();
 
 	const deleteGoal = useCallback((disposition: GoalDisposition, onDeleted: () => void) => {
-		const savedAmount = wallet.balance.amount;
-		const hasSavings = savedAmount > 0;
+		const saved = goal.progress.amount;
+		const hasSavings = saved > 0;
 
 		const run = async () => {
 			if (hasSavings && disposition.mode === 'transfer' && disposition.toWalletId !== '') {
-				await meta.createMutation.mutateAsync({
-					data: { source_wallet_id: disposition.toWalletId, amount: savedAmount.toFixed(2) },
+				await createTransactionChain({
+					entries: [
+						{
+							temporaryId: 'goal-drain-out',
+							after: null,
+							name: goal.name,
+							currency: goal.currency,
+							amount: saved,
+							walletId: goal.id,
+							origin: 'manual',
+							type: 'expense',
+							category: null,
+							evidence: null,
+						},
+						{
+							temporaryId: 'goal-drain-in',
+							after: 'goal-drain-out',
+							name: goal.name,
+							currency: goal.currency,
+							amount: saved,
+							walletId: disposition.toWalletId,
+							origin: 'manual',
+							type: 'income',
+							category: null,
+							evidence: null,
+						},
+					],
 				});
 			} else if (hasSavings && disposition.mode === 'spent') {
-				await meta.createMutation.mutateAsync({
-					data: { source_wallet_id: wallet.id, amount: `-${savedAmount.toFixed(2)}` },
+				await createTransaction({
+					name: goal.name,
+					currency: goal.currency,
+					amount: saved,
+					walletId: goal.id,
+					origin: 'manual',
+					type: 'expense',
+					category: null,
+					evidence: null,
 				});
 			}
 
-			await deleteGoalMutation.mutateAsync(wallet.id);
+			await deleteGoalMutation.mutateAsync(goal.id);
 			onDeleted();
 		};
 
 		run().catch(console.error);
-	}, [deleteGoalMutation, meta, wallet.balance.amount, wallet.id]);
+	}, [createTransaction, createTransactionChain, deleteGoalMutation, goal]);
 
-	const isPending = meta.createMutation.isPending || deleteGoalMutation.isPending;
+	const isPending = meta.createMutation.isPending
+		|| meta.chainMutation.isPending
+		|| deleteGoalMutation.isPending;
 
 	return typeof children === 'function'
 		? children({ deleteGoal, isPending })
@@ -54,4 +88,4 @@ const DeleteGoalDialog: FC<DeleteGoalDialogProps> = ({ wallet, children }) => {
 DeleteGoalDialog.displayName = 'DeleteGoalDialog';
 
 export { DeleteGoalDialog };
-export type {DeleteGoalDialogProps, DeleteGoalApi };
+export type { DeleteGoalDialogProps, DeleteGoalApi };

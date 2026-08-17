@@ -2,7 +2,7 @@ import {cn, FinanceMoney} from "@internal/ui-library";
 
 import { useCallback } from "react";
 import { WalletPinButton, WalletSwatch, walletTypeLabel } from "@entity/wallets";
-import { useWalletsPinsContext, useWalletsSelection } from "@feature/wallets";
+import { useWalletFavorite, useWalletsSelection } from "@feature/wallets";
 import { useShallow } from "zustand/react/shallow";
 import { useLocaleCurrency } from "@shared/formatting";
 import type { Wallet } from "@entity/wallets";
@@ -21,19 +21,18 @@ const PinnableWalletRow: FC<PinnableWalletRowProps> = ({ wallet }) => {
 			selectWallet: state.selectWallet,
 		}))
 	);
-	const { isPinned, togglePin } = useWalletsPinsContext();
+	const { toggleFavorite } = useWalletFavorite();
 	const format = useLocaleCurrency();
 
 	const selected = wallet.id === selectedWalletId;
-	const pinned = isPinned(wallet.id);
 
 	const handleSelect = useCallback(() => {
 		selectWallet(wallet.id);
 	}, [selectWallet, wallet.id]);
 	const handleTogglePin = useCallback((event: MouseEvent<HTMLButtonElement>) => {
 		event.stopPropagation();
-		togglePin(wallet.id);
-	}, [togglePin, wallet.id]);
+		toggleFavorite(wallet);
+	}, [toggleFavorite, wallet]);
 
 	return (
 		<div
@@ -62,7 +61,7 @@ const PinnableWalletRow: FC<PinnableWalletRowProps> = ({ wallet }) => {
 				{format(wallet.balance.amount, wallet.balance.currency)}
 			</FinanceMoney>
 			<WalletPinButton 
-				pinned={pinned}
+				pinned={wallet.favorite}
 				onClick={handleTogglePin}
 			/>
 		</div>

@@ -27,7 +27,14 @@ const AutomationsListFx: FC<AutomationsListFxProps> = ({ children }) => {
 const AutomationsListSkeleton: FC = () => (
 	<div>
 		{PLACEHOLDER_KEYS.map((key) => (
-			<AutomationSkeletonRow key={key} />
+			<AutomationSkeletonRow key={key}>
+				<AutomationSkeletonRow.Icon />
+				<AutomationSkeletonRow.Body>
+					<AutomationSkeletonRow.Title />
+					<AutomationSkeletonRow.ConditionLine />
+				</AutomationSkeletonRow.Body>
+				<AutomationSkeletonRow.Toggle />
+			</AutomationSkeletonRow>
 		))}
 	</div>
 );

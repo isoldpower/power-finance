@@ -1,17 +1,28 @@
-import type { Wallet } from "@entity/wallets";
-import type { IWalletsRESTApiClient, WalletPostRequest } from "../rest-client";
+import { walletDraftToApi, walletFromApi } from "../mutators";
+import type { Wallet, WalletDraft } from "@entity/wallets";
+import type { IWalletsRESTApiClient } from "../rest-client";
 
 interface CreateWalletRequest {
-	handler: Pick<IWalletsRESTApiClient, 'post'>
-	payload: WalletPostRequest
+	handler: Pick<IWalletsRESTApiClient, 'post'>;
+	draft: WalletDraft;
+	idempotencyKey?: string;
 }
 
-type CreateWalletResponse = Wallet & object;
+interface CreateWalletResponse {
+	wallet: Wallet;
+	replayed: boolean;
+}
 
-async function createWallet(
-	request: CreateWalletRequest
-): Promise<CreateWalletResponse> {
-	return request.handler.post(request.payload);
+async function createWallet(request: CreateWalletRequest): Promise<CreateWalletResponse> {
+	const response = await request.handler.post({
+		data: walletDraftToApi(request.draft),
+		idempotencyKey: request.idempotencyKey,
+	});
+
+	return {
+		wallet: walletFromApi(response.data),
+		replayed: response.meta.idempotent_replay ?? false,
+	};
 }
 
 export { createWallet };

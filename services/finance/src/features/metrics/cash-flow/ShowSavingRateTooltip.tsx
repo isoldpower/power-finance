@@ -2,12 +2,12 @@ import { useMemo } from "react";
 import { useConvertMoney } from "@feature/localization";
 import { Tooltip } from "@shared/overlays";
 
-import type { CashFlowInsight } from "../metrics-api/types.ts";
+import type { CashFlow } from "@entity/metrics";
 import type { ReactNode, FC } from "react";
 
 
 interface ShowSavingRateTooltipProps {
-	cashFlow: CashFlowInsight;
+	cashFlow: CashFlow;
 	children: ReactNode;
 }
 
@@ -17,8 +17,8 @@ const ShowSavingRateTooltip: FC<ShowSavingRateTooltipProps> = ({
 }) => {
 	const { convert } = useConvertMoney();
 	const tooltipContent = useMemo(() => {
-		const netFormatted = convert(cashFlow.net).formatted;
-		const inflowFormatted = convert(cashFlow.in).formatted;
+		const netFormatted = convert(cashFlow.totalNet).formatted;
+		const inflowFormatted = convert(cashFlow.inflow).formatted;
 
 		return `Net ${netFormatted} kept of ${inflowFormatted} income`;
 	}, [convert, cashFlow]);

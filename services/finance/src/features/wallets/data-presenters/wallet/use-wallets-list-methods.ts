@@ -3,25 +3,17 @@ import { useCallback, useMemo } from "react";
 import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 
 import { useApiContext, DERIVED_KEYS } from "@app/api";
-import {
-	createWallet as createWalletApi,
-	listAllWallets as listAllWalletsApi
-} from "../../wallets-api";
+import { createWallet as createWalletApi, listWallets as listWalletsApi } from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
-import type {
-	CreateWalletRequest,
-	CreateWalletResponse,
-	WalletValuableFields,
-	ListAllWalletsResponse
-} from "../../wallets-api";
-
+import type { WalletDraft } from "@entity/wallets";
+import type { CreateWalletResponse, ListWalletsResponse } from "../../wallets-api";
 
 interface UseWalletsReturn {
 	meta: {
-		query: UseQueryResult<ListAllWalletsResponse>;
-		createMutation: UseMutationResult<CreateWalletResponse, Error, CreateWalletRequest['payload']>;
+		query: UseQueryResult<ListWalletsResponse>;
+		createMutation: UseMutationResult<CreateWalletResponse, Error, WalletDraft>;
 	}
-	createWallet: (data: WalletValuableFields) => void;
+	createWallet: (draft: WalletDraft) => void;
 	fetchAllWallets: () => void;
 }
 
@@ -30,23 +22,22 @@ const useWalletsListMethods = (): UseWalletsReturn => {
 	const client = useQueryClient();
 
 	const query = useQuery({
-		queryKey: [WALLETS_CACHE_KEYS.list],
+		queryKey: [WALLETS_CACHE_KEYS.list, 'default', 'first'],
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		refetchOnReconnect: false,
-		queryFn: () => listAllWalletsApi({
+		queryFn: () => listWalletsApi({
 			handler: apiContext.walletServers.rest
 		})
 	});
 
 	const createMutation = useMutation({
-		mutationFn: (data: CreateWalletRequest['payload']) => createWalletApi({
-			payload: data,
+		mutationFn: (draft: WalletDraft) => createWalletApi({
+			draft,
 			handler: apiContext.walletServers.rest
 		}),
 		mutationKey: [WALLETS_CACHE_KEYS.create],
 		onSettled: () => {
-			void query.refetch();
 			for (const key of DERIVED_KEYS.onWalletChange) {
 				void client.invalidateQueries({ queryKey: [key] });
 			}
@@ -54,9 +45,9 @@ const useWalletsListMethods = (): UseWalletsReturn => {
 	});
 
 	const createWallet = useCallback((
-		data: WalletValuableFields
+		draft: WalletDraft
 	) => {
-		createMutation.mutate({ data });
+		createMutation.mutate(draft);
 	}, [createMutation]);
 
 	const fetchAllWallets = useCallback(() => {
@@ -73,7 +64,7 @@ const useWalletsListMethods = (): UseWalletsReturn => {
 		fetchAllWallets,
 		meta
 	}), [meta, createWallet, fetchAllWallets]);
-}
+};
 
 export { useWalletsListMethods };
 export type { UseWalletsReturn };

@@ -1,17 +1,17 @@
-import type { LedgerEntryDto } from "../types.ts";
+import type { LedgerEntry } from "../types.ts";
 import type { AccountHistoryView } from "./types.ts";
 
 
-const toLedgerHistoryView = (entry: LedgerEntryDto): AccountHistoryView => ({
-	id: entry.id,
+const toLedgerHistoryView = (entry: LedgerEntry): AccountHistoryView => ({
+	id: `${entry.sourceTransaction}-${entry.debit ? 'debit' : 'credit'}`,
 	icon: entry.icon,
-	description: entry.description,
-	date: new Date(entry.occurredAt).toLocaleDateString('en-US', {
+	description: entry.title,
+	date: new Date(entry.createdAt).toLocaleDateString('en-US', {
 		month: 'short',
 		day: 'numeric',
 	}),
-	side: entry.side,
-	amountUsd: entry.amount.amount,
+	debit: entry.debit,
+	amountUsd: entry.money.amount,
 });
 
 export { toLedgerHistoryView };

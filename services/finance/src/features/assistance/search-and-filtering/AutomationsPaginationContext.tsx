@@ -1,7 +1,7 @@
 import { createContext, use, useCallback, useMemo, useState } from "react";
 
 import type { FC, ReactNode } from "react";
-import type { AutomationRule } from "../assistance-api/automations";
+import type { Automation } from "@entity/assistance";
 
 
 interface AutomationsPaginationContextType {
@@ -13,7 +13,7 @@ interface AutomationsPaginationContextType {
 	pageCount: number;
 	scrollForward: () => void;
 	scrollBackward: () => void;
-	paginatedRules: AutomationRule[];
+	paginatedRules: Automation[];
 }
 
 const AutomationsPaginationContext = createContext<AutomationsPaginationContextType | null>(null);
@@ -22,7 +22,7 @@ interface AutomationsPaginationContextProviderProps {
 	children: ReactNode;
 	pageSize: number;
 	total: number;
-	rules: AutomationRule[];
+	rules: Automation[];
 }
 
 const AutomationsPaginationContextProvider: FC<AutomationsPaginationContextProviderProps> = ({

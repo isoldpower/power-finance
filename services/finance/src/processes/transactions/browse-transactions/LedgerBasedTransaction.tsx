@@ -5,11 +5,11 @@ import { useShallow } from "zustand/react/shallow";
 import { LedgerTransactionRow, TransactionLedgerEntries } from "@widget/transactions";
 
 import type { FC, MouseEvent } from "react";
-import type { TransactionPreviewDto } from "@entity/transactions";
+import type { Transaction } from "@entity/transactions";
 
 
 interface LedgerBasedTransactionProps {
-	transaction: TransactionPreviewDto;
+	transaction: Transaction;
 }
 
 const LedgerBasedTransaction: FC<LedgerBasedTransactionProps> = ({ transaction }) => {

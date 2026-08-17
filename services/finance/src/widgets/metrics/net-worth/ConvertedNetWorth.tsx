@@ -1,15 +1,15 @@
 import { FinanceMoney } from "@internal/ui-library";
 import { AnimatedMoney } from "@entity/localization";
-import { MetricCardDescriptor, NetWorthDeltaBadge } from "@entity/metrics";
+import { MetricCardDescriptor, NetWorthPanel } from "@entity/metrics";
 import { BodyText, textClass } from "@shared/pure-components/typography";
 import { useConvertedNetWorth, useConvertedNetDiff } from "@feature/metrics";
 
 import type { FC } from "react";
-import type { NetWorthInsight } from "@feature/metrics";
+import type { NetWorth } from "@entity/metrics";
 
 
 interface ConvertedNetWorthProps {
-	netWorth: NetWorthInsight
+	netWorth: NetWorth
 }
 
 const ConvertedNetWorth: FC<ConvertedNetWorthProps> = ({ netWorth }) => {
@@ -31,9 +31,9 @@ const ConvertedNetWorth: FC<ConvertedNetWorthProps> = ({ netWorth }) => {
 						bare
 					/>
 				</FinanceMoney>
-				<NetWorthDeltaBadge netDiffSign={netDiffSign}>
-					{netDiffSign}{Math.abs(netWorthDiff.pct)}%
-				</NetWorthDeltaBadge>
+				<NetWorthPanel.DeltaBadge netDiffSign={netDiffSign}>
+					{netDiffSign}{Math.abs(netWorthDiff.percentage)}%
+				</NetWorthPanel.DeltaBadge>
 			</div>
 			<MetricCardDescriptor>
 				<BodyText as="span" tone={netWorthDiff.direction === 'up' ? 'positive' : 'negative'}>

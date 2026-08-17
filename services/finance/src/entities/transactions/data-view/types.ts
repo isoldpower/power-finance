@@ -1,4 +1,4 @@
-import type { TransactionDirection, TransactionEntrySide } from "../types.ts";
+import type { TransactionType } from "../types.ts";
 
 
 type ConvertMoney = (
@@ -8,15 +8,16 @@ type ConvertMoney = (
 interface LedgerEntryView {
 	label: string;
 	account: string;
-	side: TransactionEntrySide;
+	debit: boolean;
 	amount: string;
 }
 
 interface TransactionRowView {
 	id: string;
 	amount: number;
+	signedAmount: number;
 	currency: string;
-	direction: TransactionDirection;
+	type: TransactionType;
 	walletId: string;
 	walletName: string;
 	createdAt: string;
@@ -26,7 +27,6 @@ interface TransactionRowView {
 	description: string;
 	scanned: boolean;
 	kind: string;
-	entries: LedgerEntryView[];
 	provenance: string;
 }
 

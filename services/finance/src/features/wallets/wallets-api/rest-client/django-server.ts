@@ -1,157 +1,71 @@
-import {
+import { buildQuery, idempotencyHeaders, request, WriteVersionStore } from "@shared/api";
+import type { AxiosInstance } from "axios";
+import type {
 	IWalletsRESTApiClient,
-	WalletDeleteRequest,
-	WalletDeleteResponse,
-	WalletGetRequest,
-	WalletGetResponse,
-	WalletListRequest,
-	WalletListResponse,
-	WalletPatchRequest,
-	WalletPatchResponse,
-	WalletPostRequest,
-	WalletPostResponse,
-	WalletPutRequest,
-	WalletPutResponse, WalletsSearchRequest, WalletsSearchResponse
-,
-	WalletKindsRequest,
-	WalletKindsResponse,
+	WalletDeleteRequest, WalletDeleteResponse,
+	WalletGetRequest, WalletGetResponse,
+	WalletListRequest, WalletListResponse,
+	WalletPatchRequest, WalletPatchResponse,
+	WalletPostRequest, WalletPostResponse,
+	WalletSearchRequest, WalletSearchResponse,
 } from "./types.ts";
-import { AxiosInstance } from "axios";
-import type { WalletDetailed, WalletPreview } from "../types.ts";
-
-
-const parseWalletPreview = (wallet: WalletPreview): WalletPreview => ({
-	...wallet,
-	balance: {
-		...wallet.balance,
-		amount: parseFloat(wallet.balance.amount as unknown as string),
-	}
-});
-
-const parseWalletDetailed = (wallet: WalletDetailed): WalletDetailed => ({
-	...wallet,
-	balance: {
-		...wallet.balance,
-		amount: parseFloat(wallet.balance.amount as unknown as string),
-	}
-});
-
-const serializeAmount = (amount: number): string => amount.toFixed(2);
-
 
 class WalletsDjangoRESTApiClient implements IWalletsRESTApiClient {
 	private readonly axiosInstance: AxiosInstance;
+	private readonly versions: WriteVersionStore;
 
-	constructor(axiosInstance: AxiosInstance) {
+	constructor(axiosInstance: AxiosInstance, versions = new WriteVersionStore()) {
 		this.axiosInstance = axiosInstance;
+		this.versions = versions;
 	}
 
-	private resolvePostfix(params: object | undefined): string {
-		let requestPostfix = '';
-		if (params && Object.keys(params).length > 0) {
-			const urlParams = new URLSearchParams(Object.entries(params));
-			requestPostfix = `?${urlParams.toString()}`;
-		}
-
-		return requestPostfix;
-	}
-	
-	public search(
-		request: WalletsSearchRequest,
-	): Promise<WalletsSearchResponse> {
-		const postfix = this.resolvePostfix(request.params);
-		const searchPayload = { 'filter_body': request.data };
-		
-		return this.axiosInstance.post<WalletsSearchResponse>(`/search/${postfix}`, searchPayload)
-			.then((response) => ({
-				...response.data,
-				data: response.data.data.map(parseWalletPreview),
-			}));
+	public list(payload: WalletListRequest): Promise<WalletListResponse> {
+		return request<WalletListResponse>(this.axiosInstance, {
+			method: 'GET',
+			url: `/${buildQuery({ ...payload.params })}`,
+			headers: this.versions.headers(),
+		}, this.versions);
 	}
 
-	public get(
-		request: WalletGetRequest
-	): Promise<WalletGetResponse> {
-		const postfix = this.resolvePostfix(request.params);
-
-		return this.axiosInstance.get<WalletDetailed>(`/${request.id}/${postfix}`)
-			.then((response) => parseWalletDetailed(response.data));
+	public get(payload: WalletGetRequest): Promise<WalletGetResponse> {
+		return request<WalletGetResponse>(this.axiosInstance, {
+			method: 'GET',
+			url: `/${payload.id}/${buildQuery({ ...payload.params })}`,
+			headers: this.versions.headers(),
+		}, this.versions);
 	}
 
-	public post(
-		request: WalletPostRequest
-	): Promise<WalletPostResponse> {
-		const postfix = this.resolvePostfix(request.params);
-		const data = {
-			...request.data,
-			balance: {
-				...request.data.balance,
-				amount: serializeAmount(request.data.balance.amount),
-			}
-		};
-
-		return this.axiosInstance.post<WalletDetailed>(`/${postfix}`, data)
-			.then((response) => parseWalletDetailed(response.data));
+	public post(payload: WalletPostRequest): Promise<WalletPostResponse> {
+		return request<WalletPostResponse>(this.axiosInstance, {
+			method: 'POST',
+			url: '/',
+			data: payload.data,
+			headers: idempotencyHeaders(payload.idempotencyKey),
+		}, this.versions);
 	}
 
-	public list(
-		request: WalletListRequest
-	): Promise<WalletListResponse> {
-		const postfix = this.resolvePostfix(request.params);
-
-		return this.axiosInstance.get<WalletListResponse>(`/${postfix}`)
-			.then((response) => ({
-				...response.data,
-				data: response.data.data.map(parseWalletPreview),
-			}));
+	public patch(payload: WalletPatchRequest): Promise<WalletPatchResponse> {
+		return request<WalletPatchResponse>(this.axiosInstance, {
+			method: 'PATCH',
+			url: `/${payload.id}/`,
+			data: payload.data,
+		}, this.versions);
 	}
 
-	patch(
-		request: WalletPatchRequest
-	): Promise<WalletPatchResponse> {
-		const postfix = this.resolvePostfix(request.params);
-		const data = request.data.balance ? {
-			...request.data,
-			balance: {
-				...request.data.balance,
-				amount: serializeAmount(request.data.balance.amount),
-			}
-		} : request.data;
-
-		return this.axiosInstance.patch<WalletDetailed>(`/${request.id}/${postfix}`, data)
-			.then((response) => parseWalletDetailed(response.data));
+	public delete(payload: WalletDeleteRequest): Promise<WalletDeleteResponse> {
+		return request<WalletDeleteResponse>(this.axiosInstance, {
+			method: 'DELETE',
+			url: `/${payload.id}/`,
+		}, this.versions);
 	}
 
-	put(
-		request: WalletPutRequest
-	): Promise<WalletPutResponse> {
-		const postfix = this.resolvePostfix(request.params);
-		const data = {
-			...request.data,
-			balance: {
-				...request.data.balance,
-				amount: serializeAmount(request.data.balance.amount),
-			}
-		};
-
-		return this.axiosInstance.put<WalletDetailed>(`/${request.id}/${postfix}`, data)
-			.then((response) => parseWalletDetailed(response.data));
-	}
-
-	delete(
-		request: WalletDeleteRequest
-	): Promise<WalletDeleteResponse> {
-		const postfix = this.resolvePostfix(request.params);
-
-		return this.axiosInstance.delete<WalletDeleteResponse>(`/${request.id}/${postfix}`)
-			.then((response) => response.data);
-	}
-
-	listKinds(
-		request: WalletKindsRequest
-	): Promise<WalletKindsResponse> {
-		return this.axiosInstance.get<WalletKindsResponse>('/kinds/', { params: request.params })
-			.then((response) => response.data);
+	public search(payload: WalletSearchRequest): Promise<WalletSearchResponse> {
+		return request<WalletSearchResponse>(this.axiosInstance, {
+			method: 'POST',
+			url: `/search/${buildQuery({ ...payload.params })}`,
+			data: payload.data,
+			headers: this.versions.headers(),
+		}, this.versions);
 	}
 }
 

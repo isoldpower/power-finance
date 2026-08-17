@@ -25,7 +25,7 @@ const useSearchResults = (pages: PageEntry[]) => {
 		return wallets
 			.slice(0, WALLET_RESULTS_LIMIT)
 			.map((wallet) => {
-				const meta = `${wallet.balance.currency}${wallet.credit ? ' · Credit' : ''}`;
+				const meta = `${wallet.balance.currency}${wallet.category ? ` · ${wallet.category}` : ''}`;
 
 				return {
 					key: wallet.id,

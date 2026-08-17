@@ -1,44 +1,47 @@
-import { useQuery } from "@tanstack/react-query";
-import { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
-import { listAllWallets } from "../../wallets-api/methods/list-all-wallets.ts";
-import { useApiContext } from "@app/api";
-import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
 import { useMemo } from "react";
-import type { Wallet, WalletType } from "@entity/wallets";
-import type { ListAllWalletsResponse } from "../../wallets-api/methods/list-all-wallets.ts";
+import { useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
+import { useApiContext } from "@app/api";
+import { listWallets } from "../../wallets-api";
+import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
+import type { PageParams } from "@shared/api";
+import type { Wallet } from "@entity/wallets";
+import type { ListWalletsResponse } from "../../wallets-api";
 
-type UseWalletsListOptions = Omit<UseQueryOptions<ListAllWalletsResponse>, 'queryKey' | 'queryFn'> & {};
+type UseWalletsListOptions = Omit<UseQueryOptions<ListWalletsResponse>, 'queryKey' | 'queryFn'> & object;
 
-type UseWalletsListReturn = UseQueryResult & {
+type UseWalletsListReturn = UseQueryResult<ListWalletsResponse> & {
 	wallets: Wallet[];
-}
-
-const walletKind = (wallet: Wallet): WalletType => {
-	return wallet.type ?? 'wallet';
+	total: number;
+	nextCursor: string | null;
+	prevCursor: string | null;
 };
+
+const EMPTY_WALLETS: Wallet[] = [];
 
 const useWalletsList = (
 	options?: UseWalletsListOptions,
-	kind: WalletType = 'wallet'
-): UseWalletsListReturn  => {
+	page?: PageParams
+): UseWalletsListReturn => {
 	const apiContext = useApiContext();
-	const query = useQuery<ListAllWalletsResponse>({
-		queryKey: [WALLETS_CACHE_KEYS.list],
-		queryFn: () => listAllWallets({
-			handler: apiContext.walletServers.rest
+	const query = useQuery<ListWalletsResponse>({
+		queryKey: [WALLETS_CACHE_KEYS.list, page?.limit ?? 'default', page?.cursor ?? 'first'],
+		queryFn: () => listWallets({
+			handler: apiContext.walletServers.rest,
+			page,
 		}),
 		...options ?? {}
 	});
 
 	return useMemo(() => ({
 		...query,
-		wallets: (query.data?.data ?? []).filter((wallet) => {
-			return walletKind(wallet) === kind;
-		})
-	}), [query, kind]);
-}
+		wallets: query.data?.page.items ?? EMPTY_WALLETS,
+		total: query.data?.page.total ?? 0,
+		nextCursor: query.data?.page.nextCursor ?? null,
+		prevCursor: query.data?.page.prevCursor ?? null,
+	}), [query]);
+};
 
 export { useWalletsList };
 export type { UseWalletsListReturn, UseWalletsListOptions };

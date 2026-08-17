@@ -1,20 +1,47 @@
-import type { AccountPreview, LedgerEntry } from "../types.ts";
+import type { AccountDto, LedgerEntryDto } from "../types.ts";
 
-
-const ACCOUNT_SEED: AccountPreview[] = [
-	{ id: 'a1', name: 'Main Checking', kind: 'Cash & equivalents', type: 'asset', balance: { amount: 8420.18, currency: 'USD' } },
-	{ id: 'a2', name: 'Emergency Fund', kind: 'Savings', type: 'asset', balance: { amount: 9800.32, currency: 'USD' } },
-	{ id: 'a3', name: 'Stocks Brokerage', kind: 'Investment', type: 'asset', balance: { amount: 880.20, currency: 'USD' } },
-	{ id: 'a4', name: 'Amex Gold', kind: 'Credit card', type: 'liability', balance: { amount: -640.20, currency: 'USD' } },
-	{ id: 'a5', name: 'Opening Balance', kind: 'Equity', type: 'equity', balance: { amount: 12768.21, currency: 'USD' } },
-	{ id: 'a6', name: 'Retained Earnings', kind: 'Equity', type: 'equity', balance: { amount: 5472.09, currency: 'USD' } },
+const ACCOUNT_SEED: AccountDto[] = [
+	{ id: 'a1', group: 'assets', name: 'Main Checking', money: { amount: '8420.18', currency: 'USD' } },
+	{ id: 'a2', group: 'assets', name: 'Emergency Fund', money: { amount: '9800.32', currency: 'USD' } },
+	{ id: 'a3', group: 'assets', name: 'Stocks Brokerage', money: { amount: '880.20', currency: 'USD' } },
+	{ id: 'a4', group: 'liabilities', name: 'Amex Gold', money: { amount: '-640.20', currency: 'USD' } },
+	{ id: 'a5', group: 'equity', name: 'Opening Balance', money: { amount: '12768.21', currency: 'USD' } },
+	{ id: 'a6', group: 'equity', name: 'Retained Earnings', money: { amount: '5472.09', currency: 'USD' } },
 ];
 
-const LEDGER_ENTRY_SEED: LedgerEntry[] = [
-	{ id: 'h1', occurred_at: '2026-06-17', description: 'Acme Corp Salary', icon: '💼', side: 'DR', amount: { amount: 4200.00, currency: 'USD' } },
-	{ id: 'h2', occurred_at: '2026-06-18', description: 'Whole Foods Market', icon: '🛒', side: 'CR', amount: { amount: -53.50, currency: 'USD' } },
-	{ id: 'h3', occurred_at: '2026-06-18', description: 'Blue Bottle Coffee', icon: '☕', side: 'CR', amount: { amount: -4.80, currency: 'USD' } },
-	{ id: 'h4', occurred_at: '2026-06-16', description: 'Metro Transit', icon: '🚇', side: 'CR', amount: { amount: -58.30, currency: 'USD' } },
+const LEDGER_ENTRY_SEED: LedgerEntryDto[] = [
+	{
+		title: 'Acme Corp Salary',
+		debit: true,
+		created_at: '2026-06-17T09:00:00-05:00',
+		source_transaction: '9f1c2f8e-0f3a-4c9b-9a1e-2f7b4c5d6e70',
+		icon: '💼',
+		money: { amount: '4200.00', currency: 'USD' },
+	},
+	{
+		title: 'Whole Foods Market',
+		debit: false,
+		created_at: '2026-06-18T18:24:00-05:00',
+		source_transaction: '9f1c2f8e-0f3a-4c9b-9a1e-2f7b4c5d6e71',
+		icon: '🛒',
+		money: { amount: '53.50', currency: 'USD' },
+	},
+	{
+		title: 'Blue Bottle Coffee',
+		debit: false,
+		created_at: '2026-06-18T08:12:00-05:00',
+		source_transaction: '9f1c2f8e-0f3a-4c9b-9a1e-2f7b4c5d6e72',
+		icon: '☕',
+		money: { amount: '4.80', currency: 'USD' },
+	},
+	{
+		title: 'Metro Transit',
+		debit: false,
+		created_at: '2026-06-16T07:45:00-05:00',
+		source_transaction: '9f1c2f8e-0f3a-4c9b-9a1e-2f7b4c5d6e73',
+		icon: '🚇',
+		money: { amount: '58.30', currency: 'USD' },
+	},
 ];
 
 export { ACCOUNT_SEED, LEDGER_ENTRY_SEED };

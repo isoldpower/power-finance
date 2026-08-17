@@ -1,27 +1,31 @@
 import { cn } from "@internal/ui-library";
-
-import type { ButtonHTMLAttributes, FC } from "react";
 import { textClass } from "@shared/pure-components/typography";
 
+import type { ButtonHTMLAttributes, FC, PropsWithChildren } from "react";
 
-interface NewWalletButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className' | 'type'> {}
+
+type NewWalletButtonProps = PropsWithChildren<
+	Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className' | 'type'>
+>;
 
 const NewWalletButton: FC<NewWalletButtonProps> = ({
 	children,
 	...props
-}) => {
-	return (
-		<button
-			type="button"
-			className={cn(
-				"flex flex-row gap-2 items-center",
-				cn(textClass({ size: 'xs', weight: 'semibold', tone: 'accent' }), "hover:underline")
-			)}
-			{...props}
-		>
-			{children}
-		</button>
-	);
-}
+}) => (
+	<button
+		type="button"
+		className={cn(
+			"flex flex-row items-center gap-2",
+			textClass({ size: 'xs', weight: 'semibold', tone: 'accent' }),
+			"hover:underline"
+		)}
+		{...props}
+	>
+		{children}
+	</button>
+);
+
+NewWalletButton.displayName = 'NewWalletButton';
 
 export { NewWalletButton };
+export type { NewWalletButtonProps };

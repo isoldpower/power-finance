@@ -1,14 +1,22 @@
-import type { IFxRESTApiClient, FxRates } from "../types.ts";
+import { ratesFromApi } from "../mutators";
+import type { CurrencyRates } from "@entity/localization";
+import type { ICurrenciesRESTApiClient } from "../rest-client";
 
 interface GetRatesRequest {
-	handler: Pick<IFxRESTApiClient, 'getRates'>;
+	handler: Pick<ICurrenciesRESTApiClient, 'rates'>;
 	base: string;
+	target?: string[];
 }
 
-type GetRatesResponse = FxRates;
+type GetRatesResponse = CurrencyRates;
 
 async function getRates(request: GetRatesRequest): Promise<GetRatesResponse> {
-	return request.handler.getRates({ params: { base: request.base } });
+	const response = await request.handler.rates({
+		code: request.base,
+		params: { target: request.target },
+	});
+
+	return ratesFromApi(response.data, response.meta.fetched_at);
 }
 
 export { getRates };

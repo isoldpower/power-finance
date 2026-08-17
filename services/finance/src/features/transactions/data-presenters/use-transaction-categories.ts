@@ -2,12 +2,11 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
-import { listCategories } from "../transactions-api/methods/list-categories.ts";
-import { categoryFromApi } from "../transactions-api/mutators/api-to-domain.ts";
+import { listCategories } from "../transactions-api";
 import { useApiContext } from "@app/api";
 import { CACHE_KEYS } from "./config.ts";
 import type { TransactionCategory } from "@entity/transactions";
-import type { ListCategoriesResponse } from "../transactions-api/methods/list-categories.ts";
+import type { ListCategoriesResponse } from "../transactions-api";
 
 
 type UseTransactionCategoriesOptions = Omit<
@@ -31,7 +30,7 @@ const useTransactionCategories = (
 		...options ?? {}
 	});
 
-	const categories = useMemo(() => (query.data?.data ?? []).map(categoryFromApi), [query.data]);
+	const categories = useMemo(() => query.data?.categories ?? [], [query.data]);
 
 	return { ...query, categories };
 };

@@ -1,14 +1,14 @@
-import type { TransactionDirection } from "../types.ts";
+import type { TransactionType } from "../types.ts";
 import type { Tone } from "@shared/formatting";
 
 
-const toneByDirection: Record<TransactionDirection, Tone> = {
-	in: 'pos',
-	out: 'neg',
+const toneByType: Record<TransactionType, Tone> = {
+	income: 'pos',
+	expense: 'neg',
 };
 
-const resolveToneWithDirection = (direction: TransactionDirection): Tone => {
-	return toneByDirection[direction];
-}
+const resolveToneWithDirection = (type: TransactionType): Tone => {
+	return toneByType[type];
+};
 
 export { resolveToneWithDirection };

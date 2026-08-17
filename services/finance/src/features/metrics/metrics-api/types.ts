@@ -1,78 +1,54 @@
-interface Money {
-	amount: number;
-	currency: string;
-}
+import type { MoneyDto } from "@shared/api";
 
-interface InsightChange {
-	pct: number;
-	direction: 'up' | 'down';
-}
+type NetDiffDirectionDto = 'up' | 'down' | 'flat';
 
-interface SeriesPoint {
-	t: string;
-	v: number;
-}
-
-interface NetWorthInsight {
-	value: Money;
-	change: InsightChange;
-	series: SeriesPoint[];
-}
-
-interface CashFlowInsight {
-	in: Money;
-	out: Money;
-	net: Money;
-	savingsRate: number;
-	range: string;
-}
-
-type InsightMetric = 'net_worth' | 'cash_flow';
-
-interface Insights {
-	net_worth?: NetWorthInsight;
-	cash_flow?: CashFlowInsight;
-}
-
-interface LedgerBalance {
-	assets: Money;
-	liabilities: Money;
-	equity: Money;
+interface BalanceMetricsDto {
+	assets: MoneyDto;
+	liabilities: MoneyDto;
+	equity: MoneyDto;
 	balanced: boolean;
+	comments: string | null;
 }
 
-interface InsightsGetRequest {
-	params: {
-		metrics: InsightMetric[];
-		range?: string;
-	};
+interface NetDiffDto {
+	percentage: number;
+	direction: NetDiffDirectionDto;
 }
 
-type InsightsGetResponse = Insights;
-
-interface LedgerBalanceGetRequest {
-	params?: object;
+interface NetWorthPointDto {
+	timestamp: string;
+	money: MoneyDto;
 }
 
-type LedgerBalanceGetResponse = LedgerBalance;
+interface NetWorthDto {
+	money: MoneyDto;
+	net_diff: NetDiffDto;
+	series: NetWorthPointDto[];
+}
 
-interface ISummaryRESTApiClient {
-	getInsights: (request: InsightsGetRequest) => Promise<InsightsGetResponse>;
-	getLedgerBalance: (request: LedgerBalanceGetRequest) => Promise<LedgerBalanceGetResponse>;
+interface CashFlowDto {
+	inflow: MoneyDto;
+	outflow: MoneyDto;
+	total_net: MoneyDto;
+	savings_rate: number;
+}
+
+interface NetWorthParams {
+	since?: string;
+	points?: number;
+}
+
+interface CashFlowParams {
+	since?: string;
 }
 
 export type {
-	Money,
-	InsightChange,
-	SeriesPoint,
-	NetWorthInsight,
-	CashFlowInsight,
-	InsightMetric,
-	Insights,
-	LedgerBalance,
-	InsightsGetRequest,
-	InsightsGetResponse,
-	LedgerBalanceGetRequest,
-	LedgerBalanceGetResponse,
-	ISummaryRESTApiClient,
+	BalanceMetricsDto,
+	CashFlowDto,
+	CashFlowParams,
+	NetDiffDto,
+	NetDiffDirectionDto,
+	NetWorthDto,
+	NetWorthParams,
+	NetWorthPointDto,
 };

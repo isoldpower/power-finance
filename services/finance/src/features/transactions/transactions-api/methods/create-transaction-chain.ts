@@ -1,26 +1,32 @@
-import { transactionDetailedResponseToFlat } from "../mutators/api-to-flat.ts";
-import type { TransactionDto } from "@entity/transactions";
-import type { ITransactionsRESTApiClient } from "../rest-client";
-import type { TransactionChainRequest } from "../rest-client";
+import { v4 as uuidv4 } from "uuid";
 
+import { transactionChainDraftToApi, transactionChainFromApi } from "../mutators";
+import type { TransactionChain, TransactionChainDraft } from "@entity/transactions";
+import type { ITransactionsRESTApiClient } from "../rest-client";
 
 interface CreateTransactionChainRequest {
-	handler: Pick<ITransactionsRESTApiClient, 'chain'>
-	payload: TransactionChainRequest
+	handler: Pick<ITransactionsRESTApiClient, 'postChain'>;
+	draft: TransactionChainDraft;
+	idempotencyKey?: string;
 }
 
 interface CreateTransactionChainResponse {
-	chainId: string
-	transactions: TransactionDto[]
+	chain: TransactionChain;
+	replayed: boolean;
 }
 
 async function createTransactionChain(
 	request: CreateTransactionChainRequest
 ): Promise<CreateTransactionChainResponse> {
-	return request.handler.chain(request.payload).then((result) => ({
-		chainId: result.chain_id,
-		transactions: result.transactions.map(transactionDetailedResponseToFlat),
-	}));
+	const response = await request.handler.postChain({
+		data: transactionChainDraftToApi(request.draft),
+		idempotencyKey: request.idempotencyKey ?? uuidv4(),
+	});
+
+	return {
+		chain: transactionChainFromApi(response.data),
+		replayed: response.meta.idempotent_replay ?? false,
+	};
 }
 
 export { createTransactionChain };

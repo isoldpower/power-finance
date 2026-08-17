@@ -27,4 +27,7 @@ const UserAvatar: FC<UserAvatarProps> = ({
 	);
 }
 
+UserAvatar.displayName = 'UserAvatar';
+
 export { UserAvatar };
+export type { UserAvatarProps };

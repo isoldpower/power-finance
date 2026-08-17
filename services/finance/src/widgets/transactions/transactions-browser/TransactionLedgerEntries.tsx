@@ -7,35 +7,57 @@ import {
 	PostingsContainer,
 	PostingsDirectionIcon,
 	TransactionAmountStack,
+	toLedgerEntryViews,
 	toTransactionMoneyView,
 	toTransactionRowView,
 	resolveToneWithDirection,
 } from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
+import { useTransactionLedger, TransactionLedgerFx } from "@feature/transactions";
 import { useLocaleCurrency } from "@shared/formatting";
+import { SpaceOccupant } from "@shared/pure-components/layout";
 import { MetaText, RowTitle } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
-import type { TransactionPreviewDto } from "@entity/transactions";
+import type { Transaction } from "@entity/transactions";
 
 
 interface LedgerTransactionEntriesProps {
-	transaction: TransactionPreviewDto;
+	transaction: Transaction;
 }
 
 const TransactionLedgerEntries: FC<LedgerTransactionEntriesProps> = ({ transaction }) => {
 	const { convert } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
 
-	const row = useMemo(() => toTransactionRowView(transaction, formatCurrency), [transaction, formatCurrency]);
-	const money = useMemo(() => toTransactionMoneyView(transaction, convert, formatCurrency), [transaction, convert, formatCurrency]);
+	const { entries, isPending } = useTransactionLedger(transaction.id);
+
+	const row = useMemo(() => toTransactionRowView(transaction), [transaction]);
+	const money = useMemo(
+		() => toTransactionMoneyView(transaction, convert, formatCurrency),
+		[transaction, convert, formatCurrency]
+	);
+	const lines = useMemo(
+		() => toLedgerEntryViews(entries, formatCurrency),
+		[entries, formatCurrency]
+	);
 
 	return (
 		<div className="max-w-[600px] py-1 pl-[52px] pr-4 pb-4">
-			<JournalPostingHeader balancedAmount={money.amountAbsolute} />
+			<JournalPostingHeader>
+				<JournalPostingHeader.Title>
+					DERIVED JOURNAL POSTING
+				</JournalPostingHeader.Title>
+				<JournalPostingHeader.AiBadge />
+				<SpaceOccupant />
+				<JournalPostingHeader.Balance>
+					<JournalPostingHeader.Check />
+					balanced · {money.amountAbsolute}
+				</JournalPostingHeader.Balance>
+			</JournalPostingHeader>
 			<PostingsContainer>
-				<PostingsDirectionIcon tone={resolveToneWithDirection(transaction.direction)}>
-					<AmountDirectionIcon direction={row.direction} size={14} />
+				<PostingsDirectionIcon tone={resolveToneWithDirection(transaction.type)}>
+					<AmountDirectionIcon type={row.type} size={14} />
 				</PostingsDirectionIcon>
 				<div className="min-w-0 flex-1">
 					<RowTitle size="12.5" truncate>
@@ -49,12 +71,27 @@ const TransactionLedgerEntries: FC<LedgerTransactionEntriesProps> = ({ transacti
 					original={money.amountOriginal}
 					main={money.amountMain}
 					converted={money.converted}
-					tone={resolveToneWithDirection(transaction.direction)}
+					tone={resolveToneWithDirection(transaction.type)}
 				/>
 			</PostingsContainer>
-			{row.entries.map((entry, index) => (
-				<LedgerLineRow key={`${row.id}-${entry.account}-${index.toString()}`} line={entry} />
-			))}
+			<TransactionLedgerFx isPending={isPending}>
+				{lines.map((entry, index) => (
+					<LedgerLineRow key={`${row.id}-${entry.account}-${index.toString()}`}>
+						<LedgerLineRow.Side debit={entry.debit}>
+							{entry.label}
+						</LedgerLineRow.Side>
+						<LedgerLineRow.Account>
+							{entry.account}
+						</LedgerLineRow.Account>
+						<LedgerLineRow.Kind>
+							{entry.debit ? 'debit' : 'credit'}
+						</LedgerLineRow.Kind>
+						<LedgerLineRow.Amount>
+							{entry.amount}
+						</LedgerLineRow.Amount>
+					</LedgerLineRow>
+				))}
+			</TransactionLedgerFx>
 			<MetaText as="div" size="10.5" className="mt-3">
 				{row.provenance}
 			</MetaText>

@@ -1,4 +1,3 @@
-export { BackgroundAurora } from './BackgroundAurora.tsx';
-export { BackgroundDotGrid } from './BackgroundDotGrid.tsx';
-export { ParticlesCanvas } from './ParticlesCanvas.tsx';
+export { Background } from './Background.tsx';
 
+export type { BackgroundProps } from './Background.tsx';

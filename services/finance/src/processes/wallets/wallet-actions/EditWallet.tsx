@@ -3,9 +3,7 @@ import {
 	EditWalletDetailsFx,
 	useWallet,
 	useWalletsSelection,
-	WalletCurrenciesFx,
 } from "@feature/wallets";
-import { useCurrencies } from "@feature/localization";
 import { SlideOver } from "@shared/overlays";
 import { useSlideOverContext } from "@shared/overlays";
 
@@ -17,7 +15,6 @@ const EditWallet: FC = () => {
 	const { isPending, isError, wallet: fetchedWallet } = useWallet(selectedWalletId ?? 'none', {
 		enabled: selectedWalletId !== null,
 	});
-	const currenciesQuery = useCurrencies();
 	const { onClose } = useSlideOverContext();
 
 	return (
@@ -32,23 +29,13 @@ const EditWallet: FC = () => {
 			</SlideOver.Heading>
 			<EditWalletDetailsFx wallet={fetchedWallet} isError={isError} isPending={isPending}>
 				{(loadedWallet) => (
-					<WalletCurrenciesFx
-						currencies={currenciesQuery.currencies}
-						isError={currenciesQuery.isError}
-						isPending={currenciesQuery.isPending}
-					>
-						{(currencies) => (
-							<EditWalletForm
-								wallet={{
-									...loadedWallet,
-									gradient: loadedWallet.color,
-									currency: loadedWallet.balance.currency,
-								}}
-								currencies={currencies}
-								onClose={onClose}
-							/>
-						)}
-					</WalletCurrenciesFx>
+					<EditWalletForm
+						wallet={{
+							...loadedWallet,
+							gradient: loadedWallet.color,
+						}}
+						onClose={onClose}
+					/>
 				)}
 			</EditWalletDetailsFx>
 		</>

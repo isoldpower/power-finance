@@ -1,22 +1,54 @@
-import type { FC } from "react";
-import { MetaText, Text } from "@shared/pure-components/typography";
+import { cn } from "@internal/ui-library";
+import { ReceiptPaperBody } from "./paper/ReceiptPaperBody.tsx";
+import { ReceiptPaperBranch } from "./paper/ReceiptPaperBranch.tsx";
+import { ReceiptPaperBrand } from "./paper/ReceiptPaperBrand.tsx";
+import { ReceiptPaperDivider } from "./paper/ReceiptPaperDivider.tsx";
+import { ReceiptPaperLine } from "./paper/ReceiptPaperLine.tsx";
+import { ReceiptPaperScanline } from "./paper/ReceiptPaperScanline.tsx";
+import { ReceiptPaperTotal } from "./paper/ReceiptPaperTotal.tsx";
 
-const ReceiptPaper: FC = () => (
-	<div className="relative w-[118px] flex-none overflow-hidden rounded-[10px] border border-border bg-[#f7f5ef] shadow-[var(--shadow)]">
-		<div className="fx-scanline pointer-events-none absolute inset-x-0 z-10 h-0.5 bg-primary shadow-[0_0_10px_2px_var(--glow)]" />
-		<MetaText as="div" tone="default" className="px-2.5 py-3 text-[#3a382f]">
-			<Text as="div" size="8" weight="semibold" tracking="0.1em" className="text-center">WHOLE FOODS</Text>
-			<Text as="div" size="6" className="mb-1.5 text-center opacity-60">MARKET · SF</Text>
-			<div className="my-1 h-px bg-[#d8d4c6]" />
-			<Text as="div" size="6.5" className="my-0.5 flex justify-between"><span>Bananas</span><span>3.20</span></Text>
-			<Text as="div" size="6.5" className="my-0.5 flex justify-between"><span>Oat milk</span><span>5.49</span></Text>
-			<Text as="div" size="6.5" className="my-0.5 flex justify-between"><span>Sourdough</span><span>6.00</span></Text>
-			<div className="my-1 h-px bg-[#d8d4c6]" />
-			<Text as="div" size="8" weight="semibold" className="flex justify-between"><span>TOTAL</span><span>86.40</span></Text>
-		</MetaText>
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
+import type { ReceiptPaperBodyProps } from "./paper/ReceiptPaperBody.tsx";
+import type { ReceiptPaperBranchProps } from "./paper/ReceiptPaperBranch.tsx";
+import type { ReceiptPaperBrandProps } from "./paper/ReceiptPaperBrand.tsx";
+import type { ReceiptPaperLineProps } from "./paper/ReceiptPaperLine.tsx";
+import type { ReceiptPaperTotalProps } from "./paper/ReceiptPaperTotal.tsx";
+
+
+type ReceiptPaperProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+type ReceiptPaperObject = FC<ReceiptPaperProps> & {
+	Body: FC<ReceiptPaperBodyProps>;
+	Branch: FC<ReceiptPaperBranchProps>;
+	Brand: FC<ReceiptPaperBrandProps>;
+	Divider: FC;
+	Line: FC<ReceiptPaperLineProps>;
+	Scanline: FC;
+	Total: FC<ReceiptPaperTotalProps>;
+}
+
+const ReceiptPaper: ReceiptPaperObject = ({
+	children,
+	...props
+}) => (
+	<div
+		className={cn(
+			"relative w-[118px] flex-none overflow-hidden rounded-[10px]",
+			"border border-border bg-[#f7f5ef] shadow-[var(--shadow)]"
+		)}
+		{...props}
+	>
+		{children}
 	</div>
 );
 
+ReceiptPaper.Body = ReceiptPaperBody;
+ReceiptPaper.Branch = ReceiptPaperBranch;
+ReceiptPaper.Brand = ReceiptPaperBrand;
+ReceiptPaper.Divider = ReceiptPaperDivider;
+ReceiptPaper.Line = ReceiptPaperLine;
+ReceiptPaper.Scanline = ReceiptPaperScanline;
+ReceiptPaper.Total = ReceiptPaperTotal;
 ReceiptPaper.displayName = 'ReceiptPaper';
 
 export { ReceiptPaper };
+export type { ReceiptPaperProps };

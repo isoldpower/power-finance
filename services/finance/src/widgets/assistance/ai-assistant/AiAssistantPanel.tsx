@@ -1,6 +1,4 @@
-import { cn, FinanceCard } from "@internal/ui-library";
-
-import { AssistantPanel } from "@entity/assistance";
+import { AssistantChat, AssistantPanel, AssistantSignals } from "@entity/assistance";
 import { ShowOn } from "@shared/visibility";
 
 import type { FC } from "react";
@@ -25,50 +23,56 @@ const AiAssistantPanel: FC<AiAssistantPanelProps> = ({
 	comingSoon = false,
 }) => {
 	return (
-		<FinanceCard 
-			variant="elevated" 
-			className={cn("relative flex flex-col overflow-hidden", className)}
-		>
-			<ShowOn condition={comingSoon}>
-				<AssistantPanel.ComingSoon />
-			</ShowOn>
-			<AssistantPanel.Body muted={comingSoon}>
-				<AssistantPanel.Header onClose={onClose} />
-				<AssistantPanel.Signals>
-					<AssistantPanel.SectionLabel>
-						SIGNALS
-					</AssistantPanel.SectionLabel>
-					<AssistantPanel.SignalsGrid>
-						{signals.map((signal) => (
-							<AssistantPanel.SignalTile
-								key={signal.label}
-								label={signal.label}
-								value={signal.value}
-								tone={signal.tone}
-							/>
+		<div className={className}>
+			<AssistantPanel>
+				<ShowOn condition={comingSoon}>
+					<AssistantPanel.ComingSoon />
+				</ShowOn>
+				<AssistantPanel.Body muted={comingSoon}>
+					<AssistantPanel.Header onClose={onClose} />
+					<AssistantSignals>
+						<AssistantSignals.Label>
+							SIGNALS
+						</AssistantSignals.Label>
+						<AssistantSignals.Grid>
+							{signals.map((signal) => (
+								<AssistantSignals.Tile
+									key={signal.label}
+									label={signal.label}
+									value={signal.value}
+									tone={signal.tone}
+								/>
+							))}
+						</AssistantSignals.Grid>
+					</AssistantSignals>
+					<AssistantChat>
+						{chat.map((message) => (
+							message.role === 'user' ? (
+								<AssistantChat.UserBubble
+									key={message.id}
+									text={message.text}
+									refs={message.refs}
+								/>
+							) : (
+								<AssistantChat.AiBubble
+									key={message.id}
+									text={message.text}
+									refs={message.refs}
+								/>
+							)
 						))}
-					</AssistantPanel.SignalsGrid>
-				</AssistantPanel.Signals>
-				<AssistantPanel.Chat>
-					{chat.map((message) => (
-						<AssistantPanel.Bubble
-							key={message.id}
-							role={message.role}
-							text={message.text}
-							refs={message.refs}
-						/>
-					))}
-				</AssistantPanel.Chat>
-				<AssistantPanel.Composer>
-					<AssistantPanel.Prompts>
-						{prompts.map((prompt) => (
-							<AssistantPanel.PromptChip key={prompt} prompt={prompt} />
-						))}
-					</AssistantPanel.Prompts>
-					<AssistantPanel.Input />
-				</AssistantPanel.Composer>
-			</AssistantPanel.Body>
-		</FinanceCard>
+					</AssistantChat>
+					<AssistantChat.Composer>
+						<AssistantChat.Prompts>
+							{prompts.map((prompt) => (
+								<AssistantChat.PromptChip key={prompt} prompt={prompt} />
+							))}
+						</AssistantChat.Prompts>
+						<AssistantChat.Input />
+					</AssistantChat.Composer>
+				</AssistantPanel.Body>
+			</AssistantPanel>
+		</div>
 	);
 };
 

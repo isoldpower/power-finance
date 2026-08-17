@@ -1,4 +1,5 @@
-import {FC, ReactNode} from "react";
+import type { FC, ReactNode } from "react";
+
 
 interface RecentTransactionContainerProps {
 	children: ReactNode;
@@ -10,4 +11,7 @@ const RecentTransactionContainer: FC<RecentTransactionContainerProps> = ({ child
 	</div>
 );
 
+RecentTransactionContainer.displayName = 'RecentTransactionContainer';
+
 export { RecentTransactionContainer };
+export type { RecentTransactionContainerProps };

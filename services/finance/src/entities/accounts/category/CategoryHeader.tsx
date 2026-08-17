@@ -1,6 +1,7 @@
-import type { FC } from "react";
 import { FinanceMoney } from "@internal/ui-library";
 import { Caption, RowTitle } from "@shared/pure-components/typography";
+
+import type { FC } from "react";
 
 
 interface CategoryHeaderProps {

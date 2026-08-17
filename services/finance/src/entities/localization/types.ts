@@ -2,6 +2,7 @@ interface CurrencyMeta {
 	code: string;
 	symbol: string;
 	name: string;
+	decimals: number;
 }
 
 interface LocaleMeta {
@@ -24,4 +25,17 @@ interface ConvertedMoney {
 	converted: boolean;
 }
 
-export type { Money, ConvertedMoney };
+interface MoneyConversion {
+	from: Money;
+	to: Money;
+	rate: number;
+	fetchedAt: string;
+}
+
+interface CurrencyRates {
+	base: string;
+	rates: Record<string, number>;
+	fetchedAt: string;
+}
+
+export type { Money, ConvertedMoney, MoneyConversion, CurrencyRates };

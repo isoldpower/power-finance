@@ -1,9 +1,11 @@
 import { cn } from "@internal/ui-library";
 
-import type { BaseHTMLAttributes, FC } from "react";
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 
 
-const RuleDialogActions: FC<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>> = ({
+type RuleDialogActionsProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+
+const RuleDialogActions: FC<RuleDialogActionsProps> = ({
 	children,
 	...props
 }) => (
@@ -20,3 +22,4 @@ const RuleDialogActions: FC<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'
 RuleDialogActions.displayName = 'RuleDialogActions';
 
 export { RuleDialogActions };
+export type { RuleDialogActionsProps };

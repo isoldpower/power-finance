@@ -1,22 +1,23 @@
-import { DuplicateIcon, QuestionIcon, RecurringIcon } from "@shared/pure-components/icons";
+import { AlertIcon, DuplicateIcon, QuestionIcon, RecurringIcon } from "@shared/pure-components/icons";
+import { useMemo } from "react";
 
-import type { ActionType } from "../types.ts";
-import type { FC, FunctionComponent } from "react";
+import type { FC } from "react";
 import type { IconProps } from "@shared/pure-components/icons";
 
 
-const ICON_BY_KIND: Record<ActionType, FunctionComponent<IconProps>> = {
-	recurring: RecurringIcon,
-	duplicate: DuplicateIcon,
-	uncategorized: QuestionIcon,
-};
-
-interface ActionIconProps extends IconProps {
-	kind: ActionType;
+interface ActionKindIconProps extends IconProps {
+	kind: string;
 }
 
-const ActionKindIcon: FC<ActionIconProps> = ({ kind, ...iconProps }) => {
-	const IconElement = ICON_BY_KIND[kind];
+const ActionKindIcon: FC<ActionKindIconProps> = ({ kind, ...iconProps }) => {
+	const IconElement = useMemo(() => {
+		return {
+			recurring: RecurringIcon,
+			insufficient_funds: AlertIcon,
+			duplicate: DuplicateIcon,
+			uncategorized: QuestionIcon,
+		}[kind] ?? QuestionIcon;
+	}, [kind]);
 
 	return (
 		<IconElement {...iconProps} />
@@ -26,4 +27,4 @@ const ActionKindIcon: FC<ActionIconProps> = ({ kind, ...iconProps }) => {
 ActionKindIcon.displayName = 'ActionKindIcon';
 
 export { ActionKindIcon };
-export type { ActionIconProps };
+export type { ActionKindIconProps };

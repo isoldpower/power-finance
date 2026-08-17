@@ -13,7 +13,7 @@ const AccountsDrillDownDetails: FC = () => {
 
 	return (
 		<>
-			<DrillDownHeader.Container>
+			<DrillDownHeader>
 				<Overline as="span" size="10" tracking="0.12em">
 					Drill-down
 				</Overline>
@@ -21,7 +21,7 @@ const AccountsDrillDownDetails: FC = () => {
 					{category.label} → account → history
 				</Caption>
 				<DrillDownHeader.Rule />
-			</DrillDownHeader.Container>
+			</DrillDownHeader>
 			<AccountsDrillDown
 				category={category}
 				account={account}

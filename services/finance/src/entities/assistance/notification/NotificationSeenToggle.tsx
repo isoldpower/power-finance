@@ -1,15 +1,16 @@
-import type { FC } from "react";
 import { FinanceIconButton } from "@internal/ui-library";
+
+import type { FC } from "react";
 
 
 interface NotificationSeenToggleProps {
 	seen: boolean;
 	disabled?: boolean;
-	onToggle: () => void;
+	onAcknowledge: () => void;
 }
 
-const NotificationSeenToggle: FC<NotificationSeenToggleProps> = ({ seen, disabled, onToggle }) => {
-	const label = seen ? 'Mark as unseen' : 'Mark as seen';
+const NotificationSeenToggle: FC<NotificationSeenToggleProps> = ({ seen, disabled, onAcknowledge }) => {
+	const label = seen ? 'Already seen' : 'Mark as seen';
 
 	return (
 		<FinanceIconButton
@@ -19,18 +20,24 @@ const NotificationSeenToggle: FC<NotificationSeenToggleProps> = ({ seen, disable
 			aria-label={label}
 			aria-pressed={seen}
 			title={label}
-			disabled={disabled}
-			onClick={onToggle}
+			disabled={disabled ?? seen}
+			onClick={onAcknowledge}
 		>
-			{seen ? (
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-3.5">
+			<svg
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				strokeWidth="2"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				className="size-3.5"
+			>
+				{seen ? (
 					<path d="m5 12.5 4.5 4.5L19 7.5" />
-				</svg>
-			) : (
-				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-3.5">
+				) : (
 					<circle cx="12" cy="12" r="8" />
-				</svg>
-			)}
+				)}
+			</svg>
 		</FinanceIconButton>
 	);
 };

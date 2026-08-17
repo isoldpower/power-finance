@@ -1,118 +1,108 @@
-import type { ITransactionsRESTApiClient } from "./types.ts";
+import { buildQuery, idempotencyHeaders, request, WriteVersionStore } from "@shared/api";
+import type { AxiosInstance } from "axios";
 import type {
+	ITransactionsRESTApiClient,
+	TransactionCategoriesRequest, TransactionCategoriesResponse,
+	TransactionChainDeleteRequest, TransactionChainDeleteResponse,
 	TransactionChainRequest, TransactionChainResponse,
 	TransactionDeleteRequest, TransactionDeleteResponse,
 	TransactionGetRequest, TransactionGetResponse,
 	TransactionListRequest, TransactionListResponse,
 	TransactionPatchRequest, TransactionPatchResponse,
-	TransactionPostRequest, TransactionPostResponse
-,
-	TransactionCategoriesRequest,
-	TransactionCategoriesResponse,
-	TransactionScanRequest,
-	TransactionScanResponse,
+	TransactionPostRequest, TransactionPostResponse,
+	TransactionScanRequest, TransactionScanResponse,
+	TransactionSearchRequest, TransactionSearchResponse,
 } from "./types.ts";
-import type { TransactionDetailed } from "../types.ts";
-import type { AxiosInstance } from "axios";
 
-
-const parseTransactionDetailed = (transaction: TransactionDetailed): TransactionDetailed => ({
-	...transaction,
-	wallet: {
-		...transaction.wallet,
-		balance: {
-			...transaction.wallet.balance,
-			amount: parseFloat(transaction.wallet.balance.amount as unknown as string),
-		},
-	},
-});
-
-
-class TransactionDjangoRESTApiClient implements ITransactionsRESTApiClient {
+class TransactionsDjangoRESTApiClient implements ITransactionsRESTApiClient {
 	private readonly axiosInstance: AxiosInstance;
+	private readonly versions: WriteVersionStore;
 
-	constructor(axiosInstance: AxiosInstance) {
+	constructor(axiosInstance: AxiosInstance, versions = new WriteVersionStore()) {
 		this.axiosInstance = axiosInstance;
+		this.versions = versions;
 	}
 
-	private resolvePostfix(params: object | undefined): string {
-		let requestPostfix = '';
-		if (params && Object.entries(params).length > 0) {
-			const urlParams = new URLSearchParams(Object.entries(params));
-			requestPostfix = `?${urlParams.toString()}`;
-		}
-
-		return requestPostfix;
+	public list(payload: TransactionListRequest): Promise<TransactionListResponse> {
+		return request<TransactionListResponse>(this.axiosInstance, {
+			method: 'GET',
+			url: `/${buildQuery({ ...payload.params })}`,
+			headers: this.versions.headers(),
+		}, this.versions);
 	}
 
-	public get(
-		request: TransactionGetRequest
-	): Promise<TransactionGetResponse> {
-		const postfix = this.resolvePostfix(request.params);
-
-		return this.axiosInstance.get<TransactionGetResponse>(`/${request.id}/${postfix}`)
-			.then((response) => parseTransactionDetailed(response.data));
+	public get(payload: TransactionGetRequest): Promise<TransactionGetResponse> {
+		return request<TransactionGetResponse>(this.axiosInstance, {
+			method: 'GET',
+			url: `/${payload.id}/${buildQuery({ ...payload.params })}`,
+			headers: this.versions.headers(),
+		}, this.versions);
 	}
 
-	public post(
-		request: TransactionPostRequest
-	): Promise<TransactionPostResponse> {
-		const postfix = this.resolvePostfix(request.params);
-
-		return this.axiosInstance.post<TransactionPostResponse>(`/${postfix}`, request.data)
-			.then((response) => parseTransactionDetailed(response.data));
+	public search(payload: TransactionSearchRequest): Promise<TransactionSearchResponse> {
+		return request<TransactionSearchResponse>(this.axiosInstance, {
+			method: 'POST',
+			url: `/search/${buildQuery({ ...payload.params })}`,
+			data: payload.data,
+			headers: this.versions.headers(),
+		}, this.versions);
 	}
 
-	public list(
-		request: TransactionListRequest
-	): Promise<TransactionListResponse> {
-		const postfix = this.resolvePostfix(request.params);
-
-		return this.axiosInstance.get<TransactionListResponse>(`/${postfix}`)
-			.then((response) => response.data);
+	public post(payload: TransactionPostRequest): Promise<TransactionPostResponse> {
+		return request<TransactionPostResponse>(this.axiosInstance, {
+			method: 'POST',
+			url: '/',
+			data: payload.data,
+			headers: idempotencyHeaders(payload.idempotencyKey),
+		}, this.versions);
 	}
 
-	public patch(
-		request: TransactionPatchRequest
-	): Promise<TransactionPatchResponse> {
-		const postfix = this.resolvePostfix(request.params);
-
-		return this.axiosInstance.patch<TransactionPatchResponse>(`/${request.id}/${postfix}`, request.data)
-			.then((response) => parseTransactionDetailed(response.data));
+	public patch(payload: TransactionPatchRequest): Promise<TransactionPatchResponse> {
+		return request<TransactionPatchResponse>(this.axiosInstance, {
+			method: 'PATCH',
+			url: `/${payload.id}/`,
+			data: payload.data,
+		}, this.versions);
 	}
 
-	public chain(
-		request: TransactionChainRequest
-	): Promise<TransactionChainResponse> {
-		return this.axiosInstance.post<TransactionChainResponse>(`/chain/`, request.data)
-			.then((response) => ({
-				chain_id: response.data.chain_id,
-				transactions: response.data.transactions.map(parseTransactionDetailed),
-			}));
+	public delete(payload: TransactionDeleteRequest): Promise<TransactionDeleteResponse> {
+		return request<TransactionDeleteResponse>(this.axiosInstance, {
+			method: 'DELETE',
+			url: `/${payload.id}/`,
+		}, this.versions);
 	}
 
-	delete(
-		request: TransactionDeleteRequest
-	): Promise<TransactionDeleteResponse> {
-		const postfix = this.resolvePostfix(request.params);
-
-		return this.axiosInstance.delete<TransactionDeleteResponse>(`/${request.id}/${postfix}`)
-			.then((response) => response.data);
+	public postChain(payload: TransactionChainRequest): Promise<TransactionChainResponse> {
+		return request<TransactionChainResponse>(this.axiosInstance, {
+			method: 'POST',
+			url: '/chains/',
+			data: payload.data,
+			headers: idempotencyHeaders(payload.idempotencyKey),
+		}, this.versions);
 	}
 
-	listCategories(
-		request: TransactionCategoriesRequest
-	): Promise<TransactionCategoriesResponse> {
-		return this.axiosInstance.get<TransactionCategoriesResponse>('/categories/', { params: request.params })
-			.then((response) => response.data);
+	public deleteChain(payload: TransactionChainDeleteRequest): Promise<TransactionChainDeleteResponse> {
+		return request<TransactionChainDeleteResponse>(this.axiosInstance, {
+			method: 'DELETE',
+			url: `/chains/${payload.chainId}/`,
+		}, this.versions);
 	}
 
-	scanReceipt(
-		request: TransactionScanRequest
-	): Promise<TransactionScanResponse> {
-		return this.axiosInstance.post<TransactionScanResponse>('/scan-receipt/', request.params)
-			.then((response) => response.data);
+	public listCategories(payload: TransactionCategoriesRequest): Promise<TransactionCategoriesResponse> {
+		return request<TransactionCategoriesResponse>(this.axiosInstance, {
+			method: 'GET',
+			url: `/categories/${buildQuery({ ...payload.params })}`,
+			headers: this.versions.headers(),
+		}, this.versions);
+	}
+
+	public scanReceipt(payload: TransactionScanRequest): Promise<TransactionScanResponse> {
+		return request<TransactionScanResponse>(this.axiosInstance, {
+			method: 'POST',
+			url: '/scan/',
+			data: payload.params,
+		}, this.versions);
 	}
 }
 
-export { TransactionDjangoRESTApiClient };
+export { TransactionsDjangoRESTApiClient };

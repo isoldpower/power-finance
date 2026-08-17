@@ -1,8 +1,8 @@
 import { useMemo } from "react";
-import { useTransactionsList } from "@feature/transactions";
+import { useTransactionsSearch } from "@feature/transactions";
 
+import type { Transaction, TransactionQuery } from "@entity/transactions";
 import type { Wallet } from "@entity/wallets";
-import type { TransactionPreviewDto } from "@entity/transactions";
 
 
 interface PeriodFlow {
@@ -12,7 +12,7 @@ interface PeriodFlow {
 }
 
 interface DatedTransaction {
-	transaction: TransactionPreviewDto;
+	transaction: Transaction;
 	postedAt: Date;
 }
 
@@ -23,21 +23,21 @@ const isSameMonth = (first: Date, second: Date): boolean => {
 const monthLabel = (date: Date): string => date.toLocaleDateString(undefined, { month: 'long' });
 
 const useWalletsPeriodFlow = (wallet: Wallet): PeriodFlow => {
-	const { transactions } = useTransactionsList();
+	const query = useMemo<TransactionQuery>(() => ({ walletIds: [wallet.id] }), [wallet.id]);
+	const { transactions } = useTransactionsSearch(query);
 	const walletTransactions = useMemo<DatedTransaction[]>(() => (
 		transactions
-			.filter((transaction) => transaction.source_wallet.id === wallet.id)
 			.map((transaction) => ({
 				transaction,
-				postedAt: new Date(transaction.occurred_at || transaction.created_at),
+				postedAt: new Date(transaction.createdAt),
 			}))
 			.filter(({ postedAt }) => !Number.isNaN(postedAt.getTime()))
 			.sort((first, second) => second.postedAt.getTime() - first.postedAt.getTime())
-	), [transactions, wallet]);
+	), [transactions]);
 
 	return useMemo(() => {
 		const now = new Date();
-		const latest = walletTransactions[0]?.postedAt;
+		const latest = walletTransactions.at(0)?.postedAt;
 		const reference = !latest || isSameMonth(latest, now) ? now : latest;
 
 		return walletTransactions.reduce<PeriodFlow>((accumulatedFlow, { transaction, postedAt }) => {
@@ -45,11 +45,11 @@ const useWalletsPeriodFlow = (wallet: Wallet): PeriodFlow => {
 				return accumulatedFlow;
 			}
 
-			const amount = parseFloat(transaction.amount) || 0;
+			const { amount } = transaction.money;
 
-			return amount >= 0
+			return transaction.type === 'income'
 				? { ...accumulatedFlow, in: accumulatedFlow.in + amount }
-				: { ...accumulatedFlow, out: accumulatedFlow.out + amount };
+				: { ...accumulatedFlow, out: accumulatedFlow.out - amount };
 		}, { in: 0, out: 0, periodLabel: monthLabel(reference) });
 	}, [walletTransactions]);
 }

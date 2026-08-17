@@ -1,22 +1,34 @@
-import type { FC } from "react";
+import { cn } from "@internal/ui-library";
+import { AccountHistoryEmptyIcon } from "./empty-state/AccountHistoryEmptyIcon.tsx";
+import { AccountHistoryEmptyMessage } from "./empty-state/AccountHistoryEmptyMessage.tsx";
 
-import { Caption, RowTitle, Text } from "@shared/pure-components/typography";
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
+import type { AccountHistoryEmptyIconProps } from "./empty-state/AccountHistoryEmptyIcon.tsx";
+import type { AccountHistoryEmptyMessageProps } from "./empty-state/AccountHistoryEmptyMessage.tsx";
 
 
-interface AccountHistoryEmptyProps {
-	accountName: string;
+type AccountHistoryEmptyProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+type AccountHistoryEmptyObject = FC<AccountHistoryEmptyProps> & {
+	Icon: FC<AccountHistoryEmptyIconProps>;
+	Message: FC<AccountHistoryEmptyMessageProps>;
 }
 
-const AccountHistoryEmpty: FC<AccountHistoryEmptyProps> = ({ accountName }) => (
-	<div className="flex flex-col items-center justify-center gap-1.5 px-5 py-11 text-center">
-		<Text as="div" size="17" tone="subtle" className="flex size-[38px] items-center justify-center rounded-[10px] border border-dashed border-border-strong">∅</Text>
-		<RowTitle as="p" tone="muted">No transactions yet</RowTitle>
-		<Caption size="xs" leading="relaxed" className="max-w-[300px]">
-			Nothing has posted to {accountName} this period. Activity will appear here as it’s recorded.
-		</Caption>
+const AccountHistoryEmpty: AccountHistoryEmptyObject = ({
+	children,
+	...props
+}) => (
+	<div
+		className={cn(
+			"flex flex-col items-center justify-center gap-1.5 px-5 py-11 text-center"
+		)}
+		{...props}
+	>
+		{children}
 	</div>
 );
 
+AccountHistoryEmpty.Icon = AccountHistoryEmptyIcon;
+AccountHistoryEmpty.Message = AccountHistoryEmptyMessage;
 AccountHistoryEmpty.displayName = 'AccountHistoryEmpty';
 
 export { AccountHistoryEmpty };

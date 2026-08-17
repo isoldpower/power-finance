@@ -1,25 +1,42 @@
-import type { FC } from "react";
+import { cn } from "@internal/ui-library";
 import { AiBadge } from "@shared/pure-components/badges";
-import { MetaText, Text } from "@shared/pure-components/typography";
+import { JournalPostingBalance } from "./journal-header/JournalPostingBalance.tsx";
+import { JournalPostingCheck } from "./journal-header/JournalPostingCheck.tsx";
+import { JournalPostingTitle } from "./journal-header/JournalPostingTitle.tsx";
 
-interface JournalPostingHeaderProps {
-	balancedAmount: string;
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
+import type { JournalPostingBalanceProps } from "./journal-header/JournalPostingBalance.tsx";
+import type { JournalPostingTitleProps } from "./journal-header/JournalPostingTitle.tsx";
+
+
+type JournalPostingHeaderProps = PropsWithChildren<
+	Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>
+>;
+type JournalPostingHeaderObject = FC<JournalPostingHeaderProps> & {
+	AiBadge: typeof AiBadge;
+	Balance: FC<JournalPostingBalanceProps>;
+	Check: FC;
+	Title: FC<JournalPostingTitleProps>;
 }
 
-const JournalPostingHeader: FC<JournalPostingHeaderProps> = ({ balancedAmount }) => (
-	<div className="mb-3 flex items-center gap-2">
-		<MetaText size="9.5" tracking="0.12em">DERIVED JOURNAL POSTING</MetaText>
-		<AiBadge />
-		<div className="flex-1" />
-		<Text size="10.5" weight="semibold" tone="positive" className="flex items-center gap-1">
-			<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-				<polyline points="20 6 9 17 4 12" />
-			</svg>
-			balanced · {balancedAmount}
-		</Text>
+const JournalPostingHeader: JournalPostingHeaderObject = ({
+	children,
+	...props
+}) => (
+	<div
+		className={cn(
+			"mb-3 flex items-center gap-2"
+		)}
+		{...props}
+	>
+		{children}
 	</div>
 );
 
+JournalPostingHeader.AiBadge = AiBadge;
+JournalPostingHeader.Balance = JournalPostingBalance;
+JournalPostingHeader.Check = JournalPostingCheck;
+JournalPostingHeader.Title = JournalPostingTitle;
 JournalPostingHeader.displayName = 'JournalPostingHeader';
 
 export { JournalPostingHeader };

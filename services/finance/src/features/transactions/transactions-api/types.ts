@@ -1,103 +1,109 @@
-import type { WalletPreview } from "@feature/wallets/wallets-api/types.ts";
+import type { LedgerEntryDto } from "@feature/accounts/accounts-api";
+import type { MoneyDto, PageParams, ResourceTimestamps, SearchOrder, SearchPayload } from "@shared/api";
 
+type TransactionTypeDto = 'expense' | 'income';
 
-type TransactionDirection = 'in' | 'out';
+type TransactionOriginDto = 'manual' | 'scanned';
 
-type TransactionOrigin = 'manual' | 'imported' | 'recurring';
-
-type TransactionEntrySide = 'debit' | 'credit';
-
-interface TransactionEntry {
-	account: string
-	side: TransactionEntrySide
-	amount: string
+interface TransactionWalletDto {
+	id: string;
+	name: string;
 }
 
-interface TransactionReceipt {
-	merchant: string
-	date: string
-	category: string
-	confidence: number
+interface TransactionEvidenceDto {
+	url: string;
 }
 
-interface TransactionMeta {
-	id: string
-	created_at: string
-	updated_at: string
+interface TransactionDto extends ResourceTimestamps {
+	id: string;
+	name: string;
+	money: MoneyDto;
+	type: TransactionTypeDto;
+	origin: TransactionOriginDto;
+	wallet: TransactionWalletDto;
+	category: string | null;
+	chain_id: string | null;
 }
 
-interface TransactionPreviewWallet {
-	id: string
-	name: string
-	color: string
+interface TransactionAnalysisDto {
+	balanced: boolean;
+	comment: string | null;
 }
 
-interface TransactionPreview {
-	id: string
-	amount: string
-	currency_code: string
-	direction: TransactionDirection
-	merchant: string
-	category: string
-	occurred_at: string
-	created_at: string
-	origin: TransactionOrigin
-	scanned: boolean
-	entries: TransactionEntry[]
-	wallet: TransactionPreviewWallet
+interface TransactionDetailDto extends TransactionDto {
+	evidence: TransactionEvidenceDto | null;
+	postings: LedgerEntryDto[];
+	analysis: TransactionAnalysisDto;
 }
 
-interface TransactionDetailed {
-	id: string
-	amount: string
-	currency_code: string
-	direction: TransactionDirection
-	merchant: string
-	category: string
-	occurred_at: string
-	origin: TransactionOrigin
-	entries: TransactionEntry[]
-	note: string
-	receipt?: TransactionReceipt
-	wallet: WalletPreview
-	counterparty_wallet?: TransactionPreviewWallet
-	chain_id?: string
-	meta: TransactionMeta
+interface TransactionCreateBody {
+	name: string;
+	currency: string;
+	amount: string;
+	wallet_id: string;
+	origin: TransactionOriginDto;
+	type: TransactionTypeDto;
+	category: string | null;
+	evidence: TransactionEvidenceDto | null;
 }
 
-interface TransactionMinimalPayload {
-	source_wallet_id: string
-	amount: string
-	merchant?: string
-	category?: string
-	direction?: TransactionDirection
-	occurred_at?: string
+interface TransactionPatchBody {
+	name?: string;
+	category?: string | null;
+	evidence?: TransactionEvidenceDto | null;
 }
 
-interface TransactionPatchFields {
-	merchant: string
-	category: string
-	note: string
+interface TransactionChainEntryBody extends TransactionCreateBody {
+	temporary_id: string;
+	after: string | null;
 }
 
-type TransactionChainItem = TransactionMinimalPayload & {
-	temporary_id: string
-	after: string | null
+interface TransactionChainBody {
+	transactions: TransactionChainEntryBody[];
+}
+
+interface TransactionChainDto {
+	chain_id: string;
+	transactions: TransactionDto[];
+}
+
+type TransactionSearchField =
+	| 'wallet_id'
+	| 'chain_id'
+	| 'amount'
+	| 'currency'
+	| 'name'
+	| 'category'
+	| 'type'
+	| 'origin'
+	| 'created_at';
+
+type TransactionSearchBody = SearchPayload<TransactionSearchField>;
+
+interface TransactionSearchParams extends PageParams {
+	order?: SearchOrder;
+}
+
+const TRANSACTION_CHAIN_LIMIT = 100;
+
+export { TRANSACTION_CHAIN_LIMIT };
+export type {
+	TransactionAnalysisDto,
+	TransactionChainBody,
+	TransactionChainDto,
+	TransactionChainEntryBody,
+	TransactionCreateBody,
+	TransactionDetailDto,
+	TransactionDto,
+	TransactionEvidenceDto,
+	TransactionOriginDto,
+	TransactionPatchBody,
+	TransactionSearchBody,
+	TransactionSearchField,
+	TransactionSearchParams,
+	TransactionTypeDto,
+	TransactionWalletDto,
 };
-
-interface TransactionChainPayload {
-	transactions: TransactionChainItem[]
-}
-
-interface TransactionChainResult {
-	chain_id: string
-	transactions: TransactionDetailed[]
-}
-
-export type { TransactionDirection, TransactionOrigin, TransactionEntry, TransactionEntrySide };
-export type { TransactionReceipt, TransactionMeta, TransactionPreviewWallet };
-export type { TransactionPreview, TransactionDetailed, TransactionMinimalPayload, TransactionPatchFields };
-export type { TransactionChainItem, TransactionChainPayload, TransactionChainResult };
 
 interface CategoryDto {
 	id: string;

@@ -11,6 +11,8 @@ import type { TransactionEntryValues } from "../types.ts";
 
 interface TransactionEntryOnSubmitProps<T extends TransactionEntryValues & FieldValues> {
 	handleSubmit: UseFormHandleSubmit<T>;
+	fromCurrency: string;
+	toCurrency: string;
 	children?: ReactNode;
 	className?: string;
 	onBeforeEdit?: () => void;
@@ -20,6 +22,8 @@ interface TransactionEntryOnSubmitProps<T extends TransactionEntryValues & Field
 
 function TransactionEntryOnSubmit<T extends TransactionEntryValues & FieldValues>({
 	handleSubmit,
+	fromCurrency,
+	toCurrency,
 	children,
 	className,
 	onBeforeEdit,
@@ -32,13 +36,17 @@ function TransactionEntryOnSubmit<T extends TransactionEntryValues & FieldValues
 		if (onBeforeEdit) onBeforeEdit();
 
 		try {
-			const payload = await submitEntry(data, { createTransaction, createTransactionChain });
+			const payload = await submitEntry(
+				data,
+				{ fromCurrency, toCurrency },
+				{ createTransaction, createTransactionChain }
+			);
 			if (onSuccess) onSuccess(payload);
 		} catch (error: unknown) {
 			console.error(error);
 			if (onError) onError(error);
 		}
-	}, [createTransaction, createTransactionChain, onBeforeEdit, onSuccess, onError]);
+	}, [createTransaction, createTransactionChain, fromCurrency, toCurrency, onBeforeEdit, onSuccess, onError]);
 
 	const handleSubmitForm = useCallback((
 		event: FormEvent<HTMLFormElement>

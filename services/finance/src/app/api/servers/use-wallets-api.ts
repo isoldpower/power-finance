@@ -1,7 +1,9 @@
 import { useMemo } from "react";
-import { IWalletsRESTApiClient, WalletsMockRESTApiClient } from "@feature/wallets";
 import { useAxiosInstance } from "@internal/shared";
 
+import { WalletsMockRESTApiClient } from "@feature/wallets";
+import { API_BASE_PATH } from "../config.ts";
+import type { IWalletsRESTApiClient } from "@feature/wallets";
 
 interface UseWalletsApiResponse {
 	rest: IWalletsRESTApiClient;
@@ -9,11 +11,11 @@ interface UseWalletsApiResponse {
 
 function useWalletsApi(baseUrl: string): UseWalletsApiResponse {
 	const walletsAxiosInstance = useAxiosInstance({
-		baseUrl: `${baseUrl}/wallets`
+		baseUrl: `${baseUrl}${API_BASE_PATH}/wallets`
 	});
 
 	const restWalletsClient = useMemo<IWalletsRESTApiClient>(() => {
-		return new WalletsMockRESTApiClient('wallets');
+		return new WalletsMockRESTApiClient();
 	}, [walletsAxiosInstance]);
 
 	return useMemo(() => ({
@@ -22,3 +24,4 @@ function useWalletsApi(baseUrl: string): UseWalletsApiResponse {
 }
 
 export { useWalletsApi };
+export type { UseWalletsApiResponse };

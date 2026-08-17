@@ -1,51 +1,86 @@
-type TransactionDirection = 'in' | 'out';
+import type { Money } from "@entity/localization";
+import type { LedgerEntry } from "@entity/accounts";
 
-type TransactionOrigin = 'manual' | 'imported' | 'recurring';
+type TransactionType = 'expense' | 'income';
 
-type TransactionEntrySide = 'debit' | 'credit';
-
-interface TransactionEntryDto {
-	account: string;
-	side: TransactionEntrySide;
-	amount: string;
-}
+type TransactionOrigin = 'manual' | 'scanned';
 
 interface TransactionWalletRef {
 	id: string;
 	name: string;
-	color: string;
 }
 
-interface TransactionReceipt {
-	merchant: string;
-	date: string;
-	category: string;
-	confidence: number;
+interface TransactionEvidence {
+	url: string;
 }
 
-interface TransactionPreviewDto {
+interface Transaction {
 	id: string;
-	amount: string;
-	currency_code: string;
-	direction: TransactionDirection;
-	merchant: string;
-	category: string;
-	occurred_at: string;
-	created_at: string;
+	name: string;
+	createdAt: string;
+	updatedAt: string | null;
+	deletedAt: string | null;
+	money: Money;
+	type: TransactionType;
 	origin: TransactionOrigin;
-	scanned: boolean;
-	entries: TransactionEntryDto[];
-	source_wallet: TransactionWalletRef;
+	wallet: TransactionWalletRef;
+	category: string | null;
+	chainId: string | null;
 }
 
-interface TransactionDto extends TransactionPreviewDto {
-	note: string;
-	receipt?: TransactionReceipt;
-	counterparty_wallet?: TransactionWalletRef;
+interface TransactionAnalysis {
+	balanced: boolean;
+	comment: string | null;
 }
 
-export type { TransactionDto, TransactionPreviewDto, TransactionDirection, TransactionWalletRef, TransactionReceipt };
-export type { TransactionOrigin, TransactionEntryDto, TransactionEntrySide };
+interface TransactionDetails extends Transaction {
+	evidence: TransactionEvidence | null;
+	analysis: TransactionAnalysis;
+}
+
+type TransactionPosting = LedgerEntry;
+
+interface TransactionChain {
+	chainId: string;
+	transactions: Transaction[];
+}
+
+interface TransactionDraft {
+	name: string;
+	currency: string;
+	amount: number;
+	walletId: string;
+	origin: TransactionOrigin;
+	type: TransactionType;
+	category: string | null;
+	evidence: TransactionEvidence | null;
+}
+
+interface TransactionPatch {
+	name?: string;
+	category?: string | null;
+	evidence?: TransactionEvidence | null;
+}
+
+interface TransactionChainEntryDraft extends TransactionDraft {
+	temporaryId: string;
+	after: string | null;
+}
+
+interface TransactionChainDraft {
+	entries: TransactionChainEntryDraft[];
+}
+
+interface TransactionQuery {
+	walletIds?: string[];
+	chainId?: string;
+	currencies?: string[];
+	minAmount?: number;
+	maxAmount?: number;
+	createdAfter?: string;
+	createdBefore?: string;
+}
+
 
 interface TransactionCategory {
 	id: string;
@@ -65,4 +100,22 @@ interface ReceiptScan {
 	fields: ReceiptScanField[];
 }
 
-export type { TransactionCategory, ReceiptScan };
+export type {
+	Transaction,
+	TransactionDetails,
+	TransactionType,
+	TransactionOrigin,
+	TransactionAnalysis,
+	TransactionEvidence,
+	TransactionPosting,
+	TransactionWalletRef,
+	TransactionChain,
+	TransactionDraft,
+	TransactionPatch,
+	TransactionChainDraft,
+	TransactionChainEntryDraft,
+	TransactionQuery,
+	TransactionCategory,
+	ReceiptScan,
+	ReceiptScanField
+};

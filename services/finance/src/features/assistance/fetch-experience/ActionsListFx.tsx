@@ -1,7 +1,7 @@
 import {UiSkeleton} from "@internal/ui-library";
 
 import type { FC, ReactNode } from "react";
-import type { Action } from "../assistance-api/actions";
+import type { Action } from "@entity/assistance";
 import { Caption } from "@shared/pure-components/typography";
 
 
@@ -48,7 +48,7 @@ const ActionsListSkeleton: FC = () => (
 
 const ActionsListFailed: FC = () => (
 	<Caption size="13" className="mt-4">
-		Couldn’t load cash flow.
+		Couldn’t load the action queue.
 	</Caption>
 );
 

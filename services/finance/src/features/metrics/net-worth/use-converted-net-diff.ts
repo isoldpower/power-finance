@@ -1,7 +1,7 @@
 import {useMemo} from "react";
 import { useConvertMoney } from "@feature/localization";
 
-import type { NetWorthInsight } from "../metrics-api";
+import type { NetWorth } from "@entity/metrics";
 import type { ConvertedMoney } from "@entity/localization";
 
 
@@ -13,16 +13,16 @@ interface ConvertedNetDiff {
 }
 
 const useConvertedNetDiff = (
-	netWorth: NetWorthInsight
+	netWorth: NetWorth
 ): ConvertedNetDiff => {
 	const { convert } = useConvertMoney();
 
 	return useMemo(() => ({
 		netDiffConverted: convert({
-			amount: Math.abs((netWorth.value.amount * netWorth.change.pct) / 100),
-			currency: netWorth.value.currency
+			amount: Math.abs((netWorth.money.amount * netWorth.netDiff.percentage) / 100),
+			currency: netWorth.money.currency
 		}),
-		netDiffSign: (netWorth.change.direction === 'up' ? '+' : '−') as NetDiffSign,
+		netDiffSign: (netWorth.netDiff.direction === 'up' ? '+' : '−') as NetDiffSign,
 	}), [convert, netWorth]);
 }
 

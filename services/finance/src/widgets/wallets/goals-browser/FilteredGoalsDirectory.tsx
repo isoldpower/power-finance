@@ -4,11 +4,11 @@ import { GoalsEmptyNotice } from "@entity/wallets";
 import { useGoals, useGoalsPaginationContext } from "@feature/wallets";
 
 import type { FC, ReactNode } from "react";
-import type { GoalWallet } from "@entity/wallets";
+import type { Goal } from "@entity/wallets";
 
 
 interface FilteredGoalsDirectoryProps {
-	children: (goal: GoalWallet, index: number) => ReactNode;
+	children: (goal: Goal, index: number) => ReactNode;
 }
 
 const FilteredGoalsDirectory: FC<FilteredGoalsDirectoryProps> = ({ children }) => {

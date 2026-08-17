@@ -1,22 +1,25 @@
 import { useMemo } from "react";
-import { useTransactionsList } from "@feature/transactions";
-import { Wallet } from "@entity/wallets";
-import type { TransactionPreviewDto } from "@entity/transactions";
+import { useTransactionsSearch } from "@feature/transactions";
+
+import type { Transaction, TransactionQuery } from "@entity/transactions";
+import type { Wallet } from "@entity/wallets";
 
 
 const useWalletRecentTransactions = (
 	wallet: Wallet | undefined,
 	recentCount: number = 3
-): TransactionPreviewDto[] => {
-	const { transactions } = useTransactionsList({ enabled: !!wallet });
+): Transaction[] => {
+	const query = useMemo<TransactionQuery>(() => ({
+		walletIds: wallet ? [wallet.id] : undefined,
+	}), [wallet]);
 
-	return useMemo(() => (wallet
-		? transactions
-			.filter((txn) => txn.source_wallet.id === wallet.id)
-			.sort((first, second) => second.created_at.localeCompare(first.created_at))
-			.slice(0, recentCount)
-		: []
-	), [transactions, wallet, recentCount]);
+	const { transactions } = useTransactionsSearch(
+		query,
+		{ order: 'DESC', limit: recentCount },
+		{ enabled: Boolean(wallet) }
+	);
+
+	return transactions;
 }
 
 export { useWalletRecentTransactions };

@@ -1,20 +1,24 @@
-import type { WebhookEndpoint } from "@entity/configuration";
-import type { IWebhookRESTApiClient, WebhookRotateRequest } from "../rest-client";
-import { webhookWithSecretResponseToFlat as webhookDetailedResponseToFlat } from "../mutators/api-to-flat.ts";
-
+import { webhookSecretFromApi } from "../mutators";
+import type { WebhookEndpointSecret } from "@entity/configuration";
+import type { IWebhookRESTApiClient } from "../rest-client";
 
 interface RotateWebhookSecretRequest {
-	handler: Pick<IWebhookRESTApiClient, 'rotateSecret'>
-	payload: WebhookRotateRequest
+	handler: Pick<IWebhookRESTApiClient, 'rotateSecret'>;
+	id: string;
+	idempotencyKey?: string;
 }
 
-type RotateWebhookSecretResponse = WebhookEndpoint & object;
+type RotateWebhookSecretResponse = WebhookEndpointSecret;
 
 async function rotateWebhookSecret(
 	request: RotateWebhookSecretRequest
 ): Promise<RotateWebhookSecretResponse> {
-	return request.handler.rotateSecret(request.payload)
-		.then(webhookDetailedResponseToFlat)
+	const response = await request.handler.rotateSecret({
+		id: request.id,
+		idempotencyKey: request.idempotencyKey,
+	});
+
+	return webhookSecretFromApi(response.data);
 }
 
 export { rotateWebhookSecret };

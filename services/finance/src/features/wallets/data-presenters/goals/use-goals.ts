@@ -1,24 +1,47 @@
 import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
-import { isGoalWallet } from "@entity/wallets";
-import { useWalletsList } from "../wallet/use-wallets-list.ts";
+import { useApiContext } from "@app/api";
+import { listGoals } from "../../goals-api";
+import { GOALS_CACHE_KEYS } from "../cache-config.ts";
+import type { PageParams } from "@shared/api";
+import type { Goal } from "@entity/wallets";
+import type { ListGoalsResponse } from "../../goals-api";
 
-import type { GoalWallet } from "@entity/wallets";
+type UseGoalsOptions = Omit<UseQueryOptions<ListGoalsResponse>, 'queryKey' | 'queryFn'>;
 
+type UseGoalsReturn = UseQueryResult<ListGoalsResponse> & {
+	goals: Goal[];
+	total: number;
+	nextCursor: string | null;
+	prevCursor: string | null;
+};
 
-interface UseGoalsReturn {
-	goals: GoalWallet[];
-	isPending: boolean;
-	isError: boolean;
-}
+const EMPTY_GOALS: Goal[] = [];
 
-const useGoals = (): UseGoalsReturn => {
-	const { wallets, isPending, isError } = useWalletsList(undefined, 'long-term-goal');
+const useGoals = (
+	page?: PageParams,
+	options?: UseGoalsOptions
+): UseGoalsReturn => {
+	const apiContext = useApiContext();
+	const query = useQuery<ListGoalsResponse>({
+		queryKey: [GOALS_CACHE_KEYS.list, page?.limit ?? 'default', page?.cursor ?? 'first'],
+		queryFn: () => listGoals({
+			handler: apiContext.goalServers.rest,
+			page,
+		}),
+		...options ?? {},
+	});
 
-	const goals = useMemo(() => wallets.filter(isGoalWallet), [wallets]);
-
-	return { goals, isPending, isError };
+	return useMemo(() => ({
+		...query,
+		goals: query.data?.page.items ?? EMPTY_GOALS,
+		total: query.data?.page.total ?? 0,
+		nextCursor: query.data?.page.nextCursor ?? null,
+		prevCursor: query.data?.page.prevCursor ?? null,
+	}), [query]);
 };
 
 export { useGoals };
-export type { UseGoalsReturn };
+export type { UseGoalsOptions, UseGoalsReturn };

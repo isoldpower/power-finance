@@ -1,5 +1,5 @@
-import {createContext, FC, ReactNode, use, useCallback, useMemo, useState} from "react";
-import { TransactionPreviewDto } from "@entity/transactions";
+import { createContext, FC, ReactNode, use, useMemo } from "react";
+import { Transaction } from "@entity/transactions";
 
 
 interface TransactionsPaginationContextType {
@@ -8,11 +8,11 @@ interface TransactionsPaginationContextType {
 	total: number;
 	pageSize: number;
 	pageNumber: number;
-	pageCount: number;
+	hasNext: boolean;
+	hasPrev: boolean;
 	scrollForward: () => void;
 	scrollBackward: () => void;
-	goToPage: (page: number) => void;
-	paginatedTransactions: TransactionPreviewDto[];
+	paginatedTransactions: Transaction[];
 }
 
 const TransactionsPaginationContext = createContext<TransactionsPaginationContextType | null>(null);
@@ -20,56 +20,45 @@ const TransactionsPaginationContext = createContext<TransactionsPaginationContex
 interface TransactionsPaginationContextProviderProps {
 	children: ReactNode;
 	pageSize: number;
+	pageNumber: number;
 	total: number;
-	transactions: TransactionPreviewDto[];
+	transactions: Transaction[];
+	hasNext: boolean;
+	hasPrev: boolean;
+	onNext: () => void;
+	onPrev: () => void;
 }
 
 const TransactionsPaginationContextProvider: FC<TransactionsPaginationContextProviderProps> = ({
 	children,
 	pageSize,
+	pageNumber,
 	total,
 	transactions,
+	hasNext,
+	hasPrev,
+	onNext,
+	onPrev,
 }) => {
-	const [page, setPage] = useState<number>(1);
-
-	const scrollForward = useCallback(() => {
-		const totalPagesAvailable = Math.ceil(total / pageSize);
-		setPage((previous) => Math.min(totalPagesAvailable, previous + 1));
-	}, [pageSize, total]);
-	const scrollBackward = useCallback(() => {
-		setPage((previous) => Math.max(0, previous - 1));
-	}, []);
-
-	const goToPage = useCallback((nextPage: number) => {
-		const totalPagesAvailable = Math.max(1, Math.ceil(total / pageSize));
-		setPage(Math.min(totalPagesAvailable, Math.max(1, nextPage)));
-	}, [pageSize, total]);
-
 	const startIndex = useMemo(() => {
-		return (page - 1) * pageSize;
-	}, [page, pageSize]);
+		return (pageNumber - 1) * pageSize;
+	}, [pageNumber, pageSize]);
 	const endIndex = useMemo(() => {
-		return page * pageSize - 1;
-	}, [page, pageSize]);
-	const pageCount = useMemo(() => {
-		return Math.ceil(transactions.length / pageSize);
-	}, [pageSize, transactions.length]);
-	const paginatedTransactions = useMemo(() => {
-		return transactions.slice(startIndex, endIndex + 1);
-	}, [endIndex, startIndex, transactions]);
+		return startIndex + Math.max(0, transactions.length - 1);
+	}, [startIndex, transactions.length]);
 
 	const paginationValues = useMemo<TransactionsPaginationContextType>(() => ({
-		scrollBackward,
-		scrollForward,
-		goToPage,
-		paginatedTransactions,
+		scrollBackward: onPrev,
+		scrollForward: onNext,
+		paginatedTransactions: transactions,
 		total,
 		pageSize,
-		pageCount,
-		pageNumber: page,
+		pageNumber,
+		hasNext,
+		hasPrev,
 		from: startIndex,
 		to: endIndex,
-	}), [scrollBackward, scrollForward, goToPage, paginatedTransactions, total, pageSize, pageCount, page, startIndex, endIndex]);
+	}), [onPrev, onNext, transactions, total, pageSize, pageNumber, hasNext, hasPrev, startIndex, endIndex]);
 
 	return (
 		<TransactionsPaginationContext value={paginationValues}>

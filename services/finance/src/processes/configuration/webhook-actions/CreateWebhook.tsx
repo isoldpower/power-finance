@@ -8,14 +8,14 @@ import {
 	UiCardHeader,
 	UiCardTitle,
 } from "@internal/ui-library";
-import type { WebhookEndpoint } from "@entity/configuration";
+import type { WebhookEndpointSecret } from "@entity/configuration";
 
 
 const CreateWebhook: FC = () => {
-	const [createdWebhook, setCreatedWebhook] = useState<WebhookEndpoint | null>(null);
+	const [createdWebhook, setCreatedWebhook] = useState<WebhookEndpointSecret | null>(null);
 	const [finishCreateOpen, setFinishCreateOpen] = useState<boolean>(false);
 	
-	const handleWebhookCreated = useCallback((webhook: WebhookEndpoint) => {
+	const handleWebhookCreated = useCallback((webhook: WebhookEndpointSecret) => {
 		setCreatedWebhook(webhook);
 		setFinishCreateOpen(true);
 	}, []);

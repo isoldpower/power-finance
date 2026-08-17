@@ -1,5 +1,6 @@
-import {FC} from "react";
-import {cn} from '@internal/ui-library';
+import { cn } from '@internal/ui-library';
+
+import type { FC } from "react";
 
 
 interface WalletSwatchProps {
@@ -20,4 +21,7 @@ const WalletSwatch: FC<WalletSwatchProps> = ({ size, color }) => {
 	);
 }
 
+WalletSwatch.displayName = 'WalletSwatch';
+
 export { WalletSwatch };
+export type { WalletSwatchProps };

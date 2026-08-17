@@ -2,38 +2,51 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
-import { listAllTransactions } from "../transactions-api/methods/list-all-transactions.ts";
 import { useApiContext } from "@app/api";
+import { listTransactions } from "../transactions-api";
 import { CACHE_KEYS } from "./config.ts";
-import type { TransactionPreviewDto } from "@entity/transactions";
-import type { ListAllTransactionsResponse } from "../transactions-api/methods/list-all-transactions.ts";
+import type { PageParams } from "@shared/api";
+import type { Transaction } from "@entity/transactions";
+import type { ListTransactionsResponse } from "../transactions-api";
+
+type UseTransactionsListParams = PageParams;
 
 type UseTransactionsListOptions = Omit<
-	UseQueryOptions<ListAllTransactionsResponse>,
+	UseQueryOptions<ListTransactionsResponse>,
 	'queryKey' | 'queryFn'
-> & {};
+> & object;
 
-type UseTransactionsListReturn = UseQueryResult & {
-	transactions: TransactionPreviewDto[];
-}
+type UseTransactionsListReturn = UseQueryResult<ListTransactionsResponse> & {
+	transactions: Transaction[];
+	total: number;
+	nextCursor: string | null;
+	prevCursor: string | null;
+};
+
+const EMPTY_TRANSACTIONS: Transaction[] = [];
 
 const useTransactionsList = (
+	params?: UseTransactionsListParams,
 	options?: UseTransactionsListOptions
-): UseTransactionsListReturn  => {
+): UseTransactionsListReturn => {
 	const apiContext = useApiContext();
-	const query = useQuery<ListAllTransactionsResponse>({
-		queryKey: [CACHE_KEYS.list],
-		queryFn: () => listAllTransactions({
-			handler: apiContext.transactionServers.rest
+	const query = useQuery<ListTransactionsResponse>({
+		queryKey: [CACHE_KEYS.list, params?.limit ?? 'default', params?.cursor ?? 'first'],
+		queryFn: () => listTransactions({
+			handler: apiContext.transactionServers.rest,
+			page: params,
 		}),
 		...options ?? {}
 	});
 
 	return useMemo(() => ({
 		...query,
-		transactions: query.data?.data ?? []
+		transactions: query.data?.page.items ?? EMPTY_TRANSACTIONS,
+		total: query.data?.page.total ?? 0,
+		nextCursor: query.data?.page.nextCursor ?? null,
+		prevCursor: query.data?.page.prevCursor ?? null,
 	}), [query]);
-}
+};
 
 export { useTransactionsList };
-export type { UseTransactionsListReturn, UseTransactionsListOptions };
+export type { UseTransactionsListReturn, UseTransactionsListOptions, UseTransactionsListParams };

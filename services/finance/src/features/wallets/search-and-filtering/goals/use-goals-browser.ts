@@ -5,10 +5,10 @@ import { goalProgressPercent } from "@entity/wallets";
 import { useGoals } from "../../data-presenters";
 
 import type { GoalsBrowseSetup } from "../types.ts";
-import type { GoalWallet } from "@entity/wallets";
+import type { Goal } from "@entity/wallets";
 
 
-function matchesSearch(goal: GoalWallet, search: string): boolean {
+function matchesSearch(goal: Goal, search: string): boolean {
 	if (search === '') {
 		return true;
 	}
@@ -16,7 +16,7 @@ function matchesSearch(goal: GoalWallet, search: string): boolean {
 	return goal.name.toLowerCase().includes(search);
 }
 
-function matchesStatus(goal: GoalWallet, statusFilter: string): boolean {
+function matchesStatus(goal: Goal, statusFilter: string): boolean {
 	if (statusFilter === 'all') {
 		return true;
 	}

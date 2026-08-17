@@ -1,35 +1,39 @@
-import { AssistantPanelHeader } from "./AssistantPanelHeader.tsx";
-import { AssistantPanelBody } from "./AssistantPanelBody.tsx";
-import { AssistantSignalsSection } from "./AssistantSignalsSection.tsx";
-import { AssistantSectionLabel } from "./AssistantSectionLabel.tsx";
-import { AssistantSignalsGrid } from "./AssistantSignalsGrid.tsx";
-import { AssistantSignalTile } from "./AssistantSignalTile.tsx";
-import { AssistantChatFeed } from "./AssistantChatFeed.tsx";
-import { AssistantChatBubble } from "./AssistantChatBubble.tsx";
-import { AssistantComposer } from "./AssistantComposer.tsx";
-import { AssistantPromptsRow } from "./AssistantPromptsRow.tsx";
-import { AssistantPromptChip } from "./AssistantPromptChip.tsx";
-import { AssistantChatInput } from "./AssistantChatInput.tsx";
-import { AssistantComingSoonOverlay } from "./AssistantComingSoonOverlay.tsx";
+import { cn, FinanceCard } from "@internal/ui-library";
+import { AssistantComingSoonOverlay } from "./panel/AssistantComingSoonOverlay.tsx";
+import { AssistantPanelBody } from "./panel/AssistantPanelBody.tsx";
+import { AssistantPanelHeader } from "./panel/AssistantPanelHeader.tsx";
+
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
+import type { AssistantPanelBodyProps } from "./panel/AssistantPanelBody.tsx";
+import type { AssistantPanelHeaderProps } from "./panel/AssistantPanelHeader.tsx";
 
 
-function AssistantPanel() {
-	return null;
+type AssistantPanelProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+type AssistantPanelObject = FC<AssistantPanelProps> & {
+	Body: FC<AssistantPanelBodyProps>;
+	ComingSoon: FC;
+	Header: FC<AssistantPanelHeaderProps>;
 }
 
-AssistantPanel.displayName = 'AssistantPanel';
-AssistantPanel.Header = AssistantPanelHeader;
+const AssistantPanel: AssistantPanelObject = ({
+	children,
+	...props
+}) => (
+	<FinanceCard
+		variant="elevated"
+		className={cn(
+			"relative flex flex-col overflow-hidden"
+		)}
+		{...props}
+	>
+		{children}
+	</FinanceCard>
+);
+
 AssistantPanel.Body = AssistantPanelBody;
-AssistantPanel.Signals = AssistantSignalsSection;
-AssistantPanel.SectionLabel = AssistantSectionLabel;
-AssistantPanel.SignalsGrid = AssistantSignalsGrid;
-AssistantPanel.SignalTile = AssistantSignalTile;
-AssistantPanel.Chat = AssistantChatFeed;
-AssistantPanel.Bubble = AssistantChatBubble;
-AssistantPanel.Composer = AssistantComposer;
-AssistantPanel.Prompts = AssistantPromptsRow;
-AssistantPanel.PromptChip = AssistantPromptChip;
-AssistantPanel.Input = AssistantChatInput;
 AssistantPanel.ComingSoon = AssistantComingSoonOverlay;
+AssistantPanel.Header = AssistantPanelHeader;
+AssistantPanel.displayName = 'AssistantPanel';
 
 export { AssistantPanel };
+export type { AssistantPanelProps };

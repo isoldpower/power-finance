@@ -51,35 +51,83 @@ const TransactionBrowserFilters = () => {
 
 	return (
 		<div className="relative z-10 flex flex-wrap items-center gap-2 border-b border-border px-4 py-3">
-			<TransactionSearchInput
-				value={search}
-				onValueChange={setSearch}
-				onClear={clearSearch}
-			/>
-			<FilterChip
-				label={walletFilter === 'all' ? 'Wallet' : walletLabel}
-				active={walletFilter !== 'all'}
-				options={walletOptions}
-				onSelect={setWalletFilter}
-			/>
-			<FilterChip
-				label={categoryFilter === 'all' ? 'Category' : categoryFilter}
-				active={categoryFilter !== 'all'}
-				options={categoryOptions}
-				onSelect={setCategoryFilter}
-			/>
-			<FilterChip
-				label={typeFilter === 'all' ? 'Type' : typeLabel}
-				active={typeFilter !== 'all'}
-				options={TRANSACTION_TYPE_FILTER_OPTIONS}
-				onSelect={setTypeFilter}
-			/>
-			<FilterChip
-				label={`Sort: ${sortLabel}`}
-				active={false}
-				options={TRANSACTION_SORT_OPTIONS}
-				onSelect={selectSort}
-			/>
+			<TransactionSearchInput>
+				<TransactionSearchInput.Icon />
+				<TransactionSearchInput.Field
+					value={search}
+					onValueChange={setSearch}
+					placeholder="Search description, amount, note…"
+				/>
+				{search ? (
+					<TransactionSearchInput.Clear onClick={clearSearch}>
+						✕
+					</TransactionSearchInput.Clear>
+				) : null}
+			</TransactionSearchInput>
+			<FilterChip>
+				<FilterChip.Trigger active={walletFilter !== 'all'}>
+					{walletFilter === 'all' ? 'Wallet' : walletLabel}
+					<FilterChip.Caret />
+				</FilterChip.Trigger>
+				<FilterChip.Options>
+					{walletOptions.map((option) => (
+						<FilterChip.Option
+							key={option.value}
+							onSelect={() => { setWalletFilter(option.value); }}
+						>
+							{option.label}
+						</FilterChip.Option>
+					))}
+				</FilterChip.Options>
+			</FilterChip>
+			<FilterChip>
+				<FilterChip.Trigger active={categoryFilter !== 'all'}>
+					{categoryFilter === 'all' ? 'Category' : categoryFilter}
+					<FilterChip.Caret />
+				</FilterChip.Trigger>
+				<FilterChip.Options>
+					{categoryOptions.map((option) => (
+						<FilterChip.Option
+							key={option.value}
+							onSelect={() => { setCategoryFilter(option.value); }}
+						>
+							{option.label}
+						</FilterChip.Option>
+					))}
+				</FilterChip.Options>
+			</FilterChip>
+			<FilterChip>
+				<FilterChip.Trigger active={typeFilter !== 'all'}>
+					{typeFilter === 'all' ? 'Type' : typeLabel}
+					<FilterChip.Caret />
+				</FilterChip.Trigger>
+				<FilterChip.Options>
+					{TRANSACTION_TYPE_FILTER_OPTIONS.map((option) => (
+						<FilterChip.Option
+							key={option.value}
+							onSelect={() => { setTypeFilter(option.value); }}
+						>
+							{option.label}
+						</FilterChip.Option>
+					))}
+				</FilterChip.Options>
+			</FilterChip>
+			<FilterChip>
+				<FilterChip.Trigger active={false}>
+					{`Sort: ${sortLabel}`}
+					<FilterChip.Caret />
+				</FilterChip.Trigger>
+				<FilterChip.Options>
+					{TRANSACTION_SORT_OPTIONS.map((option) => (
+						<FilterChip.Option
+							key={option.value}
+							onSelect={() => { selectSort(option.value); }}
+						>
+							{option.label}
+						</FilterChip.Option>
+					))}
+				</FilterChip.Options>
+			</FilterChip>
 		</div>
 	);
 };

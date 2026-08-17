@@ -1,37 +1,30 @@
-import { SearchResultMeta } from "./SearchResultMeta.tsx";
 import { UiCommandItem } from "@internal/ui-library";
+import { SearchResultLabel } from "./result/SearchResultLabel.tsx";
+import { SearchResultMeta } from "./result/SearchResultMeta.tsx";
 
-import { Text } from "@shared/pure-components/typography";
+import type { FC, PropsWithChildren } from "react";
+import type { SearchResultLabelProps } from "./result/SearchResultLabel.tsx";
+import type { SearchResultMetaProps } from "./result/SearchResultMeta.tsx";
 
-import type { FC } from "react";
 
-
-interface SearchResultProps {
+type SearchResultProps = PropsWithChildren<{
 	search: string;
-	label: string;
-	meta: string;
 	onSelect: () => void;
+}>;
+type SearchResultObject = FC<SearchResultProps> & {
+	Label: FC<SearchResultLabelProps>;
+	Meta: FC<SearchResultMetaProps>;
 }
 
-const SearchResult: FC<SearchResultProps> = ({
-	search,
-	label,
-	meta,
-	onSelect,
-}) => {
-	return (
-		<UiCommandItem
-			value={search}
-			onSelect={onSelect}
-		>
-			<Text weight="medium" truncate>
-				{label}
-			</Text>
-			<SearchResultMeta>
-				{meta}
-			</SearchResultMeta>
-		</UiCommandItem>
-	);
-}
+const SearchResult: SearchResultObject = ({ children, search, onSelect }) => (
+	<UiCommandItem value={search} onSelect={onSelect}>
+		{children}
+	</UiCommandItem>
+);
+
+SearchResult.Label = SearchResultLabel;
+SearchResult.Meta = SearchResultMeta;
+SearchResult.displayName = 'SearchResult';
 
 export { SearchResult };
+export type { SearchResultProps };

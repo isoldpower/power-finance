@@ -45,7 +45,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 
 	return (
 		<SidebarColumnsContainer sidebar="start" sidebarWidth="320px" from="md">
-			<CategoryPanel.Card>
+			<CategoryPanel>
 				<CategoryPanel.Header>
 					<CategoryPanel.Swatch color={categoryColor(category.id)} />
 					<CategoryPanel.Title>
@@ -57,7 +57,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 				</CategoryPanel.Header>
 				<CategoryPanel.List>
 					{category.accounts.map((entry) => (
-						<AccountListItem.Container
+						<AccountListItem
 							key={entry.id}
 							active={entry.id === accountId}
 							onClick={() => { setAccountId(entry.id); }}
@@ -68,19 +68,18 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 									{entry.name}
 								</RowTitle>
 								<Caption size="10.5">
-									{entry.kind}
+									{entry.group}
 								</Caption>
 							</div>
 							<AccountListItem.Balance tone={accountAmountTone(entry.balanceUsd)}>
 								{convertToUserCurrency(entry.balanceUsd)}
 							</AccountListItem.Balance>
-						</AccountListItem.Container>
+						</AccountListItem>
 					))}
 				</CategoryPanel.List>
-			</CategoryPanel.Card>
-			<AccountSummary.Card>
+			</CategoryPanel>
+			<AccountSummary>
 				<AccountSummary.Hero>
-					<AccountSummary.Glow />
 					<AccountSummary.HeroRow>
 						<div className="min-w-0 flex-1">
 							<AccountSummary.NameRow>
@@ -88,12 +87,9 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 									{account.name}
 								</Heading>
 								<AccountSummary.Type>
-									{account.accountType}
+									{account.group}
 								</AccountSummary.Type>
 							</AccountSummary.NameRow>
-							<Caption>
-								{account.kind}
-							</Caption>
 						</div>
 						<div className="flex-none text-right">
 							<Overline size="10" tracking="0.1em">
@@ -105,7 +101,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 						</div>
 					</AccountSummary.HeroRow>
 				</AccountSummary.Hero>
-				<HistoryToolbar.Container>
+				<HistoryToolbar>
 					<RowTitle as="h4">
 						Transaction history
 					</RowTitle>
@@ -116,10 +112,20 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 					<HistoryToolbar.Hint>
 						postings that hit this account
 					</HistoryToolbar.Hint>
-				</HistoryToolbar.Container>
+				</HistoryToolbar>
 				<div className="min-h-[270px]">
 					{total === 0 ? (
-						<AccountHistoryEmpty accountName={account.name} />
+						<AccountHistoryEmpty>
+							<AccountHistoryEmpty.Icon>
+								∅
+							</AccountHistoryEmpty.Icon>
+							<RowTitle as="p" tone="muted">
+								No transactions yet
+							</RowTitle>
+							<AccountHistoryEmpty.Message>
+								Nothing has posted to {account.name} this period. Activity will appear here as it’s recorded.
+							</AccountHistoryEmpty.Message>
+						</AccountHistoryEmpty>
 					) : null}
 					{paginatedHistory.map((entry) => (
 						<AccountHistoryRow key={entry.id}>
@@ -134,8 +140,8 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 								{entry.date}
 							</MetaText>
 						</div>
-						<AccountHistoryRow.Badge sideTone={ledgerSideTone(entry.side)}>
-							{entry.side}
+						<AccountHistoryRow.Badge sideTone={ledgerSideTone(entry.debit)}>
+							{entry.debit ? 'DR' : 'CR'}
 						</AccountHistoryRow.Badge>
 						<AccountHistoryRow.Value tone={accountAmountTone(entry.amountUsd)}>
 							{convertToUserCurrencyWithSign(entry.amountUsd)}
@@ -155,7 +161,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 						/>
 					) : null}
 				</div>
-			</AccountSummary.Card>
+			</AccountSummary>
 		</SidebarColumnsContainer>
 	);
 };

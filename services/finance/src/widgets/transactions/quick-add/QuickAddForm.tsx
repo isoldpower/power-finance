@@ -17,6 +17,7 @@ import {
 	useQuickAddInitials,
 } from "@feature/transactions";
 import { HideOnFormValue, ShowOnFormValue } from "@shared/forms";
+import { currencySymbol } from "@shared/formatting";
 
 import type { FC } from "react";
 import type { QuickAddSchema } from "@feature/transactions";
@@ -48,6 +49,8 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 		<UiForm {...form}>
 			<TransactionEntryOnSubmit
 				handleSubmit={form.handleSubmit}
+				fromCurrency={fromCurrency}
+				toCurrency={toCurrency}
 				onBeforeEdit={methods.handleLoading}
 				onSuccess={methods.handleDoneLoading}
 				onError={methods.handleFailedLoading}
@@ -65,12 +68,23 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 						control={form.control}
 						name="amount"
 						render={({ field }) => (
-							<EntryAmountField
-								type={type}
-								currency={currency}
-								className="mt-2"
-								{...field}
-							/>
+							<div className="mt-2">
+								<EntryAmountField>
+									<EntryAmountField.Box>
+										<EntryAmountField.Sign type={type}>
+											{type === 'income' ? '+' : '−'}
+										</EntryAmountField.Sign>
+										<EntryAmountField.Symbol type={type}>
+											{currencySymbol(currency)}
+										</EntryAmountField.Symbol>
+										<EntryAmountField.Input
+											type={type}
+											value={field.value}
+											onChange={field.onChange}
+										/>
+									</EntryAmountField.Box>
+								</EntryAmountField>
+							</div>
 						)} />
 				</HideOnFormValue>
 				<HideOnFormValue valueKey='type' hideOn={['income']} control={form.control}>
@@ -78,30 +92,98 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 						disabled={loading}
 						control={form.control}
 						name="fromWallet"
-						render={({ field }) => (
-							<WalletSelect
-								showSwatch={false}
-								leadingIcon={<FromIcon className="flex-none text-text-3" />}
-								options={fromOptions}
-								emptyLabel="No wallets yet"
-								className="mt-2"
-								{...field} />
-						)} />
+						render={({ field }) => {
+							const selected = fromOptions.find((option) => option.id === field.value);
+
+							return (
+							<WalletSelect>
+								<WalletSelect.Trigger className="mt-2">
+									<FromIcon className="flex-none text-text-3" />
+									<WalletSelect.Value placeholder={!selected}>
+										{selected ? selected.name : 'Select wallet'}
+									</WalletSelect.Value>
+									{selected ? (
+										<WalletSelect.Currency>
+											{selected.currency}
+										</WalletSelect.Currency>
+									) : null}
+									<WalletSelect.Caret />
+								</WalletSelect.Trigger>
+								<WalletSelect.Options>
+									{fromOptions.length === 0 ? (
+										<WalletSelect.Empty>
+											No wallets yet
+										</WalletSelect.Empty>
+									) : (
+										fromOptions.map((option) => (
+											<WalletSelect.Option
+												key={option.id}
+												onSelect={() => { field.onChange(option.id); }}
+											>
+												<WalletSelect.Swatch gradient={option.gradient} />
+												<WalletSelect.OptionName>
+													{option.name}
+												</WalletSelect.OptionName>
+												<WalletSelect.Currency size="10.5">
+													{option.currency}
+												</WalletSelect.Currency>
+												{option.id === field.value ? <WalletSelect.Selected /> : null}
+											</WalletSelect.Option>
+										))
+									)}
+								</WalletSelect.Options>
+							</WalletSelect>
+							);
+						}} />
 				</HideOnFormValue>
 				<HideOnFormValue valueKey='type' hideOn={['expense']} control={form.control}>
 					<UiFormField
 						disabled={loading}
 						control={form.control}
 						name="toWallet"
-						render={({ field }) => (
-							<WalletSelect
-								showSwatch={false}
-								leadingIcon={<ToIcon className="flex-none text-text-3" />}
-								options={toOptions}
-								emptyLabel="Add another wallet"
-								className="mt-2"
-								{...field} />
-						)} />
+						render={({ field }) => {
+							const selected = toOptions.find((option) => option.id === field.value);
+
+							return (
+							<WalletSelect>
+								<WalletSelect.Trigger className="mt-2">
+									<ToIcon className="flex-none text-text-3" />
+									<WalletSelect.Value placeholder={!selected}>
+										{selected ? selected.name : 'Select wallet'}
+									</WalletSelect.Value>
+									{selected ? (
+										<WalletSelect.Currency>
+											{selected.currency}
+										</WalletSelect.Currency>
+									) : null}
+									<WalletSelect.Caret />
+								</WalletSelect.Trigger>
+								<WalletSelect.Options>
+									{toOptions.length === 0 ? (
+										<WalletSelect.Empty>
+											Add another wallet
+										</WalletSelect.Empty>
+									) : (
+										toOptions.map((option) => (
+											<WalletSelect.Option
+												key={option.id}
+												onSelect={() => { field.onChange(option.id); }}
+											>
+												<WalletSelect.Swatch gradient={option.gradient} />
+												<WalletSelect.OptionName>
+													{option.name}
+												</WalletSelect.OptionName>
+												<WalletSelect.Currency size="10.5">
+													{option.currency}
+												</WalletSelect.Currency>
+												{option.id === field.value ? <WalletSelect.Selected /> : null}
+											</WalletSelect.Option>
+										))
+									)}
+								</WalletSelect.Options>
+							</WalletSelect>
+							);
+						}} />
 				</HideOnFormValue>
 				<ShowOnFormValue valueKey='type' showOn={['transfer']} control={form.control}>
 					<UiFormField
@@ -109,28 +191,48 @@ const QuickAddForm: FC<QuickAddFormProps> = ({ wallets }) => {
 						control={form.control}
 						name="amount"
 						render={({ field }) => (
-							<EntryAmountField
-								type={type}
-								currency={fromCurrency}
-								label="Send"
-								className="mt-2"
-								{...field}
-								onChange={handleSentChange}
-							/>
+							<div className="mt-2">
+								<EntryAmountField>
+									<EntryAmountField.Label>
+										Send
+									</EntryAmountField.Label>
+									<EntryAmountField.Box>
+										<EntryAmountField.Glyph type={type} />
+										<EntryAmountField.Symbol type={type}>
+											{currencySymbol(fromCurrency)}
+										</EntryAmountField.Symbol>
+										<EntryAmountField.Input
+											type={type}
+											value={field.value}
+											onChange={handleSentChange}
+										/>
+									</EntryAmountField.Box>
+								</EntryAmountField>
+							</div>
 						)} />
 					<UiFormField
 						disabled={loading}
 						control={form.control}
 						name="receiveAmount"
 						render={({ field }) => (
-							<EntryAmountField
-								type={type}
-								currency={toCurrency}
-								label="Receive"
-								className="mt-2"
-								{...field}
-								onChange={handleReceivedChange}
-							/>
+							<div className="mt-2">
+								<EntryAmountField>
+									<EntryAmountField.Label>
+										Receive
+									</EntryAmountField.Label>
+									<EntryAmountField.Box>
+										<EntryAmountField.Glyph type={type} />
+										<EntryAmountField.Symbol type={type}>
+											{currencySymbol(toCurrency)}
+										</EntryAmountField.Symbol>
+										<EntryAmountField.Input
+											type={type}
+											value={field.value}
+											onChange={handleReceivedChange}
+										/>
+									</EntryAmountField.Box>
+								</EntryAmountField>
+							</div>
 						)} />
 				</ShowOnFormValue>
 				<HideOnFormValue valueKey='type' hideOn={['transfer']} control={form.control}>

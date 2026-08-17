@@ -1,17 +1,17 @@
 import { useMemo } from "react";
 import { useConvertMoney } from "@feature/localization";
 
-import type { CashFlowInsight } from "../metrics-api/types.ts";
+import type { CashFlow } from "@entity/metrics";
 
 
 const useConvertedCashFlow = (
-	cashFlow: CashFlowInsight
+	cashFlow: CashFlow
 ) => {
 	const { convert } = useConvertMoney();
 	
 	return useMemo(() => ({
-		convertedInflow: convert(cashFlow.in),
-		convertedOutflow: convert(cashFlow.out),
+		convertedInflow: convert(cashFlow.inflow),
+		convertedOutflow: convert(cashFlow.outflow),
 	}), [cashFlow, convert]);
 }
 

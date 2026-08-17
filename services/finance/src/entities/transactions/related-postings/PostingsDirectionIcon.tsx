@@ -26,4 +26,7 @@ const PostingsDirectionIcon: FC<PostingsDirectionIconProps> = ({
 	);
 }
 
+PostingsDirectionIcon.displayName = 'PostingsDirectionIcon';
+
 export { PostingsDirectionIcon };
+export type { PostingsDirectionIconProps };

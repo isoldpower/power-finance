@@ -1,5 +1,7 @@
-import type {FC, ReactNode} from "react";
 import { Text } from "@shared/pure-components/typography";
+
+import type { FC, ReactNode } from "react";
+
 
 interface PreferencesModalBoxProps {
 	children: ReactNode;

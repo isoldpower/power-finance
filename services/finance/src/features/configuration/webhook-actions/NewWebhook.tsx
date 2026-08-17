@@ -1,16 +1,16 @@
-import { FormEvent, ReactNode, useCallback } from "react";
+import { useCallback } from "react";
+import type { FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
 
-import { useWebhooksListMethods } from "../data-presenters";
-import type { CreateWebhookResponse } from "../webhooks-api/methods/create-webhook.ts";
+import { useCreateWebhook } from "../data-presenters";
+import type { WebhookEndpointSecret } from "@entity/configuration";
 import type { WebhookSchema } from "./schemas.ts";
-import type { WebhookValuableFields } from "../webhooks-api/types.ts";
 
 
 interface NewWebhookProps {
 	handleSubmit: UseFormHandleSubmit<WebhookSchema>;
-	onBeforeCreate?: (data: WebhookSchema) => void;
-	onSuccess?: (result: CreateWebhookResponse) => void;
+	onBeforeCreate?: () => void;
+	onSuccess?: (webhook: WebhookEndpointSecret) => void;
 	children?: ReactNode;
 }
 
@@ -20,18 +20,18 @@ function NewWebhook({
 	children,
 	onBeforeCreate
 }: NewWebhookProps) {
-	const { createWebhook } = useWebhooksListMethods();
+	const createWebhook = useCreateWebhook();
 
 	const onSubmit = useCallback(async (data: WebhookSchema) => {
-		const { title, url } = data;
-		const webhookData = {
-			url,
-			title,
-		} satisfies WebhookValuableFields;
+		if (onBeforeCreate) onBeforeCreate();
 
-		if (onBeforeCreate) onBeforeCreate(webhookData);
-		const createResponse = await createWebhook(webhookData);
-		if (onSuccess) onSuccess(createResponse);
+		const created = await createWebhook.mutateAsync({
+			title: data.title,
+			url: data.url,
+			enabled: true,
+		});
+
+		if (onSuccess) onSuccess(created.webhook);
 	}, [createWebhook, onBeforeCreate, onSuccess]);
 
 	const handleSubmitForm = useCallback((

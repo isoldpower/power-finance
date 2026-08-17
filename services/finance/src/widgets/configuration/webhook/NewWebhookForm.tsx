@@ -5,17 +5,16 @@ import { InputField } from "@shared/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
-	CreateWebhookResponse,
 	NewWebhook,
 	useNewDefaultValues,
 	webhookSchema,
 	type WebhookSchema
 } from "@feature/configuration";
-import { WebhookEndpoint } from "@entity/configuration";
+import type { WebhookEndpointSecret } from "@entity/configuration";
 
 
 interface NewWebhookModalProps {
-	onWebhookCreated?: (data: WebhookEndpoint) => void;
+	onWebhookCreated?: (data: WebhookEndpointSecret) => void;
 }
 
 const NewWebhookForm: FC<NewWebhookModalProps> = ({
@@ -29,9 +28,9 @@ const NewWebhookForm: FC<NewWebhookModalProps> = ({
 		defaultValues: defaults
 	});
 	
-	const handleOnSuccess = useCallback((response: CreateWebhookResponse) => {
+	const handleOnSuccess = useCallback((webhook: WebhookEndpointSecret) => {
 		if(onWebhookCreated) {
-			onWebhookCreated(response);
+			onWebhookCreated(webhook);
 		}
 		
 		form.reset();

@@ -1,11 +1,12 @@
 import { useCallback } from "react";
 
 import { useCreateAutomation } from "../data-presenters";
+import { ruleFormToDraft } from "./rule-form-draft.ts";
 
 import type { FC, FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
+import type { Automation } from "@entity/assistance";
 import type { RuleFormSchema } from "./rule-form-schema.ts";
-import type { AutomationCreateResponse } from "../assistance-api/automations";
 
 
 interface RuleFormOnSubmitProps {
@@ -13,7 +14,7 @@ interface RuleFormOnSubmitProps {
 	children?: ReactNode;
 	className?: string;
 	onBeforeSubmit?: () => void;
-	onSuccess?: (result: AutomationCreateResponse) => void;
+	onSuccess?: (automation: Automation) => void;
 	onError?: (error: unknown) => void;
 }
 
@@ -31,8 +32,8 @@ const RuleFormOnSubmit: FC<RuleFormOnSubmitProps> = ({
 		if (onBeforeSubmit) onBeforeSubmit();
 
 		try {
-			const payload = await createAutomation.mutateAsync(data);
-			if (onSuccess) onSuccess(payload);
+			const payload = await createAutomation.mutateAsync(ruleFormToDraft(data));
+			if (onSuccess) onSuccess(payload.automation);
 		} catch (error: unknown) {
 			console.error(error);
 			if (onError) onError(error);

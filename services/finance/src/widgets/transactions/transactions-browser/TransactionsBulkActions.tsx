@@ -2,6 +2,7 @@ import { useShallow } from "zustand/react/shallow";
 
 import { BulkActionsBar } from "@entity/transactions";
 import { useTransactionsSelection } from "@feature/transactions";
+import { SpaceOccupant } from "@shared/pure-components/layout";
 
 import type { FC } from "react";
 
@@ -19,7 +20,24 @@ const TransactionsBulkActions: FC = () => {
 	}
 
 	return (
-		<BulkActionsBar count={checkedTransactionIds.length} onClear={clearChecked} />
+		<BulkActionsBar>
+			<BulkActionsBar.Count>
+				{checkedTransactionIds.length} selected
+			</BulkActionsBar.Count>
+			<BulkActionsBar.Action>
+				Recategorize
+			</BulkActionsBar.Action>
+			<BulkActionsBar.Action>
+				Change wallet
+			</BulkActionsBar.Action>
+			<BulkActionsBar.Action tone="danger">
+				Delete
+			</BulkActionsBar.Action>
+			<SpaceOccupant />
+			<BulkActionsBar.Clear onClick={clearChecked}>
+				Clear
+			</BulkActionsBar.Clear>
+		</BulkActionsBar>
 	);
 };
 

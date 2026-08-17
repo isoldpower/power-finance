@@ -5,4 +5,9 @@ export const CACHE_KEYS = {
 	delete: 'deleteWebhook',
 	update: 'updateWebhook',
 	rotate: 'rotateWebhookSecret',
+	eventTypes: 'webhook-event-types',
+	subscriptions: 'webhook-subscriptions',
+	subscribe: 'subscribeWebhook',
+	unsubscribe: 'unsubscribeWebhook',
+	deliveries: 'webhook-deliveries',
 } as const;

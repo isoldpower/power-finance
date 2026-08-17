@@ -1,20 +1,28 @@
-import type { WebhookEndpoint } from "@entity/configuration";
-import type { IWebhookRESTApiClient, WebhookPostRequest } from "../rest-client";
-import { webhookWithSecretResponseToFlat } from "../mutators/api-to-flat.ts";
-
+import { webhookDraftToApi, webhookSecretFromApi } from "../mutators";
+import type { WebhookDraft, WebhookEndpointSecret } from "@entity/configuration";
+import type { IWebhookRESTApiClient } from "../rest-client";
 
 interface CreateWebhookRequest {
-	handler: Pick<IWebhookRESTApiClient, 'post'>
-	payload: WebhookPostRequest
+	handler: Pick<IWebhookRESTApiClient, 'post'>;
+	draft: WebhookDraft;
+	idempotencyKey?: string;
 }
 
-type CreateWebhookResponse = WebhookEndpoint & object;
+interface CreateWebhookResponse {
+	webhook: WebhookEndpointSecret;
+	replayed: boolean;
+}
 
-async function createWebhookEndpoint(
-	request: CreateWebhookRequest
-): Promise<CreateWebhookResponse> {
-	return request.handler.post(request.payload)
-		.then(webhookWithSecretResponseToFlat)
+async function createWebhookEndpoint(request: CreateWebhookRequest): Promise<CreateWebhookResponse> {
+	const response = await request.handler.post({
+		data: webhookDraftToApi(request.draft),
+		idempotencyKey: request.idempotencyKey,
+	});
+
+	return {
+		webhook: webhookSecretFromApi(response.data),
+		replayed: response.meta.idempotent_replay ?? false,
+	};
 }
 
 export { createWebhookEndpoint };

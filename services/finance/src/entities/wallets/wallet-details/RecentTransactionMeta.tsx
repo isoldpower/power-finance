@@ -1,5 +1,7 @@
-import type { FC } from "react";
 import { Caption, RowTitle } from "@shared/pure-components/typography";
+
+import type { FC } from "react";
+
 
 interface RecentTransactionMetaProps {
 	description: string;
@@ -22,4 +24,7 @@ const RecentTransactionMeta: FC<RecentTransactionMetaProps> = ({
 	</div>
 );
 
+RecentTransactionMeta.displayName = 'RecentTransactionMeta';
+
 export { RecentTransactionMeta };
+export type { RecentTransactionMetaProps };

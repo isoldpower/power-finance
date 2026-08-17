@@ -1,75 +1,59 @@
-import type { WalletType, WalletGoalMeta } from "@entity/wallets";
+import type { TransactionDto } from "@feature/transactions/transactions-api";
+import type { MoneyDto, PageParams, ResourceTimestamps, SearchOrder, SearchPayload } from "@shared/api";
 
-interface WalletValuableFields {
-	name: string
-	color: string
-	balance: {
-		amount: number
-		currency: string
-	}
-	credit: boolean
-	type?: WalletType
-	goal?: WalletGoalMeta
-}
-
-interface WalletMeta {
-	created_at: string
-	updated_at: string
-	id: string
-}
-
-interface WalletStats {
-	transaction_count: number
-	last_activity_at: string | null
-}
-
-interface WalletPreview {
-	id: string
-	name: string
-	color: string
-	balance: {
-		amount: number
-		currency: string
-	}
-	credit: boolean
-	type?: WalletType
-	goal?: WalletGoalMeta
-}
-
-interface WalletDetailed extends WalletPreview {
-	meta: WalletMeta
-	stats: WalletStats
-}
-
-type WalletMinimalPayload = WalletValuableFields;
-
-interface WalletSearchLeaf {
-	field_name: string;
-	operator: string;
-	value: string;
-}
-
-type WalletSearchNode = WalletSearchLeaf | WalletSearchRoot;
-
-type WalletSearchRoot =
-	| { AND: WalletSearchNode[]; OR?: never }
-	| { OR: WalletSearchNode[]; AND?: never };
-
-interface GoalCreatePayload {
+interface WalletDto extends ResourceTimestamps {
+	id: string;
 	name: string;
-	targetAmount: number;
-	monthlyAmount: number;
-	icon?: string;
+	category: string;
+	currency: string;
+	money: MoneyDto;
+	zero_balance: MoneyDto;
+	favorite: boolean;
+	color: string;
+}
+
+interface WalletFlowsDto {
+	inflow: MoneyDto;
+	outflow: MoneyDto;
+}
+
+interface WalletDetailDto extends WalletDto {
+	last_month: WalletFlowsDto;
+	recent: TransactionDto[];
+}
+
+interface WalletCreateBody {
+	name: string;
+	color: string;
+	opening_balance: string;
+	zero_balance: string;
+	currency: string;
+	category: string;
+}
+
+interface WalletPatchBody {
+	name?: string;
+	favorite?: boolean;
+	category?: string;
+	zero_balance?: string;
 	color?: string;
 }
 
-export type { WalletPreview, WalletDetailed, WalletMeta, WalletStats, WalletValuableFields, WalletMinimalPayload, WalletSearchRoot, WalletSearchNode, WalletSearchLeaf };
-export type { GoalCreatePayload };
+type WalletSearchField = 'name' | 'currency' | 'balance' | 'created_at';
 
-interface WalletKindDto {
-	id: string;
-	label: string;
-	credit: boolean;
+type WalletSearchBody = SearchPayload<WalletSearchField>;
+
+interface WalletSearchParams extends PageParams {
+	order?: SearchOrder;
 }
 
-export type { WalletKindDto };
+export type {
+	WalletCreateBody,
+	WalletDetailDto,
+	WalletDto,
+	WalletFlowsDto,
+	WalletPatchBody,
+	WalletSearchBody,
+	WalletSearchField,
+	WalletSearchParams,
+};

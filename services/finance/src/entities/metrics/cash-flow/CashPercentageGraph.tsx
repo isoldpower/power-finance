@@ -2,6 +2,7 @@ import {cn} from "@internal/ui-library";
 
 import type { ComponentProps } from "react";
 
+
 type CashPercentageGraphProps = ComponentProps<"div"> & {
 	percentage: number;
 	isPositive?: boolean;
@@ -22,6 +23,8 @@ const CashPercentageGraph = ({
 		/>
 	);
 }
+
+CashPercentageGraph.displayName = 'CashPercentageGraph';
 
 export { CashPercentageGraph };
 export type { CashPercentageGraphProps };

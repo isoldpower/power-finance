@@ -1,37 +1,47 @@
-import { useQuery } from "@tanstack/react-query";
-import { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-
-import { listWebhooks } from "../webhooks-api/methods/list-webhooks.ts";
-import { useApiContext } from "@app/api";
-import { CACHE_KEYS } from "./cache-config.ts";
 import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
+
+import { useApiContext } from "@app/api";
+import { listWebhooks } from "../webhooks-api";
+import { CACHE_KEYS } from "./cache-config.ts";
+import type { PageParams } from "@shared/api";
 import type { WebhookEndpoint } from "@entity/configuration";
-import type { ListWebhooksResponse } from "../webhooks-api/methods/list-webhooks.ts";
+import type { ListWebhooksResponse } from "../webhooks-api";
 
+type UseWebhooksListOptions = Omit<UseQueryOptions<ListWebhooksResponse>, 'queryKey' | 'queryFn'>;
 
-type UseWebhooksListOptions = Omit<UseQueryOptions<ListWebhooksResponse>, 'queryKey' | 'queryFn'> & {};
-
-type UseWebhooksListReturn = UseQueryResult & {
+type UseWebhooksListReturn = UseQueryResult<ListWebhooksResponse> & {
 	webhooks: WebhookEndpoint[];
-}
+	total: number;
+	nextCursor: string | null;
+	prevCursor: string | null;
+};
+
+const EMPTY_WEBHOOKS: WebhookEndpoint[] = [];
 
 const useWebhooksList = (
+	page?: PageParams,
 	options?: UseWebhooksListOptions
-): UseWebhooksListReturn  => {
+): UseWebhooksListReturn => {
 	const apiContext = useApiContext();
-	const query = useQuery<ListWebhooksResponse>({
-		queryKey: [CACHE_KEYS.list],
+	const webhooksQuery = useQuery<ListWebhooksResponse>({
+		queryKey: [CACHE_KEYS.list, page?.limit ?? 'default', page?.cursor ?? 'first'],
 		queryFn: () => listWebhooks({
-			handler: apiContext.webhookServers.rest
+			handler: apiContext.webhookServers.rest,
+			page,
 		}),
-		...options ?? {}
+		...options ?? {},
 	});
 
 	return useMemo(() => ({
-		...query,
-		webhooks: query.data?.data ?? []
-	}), [query]);
-}
+		...webhooksQuery,
+		webhooks: webhooksQuery.data?.page.items ?? EMPTY_WEBHOOKS,
+		total: webhooksQuery.data?.page.total ?? 0,
+		nextCursor: webhooksQuery.data?.page.nextCursor ?? null,
+		prevCursor: webhooksQuery.data?.page.prevCursor ?? null,
+	}), [webhooksQuery]);
+};
 
 export { useWebhooksList };
-export type { UseWebhooksListReturn, UseWebhooksListOptions };
+export type { UseWebhooksListOptions, UseWebhooksListReturn };

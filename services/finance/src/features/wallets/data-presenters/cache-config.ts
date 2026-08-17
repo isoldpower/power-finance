@@ -3,14 +3,14 @@ export const WALLETS_CACHE_KEYS = {
 	fetch: 'wallet',
 	delete: 'deleteWallet',
 	update: 'updateWallet',
-	replace: 'replaceWallet',
 	create: 'createWallet',
 	search: 'searchWallet',
-	kinds: 'walletKinds',
 };
 
 export const GOALS_CACHE_KEYS = {
-	wallets: 'goals',
+	list: 'goals',
+	fetch: 'goal',
 	create: 'createGoal',
+	update: 'updateGoal',
 	delete: 'deleteGoal',
 };

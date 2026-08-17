@@ -1,27 +1,22 @@
-import { useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
-import { CurrencyCombobox } from "@widget/localization";
-import { BalanceLockedNotice, WalletPreviewCard, WalletTypeSelector } from "@entity/wallets";
-import { WalletFormOnSubmit, useWalletFormInitials, useWalletFormState, useWalletKinds, walletFormSchema } from "@feature/wallets";
+import { WalletLockedField, WalletPreviewCard } from "@entity/wallets";
+import { WalletFormOnSubmit, useWalletFormInitials, useWalletFormState, walletFormSchema } from "@feature/wallets";
 import { FieldLabel, PanelFooter } from "@shared/forms";
+import { useLocaleCurrency } from "@shared/formatting";
 
 import type { FC } from "react";
 import type { WalletFormSchema } from "@feature/wallets";
 import type { PanelWallet } from "@entity/wallets";
-import type { CurrencyMeta } from "@entity/localization";
 
 
 interface EditWalletFormProps {
 	wallet: PanelWallet;
-	currencies: CurrencyMeta[];
 	onClose: () => void;
 }
 
-const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, currencies, onClose }) => {
-	const { kinds } = useWalletKinds();
-	const kindLabels = useMemo(() => kinds.map((kind) => kind.label), [kinds]);
+const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, onClose }) => {
 	const defaultValues = useWalletFormInitials(wallet);
 	const form = useForm<WalletFormSchema>({
 		defaultValues,
@@ -30,7 +25,8 @@ const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, currencies, onClose }
 	});
 	
 	const { loading, canSubmit, methods } = useWalletFormState(form);
-	const { name, type, currency } = useWatch({ control: form.control });
+	const format = useLocaleCurrency();
+	const { name, category } = useWatch({ control: form.control });
 	
 	return (
 		<UiForm {...form}>
@@ -43,12 +39,19 @@ const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, currencies, onClose }
 				onError={methods.handleFailedLoading}
 			>
 				<div className="flex-1 overflow-auto p-5">
-					<WalletPreviewCard 
-						gradient={wallet.gradient}
-						type={type ?? ''}
-						currency={currency ?? ''}
-						name={name ?? ''}
-					/>
+					<WalletPreviewCard gradient={wallet.gradient}>
+						<WalletPreviewCard.Header>
+							<WalletPreviewCard.Type>
+								{category ?? ''}
+							</WalletPreviewCard.Type>
+							<WalletPreviewCard.Currency>
+								{wallet.currency}
+							</WalletPreviewCard.Currency>
+						</WalletPreviewCard.Header>
+						<WalletPreviewCard.Name>
+							{(name ?? '') || 'Wallet name'}
+						</WalletPreviewCard.Name>
+					</WalletPreviewCard>
 					<FieldLabel>Wallet name</FieldLabel>
 					<UiFormField
 						disabled={loading}
@@ -57,28 +60,40 @@ const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, currencies, onClose }
 						render={({ field }) => (
 							<FinanceInput placeholder="e.g. Travel Card" className="mb-4" {...field} />
 						)} />
-					<FieldLabel>Type</FieldLabel>
+					<FieldLabel>Category</FieldLabel>
 					<UiFormField
 						disabled={loading}
 						control={form.control}
-						name="type"
+						name="category"
 						render={({ field }) => (
-							<WalletTypeSelector options={kindLabels} className="mb-4" {...field} />
+							<FinanceInput placeholder="e.g. Savings" className="mb-4" {...field} />
 						)} />
-					<FieldLabel>Currency</FieldLabel>
-					<UiFormField
-						disabled={loading}
-						control={form.control}
-						name="currency"
-						render={({ field }) => (
-							<CurrencyCombobox
-								currencies={currencies}
-								value={field.value}
-								onSelected={field.onChange}
-								className="mb-4"
-							/>
-						)} />
-					<BalanceLockedNotice />
+					<div className="mb-4">
+						<FieldLabel>Currency</FieldLabel>
+						<WalletLockedField>
+							<WalletLockedField.Icon />
+							<WalletLockedField.Body>
+								<WalletLockedField.Code>
+									{wallet.currency}
+								</WalletLockedField.Code>
+								<WalletLockedField.Hint>
+									Fixed at creation
+								</WalletLockedField.Hint>
+							</WalletLockedField.Body>
+						</WalletLockedField>
+					</div>
+					<FieldLabel>Balance</FieldLabel>
+					<WalletLockedField>
+						<WalletLockedField.Icon />
+						<WalletLockedField.Body>
+							<WalletLockedField.Value tone={wallet.balance.amount < 0 ? 'neg' : 'neutral'}>
+								{format(wallet.balance.amount, wallet.balance.currency)}
+							</WalletLockedField.Value>
+							<WalletLockedField.Hint>
+								Posted automatically from transactions
+							</WalletLockedField.Hint>
+						</WalletLockedField.Body>
+					</WalletLockedField>
 				</div>
 				<PanelFooter
 					submitType="submit"

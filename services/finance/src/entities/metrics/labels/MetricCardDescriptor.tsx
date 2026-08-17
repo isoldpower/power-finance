@@ -1,8 +1,11 @@
-import type { BaseHTMLAttributes, FC } from "react";
 import { Caption } from "@shared/pure-components/typography";
 
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 
-const MetricCardDescriptor: FC<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>> = ({
+
+type MetricCardDescriptorProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+
+const MetricCardDescriptor: FC<MetricCardDescriptorProps> = ({
 	children,
 	...props
 }) => (
@@ -11,4 +14,7 @@ const MetricCardDescriptor: FC<Omit<BaseHTMLAttributes<HTMLDivElement>, 'classNa
 	</Caption>
 );
 
+MetricCardDescriptor.displayName = 'MetricCardDescriptor';
+
 export { MetricCardDescriptor };
+export type { MetricCardDescriptorProps };

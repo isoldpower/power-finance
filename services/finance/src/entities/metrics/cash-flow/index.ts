@@ -1,5 +1,5 @@
-export { CashFlowBalanceSkeleton } from './CashFlowBalanceSkeleton.tsx';
-export { CashFlowGraphSkeleton } from './CashFlowGraphSkeleton.tsx';
-export { CashFlowNetSkeleton } from './CashFlowNetSkeleton.tsx';
+export { CashFlowSkeleton } from './CashFlowSkeleton.tsx';
 export { CashPercentageGraph } from './CashPercentageGraph.tsx';
 
+export type { CashFlowSkeletonProps } from './CashFlowSkeleton.tsx';
+export type { CashPercentageGraphProps } from './CashPercentageGraph.tsx';

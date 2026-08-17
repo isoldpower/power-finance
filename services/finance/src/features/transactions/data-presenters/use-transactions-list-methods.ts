@@ -1,55 +1,40 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
-import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
+import type { UseMutationResult } from "@tanstack/react-query";
 
 import { useApiContext, DERIVED_KEYS } from "@app/api";
-import { createTransaction as createTransactionApi } from "../transactions-api/methods/create-transaction.ts";
-import { createTransactionChain as createTransactionChainApi } from "../transactions-api/methods/create-transaction-chain.ts";
-import { listAllTransactions as listAllTransactionsApi } from "../transactions-api/methods/list-all-transactions.ts";
+import {
+	createTransaction as createTransactionApi,
+	createTransactionChain as createTransactionChainApi,
+} from "../transactions-api";
 import { CACHE_KEYS } from "./config.ts";
-import type { CreateTransactionRequest, CreateTransactionResponse } from "../transactions-api/methods/create-transaction.ts";
-import type { CreateTransactionChainResponse } from "../transactions-api/methods/create-transaction-chain.ts";
-import type { TransactionMinimalPayload, TransactionChainPayload } from "../transactions-api/types.ts";
-import type { ListAllTransactionsResponse } from "../transactions-api/methods/list-all-transactions.ts";
-
+import type { TransactionChainDraft, TransactionDraft } from "@entity/transactions";
+import type { CreateTransactionChainResponse, CreateTransactionResponse } from "../transactions-api";
 
 interface UseTransactionsReturn {
 	meta: {
-		query: UseQueryResult<ListAllTransactionsResponse>;
-		createMutation: UseMutationResult<CreateTransactionResponse, Error, CreateTransactionRequest['payload']>;
-		chainMutation: UseMutationResult<CreateTransactionChainResponse, Error, TransactionChainPayload>;
+		createMutation: UseMutationResult<CreateTransactionResponse, Error, TransactionDraft>;
+		chainMutation: UseMutationResult<CreateTransactionChainResponse, Error, TransactionChainDraft>;
 	}
-	createTransaction: (data: TransactionMinimalPayload) => Promise<CreateTransactionResponse>;
-	createTransactionChain: (data: TransactionChainPayload) => Promise<CreateTransactionChainResponse>;
-	fetchAllTransactions: () => Promise<ListAllTransactionsResponse | undefined>;
+	createTransaction: (draft: TransactionDraft) => Promise<CreateTransactionResponse>;
+	createTransactionChain: (draft: TransactionChainDraft) => Promise<CreateTransactionChainResponse>;
 }
 
 const useTransactionsListMethods = (): UseTransactionsReturn => {
 	const apiContext = useApiContext();
 	const client = useQueryClient();
 
-	const query = useQuery({
-		queryKey: [CACHE_KEYS.list],
-		refetchOnMount: false,
-		refetchOnWindowFocus: false,
-		refetchOnReconnect: false,
-		queryFn: () => listAllTransactionsApi({
-			handler: apiContext.transactionServers.rest
-		})
-	});
-
 	const settleLedger = useCallback(() => {
-		query.refetch().catch((err: unknown) => {
-			console.error(err)
-		});
+		void client.invalidateQueries({ queryKey: [CACHE_KEYS.list] });
+		void client.invalidateQueries({ queryKey: [CACHE_KEYS.search] });
 		for (const key of DERIVED_KEYS.onLedgerChange) {
 			void client.invalidateQueries({ queryKey: [key] });
 		}
-	}, [query, client]);
+	}, [client]);
 
 	const createMutation = useMutation({
-		mutationFn: (data: CreateTransactionRequest['payload']) => createTransactionApi({
-			payload: data,
+		mutationFn: (draft: TransactionDraft) => createTransactionApi({
+			draft,
 			handler: apiContext.transactionServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.create],
@@ -57,8 +42,8 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 	});
 
 	const chainMutation = useMutation({
-		mutationFn: (data: TransactionChainPayload) => createTransactionChainApi({
-			payload: { data },
+		mutationFn: (draft: TransactionChainDraft) => createTransactionChainApi({
+			draft,
 			handler: apiContext.transactionServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.chain],
@@ -66,35 +51,28 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 	});
 
 	const createTransaction = useCallback((
-		data: TransactionMinimalPayload
+		draft: TransactionDraft
 	): Promise<CreateTransactionResponse> => {
-		return createMutation.mutateAsync({ data });
+		return createMutation.mutateAsync(draft);
 	}, [createMutation]);
 
 	const createTransactionChain = useCallback((
-		data: TransactionChainPayload
+		draft: TransactionChainDraft
 	): Promise<CreateTransactionChainResponse> => {
-		return chainMutation.mutateAsync(data);
+		return chainMutation.mutateAsync(draft);
 	}, [chainMutation]);
-
-	const fetchAllTransactions = useCallback(() => {
-		return query.refetch()
-			.then((response) => response.data);
-	}, [query]);
 
 	const meta = useMemo(() => ({
 		createMutation,
 		chainMutation,
-		query
-	}), [createMutation, chainMutation, query]);
+	}), [createMutation, chainMutation]);
 
 	return useMemo(() => ({
 		createTransaction,
 		createTransactionChain,
-		fetchAllTransactions,
 		meta
-	}), [meta, createTransaction, createTransactionChain, fetchAllTransactions]);
-}
+	}), [meta, createTransaction, createTransactionChain]);
+};
 
 export { useTransactionsListMethods };
 export type { UseTransactionsReturn };

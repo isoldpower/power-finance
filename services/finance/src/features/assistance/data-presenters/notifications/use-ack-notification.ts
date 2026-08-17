@@ -1,39 +1,25 @@
-import { useApiContext } from "@app/api";
-import { useResourceMutation } from "@shared/data";
-import { ackNotification } from "../../assistance-api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { useApiContext, DERIVED_KEYS } from "@app/api";
+import { ackNotification } from "../../notifications-api";
 import { NOTIFICATIONS_CACHE_KEYS } from "../cache-config.ts";
 
-import type { NotificationAckResponse, ListNotificationsResponse } from "../../assistance-api";
-
-
-interface AckNotificationVariables {
-	ack: boolean;
-}
-
-const useAckNotification = (id: string) => {
+const useAckNotification = () => {
 	const apiContext = useApiContext();
+	const queryClient = useQueryClient();
 
-	return useResourceMutation<AckNotificationVariables, NotificationAckResponse, ListNotificationsResponse>({
-		key: [NOTIFICATIONS_CACHE_KEYS.ack],
-		mutate: ({ ack }) => ackNotification({ 
+	return useMutation({
+		mutationKey: [NOTIFICATIONS_CACHE_KEYS.ack],
+		mutationFn: (id: string) => ackNotification({
 			handler: apiContext.notificationServers.rest,
 			id,
-			ack,
 		}),
-		invalidates: [[NOTIFICATIONS_CACHE_KEYS.count]],
-		optimistic: {
-			key: [NOTIFICATIONS_CACHE_KEYS.list],
-			apply: (previous, { ack }) => previous
-				? {
-					...previous,
-					data: previous.data.map((notification) => notification.id === id
-						? { ...notification, ack }
-						: notification),
-				}
-				: previous,
+		onSettled: () => {
+			for (const key of DERIVED_KEYS.onNotificationChange) {
+				void queryClient.invalidateQueries({ queryKey: [key] });
+			}
 		},
 	});
 };
 
 export { useAckNotification };
-export type { AckNotificationVariables };

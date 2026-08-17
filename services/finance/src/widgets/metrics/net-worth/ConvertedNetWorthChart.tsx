@@ -1,10 +1,5 @@
 import { useMemo } from "react";
-import {
-	NetWorthActivePoint,
-	NetWorthSparkline,
-	NetWorthSparklineTip,
-	NetWorthTooltip,
-} from "@entity/metrics";
+import { NetWorthGraph } from "@entity/metrics";
 import {
 	buildSparkline,
 	useSparklineHover,
@@ -15,11 +10,11 @@ import {
 import { relativeAgo } from "@shared/formatting";
 
 import type { FC } from "react";
-import type { NetWorthInsight } from "@feature/metrics";
+import type { NetWorth } from "@entity/metrics";
 
 
 interface NetWorthChartProps {
-	netWorth: NetWorthInsight
+	netWorth: NetWorth
 }
 
 const ConvertedNetWorthChart: FC<NetWorthChartProps> = ({ netWorth }) => {
@@ -36,17 +31,16 @@ const ConvertedNetWorthChart: FC<NetWorthChartProps> = ({ netWorth }) => {
 	});
 
 	return (
-		<div
+		<NetWorthGraph
 			ref={sparklineHover.ref}
-			className="relative mt-3.5 h-[92px] cursor-crosshair"
 			onMouseMove={sparklineHover.onMove}
 			onMouseLeave={sparklineHover.onLeave}
 		>
-			<NetWorthSparkline stroke={sparklineData.stroke} fill={sparklineData.fill} />
-			<NetWorthSparklineTip lastY={sparklineData.lastY} active={sparklineHover.active} />
-			<NetWorthActivePoint active={sparklineHover.active} />
+			<NetWorthGraph.Sparkline stroke={sparklineData.stroke} fill={sparklineData.fill} />
+			<NetWorthGraph.Tip lastY={sparklineData.lastY} active={sparklineHover.active} />
+			<NetWorthGraph.ActivePoint active={sparklineHover.active} />
 			{sparklineHover.active && sparklineHover.tip ? (
-				<NetWorthTooltip
+				<NetWorthGraph.Tooltip
 					{...sparklineHover.tip}
 					onLeft={sparklineHover.tip.onLeft}
 					valueFormatted={formatValue(sparklineHover.active)}
@@ -56,7 +50,7 @@ const ConvertedNetWorthChart: FC<NetWorthChartProps> = ({ netWorth }) => {
 					ago={relativeAgo(sparklineHover.active.date)}
 				/>
 			) : null}
-		</div>
+		</NetWorthGraph>
 	);
 };
 

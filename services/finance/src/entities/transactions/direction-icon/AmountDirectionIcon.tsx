@@ -1,21 +1,16 @@
-import { ExpenseIcon, IncomeIcon } from "@shared/pure-components/icons";
+import { resolveDirectionIcon } from "../visual-map";
 
-import type { TransactionDirection } from "../types.ts";
-import type { FC, FunctionComponent } from "react";
-import type { AmountDirectionIconProps } from "@shared/pure-components/icons";
+import type { FC } from "react";
+import type { AmountDirectionIconProps as DirectionGlyphProps } from "@shared/pure-components/icons";
+import type { TransactionType } from "../types.ts";
 
 
-const ICON_BY_DIRECTION: Record<TransactionDirection, FunctionComponent<AmountDirectionIconProps>> = {
-	in: IncomeIcon,
-	out: ExpenseIcon,
-};
-
-interface DirectionIconProps extends AmountDirectionIconProps {
-	direction: TransactionDirection;
+interface AmountDirectionIconProps extends DirectionGlyphProps {
+	type: TransactionType;
 }
 
-const AmountDirectionIcon: FC<DirectionIconProps> = ({ direction, ...iconProps }) => {
-	const IconElement = ICON_BY_DIRECTION[direction];
+const AmountDirectionIcon: FC<AmountDirectionIconProps> = ({ type, ...iconProps }) => {
+	const IconElement = resolveDirectionIcon(type);
 
 	return (
 		<IconElement {...iconProps} />
@@ -25,4 +20,4 @@ const AmountDirectionIcon: FC<DirectionIconProps> = ({ direction, ...iconProps }
 AmountDirectionIcon.displayName = 'AmountDirectionIcon';
 
 export { AmountDirectionIcon };
-export type { DirectionIconProps };
+export type { AmountDirectionIconProps };

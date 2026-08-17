@@ -1,19 +1,21 @@
-// @reserved-api - wired to the API and intentionally not consumed yet; awaiting post-MVP flows. NOT dead code: do not delete, do not drop from barrels.
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
-import { fetchTransaction } from "@feature/transactions";
+import { fetchTransaction } from "../transactions-api";
 import { useApiContext } from "@app/api";
 import { CACHE_KEYS } from "./config.ts";
-import type { TransactionDto } from "@entity/transactions";
-import type { FetchTransactionResponse } from "@feature/transactions";
+import type { TransactionDetails, TransactionPosting } from "@entity/transactions";
+import type { FetchTransactionResponse } from "../transactions-api";
 
-type UseTransactionOptions = Omit<UseQueryOptions<FetchTransactionResponse>, 'queryKey' | 'queryFn'> & {};
+type UseTransactionOptions = Omit<UseQueryOptions<FetchTransactionResponse>, 'queryKey' | 'queryFn'> & object;
 
 type UseTransactionReturn = UseQueryResult<FetchTransactionResponse> & {
-	transaction: TransactionDto | undefined;
-}
+	transaction: TransactionDetails | undefined;
+	postings: TransactionPosting[];
+};
+
+const EMPTY_POSTINGS: TransactionPosting[] = [];
 
 const useTransaction = (
 	id: string,
@@ -23,17 +25,18 @@ const useTransaction = (
 	const query = useQuery<FetchTransactionResponse>({
 		queryKey: [CACHE_KEYS.fetch, id],
 		queryFn: () => fetchTransaction({
-			payload: { id },
-			handler: apiContext.transactionServers.rest
+			id,
+			handler: apiContext.transactionServers.rest,
 		}),
 		...options ?? {}
 	});
 
 	return useMemo<UseTransactionReturn>(() => ({
 		...query,
-		transaction: query.data
+		transaction: query.data?.transaction,
+		postings: query.data?.postings.items ?? EMPTY_POSTINGS,
 	}), [query]);
-}
+};
 
 export { useTransaction };
 export type { UseTransactionReturn, UseTransactionOptions };

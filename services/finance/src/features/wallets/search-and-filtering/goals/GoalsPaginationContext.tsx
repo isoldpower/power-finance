@@ -1,7 +1,7 @@
 import { createContext, use, useCallback, useMemo, useState } from "react";
 
 import type { FC, ReactNode } from "react";
-import type { GoalWallet } from "@entity/wallets";
+import type { Goal } from "@entity/wallets";
 
 
 interface GoalsPaginationContextType {
@@ -13,7 +13,7 @@ interface GoalsPaginationContextType {
 	pageCount: number;
 	scrollForward: () => void;
 	scrollBackward: () => void;
-	paginatedGoals: GoalWallet[];
+	paginatedGoals: Goal[];
 }
 
 const GoalsPaginationContext = createContext<GoalsPaginationContextType | null>(null);
@@ -22,7 +22,7 @@ interface GoalsPaginationContextProviderProps {
 	children: ReactNode;
 	pageSize: number;
 	total: number;
-	goals: GoalWallet[];
+	goals: Goal[];
 }
 
 const GoalsPaginationContextProvider: FC<GoalsPaginationContextProviderProps> = ({

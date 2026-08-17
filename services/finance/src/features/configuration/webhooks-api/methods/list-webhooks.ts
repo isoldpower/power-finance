@@ -1,29 +1,25 @@
+import { pageFromMeta } from "@shared/api";
+import { webhookFromApi } from "../mutators";
+import type { Page, PageParams } from "@shared/api";
 import type { WebhookEndpoint } from "@entity/configuration";
 import type { IWebhookRESTApiClient } from "../rest-client";
-import { webhookPreviewResponseToFlat } from "../mutators/api-to-flat.ts";
-
 
 interface ListWebhooksRequest {
 	handler: Pick<IWebhookRESTApiClient, 'list'>;
+	enabled?: boolean;
+	page?: PageParams;
 }
 
 interface ListWebhooksResponse {
-	data: WebhookEndpoint[];
-	meta: {
-		limit: number
-		offset: number
-		total: number
-	}
+	page: Page<WebhookEndpoint>;
 }
 
-async function listWebhooks(
-	request: ListWebhooksRequest
-): Promise<ListWebhooksResponse> {
-	return request.handler.list({ params: {} })
-		.then((response) => ({
-			...response,
-			data: response.data.map(webhookPreviewResponseToFlat),
-		}))
+async function listWebhooks(request: ListWebhooksRequest): Promise<ListWebhooksResponse> {
+	const response = await request.handler.list({
+		params: { ...(request.enabled === undefined ? {} : { enabled: request.enabled }), ...request.page },
+	});
+
+	return { page: pageFromMeta(response.data.map(webhookFromApi), response.meta) };
 }
 
 export { listWebhooks };

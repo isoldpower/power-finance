@@ -2,12 +2,11 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
-import { scanReceipt } from "../transactions-api/methods/scan-receipt.ts";
-import { receiptScanFromApi } from "../transactions-api/mutators/api-to-domain.ts";
+import { scanReceipt } from "../transactions-api";
 import { useApiContext } from "@app/api";
 import { CACHE_KEYS } from "./config.ts";
 import type { ReceiptScan } from "@entity/transactions";
-import type { ScanReceiptResponse } from "../transactions-api/methods/scan-receipt.ts";
+import type { ScanReceiptResponse } from "../transactions-api";
 
 
 type UseReceiptScanOptions = Omit<
@@ -33,9 +32,7 @@ const useReceiptScan = (
 		...options ?? {}
 	});
 
-	const scan = useMemo(() => {
-		return query.data ? receiptScanFromApi(query.data) : null;
-	}, [query.data]);
+	const scan = useMemo(() => query.data ?? null, [query.data]);
 
 	return { ...query, scan };
 };

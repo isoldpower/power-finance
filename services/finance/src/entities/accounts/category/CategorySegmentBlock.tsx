@@ -1,5 +1,6 @@
-import type { FC, MouseEvent } from "react";
 import { cn } from "@internal/ui-library";
+
+import type { FC, MouseEvent } from "react";
 
 
 interface CategorySegmentBlockProps {

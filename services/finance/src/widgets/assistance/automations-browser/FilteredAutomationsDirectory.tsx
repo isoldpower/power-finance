@@ -7,11 +7,11 @@ import {
 } from "@feature/assistance";
 
 import type { FC, ReactNode } from "react";
-import type { AutomationRule } from "@feature/assistance";
+import type { Automation } from "@entity/assistance";
 
 
 interface FilteredAutomationsDirectoryProps {
-	children: (rule: AutomationRule, index: number) => ReactNode;
+	children: (rule: Automation, index: number) => ReactNode;
 }
 
 const FilteredAutomationsDirectory: FC<FilteredAutomationsDirectoryProps> = ({ children }) => {

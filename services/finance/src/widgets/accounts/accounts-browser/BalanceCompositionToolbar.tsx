@@ -6,7 +6,7 @@ import type { FC } from "react";
 
 const BalanceCompositionToolbar: FC = () => {
 	return (
-		<BalanceComposition.Container>
+		<BalanceComposition>
 			<CardTitle>
 				Balance composition
 			</CardTitle>
@@ -17,7 +17,7 @@ const BalanceCompositionToolbar: FC = () => {
 			<BalanceComposition.Hint>
 				select a category to drill in
 			</BalanceComposition.Hint>
-		</BalanceComposition.Container>
+		</BalanceComposition>
 	);
 };
 

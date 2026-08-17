@@ -1,16 +1,16 @@
-import type { LedgerBalance } from "@feature/metrics";
+import type { BalanceMetrics } from "@entity/metrics";
 import { FinanceBadge } from "@internal/ui-library";
 
 import type { FC } from "react";
 import { BalanceBadgeFx } from "@feature/metrics";
 
 
-interface LedgerBalanceBadgeProps {
-	ledger: LedgerBalance | undefined;
+interface BalanceMetricsBadgeProps {
+	ledger: BalanceMetrics | undefined;
 	isPending: boolean;
 }
 
-const LedgerBalanceBadge: FC<LedgerBalanceBadgeProps> = ({
+const BalanceMetricsBadge: FC<BalanceMetricsBadgeProps> = ({
 	isPending,
 	ledger,
 }) => {
@@ -23,4 +23,4 @@ const LedgerBalanceBadge: FC<LedgerBalanceBadgeProps> = ({
 	);
 }
 
-export { LedgerBalanceBadge };
+export { BalanceMetricsBadge };

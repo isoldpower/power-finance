@@ -1,5 +1,7 @@
+export { convertCurrency } from './convert-currency.ts';
 export { getRates } from './get-rates.ts';
-export { getCurrencies } from './get-currencies.ts';
+export { listCurrencies } from './list-currencies.ts';
 
+export type { ConvertCurrencyRequest, ConvertCurrencyResponse } from './convert-currency.ts';
 export type { GetRatesRequest, GetRatesResponse } from './get-rates.ts';
-export type { GetCurrenciesRequest, GetCurrenciesResponse } from './get-currencies.ts';
+export type { ListCurrenciesRequest, ListCurrenciesResponse } from './list-currencies.ts';

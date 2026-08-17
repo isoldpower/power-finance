@@ -1,22 +1,25 @@
 import { useMemo } from "react";
 
+import { automationSummary } from "@entity/assistance";
 import { useAutomations } from "../data-presenters";
 
+import type { Automation } from "@entity/assistance";
 import type { AutomationsBrowseSetup } from "./types.ts";
-import type { AutomationRule } from "../assistance-api/automations";
 
 
-function matchesSearch(rule: AutomationRule, search: string): boolean {
+function matchesSearch(rule: Automation, search: string): boolean {
 	if (search === '') {
 		return true;
 	}
 
+	const summary = automationSummary(rule);
+
 	return rule.name.toLowerCase().includes(search)
-		|| rule.trigger.toLowerCase().includes(search)
-		|| rule.action.toLowerCase().includes(search);
+		|| summary.when.toLowerCase().includes(search)
+		|| summary.then.toLowerCase().includes(search);
 }
 
-function matchesStatus(rule: AutomationRule, statusFilter: string): boolean {
+function matchesStatus(rule: Automation, statusFilter: string): boolean {
 	if (statusFilter === 'all') {
 		return true;
 	}

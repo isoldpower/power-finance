@@ -11,10 +11,8 @@ import { CurrencySelector, LocaleCombobox } from "@widget/localization";
 import { NavigateToSettings } from "@feature/navigation";
 import { UserAvatar } from "@entity/navigation";
 import {
-	PopoverSettingHeading,
-	PopoverSettingRow,
-	PopoverSettingsContainer,
 	PopoverBottom,
+	PopoverSettings,
 } from "@entity/configuration";
 import { Caption, CardTitle } from "@shared/pure-components/typography";
 
@@ -50,16 +48,16 @@ const NavbarAccountMenu: FC = () => {
 						</Caption>
 					</div>
 				</div>
-				<PopoverSettingsContainer>
-					<PopoverSettingRow>
-						<PopoverSettingHeading>Main currency</PopoverSettingHeading>
+				<PopoverSettings>
+					<PopoverSettings.Row>
+						<PopoverSettings.Heading>Main currency</PopoverSettings.Heading>
 						<CurrencySelector variant="field" className="w-[200px]" />
-					</PopoverSettingRow>
-					<PopoverSettingRow>
-						<PopoverSettingHeading>Locale</PopoverSettingHeading>
+					</PopoverSettings.Row>
+					<PopoverSettings.Row>
+						<PopoverSettings.Heading>Locale</PopoverSettings.Heading>
 						<LocaleCombobox variant="field" className="w-[200px]"/>
-					</PopoverSettingRow>
-				</PopoverSettingsContainer>
+					</PopoverSettings.Row>
+				</PopoverSettings>
 				<PopoverBottom>
 					<NavigateToSettings className="w-full">
 						<FinanceMenuItem>

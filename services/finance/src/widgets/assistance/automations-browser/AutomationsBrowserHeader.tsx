@@ -12,14 +12,14 @@ interface AutomationsBrowserHeaderProps {
 
 const AutomationsBrowserHeader: FC<AutomationsBrowserHeaderProps> = ({ children }) => {
 	return (
-		<AutomationsToolbar.Container>
+		<AutomationsToolbar>
 			<CardTitle as="h2">
 				Automations &amp; rules
 			</CardTitle>
 			<AiBadge />
 			<SpaceOccupant />
 			{children}
-		</AutomationsToolbar.Container>
+		</AutomationsToolbar>
 	);
 }
 

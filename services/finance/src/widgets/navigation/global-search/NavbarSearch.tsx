@@ -26,7 +26,15 @@ const NavbarSearch: FC = () => {
 	return (
 		<>
 			<ShowOnDesktop>
-				<SearchTrigger onClick={onOpen} />
+				<SearchTrigger onClick={onOpen}>
+					<SearchTrigger.Icon />
+					<SearchTrigger.Label>
+						Search…
+					</SearchTrigger.Label>
+					<SearchTrigger.Shortcut>
+						⌘K
+					</SearchTrigger.Shortcut>
+				</SearchTrigger>
 			</ShowOnDesktop>
 			<ShowOnMobile>
 				<FinanceIconButton aria-label="Search" onClick={onOpen}>
@@ -51,21 +59,35 @@ const NavbarSearch: FC = () => {
 								No results found.
 							</UiCommandEmpty>
 							<UiCommandGroup heading="Pages">
-								{pageResults.map(({ key, ...pageResult }) => (
+								{pageResults.map((pageResult) => (
 									<SearchResult
+										key={pageResult.key}
+										search={pageResult.search}
 										onSelect={() => { select(pageResult.to); }}
-										key={key}
-										{...pageResult}
-									/>
+									>
+										<SearchResult.Label>
+											{pageResult.label}
+										</SearchResult.Label>
+										<SearchResult.Meta>
+											{pageResult.meta}
+										</SearchResult.Meta>
+									</SearchResult>
 								))}
 							</UiCommandGroup>
 							<UiCommandGroup heading="Wallets">
-								{walletResults.map(({ key, ...walletResult }) => (
+								{walletResults.map((walletResult) => (
 									<SearchResult
+										key={walletResult.key}
+										search={walletResult.search}
 										onSelect={() => { select(walletResult.to); }}
-										key={key}
-										{...walletResult}
-									/>
+									>
+										<SearchResult.Label>
+											{walletResult.label}
+										</SearchResult.Label>
+										<SearchResult.Meta>
+											{walletResult.meta}
+										</SearchResult.Meta>
+									</SearchResult>
 								))}
 							</UiCommandGroup>
 						</UiCommandList>

@@ -1,17 +1,15 @@
-
-import type { BaseHTMLAttributes, FC } from "react";
 import { Caption } from "@shared/pure-components/typography";
 
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 
-const AutomationsEmptyNotice: FC<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>> = ({
+
+type AutomationsEmptyNoticeProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+
+const AutomationsEmptyNotice: FC<AutomationsEmptyNoticeProps> = ({
 	children,
 	...props
 }) => (
-	<Caption
-			size="13"
-			className="px-[18px] py-6 text-center"
-			{...props}
-		>
+	<Caption size="13" className="px-[18px] py-6 text-center" {...props}>
 		{children}
 	</Caption>
 );
@@ -19,3 +17,4 @@ const AutomationsEmptyNotice: FC<Omit<BaseHTMLAttributes<HTMLDivElement>, 'class
 AutomationsEmptyNotice.displayName = 'AutomationsEmptyNotice';
 
 export { AutomationsEmptyNotice };
+export type { AutomationsEmptyNoticeProps };

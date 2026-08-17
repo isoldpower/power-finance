@@ -1,15 +1,13 @@
-// @reserved-api - wired to the API and intentionally not consumed yet; awaiting post-MVP flows. NOT dead code: do not delete, do not drop from barrels.
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { useApiContext } from "@app/api";
-import { updateAutomation } from "../../assistance-api/automations";
+import { useApiContext, DERIVED_KEYS } from "@app/api";
+import { updateAutomation } from "../../automations-api";
 import { AUTOMATIONS_CACHE_KEYS } from "../cache-config.ts";
-import type { AutomationUpdatePayload } from "../../assistance-api/automations";
+import type { AutomationPatch } from "@entity/assistance";
 
-
-interface UpdateAutomationVariables {
+interface UpdateAutomationInput {
 	id: string;
-	data: AutomationUpdatePayload;
+	patch: AutomationPatch;
 }
 
 const useUpdateAutomation = () => {
@@ -18,16 +16,18 @@ const useUpdateAutomation = () => {
 
 	return useMutation({
 		mutationKey: [AUTOMATIONS_CACHE_KEYS.update],
-		mutationFn: (variables: UpdateAutomationVariables) => updateAutomation({
+		mutationFn: (input: UpdateAutomationInput) => updateAutomation({
 			handler: apiContext.automationServers.rest,
-			id: variables.id,
-			data: variables.data,
+			id: input.id,
+			patch: input.patch,
 		}),
-		onSuccess: () => {
-			void queryClient.invalidateQueries({ queryKey: [AUTOMATIONS_CACHE_KEYS.list] });
+		onSettled: () => {
+			for (const key of DERIVED_KEYS.onAutomationChange) {
+				void queryClient.invalidateQueries({ queryKey: [key] });
+			}
 		},
 	});
 };
 
 export { useUpdateAutomation };
-export type { UpdateAutomationVariables };
+export type { UpdateAutomationInput };

@@ -1,15 +1,10 @@
-import { FinanceButton } from "@internal/ui-library";
-import { ActionsListFx, ResolveActionOnClick } from "@feature/assistance";
-import {
-	ActionKindIcon,
-	NeedsActionRow,
-	resolveSecondaryLabel,
-	resolvePrimaryLabel
-} from "@entity/assistance";
+import { ActionsListFx } from "@feature/assistance";
+import { ActionKindIcon, NeedsActionRow } from "@entity/assistance";
 import { RowTitle } from "@shared/pure-components/typography";
+import { ActionResolutions } from "./ActionResolutions.tsx";
 
 import type { FC } from "react";
-import type { Action } from "@feature/assistance";
+import type { Action } from "@entity/assistance";
 
 
 interface ActionsListWidgetProps {
@@ -25,9 +20,9 @@ const ActionsList: FC<ActionsListWidgetProps> = ({
 }) => {
 	return (
 		<ActionsListFx isPending={isPending} isError={isError} actions={actions}>
-			{(actions) => actions.map((action) => (
-				<NeedsActionRow.Container key={action.id}>
-					<NeedsActionRow.Icon iconType={action.kind}>
+			{(loaded) => loaded.map((action) => (
+				<NeedsActionRow key={action.id}>
+					<NeedsActionRow.Icon severity={action.severity}>
 						<ActionKindIcon kind={action.kind} />
 					</NeedsActionRow.Icon>
 					<div className="min-w-0 flex-1">
@@ -35,20 +30,11 @@ const ActionsList: FC<ActionsListWidgetProps> = ({
 							{action.title}
 						</RowTitle>
 						<NeedsActionRow.Subtitle>
-							{action.subtitle}
+							{action.body}
 						</NeedsActionRow.Subtitle>
 					</div>
-					<FinanceButton asChild variant="outline" size="sm" className="flex-none">
-						<ResolveActionOnClick actionId={action.id}>
-							{resolveSecondaryLabel(action.kind)}
-						</ResolveActionOnClick>
-					</FinanceButton>
-					<FinanceButton asChild size="sm" className="flex-none">
-						<ResolveActionOnClick actionId={action.id}>
-							{resolvePrimaryLabel(action.kind)}
-						</ResolveActionOnClick>
-					</FinanceButton>
-				</NeedsActionRow.Container>
+					<ActionResolutions actionId={action.id} resolutions={action.resolutions} />
+				</NeedsActionRow>
 			))}
 		</ActionsListFx>
 	);

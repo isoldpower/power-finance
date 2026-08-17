@@ -24,15 +24,16 @@ const WalletBalanceDetails: FC<WalletBalanceDetailsProps> = ({ wallet }) => {
 				<Overline size="10" tracking="0.1em">
 					Balance
 				</Overline>
-				<MoneyInOriginal
-					currency={wallet.balance.currency}
-					tone={wallet.balance.amount >= 0 ? 'neutral' : 'neg'}
-					size="xl"
-					align="start"
-					convert={convert}
-					format={format}
-				>
-					{wallet.balance.amount}
+				<MoneyInOriginal align="start">
+					<MoneyInOriginal.Amount
+						tone={wallet.balance.amount >= 0 ? 'neutral' : 'neg'}
+						size="xl"
+					>
+						{format(wallet.balance.amount, wallet.balance.currency)}
+					</MoneyInOriginal.Amount>
+					<MoneyInOriginal.Converted>
+						{convert(wallet.balance).formatted}
+					</MoneyInOriginal.Converted>
 				</MoneyInOriginal>
 			</div>
 			<div className="flex-1" />

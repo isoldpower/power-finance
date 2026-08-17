@@ -1,63 +1,119 @@
+import type { ApiEnvelope, CollectionResponse, EmbeddedMeta, MutationMeta, MutationResponse, PageParams } from "@shared/api";
 import type {
-	DeleteRequest, DeleteResponse, IDeleteHandler,
-	GetRequest, GetResponse, IGetHandler,
-	ListParams, ListRequest, ListResponse, IListHandler,
-	PatchRequest, PatchResponse, IPatchHandler,
-	PostRequest, PostResponse, IPostHandler
-} from "@internal/shared";
-import type { TransactionDetailed, TransactionPreview, TransactionMinimalPayload, TransactionPatchFields, TransactionChainPayload, TransactionChainResult , CategoryDto, ReceiptScanDto } from "../types.ts";
+	CategoryDto,
+	ReceiptScanDto,
+	TransactionChainBody,
+	TransactionChainDto,
+	TransactionCreateBody,
+	TransactionDetailDto,
+	TransactionDto,
+	TransactionPatchBody,
+	TransactionSearchBody,
+	TransactionSearchParams,
+} from "../types.ts";
 
-interface TransactionListParams extends ListParams {
-	wallet_id?: string
+interface TransactionListRequest {
+	params?: PageParams;
 }
 
-interface ITransactionsRESTApiClient extends
-	IGetHandler<object, TransactionDetailed>,
-	IPostHandler<TransactionMinimalPayload, TransactionDetailed>,
-	IListHandler<TransactionPreview, TransactionListParams>,
-	IPatchHandler<TransactionPatchFields, TransactionDetailed>,
-	IDeleteHandler
-{
-	chain: (request: TransactionChainRequest) => Promise<TransactionChainResponse>
-	listCategories: (request: TransactionCategoriesRequest) => Promise<TransactionCategoriesResponse>
-	scanReceipt: (request: TransactionScanRequest) => Promise<TransactionScanResponse>
+type TransactionListResponse = CollectionResponse<TransactionDto>;
+
+interface TransactionGetRequest {
+	id: string;
+	params?: PageParams;
 }
 
-interface TransactionCategoriesRequest { params: object }
-interface TransactionCategoriesResponse { data: CategoryDto[] }
+type TransactionGetResponse = ApiEnvelope<TransactionDetailDto, EmbeddedMeta<'postings'>>;
 
-interface TransactionScanRequest { params: { receiptId?: string } }
-type TransactionScanResponse = ReceiptScanDto;
+interface TransactionSearchRequest {
+	data: TransactionSearchBody;
+	params?: TransactionSearchParams;
+}
 
-type TransactionGetRequest = GetRequest<object>;
-type TransactionGetResponse = GetResponse<TransactionDetailed>;
+type TransactionSearchResponse = CollectionResponse<TransactionDto>;
 
-type TransactionPostRequest = PostRequest<TransactionMinimalPayload, object>;
-type TransactionPostResponse = PostResponse<TransactionDetailed>;
+interface TransactionPostRequest {
+	data: TransactionCreateBody;
+	idempotencyKey: string;
+}
 
-type TransactionListRequest = ListRequest<TransactionListParams>;
-type TransactionListResponse = ListResponse<TransactionPreview>;
+type TransactionPostResponse = MutationResponse<TransactionDto>;
 
-type TransactionPatchRequest = PatchRequest<TransactionPatchFields, object>;
-type TransactionPatchResponse = PatchResponse<TransactionDetailed>;
+interface TransactionPatchRequest {
+	id: string;
+	data: TransactionPatchBody;
+}
 
-type TransactionChainRequest = PostRequest<TransactionChainPayload, object>;
-type TransactionChainResponse = TransactionChainResult;
+type TransactionPatchResponse = MutationResponse<TransactionDto>;
 
-type TransactionDeleteRequest = DeleteRequest<object>;
-type TransactionDeleteResponse = DeleteResponse;
+interface TransactionDeleteRequest {
+	id: string;
+}
 
-export type { TransactionGetRequest, TransactionGetResponse };
-export type { TransactionPostRequest, TransactionPostResponse };
-export type { TransactionListRequest, TransactionListResponse, TransactionListParams };
-export type { TransactionPatchRequest, TransactionPatchResponse };
-export type { TransactionChainRequest, TransactionChainResponse };
-export type { TransactionDeleteRequest, TransactionDeleteResponse };
-export type { ITransactionsRESTApiClient };
+type TransactionDeleteResponse = MutationResponse<TransactionDto>;
+
+interface TransactionChainRequest {
+	data: TransactionChainBody;
+	idempotencyKey: string;
+}
+
+type TransactionChainResponse = ApiEnvelope<TransactionChainDto, MutationMeta & EmbeddedMeta<'transactions'>>;
+
+interface TransactionChainDeleteRequest {
+	chainId: string;
+}
+
+type TransactionChainDeleteResponse = ApiEnvelope<TransactionChainDto, EmbeddedMeta<'transactions'>>;
+
+interface TransactionCategoriesRequest {
+	params?: object;
+}
+
+interface TransactionCategoriesResponse {
+	data: CategoryDto[];
+}
+
+interface TransactionScanRequest {
+	params: { receiptId?: string };
+}
+
+interface TransactionScanResponse {
+	data: ReceiptScanDto;
+}
+
+interface ITransactionsRESTApiClient {
+	list: (request: TransactionListRequest) => Promise<TransactionListResponse>;
+	get: (request: TransactionGetRequest) => Promise<TransactionGetResponse>;
+	search: (request: TransactionSearchRequest) => Promise<TransactionSearchResponse>;
+	post: (request: TransactionPostRequest) => Promise<TransactionPostResponse>;
+	patch: (request: TransactionPatchRequest) => Promise<TransactionPatchResponse>;
+	delete: (request: TransactionDeleteRequest) => Promise<TransactionDeleteResponse>;
+	postChain: (request: TransactionChainRequest) => Promise<TransactionChainResponse>;
+	deleteChain: (request: TransactionChainDeleteRequest) => Promise<TransactionChainDeleteResponse>;
+	listCategories: (request: TransactionCategoriesRequest) => Promise<TransactionCategoriesResponse>;
+	scanReceipt: (request: TransactionScanRequest) => Promise<TransactionScanResponse>;
+}
 
 export type {
+	ITransactionsRESTApiClient,
 	TransactionCategoriesRequest,
 	TransactionCategoriesResponse,
+	TransactionChainDeleteRequest,
+	TransactionChainDeleteResponse,
+	TransactionChainRequest,
+	TransactionChainResponse,
+	TransactionDeleteRequest,
+	TransactionDeleteResponse,
+	TransactionGetRequest,
+	TransactionGetResponse,
+	TransactionListRequest,
+	TransactionListResponse,
+	TransactionPatchRequest,
+	TransactionPatchResponse,
+	TransactionPostRequest,
+	TransactionPostResponse,
 	TransactionScanRequest,
 	TransactionScanResponse,
+	TransactionSearchRequest,
+	TransactionSearchResponse,
 };

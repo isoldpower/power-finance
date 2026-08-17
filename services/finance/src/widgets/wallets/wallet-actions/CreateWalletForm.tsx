@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
@@ -6,9 +5,13 @@ import { CurrencyCombobox } from "@widget/localization";
 import {
 	NEW_WALLET_GRADIENT,
 	WalletPreviewCard,
-	WalletTypeSelector,
 } from "@entity/wallets";
-import { WalletFormOnSubmit, useWalletFormInitials, useWalletFormState, useWalletKinds, walletFormSchema } from "@feature/wallets";
+import {
+	WalletFormOnSubmit,
+	useWalletFormInitials,
+	useWalletFormState,
+	walletFormSchema
+} from "@feature/wallets";
 import { FieldLabel, PanelFooter } from "@shared/forms";
 
 import type { FC } from "react";
@@ -25,8 +28,6 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 	onClose,
 	currencies,
 }) => {
-	const { kinds } = useWalletKinds();
-	const kindLabels = useMemo(() => kinds.map((kind) => kind.label), [kinds]);
 	const defaultValues = useWalletFormInitials();
 	const form = useForm<WalletFormSchema>({
 		defaultValues,
@@ -35,7 +36,7 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 	});
 
 	const { loading, canSubmit, methods } = useWalletFormState(form);
-	const { name, type, currency } = useWatch({ control: form.control });
+	const { name, category, currency } = useWatch({ control: form.control });
 	
 	return (
 		<UiForm {...form}>
@@ -47,12 +48,19 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 				onError={methods.handleFailedLoading}
 			>
 				<div className="flex-1 overflow-auto p-5">
-					<WalletPreviewCard 
-						gradient={NEW_WALLET_GRADIENT}
-						type={type ?? ''}
-						currency={currency ?? ''}
-						name={name ?? ''}
-					/>
+					<WalletPreviewCard gradient={NEW_WALLET_GRADIENT}>
+						<WalletPreviewCard.Header>
+							<WalletPreviewCard.Type>
+								{category ?? ''}
+							</WalletPreviewCard.Type>
+							<WalletPreviewCard.Currency>
+								{currency ?? ''}
+							</WalletPreviewCard.Currency>
+						</WalletPreviewCard.Header>
+						<WalletPreviewCard.Name>
+							{(name ?? '') || 'Wallet name'}
+						</WalletPreviewCard.Name>
+					</WalletPreviewCard>
 					<FieldLabel>
 						Wallet name
 					</FieldLabel>
@@ -63,13 +71,13 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 						render={({ field }) => (
 							<FinanceInput placeholder="e.g. Travel Card" className="mb-4" {...field} />
 						)} />
-					<FieldLabel>Type</FieldLabel>
+					<FieldLabel>Category</FieldLabel>
 					<UiFormField
 						disabled={loading}
 						control={form.control}
-						name="type"
+						name="category"
 						render={({ field }) => (
-							<WalletTypeSelector options={kindLabels} className="mb-4" {...field} />
+							<FinanceInput placeholder="e.g. Savings" className="mb-4" {...field} />
 						)} />
 					<FieldLabel>
 						Currency

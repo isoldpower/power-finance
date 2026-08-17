@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-
-import { TransactionMockRESTApiClient } from "@feature/transactions";
-import type { ITransactionsRESTApiClient } from "@feature/transactions";
 import { useAxiosInstance } from "@internal/shared";
 
+import { TransactionMockRESTApiClient } from "@feature/transactions";
+import { API_BASE_PATH } from "../config.ts";
+import type { ITransactionsRESTApiClient } from "@feature/transactions";
 
 interface UseTransactionsApiResponse {
 	rest: ITransactionsRESTApiClient;
@@ -11,11 +11,11 @@ interface UseTransactionsApiResponse {
 
 function useTransactionsApi(baseUrl: string): UseTransactionsApiResponse {
 	const transactionsAxiosInstance = useAxiosInstance({
-		baseUrl: `${baseUrl}/transactions`
+		baseUrl: `${baseUrl}${API_BASE_PATH}/transactions`
 	});
 
 	const restTransactionsClient = useMemo<ITransactionsRESTApiClient>(() => {
-		return new TransactionMockRESTApiClient('transactions');
+		return new TransactionMockRESTApiClient();
 	}, [transactionsAxiosInstance]);
 
 	return useMemo(() => ({
@@ -24,3 +24,4 @@ function useTransactionsApi(baseUrl: string): UseTransactionsApiResponse {
 }
 
 export { useTransactionsApi };
+export type { UseTransactionsApiResponse };

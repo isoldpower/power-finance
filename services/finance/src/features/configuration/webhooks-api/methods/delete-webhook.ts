@@ -1,22 +1,18 @@
+import { webhookFromApi } from "../mutators";
+import type { WebhookEndpoint } from "@entity/configuration";
 import type { IWebhookRESTApiClient } from "../rest-client";
-import { deleteToFlat } from "../mutators/delete-to-flat.ts";
-
 
 interface DeleteWebhookRequest {
-	handler: Pick<IWebhookRESTApiClient, 'delete'>
-	id: string
+	handler: Pick<IWebhookRESTApiClient, 'delete'>;
+	id: string;
 }
 
-interface DeleteWebhookResponse {
-	message: string
-	id: string | null
-}
+type DeleteWebhookResponse = WebhookEndpoint;
 
-async function deleteWebhookEndpoint(
-	request: DeleteWebhookRequest
-): Promise<DeleteWebhookResponse> {
-	return request.handler.delete({ id: request.id })
-		.then(deleteToFlat);
+async function deleteWebhookEndpoint(request: DeleteWebhookRequest): Promise<DeleteWebhookResponse> {
+	const response = await request.handler.delete({ id: request.id });
+
+	return webhookFromApi(response.data);
 }
 
 export { deleteWebhookEndpoint };

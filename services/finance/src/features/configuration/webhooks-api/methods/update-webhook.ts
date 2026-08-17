@@ -1,20 +1,22 @@
-import type { WebhookEndpoint } from "@entity/configuration";
-import type { IWebhookRESTApiClient, WebhookUpdateRequest } from "../rest-client";
-import { webhookDetailedResponseToFlat } from "../mutators/api-to-flat.ts";
-
+import { webhookFromApi, webhookPatchToApi } from "../mutators";
+import type { WebhookEndpoint, WebhookPatch } from "@entity/configuration";
+import type { IWebhookRESTApiClient } from "../rest-client";
 
 interface UpdateWebhookRequest {
-	handler: Pick<IWebhookRESTApiClient, 'patch'>
-	payload: WebhookUpdateRequest
+	handler: Pick<IWebhookRESTApiClient, 'patch'>;
+	id: string;
+	patch: WebhookPatch;
 }
 
-type UpdateWebhookResponse = WebhookEndpoint & object;
+type UpdateWebhookResponse = WebhookEndpoint;
 
-async function updateWebhookEndpoint(
-	request: UpdateWebhookRequest
-): Promise<UpdateWebhookResponse> {
-	return request.handler.patch(request.payload)
-		.then(webhookDetailedResponseToFlat)
+async function updateWebhookEndpoint(request: UpdateWebhookRequest): Promise<UpdateWebhookResponse> {
+	const response = await request.handler.patch({
+		id: request.id,
+		data: webhookPatchToApi(request.patch),
+	});
+
+	return webhookFromApi(response.data);
 }
 
 export { updateWebhookEndpoint };

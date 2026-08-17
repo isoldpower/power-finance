@@ -10,10 +10,11 @@ import {
 } from "@internal/ui-library";
 
 import { SearchIcon } from "@shared/pure-components/icons";
-import { useWalletsFiltersContext } from "@feature/wallets";
-import { useCallback } from "react";
+import { toWalletCategoryOptions } from "@entity/wallets";
+import { useWalletsFiltersContext, useWalletsList } from "@feature/wallets";
+import { useCallback, useMemo } from "react";
 
-import { WALLET_SORT_OPTIONS, WALLET_TYPE_OPTIONS, fromSortKey, toSortKey } from "./config.ts";
+import { WALLET_SORT_OPTIONS, fromSortKey, toSortKey } from "./config.ts";
 
 import type { ChangeEvent } from "react";
 
@@ -26,6 +27,8 @@ const WalletBrowserFilters = () => {
 		sortBy, setSortBy,
 		sortDirection, setSortDirection,
 	} = useWalletsFiltersContext();
+	const { wallets } = useWalletsList();
+	const categoryOptions = useMemo(() => toWalletCategoryOptions(wallets), [wallets]);
 
 	const setSearchCallback = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		setSearch(event.target.value);
@@ -61,7 +64,7 @@ const WalletBrowserFilters = () => {
 						<FinanceSelectValue />
 					</FinanceSelectTrigger>
 					<FinanceSelectContent>
-						{WALLET_TYPE_OPTIONS.map((option) => (
+						{categoryOptions.map((option) => (
 							<FinanceSelectItem key={option.value} value={option.value}>
 								{option.label}
 							</FinanceSelectItem>

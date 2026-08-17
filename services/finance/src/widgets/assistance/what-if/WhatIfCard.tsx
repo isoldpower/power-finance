@@ -7,7 +7,7 @@ import type { FC } from "react";
 
 const WhatIfCard: FC = () => {
 	return (
-		<WhatIf.Container>
+		<WhatIf>
 			<WhatIf.Head>
 				<WhatIf.Icon />
 				<RowTitle as="h2" size="14.5">
@@ -33,7 +33,7 @@ const WhatIfCard: FC = () => {
 			<WhatIf.NotifyButton disabled={true}>
 				🔔 Notify me when it ships
 			</WhatIf.NotifyButton>
-		</WhatIf.Container>
+		</WhatIf>
 	);
 };
 

@@ -1,17 +1,13 @@
-export { listAllWallets } from './list-all-wallets.ts';
-export { deleteWallet } from './delete-wallet.ts';
 export { createWallet } from './create-wallet.ts';
+export { deleteWallet } from './delete-wallet.ts';
 export { fetchWallet } from './fetch-wallet.ts';
-export { updateWallet } from './update-wallet.ts';
-export { replaceWallet } from './replace-wallet.ts';
+export { listWallets } from './list-wallets.ts';
 export { searchWallets } from './search-wallets.ts';
+export { updateWallet } from './update-wallet.ts';
 
-export type { ListAllWalletsResponse, ListAllWalletsRequest } from './list-all-wallets.ts';
-export type { DeleteWalletResponse, DeleteWalletRequest } from './delete-wallet.ts';
-export type { CreateWalletResponse, CreateWalletRequest } from './create-wallet.ts';
-export type { FetchWalletResponse, FetchWalletRequest } from './fetch-wallet.ts';
-export type { UpdateWalletResponse, UpdateWalletRequest } from './update-wallet.ts';
-export type { ReplaceWalletResponse, ReplaceWalletRequest } from './replace-wallet.ts';
-export type { SearchWalletsResponse, SearchWalletsRequest } from './search-wallets.ts';
-export { listKinds } from './list-kinds.ts';
-export type { ListKindsRequest, ListKindsResponse } from './list-kinds.ts';
+export type { CreateWalletRequest, CreateWalletResponse } from './create-wallet.ts';
+export type { DeleteWalletRequest, DeleteWalletResponse } from './delete-wallet.ts';
+export type { FetchWalletRequest, FetchWalletResponse } from './fetch-wallet.ts';
+export type { ListWalletsRequest, ListWalletsResponse } from './list-wallets.ts';
+export type { SearchWalletsRequest, SearchWalletsResponse } from './search-wallets.ts';
+export type { UpdateWalletRequest, UpdateWalletResponse } from './update-wallet.ts';

@@ -14,3 +14,4 @@ const NotificationList: FC<NotificationListProps> = ({ children }) => (
 NotificationList.displayName = 'NotificationList';
 
 export { NotificationList };
+export type { NotificationListProps };

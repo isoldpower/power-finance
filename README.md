@@ -103,7 +103,7 @@ Finance TODO:
 - (DONE) decide on navigation (move to shared?);
 - (DONE) drop unused code;
 - (DONE) adjust according to Claude Design;
+- (DONE) implement better loading states;
 -----
-- implement better loading states;
 - review API data fetching (by-layer fetching patterns);
 - review each file manually one more time;

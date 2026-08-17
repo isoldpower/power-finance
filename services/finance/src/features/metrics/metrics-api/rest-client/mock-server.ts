@@ -1,169 +1,176 @@
-import type { IStorage } from "@internal/shared";
 import { LocalStorageMock } from "@internal/shared";
-
+import { delay, parseAmount, serializeAmount } from "@shared/api";
+import { CURRENCY_CATALOG } from "@feature/localization/currencies-api";
+import { TRANSACTIONS_STORAGE_KEY, walletDelta } from "@feature/transactions/transactions-api";
+import { WALLETS_STORAGE_KEY } from "@feature/wallets/wallets-api";
+import { GOALS_STORAGE_KEY } from "@feature/wallets/goals-api";
+import type { IStorage } from "@internal/shared";
+import type { MoneyDto } from "@shared/api";
+import type { StoredTransaction } from "@feature/transactions/transactions-api";
+import type { StoredWallet } from "@feature/wallets/wallets-api";
+import type { StoredGoal } from "@feature/wallets/goals-api";
+import type { NetDiffDirectionDto, NetWorthPointDto } from "../types.ts";
 import type {
-	ISummaryRESTApiClient,
-	InsightsGetRequest,
-	InsightsGetResponse,
-	LedgerBalanceGetResponse,
-	NetWorthInsight,
-	CashFlowInsight,
-	SeriesPoint,
-} from "../types.ts";
+	BalanceMetricsRequest, BalanceMetricsResponse,
+	CashFlowRequest, CashFlowResponse,
+	IMetricsRESTApiClient,
+	NetWorthRequest, NetWorthResponse,
+} from "./types.ts";
 
-const MOCK_DELAY_MS = 250;
+const PREFERRED_CURRENCY = 'USD';
+const DEFAULT_SERIES_POINTS = 10;
+const DEFAULT_WINDOW_DAYS = 30;
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
+const FLAT_THRESHOLD = 0.01;
 
-const delay = <T>(value: T): Promise<T> =>
-	new Promise((resolve) => setTimeout(() => { resolve(value); }, MOCK_DELAY_MS));
-
-// Mirrors the FX mock: units of currency per 1 USD.
-const USD_RATES: Record<string, number> = {
-	USD: 1,
-	EUR: 0.92,
-	GBP: 0.79,
-	JPY: 156,
-};
-
-const toUsd = (amount: number, currency: string): number => amount / (USD_RATES[currency] ?? 1);
-
-const round2 = (value: number): number => Math.round(value * 100) / 100;
-
-const RANGE_DAYS: Record<string, number> = {
-	'1W': 7,
-	'1M': 30,
-	'3M': 91,
-	'1Y': 365,
-};
-
-const DAY_MS = 24 * 60 * 60 * 1000;
-const SERIES_POINTS = 10;
-
-interface StoredWallet {
-	id: string;
-	balance: { amount: number; currency: string };
-	credit: boolean;
-}
-
-interface StoredTransaction {
-	id: string;
-	source_wallet_id: string;
-	amount: string;
-	created_at: string;
-}
-
-interface LedgerEntry {
+interface LedgerPoint {
 	time: number;
 	usd: number;
 }
 
-// Wallets + transactions are the source of truth; everything the dashboard shows is
-// derived from them so it stays in sync once those queries are re-fetched.
-class SummaryMockRESTApiClient implements ISummaryRESTApiClient {
+const usdRate = (currency: string): number => {
+	return CURRENCY_CATALOG.find((entry) => entry.code === currency)?.usdRate ?? 1;
+};
+
+const toUsd = (amount: number, currency: string): number => amount / usdRate(currency);
+
+const money = (amount: number): MoneyDto => ({
+	amount: serializeAmount(amount),
+	currency: PREFERRED_CURRENCY,
+});
+
+const direction = (current: number, start: number): NetDiffDirectionDto => {
+	if (Math.abs(current - start) < FLAT_THRESHOLD) return 'flat';
+
+	return current > start ? 'up' : 'down';
+};
+
+class MetricsMockRESTApiClient implements IMetricsRESTApiClient {
 	private readonly wallets: IStorage<StoredWallet>;
+	private readonly goals: IStorage<StoredGoal>;
 	private readonly transactions: IStorage<StoredTransaction>;
 
 	constructor() {
-		this.wallets = new LocalStorageMock<StoredWallet>('wallets');
-		this.transactions = new LocalStorageMock<StoredTransaction>('transactions');
+		this.wallets = new LocalStorageMock<StoredWallet>(WALLETS_STORAGE_KEY);
+		this.goals = new LocalStorageMock<StoredGoal>(GOALS_STORAGE_KEY);
+		this.transactions = new LocalStorageMock<StoredTransaction>(TRANSACTIONS_STORAGE_KEY);
 	}
 
-	// Sum of wallet opening balances, converted to USD — net worth before any transaction.
+	private settled(): StoredTransaction[] {
+		return this.transactions.list().filter((item) => item.deleted_at === null);
+	}
+
 	private baselineUsd(): number {
-		return this.wallets.list().reduce((sum, wallet) => sum + toUsd(wallet.balance.amount, wallet.balance.currency), 0);
+		return this.wallets.list()
+			.filter((wallet) => wallet.deleted_at === null)
+			.reduce((sum, wallet) => sum + toUsd(parseAmount(wallet.opening_balance), wallet.currency), 0);
 	}
 
-	// Each transaction's signed USD delta (in its wallet's currency), sorted by time.
-	private ledgerEntries(): LedgerEntry[] {
-		const currencyByWallet = new Map(this.wallets.list().map((wallet) => [wallet.id, wallet.balance.currency]));
-		return this.transactions.list()
-			.map((txn) => ({
-				time: new Date(txn.created_at).getTime(),
-				usd: toUsd(parseFloat(txn.amount) || 0, currencyByWallet.get(txn.source_wallet_id) ?? 'USD'),
+	private ledger(): LedgerPoint[] {
+		return this.settled()
+			.map((item) => ({
+				time: new Date(item.created_at).getTime(),
+				usd: toUsd(walletDelta(item), item.currency),
 			}))
-			.sort((a, b) => a.time - b.time);
+			.sort((left, right) => left.time - right.time);
 	}
 
-	// Live USD balance per wallet (opening + its transactions), for assets/liabilities.
-	private liveBalancesUsd(): number[] {
-		const entries = this.transactions.list();
-		return this.wallets.list().map((wallet) => {
-			const delta = entries.reduce(
-				(sum, txn) => txn.source_wallet_id === wallet.id ? sum + (parseFloat(txn.amount) || 0) : sum,
-				0
-			);
-			return toUsd(wallet.balance.amount + delta, wallet.balance.currency);
-		});
+	private holderBalancesUsd(): number[] {
+		const settled = this.settled();
+		const deltaFor = (holderId: string): number => settled
+			.filter((item) => item.wallet_id === holderId)
+			.reduce((sum, item) => sum + walletDelta(item), 0);
+
+		const wallets = this.wallets.list()
+			.filter((wallet) => wallet.deleted_at === null)
+			.map((wallet) => toUsd(parseAmount(wallet.opening_balance) + deltaFor(wallet.id), wallet.currency));
+		const goals = this.goals.list()
+			.filter((goal) => goal.deleted_at === null)
+			.map((goal) => toUsd(deltaFor(goal.id), goal.currency));
+
+		return [...wallets, ...goals];
 	}
 
-	private netWorthFor(range: string): NetWorthInsight {
+	public async balance(_payload: BalanceMetricsRequest): Promise<BalanceMetricsResponse> {
+		await delay();
+
+		const balances = this.holderBalancesUsd();
+		const assets = balances.reduce((sum, value) => (value > 0 ? sum + value : sum), 0);
+		const liabilities = balances.reduce((sum, value) => (value < 0 ? sum - value : sum), 0);
+
+		return {
+			data: {
+				assets: money(assets),
+				liabilities: money(liabilities),
+				equity: money(assets - liabilities),
+				balanced: true,
+				comments: null,
+			},
+			meta: { cached: false },
+		};
+	}
+
+	public async netWorth(payload: NetWorthRequest): Promise<NetWorthResponse> {
+		await delay();
+
+		const points = payload.params?.points ?? DEFAULT_SERIES_POINTS;
+		const since = payload.params?.since ?? null;
+		const ledger = this.ledger();
 		const baseline = this.baselineUsd();
-		const entries = this.ledgerEntries();
-		const totalDelta = entries.reduce((sum, entry) => sum + entry.usd, 0);
-		const current = baseline + totalDelta;
-
-		const days = RANGE_DAYS[range] ?? RANGE_DAYS['1M'];
+		const current = baseline + ledger.reduce((sum, entry) => sum + entry.usd, 0);
 		const now = Date.now();
-		const sumUpTo = (cutoff: number): number =>
-			baseline + entries.reduce((sum, entry) => entry.time <= cutoff ? sum + entry.usd : sum, 0);
+		const from = since ? new Date(since).getTime() : now - DEFAULT_WINDOW_DAYS * DAY_IN_MS;
+		const span = Math.max(now - from, DAY_IN_MS);
+		const valueAt = (cutoff: number): number => baseline
+			+ ledger.reduce((sum, entry) => (entry.time <= cutoff ? sum + entry.usd : sum), 0);
 
-		const series: SeriesPoint[] = Array.from({ length: SERIES_POINTS }, (_, index) => {
-			const progress = index / (SERIES_POINTS - 1);
-			const time = now - days * (1 - progress) * DAY_MS;
-			const value = index === SERIES_POINTS - 1 ? current : sumUpTo(time);
-			return { t: new Date(time).toISOString(), v: round2(value) };
+		const series: NetWorthPointDto[] = Array.from({ length: Math.max(points, 1) }, (_, index) => {
+			const progress = points > 1 ? index / (points - 1) : 1;
+			const time = from + span * progress;
+
+			return { timestamp: new Date(time).toISOString(), money: money(valueAt(time)) };
 		});
 
-		const start = series[0].v;
-		const pct = start !== 0 ? round2(((current - start) / Math.abs(start)) * 100) : 0;
+		const start = parseAmount(series[0].money.amount);
+		const percentage = start !== 0 ? Math.abs(((current - start) / Math.abs(start)) * 100) : 0;
 
 		return {
-			value: { amount: round2(current), currency: 'USD' },
-			change: { pct: Math.abs(pct), direction: current >= start ? 'up' : 'down' },
-			series,
+			data: {
+				money: money(current),
+				net_diff: {
+					percentage: Math.round(percentage * 100) / 100,
+					direction: direction(current, start),
+				},
+				series,
+			},
+			meta: { since, points, cached: false },
 		};
 	}
 
-	private cashFlowFor(range: string): CashFlowInsight {
-		const days = RANGE_DAYS[range] ?? RANGE_DAYS['1M'];
-		const cutoff = Date.now() - days * DAY_MS;
-		let income = 0;
-		let expenses = 0;
-		for (const entry of this.ledgerEntries()) {
-			if (entry.time < cutoff) continue;
-			if (entry.usd >= 0) income += entry.usd; else expenses += -entry.usd;
-		}
-		const net = income - expenses;
+	public async cashFlow(payload: CashFlowRequest): Promise<CashFlowResponse> {
+		await delay();
+
+		const since = payload.params?.since ?? null;
+		const cutoff = since ? new Date(since).getTime() : 0;
+		const within = this.settled().filter((item) => new Date(item.created_at).getTime() >= cutoff);
+		const sumOf = (type: StoredTransaction['type']): number => within
+			.filter((item) => item.type === type)
+			.reduce((sum, item) => sum + toUsd(parseAmount(item.amount), item.currency), 0);
+
+		const inflow = sumOf('income');
+		const outflow = sumOf('expense');
+		const net = inflow - outflow;
 
 		return {
-			in: { amount: round2(income), currency: 'USD' },
-			out: { amount: round2(expenses), currency: 'USD' },
-			net: { amount: round2(net), currency: 'USD' },
-			savingsRate: income > 0 ? net / income : 0,
-			range,
+			data: {
+				inflow: money(inflow),
+				outflow: money(outflow),
+				total_net: money(net),
+				savings_rate: inflow > 0 ? Math.round((net / inflow) * 10000) / 100 : 0,
+			},
+			meta: { since, cached: false },
 		};
-	}
-
-	public getInsights(request: InsightsGetRequest): Promise<InsightsGetResponse> {
-		const range = request.params.range ?? '1M';
-		const response: InsightsGetResponse = {};
-		if (request.params.metrics.includes('net_worth')) response.net_worth = this.netWorthFor(range);
-		if (request.params.metrics.includes('cash_flow')) response.cash_flow = this.cashFlowFor(range);
-
-		return delay(response);
-	}
-
-	public getLedgerBalance(): Promise<LedgerBalanceGetResponse> {
-		const balances = this.liveBalancesUsd();
-		const assets = balances.reduce((sum, value) => value > 0 ? sum + value : sum, 0);
-		const liabilities = balances.reduce((sum, value) => value < 0 ? sum - value : sum, 0);
-
-		return delay({
-			assets: { amount: round2(assets), currency: 'USD' },
-			liabilities: { amount: round2(liabilities), currency: 'USD' },
-			equity: { amount: round2(assets - liabilities), currency: 'USD' },
-			balanced: true,
-		});
 	}
 }
 
-export { SummaryMockRESTApiClient };
+export { MetricsMockRESTApiClient };

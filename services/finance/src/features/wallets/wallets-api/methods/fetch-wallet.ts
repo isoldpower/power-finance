@@ -1,18 +1,29 @@
-import type { Wallet } from "@entity/wallets";
+import { pageFromMeta } from "@shared/api";
+import { transactionFromApi } from "@feature/transactions/transactions-api";
+import { walletDetailsFromApi } from "../mutators";
+import type { Page, PageParams } from "@shared/api";
+import type { Transaction } from "@entity/transactions";
+import type { WalletDetails } from "@entity/wallets";
 import type { IWalletsRESTApiClient } from "../rest-client";
-import type { WalletGetRequest } from "../rest-client";
 
 interface FetchWalletRequest {
-	handler: Pick<IWalletsRESTApiClient, 'get'>
-	payload: WalletGetRequest
+	handler: Pick<IWalletsRESTApiClient, 'get'>;
+	id: string;
+	page?: PageParams;
 }
 
-type FetchWalletResponse = Wallet & object;
+interface FetchWalletResponse {
+	wallet: WalletDetails;
+	recent: Page<Transaction>;
+}
 
-async function fetchWallet(
-	request: FetchWalletRequest
-): Promise<FetchWalletResponse> {
-	return request.handler.get(request.payload);
+async function fetchWallet(request: FetchWalletRequest): Promise<FetchWalletResponse> {
+	const response = await request.handler.get({ id: request.id, params: request.page });
+
+	return {
+		wallet: walletDetailsFromApi(response.data),
+		recent: pageFromMeta(response.data.recent.map(transactionFromApi), response.meta.recent),
+	};
 }
 
 export { fetchWallet };

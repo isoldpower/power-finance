@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import {
@@ -9,6 +9,7 @@ import {
 	useTransactionsSelection,
 	ResetTransactionOnBrowse,
 } from "@feature/transactions";
+import { useOnValuesChange } from "@shared/data";
 
 import { TRANSACTIONS_PAGE_SIZE } from "./config.ts";
 
@@ -49,11 +50,29 @@ const TransactionBrowserInternalContext: FC<TransactionBrowserInternalContextPro
 			selectTransaction: state.selectTransaction,
 		}))
 	);
-	const { searchResults: { transactions, total } } = useTransactionsBrowser({
+	const [cursors, setCursors] = useState<(string | null)[]>([null]);
+
+	const resetToFirstPage = useCallback(() => { setCursors([null]); }, []);
+
+	useOnValuesChange(
+		[search, caseSensitive, walletFilter, categoryFilter, typeFilter, sortBy, sortDirection],
+		resetToFirstPage
+	);
+
+	const { searchResults: { transactions, total, nextCursor, prevCursor } } = useTransactionsBrowser({
 		search: { search, caseSensitive },
 		filters: { walletFilter, categoryFilter, typeFilter },
-		ordering: { field: sortBy, direction: sortDirection },
+		ordering: { direction: sortDirection },
+		page: { pageSize: TRANSACTIONS_PAGE_SIZE, cursor: cursors[cursors.length - 1] },
 	});
+
+	const handleNext = useCallback(() => {
+		if (nextCursor) setCursors((visited) => [...visited, nextCursor]);
+	}, [nextCursor]);
+
+	const handlePrev = useCallback(() => {
+		setCursors((visited) => visited.length > 1 ? visited.slice(0, -1) : visited);
+	}, []);
 
 	useEffect(() => {
 		if (!selectedTransactionId || transactions.length === 0) {
@@ -68,8 +87,13 @@ const TransactionBrowserInternalContext: FC<TransactionBrowserInternalContextPro
 	return (
 		<TransactionsPaginationContextProvider
 			pageSize={TRANSACTIONS_PAGE_SIZE}
+			pageNumber={cursors.length}
 			total={total}
 			transactions={transactions}
+			hasNext={nextCursor !== null}
+			hasPrev={prevCursor !== null && cursors.length > 1}
+			onNext={handleNext}
+			onPrev={handlePrev}
 		>
 			<ResetTransactionOnBrowse />
 			{children}

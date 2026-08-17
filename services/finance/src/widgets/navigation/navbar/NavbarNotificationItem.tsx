@@ -2,9 +2,11 @@ import { useCallback } from "react";
 import { FinanceNotification } from "@internal/ui-library";
 import { NotificationSeenToggle } from "@entity/assistance";
 import { useAckNotification } from "@feature/assistance";
+import { relativeAgo } from "@shared/formatting";
+import { NOTIFICATION_LEVEL } from "./config.ts";
 
 import type { FC } from "react";
-import type { Notification } from "@feature/assistance";
+import type { Notification } from "@entity/assistance";
 
 
 interface NavbarNotificationItemProps {
@@ -12,24 +14,25 @@ interface NavbarNotificationItemProps {
 }
 
 const NavbarNotificationItem: FC<NavbarNotificationItemProps> = ({ notification }) => {
-	const { mutate: ackNotification, isPending } = useAckNotification(notification.id);
-	
-	const handleToggleSeen = useCallback(() => {
-		ackNotification({ ack: !notification.ack });
-	}, [ackNotification, notification.ack]);
+	const { mutate: ackNotification, isPending } = useAckNotification();
+	const seen = notification.acknowledgedAt !== null;
+
+	const handleAcknowledge = useCallback(() => {
+		ackNotification(notification.id);
+	}, [ackNotification, notification.id]);
 
 	return (
 		<FinanceNotification
-			level={notification.level}
+			level={NOTIFICATION_LEVEL[notification.severity]}
 			title={notification.title}
 			subtitle={notification.body}
-			time={notification.time}
-			className={notification.ack ? 'opacity-60' : undefined}
+			time={relativeAgo(notification.createdAt)}
+			className={seen ? 'opacity-60' : undefined}
 			action={
 				<NotificationSeenToggle
-					seen={notification.ack}
+					seen={seen}
 					disabled={isPending}
-					onToggle={handleToggleSeen}
+					onAcknowledge={handleAcknowledge}
 				/>
 			}
 		/>

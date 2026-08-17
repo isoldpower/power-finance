@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useAmbientParticles } from "@shared/motion";
 
 import { PALETTE, PARTICLE_COUNT, MAX_ALPHA } from "./config.ts";
-import { BackgroundAurora, BackgroundDotGrid, ParticlesCanvas } from "@entity/navigation";
+import { Background } from "@entity/navigation";
 
 
 
@@ -17,15 +17,11 @@ const FinanceBackground: FC = () => {
 	});
 
 	return (
-		<div className='relative'>
-			<div className="pointer-events-none fixed inset-0 z-0">
-				<BackgroundDotGrid />
-			</div>
-			<div className="pointer-events-none fixed z-0">
-				<BackgroundAurora />
-			</div>
-			<ParticlesCanvas canvasRef={canvasRef} />
-		</div>
+		<Background>
+			<Background.DotGrid />
+			<Background.Aurora />
+			<Background.Particles canvasRef={canvasRef} />
+		</Background>
 	);
 };
 

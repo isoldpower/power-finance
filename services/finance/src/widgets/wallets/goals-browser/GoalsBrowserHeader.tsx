@@ -13,7 +13,7 @@ interface GoalsBrowserHeaderProps {
 
 const GoalsBrowserHeader: FC<GoalsBrowserHeaderProps> = ({ children }) => {
 	return (
-		<GoalsToolbar.Container>
+		<GoalsToolbar>
 			<CardTitle as="h2">
 				Long-term goals
 			</CardTitle>
@@ -22,7 +22,7 @@ const GoalsBrowserHeader: FC<GoalsBrowserHeaderProps> = ({ children }) => {
 			</FinanceBadge>
 			<SpaceOccupant />
 			{children}
-		</GoalsToolbar.Container>
+		</GoalsToolbar>
 	);
 }
 

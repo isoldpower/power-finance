@@ -4,13 +4,13 @@ import { AnimatedMoney } from "@entity/localization";
 import { CashFlowPeriod } from "@entity/metrics";
 
 import type { Period } from "@entity/metrics";
-import type { CashFlowInsight } from "@feature/metrics";
+import type { CashFlow } from "@entity/metrics";
 import { textClass } from "@shared/pure-components/typography";
 
 
 interface CashFlowNetProps {
 	period: Period;
-	cashFlow: CashFlowInsight;
+	cashFlow: CashFlow;
 }
 
 const CashFlowNet = ({
@@ -19,13 +19,13 @@ const CashFlowNet = ({
 }: CashFlowNetProps) => {
 	const { convert } = useConvertMoney();
 	const { cashNetAmount, cashNetCurrency } = useMemo(() => {
-		const converted = convert(cashFlow.net);
+		const converted = convert(cashFlow.totalNet);
 
 		return {
 			cashNetAmount: converted.amount,
 			cashNetCurrency: converted.currency,
 		};
-	}, [cashFlow.net, convert]);
+	}, [cashFlow.totalNet, convert]);
 
 	return (
 		<div className="mt-[18px] flex items-center justify-between border-t border-border pt-3.5">
@@ -33,7 +33,7 @@ const CashFlowNet = ({
 			<AnimatedMoney
 				amount={cashNetAmount}
 				currency={cashNetCurrency}
-				tone={cashFlow.net.amount >= 0 ? "pos" : "neg"}
+				tone={cashFlow.totalNet.amount >= 0 ? "pos" : "neg"}
 				size="lg"
 				className={textClass({ size: '20' })}
 			/>

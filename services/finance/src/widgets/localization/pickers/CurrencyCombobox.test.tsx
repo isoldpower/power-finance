@@ -4,9 +4,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { CurrencyCombobox } from './CurrencyCombobox.tsx';
 
 const CURRENCIES = [
-	{ code: 'USD', symbol: '$', name: 'US Dollar' },
-	{ code: 'EUR', symbol: '€', name: 'Euro' },
-	{ code: 'JPY', symbol: '¥', name: 'Yen' },
+	{ code: 'USD', symbol: '$', name: 'US Dollar', decimals: 2 },
+	{ code: 'EUR', symbol: '€', name: 'Euro', decimals: 2 },
+	{ code: 'JPY', symbol: '¥', name: 'Yen', decimals: 2 },
 ];
 
 // Radix positions its popover with APIs jsdom does not implement.

@@ -2,10 +2,10 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
-import { getCurrencies } from "../currencies-api/methods/get-currencies.ts";
+import { listCurrencies } from "../currencies-api";
 import { CURRENCY_CACHE_KEYS } from "./cache-config.ts";
 import type { CurrencyMeta } from "@entity/localization";
-import type { FxCurrency } from "../currencies-api/types.ts";
+import type { ListCurrenciesResponse } from "../currencies-api";
 
 const CATALOG_STALE_TIME = 24 * 60 * 60 * 1000;
 
@@ -17,23 +17,17 @@ interface UseCurrenciesReturn {
 	isError: boolean;
 }
 
-const toCurrencyMeta = (currency: FxCurrency): CurrencyMeta => ({
-	code: currency.code,
-	symbol: currency.symbol,
-	name: currency.name,
-});
-
 const useCurrencies = (): UseCurrenciesReturn => {
 	const apiContext = useApiContext();
 
-	const query = useQuery<FxCurrency[]>({
+	const query = useQuery<ListCurrenciesResponse>({
 		queryKey: [CURRENCY_CACHE_KEYS.currencies],
-		queryFn: () => getCurrencies({ handler: apiContext.fxServers.rest }),
+		queryFn: () => listCurrencies({ handler: apiContext.currencyServers.rest }),
 		staleTime: CATALOG_STALE_TIME,
 	});
 
 	return useMemo(() => {
-		const currencies = (query.data ?? []).map(toCurrencyMeta);
+		const currencies = query.data?.currencies ?? [];
 
 		return {
 			currencies,

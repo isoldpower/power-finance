@@ -1,12 +1,11 @@
-import type { AccountType, LedgerSide } from "../types.ts";
+import type { AccountGroup } from "../types.ts";
 
 
 interface AccountView {
 	id: string;
 	name: string;
-	kind: string;
+	group: AccountGroup;
 	balanceUsd: number;
-	accountType: AccountType;
 }
 
 interface AccountCategoryView {
@@ -21,7 +20,7 @@ interface AccountHistoryView {
 	icon: string;
 	description: string;
 	date: string;
-	side: LedgerSide;
+	debit: boolean;
 	amountUsd: number;
 }
 

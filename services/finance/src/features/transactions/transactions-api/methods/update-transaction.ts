@@ -1,21 +1,22 @@
-import { transactionDetailedResponseToFlat } from "../mutators/api-to-flat.ts";
-import type { TransactionDto } from "@entity/transactions";
+import { transactionFromApi, transactionPatchToApi } from "../mutators";
+import type { Transaction, TransactionPatch } from "@entity/transactions";
 import type { ITransactionsRESTApiClient } from "../rest-client";
-import type { TransactionPatchRequest } from "../rest-client";
-
 
 interface UpdateTransactionRequest {
-	handler: Pick<ITransactionsRESTApiClient, 'patch'>
-	payload: TransactionPatchRequest
+	handler: Pick<ITransactionsRESTApiClient, 'patch'>;
+	id: string;
+	patch: TransactionPatch;
 }
 
-type UpdateTransactionResponse = TransactionDto & {}
+type UpdateTransactionResponse = Transaction;
 
-async function updateTransaction(
-	request: UpdateTransactionRequest
-): Promise<UpdateTransactionResponse> {
-	return request.handler.patch(request.payload)
-		.then(transactionDetailedResponseToFlat);
+async function updateTransaction(request: UpdateTransactionRequest): Promise<UpdateTransactionResponse> {
+	const response = await request.handler.patch({
+		id: request.id,
+		data: transactionPatchToApi(request.patch),
+	});
+
+	return transactionFromApi(response.data);
 }
 
 export { updateTransaction };

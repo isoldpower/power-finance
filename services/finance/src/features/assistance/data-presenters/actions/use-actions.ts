@@ -1,45 +1,52 @@
-import type { UseQueryOptions } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
-import { useResourceQuery } from "@shared/data";
-import type { UseResourceQueryResult } from "@shared/data";
-import { listActions } from "../../assistance-api/actions";
+import { listActions } from "../../actions-api";
 import { ACTIONS_CACHE_KEYS } from "../cache-config.ts";
-import type { Action, ListActionsResponse } from "../../assistance-api/actions";
-
-
-interface UseActionsParams {
-	resolved?: boolean;
-	limit?: number;
-}
+import type { PageParams } from "@shared/api";
+import type { Action, ActionQuery } from "@entity/assistance";
+import type { ListActionsResponse } from "../../actions-api";
 
 type UseActionsOptions = Omit<UseQueryOptions<ListActionsResponse>, 'queryKey' | 'queryFn'>;
 
-type UseActionsReturn = UseResourceQueryResult<ListActionsResponse, Action[]> & {
+type UseActionsReturn = UseQueryResult<ListActionsResponse> & {
 	actions: Action[];
+	total: number;
 };
 
 const EMPTY_ACTIONS: Action[] = [];
 
 const useActions = (
-	params?: UseActionsParams,
+	query?: ActionQuery,
+	page?: PageParams,
 	options?: UseActionsOptions
 ): UseActionsReturn => {
 	const apiContext = useApiContext();
-	const query = useResourceQuery<ListActionsResponse, Action[]>({
-		key: [ACTIONS_CACHE_KEYS.list, params?.resolved ?? false, params?.limit ?? 'all'],
-		fetch: () => listActions({
+	const actionsQuery = useQuery<ListActionsResponse>({
+		queryKey: [
+			ACTIONS_CACHE_KEYS.list,
+			query?.status ?? 'pending',
+			query?.source ?? 'any',
+			query?.severity ?? 'any',
+			page?.limit ?? 'default',
+			page?.cursor ?? 'first',
+		],
+		queryFn: () => listActions({
 			handler: apiContext.actionServers.rest,
-			resolved: params?.resolved,
-			limit: params?.limit,
+			query,
+			page,
 		}),
-		select: (response) => response.data,
-		fallback: EMPTY_ACTIONS,
-		options,
+		...options ?? {},
 	});
 
-	return { ...query, actions: query.value };
+	return useMemo(() => ({
+		...actionsQuery,
+		actions: actionsQuery.data?.page.items ?? EMPTY_ACTIONS,
+		total: actionsQuery.data?.page.total ?? 0,
+	}), [actionsQuery]);
 };
 
 export { useActions };
-export type { UseActionsParams, UseActionsOptions, UseActionsReturn };
+export type { UseActionsOptions, UseActionsReturn };

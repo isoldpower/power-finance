@@ -1,44 +1,33 @@
-import type { FC, ReactNode } from "react";
-import {
-	cn,
-	FinanceMenu,
-	FinanceMenuTrigger,
-	FinanceMenuContent,
-	FinanceMenuItem,
-} from "@internal/ui-library";
-import { Caption, textClass } from "@shared/pure-components/typography";
+import { FinanceMenu } from "@internal/ui-library";
+import { FilterChipCaret } from "./filter-chip/FilterChipCaret.tsx";
+import { FilterChipOption } from "./filter-chip/FilterChipOption.tsx";
+import { FilterChipOptions } from "./filter-chip/FilterChipOptions.tsx";
+import { FilterChipTrigger } from "./filter-chip/FilterChipTrigger.tsx";
 
-interface FilterChipProps {
-	label: ReactNode;
-	active: boolean;
-	options: { value: string; label: string }[];
-	onSelect: (value: string) => void;
+import type { FC, PropsWithChildren } from "react";
+import type { FilterChipOptionProps } from "./filter-chip/FilterChipOption.tsx";
+import type { FilterChipOptionsProps } from "./filter-chip/FilterChipOptions.tsx";
+import type { FilterChipTriggerProps } from "./filter-chip/FilterChipTrigger.tsx";
+
+
+type FilterChipProps = PropsWithChildren;
+type FilterChipObject = FC<FilterChipProps> & {
+	Caret: FC;
+	Option: FC<FilterChipOptionProps>;
+	Options: FC<FilterChipOptionsProps>;
+	Trigger: FC<FilterChipTriggerProps>;
 }
 
-const FilterChip: FC<FilterChipProps> = ({ label, active, options, onSelect }) => (
+const FilterChip: FilterChipObject = ({ children }) => (
 	<FinanceMenu>
-		<FinanceMenuTrigger asChild>
-			<button
-				type="button"
-				className={cn(
-					textClass({ size: 'xs', weight: 'semibold' }),
-					"flex items-center gap-1.5 rounded-[var(--radius-md)] border px-3 py-2",
-					active ? "border-[var(--accent-border)] bg-[var(--accent-soft)] text-primary" : "border-border-strong text-text-2"
-				)}
-			>
-				{label} <Caption as="span" size="9">▾</Caption>
-			</button>
-		</FinanceMenuTrigger>
-		<FinanceMenuContent align="start" className="min-w-44">
-			{options.map((option) => (
-				<FinanceMenuItem key={option.value} onClick={() => { onSelect(option.value); }}>
-					{option.label}
-				</FinanceMenuItem>
-			))}
-		</FinanceMenuContent>
+		{children}
 	</FinanceMenu>
 );
 
+FilterChip.Caret = FilterChipCaret;
+FilterChip.Option = FilterChipOption;
+FilterChip.Options = FilterChipOptions;
+FilterChip.Trigger = FilterChipTrigger;
 FilterChip.displayName = 'FilterChip';
 
 export { FilterChip };

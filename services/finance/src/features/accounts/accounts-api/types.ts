@@ -1,41 +1,55 @@
-import type { AccountType, LedgerSide } from "@entity/accounts";
+import type { MoneyDto, PageParams } from "@shared/api";
 
+type AccountGroupDto = 'assets' | 'liabilities' | 'equity';
 
-interface AccountMoney {
-	amount: number
-	currency: string
+type AccountGroupFilterDto = AccountGroupDto | 'all';
+
+interface AccountDto {
+	id: string;
+	group: AccountGroupDto;
+	name: string;
+	money: MoneyDto;
 }
 
-interface AccountMeta {
-	id: string
-	created_at: string
-	updated_at: string
+interface LedgerEntryDto {
+	title: string;
+	debit: boolean;
+	created_at: string;
+	source_transaction: string;
+	icon: string;
+	money: MoneyDto;
 }
 
-interface AccountTotals {
-	balance: AccountMoney
+interface AccountDetailDto extends AccountDto {
+	history: LedgerEntryDto[];
 }
 
-interface AccountPreview {
-	id: string
-	name: string
-	kind: string
-	type: AccountType
-	balance: AccountMoney
+interface AccountListParams extends PageParams {
+	group?: AccountGroupFilterDto;
+	lowbar?: string;
+	currency?: string;
 }
 
-interface AccountDetailed extends AccountPreview {
-	meta: AccountMeta
-	totals: AccountTotals
+interface AccountGroupCountsDto {
+	assets: number;
+	liabilities: number;
+	equity: number;
 }
 
-interface LedgerEntry {
-	id: string
-	occurred_at: string
-	description: string
-	icon: string
-	side: LedgerSide
-	amount: AccountMoney
+interface AccountListMeta {
+	lowbar: string;
+	currency: string;
+	group: AccountGroupFilterDto;
+	groups: AccountGroupCountsDto;
 }
 
-export type { AccountMoney, AccountMeta, AccountTotals, AccountPreview, AccountDetailed, LedgerEntry };
+export type {
+	AccountDto,
+	AccountDetailDto,
+	AccountGroupDto,
+	AccountGroupFilterDto,
+	AccountGroupCountsDto,
+	AccountListMeta,
+	AccountListParams,
+	LedgerEntryDto,
+};

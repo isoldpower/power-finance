@@ -1,19 +1,17 @@
-import type { FC, ReactNode } from "react";
 import { Text } from "@shared/pure-components/typography";
 
+import type { FC, PropsWithChildren } from "react";
 
-interface CurrencyPickerOptionCodeProps {
-	children: ReactNode;
-}
 
-const CurrencyPickerOptionCode: FC<CurrencyPickerOptionCodeProps> = ({
-	children,
-}) => {
-	return (
-		<Text weight="semibold" className="w-8 shrink-0">
-			{children}
-		</Text>
-	);
-}
+type CurrencyPickerOptionCodeProps = PropsWithChildren;
+
+const CurrencyPickerOptionCode: FC<CurrencyPickerOptionCodeProps> = ({ children }) => (
+	<Text weight="semibold" className="w-8 shrink-0">
+		{children}
+	</Text>
+);
+
+CurrencyPickerOptionCode.displayName = 'CurrencyPickerOptionCode';
 
 export { CurrencyPickerOptionCode };
+export type { CurrencyPickerOptionCodeProps };

@@ -27,7 +27,20 @@ const GoalsListFx: FC<GoalsListFxProps> = ({ children }) => {
 const GoalsListSkeleton: FC = () => (
 	<div>
 		{PLACEHOLDER_KEYS.map((key) => (
-			<GoalSkeletonRow key={key} />
+			<GoalSkeletonRow key={key}>
+				<GoalSkeletonRow.Head>
+					<GoalSkeletonRow.Icon />
+					<GoalSkeletonRow.Body>
+						<GoalSkeletonRow.Name />
+						<GoalSkeletonRow.Eta />
+					</GoalSkeletonRow.Body>
+					<GoalSkeletonRow.Amounts />
+				</GoalSkeletonRow.Head>
+				<GoalSkeletonRow.Progress>
+					<GoalSkeletonRow.Bar />
+					<GoalSkeletonRow.Percent />
+				</GoalSkeletonRow.Progress>
+			</GoalSkeletonRow>
 		))}
 	</div>
 );

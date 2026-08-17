@@ -9,12 +9,12 @@ import {
 	PasswordInput
 } from "@internal/ui-library";
 import {FC} from "react";
-import {WebhookEndpoint} from "@entity/configuration";
+import type { WebhookEndpointSecret } from "@entity/configuration";
 
 interface CreateWebhookFinishModalProps {
 	open: boolean;
 	onOpenChange: (value: boolean) => void;
-	webhook?: WebhookEndpoint | null;
+	webhook?: WebhookEndpointSecret | null;
 }
 
 const CreateWebhookFinishModal: FC<CreateWebhookFinishModalProps> = ({

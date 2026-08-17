@@ -8,7 +8,7 @@ import {
 	FinanceComboboxList,
 	FinanceComboboxTrigger,
 } from "@internal/ui-library";
-import { LocalePicker } from "@entity/localization";
+import { LocalePickerLabel, LocalePickerOptionSelected } from "@entity/localization";
 import { MetaText, Text } from "@shared/pure-components/typography";
 
 import type { FinanceComboboxPivot } from "@internal/ui-library";
@@ -40,9 +40,9 @@ const LocaleCombobox: FC<LocaleComboboxProps> = ({
 	return (
 		<FinanceCombobox>
 			<FinanceComboboxTrigger className={cn("w-full", className)}>
-				<LocalePicker.Label variant={variant} locales={locales} placeholder={placeholder}>
+				<LocalePickerLabel variant={variant} locales={locales} placeholder={placeholder}>
 					{currentLocale}
-				</LocalePicker.Label>
+				</LocalePickerLabel>
 			</FinanceComboboxTrigger>
 			<FinanceComboboxContent pivot={pivot}>
 				<FinanceComboboxInput placeholder="Search locale..." />
@@ -62,9 +62,9 @@ const LocaleCombobox: FC<LocaleComboboxProps> = ({
 							<MetaText size="10.5" truncate>
 								{locale.region}
 							</MetaText>
-							<LocalePicker.OptionSelected>
+							<LocalePickerOptionSelected>
 								{currentLocale === locale.tag}
-							</LocalePicker.OptionSelected>
+							</LocalePickerOptionSelected>
 						</FinanceComboboxItem>
 					))}
 				</FinanceComboboxList>

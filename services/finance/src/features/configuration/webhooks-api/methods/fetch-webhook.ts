@@ -1,20 +1,18 @@
-import type { IWebhookRESTApiClient, WebhookGetRequest } from "../rest-client";
-import { webhookDetailedResponseToFlat } from "../mutators/api-to-flat.ts";
-import {WebhookEndpoint} from "@entity/configuration";
-
+import { webhookFromApi } from "../mutators";
+import type { WebhookEndpoint } from "@entity/configuration";
+import type { IWebhookRESTApiClient } from "../rest-client";
 
 interface FetchWebhookRequest {
-	handler: Pick<IWebhookRESTApiClient, 'get'>
-	payload: WebhookGetRequest
+	handler: Pick<IWebhookRESTApiClient, 'get'>;
+	id: string;
 }
 
-type FetchWebhookResponse = WebhookEndpoint & object;
+type FetchWebhookResponse = WebhookEndpoint;
 
-async function fetchWebhookEndpoint(
-	request: FetchWebhookRequest
-): Promise<FetchWebhookResponse> {
-	return request.handler.get(request.payload)
-		.then(webhookDetailedResponseToFlat);
+async function fetchWebhookEndpoint(request: FetchWebhookRequest): Promise<FetchWebhookResponse> {
+	const response = await request.handler.get({ id: request.id });
+
+	return webhookFromApi(response.data);
 }
 
 export { fetchWebhookEndpoint };

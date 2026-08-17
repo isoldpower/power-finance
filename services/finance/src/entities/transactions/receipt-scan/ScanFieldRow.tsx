@@ -1,23 +1,42 @@
-import type { FC } from "react";
-import { Caption, RowTitle, Text } from "@shared/pure-components/typography";
+import { cn } from "@internal/ui-library";
+import { ScanFieldRowAction } from "./field-row/ScanFieldRowAction.tsx";
+import { ScanFieldRowAiBadge } from "./field-row/ScanFieldRowAiBadge.tsx";
+import { ScanFieldRowLabel } from "./field-row/ScanFieldRowLabel.tsx";
+import { ScanFieldRowValue } from "./field-row/ScanFieldRowValue.tsx";
 
-interface ScanFieldRowProps {
-	label: string;
-	value: string;
-	ai: boolean;
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
+import type { ScanFieldRowActionProps } from "./field-row/ScanFieldRowAction.tsx";
+import type { ScanFieldRowAiBadgeProps } from "./field-row/ScanFieldRowAiBadge.tsx";
+import type { ScanFieldRowLabelProps } from "./field-row/ScanFieldRowLabel.tsx";
+import type { ScanFieldRowValueProps } from "./field-row/ScanFieldRowValue.tsx";
+
+
+type ScanFieldRowProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+type ScanFieldRowObject = FC<ScanFieldRowProps> & {
+	Action: FC<ScanFieldRowActionProps>;
+	AiBadge: FC<ScanFieldRowAiBadgeProps>;
+	Label: FC<ScanFieldRowLabelProps>;
+	Value: FC<ScanFieldRowValueProps>;
 }
 
-const ScanFieldRow: FC<ScanFieldRowProps> = ({ label, value, ai }) => (
-	<div className="flex items-center gap-3 border-b border-border py-2.5">
-		<Caption as="span" size="11.5" className="w-24">{label}</Caption>
-		<RowTitle as="span" size="13.5" className="flex flex-1 items-center gap-2">
-			{value}
-			{ai ? <Text family="numeric" size="8.5" weight="semibold" tone="accent" className="rounded-[4px] border border-[var(--accent-border)] px-1">AI</Text> : null}
-		</RowTitle>
-		<Caption as="span" size="11" className="cursor-pointer">edit</Caption>
+const ScanFieldRow: ScanFieldRowObject = ({
+	children,
+	...props
+}) => (
+	<div
+		className={cn(
+			"flex items-center gap-3 border-b border-border py-2.5"
+		)}
+		{...props}
+	>
+		{children}
 	</div>
 );
 
+ScanFieldRow.Action = ScanFieldRowAction;
+ScanFieldRow.AiBadge = ScanFieldRowAiBadge;
+ScanFieldRow.Label = ScanFieldRowLabel;
+ScanFieldRow.Value = ScanFieldRowValue;
 ScanFieldRow.displayName = 'ScanFieldRow';
 
 export { ScanFieldRow };

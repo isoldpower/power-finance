@@ -1,23 +1,46 @@
-import { AccountSummaryCard } from "./AccountSummaryCard.tsx";
-import { AccountSummaryHero } from "./AccountSummaryHero.tsx";
-import { AccountSummaryGlow } from "./AccountSummaryGlow.tsx";
-import { AccountSummaryHeroRow } from "./AccountSummaryHeroRow.tsx";
-import { AccountSummaryNameRow } from "./AccountSummaryNameRow.tsx";
-import { AccountSummaryType } from "./AccountSummaryType.tsx";
-import { AccountSummaryBalance } from "./AccountSummaryBalance.tsx";
+import { FinanceCard } from "@internal/ui-library";
+import { AccountSummaryBalance } from "./summary/AccountSummaryBalance.tsx";
+import { AccountSummaryGlow } from "./summary/AccountSummaryGlow.tsx";
+import { AccountSummaryHero } from "./summary/AccountSummaryHero.tsx";
+import { AccountSummaryHeroRow } from "./summary/AccountSummaryHeroRow.tsx";
+import { AccountSummaryNameRow } from "./summary/AccountSummaryNameRow.tsx";
+import { AccountSummaryType } from "./summary/AccountSummaryType.tsx";
+
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
+import type { AccountSummaryBalanceProps } from "./summary/AccountSummaryBalance.tsx";
+import type { AccountSummaryGlowProps } from "./summary/AccountSummaryGlow.tsx";
+import type { AccountSummaryHeroProps } from "./summary/AccountSummaryHero.tsx";
+import type { AccountSummaryHeroRowProps } from "./summary/AccountSummaryHeroRow.tsx";
+import type { AccountSummaryNameRowProps } from "./summary/AccountSummaryNameRow.tsx";
+import type { AccountSummaryTypeProps } from "./summary/AccountSummaryType.tsx";
 
 
-function AccountSummary() {
-	return null;
+type AccountSummaryProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+type AccountSummaryObject = FC<AccountSummaryProps> & {
+	Balance: FC<AccountSummaryBalanceProps>;
+	Glow: FC<AccountSummaryGlowProps>;
+	Hero: FC<AccountSummaryHeroProps>;
+	HeroRow: FC<AccountSummaryHeroRowProps>;
+	NameRow: FC<AccountSummaryNameRowProps>;
+	Type: FC<AccountSummaryTypeProps>;
 }
 
-AccountSummary.displayName = 'AccountSummary';
-AccountSummary.Card = AccountSummaryCard;
-AccountSummary.Hero = AccountSummaryHero;
+const AccountSummary: AccountSummaryObject = ({
+	children,
+	...props
+}) => (
+	<FinanceCard className="overflow-hidden" {...props}>
+		{children}
+	</FinanceCard>
+);
+
+AccountSummary.Balance = AccountSummaryBalance;
 AccountSummary.Glow = AccountSummaryGlow;
+AccountSummary.Hero = AccountSummaryHero;
 AccountSummary.HeroRow = AccountSummaryHeroRow;
 AccountSummary.NameRow = AccountSummaryNameRow;
 AccountSummary.Type = AccountSummaryType;
-AccountSummary.Balance = AccountSummaryBalance;
+AccountSummary.displayName = 'AccountSummary';
 
 export { AccountSummary };
+export type { AccountSummaryProps };

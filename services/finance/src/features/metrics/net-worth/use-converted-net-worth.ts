@@ -1,27 +1,27 @@
 import { useMemo } from "react";
 import { useConvertMoney } from "@feature/localization";
 
-import type { InsightChange, NetWorthInsight, SeriesPoint } from "../metrics-api";
+import type { NetDiff, NetWorth, NetWorthPoint } from "@entity/metrics";
 import type { ConvertedMoney, Money } from "@entity/localization";
 
 
 interface ConvertedNetWorthInsight {
 	netWorthValue: Money;
-	netWorthDiff: InsightChange;
+	netWorthDiff: NetDiff;
 	convertedNetWorth: ConvertedMoney;
-	netWorthSeries: SeriesPoint[];
+	netWorthSeries: NetWorthPoint[];
 }
 
 const useConvertedNetWorth = (
-	netWorth: NetWorthInsight
+	netWorth: NetWorth
 ): ConvertedNetWorthInsight => {
 	const { convert } = useConvertMoney();
 	
 	return useMemo(() => ({
-		netWorthValue: netWorth.value,
-		netWorthDiff: netWorth.change,
+		netWorthValue: netWorth.money,
+		netWorthDiff: netWorth.netDiff,
 		netWorthSeries: netWorth.series,
-		convertedNetWorth: convert(netWorth.value),
+		convertedNetWorth: convert(netWorth.money),
 	}), [netWorth, convert]);
 }
 

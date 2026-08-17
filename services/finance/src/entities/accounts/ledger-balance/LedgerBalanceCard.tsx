@@ -1,19 +1,23 @@
 import { FinanceCard } from "@internal/ui-library";
 
-import type { BaseHTMLAttributes, FC } from "react";
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 
 
-const LedgerBalanceCard: FC<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>> = ({
+type LedgerBalanceCardProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+
+const LedgerBalanceCard: FC<LedgerBalanceCardProps> = ({
 	children,
 	...props
-}) => {
-	return (
-		<FinanceCard className="flex flex-wrap items-center gap-x-[18px] gap-y-2 px-[18px] py-3" {...props}>
-			{children}
-		</FinanceCard>
-	);
-}
+}) => (
+	<FinanceCard
+		className="flex flex-wrap items-center gap-x-[18px] gap-y-2 px-[18px] py-3"
+		{...props}
+	>
+		{children}
+	</FinanceCard>
+);
 
-LedgerBalanceCard.displayName = "LedgerBalanceCard";
+LedgerBalanceCard.displayName = 'LedgerBalanceCard';
 
 export { LedgerBalanceCard };
+export type { LedgerBalanceCardProps };

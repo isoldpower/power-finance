@@ -1,8 +1,9 @@
-import type { ComponentProps, FC } from "react";
 import { FinanceMoney } from "@internal/ui-library";
 
 import { useLocaleCurrency } from "@shared/formatting";
 import { useCountUp } from "@shared/motion";
+
+import type { ComponentProps, FC } from "react";
 import type { CountUpOptions } from "@shared/motion";
 
 
@@ -15,19 +16,21 @@ interface AnimatedMoneyProps extends Omit<FinanceMoneyProps, "children"> {
 	bare?: boolean;
 }
 
-const AnimatedMoney: FC<AnimatedMoneyProps> = ({ amount, currency, countUp, bare = false, ...moneyProps }) => {
+const AnimatedMoney: FC<AnimatedMoneyProps> = ({
+	amount,
+	currency,
+	countUp,
+	bare = false,
+	...moneyProps
+}) => {
 	const formatCurrency = useLocaleCurrency();
 	const value = useCountUp(amount, countUp);
 	const formatted = formatCurrency(value ?? amount, currency);
 
-	if (bare) {
-		return (
-			<>{formatted}</>
-		);
-	}
-	
-	return (
-		<FinanceMoney {...moneyProps}>{formatted}</FinanceMoney>
+	return bare ? formatted : (
+		<FinanceMoney {...moneyProps}>
+			{formatted}
+		</FinanceMoney>
 	);
 };
 

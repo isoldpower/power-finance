@@ -13,11 +13,11 @@ import { useLocaleCurrency } from "@shared/formatting";
 import { Caption, RowTitle, Text } from "@shared/pure-components/typography";
 
 import type { FC, MouseEventHandler } from "react";
-import type { TransactionPreviewDto } from "@entity/transactions";
+import type { Transaction } from "@entity/transactions";
 
 
 interface LedgerTransactionRowProps {
-	transaction: TransactionPreviewDto;
+	transaction: Transaction;
 	expanded: boolean;
 	checked: boolean;
 	onToggle: () => void;
@@ -34,12 +34,15 @@ const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 	const { convert } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
 
-	const row = useMemo(() => toTransactionRowView(transaction, formatCurrency), [transaction, formatCurrency]);
-	const money = useMemo(() => toTransactionMoneyView(transaction, convert, formatCurrency), [transaction, convert, formatCurrency]);
-	const tone = useMemo(() => resolveToneWithDirection(row.direction), [row.direction]);
+	const row = useMemo(() => toTransactionRowView(transaction), [transaction]);
+	const money = useMemo(
+		() => toTransactionMoneyView(transaction, convert, formatCurrency),
+		[transaction, convert, formatCurrency]
+	);
+	const tone = useMemo(() => resolveToneWithDirection(row.type), [row.type]);
 
 	return (
-		<LedgerRow.Container expanded={expanded} onClick={onToggle}>
+		<LedgerRow expanded={expanded} onClick={onToggle}>
 			<LedgerRow.SelectCell>
 				<RowSelectCheckbox selected={checked} onClick={onCheck} />
 			</LedgerRow.SelectCell>
@@ -53,7 +56,7 @@ const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 			</LedgerRow.DateCell>
 			<LedgerRow.Description>
 				<LedgerRow.Icon tone={tone}>
-					<AmountDirectionIcon direction={row.direction} />
+					<AmountDirectionIcon type={row.type} />
 				</LedgerRow.Icon>
 				<div className="min-w-0">
 					<RowTitle truncate>
@@ -79,7 +82,7 @@ const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 				{money.amountMain}
 			</LedgerRow.ConvertedAmount>
 			<LedgerRow.Chevron expanded={expanded} />
-		</LedgerRow.Container>
+		</LedgerRow>
 	);
 };
 

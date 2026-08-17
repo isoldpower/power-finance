@@ -3,13 +3,13 @@ import { AnimatedMoney } from "@entity/localization";
 import { useConvertedCashFlow } from "@feature/metrics";
 import { useMemo } from "react";
 
-import type { CashFlowInsight } from "@feature/metrics";
+import type { CashFlow } from "@entity/metrics";
 import { Text, textClass } from "@shared/pure-components/typography";
 
 
 interface CashFlowBalanceProps {
 	title: string
-	cashFlow: CashFlowInsight
+	cashFlow: CashFlow
 	isPositive: boolean
 }
 

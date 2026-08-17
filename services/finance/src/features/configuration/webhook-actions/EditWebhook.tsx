@@ -2,16 +2,16 @@ import { useCallback } from "react";
 import type { FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
 
-import { useWebhookMethods } from "../data-presenters";
+import { useUpdateWebhook } from "../data-presenters";
+import type { WebhookEndpoint } from "@entity/configuration";
 import type { WebhookSchema } from "./schemas.ts";
-import type { UpdateWebhookResponse } from "../webhooks-api/methods/update-webhook.ts";
 
 
 interface EditWebhookProps {
 	webhookId: string;
 	handleSubmit: UseFormHandleSubmit<WebhookSchema>;
 	onBeforeEdit?: () => void;
-	onSuccess?: (result: UpdateWebhookResponse) => void;
+	onSuccess?: (webhook: WebhookEndpoint) => void;
 	children?: ReactNode;
 }
 
@@ -22,12 +22,14 @@ function EditWebhook({
 	children,
 	onBeforeEdit
 }: EditWebhookProps) {
-	const { updateWebhook } = useWebhookMethods(webhookId);
+	const updateWebhook = useUpdateWebhook(webhookId);
 
 	const onSubmit = useCallback(async (data: WebhookSchema) => {
 		if (onBeforeEdit) onBeforeEdit();
-		const patchResponse = await updateWebhook(data);
-		if (onSuccess) onSuccess(patchResponse);
+
+		const updated = await updateWebhook.mutateAsync({ title: data.title, url: data.url });
+
+		if (onSuccess) onSuccess(updated);
 	}, [updateWebhook, onBeforeEdit, onSuccess]);
 
 	const handleSubmitForm = useCallback((

@@ -8,53 +8,53 @@ import { DeleteGoalDialog } from "@feature/wallets";
 import { DeleteGoalModal } from "@widget/wallets";
 
 import type { FC } from "react";
-import type { GoalWallet } from "@entity/wallets";
+import type { Goal } from "@entity/wallets";
 
 
 interface DeletableGoalRowProps {
-	wallet: GoalWallet;
+	goal: Goal;
 	order: number;
 }
 
-const DeletableGoalRow: FC<DeletableGoalRowProps> = ({ wallet, order }) => {
+const DeletableGoalRow: FC<DeletableGoalRowProps> = ({ goal, order }) => {
 	const formatCurrency = useLocaleCurrency();
 
-	const goal = useMemo(() => toGoalView(wallet, formatCurrency), [wallet, formatCurrency]);
+	const goalView = useMemo(() => toGoalView(goal, formatCurrency), [goal, formatCurrency]);
 
 	return (
-		<GoalRow.Container style={{ animationDelay: `${(order * 0.04).toString()}s` }}>
+		<GoalRow style={{ animationDelay: `${(order * 0.04).toString()}s` }}>
 			<GoalRow.Head>
-				<GoalRow.Icon icon={goal.icon} color={goal.color} />
+				<GoalRow.Icon icon={goalView.icon} color={goalView.color} />
 				<GoalRow.Body>
 					<RowTitle>
-						{goal.name}
+						{goalView.name}
 					</RowTitle>
 					<Caption size="11">
-						{goal.monthly} · {goal.eta}
+						{goalView.eta}
 					</Caption>
 				</GoalRow.Body>
 				<GoalRow.Amounts>
 					<DisplayText as="span" size="sm">
-						{goal.saved}
+						{goalView.saved}
 					</DisplayText>
 					<GoalRow.Target>
-						{goal.target}
+						{goalView.target}
 					</GoalRow.Target>
 				</GoalRow.Amounts>
-				<DeleteGoalDialog wallet={wallet}>
+				<DeleteGoalDialog goal={goal}>
 					{({ deleteGoal, isPending }) => (
 						<DeleteGoalModal
-							wallet={wallet}
+							goal={goal}
 							pending={isPending}
 							onConfirm={deleteGoal}
 						>
-							<RowDeleteButton label={`Delete ${wallet.name}`} />
+							<RowDeleteButton label={`Delete ${goal.name}`} />
 						</DeleteGoalModal>
 					)}
 				</DeleteGoalDialog>
 			</GoalRow.Head>
-			<GoalRow.ProgressBar percent={goal.percent} />
-		</GoalRow.Container>
+			<GoalRow.ProgressBar percent={goalView.percent} />
+		</GoalRow>
 	);
 }
 

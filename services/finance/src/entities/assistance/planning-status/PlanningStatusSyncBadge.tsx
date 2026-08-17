@@ -1,11 +1,14 @@
 import { cn } from "@internal/ui-library";
-
 import { Text } from "@shared/pure-components/typography";
 
-import type { BaseHTMLAttributes, FC } from "react";
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 
 
-const PlanningStatusSyncBadge: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'>> = ({
+type PlanningStatusSyncBadgeProps = PropsWithChildren<
+	Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'>
+>;
+
+const PlanningStatusSyncBadge: FC<PlanningStatusSyncBadgeProps> = ({
 	children,
 	...props
 }) => (
@@ -14,7 +17,8 @@ const PlanningStatusSyncBadge: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'cla
 		weight="semibold"
 		tone="positive"
 		className={cn(
-			"fx-slidein inline-flex cursor-default items-center gap-1.5 rounded-full bg-pos-soft px-2.5 py-1"
+			"fx-slidein inline-flex cursor-default items-center gap-1.5",
+			"rounded-full bg-pos-soft px-2.5 py-1"
 		)}
 		{...props}
 	>
@@ -25,3 +29,4 @@ const PlanningStatusSyncBadge: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'cla
 PlanningStatusSyncBadge.displayName = 'PlanningStatusSyncBadge';
 
 export { PlanningStatusSyncBadge };
+export type { PlanningStatusSyncBadgeProps };

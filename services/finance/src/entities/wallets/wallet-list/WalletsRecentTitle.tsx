@@ -1,5 +1,7 @@
-import {FC, ReactNode} from "react";
 import { RowTitle } from "@shared/pure-components/typography";
+
+import type { FC, ReactNode } from "react";
+
 
 interface WalletsRecentTitleProps {
 	children: ReactNode;
@@ -13,4 +15,7 @@ const WalletsRecentTitle: FC<WalletsRecentTitleProps> = ({ children }) => (
 	</div>
 );
 
+WalletsRecentTitle.displayName = 'WalletsRecentTitle';
+
 export { WalletsRecentTitle };
+export type { WalletsRecentTitleProps };

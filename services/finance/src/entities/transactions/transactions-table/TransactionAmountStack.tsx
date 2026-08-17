@@ -1,9 +1,9 @@
-import type { FC } from "react";
 import { cn } from "@internal/ui-library";
-
 import { MetaText } from "@shared/pure-components/typography";
 
+import type { FC } from "react";
 import type { Tone } from "@shared/formatting";
+
 
 interface TransactionAmountStackProps {
 	original: string;

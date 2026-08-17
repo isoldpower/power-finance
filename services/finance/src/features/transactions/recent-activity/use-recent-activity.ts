@@ -1,29 +1,26 @@
 import { useMemo } from "react";
 
-import type { TransactionPreviewDto } from "@entity/transactions";
-
-import { useTransactionsList } from "../data-presenters";
+import { useTransactionsSearch } from "../data-presenters";
 import { DAYS_CAP, TXN_CAP } from "./config";
+
+import type { Transaction, TransactionQuery } from "@entity/transactions";
 
 
 interface RecentActivityGroup {
 	dayKey: string;
-	transactions: TransactionPreviewDto[];
+	transactions: Transaction[];
 }
 
-const byNewestFirst = (first: TransactionPreviewDto, second: TransactionPreviewDto) => {
-	return Date.parse(second.created_at) - Date.parse(first.created_at);
+const RECENT_QUERY: TransactionQuery = {};
+
+const toDayKey = (transaction: Transaction) => {
+	return new Date(transaction.createdAt).toDateString();
 };
 
-const toDayKey = (transaction: TransactionPreviewDto) => {
-	return new Date(transaction.created_at).toDateString();
-};
+const groupRecentByDay = (transactions: Transaction[]): RecentActivityGroup[] => {
+	const dayGroups = new Map<string, Transaction[]>();
 
-const groupRecentByDay = (transactions: TransactionPreviewDto[]): RecentActivityGroup[] => {
-	const dayGroups = new Map<string, TransactionPreviewDto[]>();
-	const newest = [...transactions].sort(byNewestFirst).slice(0, TXN_CAP);
-
-	for (const transaction of newest) {
+	for (const transaction of transactions) {
 		const dayTransactions = dayGroups.get(toDayKey(transaction));
 
 		if (dayTransactions) {
@@ -39,7 +36,10 @@ const groupRecentByDay = (transactions: TransactionPreviewDto[]): RecentActivity
 };
 
 const useRecentActivity = () => {
-	const { transactions, isPending } = useTransactionsList();
+	const { transactions, isPending } = useTransactionsSearch(RECENT_QUERY, {
+		order: 'DESC',
+		limit: TXN_CAP,
+	});
 
 	const groups = useMemo(() => groupRecentByDay(transactions), [transactions]);
 

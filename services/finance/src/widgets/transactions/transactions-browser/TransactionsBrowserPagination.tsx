@@ -1,13 +1,9 @@
-import { useMemo } from "react";
-
 import { useTransactionsPaginationContext } from "@feature/transactions";
-import { Pagination, PaginationRange, toPageEntries } from "@shared/pure-components/collections";
+import { CursorPagination, PaginationRange } from "@shared/pure-components/collections";
 
 
 const TransactionsBrowserPagination = () => {
-	const { from, to, total, pageNumber, pageCount, goToPage } = useTransactionsPaginationContext();
-
-	const pages = useMemo(() => toPageEntries(pageNumber, pageCount), [pageCount, pageNumber]);
+	const { from, to, total, hasNext, hasPrev, scrollForward, scrollBackward } = useTransactionsPaginationContext();
 
 	return (
 		<div className="flex items-center gap-2 border-t border-border px-4 py-2.5">
@@ -17,12 +13,12 @@ const TransactionsBrowserPagination = () => {
 				to={to}
 			/>
 			<div className="flex-1" />
-			{pageCount > 1 ? (
-				<Pagination
-					currentPage={pageNumber}
-					pageCount={pageCount}
-					pages={pages}
-					onPage={goToPage}
+			{hasNext || hasPrev ? (
+				<CursorPagination
+					hasNext={hasNext}
+					hasPrev={hasPrev}
+					onNext={scrollForward}
+					onPrev={scrollBackward}
 				/>
 			) : null}
 		</div>

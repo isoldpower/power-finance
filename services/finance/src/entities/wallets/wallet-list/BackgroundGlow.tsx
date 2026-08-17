@@ -20,4 +20,7 @@ const BackgroundGlow: FC<BackgroundGlowProps> = ({
 	);
 }
 
+BackgroundGlow.displayName = 'BackgroundGlow';
+
 export { BackgroundGlow };
+export type { BackgroundGlowProps };

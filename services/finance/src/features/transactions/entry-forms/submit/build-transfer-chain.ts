@@ -1,30 +1,47 @@
-import type { TransactionChainItem } from "../../transactions-api";
 import { IN_TEMPORARY_ID, OUT_TEMPORARY_ID } from "./constants";
 
+import type { TransactionChainEntryDraft } from "@entity/transactions";
+
+
+interface TransferLeg {
+	walletId: string;
+	currency: string;
+	amount: number;
+}
 
 function buildTransferChain(
-	fromId: string,
-	toId: string,
-	sentAmount: number,
-	receivedAmount: number = sentAmount
-): TransactionChainItem[] {
-	const sent = Math.abs(sentAmount).toFixed(2);
-	const received = Math.abs(receivedAmount).toFixed(2);
-
+	name: string,
+	category: string | null,
+	sent: TransferLeg,
+	received: TransferLeg
+): TransactionChainEntryDraft[] {
 	return [
 		{
-			temporary_id: OUT_TEMPORARY_ID,
+			temporaryId: OUT_TEMPORARY_ID,
 			after: null,
-			source_wallet_id: fromId,
-			amount: `-${sent}`,
+			name,
+			currency: sent.currency,
+			amount: Math.abs(sent.amount),
+			walletId: sent.walletId,
+			origin: 'manual',
+			type: 'expense',
+			category,
+			evidence: null,
 		},
 		{
-			temporary_id: IN_TEMPORARY_ID,
+			temporaryId: IN_TEMPORARY_ID,
 			after: OUT_TEMPORARY_ID,
-			source_wallet_id: toId,
-			amount: received,
+			name,
+			currency: received.currency,
+			amount: Math.abs(received.amount),
+			walletId: received.walletId,
+			origin: 'manual',
+			type: 'income',
+			category,
+			evidence: null,
 		},
 	];
 }
 
 export { buildTransferChain };
+export type { TransferLeg };

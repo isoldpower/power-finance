@@ -1,8 +1,8 @@
 import { FinanceStat } from "@internal/ui-library";
 
 import { MoneyWithFx } from "@widget/localization";
-import { LedgerBalanceBadge, ExplanatoryNeutralBadge, AskAiForHelp } from "@widget/metrics";
-import { useLedgerBalance } from "@feature/metrics";
+import { BalanceMetricsBadge, ExplanatoryNeutralBadge, AskAiForHelp } from "@widget/metrics";
+import { useBalanceMetrics } from "@feature/metrics";
 import { LedgerCard, LedgerSymbol } from "@entity/accounts";
 import { Tooltip } from "@shared/overlays";
 import { CenteredList, EndList, SpaceOccupant } from "@shared/pure-components/layout";
@@ -12,7 +12,7 @@ import type { FC } from "react";
 
 
 const LedgerBalanceBand: FC = () => {
-	const { ledger, isPending } = useLedgerBalance();
+	const { balance, isPending } = useBalanceMetrics();
 
 	return (
 		<LedgerCard>
@@ -28,26 +28,26 @@ const LedgerBalanceBand: FC = () => {
 				<EndList gap={4.5}>
 					<Tooltip content="What you own — wallets + receivables">
 						<FinanceStat size="sm" label="Assets">
-							<MoneyWithFx money={ledger?.assets} isPending={isPending} />
+							<MoneyWithFx money={balance?.assets} isPending={isPending} />
 						</FinanceStat>
 					</Tooltip>
 					<LedgerSymbol>-</LedgerSymbol>
 					<Tooltip content="What you owe — credit card balances">
 						<FinanceStat size="sm" label="Liabilities">
-							<MoneyWithFx money={ledger?.liabilities} isPending={isPending} />
+							<MoneyWithFx money={balance?.liabilities} isPending={isPending} />
 						</FinanceStat>	
 					</Tooltip>
 					<LedgerSymbol>=</LedgerSymbol>
 					<Tooltip content="Assets − liabilities = net worth">
 						<FinanceStat size="sm" label="Equity">
-							<MoneyWithFx money={ledger?.equity} isPending={isPending} />
+							<MoneyWithFx money={balance?.equity} isPending={isPending} />
 						</FinanceStat>
 					</Tooltip>
 				</EndList>
 			</div>
 			<SpaceOccupant />
 			<Tooltip content={<AskAiForHelp reason="ledger is out of balance" /> }>
-				<LedgerBalanceBadge ledger={ledger} isPending={isPending} />
+				<BalanceMetricsBadge ledger={balance} isPending={isPending} />
 			</Tooltip>
 		</LedgerCard>
 	);

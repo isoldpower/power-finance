@@ -1,45 +1,55 @@
-import type { UseQueryOptions } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
-import { useResourceQuery } from "@shared/data";
-import type { UseResourceQueryResult } from "@shared/data";
-import { listNotifications } from "../../assistance-api/notifications";
+import { listNotifications } from "../../notifications-api";
 import { NOTIFICATIONS_CACHE_KEYS } from "../cache-config.ts";
-import type { Notification, ListNotificationsResponse } from "../../assistance-api/notifications";
-
-
-interface UseNotificationsParams {
-	ack?: boolean;
-	limit?: number;
-}
+import type { PageParams } from "@shared/api";
+import type { Notification, NotificationQuery } from "@entity/assistance";
+import type { ListNotificationsResponse } from "../../notifications-api";
 
 type UseNotificationsOptions = Omit<UseQueryOptions<ListNotificationsResponse>, 'queryKey' | 'queryFn'>;
 
-type UseNotificationsReturn = UseResourceQueryResult<ListNotificationsResponse, Notification[]> & {
+type UseNotificationsReturn = UseQueryResult<ListNotificationsResponse> & {
 	notifications: Notification[];
+	total: number;
+	nextCursor: string | null;
+	prevCursor: string | null;
 };
 
 const EMPTY_NOTIFICATIONS: Notification[] = [];
 
 const useNotifications = (
-	params?: UseNotificationsParams,
+	query?: NotificationQuery,
+	page?: PageParams,
 	options?: UseNotificationsOptions
 ): UseNotificationsReturn => {
 	const apiContext = useApiContext();
-	const query = useResourceQuery<ListNotificationsResponse, Notification[]>({
-		key: [NOTIFICATIONS_CACHE_KEYS.list, params?.ack ?? 'any', params?.limit ?? 'all'],
-		fetch: () => listNotifications({
+	const notificationsQuery = useQuery<ListNotificationsResponse>({
+		queryKey: [
+			NOTIFICATIONS_CACHE_KEYS.list,
+			query?.acknowledged ?? 'any',
+			query?.severity ?? 'any',
+			page?.limit ?? 'default',
+			page?.cursor ?? 'first',
+		],
+		queryFn: () => listNotifications({
 			handler: apiContext.notificationServers.rest,
-			ack: params?.ack,
-			limit: params?.limit,
+			query,
+			page,
 		}),
-		select: (response) => response.data,
-		fallback: EMPTY_NOTIFICATIONS,
-		options,
+		...options ?? {},
 	});
 
-	return { ...query, notifications: query.value };
+	return useMemo(() => ({
+		...notificationsQuery,
+		notifications: notificationsQuery.data?.page.items ?? EMPTY_NOTIFICATIONS,
+		total: notificationsQuery.data?.page.total ?? 0,
+		nextCursor: notificationsQuery.data?.page.nextCursor ?? null,
+		prevCursor: notificationsQuery.data?.page.prevCursor ?? null,
+	}), [notificationsQuery]);
 };
 
 export { useNotifications };
-export type { UseNotificationsParams, UseNotificationsOptions, UseNotificationsReturn };
+export type { UseNotificationsOptions, UseNotificationsReturn };

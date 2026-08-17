@@ -1,17 +1,39 @@
-import { AssistantOverlayRoot } from "./AssistantOverlayRoot.tsx";
-import { AssistantScrim } from "./AssistantScrim.tsx";
-import { AssistantSheet } from "./AssistantSheet.tsx";
-import { AssistantFab } from "./AssistantFab.tsx";
+import { cn } from "@internal/ui-library";
+import { AssistantFab } from "./overlay/AssistantFab.tsx";
+import { AssistantScrim } from "./overlay/AssistantScrim.tsx";
+import { AssistantSheet } from "./overlay/AssistantSheet.tsx";
+
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
+import type { AssistantFabProps } from "./overlay/AssistantFab.tsx";
+import type { AssistantScrimProps } from "./overlay/AssistantScrim.tsx";
+import type { AssistantSheetProps } from "./overlay/AssistantSheet.tsx";
 
 
-function AssistantOverlay() {
-	return null;
+type AssistantOverlayProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+type AssistantOverlayObject = FC<AssistantOverlayProps> & {
+	Fab: FC<AssistantFabProps>;
+	Scrim: FC<AssistantScrimProps>;
+	Sheet: FC<AssistantSheetProps>;
 }
 
-AssistantOverlay.displayName = 'AssistantOverlay';
-AssistantOverlay.Root = AssistantOverlayRoot;
+const AssistantOverlay: AssistantOverlayObject = ({
+	children,
+	...props
+}) => (
+	<div
+		className={cn(
+			"finance-theme"
+		)}
+		{...props}
+	>
+		{children}
+	</div>
+);
+
+AssistantOverlay.Fab = AssistantFab;
 AssistantOverlay.Scrim = AssistantScrim;
 AssistantOverlay.Sheet = AssistantSheet;
-AssistantOverlay.Fab = AssistantFab;
+AssistantOverlay.displayName = 'AssistantOverlay';
 
 export { AssistantOverlay };
+export type { AssistantOverlayProps };

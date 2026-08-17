@@ -1,12 +1,12 @@
 import type {FC, ReactNode} from "react";
-import type { CashFlowInsight } from "../metrics-api/types.ts";
+import type { CashFlow } from "@entity/metrics";
 
 
 interface CashFlowCardFxProps {
 	isPending: boolean;
 	isError: boolean;
-	cashFlow: CashFlowInsight | undefined;
-	children: (cashFlow: CashFlowInsight) => ReactNode;
+	cashFlow: CashFlow | undefined;
+	children: (cashFlow: CashFlow) => ReactNode;
 }
 
 const CashFlowSavingFx: FC<CashFlowCardFxProps> = ({

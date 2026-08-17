@@ -1,73 +1,55 @@
 import { useMemo } from "react";
-import type { TransactionPreviewDto } from "@entity/transactions";
 
+import { useTransactionsSearch } from "../data-presenters";
+
+import type { Transaction, TransactionQuery } from "@entity/transactions";
 import type { TransactionsBrowseSetup } from "./types.ts";
-import { useTransactionsList } from "../data-presenters";
 
 
-function matchesSearch(transaction: TransactionPreviewDto, setup: TransactionsBrowseSetup): boolean {
-	if (!setup.search.search) {
+const matchesNeedle = (transaction: Transaction, needle: string, caseSensitive: boolean): boolean => {
+	const haystack = [transaction.name, transaction.category ?? '', transaction.wallet.name].join(' ');
+
+	return caseSensitive
+		? haystack.includes(needle)
+		: haystack.toLowerCase().includes(needle.toLowerCase());
+};
+
+const narrowTransactions = (
+	transactions: Transaction[],
+	setup: TransactionsBrowseSetup
+): Transaction[] => {
+	const needle = setup.search.search;
+
+	return transactions.filter((transaction) => {
+		if (needle && !matchesNeedle(transaction, needle, setup.search.caseSensitive)) return false;
+		if (setup.filters.categoryFilter !== 'all' && transaction.category !== setup.filters.categoryFilter) return false;
+		if (setup.filters.typeFilter !== 'all' && transaction.type !== setup.filters.typeFilter) return false;
+
 		return true;
-	}
-
-	const needle = setup.search.caseSensitive
-		? setup.search.search
-		: setup.search.search.toLowerCase();
-	const haystack = [
-		transaction.merchant,
-		transaction.category,
-		transaction.source_wallet.name,
-		transaction.amount,
-		transaction.currency_code,
-	].join(' ');
-	const normalizedHaystack = setup.search.caseSensitive ? haystack : haystack.toLowerCase();
-
-	return normalizedHaystack.includes(needle);
-}
-
-function matchesWallet(transaction: TransactionPreviewDto, setup: TransactionsBrowseSetup): boolean {
-	return setup.filters.walletFilter === 'all'
-		|| transaction.source_wallet.id === setup.filters.walletFilter;
-}
-
-function matchesCategory(transaction: TransactionPreviewDto, setup: TransactionsBrowseSetup): boolean {
-	return setup.filters.categoryFilter === 'all'
-		|| transaction.category === setup.filters.categoryFilter;
-}
-
-function matchesType(transaction: TransactionPreviewDto, setup: TransactionsBrowseSetup): boolean {
-	return setup.filters.typeFilter === 'all'
-		|| transaction.direction === setup.filters.typeFilter;
-}
-
-function compareBy(field: string, first: TransactionPreviewDto, second: TransactionPreviewDto): number {
-	if (field === 'amount') {
-		return Number(first.amount) - Number(second.amount);
-	}
-
-	return first.created_at.localeCompare(second.created_at);
-}
+	});
+};
 
 const useTransactionsBrowser = (setup: TransactionsBrowseSetup) => {
-	const { transactions, isPending } = useTransactionsList();
+	const query = useMemo<TransactionQuery>(() => ({
+		walletIds: setup.filters.walletFilter === 'all' ? undefined : [setup.filters.walletFilter],
+	}), [setup.filters.walletFilter]);
 
-	const searchResults = useMemo(() => {
-		const filtered = transactions.filter((transaction) => {
-			return matchesSearch(transaction, setup)
-				&& matchesWallet(transaction, setup)
-				&& matchesCategory(transaction, setup)
-				&& matchesType(transaction, setup);
-		});
+	const { transactions, total, nextCursor, prevCursor, isPending } = useTransactionsSearch(query, {
+		order: setup.ordering.direction,
+		limit: setup.page.pageSize,
+		cursor: setup.page.cursor ?? undefined,
+	});
 
-		const ordered = [...filtered].sort((first, second) => {
-			const comparison = compareBy(setup.ordering.field, first, second);
-			return setup.ordering.direction === 'ASC' ? comparison : -comparison;
-		});
+	const narrowed = useMemo(() => narrowTransactions(transactions, setup), [transactions, setup]);
 
-		return { transactions: ordered, total: filtered.length };
-	}, [transactions, setup]);
+	const searchResults = useMemo(() => ({
+		transactions: narrowed,
+		total,
+		nextCursor,
+		prevCursor,
+	}), [narrowed, total, nextCursor, prevCursor]);
 
 	return { searchResults, isPending };
-}
+};
 
 export { useTransactionsBrowser };

@@ -1,20 +1,26 @@
+import { useMemo } from "react";
+
 import { AiAssistantFab, AiAssistantPanel, AiAssistantSheet } from "@widget/assistance";
 import { ShowOnDesktop, ShowOnMobile } from "@shared/visibility";
 import { useDisclosure } from "@shared/overlays";
-import { useAssistantContent } from "@feature/assistance";
+import { useAssistantMessages, useAssistantOverview } from "@feature/assistance";
 
 import type { FC } from "react";
 
 
 const PlanningAiAssistant: FC = () => {
 	const { open, onOpen, onClose } = useDisclosure();
-	const { content } = useAssistantContent();
+	const { overview } = useAssistantOverview();
+	const { messages } = useAssistantMessages();
+	const chat = useMemo(() => [...messages].reverse(), [messages]);
 
 	return (
 		<>
 			<ShowOnDesktop>
 				<AiAssistantPanel
-					{...content}
+					signals={overview.signals}
+					prompts={overview.prompts}
+					chat={chat}
 					className="sticky top-[70px]"
 					comingSoon={true}
 				/>
@@ -23,7 +29,9 @@ const PlanningAiAssistant: FC = () => {
 				<AiAssistantFab onOpen={onOpen} />
 				<AiAssistantSheet open={open} onClose={onClose}>
 					<AiAssistantPanel
-						{...content}
+						signals={overview.signals}
+						prompts={overview.prompts}
+						chat={chat}
 						className="w-full"
 						comingSoon={true}
 						onClose={onClose}

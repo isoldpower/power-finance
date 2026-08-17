@@ -3,11 +3,15 @@ interface GoalView {
 	icon: string;
 	color: string;
 	name: string;
-	monthly: string;
 	eta: string;
 	saved: string;
 	target: string;
 	percent: number;
 }
 
-export type { GoalView };
+interface WalletCategoryOption {
+	value: string;
+	label: string;
+}
+
+export type { GoalView, WalletCategoryOption };

@@ -1,11 +1,11 @@
 import { ShowCashBalanceTip, useCashFlowShare, useConvertedCashFlow } from "@feature/metrics";
 import { CashPercentageGraph } from "@entity/metrics";
 
-import type { CashFlowInsight } from "@feature/metrics";
+import type { CashFlow } from "@entity/metrics";
 
 
 interface CashFlowBalanceGraphProps {
-	cashFlow: CashFlowInsight;
+	cashFlow: CashFlow;
 }
 
 const CashFlowBalanceGraph = ({

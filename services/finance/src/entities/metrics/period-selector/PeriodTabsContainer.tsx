@@ -1,7 +1,7 @@
-import type { FC, ReactNode } from "react";
 import { cn } from "@internal/ui-library";
-
 import { Text } from "@shared/pure-components/typography";
+
+import type { FC, ReactNode } from "react";
 
 
 interface PeriodTabsContainerProps {

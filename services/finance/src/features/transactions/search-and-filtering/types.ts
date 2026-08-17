@@ -1,4 +1,4 @@
-import type { OrderingType } from "@shared/data";
+import type { SearchOrder } from "@shared/api";
 
 interface TransactionsSearch {
 	search?: string;
@@ -12,19 +12,25 @@ interface TransactionsFiltering {
 }
 
 interface TransactionsOrdering {
-	field: string;
-	direction: OrderingType;
+	direction: SearchOrder;
+}
+
+interface TransactionsPaging {
+	pageSize: number;
+	cursor: string | null;
 }
 
 interface TransactionsBrowseSetup {
 	search: TransactionsSearch;
 	filters: TransactionsFiltering;
 	ordering: TransactionsOrdering;
+	page: TransactionsPaging;
 }
 
 export type {
 	TransactionsSearch,
 	TransactionsFiltering,
 	TransactionsOrdering,
+	TransactionsPaging,
 	TransactionsBrowseSetup,
 };

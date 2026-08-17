@@ -1,65 +1,59 @@
-import type { TransactionEntryDto, TransactionOrigin, TransactionPreviewDto } from "../types.ts";
+import {
+	ledgerSideLabel,
+	transactionKindLabel,
+	transactionOriginLabel,
+	UNCATEGORIZED_LABEL,
+} from "../visual-map";
+
+import type { Transaction, TransactionPosting } from "../types.ts";
 import type { LedgerEntryView, TransactionRowView } from "./types.ts";
 import type { FormatMoney } from "@shared/formatting";
 
 
-const KIND_BY_DIRECTION = {
-	in: 'Income',
-	out: 'Expense',
-};
-
-const ORIGIN_VERBOSE: Record<TransactionOrigin, string> = {
-	manual: 'Added manually',
-	imported: 'Imported',
-	recurring: 'Recurring rule',
-};
-
-const SIDE_LABEL = {
-	debit: 'DR',
-	credit: 'CR',
-};
-
 const toLedgerEntryView = (
-	entry: TransactionEntryDto,
-	currency: string,
+	entry: TransactionPosting,
 	formatMoney: FormatMoney
 ): LedgerEntryView => ({
-	label: SIDE_LABEL[entry.side],
-	account: entry.account,
-	side: entry.side,
-	amount: formatMoney(parseFloat(entry.amount), currency),
+	label: ledgerSideLabel(entry.debit),
+	account: entry.title,
+	debit: entry.debit,
+	amount: formatMoney(entry.money.amount, entry.money.currency),
 });
 
-const toTransactionRowView = (
-	transaction: TransactionPreviewDto,
+const toLedgerEntryViews = (
+	entries: TransactionPosting[],
 	formatMoney: FormatMoney
+): LedgerEntryView[] => entries.map((entry) => toLedgerEntryView(entry, formatMoney));
+
+const toTransactionRowView = (
+	transaction: Transaction
 ): TransactionRowView => {
-	const created = new Date(transaction.created_at);
+	const created = new Date(transaction.createdAt);
+	const amount = transaction.money.amount;
 
 	return {
 		id: transaction.id,
-		amount: parseFloat(transaction.amount),
-		currency: transaction.currency_code,
-		direction: transaction.direction,
-		walletId: transaction.source_wallet.id,
-		walletName: transaction.source_wallet.name,
-		createdAt: transaction.created_at,
+		amount,
+		signedAmount: transaction.type === 'expense' ? -amount : amount,
+		currency: transaction.money.currency,
+		type: transaction.type,
+		walletId: transaction.wallet.id,
+		walletName: transaction.wallet.name,
+		createdAt: transaction.createdAt,
 		date: created.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
 		time: created.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }),
-		category: transaction.category,
-		description: transaction.merchant || KIND_BY_DIRECTION[transaction.direction],
-		scanned: transaction.scanned,
-		kind: KIND_BY_DIRECTION[transaction.direction],
-		entries: transaction.entries.map((entry) => toLedgerEntryView(entry, transaction.currency_code, formatMoney)),
-		provenance: `${ORIGIN_VERBOSE[transaction.origin]} · ${created.toLocaleString()}`,
+		category: transaction.category ?? UNCATEGORIZED_LABEL,
+		description: transaction.name || transactionKindLabel(transaction.type),
+		scanned: transaction.origin === 'scanned',
+		kind: transactionKindLabel(transaction.type),
+		provenance: `${transactionOriginLabel(transaction.origin)} · ${created.toLocaleString()}`,
 	};
 };
 
 const toTransactionRowViews = (
-	transactions: TransactionPreviewDto[],
-	formatMoney: FormatMoney
+	transactions: Transaction[]
 ): TransactionRowView[] => {
-	return transactions.map((transaction) => toTransactionRowView(transaction, formatMoney));
+	return transactions.map((transaction) => toTransactionRowView(transaction));
 };
 
-export { toTransactionRowView, toTransactionRowViews };
+export { toTransactionRowView, toTransactionRowViews, toLedgerEntryViews };

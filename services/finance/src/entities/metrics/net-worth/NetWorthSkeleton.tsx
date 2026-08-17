@@ -1,30 +1,36 @@
-import type { FC } from "react";
+import { cn } from "@internal/ui-library";
+import { NetWorthSkeletonAmount } from "./skeleton/NetWorthSkeletonAmount.tsx";
+import { NetWorthSkeletonDescriptor } from "./skeleton/NetWorthSkeletonDescriptor.tsx";
+import { NetWorthSkeletonGraph } from "./skeleton/NetWorthSkeletonGraph.tsx";
 
-import { VIEW_H, VIEW_W } from "./sparkline.ts";
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 
 
-const NetWorthSkeleton: FC = () => (
-	<div>
-		<div className="mt-2.5 h-[42px] w-56 animate-pulse rounded-[var(--radius-md)] bg-secondary" />
-		<div className="mt-2 h-[18px] w-40 animate-pulse rounded bg-secondary" />
-		<div className="mt-7 h-[91px]">
-			<svg viewBox={`0 0 ${VIEW_W.toString()} ${VIEW_H.toString()}`} preserveAspectRatio="none" className="block h-full w-full">
-				<line
-					x1="0"
-					y1={VIEW_H / 2}
-					x2={VIEW_W}
-					y2={VIEW_H / 2}
-					stroke="var(--border-strong)"
-					strokeWidth="2"
-					strokeLinecap="round"
-					strokeDasharray="2 6"
-					vectorEffect="non-scaling-stroke"
-				/>
-			</svg>
-		</div>
+type NetWorthSkeletonProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+type NetWorthSkeletonObject = FC<NetWorthSkeletonProps> & {
+	Amount: FC;
+	Descriptor: FC;
+	Graph: FC;
+}
+
+const NetWorthSkeleton: NetWorthSkeletonObject = ({
+	children,
+	...props
+}) => (
+	<div
+		className={cn(
+			"animate-pulse"
+		)}
+		{...props}
+	>
+		{children}
 	</div>
 );
 
+NetWorthSkeleton.Amount = NetWorthSkeletonAmount;
+NetWorthSkeleton.Descriptor = NetWorthSkeletonDescriptor;
+NetWorthSkeleton.Graph = NetWorthSkeletonGraph;
 NetWorthSkeleton.displayName = 'NetWorthSkeleton';
 
 export { NetWorthSkeleton };
+export type { NetWorthSkeletonProps };

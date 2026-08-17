@@ -1,17 +1,45 @@
-import type { FC } from "react";
-import { UiSkeleton } from "@internal/ui-library";
+import { cn } from "@internal/ui-library";
+import { AutomationSkeletonBody } from "./skeleton-row/AutomationSkeletonBody.tsx";
+import { AutomationSkeletonConditionLine } from "./skeleton-row/AutomationSkeletonConditionLine.tsx";
+import { AutomationSkeletonIcon } from "./skeleton-row/AutomationSkeletonIcon.tsx";
+import { AutomationSkeletonTitle } from "./skeleton-row/AutomationSkeletonTitle.tsx";
+import { AutomationSkeletonToggle } from "./skeleton-row/AutomationSkeletonToggle.tsx";
 
-const AutomationSkeletonRow: FC = () => (
-	<div className="flex items-center gap-3 border-b border-border px-[18px] py-3.5 last:border-b-0">
-		<UiSkeleton className="size-[34px] flex-none rounded-[9px]" />
-		<div className="min-w-0 flex-1 space-y-1.5">
-			<UiSkeleton className="h-3.5 w-1/2" />
-			<UiSkeleton className="h-3 w-3/4" />
-		</div>
-		<UiSkeleton className="h-5 w-9 flex-none rounded-full" />
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
+import type { AutomationSkeletonBodyProps } from "./skeleton-row/AutomationSkeletonBody.tsx";
+
+
+type AutomationSkeletonRowProps = PropsWithChildren<
+	Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>
+>;
+type AutomationSkeletonRowObject = FC<AutomationSkeletonRowProps> & {
+	Body: FC<AutomationSkeletonBodyProps>;
+	ConditionLine: FC;
+	Icon: FC;
+	Title: FC;
+	Toggle: FC;
+}
+
+const AutomationSkeletonRow: AutomationSkeletonRowObject = ({
+	children,
+	...props
+}) => (
+	<div
+		className={cn(
+			"flex items-center gap-3 border-b border-border px-[18px] py-3.5 last:border-b-0"
+		)}
+		{...props}
+	>
+		{children}
 	</div>
 );
 
+AutomationSkeletonRow.Body = AutomationSkeletonBody;
+AutomationSkeletonRow.ConditionLine = AutomationSkeletonConditionLine;
+AutomationSkeletonRow.Icon = AutomationSkeletonIcon;
+AutomationSkeletonRow.Title = AutomationSkeletonTitle;
+AutomationSkeletonRow.Toggle = AutomationSkeletonToggle;
 AutomationSkeletonRow.displayName = 'AutomationSkeletonRow';
 
 export { AutomationSkeletonRow };
+export type { AutomationSkeletonRowProps };

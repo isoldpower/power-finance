@@ -1,11 +1,11 @@
 import { cn } from "@internal/ui-library";
-import { NetWorthElevatedCard } from "@entity/metrics";
+import { NetWorthPanel, periodSince } from "@entity/metrics";
 import {
 	CashFlowBalanceFx,
 	CashFlowSavingFx,
 	CashFlowGraphFx,
 	CashFlowNetFx,
-	useInsights, 
+	useCashFlow,
 	useMetricsPreferences,
 } from "@feature/metrics";
 import {
@@ -25,13 +25,10 @@ interface CashFlowCardProps {
 
 const CashFlowWithFx: FC<CashFlowCardProps> = ({ className }) => {
 	const period = useMetricsPreferences((state) => state.metricsPeriod);
-	const { cashFlow, isPending, isError } = useInsights({ 
-		metrics: ['cash_flow'],
-		range: period,
-	});
+	const { cashFlow, isPending, isError } = useCashFlow({ since: periodSince(period) });
 
 	return (
-		<NetWorthElevatedCard className={cn("flex flex-col", className)}>
+		<NetWorthPanel className={cn("flex flex-col", className)}>
 			<div className="flex items-center gap-2">
 				<MetricPeriodTitle label="Cash flow" period={period} />
 				<span className="flex-1" />
@@ -68,7 +65,7 @@ const CashFlowWithFx: FC<CashFlowCardProps> = ({ className }) => {
 					<CashFlowNet cashFlow={cashFlow} period={period} />
 				)}
 			</CashFlowNetFx>
-		</NetWorthElevatedCard>
+		</NetWorthPanel>
 	);
 };
 

@@ -8,7 +8,12 @@ import {
 	FinanceComboboxList,
 	FinanceComboboxTrigger,
 } from "@internal/ui-library";
-import { CurrencyPicker } from "@entity/localization";
+import {
+	CurrencyPickerLabel,
+	CurrencyPickerOptionCode,
+	CurrencyPickerOptionSelected,
+	CurrencyPickerOptionSymbol,
+} from "@entity/localization";
 import { MetaText } from "@shared/pure-components/typography";
 
 import type { FinanceComboboxPivot } from "@internal/ui-library";
@@ -41,9 +46,9 @@ const CurrencyCombobox: FC<CurrencyComboboxProps> = ({
 	return (
 		<FinanceCombobox>
 			<FinanceComboboxTrigger className={cn("w-full", className)}>
-				<CurrencyPicker.Label variant={variant} currencies={currencies} placeholder={placeholder}>
+				<CurrencyPickerLabel variant={variant} currencies={currencies} placeholder={placeholder}>
 					{value}
-				</CurrencyPicker.Label>
+				</CurrencyPickerLabel>
 			</FinanceComboboxTrigger>
 			<FinanceComboboxContent pivot={pivot}>
 				<FinanceComboboxInput placeholder="Search currency..." />
@@ -57,18 +62,18 @@ const CurrencyCombobox: FC<CurrencyComboboxProps> = ({
 							value={`${currency.code} ${currency.name}`}
 							onSelect={() => { onSelected(currency.code); }}
 						>
-							<CurrencyPicker.OptionSymbol>
+							<CurrencyPickerOptionSymbol>
 								{currency.symbol}
-							</CurrencyPicker.OptionSymbol>
-							<CurrencyPicker.OptionCode>
+							</CurrencyPickerOptionSymbol>
+							<CurrencyPickerOptionCode>
 								{currency.code}
-							</CurrencyPicker.OptionCode>
+							</CurrencyPickerOptionCode>
 							<MetaText size="10.5">
 								{currency.name}
 							</MetaText>
-							<CurrencyPicker.OptionSelected>
+							<CurrencyPickerOptionSelected>
 								{value === currency.code}
-							</CurrencyPicker.OptionSelected>
+							</CurrencyPickerOptionSelected>
 						</FinanceComboboxItem>
 					))}
 				</FinanceComboboxList>

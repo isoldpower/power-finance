@@ -1,46 +1,127 @@
+import type { CollectionResponse, MutationResponse, ResourceResponse } from "@shared/api";
 import type {
-	ListRequest, ListResponse, IListHandler,
-	PostRequest, PostResponse, IPostHandler,
-	IDeleteHandler, DeleteRequest, DeleteResponse,
-	IGetHandler, GetRequest, GetResponse, SpecificResource, IPatchHandler, PatchRequest, PatchResponse,
-} from "@internal/shared";
-import type { WebhookDetailed, WebhookPreview, WebhookValuableFields, WebhookWithSecret } from "../types.ts";
+	DeliveryListParams,
+	SubscriptionCreateBody,
+	WebhookCreateBody,
+	WebhookDeliveryDto,
+	WebhookDto,
+	WebhookEventTypeDto,
+	WebhookListParams,
+	WebhookPatchBody,
+	WebhookSecretDto,
+	WebhookSubscriptionDto,
+} from "../types.ts";
 
-
-interface IWebhookRESTApiClient extends
-	IPostHandler<WebhookValuableFields, WebhookWithSecret>,
-	IListHandler<WebhookPreview>,
-	IGetHandler<object, WebhookDetailed>,
-	IPatchHandler<Partial<WebhookValuableFields>, WebhookDetailed>,
-	IDeleteHandler
-{
-	rotateSecret: (
-		request: PostRequest<SpecificResource<unknown>, object>
-	) => Promise<PostResponse<WebhookWithSecret>>
+interface WebhookListRequest {
+	params?: WebhookListParams;
 }
 
-type WebhookPostRequest = PostRequest<WebhookValuableFields, object>;
-type WebhookPostResponse = PostResponse<WebhookWithSecret>;
+type WebhookListResponse = CollectionResponse<WebhookDto>;
 
-type WebhookListRequest = ListRequest;
-type WebhookListResponse = ListResponse<WebhookPreview>;
+interface WebhookGetRequest {
+	id: string;
+}
 
-type WebhookDeleteRequest = DeleteRequest<object>;
-type WebhookDeleteResponse = DeleteResponse;
+type WebhookGetResponse = ResourceResponse<WebhookDto>;
 
-type WebhookGetRequest = GetRequest<object>;
-type WebhookGetResponse = GetResponse<WebhookDetailed>;
+interface WebhookPostRequest {
+	data: WebhookCreateBody;
+	idempotencyKey?: string;
+}
 
-type WebhookRotateRequest = PostRequest<SpecificResource<unknown>, object>;
-type WebhookRotateResponse = PostResponse<WebhookWithSecret>;
+type WebhookPostResponse = MutationResponse<WebhookSecretDto>;
 
-type WebhookUpdateRequest = PatchRequest<Partial<WebhookValuableFields>, object>;
-type WebhookUpdateResponse = PatchResponse<WebhookDetailed>;
+interface WebhookPatchRequest {
+	id: string;
+	data: WebhookPatchBody;
+}
 
-export type { WebhookPostRequest, WebhookPostResponse };
-export type { WebhookListRequest, WebhookListResponse };
-export type { WebhookDeleteRequest, WebhookDeleteResponse };
-export type { WebhookGetRequest, WebhookGetResponse };
-export type { WebhookRotateRequest, WebhookRotateResponse };
-export type { WebhookUpdateRequest, WebhookUpdateResponse };
-export type { IWebhookRESTApiClient };
+type WebhookPatchResponse = MutationResponse<WebhookDto>;
+
+interface WebhookDeleteRequest {
+	id: string;
+}
+
+type WebhookDeleteResponse = MutationResponse<WebhookDto>;
+
+interface WebhookRotateRequest {
+	id: string;
+	idempotencyKey?: string;
+}
+
+type WebhookRotateResponse = MutationResponse<WebhookSecretDto>;
+
+interface EventTypesRequest {
+	params?: object;
+}
+
+type EventTypesResponse = CollectionResponse<WebhookEventTypeDto>;
+
+interface SubscriptionListRequest {
+	webhookId: string;
+	params?: { limit?: number; cursor?: string };
+}
+
+type SubscriptionListResponse = CollectionResponse<WebhookSubscriptionDto>;
+
+interface SubscriptionPostRequest {
+	webhookId: string;
+	data: SubscriptionCreateBody;
+	idempotencyKey?: string;
+}
+
+type SubscriptionPostResponse = MutationResponse<WebhookSubscriptionDto>;
+
+interface SubscriptionDeleteRequest {
+	webhookId: string;
+	subscriptionId: string;
+}
+
+type SubscriptionDeleteResponse = MutationResponse<WebhookSubscriptionDto>;
+
+interface DeliveryListRequest {
+	webhookId: string;
+	params?: DeliveryListParams;
+}
+
+type DeliveryListResponse = CollectionResponse<WebhookDeliveryDto>;
+
+interface IWebhookRESTApiClient {
+	list: (request: WebhookListRequest) => Promise<WebhookListResponse>;
+	get: (request: WebhookGetRequest) => Promise<WebhookGetResponse>;
+	post: (request: WebhookPostRequest) => Promise<WebhookPostResponse>;
+	patch: (request: WebhookPatchRequest) => Promise<WebhookPatchResponse>;
+	delete: (request: WebhookDeleteRequest) => Promise<WebhookDeleteResponse>;
+	rotateSecret: (request: WebhookRotateRequest) => Promise<WebhookRotateResponse>;
+	eventTypes: (request: EventTypesRequest) => Promise<EventTypesResponse>;
+	listSubscriptions: (request: SubscriptionListRequest) => Promise<SubscriptionListResponse>;
+	subscribe: (request: SubscriptionPostRequest) => Promise<SubscriptionPostResponse>;
+	unsubscribe: (request: SubscriptionDeleteRequest) => Promise<SubscriptionDeleteResponse>;
+	listDeliveries: (request: DeliveryListRequest) => Promise<DeliveryListResponse>;
+}
+
+export type {
+	IWebhookRESTApiClient,
+	DeliveryListRequest,
+	DeliveryListResponse,
+	EventTypesRequest,
+	EventTypesResponse,
+	SubscriptionDeleteRequest,
+	SubscriptionDeleteResponse,
+	SubscriptionListRequest,
+	SubscriptionListResponse,
+	SubscriptionPostRequest,
+	SubscriptionPostResponse,
+	WebhookDeleteRequest,
+	WebhookDeleteResponse,
+	WebhookGetRequest,
+	WebhookGetResponse,
+	WebhookListRequest,
+	WebhookListResponse,
+	WebhookPatchRequest,
+	WebhookPatchResponse,
+	WebhookPostRequest,
+	WebhookPostResponse,
+	WebhookRotateRequest,
+	WebhookRotateResponse,
+};

@@ -1,22 +1,43 @@
-import { Caption, DisplayText, Overline } from "@shared/pure-components/typography";
+import { cn } from "@internal/ui-library";
+import { ScanAmountCardConfidence } from "./amount-card/ScanAmountCardConfidence.tsx";
+import { ScanAmountCardField } from "./amount-card/ScanAmountCardField.tsx";
+import { ScanAmountCardLabel } from "./amount-card/ScanAmountCardLabel.tsx";
+import { ScanAmountCardValue } from "./amount-card/ScanAmountCardValue.tsx";
 
-import type { FC } from "react";
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
+import type { ScanAmountCardConfidenceProps } from "./amount-card/ScanAmountCardConfidence.tsx";
+import type { ScanAmountCardFieldProps } from "./amount-card/ScanAmountCardField.tsx";
+import type { ScanAmountCardLabelProps } from "./amount-card/ScanAmountCardLabel.tsx";
+import type { ScanAmountCardValueProps } from "./amount-card/ScanAmountCardValue.tsx";
 
-interface ScanAmountCardProps {
-	amountFormatted: string;
-	confidence: string;
+
+type ScanAmountCardProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+type ScanAmountCardObject = FC<ScanAmountCardProps> & {
+	Confidence: FC<ScanAmountCardConfidenceProps>;
+	Field: FC<ScanAmountCardFieldProps>;
+	Label: FC<ScanAmountCardLabelProps>;
+	Value: FC<ScanAmountCardValueProps>;
 }
 
-const ScanAmountCard: FC<ScanAmountCardProps> = ({ amountFormatted, confidence }) => (
-	<div className="mb-3.5 flex items-center justify-between rounded-[var(--radius-md)] border-[1.5px] border-primary px-4 py-3.5 shadow-[0_0_0_3px_var(--accent-soft)]">
-		<div>
-			<Overline size="10.5" tracking="0.1em">Amount</Overline>
-			<DisplayText tone="negative">{amountFormatted}</DisplayText>
-		</div>
-		<Caption as="span" size="10" tone="accent" className="rounded-full bg-[var(--accent-soft)] px-2.5 py-1">{confidence}</Caption>
+const ScanAmountCard: ScanAmountCardObject = ({
+	children,
+	...props
+}) => (
+	<div
+		className={cn(
+			"mb-3.5 flex items-center justify-between rounded-[var(--radius-md)]",
+			"border-[1.5px] border-primary px-4 py-3.5 shadow-[0_0_0_3px_var(--accent-soft)]"
+		)}
+		{...props}
+	>
+		{children}
 	</div>
 );
 
+ScanAmountCard.Confidence = ScanAmountCardConfidence;
+ScanAmountCard.Field = ScanAmountCardField;
+ScanAmountCard.Label = ScanAmountCardLabel;
+ScanAmountCard.Value = ScanAmountCardValue;
 ScanAmountCard.displayName = 'ScanAmountCard';
 
 export { ScanAmountCard };

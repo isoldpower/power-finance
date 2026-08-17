@@ -2,10 +2,10 @@ export { BulkActionsBar } from './BulkActionsBar.tsx';
 export { FilterChip } from './FilterChip.tsx';
 export { JournalPostingHeader } from './JournalPostingHeader.tsx';
 export { LedgerLineRow } from './LedgerLineRow.tsx';
+export { LedgerLineSkeleton } from './LedgerLineSkeleton.tsx';
 export { LedgerRow } from './LedgerRow.tsx';
 export { RowSelectCheckbox } from './RowSelectCheckbox.tsx';
 export { TransactionAmountStack } from './TransactionAmountStack.tsx';
 export { TransactionSearchInput } from './TransactionSearchInput.tsx';
 export { TransactionsEmptyState } from './TransactionsEmptyState.tsx';
 export { TransactionsTableHeader } from './TransactionsTableHeader.tsx';
-

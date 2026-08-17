@@ -4,11 +4,11 @@ import { useTransactionsPaginationContext } from "@feature/transactions";
 import { ProtectBrowseSpace } from "@feature/wallets";
 
 import type { FC, ReactNode } from "react";
-import type { TransactionPreviewDto } from "@entity/transactions";
+import type { Transaction } from "@entity/transactions";
 
 
 interface BrowseTransactionEntriesProps {
-	children: (entry: TransactionPreviewDto) => ReactNode;
+	children: (entry: Transaction) => ReactNode;
 }
 
 const BrowseTransactionEntries: FC<BrowseTransactionEntriesProps> = ({
@@ -21,7 +21,17 @@ const BrowseTransactionEntries: FC<BrowseTransactionEntriesProps> = ({
 
 	if (paginatedTransactions.length === 0) {
 		return (
-			<TransactionsEmptyState />
+			<TransactionsEmptyState>
+				<TransactionsEmptyState.Icon>
+					⌕
+				</TransactionsEmptyState.Icon>
+				<TransactionsEmptyState.Title>
+					No matching transactions
+				</TransactionsEmptyState.Title>
+				<TransactionsEmptyState.Hint>
+					Try a different search or clear your filters.
+				</TransactionsEmptyState.Hint>
+			</TransactionsEmptyState>
 		);
 	}
 

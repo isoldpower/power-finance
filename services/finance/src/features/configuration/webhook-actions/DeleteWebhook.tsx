@@ -2,8 +2,8 @@ import { useCallback } from "react";
 import type { FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
 
-import { useWebhookMethods } from "../data-presenters";
-import type { DeleteWebhookResponse } from "../webhooks-api/methods/delete-webhook.ts";
+import { useDeleteWebhook } from "../data-presenters";
+import type { WebhookEndpoint } from "@entity/configuration";
 import type { DeletedWebhookSchema } from "./schemas.ts";
 
 
@@ -11,7 +11,7 @@ interface DeleteWebhookProps {
 	webhookId: string;
 	handleSubmit: UseFormHandleSubmit<DeletedWebhookSchema>;
 	onBeforeDelete?: () => void;
-	onSuccess?: (result: DeleteWebhookResponse) => void;
+	onSuccess?: (webhook: WebhookEndpoint) => void;
 	children?: ReactNode;
 }
 
@@ -22,12 +22,14 @@ function DeleteWebhook({
 	children,
 	onBeforeDelete
 }: DeleteWebhookProps) {
-	const { deleteWebhook } = useWebhookMethods(webhookId);
+	const deleteWebhook = useDeleteWebhook(webhookId);
 
 	const onSubmit = useCallback(async () => {
 		if (onBeforeDelete) onBeforeDelete();
-		const deleteResponse = await deleteWebhook();
-		if (onSuccess) onSuccess(deleteResponse);
+
+		const deleted = await deleteWebhook.mutateAsync();
+
+		if (onSuccess) onSuccess(deleted);
 	}, [deleteWebhook, onBeforeDelete, onSuccess]);
 
 	const handleSubmitForm = useCallback((

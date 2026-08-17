@@ -1,298 +1,280 @@
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
-import type { WalletKindDto } from "../types.ts";
-import type {Wallet, WalletGoalMeta} from "@entity/wallets";
-import {DEFAULT_GOAL_COLOR, DEFAULT_GOAL_ICON, DEFAULT_WALLET_GRADIENT} from "@entity/wallets";
-import type {WalletSearchLeaf, WalletSearchNode, WalletSearchRoot, WalletStats} from "../types.ts";
-import type {IStorage} from "@internal/shared";
-import {LocalStorageMock} from "@internal/shared";
-
-import {flatToWalletDetailed, flatToWalletPreview} from "../mutators/flat-to-api.ts";
+import { LocalStorageMock } from "@internal/shared";
 import {
+	ApiError,
+	createMatcher,
+	delay,
+	IdempotencyStore,
+	paginate,
+	parseAmount,
+	serializeAmount,
+	stringifySortedQuery,
+	validateFilter,
+} from "@shared/api";
+import { storedTransactionToDto, TRANSACTIONS_STORAGE_KEY, walletDelta } from "@feature/transactions/transactions-api";
+import { WALLETS_STORAGE_KEY } from "./storage.ts";
+import type { IStorage } from "@internal/shared";
+import type { FieldPolicy, MoneyDto } from "@shared/api";
+import type { StoredTransaction, TransactionDto } from "@feature/transactions/transactions-api";
+import type { StoredWallet } from "./storage.ts";
+import type { WalletDetailDto, WalletDto, WalletSearchField } from "../types.ts";
+import type {
 	IWalletsRESTApiClient,
-	WalletDeleteRequest,
-	WalletDeleteResponse,
-	WalletGetRequest,
-	WalletGetResponse,
-	WalletListRequest,
-	WalletListResponse,
-	WalletPatchRequest,
-	WalletPatchResponse,
-	WalletPostRequest,
-	WalletPostResponse,
-	WalletPutRequest,
-	WalletPutResponse, WalletsSearchRequest, WalletsSearchResponse
-,
-	WalletKindsRequest,
-	WalletKindsResponse,
+	WalletDeleteRequest, WalletDeleteResponse,
+	WalletGetRequest, WalletGetResponse,
+	WalletListRequest, WalletListResponse,
+	WalletPatchRequest, WalletPatchResponse,
+	WalletPostRequest, WalletPostResponse,
+	WalletSearchRequest, WalletSearchResponse,
 } from "./types.ts";
 
+const MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
 
-interface StoredTransaction {
-	id: string;
-	source_wallet_id: string;
-	amount: string;
-	created_at?: string;
-}
-
-// Goals stored before amounts became numeric kept them as "$1,234" strings.
-interface LegacyGoalAmounts {
-	target?: string;
-	monthly?: string;
-}
-
-const parseLegacyAmount = (value: string | undefined): number => {
-	return Number((value ?? '').replace(/[^0-9.]/g, '')) || 0;
+const SEARCH_FIELDS: FieldPolicy<WalletSearchField> = {
+	name: ['eq', 'neq', 'in', 'contains', 'icontains'],
+	currency: ['eq', 'neq', 'in'],
+	balance: ['eq', 'gt', 'gte', 'lt', 'lte'],
+	created_at: ['gt', 'gte', 'lt', 'lte'],
 };
 
-function resolveField(wallet: Wallet, path: string): unknown {
-	return path.split(".").reduce<unknown>(
-		(node, key) => (node && typeof node === "object") ? (node as Record<string, unknown>)[key] : undefined,
-		wallet,
-	);
+interface WalletRecord {
+	wallet: StoredWallet;
+	balance: string;
 }
 
-function matchesLeaf(wallet: Wallet, leaf: WalletSearchLeaf): boolean {
-	const field = resolveField(wallet, leaf.field_name);
-	if (field === undefined || field === null) return false;
+const compareDesc = (left: string, right: string): number => (left < right ? 1 : left > right ? -1 : 0);
 
-	const fieldString = String(field);
-	const fieldNumber = typeof field === "number" ? field : parseFloat(fieldString);
-	const valueNumber = parseFloat(leaf.value);
-	const bothNumeric = !Number.isNaN(fieldNumber) && !Number.isNaN(valueNumber);
+const orderWallets = (records: WalletRecord[]): WalletRecord[] => {
+	return [...records].sort((left, right) => {
+		if (left.wallet.favorite !== right.wallet.favorite) return left.wallet.favorite ? -1 : 1;
 
-	switch (leaf.operator) {
-		case "exact":
-		case "eq":
-			return bothNumeric ? fieldNumber === valueNumber : fieldString === leaf.value;
-		case "iexact":
-			return fieldString.toLowerCase() === leaf.value.toLowerCase();
-		case "contains":
-			return fieldString.includes(leaf.value);
-		case "icontains":
-			return fieldString.toLowerCase().includes(leaf.value.toLowerCase());
-		case "startswith":
-			return fieldString.startsWith(leaf.value);
-		case "istartswith":
-			return fieldString.toLowerCase().startsWith(leaf.value.toLowerCase());
-		case "endswith":
-			return fieldString.endsWith(leaf.value);
-		case "iendswith":
-			return fieldString.toLowerCase().endsWith(leaf.value.toLowerCase());
-		case "gt":
-			return bothNumeric && fieldNumber > valueNumber;
-		case "gte":
-			return bothNumeric && fieldNumber >= valueNumber;
-		case "lt":
-			return bothNumeric && fieldNumber < valueNumber;
-		case "lte":
-			return bothNumeric && fieldNumber <= valueNumber;
-		default:
-			return false;
+		const byDate = compareDesc(left.wallet.created_at, right.wallet.created_at);
+
+		return byDate !== 0 ? byDate : compareDesc(left.wallet.id, right.wallet.id);
+	});
+};
+
+const leafValue = (record: WalletRecord, field: WalletSearchField): string | null => {
+	switch (field) {
+		case 'name':
+			return record.wallet.name;
+		case 'currency':
+			return record.wallet.currency;
+		case 'balance':
+			return record.balance;
+		case 'created_at':
+			return record.wallet.created_at;
 	}
-}
+};
 
-function matchesNode(wallet: Wallet, node: WalletSearchNode): boolean {
-	if ("AND" in node && node.AND) return node.AND.every((child) => matchesNode(wallet, child));
-	if ("OR" in node && node.OR) return node.OR.some((child) => matchesNode(wallet, child));
-	return matchesLeaf(wallet, node as WalletSearchLeaf);
-}
-
-function matchesSearch(wallet: Wallet, root: WalletSearchRoot | undefined): boolean {
-	if (!root) return true;
-	return matchesNode(wallet, root);
-}
-
-const SEED_KINDS: WalletKindDto[] = [
-	{ id: 'debit-card', label: 'Debit card', credit: false },
-	{ id: 'savings', label: 'Savings', credit: false },
-	{ id: 'credit-card', label: 'Credit card', credit: true },
-	{ id: 'cash', label: 'Cash', credit: false },
-];
+const matchesNode = createMatcher<WalletRecord, WalletSearchField>(
+	SEARCH_FIELDS,
+	(record, field) => leafValue(record, field),
+	{ numericFields: ['balance'] },
+);
 
 class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
-	private readonly storage: IStorage<Wallet>;
+	private readonly storage: IStorage<StoredWallet>;
 	private readonly transactions: IStorage<StoredTransaction>;
+	private readonly idempotency = new IdempotencyStore<WalletDto>();
 
-	constructor(_key: string) {
-		this.storage = new LocalStorageMock<Wallet>(_key);
-		this.transactions = new LocalStorageMock<StoredTransaction>('transactions');
+	constructor(storageKey: string = WALLETS_STORAGE_KEY) {
+		this.storage = new LocalStorageMock<StoredWallet>(storageKey);
+		this.transactions = new LocalStorageMock<StoredTransaction>(TRANSACTIONS_STORAGE_KEY);
 	}
 
-	private withCompleteGoal(wallet: Wallet): Wallet {
-		if (wallet.type !== 'long-term-goal') return wallet;
+	private ledger(walletId: string): StoredTransaction[] {
+		return this.transactions.list()
+			.filter((item) => item.wallet_id === walletId && item.deleted_at === null);
+	}
 
-		const legacy = wallet.goal as (WalletGoalMeta & LegacyGoalAmounts) | undefined;
+	private balance(wallet: StoredWallet): string {
+		const delta = this.ledger(wallet.id).reduce((sum, item) => sum + walletDelta(item), 0);
+
+		return serializeAmount(parseAmount(wallet.opening_balance) + delta);
+	}
+
+	private record(wallet: StoredWallet): WalletRecord {
+		return { wallet, balance: this.balance(wallet) };
+	}
+
+	private money(record: WalletRecord): MoneyDto {
+		return { amount: record.balance, currency: record.wallet.currency };
+	}
+
+	private toDto(record: WalletRecord): WalletDto {
+		const { wallet } = record;
 
 		return {
-			...wallet,
-			goal: {
-				icon: wallet.goal?.icon ?? DEFAULT_GOAL_ICON,
-				color: wallet.goal?.color ?? DEFAULT_GOAL_COLOR,
-				targetAmount: wallet.goal?.targetAmount ?? parseLegacyAmount(legacy?.target),
-				monthlyAmount: wallet.goal?.monthlyAmount ?? parseLegacyAmount(legacy?.monthly),
-			},
+			id: wallet.id,
+			name: wallet.name,
+			created_at: wallet.created_at,
+			updated_at: wallet.updated_at,
+			deleted_at: wallet.deleted_at,
+			category: wallet.category,
+			currency: wallet.currency,
+			money: this.money(record),
+			zero_balance: { amount: wallet.zero_balance, currency: wallet.currency },
+			favorite: wallet.favorite,
+			color: wallet.color,
 		};
 	}
 
-	private withLiveBalance(wallet: Wallet): Wallet {
-		const delta = this.transactions.list().reduce(
-			(sum, txn) => txn.source_wallet_id === wallet.id ? sum + (parseFloat(txn.amount) || 0) : sum,
-			0
-		);
-		return this.withCompleteGoal({
-			...wallet,
-			color: wallet.color || DEFAULT_WALLET_GRADIENT,
-			balance: { ...wallet.balance, amount: wallet.balance.amount + delta }
-		});
-	}
-
-	private statsFor(walletId: string): WalletStats {
-		const owned = this.transactions.list().filter((txn) => txn.source_wallet_id === walletId);
-		const lastActivity = owned.reduce<string | null>(
-			(latest, txn) => txn.created_at && (!latest || txn.created_at > latest) ? txn.created_at : latest,
-			null
+	private lastMonth(walletId: string, currency: string): WalletDetailDto['last_month'] {
+		const since = Date.now() - MONTH_IN_MS;
+		const recent = this.ledger(walletId).filter((item) => new Date(item.created_at).getTime() >= since);
+		const sum = (type: StoredTransaction['type']): string => serializeAmount(
+			recent
+				.filter((item) => item.type === type)
+				.reduce((total, item) => total + parseAmount(item.amount), 0),
 		);
 
-		return { transaction_count: owned.length, last_activity_at: lastActivity };
+		return {
+			inflow: { amount: sum('income'), currency },
+			outflow: { amount: sum('expense'), currency },
+		};
 	}
 
-	public get(
-		request: WalletGetRequest
-	): Promise<WalletGetResponse> {
-		return new Promise((resolve) => setTimeout(resolve, 250))
-			.then(() => this.storage.get(request.id))
-			.then((value) => {
-				if (!value) throw new Error("Not found");
-
-				return flatToWalletDetailed(this.withLiveBalance(value), this.statsFor(value.id));
-			});
-	}
-	
-	public search(
-		request: WalletsSearchRequest,
-	): Promise<WalletsSearchResponse> {
-		const filteredItems = this.storage.list()
-			.map((value) => this.withLiveBalance(value))
-			.filter((value) => matchesSearch(value, request.data));
-		const start = request.params?.offset ?? 0;
-		const end = request.params?.limit
-			? start + request.params.limit
-			: filteredItems.length;
-
-		return new Promise((resolve) => setTimeout(resolve, 250))
-			.then(() => filteredItems.slice(start, end))
-			.then((values) => ({
-				data: values.map((value) => flatToWalletPreview(value)),
-				meta: {
-					total: filteredItems.length,
-					offset: request.params?.offset ?? 0,
-					limit: end - start,
-				}
-			}));
+	private recent(walletId: string): TransactionDto[] {
+		return this.ledger(walletId)
+			.sort((left, right) => compareDesc(left.created_at, right.created_at))
+			.map(storedTransactionToDto);
 	}
 
-	public post(
-		request: WalletPostRequest
-	): Promise<WalletPostResponse> {
-		const timestamp = new Date().toISOString();
-		const filledPayload: Wallet = Object.assign(request.data, {
+	private require(id: string): StoredWallet {
+		const wallet = this.storage.get(id);
+		if (!wallet) throw new ApiError('not_found', `Wallet ${id} does not exist`);
+
+		return wallet;
+	}
+
+	private open(): WalletRecord[] {
+		return orderWallets(
+			this.storage.list()
+				.filter((wallet) => wallet.deleted_at === null)
+				.map((wallet) => this.record(wallet)),
+		);
+	}
+
+	private replace(previous: StoredWallet, next: StoredWallet): void {
+		this.storage.remove(previous);
+		this.storage.add(next);
+	}
+
+	public async list(payload: WalletListRequest): Promise<WalletListResponse> {
+		await delay();
+
+		const page = paginate(this.open(), payload.params, stringifySortedQuery({ scope: 'list' }));
+
+		return {
+			data: page.items.map((record) => this.toDto(record)),
+			meta: { ...page.meta, cached: false },
+		};
+	}
+
+	public async get(payload: WalletGetRequest): Promise<WalletGetResponse> {
+		await delay();
+
+		const wallet = this.require(payload.id);
+		const record = this.record(wallet);
+		const recent = paginate(
+			this.recent(wallet.id),
+			payload.params,
+			stringifySortedQuery({ id: payload.id }),
+		);
+
+		return {
+			data: {
+				...this.toDto(record),
+				last_month: this.lastMonth(wallet.id, wallet.currency),
+				recent: recent.items,
+			},
+			meta: { recent: recent.meta, cached: false },
+		};
+	}
+
+	public async post(payload: WalletPostRequest): Promise<WalletPostResponse> {
+		const replay = this.idempotency.replay(payload.idempotencyKey, payload.data);
+		if (replay) return { data: replay, meta: { idempotent_replay: true } };
+
+		await delay();
+
+		const wallet: StoredWallet = {
 			id: uuidv4(),
-			createdAt: timestamp,
-			updatedAt: timestamp,
-		});
+			name: payload.data.name,
+			created_at: new Date().toISOString(),
+			updated_at: null,
+			deleted_at: null,
+			category: payload.data.category,
+			currency: payload.data.currency,
+			opening_balance: payload.data.opening_balance,
+			zero_balance: payload.data.zero_balance,
+			favorite: false,
+			color: payload.data.color,
+		};
 
-		return new Promise((resolve) => setTimeout(resolve, 250))
-			.then(() => { this.storage.add(filledPayload); })
-			.then(() => flatToWalletDetailed(filledPayload, this.statsFor(filledPayload.id)));
+		this.storage.add(wallet);
+
+		const dto = this.toDto(this.record(wallet));
+		this.idempotency.remember(payload.idempotencyKey, payload.data, dto);
+
+		return { data: dto, meta: { idempotent_replay: false } };
 	}
 
-	public list(
-		request: WalletListRequest
-	): Promise<WalletListResponse> {
-		const items = this.storage.list();
-		const start = request.params?.offset ?? 0;
-		const end = request.params?.limit
-			? start + request.params.limit
-			: items.length;
+	public async patch(payload: WalletPatchRequest): Promise<WalletPatchResponse> {
+		await delay();
 
-		return new Promise((resolve) => setTimeout(resolve, 250))
-			.then(() => items.slice(start, end))
-			.then((values) => ({
-				data: values.map((value) => flatToWalletPreview(this.withLiveBalance(value))),
-				meta: {
-					total: items.length,
-					offset: request.params?.offset ?? 0,
-					limit: end - start,
-				}
-			}));
+		const wallet = this.require(payload.id);
+		const updated: StoredWallet = {
+			...wallet,
+			name: payload.data.name ?? wallet.name,
+			favorite: payload.data.favorite ?? wallet.favorite,
+			category: payload.data.category ?? wallet.category,
+			zero_balance: payload.data.zero_balance ?? wallet.zero_balance,
+			color: payload.data.color ?? wallet.color,
+			updated_at: new Date().toISOString(),
+		};
+
+		this.replace(wallet, updated);
+
+		return { data: this.toDto(this.record(updated)), meta: {} };
 	}
 
-	patch(
-		request: WalletPatchRequest
-	): Promise<WalletPatchResponse> {
-		return new Promise((resolve) => setTimeout(resolve, 250))
-			.then(() => this.storage.get(request.id))
-			.then((value) => {
-				if (!value) throw new Error("Not found");
+	public async delete(payload: WalletDeleteRequest): Promise<WalletDeleteResponse> {
+		await delay();
 
-				this.storage.remove(value);
-				const openingAmount = value.balance.amount;
-				const updatedValue = Object.assign(value, request.data, { updatedAt: new Date().toISOString() });
-				// The stored balance is the wallet's opening amount; the live balance is derived from
-				// the transaction ledger, so a client write must never overwrite it (that double-counts).
-				updatedValue.balance = { ...updatedValue.balance, amount: openingAmount };
-				this.storage.add(updatedValue);
-				return flatToWalletDetailed(this.withLiveBalance(updatedValue), this.statsFor(updatedValue.id));
-			});
+		const wallet = this.require(payload.id);
+		const record = this.record(wallet);
+
+		if (wallet.deleted_at === null && parseAmount(record.balance) !== 0) {
+			throw new ApiError('wallet_not_empty', 'Wallet still holds money and cannot be closed');
+		}
+
+		const closed: StoredWallet = { ...wallet, deleted_at: wallet.deleted_at ?? new Date().toISOString() };
+		this.replace(wallet, closed);
+
+		return { data: this.toDto(this.record(closed)), meta: {} };
 	}
 
-	put(
-		request: WalletPutRequest
-	): Promise<WalletPutResponse> {
-		return new Promise((resolve) => setTimeout(resolve, 250))
-			.then(() => this.storage.get(request.id))
-			.then((value) => {
-				if (!value) throw new Error("Not found");
+	public async search(payload: WalletSearchRequest): Promise<WalletSearchResponse> {
+		validateFilter(SEARCH_FIELDS, payload.data.filter_body);
 
-				this.storage.remove(value);
-				const updatedValue: Wallet = Object.assign(
-					{ id: value.id, createdAt: value.createdAt, updatedAt: new Date().toISOString() },
-					request.data
-				);
-				// Opening balance is server-owned (live balance derives from the ledger); keep the stored amount.
-				updatedValue.balance = { ...updatedValue.balance, amount: value.balance.amount };
-				this.storage.add(updatedValue);
-				return flatToWalletDetailed(this.withLiveBalance(updatedValue), this.statsFor(updatedValue.id));
-			});
-	}
+		await delay();
 
-	delete(
-		request: WalletDeleteRequest
-	): Promise<WalletDeleteResponse> {
-		return new Promise((resolve) => setTimeout(resolve, 250))
-			.then(() => this.storage.get(request.id))
-			.then((value) => {
-				if (!value) throw new Error("Not found");
+		const matching = this.open().filter((record) => matchesNode(record, payload.data.filter_body));
+		const ordered = payload.params?.order === 'ASC' ? [...matching].reverse() : matching;
+		const page = paginate(
+			ordered,
+			payload.params,
+			stringifySortedQuery({ filter: payload.data.filter_body, order: payload.params?.order ?? 'DESC' }),
+		);
 
-				this.storage.remove(value);
-				return {
-					message: `Successfully deleted resource at ${request.id}`,
-					meta: {
-						id: request.id,
-						success: true
-					}
-				};
-			});
-	}
-
-	listKinds(
-		_request: WalletKindsRequest
-	): Promise<WalletKindsResponse> {
-		return new Promise<WalletKindsResponse>((resolve) => {
-			setTimeout(() => { resolve({ data: SEED_KINDS }); }, 250);
-		});
+		return {
+			data: page.items.map((record) => this.toDto(record)),
+			meta: { ...page.meta, cached: false },
+		};
 	}
 }
 
-export { WalletsMockRESTApiClient };
+export { WalletsMockRESTApiClient, SEARCH_FIELDS as WALLET_SEARCH_FIELDS };

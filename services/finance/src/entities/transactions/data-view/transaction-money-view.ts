@@ -1,19 +1,19 @@
-import type { TransactionPreviewDto } from "../types.ts";
+import type { Transaction } from "../types.ts";
 import type { ConvertMoney, TransactionMoneyView } from "./types.ts";
 import type { FormatMoney } from "@shared/formatting";
 
 
 const toTransactionMoneyView = (
-	transaction: TransactionPreviewDto,
+	transaction: Transaction,
 	convert: ConvertMoney,
 	formatMoney: FormatMoney
 ): TransactionMoneyView => {
-	const currency = transaction.currency_code;
-	const amount = parseFloat(transaction.amount);
+	const { currency } = transaction.money;
+	const amount = transaction.type === 'expense' ? -transaction.money.amount : transaction.money.amount;
 	const main = convert({ amount, currency });
 
 	return {
-		walletName: transaction.source_wallet.name,
+		walletName: transaction.wallet.name,
 		amountOriginal: formatMoney(amount, currency),
 		amountMain: main.formatted,
 		amountAbsolute: formatMoney(Math.abs(amount), currency),

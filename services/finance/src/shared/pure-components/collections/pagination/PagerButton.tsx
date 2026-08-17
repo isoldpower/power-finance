@@ -2,7 +2,7 @@ import { cn } from "@internal/ui-library";
 import type { ButtonHTMLAttributes, FC } from "react";
 
 
-type PagerButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'aria-label'>;
+type PagerButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'>;
 
 const PagerButton: FC<PagerButtonProps> = ({
 	children,
@@ -12,7 +12,6 @@ const PagerButton: FC<PagerButtonProps> = ({
 	return (
 		<button
 			type="button"
-			aria-label="Previous page"
 			className={cn(
 				"flex size-7 items-center justify-center rounded-[7px] border border-border-strong",
 				"text-text-2 transition-colors hover:bg-secondary disabled:pointer-events-none disabled:opacity-40",

@@ -1,17 +1,19 @@
-import type { ITransactionsRESTApiClient } from "../rest-client/types.ts";
-import type { CategoryDto } from "../types.ts";
-
+import { categoryFromApi } from "../mutators";
+import type { TransactionCategory } from "@entity/transactions";
+import type { ITransactionsRESTApiClient } from "../rest-client";
 
 interface ListCategoriesRequest {
 	handler: Pick<ITransactionsRESTApiClient, 'listCategories'>;
 }
 
 interface ListCategoriesResponse {
-	data: CategoryDto[];
+	categories: TransactionCategory[];
 }
 
 async function listCategories(request: ListCategoriesRequest): Promise<ListCategoriesResponse> {
-	return request.handler.listCategories({ params: {} });
+	const response = await request.handler.listCategories({ params: {} });
+
+	return { categories: response.data.map(categoryFromApi) };
 }
 
 export { listCategories };

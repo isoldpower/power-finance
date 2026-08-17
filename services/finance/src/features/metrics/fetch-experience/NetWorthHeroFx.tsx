@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from "react";
-import type { NetWorthInsight } from "../metrics-api/types.ts";
+import type { NetWorth } from "@entity/metrics";
 
 import { NetWorthSkeleton } from "@entity/metrics";
 import { Caption } from "@shared/pure-components/typography";
@@ -8,8 +8,8 @@ import { Caption } from "@shared/pure-components/typography";
 interface NetWorthHeroFxProps {
 	isPending: boolean;
 	isError: boolean;
-	netWorth: NetWorthInsight | undefined;
-	children: (netWorth: NetWorthInsight) => ReactNode;
+	netWorth: NetWorth | undefined;
+	children: (netWorth: NetWorth) => ReactNode;
 }
 
 const NetWorthHeroFx: FC<NetWorthHeroFxProps> = ({
@@ -19,7 +19,13 @@ const NetWorthHeroFx: FC<NetWorthHeroFxProps> = ({
 	children,
 }) => {
 	if (isPending) {
-		return <NetWorthSkeleton />;
+		return (
+			<NetWorthSkeleton>
+				<NetWorthSkeleton.Amount />
+				<NetWorthSkeleton.Descriptor />
+				<NetWorthSkeleton.Graph />
+			</NetWorthSkeleton>
+		);
 	} else if (isError || !netWorth) {
 		return <NetWorthHeroFailed />;
 	}

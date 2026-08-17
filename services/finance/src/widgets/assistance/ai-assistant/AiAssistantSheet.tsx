@@ -15,12 +15,12 @@ const AiAssistantSheet: FC<AiAssistantSheetProps> = ({ open, onClose, children }
 	return (
 		<ShowOnOpen open={open}>
 			<AttachToLayout>
-				<AssistantOverlay.Root>
+				<AssistantOverlay>
 					<AssistantOverlay.Scrim onClick={onClose} />
 					<AssistantOverlay.Sheet>
 						{children}
 					</AssistantOverlay.Sheet>
-				</AssistantOverlay.Root>
+				</AssistantOverlay>
 			</AttachToLayout>
 		</ShowOnOpen>
 	);

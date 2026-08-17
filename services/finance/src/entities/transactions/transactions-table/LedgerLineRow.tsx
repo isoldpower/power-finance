@@ -1,31 +1,43 @@
-import { FinanceBadge } from "@internal/ui-library";
+import { cn } from "@internal/ui-library";
+import { LedgerLineAccount } from "./ledger-line/LedgerLineAccount.tsx";
+import { LedgerLineAmount } from "./ledger-line/LedgerLineAmount.tsx";
+import { LedgerLineKind } from "./ledger-line/LedgerLineKind.tsx";
+import { LedgerLineSide } from "./ledger-line/LedgerLineSide.tsx";
 
-import type { LedgerEntryView } from "../data-view";
-import type { FC } from "react";
-import { DisplayText, Overline, RowTitle } from "@shared/pure-components/typography";
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
+import type { LedgerLineAccountProps } from "./ledger-line/LedgerLineAccount.tsx";
+import type { LedgerLineAmountProps } from "./ledger-line/LedgerLineAmount.tsx";
+import type { LedgerLineKindProps } from "./ledger-line/LedgerLineKind.tsx";
+import type { LedgerLineSideProps } from "./ledger-line/LedgerLineSide.tsx";
 
 
-interface LedgerLineRowProps {
-	line: LedgerEntryView;
+type LedgerLineRowProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+type LedgerLineRowObject = FC<LedgerLineRowProps> & {
+	Account: FC<LedgerLineAccountProps>;
+	Amount: FC<LedgerLineAmountProps>;
+	Kind: FC<LedgerLineKindProps>;
+	Side: FC<LedgerLineSideProps>;
 }
 
-const LedgerLineRow: FC<LedgerLineRowProps> = ({ line }) => (
-	<div className="ml-[17px] mt-2 flex items-center gap-2.5 rounded-[9px] border border-border bg-card px-3 py-2.5">
-		<FinanceBadge tone={line.side === 'debit' ? 'accent' : 'viol'} appearance="soft" size="sm">
-			{line.label}
-		</FinanceBadge>
-		<RowTitle as="span" size="12.5" truncate className="min-w-0 flex-1">
-			{line.account}
-		</RowTitle>
-		<Overline as="span" size="9" tracking="0.06em">
-			{line.side}
-		</Overline>
-		<DisplayText as="span" size="13" className="min-w-16 text-right">
-			{line.amount}
-		</DisplayText>
+const LedgerLineRow: LedgerLineRowObject = ({
+	children,
+	...props
+}) => (
+	<div
+		className={cn(
+			"ml-[17px] mt-2 flex items-center gap-2.5 rounded-[9px]",
+			"border border-border bg-card px-3 py-2.5"
+		)}
+		{...props}
+	>
+		{children}
 	</div>
 );
 
+LedgerLineRow.Account = LedgerLineAccount;
+LedgerLineRow.Amount = LedgerLineAmount;
+LedgerLineRow.Kind = LedgerLineKind;
+LedgerLineRow.Side = LedgerLineSide;
 LedgerLineRow.displayName = 'LedgerLineRow';
 
 export { LedgerLineRow };

@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-
-import { AccountsMockRESTApiClient } from "@feature/accounts";
-import type { IAccountsRESTApiClient } from "@feature/accounts";
 import { useAxiosInstance } from "@internal/shared";
 
+import { AccountsMockRESTApiClient } from "@feature/accounts";
+import { API_BASE_PATH } from "../config.ts";
+import type { IAccountsRESTApiClient } from "@feature/accounts";
 
 interface UseAccountsApiResponse {
 	rest: IAccountsRESTApiClient;
@@ -11,7 +11,7 @@ interface UseAccountsApiResponse {
 
 function useAccountsApi(baseUrl: string): UseAccountsApiResponse {
 	const accountsAxiosInstance = useAxiosInstance({
-		baseUrl: `${baseUrl}/accounts`
+		baseUrl: `${baseUrl}${API_BASE_PATH}/accounts`
 	});
 
 	const restAccountsClient = useMemo<IAccountsRESTApiClient>(() => {
@@ -24,3 +24,4 @@ function useAccountsApi(baseUrl: string): UseAccountsApiResponse {
 }
 
 export { useAccountsApi };
+export type { UseAccountsApiResponse };

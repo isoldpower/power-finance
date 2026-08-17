@@ -1,18 +1,21 @@
-export { listAllTransactions } from './list-all-transactions.ts';
-export { deleteTransaction } from './delete-transaction.ts';
 export { createTransaction } from './create-transaction.ts';
-export { fetchTransaction } from './fetch-transaction.ts';
-export { updateTransaction } from './update-transaction.ts';
 export { createTransactionChain } from './create-transaction-chain.ts';
-
-export type { ListAllTransactionsResponse, ListAllTransactionsRequest } from './list-all-transactions.ts';
-export type { DeleteTransactionResponse, DeleteTransactionRequest } from './delete-transaction.ts';
-export type { CreateTransactionResponse, CreateTransactionRequest } from './create-transaction.ts';
-export type { FetchTransactionResponse, FetchTransactionRequest } from './fetch-transaction.ts';
-export type { UpdateTransactionResponse, UpdateTransactionRequest } from './update-transaction.ts';
-export type { CreateTransactionChainResponse, CreateTransactionChainRequest } from './create-transaction-chain.ts';
+export { deleteTransaction } from './delete-transaction.ts';
+export { deleteTransactionChain } from './delete-transaction-chain.ts';
+export { fetchTransaction } from './fetch-transaction.ts';
 export { listCategories } from './list-categories.ts';
+export { listTransactions } from './list-transactions.ts';
 export { scanReceipt } from './scan-receipt.ts';
+export { searchTransactions } from './search-transactions.ts';
+export { updateTransaction } from './update-transaction.ts';
 
+export type { CreateTransactionRequest, CreateTransactionResponse } from './create-transaction.ts';
+export type { CreateTransactionChainRequest, CreateTransactionChainResponse } from './create-transaction-chain.ts';
+export type { DeleteTransactionRequest, DeleteTransactionResponse } from './delete-transaction.ts';
+export type { DeleteTransactionChainRequest, DeleteTransactionChainResponse } from './delete-transaction-chain.ts';
+export type { FetchTransactionRequest, FetchTransactionResponse } from './fetch-transaction.ts';
 export type { ListCategoriesRequest, ListCategoriesResponse } from './list-categories.ts';
+export type { ListTransactionsRequest, ListTransactionsResponse } from './list-transactions.ts';
 export type { ScanReceiptRequest, ScanReceiptResponse } from './scan-receipt.ts';
+export type { SearchTransactionsRequest, SearchTransactionsResponse } from './search-transactions.ts';
+export type { UpdateTransactionRequest, UpdateTransactionResponse } from './update-transaction.ts';

@@ -1,59 +1,89 @@
-type WalletType = 'wallet' | 'long-term-goal';
+import type { Money } from "@entity/localization";
 
-// Goal data carried only by `long-term-goal` wallets so they can be rendered as
-// goals while still being full wallets under the hood.
-interface WalletGoalMeta {
-	icon: string;
-	color: string;
-	targetAmount: number;
-	monthlyAmount: number;
-}
 
 interface Wallet {
 	id: string;
 	name: string;
+	createdAt: string;
+	updatedAt: string | null;
+	deletedAt: string | null;
+	category: string;
+	currency: string;
+	balance: Money;
+	zeroBalance: Money;
+	favorite: boolean;
 	color: string;
-	balance: {
-		amount: number;
-		currency: string;
-	}
-	credit: boolean;
-	// Optional for back-compat: a missing type is treated as a user-facing 'wallet'.
-	type?: WalletType;
-	goal?: WalletGoalMeta;
-	createdAt?: string;
-	updatedAt?: string;
 }
 
-// A `long-term-goal` wallet always carries its goal data, so goal consumers can
-// rely on it without re-filling defaults the API already guarantees.
-interface GoalWallet extends Wallet {
-	type: 'long-term-goal';
-	goal: WalletGoalMeta;
+interface WalletFlows {
+	inflow: Money;
+	outflow: Money;
 }
 
-export type { Wallet, WalletType, WalletGoalMeta, GoalWallet };
+interface WalletDetails extends Wallet {
+	lastMonth: WalletFlows;
+}
 
-interface WalletKind {
+interface Goal {
 	id: string;
-	label: string;
-	credit: boolean;
+	name: string;
+	url: string | null;
+	currency: string;
+	finishAt: string;
+	createdAt: string;
+	updatedAt: string | null;
+	deletedAt: string | null;
+	target: Money;
+	progress: Money;
 }
 
-export type { WalletKind };
+interface WalletDraft {
+	name: string;
+	color: string;
+	openingBalance: number;
+	zeroBalance: number;
+	currency: string;
+	category: string;
+}
 
-type PanelMode = 'add' | 'scan' | 'wallet' | 'transfer' | 'edit';
+interface WalletPatch {
+	name?: string;
+	favorite?: boolean;
+	category?: string;
+	zeroBalance?: number;
+	color?: string;
+}
+
+interface GoalDraft {
+	name: string;
+	finishAt: string;
+	currency: string;
+	target: number;
+}
+
+interface GoalPatch {
+	name?: string;
+	finishAt?: string;
+	target?: number;
+}
+
+interface WalletQuery {
+	name?: string;
+	currencies?: string[];
+	minBalance?: number;
+	maxBalance?: number;
+	createdAfter?: string;
+	createdBefore?: string;
+}
+
 
 interface PanelWallet {
 	id: string;
 	name: string;
+	category: string;
 	currency: string;
-	credit: boolean;
 	gradient: string;
-	balance: {
-		amount: number;
-		currency: string;
-	};
+	balance: Money;
 }
 
 type GoalDispositionMode = 'transfer' | 'spent';
@@ -63,4 +93,17 @@ interface GoalDisposition {
 	toWalletId: string;
 }
 
-export type { PanelMode, PanelWallet, GoalDispositionMode, GoalDisposition };
+export type {
+	Wallet,
+	WalletDetails,
+	WalletFlows,
+	Goal,
+	PanelWallet,
+	GoalDispositionMode,
+	GoalDisposition,
+	WalletDraft,
+	WalletPatch,
+	GoalDraft,
+	GoalPatch,
+	WalletQuery
+};

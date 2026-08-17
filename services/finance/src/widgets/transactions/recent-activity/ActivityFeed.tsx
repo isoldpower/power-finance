@@ -1,4 +1,10 @@
-import { ActivityGroupHeader, ActivityRow, AmountDirectionIcon, resolveToneWithDirection, toTransactionDayView } from "@entity/transactions";
+import {
+	ActivityGroupHeader,
+	ActivityRow,
+	AmountDirectionIcon,
+	resolveToneWithDirection,
+	toTransactionDayView,
+} from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
 import { ProtectActivityEmpty } from "@feature/transactions";
 import { useLocaleCurrency } from "@shared/formatting";
@@ -14,30 +20,46 @@ interface ActivityFeedProps {
 	groups: RecentActivityGroup[];
 }
 
+const APPEAR_STEP_MS = 45;
+const APPEAR_CAP_MS = 450;
+
+const toAppearDelay = (position: number): number => Math.min(position * APPEAR_STEP_MS, APPEAR_CAP_MS);
+
 const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 	const { convert, targetCurrency } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
 
-	const days = useMemo(() => groups.map((group) => (
-		toTransactionDayView(group.dayKey, group.transactions, convert, formatCurrency)
-	)), [groups, convert, formatCurrency]);
+	const days = useMemo(() => {
+		let position = 0;
+
+		return groups.map((group) => {
+			const day = toTransactionDayView(group.dayKey, group.transactions, convert);
+			const startPosition = position;
+			position += day.transactions.length;
+
+			return { ...day, startPosition };
+		});
+	}, [groups, convert]);
 
 	return (
 		<ProtectActivityEmpty activityGroups={days}>
 			{days.map((day) => (
 				<div key={day.dayLabel}>
-					<ActivityGroupHeader.Container>
+					<ActivityGroupHeader>
 						<Overline as="span" size="10" tracking="0.1em">
 							{day.dayLabel}
 						</Overline>
 						<ActivityGroupHeader.Money positive={day.dayTotal >= 0}>
 							{formatCurrency(day.dayTotal, targetCurrency)}
 						</ActivityGroupHeader.Money>
-					</ActivityGroupHeader.Container>
-					{day.transactions.map((transaction) => (
-						<ActivityRow.Container key={transaction.id}>
-							<ActivityRow.Icon tone={transaction.direction === 'in' ? 'positive' : 'negative'}>
-								<AmountDirectionIcon direction={transaction.direction} />
+					</ActivityGroupHeader>
+					{day.transactions.map((transaction, index) => (
+						<ActivityRow
+							key={transaction.id}
+							appearDelayMs={toAppearDelay(day.startPosition + index)}
+						>
+							<ActivityRow.Icon tone={transaction.type === 'income' ? 'positive' : 'negative'}>
+								<AmountDirectionIcon type={transaction.type} />
 							</ActivityRow.Icon>
 							<div className="min-w-0 flex-1">
 								<RowTitle>
@@ -51,18 +73,18 @@ const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 							</div>
 							<div className="text-right">
 								<ActivityRow.Money
-									tone={resolveToneWithDirection(transaction.direction)}
-									currency={transaction.currency}
-									convert={convert}
-									format={formatCurrency}
-								>
-									{transaction.amount}
-								</ActivityRow.Money>
+									tone={resolveToneWithDirection(transaction.type)}
+									amount={formatCurrency(transaction.amount, transaction.currency)}
+									converted={convert({
+										amount: transaction.amount,
+										currency: transaction.currency,
+									}).formatted}
+								/>
 								<MetaText size="10.5" dateTime={transaction.createdAt}>
 									{transaction.time}
 								</MetaText>
 							</div>
-						</ActivityRow.Container>
+						</ActivityRow>
 					))}
 				</div>
 			))}

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import type { SeriesPoint } from "../metrics-api/types.ts";
+import type { NetWorthPoint } from "@entity/metrics";
 import type { ChartPoint } from "./build-sparkline.ts";
 import type { Money } from "@entity/localization";
 
@@ -13,7 +13,7 @@ interface HoverStateParams {
 
 interface NetWorthData {
 	netWorthValue: Money;
-	netWorthSeries: SeriesPoint[];
+	netWorthSeries: NetWorthPoint[];
 }
 
 const useChartHoverData = (
@@ -22,7 +22,7 @@ const useChartHoverData = (
 ) => {
 	const currentValue = useMemo(() => {
 		return netWorthSeries.length > 0
-			? netWorthSeries[netWorthSeries.length - 1].v
+			? netWorthSeries[netWorthSeries.length - 1].money.amount
 			: netWorthValue.amount;
 	}, [netWorthSeries, netWorthValue]);
 	

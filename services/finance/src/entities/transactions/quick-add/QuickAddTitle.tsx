@@ -1,8 +1,11 @@
-import type { FC, BaseHTMLAttributes } from "react";
 import { CardTitle } from "@shared/pure-components/typography";
 
+import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 
-const QuickAddTitle: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'>> = ({
+
+type QuickAddTitleProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'>>;
+
+const QuickAddTitle: FC<QuickAddTitleProps> = ({
 	children,
 	...props
 }) => (
@@ -11,4 +14,7 @@ const QuickAddTitle: FC<Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'>> 
 	</CardTitle>
 );
 
+QuickAddTitle.displayName = 'QuickAddTitle';
+
 export { QuickAddTitle };
+export type { QuickAddTitleProps };

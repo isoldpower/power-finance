@@ -1,38 +1,31 @@
-interface FxRates {
-	base: string;
-	rates: Record<string, number>;
-	asOf: string;
-}
+import type { MoneyDto } from "@shared/api";
 
-interface FxCurrency {
+interface CurrencyDto {
 	code: string;
 	symbol: string;
 	name: string;
 	decimals: number;
 }
 
-interface FxRatesGetRequest {
-	params: {
-		base: string;
-	};
+interface CurrencyConversionDto {
+	from: MoneyDto;
+	to: MoneyDto;
+	rate: string;
 }
 
-type FxRatesGetResponse = FxRates;
-
-interface FxCurrenciesGetResponse {
-	currencies: FxCurrency[];
+interface CurrencyRatesDto {
+	base: string;
+	rates: Record<string, string>;
 }
 
-interface IFxRESTApiClient {
-	getRates: (request: FxRatesGetRequest) => Promise<FxRatesGetResponse>;
-	getCurrencies: () => Promise<FxCurrenciesGetResponse>;
+interface CurrencyConvertParams {
+	from_code: string;
+	to_code: string;
+	amount: string;
 }
 
-export type {
-	FxRates,
-	FxCurrency,
-	FxRatesGetRequest,
-	FxRatesGetResponse,
-	FxCurrenciesGetResponse,
-	IFxRESTApiClient,
-};
+interface CurrencyRatesParams {
+	target?: string[];
+}
+
+export type { CurrencyConversionDto, CurrencyConvertParams, CurrencyDto, CurrencyRatesDto, CurrencyRatesParams };

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
-import type { LocalePickerVariant } from "./types.ts";
 import type { FC } from "react";
+import type { LocalePickerVariant } from "./types.ts";
 import type { LocaleMeta } from "../types.ts";
 
 
@@ -33,7 +33,9 @@ const LocalePickerLabel: FC<LocalePickerLabelProps> = ({
 			{currentLabel}
 		</span>
 	);
-}
+};
+
+LocalePickerLabel.displayName = 'LocalePickerLabel';
 
 export { LocalePickerLabel };
 export type { LocalePickerLabelProps };

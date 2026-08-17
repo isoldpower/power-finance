@@ -1,6 +1,6 @@
 import { FinanceButton } from "@internal/ui-library";
 
-import { RuleDialog } from "@entity/assistance";
+import { RuleDialogActions, RuleDialogDescription } from "@entity/assistance";
 import { ConfirmModal } from "@shared/overlays";
 import { DangerIconBadge } from "@shared/pure-components/badges";
 import { Heading } from "@shared/pure-components/typography";
@@ -24,10 +24,10 @@ const DeleteRuleModal: FC<DeleteRuleModalProps> = ({ name, pending, onConfirm, c
 					<Heading>
 						Delete automation
 					</Heading>
-					<RuleDialog.Description>
+					<RuleDialogDescription>
 						Permanently delete “{name}”? This can’t be undone.
-					</RuleDialog.Description>
-					<RuleDialog.Actions>
+					</RuleDialogDescription>
+					<RuleDialogActions>
 						<FinanceButton type="button" size="lg" variant="outline" className="flex-1" onClick={close}>
 							Cancel
 						</FinanceButton>
@@ -41,7 +41,7 @@ const DeleteRuleModal: FC<DeleteRuleModalProps> = ({ name, pending, onConfirm, c
 						>
 							{pending ? 'Deleting…' : 'Delete'}
 						</FinanceButton>
-					</RuleDialog.Actions>
+					</RuleDialogActions>
 				</>
 			)}
 		</ConfirmModal>

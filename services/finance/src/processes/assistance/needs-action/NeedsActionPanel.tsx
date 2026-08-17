@@ -26,7 +26,7 @@ const NeedsActionPanel: FC<NeedsActionPanelProps> = ({
 			variant={isAllClear ? 'default' : 'accent'}
 			className={cn("overflow-hidden", isAllClear && "border-border bg-secondary")}
 		>
-			<NeedsActionHeader.Container tone={isAllClear ? 'positive' : 'accent'}>
+			<NeedsActionHeader tone={isAllClear ? 'positive' : 'accent'}>
 				{isAllClear ? <CheckIcon size={16} className="text-pos" /> : <AlertIcon />}
 				<RowTitle as="h2" size="14.5">
 					{isAllClear ? 'Nothing needs your action' : 'Needs your action'}
@@ -42,7 +42,7 @@ const NeedsActionPanel: FC<NeedsActionPanelProps> = ({
 				<NeedsActionHeader.Descriptor>
 					{isAllClear ? clearDescriptor : descriptor}
 				</NeedsActionHeader.Descriptor>
-			</NeedsActionHeader.Container>
+			</NeedsActionHeader>
 			<div className="flex flex-col">
 				<ActionsList
 					actions={actions}

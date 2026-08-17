@@ -1,4 +1,4 @@
-import { Tooltip } from "@shared/overlays";
+import {SlideOver, SlideOverTrigger, Tooltip} from "@shared/overlays";
 import { RevealMotion } from "@shared/motion";
 import { CenteredList, PageContainer, SidebarColumnsContainer, SpaceOccupant, StackedList } from "@shared/pure-components/layout";
 import { PageTitle } from "@shared/pure-components/typography";
@@ -12,7 +12,6 @@ import {
 	AutomationsBrowserFilters,
 	AutomationsBrowserHeader, AutomationsBrowserPagination,
 	FilteredAutomationsDirectory,
-	NewRulePanel,
 	WhatIfCard
 } from "@widget/assistance";
 import {
@@ -31,9 +30,11 @@ import {
 import { GoalsListFx } from "@feature/wallets";
 import {
 	AutomationsToolbar,
-	PlanningStatus,
+	PlanningStatusSteps,
+	PlanningStatusSyncBadge,
 } from "@entity/assistance";
 import { GoalsToolbar } from "@entity/wallets";
+import {planningSlides, planningSlidesRegistry} from "./SlideOverRegistry.tsx";
 
 
 import type { FC } from "react";
@@ -49,16 +50,16 @@ const PlanningPage: FC = () => {
 					</PageTitle>
 					<ShowOnResolved>
 						<Tooltip content="Everything is in sync — nothing needs your approval right now.">
-							<PlanningStatus.SyncBadge>
+							<PlanningStatusSyncBadge>
 								<CheckIcon />
 								In sync
-							</PlanningStatus.SyncBadge>
+							</PlanningStatusSyncBadge>
 						</Tooltip>
 					</ShowOnResolved>
 					<ShowOnUnresolved>
-						<PlanningStatus.Steps>
+						<PlanningStatusSteps>
 							Set intent · Model · Discuss
-						</PlanningStatus.Steps>
+						</PlanningStatusSteps>
 					</ShowOnUnresolved>
 					<SpaceOccupant />
 					<NewGoalPanel>
@@ -77,11 +78,11 @@ const PlanningPage: FC = () => {
 						<AutomationsBrowserProvider>
 							<FinanceCard className="overflow-hidden">
 								<AutomationsBrowserHeader>
-									<NewRulePanel>
+									<SlideOverTrigger panelId={planningSlides.newRule}>
 										<AutomationsToolbar.Action>
 											＋ New rule
 										</AutomationsToolbar.Action>
-									</NewRulePanel>
+									</SlideOverTrigger>
 								</AutomationsBrowserHeader>
 								<AutomationsListFx>
 									<AutomationsBrowserFilters />
@@ -111,7 +112,7 @@ const PlanningPage: FC = () => {
 									<FilteredGoalsDirectory>
 										{(goal, index) => (
 											<DeletableGoalRow
-												wallet={goal}
+												goal={goal}
 												order={index}
 											/>
 										)}
@@ -125,6 +126,7 @@ const PlanningPage: FC = () => {
 					<PlanningAiAssistant />
 				</SidebarColumnsContainer>
 			</RevealMotion>
+			<SlideOver panelsRegistry={planningSlidesRegistry} />
 		</PageContainer>
 	);
 };

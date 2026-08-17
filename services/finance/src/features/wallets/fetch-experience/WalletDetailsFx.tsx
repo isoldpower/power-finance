@@ -1,8 +1,13 @@
 import { FinanceCard, cn } from "@internal/ui-library";
-import type { Wallet } from "@entity/wallets";
-import type { FC, ReactNode } from "react";
+import { WalletDetailsSkeleton } from "@entity/wallets";
+import { SpaceOccupant } from "@shared/pure-components/layout";
 import { textClass } from "@shared/pure-components/typography";
 
+import type { Wallet } from "@entity/wallets";
+import type { FC, ReactNode } from "react";
+
+
+const PLACEHOLDER_ROWS = ['w1', 'w2', 'w3'];
 
 interface WalletDetailsFxProps {
 	isError: boolean;
@@ -11,7 +16,7 @@ interface WalletDetailsFxProps {
 	children: (wallet: Wallet) => ReactNode;
 }
 
-const WalletDetailsFx: FC<WalletDetailsFxProps> = ({ 
+const WalletDetailsFx: FC<WalletDetailsFxProps> = ({
 	isError,
 	isPending,
 	wallet,
@@ -26,11 +31,37 @@ const WalletDetailsFx: FC<WalletDetailsFxProps> = ({
 	} else if (isPending || !wallet) {
 		return (
 			<FinanceCard className="overflow-hidden">
-				<div className="h-64 animate-pulse bg-surface-2" />
+				<WalletDetailsSkeleton>
+					<WalletDetailsSkeleton.Header>
+						<WalletDetailsSkeleton.Thumbnail>
+							<WalletDetailsSkeleton.Swatch />
+							<WalletDetailsSkeleton.Body>
+								<WalletDetailsSkeleton.Title />
+								<WalletDetailsSkeleton.Subtitle />
+							</WalletDetailsSkeleton.Body>
+							<WalletDetailsSkeleton.Actions>
+								<WalletDetailsSkeleton.Action />
+								<WalletDetailsSkeleton.Action size="sm" />
+							</WalletDetailsSkeleton.Actions>
+						</WalletDetailsSkeleton.Thumbnail>
+						<WalletDetailsSkeleton.Balances>
+							<WalletDetailsSkeleton.Balance />
+							<SpaceOccupant />
+							<WalletDetailsSkeleton.Metric />
+							<WalletDetailsSkeleton.Metric />
+						</WalletDetailsSkeleton.Balances>
+					</WalletDetailsSkeleton.Header>
+					<WalletDetailsSkeleton.Section />
+					<WalletDetailsSkeleton.Rows>
+						{PLACEHOLDER_ROWS.map((row) => (
+							<WalletDetailsSkeleton.Row key={row} />
+						))}
+					</WalletDetailsSkeleton.Rows>
+				</WalletDetailsSkeleton>
 			</FinanceCard>
 		);
 	}
-	
+
 	return children(wallet);
 }
 

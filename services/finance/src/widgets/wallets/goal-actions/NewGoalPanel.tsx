@@ -14,8 +14,6 @@ import {
 import { SlideOverPanel } from "@shared/overlays";
 import { FieldLabel, PanelFooter } from "@shared/forms";
 
-import { GoalIconPicker } from "./GoalIconPicker.tsx";
-
 import type { FC, ReactNode } from "react";
 import type { GoalFormSchema } from "@feature/wallets";
 
@@ -45,32 +43,19 @@ const NewGoalPanel: FC<NewGoalPanelProps> = ({ children }) => {
 					onSuccess={() => { methods.handleDoneLoading(); close(); }}
 					onError={methods.handleFailedLoading}
 				>
-					<GoalForm.Body>
+					<GoalForm>
 						<GoalForm.Intro>
-							Set a target and a monthly contribution to track your progress.
+							Set a target and a date to track your progress.
 						</GoalForm.Intro>
 						<GoalForm.Field>
 							<FieldLabel htmlFor="goal-name">
 								Name
 							</FieldLabel>
-							<GoalForm.NameRow>
-								<Controller
-									control={control}
-									name="icon"
-									render={({ field }) => (
-										<GoalIconPicker
-											value={field.value ?? ''}
-											onChange={field.onChange}
-										/>
-									)}
-								/>
-								<FinanceInput
-									id="goal-name"
-									placeholder="Emergency fund"
-									className="flex-1"
-									{...register('name')}
-								/>
-							</GoalForm.NameRow>
+							<FinanceInput
+								id="goal-name"
+								placeholder="Emergency fund"
+								{...register('name')}
+							/>
 							{errors.name ? (
 								<GoalForm.FieldError>
 									{errors.name.message}
@@ -102,30 +87,22 @@ const NewGoalPanel: FC<NewGoalPanelProps> = ({ children }) => {
 								) : null}
 							</div>
 							<div>
-								<FieldLabel htmlFor="goal-monthly">
-									Monthly
+								<FieldLabel htmlFor="goal-finish-at">
+									Target date
 								</FieldLabel>
-								<Controller
-									control={control}
-									name="monthly"
-									render={({ field }) => (
-										<FinanceInput
-											id="goal-monthly"
-											inputMode="decimal"
-											placeholder="$300"
-											value={field.value}
-											onChange={(event) => { field.onChange(formatCurrencyInput(event.target.value)); }}
-										/>
-									)}
+								<FinanceInput
+									id="goal-finish-at"
+									type="date"
+									{...register('finishAt')}
 								/>
-								{errors.monthly ? (
+								{errors.finishAt ? (
 									<GoalForm.FieldError>
-										{errors.monthly.message}
+										{errors.finishAt.message}
 									</GoalForm.FieldError>
 								) : null}
 							</div>
 						</GoalForm.AmountsGrid>
-					</GoalForm.Body>
+					</GoalForm>
 					<PanelFooter
 						submitType="submit"
 						submitLabel={loading ? 'Creating…' : 'Create goal'}

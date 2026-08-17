@@ -1,19 +1,28 @@
-import type { TransactionDto } from "@entity/transactions";
+import { pageFromMeta } from "@shared/api";
+import { ledgerEntryFromApi } from "@feature/accounts/accounts-api";
+import { transactionDetailsFromApi } from "../mutators";
+import type { Page, PageParams } from "@shared/api";
+import type { TransactionDetails, TransactionPosting } from "@entity/transactions";
 import type { ITransactionsRESTApiClient } from "../rest-client";
-import type { TransactionGetRequest } from "../rest-client";
-import { transactionDetailedResponseToFlat } from "../mutators/api-to-flat.ts";
 
 interface FetchTransactionRequest {
-	handler: Pick<ITransactionsRESTApiClient, 'get'>
-	payload: TransactionGetRequest
+	handler: Pick<ITransactionsRESTApiClient, 'get'>;
+	id: string;
+	page?: PageParams;
 }
 
-type FetchTransactionResponse = TransactionDto & {}
+interface FetchTransactionResponse {
+	transaction: TransactionDetails;
+	postings: Page<TransactionPosting>;
+}
 
-async function fetchTransaction(
-	request: FetchTransactionRequest
-): Promise<FetchTransactionResponse> {
-	return request.handler.get(request.payload).then(transactionDetailedResponseToFlat);
+async function fetchTransaction(request: FetchTransactionRequest): Promise<FetchTransactionResponse> {
+	const response = await request.handler.get({ id: request.id, params: request.page });
+
+	return {
+		transaction: transactionDetailsFromApi(response.data),
+		postings: pageFromMeta(response.data.postings.map(ledgerEntryFromApi), response.meta.postings),
+	};
 }
 
 export { fetchTransaction };

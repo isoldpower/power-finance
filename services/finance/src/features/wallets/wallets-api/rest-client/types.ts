@@ -1,64 +1,74 @@
+import type { ApiEnvelope, CollectionResponse, EmbeddedMeta, MutationResponse, PageParams } from "@shared/api";
 import type {
-	DeleteRequest, DeleteResponse, IDeleteHandler,
-	GetRequest, GetResponse, IGetHandler,
-	ListRequest, ListResponse, IListHandler,
-	PatchRequest, PatchResponse, IPatchHandler,
-	PostRequest, PostResponse, IPostHandler,
-	PutRequest, PutResponse, IPutHandler, ListParams,
-} from "@internal/shared";
-import type {
-	WalletDetailed,
-	WalletMinimalPayload,
-	WalletPreview,
-	WalletSearchRoot,
-	WalletValuableFields,
-	WalletKindDto
+	WalletCreateBody,
+	WalletDetailDto,
+	WalletDto,
+	WalletPatchBody,
+	WalletSearchBody,
+	WalletSearchParams,
 } from "../types.ts";
 
-
-interface IWalletsRESTApiClient extends 
-	IGetHandler<object, WalletDetailed>,
-	IPostHandler<WalletMinimalPayload, WalletDetailed>,
-	IListHandler<WalletPreview>,
-	IPatchHandler<WalletMinimalPayload, WalletDetailed>,
-	IPutHandler<WalletMinimalPayload, WalletDetailed>,
-	IDeleteHandler 
-{
-	search: (request: PostRequest<WalletSearchRoot, ListParams>) => Promise<ListResponse<WalletPreview>>
-	listKinds: (request: WalletKindsRequest) => Promise<WalletKindsResponse>
+interface WalletListRequest {
+	params?: PageParams;
 }
 
-interface WalletKindsRequest { params: object }
-interface WalletKindsResponse { data: WalletKindDto[] }
+type WalletListResponse = CollectionResponse<WalletDto>;
 
-type WalletGetRequest = GetRequest<object>;
-type WalletGetResponse = GetResponse<WalletDetailed>;
+interface WalletGetRequest {
+	id: string;
+	params?: PageParams;
+}
 
-type WalletPostRequest = PostRequest<WalletValuableFields, object>;
-type WalletPostResponse = PostResponse<WalletDetailed>;
+type WalletGetResponse = ApiEnvelope<WalletDetailDto, EmbeddedMeta<'recent'>>;
 
-type WalletsSearchRequest = PostRequest<WalletSearchRoot, ListParams>;
-type WalletsSearchResponse = ListResponse<WalletPreview>;
+interface WalletPostRequest {
+	data: WalletCreateBody;
+	idempotencyKey?: string;
+}
 
-type WalletListRequest = ListRequest;
-type WalletListResponse = ListResponse<WalletPreview>;
+type WalletPostResponse = MutationResponse<WalletDto>;
 
-type WalletPatchRequest = PatchRequest<WalletValuableFields, object>
-type WalletPatchResponse = PatchResponse<WalletDetailed>;
+interface WalletPatchRequest {
+	id: string;
+	data: WalletPatchBody;
+}
 
-type WalletPutRequest = PutRequest<WalletValuableFields, object>;
-type WalletPutResponse = PutResponse<WalletDetailed>;
+type WalletPatchResponse = MutationResponse<WalletDto>;
 
-type WalletDeleteRequest = DeleteRequest<object>;
-type WalletDeleteResponse = DeleteResponse;
+interface WalletDeleteRequest {
+	id: string;
+}
 
-export type {WalletGetRequest, WalletGetResponse};
-export type {WalletPostRequest, WalletPostResponse};
-export type {WalletListRequest, WalletListResponse};
-export type {WalletPatchRequest, WalletPatchResponse};
-export type {WalletPutRequest, WalletPutResponse};
-export type {WalletDeleteRequest, WalletDeleteResponse};
-export type {WalletsSearchRequest, WalletsSearchResponse};
-export type {IWalletsRESTApiClient};
+type WalletDeleteResponse = MutationResponse<WalletDto>;
 
-export type { WalletKindsRequest, WalletKindsResponse };
+interface WalletSearchRequest {
+	data: WalletSearchBody;
+	params?: WalletSearchParams;
+}
+
+type WalletSearchResponse = CollectionResponse<WalletDto>;
+
+interface IWalletsRESTApiClient {
+	list: (request: WalletListRequest) => Promise<WalletListResponse>;
+	get: (request: WalletGetRequest) => Promise<WalletGetResponse>;
+	post: (request: WalletPostRequest) => Promise<WalletPostResponse>;
+	patch: (request: WalletPatchRequest) => Promise<WalletPatchResponse>;
+	delete: (request: WalletDeleteRequest) => Promise<WalletDeleteResponse>;
+	search: (request: WalletSearchRequest) => Promise<WalletSearchResponse>;
+}
+
+export type {
+	IWalletsRESTApiClient,
+	WalletDeleteRequest,
+	WalletDeleteResponse,
+	WalletGetRequest,
+	WalletGetResponse,
+	WalletListRequest,
+	WalletListResponse,
+	WalletPatchRequest,
+	WalletPatchResponse,
+	WalletPostRequest,
+	WalletPostResponse,
+	WalletSearchRequest,
+	WalletSearchResponse,
+};

@@ -31,36 +31,34 @@ const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ wallet }) => {
 	const recentTransactions = useWalletRecentTransactions(wallet);
 
 	const recentRows = useMemo(
-		() => toTransactionRowViews(recentTransactions, format),
-		[recentTransactions, format]
+		() => toTransactionRowViews(recentTransactions),
+		[recentTransactions]
 	);
 
 	return (
 		<div className='flex flex-col'>
 			{recentRows.map((row) => (
 				<RecentTransactionContainer key={row.id}>
-					<WalletTransactionIcon tone={resolveToneWithDirection(row.direction)}>
-						<AmountDirectionIcon direction={row.direction} />
+					<WalletTransactionIcon tone={resolveToneWithDirection(row.type)}>
+						<AmountDirectionIcon type={row.type} />
 					</WalletTransactionIcon>
 					<RecentTransactionMeta
 						description={row.description}
 						category={row.category}
 						date={row.date}
 					/>
-					<MoneyInOriginal
-						currency={row.currency}
-						tone={resolveToneWithDirection(row.direction)}
-						size="sm"
-						align="end"
-						convert={convert}
-						format={format}
-					>
-						{row.amount}
+					<MoneyInOriginal align="end">
+						<MoneyInOriginal.Amount tone={resolveToneWithDirection(row.type)} size="sm">
+							{format(row.amount, row.currency)}
+						</MoneyInOriginal.Amount>
+						<MoneyInOriginal.Converted>
+							{convert({ amount: row.amount, currency: row.currency }).formatted}
+						</MoneyInOriginal.Converted>
 					</MoneyInOriginal>
 				</RecentTransactionContainer>
 			))}
 			<FulfillWithPlaceholder current={recentRows.length} minimum={3}>
-				<NoActivityPlaceholder.Container>
+				<NoActivityPlaceholder>
 					<NoActivityPlaceholder.Border />
 					<div className="min-w-0 flex-1 relative">
 						<NoActivityPlaceholder.Original>
@@ -73,7 +71,7 @@ const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ wallet }) => {
 							No activity yet
 						</NoActivityPlaceholder.Title>
 					</div>
-				</NoActivityPlaceholder.Container>
+				</NoActivityPlaceholder>
 			</FulfillWithPlaceholder>
 		</div>
 	);

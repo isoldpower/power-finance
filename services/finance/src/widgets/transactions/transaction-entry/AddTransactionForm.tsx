@@ -11,9 +11,20 @@ import {
 	ScanReceiptCta,
 } from "@entity/transactions";
 import { WalletSelect, toWalletSelectOptions } from "@entity/wallets";
-import { TransactionEntryOnSubmit, addTransactionSchema, useAddTransactionInitials, useCrossCurrencyTransfer, useEntryFormState, useEntryTypeEffects, useEntryWalletOptions, useTransactionCategories, useWalletsCurrencies } from "@feature/transactions";
+import {
+	TransactionEntryOnSubmit,
+	addTransactionSchema,
+	useAddTransactionInitials,
+	useCrossCurrencyTransfer,
+	useEntryFormState,
+	useEntryTypeEffects,
+	useEntryWalletOptions,
+	useTransactionCategories,
+	useWalletsCurrencies,
+} from "@feature/transactions";
 import { useWalletsList } from "@feature/wallets";
 import { FieldLabel, HideOnFormValue, PanelFooter, ShowOnFormValue } from "@shared/forms";
+import { currencySymbol } from "@shared/formatting";
 
 import type { FC } from "react";
 import type { AddTransactionSchema } from "@feature/transactions";
@@ -50,13 +61,15 @@ const AddTransactionForm: FC<AddTransactionFormProps> = ({ onScanReceipt, onClos
 			<TransactionEntryOnSubmit
 				className="flex flex-1 flex-col overflow-hidden"
 				handleSubmit={form.handleSubmit}
+				fromCurrency={fromCurrency}
+				toCurrency={toCurrency}
 				onBeforeEdit={methods.handleLoading}
 				onSuccess={() => { methods.handleDoneLoading(); onClose(); }}
 				onError={methods.handleFailedLoading}
 			>
 				<div className="flex-1 overflow-auto p-5">
 					<button type="button" onClick={onScanReceipt} className="mb-[18px] w-full">
-						<ScanReceiptCta.Container>
+						<ScanReceiptCta>
 							<ScanReceiptIcon size={18} className="flex-none text-primary" />
 							<span className="flex-1">
 								<ScanReceiptCta.Title>
@@ -67,7 +80,7 @@ const AddTransactionForm: FC<AddTransactionFormProps> = ({ onScanReceipt, onClos
 								</ScanReceiptCta.Paragraph>
 							</span>
 							<ForwardIcon className="flex-none text-primary" />
-						</ScanReceiptCta.Container>
+						</ScanReceiptCta>
 					</button>
 					<UiFormField
 						disabled={loading}
@@ -82,13 +95,23 @@ const AddTransactionForm: FC<AddTransactionFormProps> = ({ onScanReceipt, onClos
 							control={form.control}
 							name="amount"
 							render={({ field }) => (
-								<EntryAmountField
-									type={type}
-									currency={currency}
-									emphasis="accent"
-									className="mb-3.5"
-									{...field}
-								/>
+								<div className="mb-3.5">
+									<EntryAmountField>
+										<EntryAmountField.Box emphasis="accent">
+											<EntryAmountField.Sign type={type}>
+												{type === 'income' ? '+' : '−'}
+											</EntryAmountField.Sign>
+											<EntryAmountField.Symbol type={type}>
+												{currencySymbol(currency)}
+											</EntryAmountField.Symbol>
+											<EntryAmountField.Input
+												type={type}
+												value={field.value}
+												onChange={field.onChange}
+											/>
+										</EntryAmountField.Box>
+									</EntryAmountField>
+								</div>
 							)} />
 					</HideOnFormValue>
 					<ShowOnFormValue valueKey='type' showOn={['transfer']} control={form.control}>
@@ -97,30 +120,48 @@ const AddTransactionForm: FC<AddTransactionFormProps> = ({ onScanReceipt, onClos
 							control={form.control}
 							name="amount"
 							render={({ field }) => (
-								<EntryAmountField
-									type={type}
-									currency={fromCurrency}
-									label="Send"
-									emphasis="accent"
-									className="mb-2.5"
-									{...field}
-									onChange={handleSentChange}
-								/>
+								<div className="mb-2.5">
+									<EntryAmountField>
+										<EntryAmountField.Label>
+											Send
+										</EntryAmountField.Label>
+										<EntryAmountField.Box emphasis="accent">
+											<EntryAmountField.Glyph type={type} emphasis="accent" />
+											<EntryAmountField.Symbol type={type}>
+												{currencySymbol(fromCurrency)}
+											</EntryAmountField.Symbol>
+											<EntryAmountField.Input
+												type={type}
+												value={field.value}
+												onChange={handleSentChange}
+											/>
+										</EntryAmountField.Box>
+									</EntryAmountField>
+								</div>
 							)} />
 						<UiFormField
 							disabled={loading}
 							control={form.control}
 							name="receiveAmount"
 							render={({ field }) => (
-								<EntryAmountField
-									type={type}
-									currency={toCurrency}
-									label="Receive"
-									emphasis="accent"
-									className="mb-3.5"
-									{...field}
-									onChange={handleReceivedChange}
-								/>
+								<div className="mb-3.5">
+									<EntryAmountField>
+										<EntryAmountField.Label>
+											Receive
+										</EntryAmountField.Label>
+										<EntryAmountField.Box emphasis="accent">
+											<EntryAmountField.Glyph type={type} emphasis="accent" />
+											<EntryAmountField.Symbol type={type}>
+												{currencySymbol(toCurrency)}
+											</EntryAmountField.Symbol>
+											<EntryAmountField.Input
+												type={type}
+												value={field.value}
+												onChange={handleReceivedChange}
+											/>
+										</EntryAmountField.Box>
+									</EntryAmountField>
+								</div>
 							)} />
 					</ShowOnFormValue>
 					<FieldLabel>{type === 'transfer' ? 'Wallets' : 'Wallet'}</FieldLabel>
@@ -129,28 +170,100 @@ const AddTransactionForm: FC<AddTransactionFormProps> = ({ onScanReceipt, onClos
 							disabled={loading}
 							control={form.control}
 							name="fromWallet"
-							render={({ field }) => (
-								<WalletSelect
-									leadingIcon={type === 'transfer' ? <FromIcon className="flex-none text-text-3" /> : undefined}
-									options={fromOptions}
-									emptyLabel="No wallets yet"
-									className="mb-2"
-									{...field} />
-							)} />
+							render={({ field }) => {
+								const selected = fromOptions.find((option) => option.id === field.value);
+
+								return (
+								<WalletSelect>
+									<WalletSelect.Trigger className="mb-2">
+										{type === 'transfer' ? <FromIcon className="flex-none text-text-3" /> : null}
+										{selected ? <WalletSelect.Swatch gradient={selected.gradient} /> : null}
+										<WalletSelect.Value placeholder={!selected}>
+											{selected ? selected.name : 'Select wallet'}
+										</WalletSelect.Value>
+										{selected ? (
+											<WalletSelect.Currency>
+												{selected.currency}
+											</WalletSelect.Currency>
+										) : null}
+										<WalletSelect.Caret />
+									</WalletSelect.Trigger>
+									<WalletSelect.Options>
+										{fromOptions.length === 0 ? (
+											<WalletSelect.Empty>
+												No wallets yet
+											</WalletSelect.Empty>
+										) : (
+											fromOptions.map((option) => (
+												<WalletSelect.Option
+													key={option.id}
+													onSelect={() => { field.onChange(option.id); }}
+												>
+													<WalletSelect.Swatch gradient={option.gradient} />
+													<WalletSelect.OptionName>
+														{option.name}
+													</WalletSelect.OptionName>
+													<WalletSelect.Currency size="10.5">
+														{option.currency}
+													</WalletSelect.Currency>
+													{option.id === field.value ? <WalletSelect.Selected /> : null}
+												</WalletSelect.Option>
+											))
+										)}
+									</WalletSelect.Options>
+								</WalletSelect>
+								);
+							}} />
 					</HideOnFormValue>
 					<HideOnFormValue valueKey='type' hideOn={['expense']} control={form.control}>
 						<UiFormField
 							disabled={loading}
 							control={form.control}
 							name="toWallet"
-							render={({ field }) => (
-								<WalletSelect
-									leadingIcon={type === 'transfer' ? <ToIcon className="flex-none text-text-3" /> : undefined}
-									options={toOptions}
-									emptyLabel="Add another wallet"
-									className="mb-2"
-									{...field} />
-							)} />
+							render={({ field }) => {
+								const selected = toOptions.find((option) => option.id === field.value);
+
+								return (
+								<WalletSelect>
+									<WalletSelect.Trigger className="mb-2">
+										{type === 'transfer' ? <ToIcon className="flex-none text-text-3" /> : null}
+										{selected ? <WalletSelect.Swatch gradient={selected.gradient} /> : null}
+										<WalletSelect.Value placeholder={!selected}>
+											{selected ? selected.name : 'Select wallet'}
+										</WalletSelect.Value>
+										{selected ? (
+											<WalletSelect.Currency>
+												{selected.currency}
+											</WalletSelect.Currency>
+										) : null}
+										<WalletSelect.Caret />
+									</WalletSelect.Trigger>
+									<WalletSelect.Options>
+										{toOptions.length === 0 ? (
+											<WalletSelect.Empty>
+												Add another wallet
+											</WalletSelect.Empty>
+										) : (
+											toOptions.map((option) => (
+												<WalletSelect.Option
+													key={option.id}
+													onSelect={() => { field.onChange(option.id); }}
+												>
+													<WalletSelect.Swatch gradient={option.gradient} />
+													<WalletSelect.OptionName>
+														{option.name}
+													</WalletSelect.OptionName>
+													<WalletSelect.Currency size="10.5">
+														{option.currency}
+													</WalletSelect.Currency>
+													{option.id === field.value ? <WalletSelect.Selected /> : null}
+												</WalletSelect.Option>
+											))
+										)}
+									</WalletSelect.Options>
+								</WalletSelect>
+								);
+							}} />
 					</HideOnFormValue>
 					<ShowOnFormValue valueKey='type' showOn={['expense', 'income']} control={form.control}>
 						<FieldLabel>Category</FieldLabel>

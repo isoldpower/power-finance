@@ -1,31 +1,35 @@
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
+
 import { useApiContext } from "@app/api";
-import { useResourceQuery } from "@shared/data";
+import { countNotifications } from "../../notifications-api";
 import { NOTIFICATIONS_CACHE_KEYS } from "../cache-config.ts";
-import { countNotifications } from "../../assistance-api";
+import type { NotificationCounts } from "@entity/assistance";
 
-import type { UseResourceQueryResult } from "@shared/data";
-import type { NotificationCountResponse } from "../../assistance-api";
+type UseNotificationsCountOptions = Omit<UseQueryOptions<NotificationCounts>, 'queryKey' | 'queryFn'>;
 
-
-type UseNotificationsCountReturn = UseResourceQueryResult<NotificationCountResponse, number> & {
-	count: number;
+type UseNotificationsCountReturn = UseQueryResult<NotificationCounts> & {
+	unacknowledged: number;
+	total: number;
 };
 
-const useNotificationsCount = (ack = false): UseNotificationsCountReturn => {
+const useNotificationsCount = (
+	options?: UseNotificationsCountOptions
+): UseNotificationsCountReturn => {
 	const apiContext = useApiContext();
-	
-	const query = useResourceQuery<NotificationCountResponse, number>({
-		key: [NOTIFICATIONS_CACHE_KEYS.count, ack],
-		fetch: () => countNotifications({
-			handler: apiContext.notificationServers.rest,
-			ack,
-		}),
-		select: (response) => response.count,
-		fallback: 0,
+	const countQuery = useQuery<NotificationCounts>({
+		queryKey: [NOTIFICATIONS_CACHE_KEYS.count],
+		queryFn: () => countNotifications({ handler: apiContext.notificationServers.rest }),
+		...options ?? {},
 	});
 
-	return { ...query, count: query.value };
+	return useMemo(() => ({
+		...countQuery,
+		unacknowledged: countQuery.data?.unacknowledged ?? 0,
+		total: countQuery.data?.total ?? 0,
+	}), [countQuery]);
 };
 
 export { useNotificationsCount };
-export type { UseNotificationsCountReturn };
+export type { UseNotificationsCountOptions, UseNotificationsCountReturn };

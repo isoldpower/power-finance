@@ -1,31 +1,22 @@
-import type {
-	GetRequest, GetResponse, IGetHandler,
-	ListParams, ListRequest, ListResponse, IListHandler,
-} from "@internal/shared";
-import type { AccountPreview, AccountDetailed, LedgerEntry } from "../types.ts";
+import type { ApiEnvelope, CollectionResponse, EmbeddedMeta, PageParams } from "@shared/api";
+import type { AccountDetailDto, AccountDto, AccountListMeta, AccountListParams } from "../types.ts";
 
-
-interface AccountEntriesRequest {
-	id: string
-	params?: ListParams
+interface AccountListRequest {
+	params?: AccountListParams;
 }
 
-type AccountEntriesResponse = ListResponse<LedgerEntry>;
+type AccountListResponse = CollectionResponse<AccountDto, AccountListMeta>;
 
-interface IAccountsRESTApiClient extends
-	IGetHandler<object, AccountDetailed>,
-	IListHandler<AccountPreview>
-{
-	listEntries: (request: AccountEntriesRequest) => Promise<AccountEntriesResponse>
+interface AccountGetRequest {
+	id: string;
+	params?: PageParams;
 }
 
-type AccountGetRequest = GetRequest<object>;
-type AccountGetResponse = GetResponse<AccountDetailed>;
+type AccountGetResponse = ApiEnvelope<AccountDetailDto, EmbeddedMeta<'history'>>;
 
-type AccountListRequest = ListRequest;
-type AccountListResponse = ListResponse<AccountPreview>;
+interface IAccountsRESTApiClient {
+	list: (request: AccountListRequest) => Promise<AccountListResponse>;
+	get: (request: AccountGetRequest) => Promise<AccountGetResponse>;
+}
 
-export type { AccountGetRequest, AccountGetResponse };
-export type { AccountListRequest, AccountListResponse };
-export type { AccountEntriesRequest, AccountEntriesResponse };
-export type { IAccountsRESTApiClient };
+export type { AccountGetRequest, AccountGetResponse, AccountListRequest, AccountListResponse, IAccountsRESTApiClient };

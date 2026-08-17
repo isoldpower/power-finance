@@ -1,45 +1,54 @@
-import type { UseQueryOptions } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 
 import { useApiContext } from "@app/api";
-import { useResourceQuery } from "@shared/data";
-import type { UseResourceQueryResult } from "@shared/data";
-import { listAutomations } from "../../assistance-api/automations";
+import { listAutomations } from "../../automations-api";
 import { AUTOMATIONS_CACHE_KEYS } from "../cache-config.ts";
-import type { AutomationRule, ListAutomationsResponse } from "../../assistance-api/automations";
-
-
-interface UseAutomationsParams {
-	enabled?: boolean;
-	limit?: number;
-}
+import type { PageParams } from "@shared/api";
+import type { Automation, AutomationQuery } from "@entity/assistance";
+import type { ListAutomationsResponse } from "../../automations-api";
 
 type UseAutomationsOptions = Omit<UseQueryOptions<ListAutomationsResponse>, 'queryKey' | 'queryFn'>;
 
-type UseAutomationsReturn = UseResourceQueryResult<ListAutomationsResponse, AutomationRule[]> & {
-	rules: AutomationRule[];
+type UseAutomationsReturn = UseQueryResult<ListAutomationsResponse> & {
+	rules: Automation[];
+	total: number;
+	nextCursor: string | null;
+	prevCursor: string | null;
 };
 
-const EMPTY_RULES: AutomationRule[] = [];
+const EMPTY_RULES: Automation[] = [];
 
 const useAutomations = (
-	params?: UseAutomationsParams,
+	query?: AutomationQuery,
+	page?: PageParams,
 	options?: UseAutomationsOptions
 ): UseAutomationsReturn => {
 	const apiContext = useApiContext();
-	const query = useResourceQuery<ListAutomationsResponse, AutomationRule[]>({
-		key: [AUTOMATIONS_CACHE_KEYS.list, params?.enabled ?? 'all', params?.limit ?? 'all'],
-		fetch: () => listAutomations({
+	const automationsQuery = useQuery<ListAutomationsResponse>({
+		queryKey: [
+			AUTOMATIONS_CACHE_KEYS.list,
+			query?.enabled ?? 'any',
+			page?.limit ?? 'default',
+			page?.cursor ?? 'first',
+		],
+		queryFn: () => listAutomations({
 			handler: apiContext.automationServers.rest,
-			enabled: params?.enabled,
-			limit: params?.limit,
+			query,
+			page,
 		}),
-		select: (response) => response.data,
-		fallback: EMPTY_RULES,
-		options,
+		...options ?? {},
 	});
 
-	return { ...query, rules: query.value };
+	return useMemo(() => ({
+		...automationsQuery,
+		rules: automationsQuery.data?.page.items ?? EMPTY_RULES,
+		total: automationsQuery.data?.page.total ?? 0,
+		nextCursor: automationsQuery.data?.page.nextCursor ?? null,
+		prevCursor: automationsQuery.data?.page.prevCursor ?? null,
+	}), [automationsQuery]);
 };
 
 export { useAutomations };
-export type { UseAutomationsParams, UseAutomationsOptions, UseAutomationsReturn };
+export type { UseAutomationsOptions, UseAutomationsReturn };

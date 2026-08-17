@@ -1,4 +1,5 @@
 import { FinanceCard } from "@internal/ui-library";
+
 import type { FC, ReactNode } from "react";
 
 
@@ -11,6 +12,8 @@ const LedgerCard: FC<LedgerCardProps> = ({ children }) => (
 		{children}
 	</FinanceCard>
 )
+
+LedgerCard.displayName = 'LedgerCard';
 
 export { LedgerCard };
 export type { LedgerCardProps };

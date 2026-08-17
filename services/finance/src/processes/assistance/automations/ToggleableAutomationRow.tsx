@@ -1,17 +1,22 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { UiSwitch } from "@internal/ui-library";
 
-import { AutomationRow, automationStatus } from "@entity/assistance";
-import { DeleteRuleDialog, useToggleAutomation } from "@feature/assistance";
+import {
+	AutomationRow,
+	automationSummary,
+	resolveAutomationIcon,
+	resolveAutomationStatus,
+} from "@entity/assistance";
+import { DeleteRuleDialog, useUpdateAutomation } from "@feature/assistance";
 import { DeleteRuleModal } from "@widget/assistance";
 import { RowDeleteButton } from "@shared/pure-components/collections";
 
 import type { FC } from "react";
-import type { AutomationRule } from "@feature/assistance";
+import type { Automation } from "@entity/assistance";
 
 
 interface ToggleableAutomationRowProps {
-	rule: AutomationRule;
+	rule: Automation;
 	order: number;
 }
 
@@ -19,16 +24,20 @@ const ToggleableAutomationRow: FC<ToggleableAutomationRowProps> = ({
 	rule,
 	order,
 }) => {
-	const toggle = useToggleAutomation();
-	const status = automationStatus(rule.enabled);
+	const toggle = useUpdateAutomation();
+	const status = resolveAutomationStatus(rule.enabled);
+	const Icon = useMemo(() => resolveAutomationIcon(rule.icon), [rule.icon]);
+	const summary = useMemo(() => automationSummary(rule), [rule]);
 
 	const handleToggle = useCallback((enabled: boolean) => {
-		toggle.mutate({ id: rule.id, enabled });
+		toggle.mutate({ id: rule.id, patch: { enabled } });
 	}, [rule.id, toggle]);
 
 	return (
-		<AutomationRow.Container style={{ animationDelay: `${(order * 0.04).toString()}s` }}>
-			<AutomationRow.Icon icon={rule.icon} />
+		<AutomationRow style={{ animationDelay: `${(order * 0.04).toString()}s` }}>
+			<AutomationRow.Icon>
+				{Icon}
+			</AutomationRow.Icon>
 			<AutomationRow.Body>
 				<AutomationRow.Title>
 					{rule.name}
@@ -38,11 +47,11 @@ const ToggleableAutomationRow: FC<ToggleableAutomationRowProps> = ({
 					/>
 				</AutomationRow.Title>
 				<AutomationRow.ConditionLine
-					trigger={rule.trigger}
-					action={rule.action}
+					when={summary.when}
+					then={summary.then}
 				/>
 			</AutomationRow.Body>
-			<AutomationRow.FrequencyBadge frequency={rule.frequency} />
+			<AutomationRow.FrequencyBadge frequency={summary.frequency} />
 			<UiSwitch
 				checked={rule.enabled}
 				disabled={toggle.isPending}
@@ -59,7 +68,7 @@ const ToggleableAutomationRow: FC<ToggleableAutomationRowProps> = ({
 					</DeleteRuleModal>
 				)}
 			</DeleteRuleDialog>
-		</AutomationRow.Container>
+		</AutomationRow>
 	);
 }
 

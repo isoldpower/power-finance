@@ -1,6 +1,6 @@
 import { PAD, VIEW_H, VIEW_W } from "@entity/metrics";
 
-import type { SeriesPoint } from "../metrics-api";
+import type { NetWorthPoint } from "@entity/metrics";
 
 
 interface ChartPoint {
@@ -10,9 +10,9 @@ interface ChartPoint {
 	date: string;
 }
 
-const buildSparkline = (series: SeriesPoint[]) => {
+const buildSparkline = (series: NetWorthPoint[]) => {
 	if (series.length < 2) return { stroke: '', fill: '', lastY: VIEW_H / 2, points: [] as ChartPoint[] };
-	const values = series.map((point) => point.v);
+	const values = series.map((point) => point.money.amount);
 	const min = Math.min(...values);
 	const max = Math.max(...values);
 	const span = max - min || 1;
@@ -25,8 +25,8 @@ const buildSparkline = (series: SeriesPoint[]) => {
 	const points = coords.map(([x, y], index) => ({
 		xPct: (x / VIEW_W) * 100,
 		yPct: (y / VIEW_H) * 100,
-		value: series[index].v,
-		date: series[index].t,
+		value: series[index].money.amount,
+		date: series[index].timestamp,
 	}));
 	return {
 		stroke,

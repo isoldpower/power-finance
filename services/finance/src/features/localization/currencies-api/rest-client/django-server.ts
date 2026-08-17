@@ -1,31 +1,44 @@
+import { buildQuery, request, WriteVersionStore } from "@shared/api";
 import type { AxiosInstance } from "axios";
-
 import type {
-	IFxRESTApiClient,
-	FxCurrenciesGetResponse,
-	FxRatesGetRequest,
-	FxRatesGetResponse,
-} from "../types.ts";
+	CurrencyConvertRequest, CurrencyConvertResponse,
+	CurrencyListRequest, CurrencyListResponse,
+	CurrencyRatesRequest, CurrencyRatesResponse,
+	ICurrenciesRESTApiClient,
+} from "./types.ts";
 
-
-class FxDjangoRESTApiClient implements IFxRESTApiClient {
+class CurrenciesDjangoRESTApiClient implements ICurrenciesRESTApiClient {
 	private readonly axiosInstance: AxiosInstance;
+	private readonly versions: WriteVersionStore;
 
-	constructor(axiosInstance: AxiosInstance) {
+	constructor(axiosInstance: AxiosInstance, versions = new WriteVersionStore()) {
 		this.axiosInstance = axiosInstance;
+		this.versions = versions;
 	}
 
-	public getRates(request: FxRatesGetRequest): Promise<FxRatesGetResponse> {
-		const params = new URLSearchParams({ base: request.params.base });
-
-		return this.axiosInstance.get<FxRatesGetResponse>(`/rates/?${params.toString()}`)
-			.then((response) => response.data);
+	public list(payload: CurrencyListRequest): Promise<CurrencyListResponse> {
+		return request<CurrencyListResponse>(this.axiosInstance, {
+			method: 'GET',
+			url: `/${buildQuery({ ...payload.params })}`,
+			headers: this.versions.headers(),
+		}, this.versions);
 	}
 
-	public getCurrencies(): Promise<FxCurrenciesGetResponse> {
-		return this.axiosInstance.get<FxCurrenciesGetResponse>('/currencies/')
-			.then((response) => response.data);
+	public convert(payload: CurrencyConvertRequest): Promise<CurrencyConvertResponse> {
+		return request<CurrencyConvertResponse>(this.axiosInstance, {
+			method: 'GET',
+			url: `/convert/${buildQuery({ ...payload.params })}`,
+			headers: this.versions.headers(),
+		}, this.versions);
+	}
+
+	public rates(payload: CurrencyRatesRequest): Promise<CurrencyRatesResponse> {
+		return request<CurrencyRatesResponse>(this.axiosInstance, {
+			method: 'GET',
+			url: `/rates/${payload.code}/${buildQuery({ target: payload.params?.target })}`,
+			headers: this.versions.headers(),
+		}, this.versions);
 	}
 }
 
-export { FxDjangoRESTApiClient };
+export { CurrenciesDjangoRESTApiClient };

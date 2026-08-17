@@ -1,107 +1,58 @@
-import type { IStorage } from "@internal/shared";
-import { LocalStorageMock } from "@internal/shared";
+import { ApiError, delay, paginate, parseAmount, stringifySortedQuery } from "@shared/api";
+import { ACCOUNT_SEED, LEDGER_ENTRY_SEED } from "./mock-seed.ts";
 import type {
-	AccountEntriesRequest, AccountEntriesResponse,
 	AccountGetRequest, AccountGetResponse,
 	AccountListRequest, AccountListResponse,
 	IAccountsRESTApiClient,
 } from "./types.ts";
-import type { AccountPreview, AccountDetailed, LedgerEntry } from "../types.ts";
-import { ACCOUNT_SEED, LEDGER_ENTRY_SEED } from "./mock-seed.ts";
+import type { AccountDto, AccountGroupCountsDto } from "../types.ts";
 
+const countGroups = (accounts: AccountDto[]): AccountGroupCountsDto => ({
+	assets: accounts.filter((account) => account.group === 'assets').length,
+	liabilities: accounts.filter((account) => account.group === 'liabilities').length,
+	equity: accounts.filter((account) => account.group === 'equity').length,
+});
 
 class AccountsMockRESTApiClient implements IAccountsRESTApiClient {
-	private readonly accounts: IStorage<AccountPreview>;
-	private readonly entries: IStorage<LedgerEntry>;
+	private readonly accounts: AccountDto[] = ACCOUNT_SEED;
 
-	constructor() {
-		this.accounts = new LocalStorageMock<AccountPreview>('accounts');
-		this.entries = new LocalStorageMock<LedgerEntry>('ledger-entries');
-		
-		this.seed();
-	}
+	public async list(payload: AccountListRequest): Promise<AccountListResponse> {
+		await delay();
 
-	private seed(): void {
-		if (this.accounts.list().length === 0) {
-			ACCOUNT_SEED.forEach((account) => { 
-				this.accounts.add(account); 
-			});
-		}
-		if (this.entries.list().length === 0) {
-			LEDGER_ENTRY_SEED.forEach((entry) => {
-				this.entries.add(entry);
-			});
-		}
-	}
-
-	private toDetailed(account: AccountPreview): AccountDetailed {
-		const timestamp = new Date().toISOString();
+		const group = payload.params?.group ?? 'all';
+		const lowbar = payload.params?.lowbar ?? '0';
+		const currency = payload.params?.currency ?? 'USD';
+		const threshold = parseAmount(lowbar);
+		const matching = this.accounts
+			.filter((account) => group === 'all' || account.group === group)
+			.filter((account) => Math.abs(parseAmount(account.money.amount)) >= threshold);
+		const page = paginate(matching, payload.params, stringifySortedQuery({ group, lowbar, currency }));
 
 		return {
-			...account,
-			meta: { 
-				id: account.id,
-				created_at: timestamp,
-				updated_at: timestamp,
-			},
-			totals: { 
-				balance: account.balance,
+			data: page.items,
+			meta: {
+				...page.meta,
+				cached: false,
+				lowbar,
+				currency,
+				group,
+				groups: countGroups(this.accounts),
 			},
 		};
 	}
 
-	public list(
-		request: AccountListRequest
-	): Promise<AccountListResponse> {
-		const items = this.accounts.list();
-		const start = request.params?.offset ?? 0;
-		const end = request.params?.limit ? start + request.params.limit : items.length;
+	public async get(payload: AccountGetRequest): Promise<AccountGetResponse> {
+		await delay();
 
-		return new Promise((resolve) => setTimeout(resolve, 250))
-			.then(() => items.slice(start, end))
-			.then((values) => ({
-				data: values,
-				meta: {
-					total: items.length,
-					offset: start,
-					limit: end - start,
-				},
-			}));
-	}
+		const account = this.accounts.find((item) => item.id === payload.id);
+		if (!account) throw new ApiError('not_found', `Account ${payload.id} does not exist`);
 
-	public get(
-		request: AccountGetRequest
-	): Promise<AccountGetResponse> {
-		return new Promise((resolve) => setTimeout(resolve, 250))
-			.then(() => this.accounts.get(request.id))
-			.then((value) => {
-				if (!value) {
-					throw new Error("Not found");
-				}
+		const history = paginate(LEDGER_ENTRY_SEED, payload.params, stringifySortedQuery({ id: payload.id }));
 
-				return this.toDetailed(value);
-			});
-	}
-
-	public listEntries(
-		request: AccountEntriesRequest
-	): Promise<AccountEntriesResponse> {
-		const items = this.entries.list();
-		const start = request.params?.offset ?? 0;
-		const end = request.params?.limit 
-			? start + request.params.limit 
-			: items.length;
-
-		return new Promise((resolve) => setTimeout(resolve, 250))
-			.then(() => items.slice(start, end))
-			.then((values) => ({
-				data: values,
-				meta: {
-					total: items.length,
-					offset: start, 
-					limit: end - start,
-				},
-			}));
+		return {
+			data: { ...account, history: history.items },
+			meta: { history: history.meta, cached: false },
+		};
 	}
 }
 

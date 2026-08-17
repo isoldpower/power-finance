@@ -5,25 +5,28 @@ import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import { useApiContext } from "@app/api";
 import { fetchWallet } from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
-import type { Wallet } from "@entity/wallets";
-import type { FetchWalletResponse } from "../../wallets-api/methods/fetch-wallet.ts";
+import type { Transaction } from "@entity/transactions";
+import type { WalletDetails } from "@entity/wallets";
+import type { FetchWalletResponse } from "../../wallets-api";
 
+type UseWalletOptions = Omit<UseQueryOptions<FetchWalletResponse>, 'queryKey' | 'queryFn'> & object;
 
-type UseWalletOptions = Omit<UseQueryOptions<FetchWalletResponse>, 'queryKey' | 'queryFn'> & {};
+type UseWalletReturn = UseQueryResult<FetchWalletResponse> & {
+	wallet: WalletDetails | undefined;
+	recent: Transaction[];
+};
 
-type UseWalletReturn = UseQueryResult & {
-	wallet: Wallet | undefined;
-}
+const EMPTY_RECENT: Transaction[] = [];
 
 const useWallet = (
 	id: string,
 	options?: UseWalletOptions
-): UseWalletReturn  => {
+): UseWalletReturn => {
 	const apiContext = useApiContext();
 	const query = useQuery<FetchWalletResponse>({
 		queryKey: [WALLETS_CACHE_KEYS.fetch, id],
 		queryFn: () => fetchWallet({
-			payload: { id },
+			id,
 			handler: apiContext.walletServers.rest
 		}),
 		...options ?? {}
@@ -31,9 +34,10 @@ const useWallet = (
 
 	return useMemo(() => ({
 		...query,
-		wallet: query.data
+		wallet: query.data?.wallet,
+		recent: query.data?.recent.items ?? EMPTY_RECENT,
 	}), [query]);
-}
+};
 
 export { useWallet };
 export type { UseWalletReturn, UseWalletOptions };
