@@ -1,3 +1,4 @@
+import { Icons } from "@internal/ui-library";
 import { List } from "@shared/pure-components/collections";
 import { TransactionsEmptyState } from "@entity/transactions";
 import { useTransactionsPaginationContext } from "@feature/transactions";
@@ -23,7 +24,7 @@ const BrowseTransactionEntries: FC<BrowseTransactionEntriesProps> = ({
 		return (
 			<TransactionsEmptyState>
 				<TransactionsEmptyState.Icon>
-					⌕
+					<Icons.CircleOff size={10} />
 				</TransactionsEmptyState.Icon>
 				<TransactionsEmptyState.Title>
 					No matching transactions
@@ -36,9 +37,14 @@ const BrowseTransactionEntries: FC<BrowseTransactionEntriesProps> = ({
 	}
 
 	return (
-		<div className="flex flex-col overflow-y-auto" style={{ minHeight: pageSize * ROW_HEIGHT + (pageSize - 1) * SEPARATOR_HEIGHT }}>
+		<div 
+			className="flex flex-col overflow-y-auto" 
+			style={{ minHeight: pageSize * ROW_HEIGHT + (pageSize - 1) * SEPARATOR_HEIGHT }}
+		>
 			<List className="divide-y divide-border">
-				{paginatedTransactions.map((transaction) => children(transaction))}
+				{paginatedTransactions.map((transaction) => {
+					return children(transaction);
+				})}
 			</List>
 			<ProtectBrowseSpace resources={paginatedTransactions} pageSize={pageSize}>
 				This is all we found.

@@ -6,11 +6,11 @@ import {
 	UiDialogTitle,
 	UiDialogTrigger,
 } from "@internal/ui-library";
-import type {FC, PropsWithChildren} from "react";
-
-import type { WebhookEndpoint } from "@entity/configuration";
 import { DeleteWebhookForm } from "@widget/configuration";
 import { useDisclosure } from "@shared/overlays";
+
+import type { FC, PropsWithChildren } from "react";
+import type { WebhookEndpoint } from "@entity/configuration";
 
 
 type DeleteWebhookModalProps = PropsWithChildren<{

@@ -1,6 +1,6 @@
 export { GoalsDjangoRESTApiClient } from './django-server.ts';
 export { GoalsMockRESTApiClient } from './mock-server.ts';
-export { GOALS_STORAGE_KEY } from './storage.ts';
+export { GOALS_STORAGE_KEY } from './mock-seed.ts';
 
 export type {
 	IGoalsRESTApiClient,
@@ -15,4 +15,4 @@ export type {
 	GoalPostRequest,
 	GoalPostResponse,
 } from './types.ts';
-export type { StoredGoal } from './storage.ts';
+export type { StoredGoal } from './mock-seed.ts';

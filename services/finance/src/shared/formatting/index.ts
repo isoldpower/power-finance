@@ -1,6 +1,6 @@
 export { useLocaleCurrency } from './use-locale-currency.ts';
 export { useLocaleDate, useLocaleDateTransform } from './use-locale-date.ts';
-export { formatAmountInput, parseAmountInput, sanitizeAmountInput } from './amount-input.ts';
+export { formatAmountInput, parseAmountInput, sanitizeAmountInput } from './amount-input';
 export { currencySymbol, currencyFractionDigits, roundToCurrency } from './money.ts';
 export { relativeAgo } from './time.ts';
 export { TRANSACTION_TYPE_TONE, TRANSACTION_TYPE_OPTIONS } from './transaction-type.ts';

@@ -1,5 +1,4 @@
 import { FinanceBadge } from "@internal/ui-library";
-
 import { GoalsToolbar } from "@entity/wallets";
 import { CardTitle } from "@shared/pure-components/typography";
 import { SpaceOccupant } from "@shared/pure-components/layout";

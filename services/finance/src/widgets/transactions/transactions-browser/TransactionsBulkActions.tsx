@@ -1,5 +1,4 @@
 import { useShallow } from "zustand/react/shallow";
-
 import { BulkActionsBar } from "@entity/transactions";
 import { useTransactionsSelection } from "@feature/transactions";
 import { SpaceOccupant } from "@shared/pure-components/layout";

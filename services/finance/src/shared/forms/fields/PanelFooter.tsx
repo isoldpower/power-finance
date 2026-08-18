@@ -1,5 +1,7 @@
-import type { FC } from "react";
 import { FinanceButton } from "@internal/ui-library";
+
+import type { FC } from "react";
+
 
 interface PanelFooterProps {
 	submitLabel: string;
@@ -10,7 +12,14 @@ interface PanelFooterProps {
 	submitType?: 'button' | 'submit';
 }
 
-const PanelFooter: FC<PanelFooterProps> = ({ submitLabel, cancelLabel = 'Cancel', onClose, onSubmit, submitDisabled = false, submitType = 'button' }) => (
+const PanelFooter: FC<PanelFooterProps> = ({ 
+	submitLabel,
+	cancelLabel = 'Cancel',
+	onClose,
+	onSubmit,
+	submitDisabled = false,
+	submitType = 'button',
+}) => (
 	<div className="flex gap-2.5 border-t border-border px-5 py-4">
 		<FinanceButton
 			type={submitType}

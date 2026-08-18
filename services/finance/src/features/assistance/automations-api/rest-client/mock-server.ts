@@ -11,11 +11,11 @@ import {
 } from "@shared/api";
 import { TRANSACTION_SEARCH_FIELDS } from "@feature/transactions/transactions-api";
 import { WALLET_SEARCH_FIELDS } from "@feature/wallets/wallets-api";
-import { AUTOMATIONS_STORAGE_KEY, SEED_AUTOMATIONS } from "./storage.ts";
+import { AUTOMATIONS_STORAGE_KEY, SEED_AUTOMATIONS } from "./mock-seed.ts";
 
 import type { IStorage } from "@internal/shared";
 import type { FilterNode } from "@shared/api";
-import type { StoredAutomation } from "./storage.ts";
+import type { StoredAutomation } from "./mock-seed.ts";
 import type {
 	AutomationDto,
 	AutomationEffectDto,

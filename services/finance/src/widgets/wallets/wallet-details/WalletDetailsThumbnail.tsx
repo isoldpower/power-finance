@@ -1,11 +1,11 @@
 import { FinanceButton } from "@internal/ui-library";
-import { WalletSwatch, walletTypeLabel } from "@entity/wallets";
 import { Caption, DisplayText } from "@shared/pure-components/typography";
 import { SlideOverTrigger } from "@shared/overlays";
+import { WalletSwatch, walletTypeLabel } from "@entity/wallets";
+import { ShowWhenUpdated } from "@feature/wallets";
 
 import type { FC } from "react";
 import type { Wallet } from "@entity/wallets";
-import {ShowWhenUpdated} from "@feature/wallets";
 
 
 interface WalletDetailsThumbnailProps {

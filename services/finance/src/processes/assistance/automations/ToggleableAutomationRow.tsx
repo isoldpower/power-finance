@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from "react";
 import { UiSwitch } from "@internal/ui-library";
-
 import {
 	AutomationRow,
 	automationSummary,
@@ -26,8 +25,9 @@ const ToggleableAutomationRow: FC<ToggleableAutomationRowProps> = ({
 }) => {
 	const toggle = useUpdateAutomation();
 	const status = resolveAutomationStatus(rule.enabled);
-	const Icon = useMemo(() => resolveAutomationIcon(rule.icon), [rule.icon]);
-	const summary = useMemo(() => automationSummary(rule), [rule]);
+	const summary = useMemo(() => {
+		return automationSummary(rule);
+	}, [rule]);
 
 	const handleToggle = useCallback((enabled: boolean) => {
 		toggle.mutate({ id: rule.id, patch: { enabled } });
@@ -36,7 +36,7 @@ const ToggleableAutomationRow: FC<ToggleableAutomationRowProps> = ({
 	return (
 		<AutomationRow style={{ animationDelay: `${(order * 0.04).toString()}s` }}>
 			<AutomationRow.Icon>
-				{Icon}
+				{resolveAutomationIcon(rule.icon)}
 			</AutomationRow.Icon>
 			<AutomationRow.Body>
 				<AutomationRow.Title>

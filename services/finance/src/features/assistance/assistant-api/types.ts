@@ -1,5 +1,5 @@
 import type { PageParams } from "@shared/api";
-import type { ResourceRefDto } from "@feature/assistance/actions-api";
+import type { ActionResourceRefDto } from "@feature/assistance/actions-api";
 
 
 type SignalToneDto = 'positive' | 'negative' | 'neutral' | 'muted';
@@ -25,7 +25,7 @@ interface AssistantMessageDto {
 	role: MessageRoleDto;
 	status: MessageStatusDto;
 	text: string;
-	refs: ResourceRefDto[];
+	refs: ActionResourceRefDto[];
 }
 
 interface AssistantAcceptedDto {

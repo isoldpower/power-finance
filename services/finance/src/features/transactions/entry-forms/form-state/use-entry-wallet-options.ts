@@ -1,16 +1,19 @@
 import { useMemo } from "react";
 import { useWatch } from "react-hook-form";
 
+import { toWalletSelectOptions } from "@entity/wallets";
+
 import type { Control, FieldValues, UseFormReturn } from "react-hook-form";
-import type { WalletSelectItem } from "@entity/wallets";
+import type { Wallet } from "@entity/wallets";
 import type { TransactionEntryValues } from "../types.ts";
 
 
 const useEntryWalletOptions = <T extends TransactionEntryValues & FieldValues>(
-	walletOptions: WalletSelectItem[],
+	wallets: Wallet[],
 	form: UseFormReturn<T>,
 ) => {
 	const control = form.control as unknown as Control<TransactionEntryValues>;
+	const walletOptions = useMemo(() => toWalletSelectOptions(wallets), [wallets]);
 	const type = useWatch({ control, name: 'type' });
 	const fromWallet = useWatch({ control, name: 'fromWallet' });
 	const toWallet = useWatch({ control, name: 'toWallet' });

@@ -13,11 +13,11 @@ import {
 	validateFilter,
 } from "@shared/api";
 import { storedTransactionToDto, TRANSACTIONS_STORAGE_KEY, walletDelta } from "@feature/transactions/transactions-api";
-import { WALLETS_STORAGE_KEY } from "./storage.ts";
+import { WALLETS_STORAGE_KEY } from "./mock-seed.ts";
 import type { IStorage } from "@internal/shared";
 import type { FieldPolicy, MoneyDto } from "@shared/api";
 import type { StoredTransaction, TransactionDto } from "@feature/transactions/transactions-api";
-import type { StoredWallet } from "./storage.ts";
+import type { StoredWallet } from "./mock-seed.ts";
 import type { WalletDetailDto, WalletDto, WalletSearchField } from "../types.ts";
 import type {
 	IWalletsRESTApiClient,

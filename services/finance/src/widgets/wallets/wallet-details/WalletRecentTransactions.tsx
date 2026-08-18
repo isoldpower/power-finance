@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-
 import { MoneyInOriginal } from "@entity/localization";
 import {
 	AmountDirectionIcon,
@@ -30,10 +29,9 @@ const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ wallet }) => {
 	const format = useLocaleCurrency();
 	const recentTransactions = useWalletRecentTransactions(wallet);
 
-	const recentRows = useMemo(
-		() => toTransactionRowViews(recentTransactions),
-		[recentTransactions]
-	);
+	const recentRows = useMemo(() => {
+		return toTransactionRowViews(recentTransactions);
+	}, [recentTransactions]);
 
 	return (
 		<div className='flex flex-col'>

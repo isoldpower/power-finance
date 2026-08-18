@@ -1,6 +1,12 @@
 import { useMemo } from "react";
 import { cn } from "@internal/ui-library";
-import { CategoryHeader, CompositionBar, CategorySegmentBlock, categoryColor, toAccountSegments } from "@entity/accounts";
+import {
+	CategoryHeader,
+	CompositionBar,
+	CategorySegmentBlock,
+	categoryColor,
+	toAccountSegments
+} from "@entity/accounts";
 import { useAccountsConvertion, useAccountsBrowser } from "@feature/accounts";
 
 import type { FC } from "react";
@@ -15,18 +21,22 @@ const CategoryRow: FC<CategoryRowProps> = ({ categoryEntry }) => {
 	const { category, account, selectCategory, selectSegment } = useAccountsBrowser();
 	const { convertToUserCurrency } = useAccountsConvertion();
 
-	const color = categoryColor(categoryEntry.id);
-	const active = categoryEntry.id === category.id;
-	const selectedAccountId = account.id;
-	const totalFormatted = convertToUserCurrency(categoryEntry.totalUsd);
-	const segments = useMemo(() => toAccountSegments(categoryEntry.accounts), [categoryEntry.accounts]);
+	const color = useMemo(() => {
+		return categoryColor(categoryEntry.id);
+	}, [categoryEntry.id]);
+	const totalFormatted = useMemo(() => {
+		return convertToUserCurrency(categoryEntry.totalUsd);
+	}, [categoryEntry.totalUsd, convertToUserCurrency]);
+	const segments = useMemo(() => {
+		return toAccountSegments(categoryEntry.accounts);
+	}, [categoryEntry.accounts]);
 
 	return (
 		<div
 			onClick={() => { selectCategory(categoryEntry.id); }}
 			className={cn(
 				"-mx-2 cursor-pointer rounded-[var(--radius-md)] px-2 py-2 hover:bg-secondary",
-				active && "bg-secondary",
+				(categoryEntry.id === category.id) && "bg-secondary",
 			)}
 		>
 			<CategoryHeader 
@@ -42,7 +52,7 @@ const CategoryRow: FC<CategoryRowProps> = ({ categoryEntry }) => {
 						width={segment.width}
 						shade={segment.shade}
 						title={segment.name}
-						selected={active && segment.accountId === selectedAccountId}
+						selected={categoryEntry.id === category.id && segment.accountId === account.id}
 						onClick={(event) => {
 							event.stopPropagation();
 							selectSegment(categoryEntry.id, segment.accountId);

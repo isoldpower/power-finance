@@ -1,6 +1,6 @@
 export { NotificationsDjangoRESTApiClient } from './django-server.ts';
 export { NotificationsMockRESTApiClient } from './mock-server.ts';
-export { NOTIFICATIONS_STORAGE_KEY } from './storage.ts';
+export { NOTIFICATIONS_STORAGE_KEY } from './mock-seed.ts';
 
 export type {
 	INotificationsRESTApiClient,
@@ -12,4 +12,4 @@ export type {
 	NotificationListResponse,
 	NotificationStreamRequest,
 } from './types.ts';
-export type { StoredNotification } from './storage.ts';
+export type { StoredNotification } from './mock-seed.ts';

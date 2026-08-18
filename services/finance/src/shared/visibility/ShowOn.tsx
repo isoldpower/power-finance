@@ -1,13 +1,20 @@
-import type { FC, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 
-interface ShowOnProps {
-	condition: boolean;
-	children: ReactNode;
+interface ShowOnProps<T> {
+	condition: T;
+	children: ((cleanItem: NonNullable<T>) => ReactNode) | ReactNode;
 }
 
-const ShowOn: FC<ShowOnProps> = ({ condition, children }) => {
-	return condition ? children : null;
+function ShowOn<T = boolean>({ 
+	condition,
+	children
+}: ShowOnProps<T>){
+	return condition 
+		? typeof children === 'function' 
+			? children(condition) 
+			: children 
+		: null;
 }
 
 ShowOn.displayName = 'ShowOn';

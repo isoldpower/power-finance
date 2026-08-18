@@ -10,12 +10,12 @@ import {
 	stringifySortedQuery,
 	validateFilter,
 } from "@shared/api";
-import { storedTransactionToDto, TRANSACTIONS_STORAGE_KEY } from "./storage.ts";
+import { storedTransactionToDto, TRANSACTIONS_STORAGE_KEY } from "./mock-seed.ts";
 import { TRANSACTION_CHAIN_LIMIT } from "../types.ts";
 import type { IStorage } from "@internal/shared";
 import type { FieldPolicy } from "@shared/api";
 import type { LedgerEntryDto } from "@feature/accounts/accounts-api";
-import type { StoredTransaction } from "./storage.ts";
+import type { StoredTransaction } from "./mock-seed.ts";
 import type {
 	CategoryDto,
 	ReceiptScanDto,

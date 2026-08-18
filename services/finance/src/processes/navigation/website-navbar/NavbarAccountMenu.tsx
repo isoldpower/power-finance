@@ -10,10 +10,7 @@ import { clerk } from "@internal/shared";
 import { CurrencySelector, LocaleCombobox } from "@widget/localization";
 import { NavigateToSettings } from "@feature/navigation";
 import { UserAvatar } from "@entity/navigation";
-import {
-	PopoverBottom,
-	PopoverSettings,
-} from "@entity/configuration";
+import { PopoverBottom, PopoverSettings } from "@entity/configuration";
 import { Caption, CardTitle } from "@shared/pure-components/typography";
 
 import type { FC } from "react";

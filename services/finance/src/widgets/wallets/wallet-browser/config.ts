@@ -1,8 +1,6 @@
 import type { OrderingType } from "@shared/data";
 
 
-const WALLETS_PAGE_SIZE = 5;
-
 const WALLET_SORT_OPTIONS = [
 	{ value: 'balance:DESC', label: 'Balance: high → low' },
 	{ value: 'balance:ASC', label: 'Balance: low → high' },
@@ -18,5 +16,5 @@ const fromSortKey = (key: string): { field: string; direction: OrderingType } =>
 	return { field, direction: direction === 'ASC' ? 'ASC' : 'DESC' };
 };
 
-export { WALLETS_PAGE_SIZE, WALLET_SORT_OPTIONS };
+export { WALLET_SORT_OPTIONS };
 export { toSortKey, fromSortKey };

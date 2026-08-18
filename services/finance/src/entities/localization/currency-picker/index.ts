@@ -1,6 +1,4 @@
-export { CurrencyPickerLabel } from './CurrencyPickerLabel.tsx';
-export { CurrencyPickerOptionCode } from './CurrencyPickerOptionCode.tsx';
-export { CurrencyPickerOptionSelected } from './CurrencyPickerOptionSelected.tsx';
-export { CurrencyPickerOptionSymbol } from './CurrencyPickerOptionSymbol.tsx';
+export { CurrencyCombobox } from './CurrencyCombobox.tsx';
 
-export type { CurrencyPickerVariant } from './types.ts';
+export type { CurrencyComboboxProps } from './CurrencyCombobox.tsx';
+export type { CurrencyPickerVariant } from './picker/types.ts';

@@ -11,11 +11,11 @@ import {
 	stringifySortedQuery,
 } from "@shared/api";
 import { storedTransactionToDto, TRANSACTIONS_STORAGE_KEY, walletDelta } from "@feature/transactions/transactions-api";
-import { GOALS_STORAGE_KEY } from "./storage.ts";
+import { GOALS_STORAGE_KEY } from "./mock-seed.ts";
 import type { IStorage } from "@internal/shared";
 import type { LedgerEntryDto } from "@feature/accounts/accounts-api";
 import type { StoredTransaction } from "@feature/transactions/transactions-api";
-import type { StoredGoal } from "./storage.ts";
+import type { StoredGoal } from "./mock-seed.ts";
 import type { GoalDto } from "../types.ts";
 import type {
 	IGoalsRESTApiClient,

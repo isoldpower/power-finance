@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-
 import {
 	AccountHistoryEmpty,
 	AccountHistoryRow,
@@ -16,6 +15,7 @@ import { useAccountHistoryPage } from "@feature/accounts";
 import { Caption, Heading, MetaText, Overline, RowTitle } from "@shared/pure-components/typography";
 import { Pagination, PaginationRange, toPageEntries } from "@shared/pure-components/collections";
 import { SidebarColumnsContainer } from "@shared/pure-components/layout";
+import { ShowOn } from "@shared/visibility";
 
 import type { FC } from "react";
 import type { AccountHistoryView, AccountView, AccountCategoryView } from "@entity/accounts";
@@ -40,8 +40,19 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 	convertToUserCurrency,
 	convertToUserCurrencyWithSign,
 }) => {
-	const { paginatedHistory, total, pageNumber, pageCount, from, to, goToPage } = useAccountHistoryPage(history, accountId);
-	const pages = useMemo(() => toPageEntries(pageNumber, pageCount), [pageCount, pageNumber]);
+	const {
+		paginatedHistory,
+		total,
+		pageNumber,
+		pageCount,
+		from,
+		to,
+		goToPage
+	} = useAccountHistoryPage(history, accountId);
+	
+	const pages = useMemo(() => {
+		return toPageEntries(pageNumber, pageCount);
+	}, [pageCount, pageNumber]);
 
 	return (
 		<SidebarColumnsContainer sidebar="start" sidebarWidth="320px" from="md">
@@ -114,7 +125,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 					</HistoryToolbar.Hint>
 				</HistoryToolbar>
 				<div className="min-h-[270px]">
-					{total === 0 ? (
+					<ShowOn condition={total === 0}>
 						<AccountHistoryEmpty>
 							<AccountHistoryEmpty.Icon>
 								∅
@@ -123,43 +134,44 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 								No transactions yet
 							</RowTitle>
 							<AccountHistoryEmpty.Message>
-								Nothing has posted to {account.name} this period. Activity will appear here as it’s recorded.
+								Nothing has posted to {account.name} this period.
+								Activity will appear here as it’s recorded.
 							</AccountHistoryEmpty.Message>
 						</AccountHistoryEmpty>
-					) : null}
+					</ShowOn>
 					{paginatedHistory.map((entry) => (
 						<AccountHistoryRow key={entry.id}>
-						<AccountHistoryRow.Icon className={ledgerIconClass(entry.amountUsd)}>
-							{entry.icon}
-						</AccountHistoryRow.Icon>
-						<div className="min-w-0 flex-1">
-							<RowTitle size="13" truncate>
-								{entry.description}
-							</RowTitle>
-							<MetaText as="div" size="10.5">
-								{entry.date}
-							</MetaText>
-						</div>
-						<AccountHistoryRow.Badge sideTone={ledgerSideTone(entry.debit)}>
-							{entry.debit ? 'DR' : 'CR'}
-						</AccountHistoryRow.Badge>
-						<AccountHistoryRow.Value tone={accountAmountTone(entry.amountUsd)}>
-							{convertToUserCurrencyWithSign(entry.amountUsd)}
-						</AccountHistoryRow.Value>
-					</AccountHistoryRow>
-				))}
+							<AccountHistoryRow.Icon className={ledgerIconClass(entry.amountUsd)}>
+								{entry.icon}
+							</AccountHistoryRow.Icon>
+							<div className="min-w-0 flex-1">
+								<RowTitle size="13" truncate>
+									{entry.description}
+								</RowTitle>
+								<MetaText as="div" size="10.5">
+									{entry.date}
+								</MetaText>
+							</div>
+							<AccountHistoryRow.Badge sideTone={ledgerSideTone(entry.debit)}>
+								{entry.debit ? 'DR' : 'CR'}
+							</AccountHistoryRow.Badge>
+							<AccountHistoryRow.Value tone={accountAmountTone(entry.amountUsd)}>
+								{convertToUserCurrencyWithSign(entry.amountUsd)}
+							</AccountHistoryRow.Value>
+						</AccountHistoryRow>
+					))}
 				</div>
 				<div className="flex h-[50px] items-center gap-2.5 border-t border-border px-[18px]">
 					<PaginationRange total={total} from={from} to={to} />
 					<div className="flex-1" />
-					{pageCount > 1 ? (
+					<ShowOn condition={pageCount > 1}>
 						<Pagination
 							currentPage={pageNumber}
 							pageCount={pageCount}
 							pages={pages}
 							onPage={goToPage}
 						/>
-					) : null}
+					</ShowOn>
 				</div>
 			</AccountSummary>
 		</SidebarColumnsContainer>

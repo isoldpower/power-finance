@@ -16,6 +16,7 @@ type UseTransactionCategoriesOptions = Omit<
 
 type UseTransactionCategoriesReturn = UseQueryResult & {
 	categories: TransactionCategory[];
+	categoryLabels: string[];
 };
 
 const useTransactionCategories = (
@@ -34,7 +35,11 @@ const useTransactionCategories = (
 		return query.data?.categories ?? [];
 	}, [query.data]);
 
-	return { ...query, categories };
+	const categoryLabels = useMemo(() => {
+		return categories.map((category) => category.label);
+	}, [categories]);
+
+	return { ...query, categories, categoryLabels };
 };
 
 export { useTransactionCategories };

@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
+import { startTween, stopTween } from "./count-up-tween.ts";
+import { prefersReducedMotion } from "./reduced-motion.ts";
+
+
 interface CountUpOptions {
 	introDuration?: number;
 	retargetDuration?: number;
@@ -7,61 +11,87 @@ interface CountUpOptions {
 	introRatio?: number;
 }
 
-const easeOutCubic = (progress: number): number => 1 - Math.pow(1 - progress, 3);
+const DEFAULT_INTRO_DURATION = 1150;
+const DEFAULT_RETARGET_DURATION = 850;
+const DEFAULT_DELAY = 320;
+const DEFAULT_INTRO_RATIO = 0.9;
+const NO_ANIMATION_FRAME = 0;
+const EMPTY_VALUE = 0;
+const NO_DELAY = 0;
 
-const prefersReducedMotion = (): boolean =>
-	typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const initialValue = (target: number | null, introRatio: number, reducedMotion: boolean): number => {
+	if (target === null) {
+		return EMPTY_VALUE;
+	}
 
+	if (reducedMotion) {
+		return target;
+	}
+
+	return target * introRatio;
+};
+
+// Animates a number towards `target`: the first run climbs from a fraction of it, later changes
+// tween from whatever is currently on screen. Returns null while the target is unknown.
 const useCountUp = (target: number | null, options: CountUpOptions = {}): number | null => {
 	const {
-		introDuration = 1150,
-		retargetDuration = 850,
-		delay = 320,
-		introRatio = 0.9,
+		introDuration = DEFAULT_INTRO_DURATION,
+		retargetDuration = DEFAULT_RETARGET_DURATION,
+		delay = DEFAULT_DELAY,
+		introRatio = DEFAULT_INTRO_RATIO,
 	} = options;
 
-	const reduceRef = useRef(prefersReducedMotion());
-	const [value, setValue] = useState<number>(() => {
-		if (target === null) return 0;
-		return reduceRef.current ? target : target * introRatio;
-	});
-	const valueRef = useRef(value);
-	valueRef.current = value;
-	const playedRef = useRef(false);
-	const rafRef = useRef(0);
+	const reducedMotionRef = useRef(prefersReducedMotion());
+	const [displayedValue, setDisplayedValue] = useState<number>(
+		initialValue(target, introRatio, reducedMotionRef.current),
+	);
+
+	const displayedValueRef = useRef(displayedValue);
+	displayedValueRef.current = displayedValue;
+
+	const introPlayedRef = useRef(false);
+	const animationFrameRef = useRef(NO_ANIMATION_FRAME);
 
 	useEffect(() => {
-		if (target === null) return;
-		if (reduceRef.current) {
-			setValue(target);
-			playedRef.current = true;
+		if (target === null) {
 			return;
 		}
 
-		const isIntro = !playedRef.current;
-		const from = isIntro ? target * introRatio : valueRef.current;
-		const duration = isIntro ? introDuration : retargetDuration;
-		const startAt = performance.now() + (isIntro ? delay : 0);
-		playedRef.current = true;
+		if (reducedMotionRef.current) {
+			setDisplayedValue(target);
+			introPlayedRef.current = true;
 
-		if (from === target) {
-			setValue(target);
 			return;
 		}
 
-		const tick = (now: number) => {
-			const elapsed = now - startAt;
-			const progress = elapsed <= 0 ? 0 : Math.min(elapsed / duration, 1);
-			setValue(from + (target - from) * easeOutCubic(progress));
-			if (progress < 1) rafRef.current = requestAnimationFrame(tick);
-		};
+		const isIntro = !introPlayedRef.current;
+		const startValue = isIntro ? target * introRatio : displayedValueRef.current;
 
-		cancelAnimationFrame(rafRef.current);
-		rafRef.current = requestAnimationFrame(tick);
-		return () => { cancelAnimationFrame(rafRef.current); };
+		introPlayedRef.current = true;
+
+		if (startValue === target) {
+			setDisplayedValue(target);
+
+			return;
+		}
+
+		startTween({
+			startedAt: performance.now() + (isIntro ? delay : NO_DELAY),
+			duration: isIntro ? introDuration : retargetDuration,
+			startValue,
+			endValue: target,
+			frameRef: animationFrameRef,
+			setValue: setDisplayedValue,
+		});
+
+		return stopTween.bind(null, animationFrameRef);
 	}, [target, introDuration, retargetDuration, delay, introRatio]);
 
-	return target === null ? null : value;
+	if (target === null) {
+		return null;
+	}
+
+	return displayedValue;
 };
 
 export { useCountUp };

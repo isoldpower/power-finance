@@ -1,11 +1,13 @@
+import { useShallow } from "zustand/react/shallow";
 import {
+	Icons,
+	UiButton,
 	UiTabs,
 	UiTabsContent,
 	UiTabsList,
 	UiTabsTrigger,
 } from "@internal/ui-library";
-
-import { WebhookWithControls, CreateWebhook } from "@process/configuration";
+import { CreateWebhook, EditWebhookModal, DeleteWebhookModal } from "@process/configuration";
 import {
 	SettingsPreferencesProvider,
 	useSettingsPreferences,
@@ -13,13 +15,14 @@ import {
 	WebhooksListEmptyUX,
 	WebhooksListFx,
 } from "@feature/configuration";
-import { useShallow } from "zustand/react/shallow";
+import { WebhookWithControls } from "@entity/configuration";
 
 import type { FC } from 'react';
 import type { SettingsTab } from "@entity/configuration";
 
 
 // TODO: Implement Webhooks pagination and filtering
+// TODO: Potentially optimize DOM size through using unified modals for deleting/editing webhooks.
 const SettingsTabs: FC = () => {
 	const { webhooks, status } = useWebhooksList();
 	const { settingsTab, changeTab } = useSettingsPreferences(
@@ -60,7 +63,18 @@ const SettingsTabs: FC = () => {
 						>
 							<WebhooksListEmptyUX dataset={webhooks}>
 								{webhooks.map((hook) => (
-									<WebhookWithControls webhook={hook} key={hook.id} />
+									<WebhookWithControls webhook={hook} key={hook.id}>
+										<EditWebhookModal targetWebhook={hook}>
+											<UiButton size="icon" variant="secondary">
+												<Icons.Pencil />
+											</UiButton>
+										</EditWebhookModal>
+										<DeleteWebhookModal targetWebhook={hook}>
+											<UiButton size="icon" variant="destructive">
+												<Icons.Trash2 />
+											</UiButton>
+										</DeleteWebhookModal>
+									</WebhookWithControls>
 								))}
 							</WebhooksListEmptyUX>
 						</WebhooksListFx>

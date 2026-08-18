@@ -1,13 +1,13 @@
-import {cn, FinanceMoney} from "@internal/ui-library";
-
+import { cn, FinanceMoney } from "@internal/ui-library";
 import { useCallback } from "react";
 import { WalletPinButton, WalletSwatch, walletTypeLabel } from "@entity/wallets";
 import { useWalletFavorite, useWalletsSelection } from "@feature/wallets";
 import { useShallow } from "zustand/react/shallow";
 import { useLocaleCurrency } from "@shared/formatting";
-import type { Wallet } from "@entity/wallets";
-import { FC, MouseEvent } from "react";
 import { Caption, RowTitle, textClass } from "@shared/pure-components/typography";
+
+import type { FC, MouseEvent } from "react";
+import type { Wallet } from "@entity/wallets";
 
 
 interface PinnableWalletRowProps {

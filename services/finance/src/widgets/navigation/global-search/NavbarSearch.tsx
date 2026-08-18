@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import {
 	cn,
 	FinanceIconButton,
@@ -12,11 +11,13 @@ import {
 	UiDialogDescription,
 	UiDialogTitle,
 } from "@internal/ui-library";
-import { SearchTrigger, SearchResult } from "@entity/navigation";
 import { SearchIcon } from "@shared/pure-components/icons";
-import { useGlobalSearch, useSearchResults } from "@feature/navigation";
 import { ShowOnDesktop, ShowOnMobile } from "@shared/visibility";
+import { SearchTrigger, SearchResult } from "@entity/navigation";
+import { useGlobalSearch, useSearchResults } from "@feature/navigation";
 import { PAGES } from "./config.ts";
+
+import type { FC } from "react";
 
 
 const NavbarSearch: FC = () => {

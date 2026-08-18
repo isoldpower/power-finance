@@ -1,5 +1,6 @@
-import { rangeCodeToRelativeVerbose, rangeVerbose } from "@entity/metrics";
+import { useMemo } from "react";
 import { Overline } from "@shared/pure-components/typography";
+import { rangeCodeToRelativeVerbose, rangeVerbose } from "@entity/metrics";
 
 import type { FC } from "react";
 
@@ -11,7 +12,11 @@ interface MetricPeriodTitleProps {
 }
 
 const MetricPeriodTitle: FC<MetricPeriodTitleProps> = ({ label, period, relative = false }) => {
-	const periodLabel = relative ? rangeCodeToRelativeVerbose(period) : rangeVerbose(period);
+	const periodLabel = useMemo(() => {
+		return relative 
+			? rangeCodeToRelativeVerbose(period) 
+			: rangeVerbose(period);
+	}, [period, relative])
 
 	return (
 		<Overline as="h2" tracking="0.14em">

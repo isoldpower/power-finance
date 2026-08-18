@@ -2,6 +2,7 @@ import { Caption } from "@shared/pure-components/typography";
 
 import type { FC, ReactNode } from "react";
 
+
 interface FieldLabelProps {
 	children: ReactNode;
 	htmlFor?: string;

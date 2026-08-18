@@ -4,7 +4,6 @@ import {
 	useGoalsBrowser,
 	useGoalsFiltersContext,
 } from "@feature/wallets";
-
 import { GOALS_PAGE_SIZE } from "./config.ts";
 
 import type { FC, ReactNode } from "react";

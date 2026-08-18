@@ -4,9 +4,19 @@ import type { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
 import type { TransactionEntryValues } from "../types.ts";
 
 
+interface UseEntryFormStateReturn {
+	canSubmit: boolean;
+	loading: boolean;
+	methods: {
+		handleDoneLoading: () => void;
+		handleFailedLoading: () => void;
+		handleLoading: () => void;
+	};
+}
+
 const useEntryFormState = <T extends TransactionEntryValues & FieldValues>(
 	form: UseFormReturn<T>,
-) => {
+): UseEntryFormStateReturn => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const { formState, resetField } = form;
 
@@ -40,3 +50,4 @@ const useEntryFormState = <T extends TransactionEntryValues & FieldValues>(
 }
 
 export { useEntryFormState };
+export type { UseEntryFormStateReturn };

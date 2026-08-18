@@ -1,7 +1,6 @@
 import { useSettingsContext } from "@internal/shared";
+import { CurrencyCombobox } from "@entity/localization";
 import { useCurrencies, useSelectMainCurrency } from "@feature/localization";
-
-import { CurrencyCombobox } from "./CurrencyCombobox.tsx";
 
 import type { FinanceComboboxPivot } from "@internal/ui-library";
 import type { CurrencyPickerVariant } from "@entity/localization";

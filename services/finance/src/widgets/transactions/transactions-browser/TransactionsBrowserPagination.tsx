@@ -3,7 +3,15 @@ import { CursorPagination, PaginationRange } from "@shared/pure-components/colle
 
 
 const TransactionsBrowserPagination = () => {
-	const { from, to, total, hasNext, hasPrev, scrollForward, scrollBackward } = useTransactionsPaginationContext();
+	const {
+		from,
+		to,
+		total,
+		hasNext,
+		hasPrev,
+		scrollForward,
+		scrollBackward
+	} = useTransactionsPaginationContext();
 
 	return (
 		<div className="flex items-center gap-2 border-t border-border px-4 py-2.5">

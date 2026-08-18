@@ -1,6 +1,3 @@
-import { ScanReceiptIcon } from "@shared/pure-components/icons";
-import type { FC } from "react";
-
 import { AccountsDrillDownDetails, BrowseAccountCategories, LedgerBalanceBand } from "@process/accounts";
 import { BrowseTransactionEntries, LedgerBasedTransaction } from "@process/transactions";
 import { BrowseAndSelectWallets, SelectedWalletDetails } from "@process/wallets";
@@ -23,9 +20,11 @@ import { SlideOver, SlideOverTrigger } from "@shared/overlays";
 import { AiBadge } from "@shared/pure-components/badges";
 import { Overline, PageTitle } from "@shared/pure-components/typography";
 import { CenteredList, PageContainer, SidebarColumnsContainer, SpaceBetween } from "@shared/pure-components/layout";
+import { ScanReceiptIcon } from "@shared/pure-components/icons";
 import { FinanceButton, FinanceCard } from "@internal/ui-library";
-
 import { managementSlides, managementSlidesRegistry } from "./SlideOverRegistry.tsx";
+
+import type { FC } from "react";
 
 
 const ManagementPage: FC = () => {

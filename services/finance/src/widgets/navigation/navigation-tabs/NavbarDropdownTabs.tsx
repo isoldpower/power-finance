@@ -1,7 +1,4 @@
-import { ChevronDownIcon } from "@shared/pure-components/icons";
 import { useCallback } from "react";
-import { useDisclosure } from "@shared/overlays";
-import { useActiveTab } from "@feature/navigation";
 import {
 	cn,
 	FinanceMenu,
@@ -9,11 +6,14 @@ import {
 	FinanceMenuContent,
 	FinanceMenuItem,
 } from "@internal/ui-library";
+import { ChevronDownIcon } from "@shared/pure-components/icons";
+import { textClass } from "@shared/pure-components/typography";
+import { useDisclosure } from "@shared/overlays";
+import { useActiveTab } from "@feature/navigation";
 import { NAVIGATION_TABS } from "./config.ts";
 
 import type { FC, ReactNode } from "react";
 import type { NavTab } from "@entity/navigation";
-import { textClass } from "@shared/pure-components/typography";
 
 
 interface NavbarDropdownTabsProps {

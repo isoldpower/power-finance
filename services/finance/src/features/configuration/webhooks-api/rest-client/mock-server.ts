@@ -8,9 +8,9 @@ import {
 	SEED_WEBHOOKS,
 	SUBSCRIPTIONS_STORAGE_KEY,
 	WEBHOOKS_STORAGE_KEY,
-} from "./storage.ts";
+} from "./mock-seed.ts";
 import type { IStorage } from "@internal/shared";
-import type { StoredDelivery, StoredSubscription, StoredWebhook } from "./storage.ts";
+import type { StoredDelivery, StoredSubscription, StoredWebhook } from "./mock-seed.ts";
 import type { WebhookDto, WebhookSecretDto, WebhookSubscriptionDto } from "../types.ts";
 import type {
 	IWebhookRESTApiClient,

@@ -1,6 +1,6 @@
-import type { ReactNode } from "react";
-
 import { NewRulePanel } from "@process/assistance";
+
+import type { ReactNode } from "react";
 
 
 const planningSlides = {

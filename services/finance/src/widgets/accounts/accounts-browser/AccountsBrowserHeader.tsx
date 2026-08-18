@@ -1,6 +1,5 @@
 import { LockIcon } from "@shared/pure-components/icons";
 import { FinanceBadge } from "@internal/ui-library";
-
 import { SectionHeader } from "@shared/pure-components/layout";
 import { useAccountsBrowser } from "@feature/accounts";
 

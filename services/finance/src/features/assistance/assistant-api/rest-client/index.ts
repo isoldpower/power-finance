@@ -1,6 +1,6 @@
 export { AssistantDjangoRESTApiClient } from './django-server.ts';
 export { AssistantMockRESTApiClient } from './mock-server.ts';
-export { ASSISTANT_MESSAGES_STORAGE_KEY } from './storage.ts';
+export { ASSISTANT_MESSAGES_STORAGE_KEY } from './mock-seed.ts';
 
 export type {
 	IAssistantRESTApiClient,
@@ -13,4 +13,4 @@ export type {
 	AssistantSendRequest,
 	AssistantSendResponse,
 } from './types.ts';
-export type { StoredMessage } from './storage.ts';
+export type { StoredMessage } from './mock-seed.ts';

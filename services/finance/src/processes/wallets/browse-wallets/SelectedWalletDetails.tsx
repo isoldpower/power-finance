@@ -1,5 +1,4 @@
-import {FinanceCard} from "@internal/ui-library";
-
+import { FinanceCard } from "@internal/ui-library";
 import { WalletsRecentTitle } from "@entity/wallets";
 import {
 	useWallet,

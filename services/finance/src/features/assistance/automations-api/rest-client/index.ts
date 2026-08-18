@@ -1,6 +1,6 @@
 export { AutomationsDjangoRESTApiClient } from './django-server.ts';
 export { AutomationsMockRESTApiClient } from './mock-server.ts';
-export { AUTOMATIONS_STORAGE_KEY } from './storage.ts';
+export { AUTOMATIONS_STORAGE_KEY } from './mock-seed.ts';
 
 export type {
 	IAutomationsRESTApiClient,
@@ -15,4 +15,4 @@ export type {
 	AutomationPostRequest,
 	AutomationPostResponse,
 } from './types.ts';
-export type { StoredAutomation } from './storage.ts';
+export type { StoredAutomation } from './mock-seed.ts';

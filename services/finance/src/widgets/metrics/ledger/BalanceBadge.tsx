@@ -1,8 +1,8 @@
-import type { BalanceMetrics } from "@entity/metrics";
 import { FinanceBadge } from "@internal/ui-library";
-
-import type { FC } from "react";
 import { BalanceBadgeFx } from "@feature/metrics";
+
+import type { BalanceMetrics } from "@entity/metrics";
+import type { FC } from "react";
 
 
 interface BalanceMetricsBadgeProps {

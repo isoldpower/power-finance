@@ -8,8 +8,10 @@ import {
 	UiLabel,
 	PasswordInput
 } from "@internal/ui-library";
-import {FC} from "react";
+
+import type { FC } from "react";
 import type { WebhookEndpointSecret } from "@entity/configuration";
+
 
 interface CreateWebhookFinishModalProps {
 	open: boolean;

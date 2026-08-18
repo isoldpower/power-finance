@@ -1,11 +1,9 @@
-import type { FC } from "react";
 import { useRef } from "react";
-
 import { useAmbientParticles } from "@shared/motion";
-
 import { PALETTE, PARTICLE_COUNT, MAX_ALPHA } from "./config.ts";
 import { Background } from "@entity/navigation";
 
+import type { FC } from "react";
 
 
 const FinanceBackground: FC = () => {

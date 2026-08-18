@@ -7,11 +7,6 @@ import { CardTitle } from "@shared/pure-components/typography";
 import type { FC } from "react";
 
 
-const PLACEHOLDER_DAYS = [
-	{ key: 'd1', rows: ['d1r1', 'd1r2', 'd1r3', 'd1r4'] },
-	{ key: 'd2', rows: ['d2r1', 'd2r2', 'd2r3', 'd2r4'] },
-];
-
 interface RecentActivityPanelProps {
 	className?: string;
 }
@@ -38,7 +33,10 @@ const RecentActivityPanel: FC<RecentActivityPanelProps> = ({ className }) => {
 
 const RecentActivitySkeleton: FC = () => (
 	<ActivityFeedSkeleton>
-		{PLACEHOLDER_DAYS.map((day) => (
+		{[
+			{ key: 'd1', rows: ['d1r1', 'd1r2', 'd1r3', 'd1r4'] },
+			{ key: 'd2', rows: ['d2r1', 'd2r2', 'd2r3', 'd2r4'] },
+		].map((day) => (
 			<ActivityFeedSkeleton.Day key={day.key}>
 				<ActivityFeedSkeleton.GroupHeader />
 				{day.rows.map((row) => (

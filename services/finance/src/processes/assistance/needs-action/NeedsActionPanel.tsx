@@ -1,12 +1,11 @@
 import { AlertIcon, CheckIcon } from "@shared/pure-components/icons";
 import { RowTitle } from "@shared/pure-components/typography";
 import { cn, FinanceCard } from "@internal/ui-library";
-
 import { ActionsList } from "@widget/assistance";
 import { useActions, NeedsActionBadgeFx } from "@feature/assistance";
 import { NeedsActionHeader } from "@entity/assistance";
 
-import type { FC } from "react";
+import {FC, useMemo} from "react";
 
 
 interface NeedsActionPanelProps {
@@ -19,7 +18,9 @@ const NeedsActionPanel: FC<NeedsActionPanelProps> = ({
 	clearDescriptor = 'nothing pending',
 }) => {
 	const { actions, isPending, isError } = useActions();
-	const isAllClear = !isPending && !isError && actions.length === 0;
+	const isAllClear = useMemo(() => {
+		return !isPending && !isError && actions.length === 0;
+	}, [actions.length, isError, isPending]);
 
 	return (
 		<FinanceCard

@@ -1,9 +1,8 @@
 import { FinanceStat } from "@internal/ui-library";
-
 import { MoneyWithFx } from "@widget/localization";
 import { BalanceMetricsBadge, ExplanatoryNeutralBadge, AskAiForHelp } from "@widget/metrics";
-import { useBalanceMetrics } from "@feature/metrics";
 import { LedgerCard, LedgerSymbol } from "@entity/accounts";
+import { useBalanceMetrics } from "@feature/metrics";
 import { Tooltip } from "@shared/overlays";
 import { CenteredList, EndList, SpaceOccupant } from "@shared/pure-components/layout";
 import { Overline } from "@shared/pure-components/typography";

@@ -1,5 +1,4 @@
 import { FinanceStat, FinanceBadge } from "@internal/ui-library";
-
 import { MoneyWithFx } from "@widget/localization";
 import { BalanceMetricsBadge } from "@widget/metrics";
 import { useBalanceMetrics } from "@feature/metrics";
@@ -7,6 +6,7 @@ import { RouteLink } from "@shared/routing";
 import { FormulaOperator, LedgerBalanceCard } from "@entity/accounts";
 import { Tooltip } from "@shared/overlays";
 import { Overline, UnderlinedLink } from "@shared/pure-components/typography";
+import {CenteredList, SpaceOccupant} from "@shared/pure-components/layout";
 
 import type { FC } from "react";
 
@@ -16,14 +16,14 @@ const LedgerStatusSummary: FC = () => {
 
 	return (
 		<LedgerBalanceCard>
-			<div className="flex items-center gap-2.5">
+			<CenteredList gap={2.5}>
 				<Overline as="h2" tracking="0.14em">
 					Ledger
 				</Overline>
 				<FinanceBadge tone="neutral" appearance="outline" size="sm">
 					double-entry
 				</FinanceBadge>
-			</div>
+			</CenteredList>
 			<div className="hidden items-end gap-[18px] sm:flex ml-4">
 				<Tooltip content="What you own — wallets + receivables">
 					<FinanceStat size="sm" label="Assets">
@@ -43,13 +43,13 @@ const LedgerStatusSummary: FC = () => {
 					</FinanceStat>
 				</Tooltip>
 			</div>
-			<div className="flex-1" />
-			<div className="flex items-center gap-3">
+			<SpaceOccupant />
+			<CenteredList gap={3}>
 				<BalanceMetricsBadge ledger={balance} isPending={isPending} />
 				<RouteLink to="management">
 					<UnderlinedLink>Manage →</UnderlinedLink>
 				</RouteLink>
-			</div>
+			</CenteredList>
 		</LedgerBalanceCard>
 	);
 };

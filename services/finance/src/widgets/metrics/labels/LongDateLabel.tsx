@@ -1,8 +1,8 @@
 import { useMemo } from "react";
-import type { FC } from "react";
-
-import { useLongDateLabel } from "@feature/localization";
 import { Overline } from "@shared/pure-components/typography";
+import { useLongDateLabel } from "@feature/localization";
+
+import type { FC } from "react";
 
 
 const LongCurrentDateLabel: FC = () => {

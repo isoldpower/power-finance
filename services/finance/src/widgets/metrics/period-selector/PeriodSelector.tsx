@@ -1,8 +1,8 @@
-import type { FC } from "react";
-
 import { PeriodButton, PeriodTabsContainer } from "@entity/metrics";
 import { useMetricsPreferences } from "@feature/metrics";
 import { useShallow } from "zustand/react/shallow";
+
+import type { FC } from "react";
 import type { Period } from "@entity/metrics";
 
 

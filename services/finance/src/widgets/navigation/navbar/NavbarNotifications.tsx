@@ -4,7 +4,6 @@ import {
 	FinanceMenuTrigger,
 	FinanceMenuContent,
 } from "@internal/ui-library";
-
 import { RouteLink } from "@shared/routing";
 import {
 	useNotifications,

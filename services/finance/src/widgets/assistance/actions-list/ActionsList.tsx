@@ -33,7 +33,10 @@ const ActionsList: FC<ActionsListWidgetProps> = ({
 							{action.body}
 						</NeedsActionRow.Subtitle>
 					</div>
-					<ActionResolutions actionId={action.id} resolutions={action.resolutions} />
+					<ActionResolutions 
+						actionId={action.id} 
+						resolutions={action.resolutions} 
+					/>
 				</NeedsActionRow>
 			))}
 		</ActionsListFx>

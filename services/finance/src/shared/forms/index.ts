@@ -5,3 +5,5 @@ export { PanelFooter } from './fields/PanelFooter.tsx';
 
 export { HideOnFormValue } from './form-values/HideOnFormValue.tsx';
 export { ShowOnFormValue } from './form-values/ShowOnFormValue.tsx';
+
+export type { SelectOption } from './types.ts';

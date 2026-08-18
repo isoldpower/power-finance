@@ -1,14 +1,10 @@
-import { FC, useState } from "react";
+import { useState } from "react";
 import { useCallback } from "react";
-
+import { UiCard, UiCardContent, UiCardHeader, UiCardTitle } from "@internal/ui-library";
 import { NewWebhookForm, CreateWebhookFinishModal } from "@widget/configuration";
-import {
-	UiCard,
-	UiCardContent,
-	UiCardHeader,
-	UiCardTitle,
-} from "@internal/ui-library";
+
 import type { WebhookEndpointSecret } from "@entity/configuration";
+import type { FC } from "react";
 
 
 const CreateWebhook: FC = () => {
@@ -20,13 +16,13 @@ const CreateWebhook: FC = () => {
 		setFinishCreateOpen(true);
 	}, []);
 	
-	const handleFinishCreateOpenChange = useCallback((open: boolean) => {
-		if (open && !createdWebhook) {
-			throw Error("Attempt to open the WebhookFinishCreate modal while no data on create webhook is stored");
-		}
+	const handleFinishCreateOpenChange = useCallback((isNowOpen: boolean) => {
+		if (isNowOpen && !createdWebhook) throw Error(
+			"Attempt to open the WebhookFinishCreate modal while no data on create webhook is stored"
+		);
 		
-		setFinishCreateOpen(open);
-		if (!open) {
+		setFinishCreateOpen(isNowOpen);
+		if (!isNowOpen) {
 			setCreatedWebhook(null);
 		}
 	}, [createdWebhook]);

@@ -27,11 +27,6 @@ const WALLETS = [
 	{ id: 'b', name: 'B', balance: { amount: 0, currency: 'EUR' }, color: 'y' },
 ] as never[];
 
-const WALLET_OPTIONS = [
-	{ id: 'a', name: 'A', currency: 'USD', gradient: 'x' },
-	{ id: 'b', name: 'B', currency: 'EUR', gradient: 'y' },
-];
-
 const RATE = 1.087;
 
 const renderQuickAddHooks = (counter: { renders: number }) => renderHook(() => {
@@ -48,7 +43,7 @@ const renderQuickAddHooks = (counter: { renders: number }) => renderHook(() => {
 
 	const { toCurrency, fromCurrency } = useWalletsCurrencies(WALLETS, form);
 	useEntryFormState(form);
-	useEntryWalletOptions(WALLET_OPTIONS, form);
+	useEntryWalletOptions(WALLETS, form);
 	const transfer = useCrossCurrencyTransfer(fromCurrency, toCurrency, form);
 	useEntryTypeEffects(defaultValues, form);
 

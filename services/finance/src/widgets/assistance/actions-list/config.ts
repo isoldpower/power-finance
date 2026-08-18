@@ -1,5 +1,6 @@
 import type { ResolutionIntent } from "@entity/assistance";
 
+
 type ResolutionVariant = 'primary' | 'outline' | 'ghost' | 'danger';
 
 const RESOLUTION_VARIANT: Record<ResolutionIntent, ResolutionVariant> = {

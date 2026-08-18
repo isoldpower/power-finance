@@ -1,10 +1,10 @@
 import { cn } from "@internal/ui-library";
+import { Text, textClass } from "@shared/pure-components/typography";
 import { AnimatedMoney } from "@entity/localization";
 import { useConvertedCashFlow } from "@feature/metrics";
 import { useMemo } from "react";
 
 import type { CashFlow } from "@entity/metrics";
-import { Text, textClass } from "@shared/pure-components/typography";
 
 
 interface CashFlowBalanceProps {

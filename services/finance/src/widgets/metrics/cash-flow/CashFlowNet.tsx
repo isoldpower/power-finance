@@ -1,11 +1,11 @@
-import { useConvertMoney } from "@feature/localization";
 import { useMemo } from "react";
+import { textClass } from "@shared/pure-components/typography";
 import { AnimatedMoney } from "@entity/localization";
 import { CashFlowPeriod } from "@entity/metrics";
+import { useConvertMoney } from "@feature/localization";
 
 import type { Period } from "@entity/metrics";
 import type { CashFlow } from "@entity/metrics";
-import { textClass } from "@shared/pure-components/typography";
 
 
 interface CashFlowNetProps {

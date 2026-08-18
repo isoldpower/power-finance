@@ -5,11 +5,11 @@ import {
 	UiDialogTitle,
 	UiDialogTrigger,
 } from "@internal/ui-library";
-import type { FC, PropsWithChildren } from "react";
-
-import type { WebhookEndpoint } from "@entity/configuration";
 import { EditWebhookForm } from "@widget/configuration";
 import { useDisclosure } from "@shared/overlays";
+
+import type { FC, PropsWithChildren } from "react";
+import type { WebhookEndpoint } from "@entity/configuration";
 
 
 type EditWebhookModalProps = PropsWithChildren<{

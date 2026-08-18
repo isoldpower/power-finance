@@ -1,5 +1,4 @@
 import { Fragment } from "react";
-
 import { GoalsEmptyNotice } from "@entity/wallets";
 import { useGoals, useGoalsPaginationContext } from "@feature/wallets";
 
@@ -18,7 +17,9 @@ const FilteredGoalsDirectory: FC<FilteredGoalsDirectoryProps> = ({ children }) =
 	if (total === 0) {
 		return (
 			<GoalsEmptyNotice>
-				{goals.length === 0 ? 'No goals yet... Try creating new one' : 'No goals match your search.'}
+				{goals.length === 0 
+					? 'No goals yet... Try creating new one' 
+					: 'No goals match your search.'}
 			</GoalsEmptyNotice>
 		);
 	}

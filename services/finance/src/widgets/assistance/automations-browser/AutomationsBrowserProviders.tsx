@@ -4,7 +4,6 @@ import {
 	useAutomationsBrowser,
 	useAutomationsFiltersContext,
 } from "@feature/assistance";
-
 import { AUTOMATIONS_PAGE_SIZE } from "./config.ts";
 
 import type { FC, ReactNode } from "react";

@@ -8,12 +8,10 @@ import {
 	FinanceSelectValue,
 	FinanceToggle,
 } from "@internal/ui-library";
-
 import { SearchIcon } from "@shared/pure-components/icons";
 import { toWalletCategoryOptions } from "@entity/wallets";
 import { useWalletsFiltersContext, useWalletsList } from "@feature/wallets";
 import { useCallback, useMemo } from "react";
-
 import { WALLET_SORT_OPTIONS, fromSortKey, toSortKey } from "./config.ts";
 
 import type { ChangeEvent } from "react";

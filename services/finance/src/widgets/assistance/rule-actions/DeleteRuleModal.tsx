@@ -1,5 +1,4 @@
-import { FinanceButton } from "@internal/ui-library";
-
+import { cn, FinanceButton } from "@internal/ui-library";
 import { RuleDialogActions, RuleDialogDescription } from "@entity/assistance";
 import { ConfirmModal } from "@shared/overlays";
 import { DangerIconBadge } from "@shared/pure-components/badges";
@@ -15,7 +14,12 @@ interface DeleteRuleModalProps {
 	children: ReactNode;
 }
 
-const DeleteRuleModal: FC<DeleteRuleModalProps> = ({ name, pending, onConfirm, children }) => {
+const DeleteRuleModal: FC<DeleteRuleModalProps> = ({
+	name,
+	pending,
+	onConfirm,
+	children
+}) => {
 	return (
 		<ConfirmModal trigger={children} className="w-[400px] p-6 text-center">
 			{({ close }) => (
@@ -35,7 +39,10 @@ const DeleteRuleModal: FC<DeleteRuleModalProps> = ({ name, pending, onConfirm, c
 							type="button"
 							size="lg"
 							variant="danger"
-							className="flex-1 border-transparent bg-neg text-white shadow-[var(--shadow)] hover:bg-neg hover:brightness-95"
+							className={cn(
+								"flex-1 border-transparent bg-neg text-white",
+								"shadow-[var(--shadow)] hover:bg-neg hover:brightness-95"
+							)}
 							disabled={pending}
 							onClick={() => { onConfirm(close); }}
 						>

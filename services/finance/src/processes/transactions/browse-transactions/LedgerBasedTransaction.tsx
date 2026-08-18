@@ -1,8 +1,9 @@
-import { cn } from "@internal/ui-library";
 import { useCallback, useMemo } from "react";
-import { useTransactionsSelection } from "@feature/transactions";
 import { useShallow } from "zustand/react/shallow";
+import { cn } from "@internal/ui-library";
+import { useTransactionsSelection } from "@feature/transactions";
 import { LedgerTransactionRow, TransactionLedgerEntries } from "@widget/transactions";
+import { ShowOn } from "@shared/visibility";
 
 import type { FC, MouseEvent } from "react";
 import type { Transaction } from "@entity/transactions";
@@ -35,7 +36,13 @@ const LedgerBasedTransaction: FC<LedgerBasedTransactionProps> = ({ transaction }
 	}, [toggleChecked, transaction.id]);
 
 	return (
-		<div className={cn("border-b border-border last:border-b-0", checked && "bg-[var(--accent-soft)]", !checked && expanded && "bg-secondary")}>
+		<div 
+			className={cn(
+				"border-b border-border last:border-b-0", 
+				checked && "bg-[var(--accent-soft)]", 
+				!checked && expanded && "bg-secondary"
+			)}
+		>
 			<LedgerTransactionRow
 				transaction={transaction}
 				expanded={expanded}
@@ -43,9 +50,9 @@ const LedgerBasedTransaction: FC<LedgerBasedTransactionProps> = ({ transaction }
 				onCheck={handleCheck}
 				onToggle={() => { selectTransaction(expanded ? null : transaction.id); }}
 			/>
-			{expanded ? (
+			<ShowOn condition={expanded}>
 				<TransactionLedgerEntries transaction={transaction} />
-			) : null}
+			</ShowOn>
 		</div>
 	);
 }

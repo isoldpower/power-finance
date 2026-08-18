@@ -1,7 +1,6 @@
 import { useCallback } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FinanceInput } from "@internal/ui-library";
 
 import { GoalForm } from "@entity/wallets";
 import {
@@ -12,8 +11,10 @@ import {
 } from "@feature/wallets";
 import { useConvertMoney } from "@feature/localization";
 import { SlideOverPanel } from "@shared/overlays";
-import { FieldLabel, PanelFooter } from "@shared/forms";
-import { currencySymbol, formatAmountInput } from "@shared/formatting";
+import { PanelFooter } from "@shared/forms";
+import { currencySymbol } from "@shared/formatting";
+import { GoalTargetField } from "./goal-fields/GoalTargetField.tsx";
+import { GoalTextField } from "./goal-fields/GoalTextField.tsx";
 
 import type { FC, ReactNode } from "react";
 import type { GoalFormSchema } from "@feature/wallets";
@@ -51,58 +52,33 @@ const NewGoalPanel: FC<NewGoalPanelProps> = ({ children }) => {
 							Set a target and a date to track your progress.
 						</GoalForm.Intro>
 						<GoalForm.Field>
-							<FieldLabel htmlFor="goal-name">
-								Name
-							</FieldLabel>
-							<FinanceInput
+							<GoalTextField
 								id="goal-name"
+								label="Name"
 								placeholder="Emergency fund"
-								{...register('name')}
+								registration={register('name')}
+								error={errors.name?.message}
 							/>
-							{errors.name ? (
-								<GoalForm.FieldError>
-									{errors.name.message}
-								</GoalForm.FieldError>
-							) : null}
 						</GoalForm.Field>
 						<GoalForm.AmountsGrid>
 							<div>
-								<FieldLabel htmlFor="goal-target">
-									Target
-								</FieldLabel>
-								<Controller
+								<GoalTargetField
+									id="goal-target"
+									label="Target"
 									control={control}
-									name="target"
-									render={({ field }) => (
-										<FinanceInput
-											id="goal-target"
-											inputMode="decimal"
-											placeholder={`${symbol}15,000`}
-											value={field.value}
-											onChange={(event) => { field.onChange(formatAmountInput(event.target.value, symbol)); }}
-										/>
-									)}
+									symbol={symbol}
+									placeholder={`${symbol}15,000`}
+									error={errors.target?.message}
 								/>
-								{errors.target ? (
-									<GoalForm.FieldError>
-										{errors.target.message}
-									</GoalForm.FieldError>
-								) : null}
 							</div>
 							<div>
-								<FieldLabel htmlFor="goal-finish-at">
-									Target date
-								</FieldLabel>
-								<FinanceInput
+								<GoalTextField
 									id="goal-finish-at"
+									label="Target date"
 									type="date"
-									{...register('finishAt')}
+									registration={register('finishAt')}
+									error={errors.finishAt?.message}
 								/>
-								{errors.finishAt ? (
-									<GoalForm.FieldError>
-										{errors.finishAt.message}
-									</GoalForm.FieldError>
-								) : null}
 							</div>
 						</GoalForm.AmountsGrid>
 					</GoalForm>

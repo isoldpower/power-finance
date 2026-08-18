@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from "react";
-
 import { FilterChip, TransactionSearchInput } from "@entity/transactions";
 import { useTransactionCategories, useTransactionsFiltersContext } from "@feature/transactions";
 import { useWalletsList } from "@feature/wallets";

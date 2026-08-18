@@ -1,5 +1,4 @@
 import { Icons } from "@internal/ui-library";
-
 import { useWalletsPaginationContext } from "@feature/wallets";
 import { MetaText } from "@shared/pure-components/typography";
 import { PagerButton, PaginationRange } from "@shared/pure-components/collections";

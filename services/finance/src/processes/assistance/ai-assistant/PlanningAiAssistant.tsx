@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-
 import { AiAssistantFab, AiAssistantPanel, AiAssistantSheet } from "@widget/assistance";
 import { ShowOnDesktop, ShowOnMobile } from "@shared/visibility";
 import { useDisclosure } from "@shared/overlays";
@@ -12,7 +11,10 @@ const PlanningAiAssistant: FC = () => {
 	const { open, onOpen, onClose } = useDisclosure();
 	const { overview } = useAssistantOverview();
 	const { messages } = useAssistantMessages();
-	const chat = useMemo(() => [...messages].reverse(), [messages]);
+	
+	const chatHistory = useMemo(() => {
+		return [...messages].reverse();
+	}, [messages]);
 
 	return (
 		<>
@@ -20,7 +22,7 @@ const PlanningAiAssistant: FC = () => {
 				<AiAssistantPanel
 					signals={overview.signals}
 					prompts={overview.prompts}
-					chat={chat}
+					chat={chatHistory}
 					className="sticky top-[70px]"
 					comingSoon={true}
 				/>
@@ -31,7 +33,7 @@ const PlanningAiAssistant: FC = () => {
 					<AiAssistantPanel
 						signals={overview.signals}
 						prompts={overview.prompts}
-						chat={chat}
+						chat={chatHistory}
 						className="w-full"
 						comingSoon={true}
 						onClose={onClose}

@@ -9,7 +9,10 @@ import type { RuleFormSchema } from "./rule-form-schema.ts";
 
 const IN_SEPARATOR = ',';
 
-const conditionValue = (operator: RuleFormSchema['conditions'][number]['operator'], value: string): string | string[] => {
+const conditionValue = (
+	operator: RuleFormSchema['conditions'][number]['operator'],
+	value: string,
+): string | string[] => {
 	return operator === 'in' ? value.split(IN_SEPARATOR).map((entry) => entry.trim()) : value;
 };
 

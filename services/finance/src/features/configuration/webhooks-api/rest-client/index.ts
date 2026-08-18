@@ -1,6 +1,6 @@
 export { WebhookDjangoRESTApiClient } from './django-server.ts';
 export { WebhookMockRESTApiClient } from './mock-server.ts';
-export { DELIVERIES_STORAGE_KEY, SUBSCRIPTIONS_STORAGE_KEY, WEBHOOKS_STORAGE_KEY } from './storage.ts';
+export { DELIVERIES_STORAGE_KEY, SUBSCRIPTIONS_STORAGE_KEY, WEBHOOKS_STORAGE_KEY } from './mock-seed.ts';
 
 export type {
 	IWebhookRESTApiClient,
@@ -27,4 +27,4 @@ export type {
 	WebhookRotateRequest,
 	WebhookRotateResponse,
 } from './types.ts';
-export type { StoredDelivery, StoredSubscription, StoredWebhook } from './storage.ts';
+export type { StoredDelivery, StoredSubscription, StoredWebhook } from './mock-seed.ts';

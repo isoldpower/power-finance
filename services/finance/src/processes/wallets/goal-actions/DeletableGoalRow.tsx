@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-
 import { Caption, DisplayText, RowTitle } from "@shared/pure-components/typography";
 import { RowDeleteButton } from "@shared/pure-components/collections";
 import { useLocaleCurrency } from "@shared/formatting";
@@ -19,7 +18,9 @@ interface DeletableGoalRowProps {
 const DeletableGoalRow: FC<DeletableGoalRowProps> = ({ goal, order }) => {
 	const formatCurrency = useLocaleCurrency();
 
-	const goalView = useMemo(() => toGoalView(goal, formatCurrency), [goal, formatCurrency]);
+	const goalView = useMemo(() => {
+		return toGoalView(goal, formatCurrency);
+	}, [goal, formatCurrency]);
 
 	return (
 		<GoalRow style={{ animationDelay: `${(order * 0.04).toString()}s` }}>

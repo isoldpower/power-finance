@@ -1,17 +1,9 @@
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
-import { CurrencyCombobox } from "@widget/localization";
-import {
-	NEW_WALLET_GRADIENT,
-	WalletPreviewCard,
-} from "@entity/wallets";
-import {
-	WalletFormOnSubmit,
-	useWalletFormInitials,
-	useWalletFormState,
-	walletFormSchema
-} from "@feature/wallets";
+import { CurrencyCombobox } from "@entity/localization";
+import { NEW_WALLET_GRADIENT, WalletPreviewCard } from "@entity/wallets";
+import { WalletFormOnSubmit, useWalletFormInitials, useWalletFormState, walletFormSchema } from "@feature/wallets";
 import { FieldLabel, PanelFooter } from "@shared/forms";
 
 import type { FC } from "react";

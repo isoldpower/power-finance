@@ -5,9 +5,8 @@ import {
 	FinanceMenuContent,
 	FinanceMenuTrigger,
 } from "@internal/ui-library";
-
-import { ResolveActionOnClick } from "@feature/assistance";
 import { resolutionChoice } from "@entity/assistance";
+import { ResolveActionOnClick } from "@feature/assistance";
 import { ChevronDownIcon } from "@shared/pure-components/icons";
 import { MENU_RESOLUTION_VARIANT, RESOLUTION_VARIANT } from "./config.ts";
 
@@ -21,11 +20,11 @@ interface ActionResolutionsProps {
 }
 
 const ActionResolutions: FC<ActionResolutionsProps> = ({ actionId, resolutions }) => {
-	const { recommended, alternatives } = useMemo(() => resolutionChoice(resolutions), [resolutions]);
+	const { recommended, alternatives } = useMemo(() => {
+		return resolutionChoice(resolutions);
+	}, [resolutions]);
 
-	if (!recommended) return null;
-
-	return (
+	return recommended ? (
 		<>
 			<FinanceButton
 				asChild
@@ -72,7 +71,7 @@ const ActionResolutions: FC<ActionResolutionsProps> = ({ actionId, resolutions }
 				</FinanceMenu>
 			) : null}
 		</>
-	);
+	) : null;
 };
 
 ActionResolutions.displayName = 'ActionResolutions';

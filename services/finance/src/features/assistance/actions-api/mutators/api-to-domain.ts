@@ -3,7 +3,7 @@ import { parseAmount } from "@shared/api";
 import type { MoneyDto } from "@shared/api";
 import type { Action, ActionResolution, ResourceRef } from "@entity/assistance";
 import type { Money } from "@entity/localization";
-import type { ActionDto, ActionResolutionDto, ResourceRefDto } from "../types.ts";
+import type { ActionDto, ActionResolutionDto, ActionResourceRefDto } from "../types.ts";
 
 
 const moneyFromApi = (dto: MoneyDto): Money => ({
@@ -11,7 +11,7 @@ const moneyFromApi = (dto: MoneyDto): Money => ({
 	currency: dto.currency,
 });
 
-const resourceRefFromApi = (dto: ResourceRefDto): ResourceRef => ({
+const resourceRefFromApi = (dto: ActionResourceRefDto): ResourceRef => ({
 	type: dto.type,
 	id: dto.id,
 });

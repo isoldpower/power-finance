@@ -1,13 +1,7 @@
-import type { ReactNode } from "react";
+import { ScanReceipt, CreateTransaction } from "@process/transactions";
+import { CreateWallet, EditWallet } from "@process/wallets";
 
-import {
-	ScanReceipt,
-	CreateTransaction,
-} from "@process/transactions";
-import {
-	CreateWallet,
-	EditWallet,
-} from "@process/wallets";
+import type { ReactNode } from "react";
 
 
 const managementSlides = {

@@ -1,6 +1,7 @@
 import { useConvertMoney } from "@feature/localization";
 import { AnimatedMoney } from "@entity/localization";
 import { useMemo } from "react";
+
 import type { Money } from "@entity/localization";
 import type { FC } from "react";
 

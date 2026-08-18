@@ -1,17 +1,14 @@
-import {FC, useCallback, useState} from "react";
-import {UiButton, UiForm, UiFormField} from "@internal/ui-library";
-import { FieldLayout } from "@shared/forms";
-import { InputField } from "@shared/forms";
+import { useCallback, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-	NewWebhook,
-	useNewDefaultValues,
-	webhookSchema,
-	type WebhookSchema
-} from "@feature/configuration";
-import type { WebhookEndpointSecret } from "@entity/configuration";
+import { UiButton, UiForm, UiFormField } from "@internal/ui-library";
+import { FieldLayout } from "@shared/forms";
+import { InputField } from "@shared/forms";
+import { NewWebhook, useNewDefaultValues, webhookSchema } from "@feature/configuration";
 
+import type { FC } from "react";
+import type { WebhookEndpointSecret } from "@entity/configuration";
+import type { WebhookSchema } from "@feature/configuration";
 
 interface NewWebhookModalProps {
 	onWebhookCreated?: (data: WebhookEndpointSecret) => void;

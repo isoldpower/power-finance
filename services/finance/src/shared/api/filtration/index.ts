@@ -4,6 +4,7 @@ export {
 	REFERENCE_OPERATORS,
 	TEXT_OPERATORS,
 } from './operators.ts';
+export { OPERATOR_LABELS } from './labels.ts';
 
 export type {
 	FilterAndGroup,

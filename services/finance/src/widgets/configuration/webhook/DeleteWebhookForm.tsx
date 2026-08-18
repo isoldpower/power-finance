@@ -1,11 +1,11 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UiButton, UiForm, UiFormField } from "@internal/ui-library";
-import type { FC, PropsWithChildren } from "react";
-
 import { DeleteWebhook, deleteWebhookSchema, useDeleteDefaultValues } from "@feature/configuration";
 import { FieldLayout } from "@shared/forms";
 import { InputField } from "@shared/forms";
+
+import type { FC, PropsWithChildren } from "react";
 import type { WebhookEndpoint } from "@entity/configuration";
 import type { DeletedWebhookSchema } from "@feature/configuration";
 

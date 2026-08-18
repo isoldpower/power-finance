@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
 	ActivityGroupHeader,
 	ActivityRow,
@@ -6,11 +7,9 @@ import {
 	toTransactionDayView,
 } from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
-import { ProtectActivityEmpty } from "@feature/transactions";
+import { LadderAppearance, ProtectActivityEmpty } from "@feature/transactions";
 import { useLocaleCurrency } from "@shared/formatting";
 import { MetaText, Overline, RowTitle } from "@shared/pure-components/typography";
-
-import { useMemo } from "react";
 
 import type { FC } from "react";
 import type { RecentActivityGroup } from "@feature/transactions";
@@ -20,16 +19,11 @@ interface ActivityFeedProps {
 	groups: RecentActivityGroup[];
 }
 
-const APPEAR_STEP_MS = 45;
-const APPEAR_CAP_MS = 450;
-
-const toAppearDelay = (position: number): number => Math.min(position * APPEAR_STEP_MS, APPEAR_CAP_MS);
-
 const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 	const { convert, targetCurrency } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
 
-	const days = useMemo(() => {
+	const dailyGroups = useMemo(() => {
 		let position = 0;
 
 		return groups.map((group) => {
@@ -42,8 +36,8 @@ const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 	}, [groups, convert]);
 
 	return (
-		<ProtectActivityEmpty activityGroups={days}>
-			{days.map((day) => (
+		<ProtectActivityEmpty activityGroups={dailyGroups}>
+			{dailyGroups.map((day) => (
 				<div key={day.dayLabel}>
 					<ActivityGroupHeader>
 						<Overline as="span" size="10" tracking="0.1em">
@@ -54,37 +48,41 @@ const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 						</ActivityGroupHeader.Money>
 					</ActivityGroupHeader>
 					{day.transactions.map((transaction, index) => (
-						<ActivityRow
-							key={transaction.id}
-							appearDelayMs={toAppearDelay(day.startPosition + index)}
-						>
-							<ActivityRow.Icon tone={transaction.type === 'income' ? 'positive' : 'negative'}>
-								<AmountDirectionIcon type={transaction.type} />
-							</ActivityRow.Icon>
-							<div className="min-w-0 flex-1">
-								<RowTitle>
-									{transaction.description}
-								</RowTitle>
-								<ActivityRow.Body>
-									<span>{transaction.walletName}</span>
-									<ActivityRow.Separator />
-									<span>{transaction.category}</span>
-								</ActivityRow.Body>
-							</div>
-							<div className="text-right">
-								<ActivityRow.Money
-									tone={resolveToneWithDirection(transaction.type)}
-									amount={formatCurrency(transaction.amount, transaction.currency)}
-									converted={convert({
-										amount: transaction.amount,
-										currency: transaction.currency,
-									}).formatted}
-								/>
-								<MetaText size="10.5" dateTime={transaction.createdAt}>
-									{transaction.time}
-								</MetaText>
-							</div>
-						</ActivityRow>
+						<LadderAppearance order={day.startPosition + index} key={transaction.id}>
+							<ActivityRow>
+								<ActivityRow.Icon tone={transaction.type === 'income' ? 'positive' : 'negative'}>
+									<AmountDirectionIcon type={transaction.type} />
+								</ActivityRow.Icon>
+								<div className="min-w-0 flex-1">
+									<RowTitle>
+										{transaction.description}
+									</RowTitle>
+									<ActivityRow.Body>
+										<span>{transaction.walletName}</span>
+										<ActivityRow.Separator />
+										<span>{transaction.category}</span>
+									</ActivityRow.Body>
+								</div>
+								<div className="text-right">
+									<ActivityRow.Money
+										tone={resolveToneWithDirection(
+											transaction.type
+										)}
+										amount={formatCurrency(
+											transaction.amount,
+											transaction.currency
+										)}
+										converted={convert({
+											amount: transaction.amount,
+											currency: transaction.currency,
+										}).formatted}
+									/>
+									<MetaText size="10.5" dateTime={transaction.createdAt}>
+										{transaction.time}
+									</MetaText>
+								</div>
+							</ActivityRow>
+						</LadderAppearance>
 					))}
 				</div>
 			))}

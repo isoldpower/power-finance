@@ -1,16 +1,22 @@
-import {SlideOver, SlideOverTrigger, Tooltip} from "@shared/overlays";
+import { SlideOver, SlideOverTrigger, Tooltip } from "@shared/overlays";
 import { RevealMotion } from "@shared/motion";
-import { CenteredList, PageContainer, SidebarColumnsContainer, SpaceOccupant, StackedList } from "@shared/pure-components/layout";
+import {
+	CenteredList,
+	PageContainer,
+	SidebarColumnsContainer,
+	SpaceOccupant,
+	StackedList
+} from "@shared/pure-components/layout";
 import { PageTitle } from "@shared/pure-components/typography";
 import { CheckIcon } from "@shared/pure-components/icons";
 import { FinanceButton, FinanceCard } from "@internal/ui-library";
-
 import { PlanningAiAssistant, NeedsActionPanel, ToggleableAutomationRow } from "@process/assistance";
 import { DeletableGoalRow } from "@process/wallets";
 import {
 	AutomationsBrowserProvider,
 	AutomationsBrowserFilters,
-	AutomationsBrowserHeader, AutomationsBrowserPagination,
+	AutomationsBrowserHeader, 
+	AutomationsBrowserPagination,
 	FilteredAutomationsDirectory,
 	WhatIfCard
 } from "@widget/assistance";
@@ -34,8 +40,7 @@ import {
 	PlanningStatusSyncBadge,
 } from "@entity/assistance";
 import { GoalsToolbar } from "@entity/wallets";
-import {planningSlides, planningSlidesRegistry} from "./SlideOverRegistry.tsx";
-
+import { planningSlides, planningSlidesRegistry } from "./SlideOverRegistry.tsx";
 
 import type { FC } from "react";
 
