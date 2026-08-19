@@ -1,20 +1,24 @@
-type PageEntry = number | 'gap';
+import { MAX_VISIBLE_PAGES } from "./config.ts";
 
-const MAX_VISIBLE_PAGES = 7;
+import type { PageEntry } from "./types.ts";
 
-const toPageEntries = (currentPage: number, pageCount: number): PageEntry[] => {
+
+const toPageEntries = (
+	currentPage: number,
+	pageCount: number,
+): PageEntry[] => {
 	if (pageCount <= MAX_VISIBLE_PAGES) {
 		return Array.from({ length: pageCount }, (_, index) => index + 1);
 	}
 
-	const first = 1;
-	const last = pageCount;
-	const start = Math.max(first + 1, currentPage - 1);
-	const end = Math.min(last - 1, currentPage + 1);
+	const firstPage = 1;
+	const lastPage = pageCount;
+	
+	const start = Math.max(firstPage + 1, currentPage - 1);
+	const end = Math.min(lastPage - 1, currentPage + 1);
 
-	const entries: PageEntry[] = [first];
-
-	if (start > first + 1) {
+	const entries: PageEntry[] = [firstPage];
+	if (start > firstPage + 1) {
 		entries.push('gap');
 	}
 
@@ -22,14 +26,12 @@ const toPageEntries = (currentPage: number, pageCount: number): PageEntry[] => {
 		entries.push(page);
 	}
 
-	if (end < last - 1) {
+	if (end < lastPage - 1) {
 		entries.push('gap');
 	}
 
-	entries.push(last);
-
+	entries.push(lastPage);
 	return entries;
 };
 
 export { toPageEntries };
-export type { PageEntry };

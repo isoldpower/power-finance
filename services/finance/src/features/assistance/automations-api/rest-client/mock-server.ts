@@ -256,7 +256,9 @@ class AutomationsMockRESTApiClient implements IAutomationsRESTApiClient {
 		const trigger = payload.data.trigger ? normalizeTrigger(payload.data.trigger) : automation.trigger;
 		const effects = payload.data.effects ?? automation.effects;
 
-		validateRule(trigger, effects);
+		if (payload.data.trigger !== undefined || payload.data.effects !== undefined) {
+			validateRule(trigger, effects);
+		}
 
 		await delay();
 

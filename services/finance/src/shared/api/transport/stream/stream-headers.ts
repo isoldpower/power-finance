@@ -7,13 +7,17 @@ import {
 import type { StreamRequestInit } from "./types.ts";
 
 
-const streamHeaders = (init: StreamRequestInit): Record<string, string> => {
+function streamHeaders(init: StreamRequestInit): Record<string, string> {
 	return {
 		Accept: EVENT_STREAM_CONTENT_TYPE,
-		...(init.body === undefined ? {} : { 'Content-Type': JSON_CONTENT_TYPE }),
-		...(init.lastEventId ? { [LAST_EVENT_ID_HEADER]: init.lastEventId } : {}),
+		...(init.body === undefined ?
+			{} 
+			: { 'Content-Type': JSON_CONTENT_TYPE }),
+		...(init.lastEventId 
+			? { [LAST_EVENT_ID_HEADER]: init.lastEventId }
+			: {}),
 		...init.headers,
 	};
-};
+}
 
 export { streamHeaders };

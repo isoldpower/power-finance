@@ -1,16 +1,10 @@
 import { sanitizeAmountInput } from "./sanitize-amount-input.ts";
 
 
-const FALLBACK_AMOUNT = 0;
+function parseAmountInput(formatted: string): number {
+	const parsedInput = Number(sanitizeAmountInput(formatted));
 
-const parseAmountInput = (formatted: string): number => {
-	const parsed = Number(sanitizeAmountInput(formatted));
-
-	if (Number.isNaN(parsed)) {
-		return FALLBACK_AMOUNT;
-	}
-
-	return parsed;
-};
+	return Number.isNaN(parsedInput) ? 0 : parsedInput;
+}
 
 export { parseAmountInput };

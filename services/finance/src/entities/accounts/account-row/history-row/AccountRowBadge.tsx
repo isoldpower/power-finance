@@ -1,12 +1,12 @@
 import { FinanceBadge } from "@internal/ui-library";
 
 import type { FC } from "react";
-import type { Tone } from "@shared/formatting";
+import type { Types } from "@shared/formatting";
 
 
 interface AccountRowBadgeProps {
 	children: string;
-	sideTone: Tone;
+	sideTone: Types;
 }
 
 const AccountRowBadge: FC<AccountRowBadgeProps> = ({ children, sideTone }) => (

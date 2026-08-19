@@ -2,14 +2,14 @@ import { cn } from "@internal/ui-library";
 import { MetaText } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
-import type { Tone } from "@shared/formatting";
+import type { Types } from "@shared/formatting";
 
 
 interface TransactionAmountStackProps {
 	original: string;
 	main: string;
 	converted: boolean;
-	tone: Tone;
+	tone: Types;
 }
 
 const TransactionAmountStack: FC<TransactionAmountStackProps> = ({ original, main, converted, tone }) => (

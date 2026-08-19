@@ -1,6 +1,9 @@
 import type { Money } from "@entity/localization";
 import type { LedgerEntry } from "@entity/accounts";
 
+
+type TransactionEntryType = 'expense' | 'income' | 'transfer';
+
 type TransactionType = 'expense' | 'income';
 
 type TransactionOrigin = 'manual' | 'scanned';
@@ -117,5 +120,6 @@ export type {
 	TransactionQuery,
 	TransactionCategory,
 	ReceiptScan,
-	ReceiptScanField
+	ReceiptScanField,
+	TransactionEntryType
 };

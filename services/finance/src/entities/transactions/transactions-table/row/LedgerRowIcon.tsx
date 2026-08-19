@@ -1,11 +1,11 @@
 import { cn } from "@internal/ui-library";
 
 import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
-import type { Tone } from "@shared/formatting";
+import type { Types } from "@shared/formatting";
 
 
 type LedgerRowIconProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> & {
-	tone: Tone;
+	tone: Types;
 }>;
 
 const LedgerRowIcon: FC<LedgerRowIconProps> = ({

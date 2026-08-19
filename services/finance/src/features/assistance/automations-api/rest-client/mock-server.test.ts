@@ -134,6 +134,27 @@ describe('AutomationsMockRESTApiClient', () => {
 		expect(enabled.data.some((rule) => rule.id === created.data.id)).toBe(false);
 	});
 
+	test('toggles a seeded rule whose stored effects are incomplete', async () => {
+		const seeded = new AutomationsMockRESTApiClient('automations-seeded');
+		const listed = await seeded.list({});
+		const sweep = listed.data.find((rule) => rule.name === 'Monthly savings sweep');
+
+		const patched = await seeded.patch({ id: sweep?.id ?? '', data: { enabled: true } });
+
+		expect(patched.data.enabled).toBe(true);
+	});
+
+	test('still validates effects when the patch carries them', async () => {
+		const created = await client.post({ data: draft() });
+
+		await expect(client.patch({
+			id: created.data.id,
+			data: { effects: [{ type: 'set_category', params: {} }] },
+		})).rejects.toSatisfy(
+			(error: unknown) => isApiError(error) && error.details[0]?.code === 'effect_params_invalid',
+		);
+	});
+
 	test('soft-deletes a rule and hides it from the list', async () => {
 		const created = await client.post({ data: draft() });
 

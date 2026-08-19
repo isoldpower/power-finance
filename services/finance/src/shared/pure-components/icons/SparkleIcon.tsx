@@ -1,5 +1,6 @@
 import type { FC } from "react";
 
+
 interface SparkleIconProps {
 	size: number;
 	accent?: boolean;

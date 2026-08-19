@@ -36,7 +36,7 @@ const CategoryRow: FC<CategoryRowProps> = ({ categoryEntry }) => {
 			onClick={() => { selectCategory(categoryEntry.id); }}
 			className={cn(
 				"-mx-2 cursor-pointer rounded-[var(--radius-md)] px-2 py-2 hover:bg-secondary",
-				(categoryEntry.id === category.id) && "bg-secondary",
+				(categoryEntry.id === category?.id) && "bg-secondary",
 			)}
 		>
 			<CategoryHeader 
@@ -52,7 +52,7 @@ const CategoryRow: FC<CategoryRowProps> = ({ categoryEntry }) => {
 						width={segment.width}
 						shade={segment.shade}
 						title={segment.name}
-						selected={categoryEntry.id === category.id && segment.accountId === account.id}
+						selected={categoryEntry.id === category?.id && segment.accountId === account?.id}
 						onClick={(event) => {
 							event.stopPropagation();
 							selectSegment(categoryEntry.id, segment.accountId);

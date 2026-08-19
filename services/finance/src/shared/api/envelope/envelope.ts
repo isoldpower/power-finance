@@ -1,22 +1,5 @@
-interface PaginationMeta {
-	limit: number | null;
-	total: number;
-	next_cursor: string | null;
-	prev_cursor: string | null;
-}
+import type { CacheMeta, CollectionMeta, MutationMeta } from "./meta";
 
-interface CacheMeta {
-	cached?: boolean;
-}
-
-type CollectionMeta<TExtra extends object = object> = PaginationMeta & CacheMeta & TExtra;
-
-type EmbeddedMeta<TField extends string, TExtra extends object = object> =
-	Record<TField, PaginationMeta> & CacheMeta & TExtra;
-
-interface MutationMeta {
-	idempotent_replay?: boolean;
-}
 
 interface ApiEnvelope<TData, TMeta extends object = object> {
 	data: TData;
@@ -37,13 +20,8 @@ interface ResourceTimestamps {
 
 export type {
 	ApiEnvelope,
-	CacheMeta,
-	CollectionMeta,
 	CollectionResponse,
-	EmbeddedMeta,
-	MutationMeta,
 	MutationResponse,
-	PaginationMeta,
 	ResourceResponse,
 	ResourceTimestamps,
 };

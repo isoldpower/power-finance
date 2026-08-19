@@ -1,5 +1,4 @@
 import { cn } from "@internal/ui-library";
-
 import { Text } from "../typography";
 
 import type { FC } from "react";

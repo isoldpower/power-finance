@@ -1,11 +1,11 @@
 import { resourceRefFromApi } from "@feature/assistance/actions-api";
 
 import type { AssistantMessage, AssistantOverview, AssistantSignal } from "@entity/assistance";
-import type { Tone } from "@shared/formatting";
+import type { Types } from "@shared/formatting";
 import type { AssistantMessageDto, AssistantOverviewDto, AssistantSignalDto, SignalToneDto } from "../types.ts";
 
 
-const TONE_BY_SIGNAL: Record<SignalToneDto, Tone> = {
+const TONE_BY_SIGNAL: Record<SignalToneDto, Types> = {
 	positive: 'pos',
 	negative: 'neg',
 	neutral: 'neutral',

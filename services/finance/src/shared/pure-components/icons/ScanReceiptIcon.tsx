@@ -1,5 +1,6 @@
 import type { FC } from "react";
 
+
 interface ScanReceiptIconProps {
 	size?: number;
 	className?: string;

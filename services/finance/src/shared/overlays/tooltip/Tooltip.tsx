@@ -1,5 +1,6 @@
-import type { FC, ReactNode } from "react";
 import { FinanceTooltip } from "@internal/ui-library";
+
+import type { FC, ReactNode } from "react";
 
 
 interface TooltipProps {

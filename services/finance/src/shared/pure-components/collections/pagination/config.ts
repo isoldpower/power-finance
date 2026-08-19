@@ -1,0 +1,3 @@
+const MAX_VISIBLE_PAGES = 7;
+
+export { MAX_VISIBLE_PAGES };

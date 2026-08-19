@@ -1,6 +1,8 @@
-import type { FxObject, FxType, FxTypeMap } from "./types.ts";
 import { PagePending, PageError } from "./PageFx.tsx";
 import { DefaultPending, DefaultError } from "./DefaultFx.tsx";
+
+import type { FxObject, FxType, FxTypeMap } from "./types.ts";
+
 
 const componentsDictionary: FxTypeMap = {
 	'default-page': {

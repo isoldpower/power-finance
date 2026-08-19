@@ -1,5 +1,6 @@
 import type { FC } from "react";
 
+
 interface SearchIconProps {
 	size?: number;
 	className?: string;

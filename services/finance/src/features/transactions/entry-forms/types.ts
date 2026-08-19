@@ -1,4 +1,4 @@
-import type { TransactionEntryType } from "@shared/formatting";
+import type { TransactionEntryType } from "@entity/transactions";
 
 
 interface TransactionEntryFields {

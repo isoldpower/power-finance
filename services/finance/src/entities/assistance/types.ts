@@ -1,6 +1,6 @@
 import type { FilterOperator } from "@shared/api";
 import type { Money } from "@entity/localization";
-import type { Tone } from "@shared/formatting";
+import type { Types } from "@shared/formatting";
 
 
 type Severity = 'info' | 'warning' | 'critical';
@@ -174,7 +174,7 @@ interface AutomationQuery {
 interface AssistantSignal {
 	label: string;
 	value: string;
-	tone: Tone;
+	tone: Types;
 }
 
 interface AssistantOverview {

@@ -1,5 +1,6 @@
-import type { FC } from "react";
 import { MetaText } from "@shared/pure-components/typography";
+
+import type { FC } from "react";
 
 
 interface PaginationRangeProps {

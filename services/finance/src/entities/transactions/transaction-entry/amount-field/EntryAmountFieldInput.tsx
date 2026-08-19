@@ -1,9 +1,9 @@
 import { cn } from "@internal/ui-library";
-import { TRANSACTION_TYPE_TONE, sanitizeAmountInput } from "@shared/formatting";
+import { sanitizeAmountInput } from "@shared/formatting";
 import { textClass } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
-import type { TransactionEntryType } from "@shared/formatting";
+import type { TransactionEntryType } from "../../types";
 
 
 interface EntryAmountFieldInputProps {
@@ -28,7 +28,9 @@ const EntryAmountFieldInput: FC<EntryAmountFieldInputProps> = ({
 			textClass({ family: 'display', size: '3xl', weight: 'semibold' }),
 			"w-full min-w-0 flex-1 border-none bg-transparent p-0 outline-none",
 			"placeholder:text-[var(--text-3)]",
-			TRANSACTION_TYPE_TONE[type]
+			type === 'expense' && 'text-neg',
+			type === 'income' && 'text-pos',
+			type === 'transfer' && 'text-primary'
 		)}
 	/>
 );

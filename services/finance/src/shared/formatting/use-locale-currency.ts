@@ -1,15 +1,16 @@
 import { resolveLocale, useSettingsContext } from "@internal/shared";
 import { useCallback } from "react";
 
-export const useLocaleCurrency = () => {
+
+type UseLocaleCurrencyReturn = ((amount: number, currency: string) => string);
+
+const useLocaleCurrency = (): UseLocaleCurrencyReturn => {
 	const { locale } = useSettingsContext();
 
-	return useCallback((
-		amount: number,
-		currency: string
-	) => {
+	return useCallback((amount: number, currency: string) => {
 		const code = currency.trim() || 'USD';
 		const safeLocale = resolveLocale(locale);
+		
 		try {
 			return amount.toLocaleString(safeLocale, {
 				style: 'currency',
@@ -23,3 +24,5 @@ export const useLocaleCurrency = () => {
 		}
 	}, [locale]);
 }
+
+export { useLocaleCurrency };

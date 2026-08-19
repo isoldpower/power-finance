@@ -1,13 +1,13 @@
 import { MoneyInOriginal } from "@entity/localization";
 
 import type { FC } from "react";
-import type { Tone } from "@shared/formatting";
+import type { Types } from "@shared/formatting";
 
 
 interface ActivityRowMoneyProps {
 	amount: string;
 	converted: string;
-	tone: Tone;
+	tone: Types;
 }
 
 const ActivityRowMoney: FC<ActivityRowMoneyProps> = ({ amount, converted, tone }) => (

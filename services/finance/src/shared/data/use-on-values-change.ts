@@ -5,14 +5,14 @@ const useOnValuesChange = (values: unknown[], onChange: () => void) => {
 	const previousValues = useRef<unknown[]>(values);
 
 	useEffect(() => {
-		const changed = values.some((value, index) => value !== previousValues.current[index]);
+		const isChanged = values.some((value, index) => {
+			return value !== previousValues.current[index];
+		});
 
-		if (!changed) {
-			return;
+		if (isChanged) {
+			previousValues.current = values;
+			onChange();
 		}
-
-		previousValues.current = values;
-		onChange();
 	}, [onChange, values]);
 }
 

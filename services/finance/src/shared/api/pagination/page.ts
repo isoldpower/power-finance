@@ -14,13 +14,18 @@ interface Page<TItem> {
 	prevCursor: string | null;
 }
 
-const pageFromMeta = <TItem>(items: TItem[], meta: PaginationMeta): Page<TItem> => ({
-	items,
-	limit: meta.limit,
-	total: meta.total,
-	nextCursor: meta.next_cursor,
-	prevCursor: meta.prev_cursor,
-});
+function pageFromMeta<TItem>(
+	items: TItem[],
+	meta: PaginationMeta,
+): Page<TItem> {
+	return {
+		items,
+		limit: meta.limit,
+		total: meta.total,
+		nextCursor: meta.next_cursor,
+		prevCursor: meta.prev_cursor,
+	};
+}
 
 export { pageFromMeta };
 export type { Page, PageParams };

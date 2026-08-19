@@ -1,11 +1,11 @@
 import { FinanceMoney } from "@internal/ui-library";
 
 import type { FC, PropsWithChildren } from "react";
-import type { Tone } from "@shared/formatting";
+import type { Types } from "@shared/formatting";
 
 
 type AccountListItemBalanceProps = PropsWithChildren<{
-	tone: Tone;
+	tone: Types;
 }>;
 
 const AccountListItemBalance: FC<AccountListItemBalanceProps> = ({ children, tone }) => (

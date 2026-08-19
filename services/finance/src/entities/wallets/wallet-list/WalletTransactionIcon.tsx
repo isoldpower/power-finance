@@ -1,11 +1,11 @@
 import { cn } from "@internal/ui-library";
 
 import type { FC, PropsWithChildren } from "react";
-import type { Tone } from "@shared/formatting";
+import type { Types } from "@shared/formatting";
 
 
 type WalletTransactionIconProps = PropsWithChildren<{
-	tone: Tone;
+	tone: Types;
 }>;
 
 const WalletTransactionIcon: FC<WalletTransactionIconProps> = ({ children, tone }) => (

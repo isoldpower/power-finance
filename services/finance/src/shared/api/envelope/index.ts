@@ -3,16 +3,18 @@ export { isApiError, isApiErrorEnvelope, apiErrorFromEnvelope } from './helpers.
 
 export type {
 	ApiEnvelope,
-	CacheMeta,
-	CollectionMeta,
 	CollectionResponse,
-	EmbeddedMeta,
-	MutationMeta,
 	MutationResponse,
-	PaginationMeta,
 	ResourceResponse,
 	ResourceTimestamps,
 } from './envelope.ts';
+export type {
+	CacheMeta,
+	CollectionMeta,
+	EmbeddedMeta,
+	MutationMeta,
+	PaginationMeta,
+} from './meta.ts';
 export type {
 	ApiDetailCode,
 	ApiErrorBody,

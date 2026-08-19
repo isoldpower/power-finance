@@ -4,31 +4,37 @@ import type { FilterLeaf, FilterNode, FilterOperator } from "../filtration";
 
 
 type FieldPolicy<TField extends string> = Record<TField, FilterOperator[]>;
-
 type FieldResolver<TRecord, TField extends string> = (record: TRecord, field: TField) => string | null;
 
 interface MatcherOptions<TField extends string> {
 	numericFields?: TField[];
 }
 
-const scalarOf = (leaf: FilterLeaf, field: string): string => {
+
+function scalarOf(leaf: FilterLeaf, field: string): string {
 	if (Array.isArray(leaf.value)) {
-		throw new ApiError('validation_failed', 'Filter value must be a scalar', [
-			{ field: `filter_body.${field}`, code: 'filter_value_type', message: `${leaf.operator} expects a scalar` },
-		]);
+		throw new ApiError(
+			'validation_failed',
+			'Filter value must be a scalar', 
+			[{
+				field: `filter_body.${field}`,
+				code: 'filter_value_type',
+				message: `${leaf.operator} expects a scalar`,
+			}]
+		);
 	}
 
 	return leaf.value;
-};
+}
 
 const compare = (
-	actual: string | null,
-	leaf: FilterLeaf,
+	actualValue: string | null,
+	compareLeaf: FilterLeaf,
 	field: string,
 	numeric: boolean,
 ): boolean => {
-	if (leaf.operator === 'in') {
-		if (!Array.isArray(leaf.value)) {
+	if (compareLeaf.operator === 'in') {
+		if (!Array.isArray(compareLeaf.value)) {
 			throw new ApiError('validation_failed', 'Filter value must be an array', [{
 				field: `filter_body.${field}`,
 				code: 'filter_value_type',
@@ -36,34 +42,33 @@ const compare = (
 			}]);
 		}
 
-		return actual !== null && leaf.value.includes(actual);
+		return actualValue !== null && compareLeaf.value.includes(actualValue);
 	}
 
-	const expected = scalarOf(leaf, field);
-	if (actual === null) {
-		return leaf.operator === 'neq';
+	const expectedValue = scalarOf(compareLeaf, field);
+	if (actualValue === null) {
+		return compareLeaf.operator === 'neq';
 	}
 
-	const left: string | number = numeric ? Number.parseFloat(actual) : actual;
-	const right: string | number = numeric ? Number.parseFloat(expected) : expected;
-
-	switch (leaf.operator) {
+	const leftValue: string | number = numeric ? Number.parseFloat(actualValue) : actualValue;
+	const rightValue: string | number = numeric ? Number.parseFloat(expectedValue) : expectedValue;
+	switch (compareLeaf.operator) {
 		case 'eq':
-			return left === right;
+			return leftValue === rightValue;
 		case 'neq':
-			return left !== right;
+			return leftValue !== rightValue;
 		case 'gt':
-			return left > right;
+			return leftValue > rightValue;
 		case 'gte':
-			return left >= right;
+			return leftValue >= rightValue;
 		case 'lt':
-			return left < right;
+			return leftValue < rightValue;
 		case 'lte':
-			return left <= right;
+			return leftValue <= rightValue;
 		case 'contains':
-			return actual.includes(expected);
+			return actualValue.includes(expectedValue);
 		case 'icontains':
-			return actual.toLowerCase().includes(expected.toLowerCase());
+			return actualValue.toLowerCase().includes(expectedValue.toLowerCase());
 	}
 };
 
@@ -91,20 +96,21 @@ const assertLeaf = <TField extends string>(
 	return allowed;
 };
 
-const validateFilter = <TField extends string>(policy: FieldPolicy<TField>, node: FilterNode): void => {
+const validateFilter = <TField extends string>(
+	policy: FieldPolicy<TField>,
+	node: FilterNode,
+): void => {
 	if ('and' in node) {
-		node.and.forEach((child) => { validateFilter(policy, child); });
-
-		return;
+		node.and.forEach((child) => {
+			validateFilter(policy, child);
+		});
+	} else if ('or' in node) {
+		node.or.forEach((child) => { 
+			validateFilter(policy, child); 
+		});
+	} else {
+		assertLeaf(policy, node);
 	}
-
-	if ('or' in node) {
-		node.or.forEach((child) => { validateFilter(policy, child); });
-
-		return;
-	}
-
-	assertLeaf(policy, node);
 };
 
 const createMatcher = <TRecord, TField extends string>(
@@ -115,17 +121,21 @@ const createMatcher = <TRecord, TField extends string>(
 	const numericFields = new Set<string>(options.numericFields ?? []);
 
 	const matches = (record: TRecord, node: FilterNode): boolean => {
-		if ('and' in node) return node.and.every((child) => matches(record, child));
-		if ('or' in node) return node.or.some((child) => matches(record, child));
+		if ('and' in node) return node.and.every((child) => {
+			return matches(record, child);
+		});
+		if ('or' in node) return node.or.some((child) => {
+			return matches(record, child);
+		});
 
-		const leaf = node;
-		assertLeaf(policy, leaf);
+		const leafNode = node;
+		assertLeaf(policy, leafNode);
 
 		return compare(
-			resolve(record, leaf.field_name as TField),
-			leaf,
-			leaf.field_name,
-			numericFields.has(leaf.field_name),
+			resolve(record, leafNode.field_name as TField),
+			leafNode,
+			leafNode.field_name,
+			numericFields.has(leafNode.field_name),
 		);
 	};
 

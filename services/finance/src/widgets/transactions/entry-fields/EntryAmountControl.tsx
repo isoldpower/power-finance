@@ -4,7 +4,7 @@ import { currencySymbol } from "@shared/formatting";
 
 import type { FC } from "react";
 import type { Control, FieldValues, Path } from "react-hook-form";
-import type { TransactionEntryType } from "@shared/formatting";
+import type { TransactionEntryType } from "@entity/transactions";
 import type { EntryAmountEmphasis } from "@entity/transactions";
 
 

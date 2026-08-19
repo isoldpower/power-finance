@@ -10,7 +10,7 @@ import { useWalletsCurrencies } from "./use-wallets-currencies.ts";
 import type { DefaultValues, FieldValues, UseFormReturn } from "react-hook-form";
 import type { ZodType } from "zod";
 import type { Wallet, WalletSelectItem } from "@entity/wallets";
-import type { TransactionEntryType } from "@shared/formatting";
+import type { TransactionEntryType } from "@entity/transactions";
 import type { TransactionEntryValues } from "../types.ts";
 import type { UseEntryFormStateReturn } from "./use-entry-form-state.ts";
 

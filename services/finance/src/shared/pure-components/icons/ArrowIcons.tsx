@@ -44,6 +44,14 @@ const ForwardIcon: FC<AmountDirectionIconProps> = ({ size = 16, className }) => 
 	<Icons.ArrowRight size={size} className={className} />
 );
 
+const ChevronLeftIcon: FC<AmountDirectionIconProps> = ({ size = 14, className }) => (
+	<Icons.ChevronLeft size={size} className={className} />
+);
+
+const ChevronRightIcon: FC<AmountDirectionIconProps> = ({ size = 14, className }) => (
+	<Icons.ChevronRight size={size} className={className} />
+);
+
 const ChevronDownIcon: FC<AmountDirectionIconProps> = ({ size = 13, className }) => (
 	<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className={className}>
 		<polyline points="6 9 12 15 18 9" />
@@ -51,6 +59,8 @@ const ChevronDownIcon: FC<AmountDirectionIconProps> = ({ size = 13, className })
 );
 
 ChevronDownIcon.displayName = 'ChevronDownIcon';
+ChevronLeftIcon.displayName = 'ChevronLeftIcon';
+ChevronRightIcon.displayName = 'ChevronRightIcon';
 TransferGlyph.displayName = 'TransferGlyph';
 FromIcon.displayName = 'FromIcon';
 ToIcon.displayName = 'ToIcon';
@@ -58,5 +68,6 @@ IncomeIcon.displayName = 'IncomeIcon';
 ExpenseIcon.displayName = 'ExpenseIcon';
 ForwardIcon.displayName = 'ForwardIcon';
 
-export { TransferGlyph, FromIcon, ToIcon, IncomeIcon, ExpenseIcon, ForwardIcon, ChevronDownIcon };
+export { TransferGlyph, FromIcon, ToIcon, IncomeIcon, ExpenseIcon, ForwardIcon };
+export { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon };
 export type { AmountDirectionIconProps, GlyphProps };

@@ -2,26 +2,10 @@ import { resolveLocale, useSettingsContext } from "@internal/shared";
 import { useCallback, useMemo } from "react";
 
 
-export const useLocaleDate = (date: string) => {
-	const { locale } = useSettingsContext();
+type UseLocaleDateReturn = string;
+type UseLocaleDateTransformReturn = ((date: string) => UseLocaleDateReturn);
 
-	return useMemo(() => {
-		const dateFormat = new Date(date);
-
-		try {
-			return new Intl.DateTimeFormat(resolveLocale(locale), {
-				month: 'short',
-				day: 'numeric',
-				year: 'numeric'
-			}).format(dateFormat);
-		} catch (e) {
-			console.error(e);
-			return dateFormat.toLocaleDateString();
-		}
-	}, [locale, date]);
-}
-
-export const useLocaleDateTransform = () => {
+const useLocaleDateTransform = (): UseLocaleDateTransformReturn => {
 	const { locale } = useSettingsContext();
 
 	return useCallback((date: string) => {
@@ -39,3 +23,14 @@ export const useLocaleDateTransform = () => {
 		}
 	}, [locale]);
 }
+
+const useLocaleDate = (date: string): UseLocaleDateReturn => {
+	const transform = useLocaleDateTransform();
+
+	return useMemo(() => {
+		return transform(date);
+	}, [transform, date]);
+}
+
+
+export { useLocaleDate, useLocaleDateTransform };

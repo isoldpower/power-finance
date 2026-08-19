@@ -9,7 +9,9 @@ interface FieldLabelProps {
 }
 
 const FieldLabel: FC<FieldLabelProps> = ({ children, htmlFor }) => (
-	<Caption as="label" size="11.5" htmlFor={htmlFor} className="mb-1.5 block">{children}</Caption>
+	<Caption as="label" size="11.5" htmlFor={htmlFor} className="mb-1.5 block">
+		{children}
+	</Caption>
 );
 
 FieldLabel.displayName = 'FieldLabel';

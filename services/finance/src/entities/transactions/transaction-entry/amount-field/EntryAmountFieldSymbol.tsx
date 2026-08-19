@@ -1,8 +1,8 @@
-import { TRANSACTION_TYPE_TONE } from "@shared/formatting";
+import { cn } from "@internal/ui-library";
 import { DisplayText } from "@shared/pure-components/typography";
 
 import type { FC, PropsWithChildren } from "react";
-import type { TransactionEntryType } from "@shared/formatting";
+import type { TransactionEntryType } from "../../types.ts";
 
 
 type EntryAmountFieldSymbolProps = PropsWithChildren<{
@@ -10,7 +10,14 @@ type EntryAmountFieldSymbolProps = PropsWithChildren<{
 }>;
 
 const EntryAmountFieldSymbol: FC<EntryAmountFieldSymbolProps> = ({ children, type }) => (
-	<DisplayText as="span" className={TRANSACTION_TYPE_TONE[type]}>
+	<DisplayText
+		as="span"
+		className={cn(
+			type === 'expense' && 'text-neg',
+			type === 'income' && 'text-pos',
+			type === 'transfer' && 'text-primary'
+		)}
+	>
 		{children}
 	</DisplayText>
 );

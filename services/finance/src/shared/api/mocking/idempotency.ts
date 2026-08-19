@@ -10,28 +10,50 @@ interface IdempotentRecord<TResult> {
 class IdempotencyStore<TResult> {
 	private readonly records = new Map<string, IdempotentRecord<TResult>>();
 
-	public replay(key: string | undefined, body: object): TResult | undefined {
-		if (!key) return undefined;
-
-		const record = this.records.get(key);
-		if (!record) return undefined;
-
-		if (record.bodyHash !== stringifySorted(body)) {
-			throw new ApiError('idempotency_key_reuse', 'Idempotency key was reused with a different body');
+	public replay(
+		key: string | undefined, 
+		body: object,
+	): TResult | undefined {
+		if (!key) {
+			return undefined;
 		}
 
-		return record.result;
+		const idempotencyRecord = this.records.get(key);
+		if (!idempotencyRecord) {
+			return undefined;
+		}
+
+		if (idempotencyRecord.bodyHash !== stringifySorted(body)) {
+			throw new ApiError(
+				'idempotency_key_reuse',
+				'Idempotency key was reused with a different body',
+			);
+		} else {
+			return idempotencyRecord.result;
+		}
 	}
 
-	public remember(key: string | undefined, body: object, result: TResult): void {
-		if (!key) return;
-
-		this.records.set(key, { bodyHash: stringifySorted(body), result });
+	public remember(
+		key: string | undefined,
+		body: object,
+		result: TResult,
+	): void {
+		if (key) {
+			this.records.set(key, {
+				bodyHash: stringifySorted(body),
+				result,
+			});
+		}
 	}
 
-	public require(key: string | undefined): void {
+	public require(
+		key: string | undefined,
+	): void {
 		if (!key) {
-			throw new ApiError('idempotency_key_required', 'Idempotency-Key header is required for this request');
+			throw new ApiError(
+				'idempotency_key_required',
+				'Idempotency-Key header is required for this request',
+			);
 		}
 	}
 }

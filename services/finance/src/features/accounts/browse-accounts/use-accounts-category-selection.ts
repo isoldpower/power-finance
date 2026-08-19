@@ -15,14 +15,30 @@ const useAccountsCategorySelection = (): BrowseAccountsContextType => {
 		return toAccountCategoryViews(accounts);
 	}, [accounts]);
 	const category = useMemo(() => {
-		return categories.find((entry) => {
+		const selected = categories.find((entry) => {
 			return entry.id === categoryId
-		}) ?? categories[0];
+		});
+
+		if (selected) {
+			return selected;
+		}
+
+		return categories.length > 0 ? categories[0] : null;
 	}, [categories, categoryId]);
 	const account = useMemo(() => {
-		return category.accounts.find((entry) => {
+		if (!category) {
+			return null;
+		}
+
+		const selected = category.accounts.find((entry) => {
 			return entry.id === accountId
-		}) ?? category.accounts[0];
+		});
+
+		if (selected) {
+			return selected;
+		}
+
+		return category.accounts.length > 0 ? category.accounts[0] : null;
 	}, [category, accountId]);
 	const accountCount = useMemo(() => {
 		return categories.reduce((sum, entry) => {
@@ -45,8 +61,8 @@ const useAccountsCategorySelection = (): BrowseAccountsContextType => {
 
 	return {
 		categories,
-		categoryId: category.id,
-		accountId: account.id,
+		categoryId: category?.id ?? '',
+		accountId: account?.id ?? '',
 		category,
 		account,
 		accountCount,

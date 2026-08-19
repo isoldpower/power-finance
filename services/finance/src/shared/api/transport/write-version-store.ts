@@ -13,7 +13,9 @@ class WriteVersionStore {
 	}
 
 	public headers(): Record<string, string> {
-		return this.writeVersion ? { [READ_AT_LEAST_HEADER]: this.writeVersion } : {};
+		return this.writeVersion 
+			? { [READ_AT_LEAST_HEADER]: this.writeVersion } 
+			: {};
 	}
 }
 

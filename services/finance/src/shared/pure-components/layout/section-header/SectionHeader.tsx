@@ -1,5 +1,6 @@
-import type { FC, ReactNode } from "react";
 import { Heading, Overline } from "@shared/pure-components/typography";
+
+import type { FC, ReactNode } from "react";
 
 
 interface SectionHeaderProps {

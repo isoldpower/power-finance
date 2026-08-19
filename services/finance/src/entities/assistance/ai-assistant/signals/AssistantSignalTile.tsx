@@ -1,13 +1,13 @@
 import { Caption, DisplayText } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
-import type { Tone } from "@shared/formatting";
+import type { Types } from "@shared/formatting";
 import type { AssistantSignal } from "../../types.ts";
 
 
 type AssistantSignalTileProps = AssistantSignal;
 
-const toneClass: Record<Tone, string> = {
+const toneClass: Record<Types, string> = {
 	pos: 'text-pos',
 	neg: 'text-neg',
 	neutral: 'text-foreground',

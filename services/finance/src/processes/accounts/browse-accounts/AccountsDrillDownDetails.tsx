@@ -11,6 +11,10 @@ const AccountsDrillDownDetails: FC = () => {
 	const { convertToUserCurrency, convertToUserCurrencyWithSign } = useAccountsConvertion();
 	const { history } = useAccountHistory(accountId);
 
+	if (!category || !account) {
+		return null;
+	}
+
 	return (
 		<>
 			<DrillDownHeader>

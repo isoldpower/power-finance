@@ -1,4 +1,4 @@
-import { decodeCursor, encodeCursor } from "./cursors.ts";
+import { Cursor } from "./cursors.ts";
 import { clampLimit } from "./page-limit.ts";
 
 import type { PaginationMeta } from "../envelope";
@@ -10,13 +10,13 @@ interface PaginatedSlice<TItem> {
 	meta: PaginationMeta;
 }
 
-const paginate = <TItem>(
+function paginate<TItem>(
 	items: TItem[],
 	params: PageParams | undefined,
 	query: string,
-): PaginatedSlice<TItem> => {
+): PaginatedSlice<TItem> {
 	const limit = clampLimit(params?.limit);
-	const anchor = params?.cursor ? decodeCursor(params.cursor, query) : null;
+	const anchor = params?.cursor ? Cursor.getDecoded(params.cursor, query) : null;
 	const start = anchor
 		? (anchor.direction === 'next' ? anchor.index : Math.max(anchor.index - limit, 0))
 		: 0;
@@ -28,21 +28,27 @@ const paginate = <TItem>(
 		meta: {
 			limit,
 			total: items.length,
-			next_cursor: end < items.length ? encodeCursor({ direction: 'next', index: end, query }) : null,
-			prev_cursor: start > 0 ? encodeCursor({ direction: 'prev', index: start, query }) : null,
+			next_cursor: end < items.length 
+				? Cursor.getEncoded({ direction: 'next', index: end, query }) 
+				: null,
+			prev_cursor: start > 0 
+				? Cursor.getEncoded({ direction: 'prev', index: start, query }) 
+				: null,
 		},
 	};
-};
+}
 
-const unpaginated = <TItem>(items: TItem[]): PaginatedSlice<TItem> => ({
-	items,
-	meta: {
-		limit: null,
-		total: items.length,
-		next_cursor: null,
-		prev_cursor: null,
-	},
-});
+function unpaginated<TItem>(items: TItem[]): PaginatedSlice<TItem> {
+	return {
+		items,
+		meta: {
+			limit: null,
+			total: items.length,
+			next_cursor: null,
+			prev_cursor: null,
+		},
+	};
+}
 
 export { paginate, unpaginated };
 export type { PaginatedSlice };
