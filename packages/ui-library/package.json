@@ -62,7 +62,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "input-otp": "^1.4.2",
-    "lucide-react": "^0.501.0",
+    "lucide-react": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-hook-form": "^7.56.1",
