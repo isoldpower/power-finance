@@ -28,14 +28,14 @@ jobs:
         env:
           NODE_OPTIONS: --require ts-node/register
         run: npx nx run-many -t build --projects=@internal/*
-      - name: Run linter
-        env:
-          NODE_OPTIONS: --require ts-node/register
-        run: npx nx lint @power/finance
       - name: Run type-checking
         env:
           NODE_OPTIONS: --require ts-node/register
         run: npx nx typecheck @power/finance
+      - name: Run linter
+        env:
+          NODE_OPTIONS: --require ts-node/register
+        run: npx nx lint @power/finance
       - name: Run tests
         env:
           NODE_OPTIONS: --require ts-node/register
