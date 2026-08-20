@@ -1,4 +1,4 @@
-import { resolveLocale, useSettingsContext } from "@internal/shared";
+import { resolveLocale, resolveTimezone, useSettingsContext } from "@internal/shared";
 import { useCallback, useMemo } from "react";
 
 
@@ -6,7 +6,7 @@ type UseLocaleDateReturn = string;
 type UseLocaleDateTransformReturn = ((date: string) => UseLocaleDateReturn);
 
 const useLocaleDateTransform = (): UseLocaleDateTransformReturn => {
-	const { locale } = useSettingsContext();
+	const { locale, timezone } = useSettingsContext();
 
 	return useCallback((date: string) => {
 		const dateFormat = new Date(date);
@@ -15,13 +15,14 @@ const useLocaleDateTransform = (): UseLocaleDateTransformReturn => {
 			return new Intl.DateTimeFormat(resolveLocale(locale), {
 				month: 'short',
 				day: 'numeric',
-				year: 'numeric'
+				year: 'numeric',
+				timeZone: resolveTimezone(timezone)
 			}).format(dateFormat);
 		} catch (e) {
 			console.error(e);
 			return dateFormat.toLocaleDateString();
 		}
-	}, [locale]);
+	}, [locale, timezone]);
 }
 
 const useLocaleDate = (date: string): UseLocaleDateReturn => {

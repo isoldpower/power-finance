@@ -6,34 +6,34 @@ import {
 	FinanceMenuItem,
     Icons,
 } from "@internal/ui-library";
-import { clerk } from "@internal/shared";
 import { CurrencySelector, LocaleCombobox } from "@widget/localization";
 import { NavigateToSettings } from "@feature/navigation";
 import { UserAvatar } from "@entity/navigation";
 import { PopoverBottom, PopoverSettings } from "@entity/configuration";
+import { useCurrentUser } from "@feature/configuration";
 import { Caption, CardTitle } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
 
 
 const NavbarAccountMenu: FC = () => {
-	const { user } = clerk.useUser();
+	const { profile } = useCurrentUser();
 	
 	return (
 		<FinanceMenu>
 			<FinanceMenuTrigger asChild>
 				<button type="button" aria-label="Account" className="rounded-full">
 					<UserAvatar 
-						firstName={user?.firstName} 
-						lastName={user?.lastName} 
+						firstName={profile?.identity.firstName} 
+						lastName={profile?.identity.lastName} 
 					/>
 				</button>
 			</FinanceMenuTrigger>
 			<FinanceMenuContent className="w-[340px]">
 				<div className="flex items-center gap-3 border-b border-border px-3 py-3">
 					<UserAvatar 
-						firstName={user?.firstName}
-						lastName={user?.lastName} 
+						firstName={profile?.identity.firstName}
+						lastName={profile?.identity.lastName} 
 						size="lg"
 					/>
 					<div className="min-w-0">

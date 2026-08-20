@@ -7,7 +7,12 @@ import {
 	UiTabsList,
 	UiTabsTrigger,
 } from "@internal/ui-library";
-import { CreateWebhook, EditWebhookModal, DeleteWebhookModal } from "@process/configuration";
+import {
+	CreateWebhook,
+	DeleteWebhookModal,
+	EditWebhookModal,
+	PreferencesSettings,
+} from "@process/configuration";
 import {
 	SettingsPreferencesProvider,
 	useSettingsPreferences,
@@ -48,10 +53,7 @@ const SettingsTabs: FC = () => {
 			</UiTabsList>
 			<div className="p-6 w-full">
 				<UiTabsContent value="preferences">
-					{/*<PreferencesModalBox>*/}
-					{/*	<PreferredCurrencySelection/>*/}
-					{/*	<GlobalLocaleSelection/>*/}
-					{/*</PreferencesModalBox>*/}
+					<PreferencesSettings />
 				</UiTabsContent>
 				<UiTabsContent value="webhooks">
 					<div className="grid grid-cols-1 gap-4">

@@ -8,14 +8,14 @@ import type { Types } from "@shared/formatting";
 type LedgerRowConvertedAmountProps = PropsWithChildren<
 	Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> & {
 		tone: Types;
-		converted: boolean;
+		inTarget: boolean;
 	}
 >;
 
 const LedgerRowConvertedAmount: FC<LedgerRowConvertedAmountProps> = ({
 	children,
 	tone,
-	converted,
+	inTarget,
 	...props
 }) => (
 	<MetaText
@@ -25,7 +25,7 @@ const LedgerRowConvertedAmount: FC<LedgerRowConvertedAmountProps> = ({
 		className="hidden w-[104px] text-right md:block"
 		{...props}
 	>
-		{converted ? (
+		{inTarget ? (
 			<span
 				className={cn(
 					tone === 'pos' && "text-pos",

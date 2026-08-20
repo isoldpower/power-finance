@@ -29,6 +29,7 @@ interface CurrencyComboboxProps {
 	className?: string;
 	placeholder?: string;
 	notFound?: ReactNode;
+	isSaving?: boolean;
 }
 
 const CurrencyCombobox: FC<CurrencyComboboxProps> = ({
@@ -40,10 +41,18 @@ const CurrencyCombobox: FC<CurrencyComboboxProps> = ({
 	className,
 	placeholder,
 	notFound,
+	isSaving = false,
 }) => {
 	return (
 		<FinanceCombobox>
-			<FinanceComboboxTrigger className={cn("w-full", className)}>
+			<FinanceComboboxTrigger
+				aria-busy={isSaving}
+				className={cn(
+					"w-full transition-opacity",
+					isSaving && "opacity-60", 
+					className,
+				)}
+			>
 				<CurrencyPickerLabel variant={variant} currencies={currencies} placeholder={placeholder}>
 					{value}
 				</CurrencyPickerLabel>

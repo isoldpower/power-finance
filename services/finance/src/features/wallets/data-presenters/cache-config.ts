@@ -7,6 +7,8 @@ export const WALLETS_CACHE_KEYS = {
 	search: 'searchWallet',
 };
 
+export const WALLET_RECENT_LIMIT = 3;
+
 export const GOALS_CACHE_KEYS = {
 	list: 'goals',
 	fetch: 'goal',

@@ -1,5 +1,5 @@
 export * from './header-popover';
-export * from './preferences-modal';
+export * from './preferences-panel';
 export * from './visual-map';
 export * from './webhook-controls';
 

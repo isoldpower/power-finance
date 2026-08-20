@@ -4,13 +4,14 @@ import { useLongDateLabel } from './use-long-date-label';
 import { useSettingsContext } from '@internal/shared';
 
 const mockedUseSettingsContext = useSettingsContext as unknown as Mock;
-vi.mock('@internal/shared', async () => {
-	const actual = await vi.importActual<object>('@internal/shared');
-	return {
-		...actual,
-		useSettingsContext: vi.fn(),
-	};
-});
+vi.mock('@internal/shared', async (importOriginal) => ({
+	...await importOriginal<object>(),
+	useSettingsContext: vi.fn(),
+}));
+
+const withLocale = (locale: string) => {
+	mockedUseSettingsContext.mockReturnValue({ locale, mainCurrency: 'USD' });
+};
 
 describe('useLongDateLabel', () => {
 	beforeEach(() => {
@@ -18,14 +19,14 @@ describe('useLongDateLabel', () => {
 	});
 
 	test('formats the label for en-US', () => {
-		mockedUseSettingsContext.mockReturnValue({ locale: 'en-US' });
+		withLocale('en-US');
 
 		const { result } = renderHook(() => useLongDateLabel(new Date('2023-10-15T00:00:00Z')));
 		expect(result.current).toBe('SUN · OCT 15 · 2023');
 	});
 
 	test('formats the label for de-DE', () => {
-		mockedUseSettingsContext.mockReturnValue({ locale: 'de-DE' });
+		withLocale('de-DE');
 
 		const { result } = renderHook(() => useLongDateLabel(new Date('2023-10-15T00:00:00Z')));
 		expect(result.current).toContain('15');
@@ -33,14 +34,14 @@ describe('useLongDateLabel', () => {
 	});
 
 	test('falls back instead of throwing for an empty locale', () => {
-		mockedUseSettingsContext.mockReturnValue({ locale: '' });
+		withLocale('');
 
 		const { result } = renderHook(() => useLongDateLabel(new Date('2023-10-15T00:00:00Z')));
 		expect(result.current).toBe('SUN · OCT 15 · 2023');
 	});
 
 	test('falls back instead of throwing for an unsupported locale', () => {
-		mockedUseSettingsContext.mockReturnValue({ locale: 'xx-XX' });
+		withLocale('xx-XX');
 
 		const { result } = renderHook(() => useLongDateLabel(new Date('2023-10-15T00:00:00Z')));
 		expect(result.current).toBe('SUN · OCT 15 · 2023');

@@ -11,7 +11,8 @@ import {
 import { useSettingsContext } from "@internal/shared";
 import { LocalePickerLabel, LocalePickerOptionSelected } from "@entity/localization";
 import { MetaText, Text } from "@shared/pure-components/typography";
-import { useLocales, useSelectLocale } from "@feature/localization";
+import { useLocales } from "@feature/localization";
+import { useSelectLocale } from "@feature/configuration";
 
 import type { FinanceComboboxPivot } from "@internal/ui-library";
 import type { LocalePickerVariant } from "@entity/localization";
@@ -35,11 +36,14 @@ const LocaleCombobox: FC<LocaleComboboxProps> = ({
 }) => {
 	const { locale: currentLocale } = useSettingsContext();
 	const { locales } = useLocales();
-	const onSelectLocale = useSelectLocale();
+	const { onSelect, isSaving } = useSelectLocale();
 	
 	return (
 		<FinanceCombobox>
-			<FinanceComboboxTrigger className={cn("w-full", className)}>
+			<FinanceComboboxTrigger
+				aria-busy={isSaving}
+				className={cn("w-full transition-opacity", isSaving && "opacity-60", className)}
+			>
 				<LocalePickerLabel variant={variant} locales={locales} placeholder={placeholder}>
 					{currentLocale}
 				</LocalePickerLabel>
@@ -54,7 +58,7 @@ const LocaleCombobox: FC<LocaleComboboxProps> = ({
 						<FinanceComboboxItem
 							key={locale.tag}
 							value={`${locale.tag} ${locale.name} ${locale.region}`}
-							onSelect={() => { onSelectLocale(locale.tag); }}
+							onSelect={() => { onSelect(locale.tag); }}
 						>
 							<Text weight="semibold" truncate>
 								{locale.name}

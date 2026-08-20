@@ -12,11 +12,13 @@ import { useNotificationsApi } from "./servers/use-notifications-api.ts";
 import { useAssistantApi } from "./servers/use-assistant-api.ts";
 import { useCurrenciesApi } from "./servers/use-currencies-api.ts";
 import { useAccountsApi } from "./servers/use-accounts-api.ts";
+import { useAuthApi } from "./servers/use-auth-api.ts";
+
 import type { FC } from 'react';
 import type { IGoalsRESTApiClient, IWalletsRESTApiClient } from "@feature/wallets";
 import type { ITransactionsRESTApiClient } from "@feature/transactions";
 import type { IAccountsRESTApiClient } from "@feature/accounts";
-import type { IWebhookRESTApiClient } from "@feature/configuration";
+import type { IAuthRESTApiClient, IWebhookRESTApiClient } from "@feature/configuration";
 import type { IMetricsRESTApiClient } from "@feature/metrics";
 import type { INotificationsRESTApiClient } from "@feature/assistance";
 import type { ICurrenciesRESTApiClient } from "@feature/localization";
@@ -38,6 +40,10 @@ interface ApiContextType {
 	},
 	webhookServers: {
 		readonly rest: IWebhookRESTApiClient
+	},
+	authServers: {
+		readonly rest: IAuthRESTApiClient
+		readonly revision: string
 	},
 	metricsServers: {
 		readonly rest: IMetricsRESTApiClient
@@ -81,6 +87,7 @@ const ApiProvider: FC<ApiProviderProps> = ({
 	const notificationServers = useNotificationsApi(envVariables.CLIENT_API_BASE_URL);
 	const assistantServers = useAssistantApi(envVariables.CLIENT_API_BASE_URL);
 	const currencyServers = useCurrenciesApi(envVariables.CLIENT_API_BASE_URL);
+	const authServers = useAuthApi();
 
 	const contextValue = useMemo<ApiContextType>(() => ({
 		walletServers,
@@ -93,7 +100,8 @@ const ApiProvider: FC<ApiProviderProps> = ({
 		assistantServers,
 		automationServers,
 		notificationServers,
-		currencyServers
+		currencyServers,
+		authServers
 	}), [
 		transactionServers,
 		walletServers,
@@ -105,7 +113,8 @@ const ApiProvider: FC<ApiProviderProps> = ({
 		automationServers,
 		notificationServers,
 		assistantServers,
-		currencyServers
+		currencyServers,
+		authServers
 	]);
 
 	return (

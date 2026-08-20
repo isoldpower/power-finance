@@ -22,6 +22,7 @@ const QUERY_KEYS = {
 	webhookDeliveries: 'webhook-deliveries',
 	assistantOverview: 'assistant-overview',
 	assistantMessages: 'assistant-messages',
+	session: 'auth-session',
 	metricsBalance: 'metrics-balance',
 	metricsNetWorth: 'metrics-net-worth',
 	metricsCashFlow: 'metrics-cash-flow',
@@ -74,6 +75,9 @@ const DERIVED_KEYS = {
 	],
 	onSubscriptionChange: [
 		QUERY_KEYS.webhookSubscriptions,
+	],
+	onPreferencesChange: [
+		QUERY_KEYS.session,
 	],
 	onAssistantChange: [
 		QUERY_KEYS.assistantMessages,

@@ -26,15 +26,15 @@ interface LedgerTransactionEntriesProps {
 }
 
 const TransactionLedgerEntries: FC<LedgerTransactionEntriesProps> = ({ transaction }) => {
-	const { convert } = useConvertMoney();
+	const { convert, targetCurrency } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
 
 	const { entries, isPending } = useTransactionLedger(transaction.id);
 
 	const row = useMemo(() => toTransactionRowView(transaction), [transaction]);
 	const money = useMemo(
-		() => toTransactionMoneyView(transaction, convert, formatCurrency),
-		[transaction, convert, formatCurrency]
+		() => toTransactionMoneyView(transaction, convert, formatCurrency, targetCurrency),
+		[transaction, convert, formatCurrency, targetCurrency]
 	);
 	const lines = useMemo(
 		() => toLedgerEntryViews(entries, formatCurrency),

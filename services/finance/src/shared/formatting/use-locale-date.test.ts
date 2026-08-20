@@ -54,6 +54,20 @@ describe('useLocaleDate', () => {
 		const { result } = renderHook(() => useLocaleDate('2023-10-15'));
 		expect(result.current).toBe('Oct 15, 2023');
 	});
+
+	test('renders the instant in the chosen timezone', () => {
+		mockedUseSettingsContext.mockReturnValue({ locale: 'en-US', timezone: 'Pacific/Honolulu' });
+
+		const { result } = renderHook(() => useLocaleDate('2023-10-15T02:00:00.000Z'));
+		expect(result.current).toBe('Oct 14, 2023');
+	});
+
+	test('falls back to the system zone for an unusable timezone', () => {
+		mockedUseSettingsContext.mockReturnValue({ locale: 'en-US', timezone: 'Mars/Olympus' });
+
+		const { result } = renderHook(() => useLocaleDate('2023-10-15T02:00:00.000Z'));
+		expect(result.current).toBe('Oct 15, 2023');
+	});
 });
 
 describe('useLocaleDateTransform', () => {

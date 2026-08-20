@@ -30,13 +30,13 @@ const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 	onToggle,
 	onCheck,
 }) => {
-	const { convert } = useConvertMoney();
+	const { convert, targetCurrency } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
 
 	const row = useMemo(() => toTransactionRowView(transaction), [transaction]);
 	const money = useMemo(
-		() => toTransactionMoneyView(transaction, convert, formatCurrency),
-		[transaction, convert, formatCurrency]
+		() => toTransactionMoneyView(transaction, convert, formatCurrency, targetCurrency),
+		[transaction, convert, formatCurrency, targetCurrency]
 	);
 	const tone = useMemo(() => resolveToneWithDirection(row.type), [row.type]);
 
@@ -77,7 +77,7 @@ const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 			<LedgerRow.Amount tone={tone}>
 				{money.amountOriginal}
 			</LedgerRow.Amount>
-			<LedgerRow.ConvertedAmount tone={tone} converted={money.converted}>
+			<LedgerRow.ConvertedAmount tone={tone} inTarget={money.inTarget}>
 				{money.amountMain}
 			</LedgerRow.ConvertedAmount>
 			<LedgerRow.Chevron expanded={expanded} />

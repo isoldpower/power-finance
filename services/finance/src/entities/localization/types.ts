@@ -11,7 +11,14 @@ interface LocaleMeta {
 	region: string;
 }
 
-export type { CurrencyMeta, LocaleMeta };
+interface TimezoneMeta {
+	id: string;
+	city: string;
+	area: string;
+	offset: string;
+}
+
+export type { CurrencyMeta, LocaleMeta, TimezoneMeta };
 
 interface Money {
 	amount: number;

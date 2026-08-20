@@ -1,13 +1,18 @@
 export { useCreateWebhook } from './use-create-webhook.ts';
+export { useCurrentUser } from './use-current-user.ts';
 export { useDeleteWebhook } from './use-delete-webhook.ts';
 export { useRotateWebhookSecret } from './use-rotate-webhook-secret.ts';
+export { useUpdatePreferences } from './use-update-preferences.ts';
 export { useUpdateWebhook } from './use-update-webhook.ts';
+export { useUserPreferences } from './use-user-preferences.ts';
 export { useWebhookDeliveries } from './use-webhook-deliveries.ts';
 export { useWebhookEventTypes } from './use-webhook-event-types.ts';
 export { useWebhookSubscriptionMethods } from './use-webhook-subscription-methods.ts';
 export { useWebhookSubscriptions } from './use-webhook-subscriptions.ts';
 export { useWebhooksList } from './use-webhooks-list.ts';
 
+export type { UseCurrentUserOptions, UseCurrentUserReturn } from './use-current-user.ts';
+export type { UseUserPreferencesReturn } from './use-user-preferences.ts';
 export type { UseWebhookDeliveriesOptions, UseWebhookDeliveriesReturn } from './use-webhook-deliveries.ts';
 export type { UseWebhookEventTypesOptions, UseWebhookEventTypesReturn } from './use-webhook-event-types.ts';
 export type { UseWebhookSubscriptionMethodsReturn } from './use-webhook-subscription-methods.ts';

@@ -1,9 +1,12 @@
 import type { TransactionType } from "../types.ts";
 
 
-type ConvertMoney = (
-	money: { amount: number; currency: string }
-) => { amount: number; currency: string; formatted: string; converted: boolean };
+type ConvertMoney = (money: { amount: number; currency: string }) => { 
+	amount: number;
+	currency: string;
+	formatted: string;
+	converted: boolean;
+};
 
 interface LedgerEntryView {
 	label: string;
@@ -36,6 +39,7 @@ interface TransactionMoneyView {
 	amountMain: string;
 	amountAbsolute: string;
 	converted: boolean;
+	inTarget: boolean;
 }
 
 interface TransactionDayView {

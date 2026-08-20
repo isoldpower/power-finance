@@ -12,26 +12,25 @@ import {
 	WalletTransactionIcon
 } from "@entity/wallets";
 import { useConvertMoney } from "@feature/localization";
-import { useWalletRecentTransactions, FulfillWithPlaceholder } from "@feature/wallets";
+import { FulfillWithPlaceholder } from "@feature/wallets";
 import { useLocaleCurrency } from "@shared/formatting";
 import { Caption } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
-import type { Wallet } from "@entity/wallets";
+import type { Transaction } from "@entity/transactions";
 
 
 interface WalletRecentRowProps {
-	wallet: Wallet;
+	transactions: Transaction[];
 }
 
-const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ wallet }) => {
+const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ transactions }) => {
 	const { convert } = useConvertMoney();
 	const format = useLocaleCurrency();
-	const recentTransactions = useWalletRecentTransactions(wallet);
 
 	const recentRows = useMemo(() => {
-		return toTransactionRowViews(recentTransactions);
-	}, [recentTransactions]);
+		return toTransactionRowViews(transactions);
+	}, [transactions]);
 
 	return (
 		<div className='flex flex-col'>

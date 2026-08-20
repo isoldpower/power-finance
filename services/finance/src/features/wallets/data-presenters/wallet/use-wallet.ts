@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useApiContext } from "@app/api";
 import { fetchWallet } from "../../wallets-api";
-import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
+import { WALLET_RECENT_LIMIT, WALLETS_CACHE_KEYS } from "../cache-config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { Transaction } from "@entity/transactions";
@@ -28,7 +28,8 @@ const useWallet = (
 		queryKey: [WALLETS_CACHE_KEYS.fetch, id],
 		queryFn: () => fetchWallet({
 			id,
-			handler: apiContext.walletServers.rest
+			handler: apiContext.walletServers.rest,
+			page: { limit: WALLET_RECENT_LIMIT },
 		}),
 		...options ?? {}
 	});

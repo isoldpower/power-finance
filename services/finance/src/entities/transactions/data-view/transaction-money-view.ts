@@ -6,18 +6,25 @@ import type { FormatMoney } from "@shared/formatting";
 const toTransactionMoneyView = (
 	transaction: Transaction,
 	convert: ConvertMoney,
-	formatMoney: FormatMoney
+	formatMoney: FormatMoney,
+	targetCurrency: string
 ): TransactionMoneyView => {
 	const { currency } = transaction.money;
-	const amount = transaction.type === 'expense' ? -transaction.money.amount : transaction.money.amount;
-	const main = convert({ amount, currency });
+	const signedAmount = transaction.type === 'expense' 
+		? -transaction.money.amount 
+		: transaction.money.amount;
+	const mainAmount = convert({ 
+		amount: signedAmount,
+		currency,
+	});
 
 	return {
 		walletName: transaction.wallet.name,
-		amountOriginal: formatMoney(amount, currency),
-		amountMain: main.formatted,
-		amountAbsolute: formatMoney(Math.abs(amount), currency),
-		converted: main.converted,
+		amountOriginal: formatMoney(signedAmount, currency),
+		amountMain: mainAmount.formatted,
+		amountAbsolute: formatMoney(Math.abs(signedAmount), currency),
+		converted: mainAmount.converted,
+		inTarget: mainAmount.currency === targetCurrency,
 	};
 };
 

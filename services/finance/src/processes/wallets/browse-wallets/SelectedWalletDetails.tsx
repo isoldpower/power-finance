@@ -27,7 +27,7 @@ const SelectedWalletDetails = ({
 	const selectedWalletProtected = useMemo(() => {
 		return selectedWalletId ?? 'none';
 	}, [selectedWalletId]);
-	const { wallet, isError, isPending } = useWallet(selectedWalletProtected, { 
+	const { wallet, recent, isError, isPending } = useWallet(selectedWalletProtected, { 
 		enabled: selectedWalletProtected !== 'none'
 	});
 
@@ -48,7 +48,7 @@ const SelectedWalletDetails = ({
 							<WalletsRecentTitle>
 								Recent in this wallet
 							</WalletsRecentTitle>
-							<WalletRecentTransactions wallet={wallet} />
+							<WalletRecentTransactions transactions={recent} />
 						</FinanceCard>
 					</div>
 				)}
