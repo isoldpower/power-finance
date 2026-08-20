@@ -1,4 +1,4 @@
-import { SidebarTrigger } from "@internal/ui-library";
+import { UiSidebarTrigger } from "@internal/ui-library";
 import { useEffect, useRef, useState } from "react";
 
 const SidebarFloatingTrigger = () => {
@@ -15,7 +15,7 @@ const SidebarFloatingTrigger = () => {
 	return (
 		<div className="relative" style={{ marginRight: `calc(-1 * ${offset.toString()}px)` }}>
 			<div ref={triggerRef} className="sticky top-3 ml-2 z-10 rounded bg-accent">
-				<SidebarTrigger />
+				<UiSidebarTrigger />
 			</div>
 		</div>
 	)

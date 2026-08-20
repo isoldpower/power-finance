@@ -6,7 +6,5 @@
 }
 
 button:hover, .button:hover {
-	display: inline-flex;
-	text-align: center;
 	cursor: pointer;
 }

@@ -37,6 +37,9 @@ export default (env: ConfigEnv) => {
 		test: {
 			globals: true,
 			environment: 'jsdom',
+			// Pin the timezone so date-formatting tests are deterministic regardless of
+			// the host timezone (a date-only ISO string parses as UTC midnight).
+			env: { TZ: 'UTC' },
 			setupFiles: ['./test/vitest.setup.ts'],
 			coverage: {
 				enabled: true,

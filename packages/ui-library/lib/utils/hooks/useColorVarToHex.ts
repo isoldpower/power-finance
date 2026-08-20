@@ -1,5 +1,6 @@
-import {useCallback, useEffect, useRef} from "react";
-import {formatHex, parse} from "culori";
+import { useCallback, useEffect, useRef } from "react";
+import { formatHex, parse } from "culori";
+
 
 interface UseColorVarToHexReturn {
 	getColor: (varName: string) => string

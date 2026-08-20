@@ -1,16 +1,16 @@
 import type { FC } from "react";
 import { useCallback } from "react";
 import {
-	Button,
-	FormControl,
-	FormItem,
-	FormLabel,
-	FormMessage,
+	UiButton,
+	UiFormControl,
+	UiFormItem,
+	UiFormLabel,
+	UiFormMessage,
 	FormWizard,
-	InputOTP,
-	InputOTPGroup,
-	InputOTPSeparator,
-	InputOTPSlot,
+	UiInputOTP,
+	UiInputOTPGroup,
+	UiInputOTPSeparator,
+	UiInputOTPSlot,
 	PasswordInput,
 	FormWizardBack
 } from "@internal/ui-library";
@@ -51,49 +51,49 @@ const ResetRecoveryForm: FC<ResetRecoveryFormProps> = () => {
 			<div className="flex flex-col gap-8">
 				<FormWizard.StepField formSchema={formSchema} name="code">
 					{({ field }) => (
-						<FormItem className="flex flex-col">
-							<FormLabel className="pb-2">Email Code</FormLabel>
-							<FormControl>
-								<InputOTP maxLength={6} {...field}>
-									<InputOTPGroup>
+						<UiFormItem className="flex flex-col">
+							<UiFormLabel className="pb-2">Email Code</UiFormLabel>
+							<UiFormControl>
+								<UiInputOTP maxLength={6} {...field}>
+									<UiInputOTPGroup>
 										{Array.from({ length: 3 }, (_, index) => (
-											<InputOTPSlot className="w-11.5 h-11.5" index={index} key={index} />
+											<UiInputOTPSlot className="w-11.5 h-11.5" index={index} key={index} />
 										))}
-									</InputOTPGroup>
-									<InputOTPSeparator />
-									<InputOTPGroup>
+									</UiInputOTPGroup>
+									<UiInputOTPSeparator />
+									<UiInputOTPGroup>
 										{Array.from({ length: 3 }, (_, index) => (
-											<InputOTPSlot className="w-11.5 h-11.5" index={index + 3} key={index} />
+											<UiInputOTPSlot className="w-11.5 h-11.5" index={index + 3} key={index} />
 										))}
-									</InputOTPGroup>
-								</InputOTP>
-							</FormControl>
+									</UiInputOTPGroup>
+								</UiInputOTP>
+							</UiFormControl>
 							<div className="text-left">
-								<FormMessage className="text-xs" />
+								<UiFormMessage className="text-xs" />
 							</div>
-						</FormItem>
+						</UiFormItem>
 					)}
 				</FormWizard.StepField>
 				<FormWizard.StepField formSchema={formSchema} name="password">
 					{({ field }) => (
-						<FormItem className="flex flex-col">
-							<FormLabel className="pb-2">New Password</FormLabel>
-							<FormControl>
+						<UiFormItem className="flex flex-col">
+							<UiFormLabel className="pb-2">New Password</UiFormLabel>
+							<UiFormControl>
 								<PasswordInput {...field} />
-							</FormControl>
+							</UiFormControl>
 							<div className="text-left">
-								<FormMessage className="text-xs" />
+								<UiFormMessage className="text-xs" />
 							</div>
-						</FormItem>
+						</UiFormItem>
 					)}
 				</FormWizard.StepField>
 				<div className="flex flex-col gap-2 text-left">
 					<p className="text-destructive text-xs">{ error ?? '' }</p>
 					<div className="flex gap-2 items-center">
 						<FormWizardBack>
-							<Button type="submit" size="icon" variant="outline" className="hover:gap-4">
+							<UiButton type="submit" size="icon" variant="outline" className="hover:gap-4">
 								<ArrowLeft width={6} height={6} />
-							</Button>
+							</UiButton>
 						</FormWizardBack>
 						<FormButton type="submit" size="sm" className="hover:gap-4 grow">
 							Continue

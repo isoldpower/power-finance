@@ -91,9 +91,19 @@ This is the list of known issues. It means that they are in the priority list to
     - [ ] E2E tests
     - [ ] Draft Mode (major feature)
 - [ ] UI Toolkit
-    - [ ] Utilise Storybook for unified design code
+    - [x] Utilise Storybook for unified design code
     - [ ] Cover with screenshot tests
     - [ ] Move from default Shadcn/ui design
 - [ ] Build Config
 	- [ ] Implement automised config file read (without function wrapper)
  	- [ ] Cover with unit tests
+
+Finance TODO:
+- (DONE) merge common elements in layers;
+- (DONE) decide on navigation (move to shared?);
+- (DONE) drop unused code;
+- (DONE) adjust according to Claude Design;
+- (DONE) implement better loading states;
+-----
+- review API data fetching (by-layer fetching patterns);
+- review each file manually one more time;

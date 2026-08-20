@@ -7,6 +7,7 @@ import { SettingsContext } from './context.js';
 import type { SettingsContextValue, SettingsState } from '../index.ts';
 import { useLocalStorage } from "../../local-storage";
 
+
 const SettingsProvider: FC<{ readonly children: ReactNode }> = ({ children }) => {
   const values = useLocalStorage<SettingsState>(STORAGE_KEY, defaultSettings);
 

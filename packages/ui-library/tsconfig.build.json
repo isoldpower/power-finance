@@ -12,5 +12,6 @@
 			"@/*": ["./lib/*"]
 		}
 	},
-	"include": ["lib"]
+	"include": ["lib"],
+	"exclude": ["lib/**/*.stories.tsx"]
 }

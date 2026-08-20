@@ -1,1 +1,0 @@
-export { WebhookDjangoRESTApiClient } from './django-server.ts';

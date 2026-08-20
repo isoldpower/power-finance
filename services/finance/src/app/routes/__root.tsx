@@ -3,7 +3,7 @@ import { lazy } from "react";
 import { AppError, AppLoader } from "@internal/ui-library";
 import { SettingsProvider } from "@internal/shared";
 
-import { getTanStackPageFx, GlobalLayout } from "@shared/components";
+import { getTanStackPageFx } from "@shared/pure-components/feedback";
 
 
 export const Route = createRootRoute({
@@ -18,9 +18,7 @@ const RootComponent = lazy(() => import('../RootComponent.tsx'));
 function RootLayout () {
 	return (
 		<SettingsProvider>
-			<GlobalLayout>
-				<RootComponent />
-			</GlobalLayout>
+			<RootComponent />
 		</SettingsProvider>
 	)
 }

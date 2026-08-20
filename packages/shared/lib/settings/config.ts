@@ -8,4 +8,5 @@ export const defaultSettings: SettingsState = {
 	mobileSidebarOpen: false,
 	mainCurrency: 'USD',
 	locale: 'en-US',
+	timezone: '',
 } as const;

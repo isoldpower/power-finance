@@ -1,67 +1,106 @@
-import type { FC } from 'react';
-
+import { useShallow } from "zustand/react/shallow";
 import {
-	TabsContent,
-	TabsList,
-	TabsTrigger,
+	Icons,
+	UiButton,
+	UiTabs,
+	UiTabsContent,
+	UiTabsList,
+	UiTabsTrigger,
 } from "@internal/ui-library";
+import {
+	CreateWebhook,
+	DeleteWebhookModal,
+	EditWebhookModal,
+	PreferencesSettings,
+} from "@process/configuration";
+import {
+	SettingsPreferencesProvider,
+	useSettingsPreferences,
+	useWebhooksList,
+	WebhooksListEmptyUX,
+	WebhooksListFx,
+} from "@feature/configuration";
+import { WebhookWithControls } from "@entity/configuration";
 
-import { PreferencesModalBox } from "@entity/settings";
-import { useWebhooksList, WebhooksListFx, WebhooksListEmptyUX } from "@feature/settings";
-import { GlobalLocaleSelection, PreferredCurrencySelection } from "@widget/settings";
-import { WebhookWithControls, CreateWebhookProcess } from "@process/settings";
-import { TabsWithSearchParam } from "@shared/components";
+import type { FC } from 'react';
+import type { SettingsTab } from "@entity/configuration";
 
 
 // TODO: Implement Webhooks pagination and filtering
-const SettingsPage: FC = () => {
+// TODO: Potentially optimize DOM size through using unified modals for deleting/editing webhooks.
+const SettingsTabs: FC = () => {
 	const { webhooks, status } = useWebhooksList();
-	
+	const { settingsTab, changeTab } = useSettingsPreferences(
+		useShallow((state) => ({
+			settingsTab: state.settingsTab,
+			changeTab: state.changeTab,
+		}))
+	);
+
 	return (
-		<div className="max-w-[1280px] mx-auto py-4 h-full">
-			<TabsWithSearchParam
-				searchParam="current"
-				defaultValue="preferences"
-				className="px-4"
-			>
-				<TabsList className="w-full justify-start">
-					<TabsTrigger className="flex-0" value="preferences">
-						Preferences
-					</TabsTrigger>
-					<TabsTrigger className="flex-0" value="webhooks">
-						Webhooks
-					</TabsTrigger>
-				</TabsList>
-				<div className="p-6 w-full">
-					<TabsContent value="preferences">
-						<PreferencesModalBox>
-							<PreferredCurrencySelection/>
-							<GlobalLocaleSelection/>
-						</PreferencesModalBox>
-					</TabsContent>
-					<TabsContent value="webhooks">
-						<div className="grid grid-cols-1 gap-4">
-							<WebhooksListFx
-								errorElement={<div>hello</div>}
-								pendingElement={<div>World</div>}
-								status={status}
-								fxSampleSize={5}
-							>
-								<WebhooksListEmptyUX dataset={webhooks}>
-									{webhooks.map((hook) => (
-										<WebhookWithControls webhook={hook} key={hook.id} />
-									))}
-								</WebhooksListEmptyUX>
-							</WebhooksListFx>
-						</div>
-						<hr className="my-4" />
-						<CreateWebhookProcess />
-					</TabsContent>
-				</div>
-			</TabsWithSearchParam>
-		</div>
+		<UiTabs
+			value={settingsTab}
+			onValueChange={(tab) => { changeTab(tab as SettingsTab); }}
+			className="px-4"
+		>
+			<UiTabsList className="w-full justify-start">
+				<UiTabsTrigger className="flex-0" value="preferences">
+					Preferences
+				</UiTabsTrigger>
+				<UiTabsTrigger className="flex-0" value="webhooks">
+					Webhooks
+				</UiTabsTrigger>
+			</UiTabsList>
+			<div className="p-6 w-full">
+				<UiTabsContent value="preferences">
+					<PreferencesSettings />
+				</UiTabsContent>
+				<UiTabsContent value="webhooks">
+					<div className="grid grid-cols-1 gap-4">
+						<WebhooksListFx
+							errorElement={<div>hello</div>}
+							pendingElement={<div>World</div>}
+							status={status}
+							fxSampleSize={5}
+						>
+							<WebhooksListEmptyUX dataset={webhooks}>
+								{webhooks.map((hook) => (
+									<WebhookWithControls webhook={hook} key={hook.id}>
+										<EditWebhookModal targetWebhook={hook}>
+											<UiButton size="icon" variant="secondary">
+												<Icons.Pencil />
+											</UiButton>
+										</EditWebhookModal>
+										<DeleteWebhookModal targetWebhook={hook}>
+											<UiButton size="icon" variant="destructive">
+												<Icons.Trash2 />
+											</UiButton>
+										</DeleteWebhookModal>
+									</WebhookWithControls>
+								))}
+							</WebhooksListEmptyUX>
+						</WebhooksListFx>
+					</div>
+					<hr className="my-4" />
+					<CreateWebhook />
+				</UiTabsContent>
+			</div>
+		</UiTabs>
 	);
 };
 
+SettingsTabs.displayName = 'SettingsTabs';
+
+const SettingsPage: FC = () => {
+	return (
+		<SettingsPreferencesProvider>
+			<div className="max-w-[1280px] mx-auto py-4 h-full">
+				<SettingsTabs />
+			</div>
+		</SettingsPreferencesProvider>
+	);
+};
+
+SettingsPage.displayName = 'SettingsPage';
+
 export { SettingsPage };
-export default SettingsPage;

@@ -1,8 +1,8 @@
-import { cn, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@internal/ui-library";
+import { cn, UiSelect, UiSelectContent, UiSelectItem, UiSelectTrigger, UiSelectValue } from "@internal/ui-library";
 import { useCallback, type ComponentProps, type ReactNode } from "react";
 
 
-interface SelectGraphTypeProps<T extends string, V extends string> extends Omit<ComponentProps<typeof SelectTrigger>, 'onChange'> {
+interface SelectGraphTypeProps<T extends string, V extends string> extends Omit<ComponentProps<typeof UiSelectTrigger>, 'onChange'> {
 	graphType: T;
 	onChange: (graphType: T) => void;
 	options: Record<T, V>;
@@ -20,18 +20,18 @@ function SelectGraphType<T extends string, V extends string>({
 	}, [onChange]);
 
 	return (
-		<Select value={graphType} onValueChange={handleValueChange}>
-			<SelectTrigger className={cn("w-full", className)} {...props}>
-				<SelectValue />
-			</SelectTrigger>
-			<SelectContent>
+		<UiSelect value={graphType} onValueChange={handleValueChange}>
+			<UiSelectTrigger className={cn("w-full", className)} {...props}>
+				<UiSelectValue />
+			</UiSelectTrigger>
+			<UiSelectContent>
 				{Object.entries(options).map(([key, value]) => (
-					<SelectItem key={key} value={key}>
+					<UiSelectItem key={key} value={key}>
 						{value as ReactNode}
-					</SelectItem>
+					</UiSelectItem>
 				))}
-			</SelectContent>
-		</Select>
+			</UiSelectContent>
+		</UiSelect>
 	)
 }
 

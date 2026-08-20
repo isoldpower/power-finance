@@ -19,6 +19,8 @@ catalog:
   "@clerk/clerk-react": "^5.28.2"
   "@clerk/types": "^4.54.2"
   "@clerk/themes": "^2.2.34"
+  axios: "^1.9.0"
+  "lucide-react": "^0.501.0"
   globals: "^15.15.0"
   eslint: "^9.22.0"
   "@eslint/js": "^9.22.0"

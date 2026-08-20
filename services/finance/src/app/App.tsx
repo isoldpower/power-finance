@@ -3,8 +3,8 @@ import { AppLoader } from '@internal/ui-library';
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import './styles/_index.css'
 import '@internal/ui-library/css';
+import './styles/_index.css'
 
 import { routeTree } from "./routeTree.gen.ts";
 

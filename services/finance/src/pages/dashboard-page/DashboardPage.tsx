@@ -1,68 +1,62 @@
-import { useState } from "react";
 import type { FC } from "react";
 
-import { WalletCardWithControls } from "@process/wallet";
-import {
-	BalanceSummary,
-	PreviewWalletsList,
-	WalletsListNavigationHeader
-} from "@widget/wallet";
-import {
-	TransactionsListNavigationHeader,
-	RecentTransactionsList,
-	RecentTransaction, NewTransactionForm
-} from "@widget/transaction";
+import { QuickAddPanel, RecentActivityPanel } from "@process/transactions";
+import { CashFlowWithFx, NetWorthHeroWithFx } from "@process/metrics";
+import { LedgerStatusSummary } from "@process/accounts";
+import { NeedsActionPanel } from "@process/assistance";
+import { CurrencySelector } from "@widget/localization";
+import { PeriodSelector, LongCurrentDateLabel } from "@widget/metrics";
+import { MetricsPreferencesProvider } from "@feature/metrics";
+import { RevealMotion } from "@shared/motion";
+import { PageContainer, SidebarColumnsContainer, TwoColumnsContainer } from "@shared/pure-components/layout";
+import { PageTitle } from "@shared/pure-components/typography";
 
-import { useWalletSelection, useWalletsList } from "@feature/wallet";
-import { OpenTransactionCreation } from "@feature/transaction";
-import type { TransactionPreviewDto } from "@entity/transaction";
-import type { Wallet } from "@entity/wallet";
+import { PERIODS } from "./config.ts";
 
 
 const DashboardPage: FC = () => {
-	const { wallets } = useWalletsList();
-	const { selected } = useWalletSelection({ searchKey: 'selectedWallet' });
-	const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(false);
-
 	return (
-		<div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto flex flex-col gap-8">
-			<div>
-				<h1 className="text-2xl font-bold">Dashboard</h1>
-				<p className="text-gray-500 dark:text-gray-300">Welcome to your financial overview</p>
-			</div>
-			<div className="bg-gradient-to-r bg-card rounded-xl shadow-sm p-6">
-				<div className="md:flex md:justify-between md:items-center">
-					<BalanceSummary />
-					<div className="mt-4 md:mt-0">
-						<OpenTransactionCreation
-							setIsModalOpen={setIsNewTransactionModalOpen}
-							isModalOpen={isNewTransactionModalOpen}
-						>
-							<NewTransactionForm
-								wallets={wallets}
-								onClose={() => { setIsNewTransactionModalOpen(false); }} 
-							/>
-						</OpenTransactionCreation>
+		<MetricsPreferencesProvider>
+			<PageContainer>
+				<RevealMotion delay={0.1}>
+					<div className='flex flex-wrap justify-between gap-3.5'>
+						<div className="flex items-center gap-4">
+							<PageTitle>Dashboard</PageTitle>
+							<LongCurrentDateLabel />
+						</div>
+						<div className="flex items-center gap-2">
+							<PeriodSelector fullList={PERIODS} />
+							<div className="w-18">
+								<CurrencySelector pivot='end' />
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-			<div>
-				<WalletsListNavigationHeader />
-				<PreviewWalletsList>
-					<WalletCardWithControls wallet={{} as Wallet} />
-				</PreviewWalletsList>
-			</div>
-			<div>
-				<TransactionsListNavigationHeader />
-				<RecentTransactionsList selectedWallet={selected}>
-					<RecentTransaction transaction={{} as TransactionPreviewDto} />
-				</RecentTransactionsList>
-			</div>
-		</div>
+				</RevealMotion>
+				<TwoColumnsContainer>
+					<RevealMotion delay={0.1}>
+						<NetWorthHeroWithFx className="h-full" />
+					</RevealMotion>
+					<RevealMotion delay={0.1}>
+						<CashFlowWithFx className="h-full" />
+					</RevealMotion>
+				</TwoColumnsContainer>
+				<RevealMotion delay={0.1}>
+					<LedgerStatusSummary />
+				</RevealMotion>
+				<RevealMotion delay={0.1}>
+					<NeedsActionPanel />
+				</RevealMotion>
+				<RevealMotion delay={0.1}>
+					<SidebarColumnsContainer>
+						<RecentActivityPanel className="order-2 lg:order-1" />
+						<QuickAddPanel className="order-1 lg:order-2" />
+					</SidebarColumnsContainer>
+				</RevealMotion>
+			</PageContainer>
+		</MetricsPreferencesProvider>
 	);
 };
 
 DashboardPage.displayName = 'DashboardPage';
 
 export { DashboardPage };
-export default DashboardPage;

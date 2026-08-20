@@ -1,0 +1,120 @@
+.finance-theme {
+	--background: #f4f6fb;
+	--foreground: #13151c;
+	--card: #ffffff;
+	--card-foreground: #13151c;
+	--popover: #ffffff;
+	--popover-foreground: #13151c;
+	--primary: #4f46e5;
+	--primary-foreground: #ffffff;
+	--secondary: #eef1f8;
+	--secondary-foreground: #13151c;
+	--muted: #eef1f8;
+	--muted-foreground: #565d6e;
+	--accent: #eef1f8;
+	--accent-foreground: #13151c;
+	--destructive: #e03131;
+	--border: #e3e7f0;
+	--input: #cfd5e2;
+	--ring: #4f46e5;
+	--radius: 0.8125rem;
+
+	--surface: #ffffff;
+	--surface-2: #eef1f8;
+	--surface-3: #e6eaf3;
+	--border-strong: #cfd5e2;
+	--text: #13151c;
+	--text-2: #565d6e;
+	--text-3: #8a90a1;
+
+	--accent-soft: rgba(79, 70, 229, 0.10);
+	--accent-border: rgba(79, 70, 229, 0.32);
+	--accent-grad: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+	--glow: rgba(79, 70, 229, 0.30);
+
+	--pos: #0ca678;
+	--pos-soft: rgba(12, 166, 120, 0.12);
+	--neg: #e03131;
+	--neg-soft: rgba(224, 49, 49, 0.12);
+	--warn: #e8920c;
+	--warn-soft: rgba(232, 146, 12, 0.14);
+	--viol: #8b5cf6;
+	--viol-soft: rgba(139, 92, 246, 0.13);
+
+	--shadow: 0 1px 2px rgba(17, 20, 28, 0.05), 0 2px 6px rgba(17, 20, 28, 0.05);
+	--shadow-lg: 0 4px 14px rgba(17, 20, 28, 0.08), 0 1px 3px rgba(17, 20, 28, 0.06);
+
+	font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+	font-variant-numeric: tabular-nums;
+	color: var(--foreground);
+}
+
+.dark .finance-theme,
+.finance-theme.dark {
+	--background: #0c0e13;
+	--foreground: #eef1f7;
+	--card: #15181f;
+	--card-foreground: #eef1f7;
+	--popover: #15181f;
+	--popover-foreground: #eef1f7;
+	--primary: #818cf8;
+	--primary-foreground: #ffffff;
+	--secondary: #1b1f28;
+	--secondary-foreground: #eef1f7;
+	--muted: #1b1f28;
+	--muted-foreground: #a4abbb;
+	--accent: #1b1f28;
+	--accent-foreground: #eef1f7;
+	--destructive: #f87171;
+	--border: #262b37;
+	--input: #39414f;
+	--ring: #818cf8;
+
+	--surface: #15181f;
+	--surface-2: #1b1f28;
+	--surface-3: #232936;
+	--border-strong: #39414f;
+	--text: #eef1f7;
+	--text-2: #a4abbb;
+	--text-3: #6d7585;
+
+	--accent-soft: rgba(129, 140, 248, 0.14);
+	--accent-border: rgba(129, 140, 248, 0.36);
+	--accent-grad: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+	--glow: rgba(129, 140, 248, 0.30);
+
+	--pos: #34d399;
+	--pos-soft: rgba(52, 211, 153, 0.13);
+	--neg: #f87171;
+	--neg-soft: rgba(248, 113, 113, 0.13);
+	--warn: #fbbf24;
+	--warn-soft: rgba(251, 191, 36, 0.13);
+	--viol: #a78bfa;
+	--viol-soft: rgba(167, 139, 250, 0.16);
+
+	--shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.4);
+	--shadow-lg: 0 8px 26px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	@keyframes finance-fade-up {
+		from { opacity: 0; transform: translate3d(0, 15px, 0); }
+		to { opacity: 1; transform: none; }
+	}
+	@keyframes finance-fade-in {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+	@keyframes finance-drop {
+		from { transform: translateY(-6px); opacity: 0; }
+		to { transform: translateY(0); opacity: 1; }
+	}
+	@keyframes finance-grow-x {
+		from { transform: scaleX(0); }
+		to { transform: scaleX(1); }
+	}
+	@keyframes finance-draw-line {
+		from { stroke-dashoffset: 1; }
+		to { stroke-dashoffset: 0; }
+	}
+}

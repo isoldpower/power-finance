@@ -1,0 +1,17 @@
+import { UiInput } from "@internal/ui-library"
+
+import type { ComponentProps, FC } from "react";
+
+
+interface AmountFieldProps extends ComponentProps<'input'> {
+	placeholder?: string;
+}
+
+const InputField: FC<AmountFieldProps> = ({ placeholder, ...field }) => {
+	return (
+		<UiInput placeholder={placeholder} {...field} />
+	)
+}
+
+export { InputField };
+export type { AmountFieldProps };

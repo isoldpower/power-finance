@@ -3,11 +3,11 @@ import { createFileRoute, Navigate } from '@tanstack/react-router'
 
 
 export const Route = createFileRoute('/')({
-  component: Redirect,
+	component: Redirect,
 });
 
 function Redirect() {
-  return (
+	return (
 		<Navigate to={getFinanceRoute('dashboard')} />
 	);
 }

@@ -1,13 +1,13 @@
 import type { ComponentProps } from "react";
 import {
-	Sidebar,
-	SidebarContent,
-	SidebarGroup,
-	SidebarGroupContent,
-	SidebarGroupLabel,
-	SidebarMenu,
-	SidebarRail,
-	useSidebar
+	UiSidebar,
+	UiSidebarContent,
+	UiSidebarGroup,
+	UiSidebarGroupContent,
+	UiSidebarGroupLabel,
+	UiSidebarMenu,
+	UiSidebarRail,
+	useUiSidebar
 } from "@internal/ui-library";
 
 import {data, NavigationGroup, NavigationItem} from "./config.ts";
@@ -16,16 +16,16 @@ import { AppSidebarFooter } from "./SidebarFooter.tsx";
 import { AppSidebarItem } from "./SidebarItem.tsx";
 
 
-export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }: ComponentProps<typeof UiSidebar>) {
 	return (
-		<Sidebar collapsible="icon" {...props}>
+		<UiSidebar collapsible="icon" {...props}>
 			<AppSidebarHeader />
-			<SidebarContent>
+			<UiSidebarContent>
 				<AppSidebarRecursiveItem first items={data.navMain} />
-			</SidebarContent>
+			</UiSidebarContent>
 			<AppSidebarFooter />
-			<SidebarRail />
-		</Sidebar>
+			<UiSidebarRail />
+		</UiSidebar>
 	)
 }
 
@@ -49,22 +49,22 @@ function AppSidebarRecursiveItem({
 }
 
 function AppSidebarGroup({ item }: { item: NavigationGroup }) {
-	const { open } = useSidebar();
+	const { open } = useUiSidebar();
 
 	return (
-		<SidebarGroup key={item.title}>
+		<UiSidebarGroup key={item.title}>
 			{open && (
-				<SidebarGroupLabel>
+				<UiSidebarGroupLabel>
 					{item.title}
-				</SidebarGroupLabel>
+				</UiSidebarGroupLabel>
 			)}
 			{item.items && (
-				<SidebarGroupContent>
-					<SidebarMenu>
+				<UiSidebarGroupContent>
+					<UiSidebarMenu>
 						<AppSidebarRecursiveItem items={item.items} />
-					</SidebarMenu>
-				</SidebarGroupContent>
+					</UiSidebarMenu>
+				</UiSidebarGroupContent>
 			)}
-		</SidebarGroup>
+		</UiSidebarGroup>
 	)
 }

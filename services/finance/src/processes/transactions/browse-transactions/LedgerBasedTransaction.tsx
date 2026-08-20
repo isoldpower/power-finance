@@ -1,0 +1,61 @@
+import { useCallback, useMemo } from "react";
+import { useShallow } from "zustand/react/shallow";
+import { cn } from "@internal/ui-library";
+import { useTransactionsSelection } from "@feature/transactions";
+import { LedgerTransactionRow, TransactionLedgerEntries } from "@widget/transactions";
+import { ShowOn } from "@shared/visibility";
+
+import type { FC, MouseEvent } from "react";
+import type { Transaction } from "@entity/transactions";
+
+
+interface LedgerBasedTransactionProps {
+	transaction: Transaction;
+}
+
+const LedgerBasedTransaction: FC<LedgerBasedTransactionProps> = ({ transaction }) => {
+	const { selectedTransactionId, selectTransaction, checkedTransactionIds, toggleChecked } = useTransactionsSelection(
+		useShallow((state) => ({
+			selectedTransactionId: state.selectedTransactionId,
+			selectTransaction: state.selectTransaction,
+			checkedTransactionIds: state.checkedTransactionIds,
+			toggleChecked: state.toggleChecked,
+		}))
+	);
+
+	const expanded = useMemo(() => {
+		return selectedTransactionId === transaction.id;
+	}, [selectedTransactionId, transaction.id]);
+	const checked = useMemo(() => {
+		return checkedTransactionIds.includes(transaction.id);
+	}, [checkedTransactionIds, transaction.id]);
+
+	const handleCheck = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+		event.stopPropagation();
+		toggleChecked(transaction.id);
+	}, [toggleChecked, transaction.id]);
+
+	return (
+		<div 
+			className={cn(
+				"border-b border-border last:border-b-0", 
+				checked && "bg-[var(--accent-soft)]", 
+				!checked && expanded && "bg-secondary"
+			)}
+		>
+			<LedgerTransactionRow
+				transaction={transaction}
+				expanded={expanded}
+				checked={checked}
+				onCheck={handleCheck}
+				onToggle={() => { selectTransaction(expanded ? null : transaction.id); }}
+			/>
+			<ShowOn condition={expanded}>
+				<TransactionLedgerEntries transaction={transaction} />
+			</ShowOn>
+		</div>
+	);
+}
+
+export { LedgerBasedTransaction };
+export type { LedgerBasedTransactionProps };

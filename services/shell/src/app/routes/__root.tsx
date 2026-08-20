@@ -1,5 +1,5 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
-import { AppLoader, SidebarInset } from "@internal/ui-library";
+import { AppLoader, UiSidebarInset } from "@internal/ui-library";
 
 import { RootComponent } from '../RootComponent.tsx';
 import { AppSidebar, HideOnRoute, SidebarFloatingTrigger } from '@shared/components';
@@ -17,9 +17,9 @@ function RootLayout() {
 				<AppSidebar />
 				<SidebarFloatingTrigger />
 			</HideOnRoute>
-			<SidebarInset>
+			<UiSidebarInset>
 				<Outlet />
-			</SidebarInset>
+			</UiSidebarInset>
 		</RootComponent>
 	)
 }

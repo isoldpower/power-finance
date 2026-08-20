@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, cn } from "@internal/ui-library";
+import { UiCard, UiCardContent, UiCardDescription, UiCardHeader, UiCardTitle, cn } from "@internal/ui-library";
 import type { FC, ReactNode } from "react";
 
 
@@ -16,18 +16,18 @@ const GridChartCard: FC<GridChartCardProps> = ({
 	actions
  }) => {
 	return (
-		<Card className={cn("rounded-none border-none shadow-none")}>
-            <CardHeader className="flex flex-row gap-4 justify-between items-center">
+		<UiCard className={cn("rounded-none border-none shadow-none")}>
+            <UiCardHeader className="flex flex-row gap-4 justify-between items-center">
 				<div className="flex flex-col gap-2">
-					<CardTitle>{title}</CardTitle>
-					<CardDescription>{description}</CardDescription>
+					<UiCardTitle>{title}</UiCardTitle>
+					<UiCardDescription>{description}</UiCardDescription>
 				</div>
 				{actions && actions}
-            </CardHeader>
-            <CardContent>
+            </UiCardHeader>
+            <UiCardContent>
 				{children}
-			</CardContent>
-		</Card>
+			</UiCardContent>
+		</UiCard>
 	)
 }
 
