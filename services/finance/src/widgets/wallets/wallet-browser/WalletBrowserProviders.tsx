@@ -6,6 +6,8 @@ import {
 	WalletsPaginationContextProvider,
 } from "@feature/wallets";
 
+import { useMemo } from "react";
+
 import type { FC, ReactNode } from "react";
 
 
@@ -34,12 +36,16 @@ const WalletBrowserInternalContext: FC<WalletBrowserInternalContextProps> = ({ c
 		filters: { typeFilter },
 		ordering: { field: sortBy, direction: sortDirection },
 	});
+	const resetKey = useMemo(() => {
+		return [search, String(caseSensitive), typeFilter, sortBy, sortDirection].join('|');
+	}, [search, caseSensitive, typeFilter, sortBy, sortDirection]);
 
 	return (
 		<WalletsPaginationContextProvider
 			pageSize={5}
 			total={total}
 			wallets={wallets}
+			resetKey={resetKey}
 		>
 			<KeepWalletSelected wallets={wallets} />
 			{children}

@@ -20,9 +20,10 @@ const LadderAppearance: FC<LadderAppearanceProps> = ({
 		return Math.min(order * appearStepMs, appearMsCap);
 	}, [appearMsCap, appearStepMs, order]);
 	const appearStyle: CSSProperties = useMemo(() => {
-		return Object.assign(style ?? {}, { 
-			animationDelay: `${appearDelayMs.toString()}ms` 
-		});
+		return {
+			...style,
+			animationDelay: `${appearDelayMs.toString()}ms`,
+		};
 	}, [appearDelayMs, style]);
 	
 	return (

@@ -21,7 +21,7 @@ const resolveActiveTab = (
 	if (allFitting.length > 1) {
 		throw new Error(
 			'Got more than 1 occurrence while trying to resolve active tab. Expected 1 max. ' + 
-			`All occurrences: ${Object.keys(allFitting).join(', ')}`
+			`All occurrences: ${allFitting.join(', ')}`
 		);
 	}
 	

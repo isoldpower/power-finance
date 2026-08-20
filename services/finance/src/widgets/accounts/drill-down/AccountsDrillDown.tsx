@@ -11,7 +11,7 @@ import {
 	ledgerSideTone,
 	HistoryToolbar,
 } from "@entity/accounts";
-import { useAccountHistoryPage } from "@feature/accounts";
+import { useAccountHistoryPage, useAccountsConvertion } from "@feature/accounts";
 import { Caption, Heading, MetaText, Overline, RowTitle } from "@shared/pure-components/typography";
 import { Pagination, PaginationRange, toPageEntries } from "@shared/pure-components/collections";
 import { SidebarColumnsContainer } from "@shared/pure-components/layout";
@@ -27,8 +27,6 @@ interface AccountsDrillDownProps {
 	accountId: string;
 	setAccountId: (id: string) => void;
 	history: AccountHistoryView[];
-	convertToUserCurrency: (value: number) => string;
-	convertToUserCurrencyWithSign: (value: number) => string;
 }
 
 const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
@@ -37,8 +35,6 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 	accountId,
 	setAccountId,
 	history,
-	convertToUserCurrency,
-	convertToUserCurrencyWithSign,
 }) => {
 	const {
 		paginatedHistory,
@@ -49,6 +45,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 		to,
 		goToPage
 	} = useAccountHistoryPage(history, accountId);
+	const { convertToUserCurrency, convertToUserCurrencyWithSign } = useAccountsConvertion();
 	
 	const pages = useMemo(() => {
 		return toPageEntries(pageNumber, pageCount);
@@ -82,8 +79,8 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 									{entry.group}
 								</Caption>
 							</div>
-							<AccountListItem.Balance tone={accountAmountTone(entry.balanceUsd)}>
-								{convertToUserCurrency(entry.balanceUsd)}
+							<AccountListItem.Balance tone={accountAmountTone(entry.balance.amount)}>
+								{convertToUserCurrency(entry.balance)}
 							</AccountListItem.Balance>
 						</AccountListItem>
 					))}
@@ -106,8 +103,8 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 							<Overline size="10" tracking="0.1em">
 								Balance
 							</Overline>
-							<AccountSummary.Balance tone={accountAmountTone(account.balanceUsd)}>
-								{convertToUserCurrency(account.balanceUsd)}
+							<AccountSummary.Balance tone={accountAmountTone(account.balance.amount)}>
+								{convertToUserCurrency(account.balance)}
 							</AccountSummary.Balance>
 						</div>
 					</AccountSummary.HeroRow>
@@ -141,7 +138,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 					</ShowOn>
 					{paginatedHistory.map((entry) => (
 						<AccountHistoryRow key={entry.id}>
-							<AccountHistoryRow.Icon className={ledgerIconClass(entry.amountUsd)}>
+							<AccountHistoryRow.Icon className={ledgerIconClass(entry.amount.amount)}>
 								{entry.icon}
 							</AccountHistoryRow.Icon>
 							<div className="min-w-0 flex-1">
@@ -155,8 +152,8 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 							<AccountHistoryRow.Badge sideTone={ledgerSideTone(entry.debit)}>
 								{entry.debit ? 'DR' : 'CR'}
 							</AccountHistoryRow.Badge>
-							<AccountHistoryRow.Value tone={accountAmountTone(entry.amountUsd)}>
-								{convertToUserCurrencyWithSign(entry.amountUsd)}
+							<AccountHistoryRow.Value tone={accountAmountTone(entry.amount.amount)}>
+								{convertToUserCurrencyWithSign(entry.amount)}
 							</AccountHistoryRow.Value>
 						</AccountHistoryRow>
 					))}

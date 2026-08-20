@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState } from "react";
 
 import type { FC, PropsWithChildren } from "react";
 import type { MetricsPreferences } from "./types.ts";
@@ -13,9 +13,9 @@ const MetricsPreferencesProvider: FC<MetricsPreferencesProviderProps> = ({
 	children,
 	...initialValue
 }) => {
-	const zustandStore = useMemo(() => {
+	const [zustandStore] = useState(() => {
 		return createMetricsSettingsStore(initialValue);
-	}, [initialValue]);
+	});
 	
 	return (
 		<MetricsPreferencesReactContext value={zustandStore}>

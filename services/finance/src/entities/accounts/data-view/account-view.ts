@@ -9,7 +9,7 @@ const toAccountView = (account: Account): AccountView => ({
 	id: account.id,
 	name: account.name,
 	group: account.group,
-	balanceUsd: account.money.amount,
+	balance: account.money,
 });
 
 const toAccountCategoryViews = (accounts: Account[]): AccountCategoryView[] => {
@@ -20,7 +20,6 @@ const toAccountCategoryViews = (accounts: Account[]): AccountCategoryView[] => {
 			return {
 				id: CATEGORY_ID[group],
 				label: CATEGORY_LABEL[group],
-				totalUsd: owned.reduce((sum, account) => sum + account.money.amount, 0),
 				accounts: owned.map(toAccountView),
 			};
 		})

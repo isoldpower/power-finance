@@ -1,4 +1,5 @@
 import { createContext, use, useCallback, useMemo, useState } from "react";
+import { useOnValuesChange } from "@shared/data";
 
 import type { Wallet } from "@entity/wallets";
 import type { FC, ReactNode } from "react";
@@ -23,6 +24,7 @@ interface WalletsPaginationContextProviderProps {
 	pageSize: number;
 	total: number;
 	wallets: Wallet[];
+	resetKey: string;
 }
 
 const WalletsPaginationContextProvider: FC<WalletsPaginationContextProviderProps> = ({ 
@@ -30,26 +32,36 @@ const WalletsPaginationContextProvider: FC<WalletsPaginationContextProviderProps
 	pageSize,
 	total,
 	wallets,
+	resetKey,
 }) => {
 	const [page, setPage] = useState<number>(1);
-	
-	const scrollForward = useCallback(() => {
-		const totalPagesAvailable = Math.ceil(total / pageSize);
-		setPage((previous) => Math.min(totalPagesAvailable, previous + 1));
-	}, [pageSize, total]);
-	const scrollBackward = useCallback(() => {
-		setPage((previous) => Math.max(0, previous - 1));
+
+	const resetToFirstPage = useCallback(() => {
+		setPage(1);
 	}, []);
 	
-	const startIndex = useMemo(() => {
-		return (page - 1) * pageSize;
-	}, [page, pageSize]);
-	const endIndex = useMemo(() => {
-		return page * pageSize - 1;
-	}, [page, pageSize]);
+	useOnValuesChange([resetKey], resetToFirstPage);
+	
 	const pageCount = useMemo(() => {
-		return Math.ceil(wallets.length / pageSize);
+		return Math.max(1, Math.ceil(wallets.length / pageSize));
 	}, [pageSize, wallets.length]);
+	const pageNumber = useMemo(() => {
+		return Math.min(page, pageCount);
+	}, [page, pageCount]);
+
+	const scrollForward = useCallback(() => {
+		setPage((previous) => Math.min(pageCount, previous + 1));
+	}, [pageCount]);
+	const scrollBackward = useCallback(() => {
+		setPage((previous) => Math.max(1, previous - 1));
+	}, []);
+
+	const startIndex = useMemo(() => {
+		return (pageNumber - 1) * pageSize;
+	}, [pageNumber, pageSize]);
+	const endIndex = useMemo(() => {
+		return pageNumber * pageSize - 1;
+	}, [pageNumber, pageSize]);
 	const paginatedWallets = useMemo(() => {
 		return wallets.slice(startIndex, endIndex + 1);
 	}, [endIndex, startIndex, wallets]);
@@ -61,10 +73,20 @@ const WalletsPaginationContextProvider: FC<WalletsPaginationContextProviderProps
 		total,
 		pageSize,
 		pageCount,
-		pageNumber: page,
+		pageNumber,
 		from: startIndex,
 		to: endIndex,
-	}), [scrollBackward, scrollForward, paginatedWallets, total, pageSize, pageCount, page, startIndex, endIndex]);
+	}), [
+		scrollBackward,
+		scrollForward,
+		paginatedWallets,
+		total,
+		pageSize,
+		pageCount,
+		pageNumber,
+		startIndex,
+		endIndex,
+	]);
 	
 	return (
 		<WalletsPaginationContext value={paginationValues}>

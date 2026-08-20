@@ -22,7 +22,8 @@ const createMetricsSettingsStore = (
 	initialValues: Partial<MetricsPreferences>
 ): StoreApi<MetricsPreferencesState> => {
 	return createStore<MetricsPreferencesState>()(persist((setState) => ({
-		...Object.assign(initialValues, initialState),
+		...initialState,
+		...initialValues,
 		changePeriod: (period: MetricsPeriod) => {
 			setState(() => ({ metricsPeriod: period }));
 		},

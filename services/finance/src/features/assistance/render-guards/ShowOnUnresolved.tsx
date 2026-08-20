@@ -10,7 +10,11 @@ interface ShowOnUnresolvedProps {
 const ShowOnUnresolved: FC<ShowOnUnresolvedProps> = ({ children }) => {
 	const { actions, isPending } = useActions();
 	
-	return isPending || actions.length !== 0 && children;
+	if (!isPending && actions.length === 0) {
+		return null;
+	}
+
+	return children;
 }
 
 export { ShowOnUnresolved };

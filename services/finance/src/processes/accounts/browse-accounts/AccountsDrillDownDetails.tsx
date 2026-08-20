@@ -1,5 +1,5 @@
 import { DrillDownHeader } from "@entity/accounts";
-import { useAccountsConvertion, useAccountHistory, useAccountsBrowser } from "@feature/accounts";
+import { useAccountHistory, useAccountsBrowser } from "@feature/accounts";
 import { AccountsDrillDown } from "@widget/accounts";
 import { Caption, Overline } from "@shared/pure-components/typography";
 
@@ -8,7 +8,6 @@ import type { FC } from "react";
 
 const AccountsDrillDownDetails: FC = () => {
 	const { category, account, accountId, setAccountId } = useAccountsBrowser();
-	const { convertToUserCurrency, convertToUserCurrencyWithSign } = useAccountsConvertion();
 	const { history } = useAccountHistory(accountId);
 
 	if (!category || !account) {
@@ -32,8 +31,6 @@ const AccountsDrillDownDetails: FC = () => {
 				accountId={accountId}
 				setAccountId={setAccountId}
 				history={history}
-				convertToUserCurrency={convertToUserCurrency}
-				convertToUserCurrencyWithSign={convertToUserCurrencyWithSign}
 			/>
 		</>
 	);

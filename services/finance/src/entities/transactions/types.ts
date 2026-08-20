@@ -78,6 +78,10 @@ interface TransactionQuery {
 	walletIds?: string[];
 	chainId?: string;
 	currencies?: string[];
+	categories?: string[];
+	types?: TransactionType[];
+	search?: string;
+	caseSensitive?: boolean;
 	minAmount?: number;
 	maxAmount?: number;
 	createdAfter?: string;

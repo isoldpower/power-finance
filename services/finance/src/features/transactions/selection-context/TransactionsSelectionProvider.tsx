@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState } from "react";
 import { createTransactionsSelectionStore } from "./selection-store.ts";
 import { TransactionsSelectionReactContext } from "./context.ts";
 
@@ -12,9 +12,9 @@ const TransactionsSelectionProvider: FC<TransactionsSelectionProviderProps> = ({
 	children,
 	...initialValue
 }) => {
-	const zustandStore = useMemo(() => {
+	const [zustandStore] = useState(() => {
 		return createTransactionsSelectionStore(initialValue);
-	}, [initialValue]);
+	});
 
 	return (
 		<TransactionsSelectionReactContext value={zustandStore}>

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState } from "react";
 import { createWalletsSelectionStore } from "./selection-store.ts";
 import { WalletsSelectionReactContext } from "./context.ts";
 
@@ -12,9 +12,9 @@ const WalletsSelectionProvider: FC<WalletsSelectionProviderProps> = ({
 	children,
 	...initialValue
 }) => {
-	const zustandStore = useMemo(() => {
+	const [zustandStore] = useState(() => {
 		return createWalletsSelectionStore(initialValue);
-	}, [initialValue]);
+	});
 
 	return (
 		<WalletsSelectionReactContext value={zustandStore}>

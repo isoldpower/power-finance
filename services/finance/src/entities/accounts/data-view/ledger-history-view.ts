@@ -11,7 +11,7 @@ const toLedgerHistoryView = (entry: LedgerEntry): AccountHistoryView => ({
 		day: 'numeric',
 	}),
 	debit: entry.debit,
-	amountUsd: entry.money.amount,
+	amount: entry.money,
 });
 
 export { toLedgerHistoryView };

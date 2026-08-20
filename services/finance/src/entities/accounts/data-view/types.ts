@@ -1,3 +1,4 @@
+import type { Money } from "@entity/localization";
 import type { AccountGroup } from "../types.ts";
 
 
@@ -5,13 +6,12 @@ interface AccountView {
 	id: string;
 	name: string;
 	group: AccountGroup;
-	balanceUsd: number;
+	balance: Money;
 }
 
 interface AccountCategoryView {
 	id: string;
 	label: string;
-	totalUsd: number;
 	accounts: AccountView[];
 }
 
@@ -21,7 +21,7 @@ interface AccountHistoryView {
 	description: string;
 	date: string;
 	debit: boolean;
-	amountUsd: number;
+	amount: Money;
 }
 
 interface AccountSegment {

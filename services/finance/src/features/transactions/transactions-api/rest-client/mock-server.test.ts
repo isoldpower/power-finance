@@ -145,6 +145,49 @@ describe('TransactionMockRESTApiClient', () => {
 		expect(data).toHaveLength(0);
 	});
 
+	test('narrows a search by type, category and text across name and category', async () => {
+		await client.post({ data: body('Whole Foods', { category: 'Groceries' }), idempotencyKey: 'n-1' });
+		await client.post({ data: body('Rent', { category: 'Housing', amount: '900.00' }), idempotencyKey: 'n-2' });
+		await client.post({ data: body('Salary', { category: 'Income', type: 'income' }), idempotencyKey: 'n-3' });
+
+		const income = await client.search({
+			data: { filter_body: { and: [{ field_name: 'type', operator: 'in', value: ['income'] }] } },
+		});
+		const housing = await client.search({
+			data: { filter_body: { and: [{ field_name: 'category', operator: 'in', value: ['Housing'] }] } },
+		});
+		const needle = await client.search({
+			data: {
+				filter_body: {
+					and: [{
+						or: [
+							{ field_name: 'name', operator: 'icontains', value: 'gROcer' },
+							{ field_name: 'category', operator: 'icontains', value: 'gROcer' },
+						],
+					}],
+				},
+			},
+		});
+
+		expect(income.data.map((entry) => entry.name)).toEqual(['Salary']);
+		expect(housing.data.map((entry) => entry.name)).toEqual(['Rent']);
+		expect(needle.data.map((entry) => entry.name)).toEqual(['Whole Foods']);
+	});
+
+	test('reports the narrowed total so paging stays truthful', async () => {
+		await client.post({ data: body('Whole Foods'), idempotencyKey: 't-1' });
+		await client.post({ data: body('Rent', { category: 'Housing' }), idempotencyKey: 't-2' });
+		await client.post({ data: body('Salary', { category: 'Income', type: 'income' }), idempotencyKey: 't-3' });
+
+		const { meta } = await client.search({
+			data: { filter_body: { and: [{ field_name: 'type', operator: 'in', value: ['expense'] }] } },
+			params: { limit: 1 },
+		});
+
+		expect(meta.total).toBe(2);
+		expect(meta.next_cursor).not.toBeNull();
+	});
+
 	test('rejects an operator the field does not allow', async () => {
 		await expect(client.search({
 			data: { filter_body: { and: [{ field_name: 'created_at', operator: 'icontains', value: '2026' }] } },

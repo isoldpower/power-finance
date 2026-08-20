@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState } from "react";
 
 import { createSettingsPreferencesStore } from "./settings-store.ts";
 import { SettingsPreferencesReactContext } from "./context.ts";
@@ -13,9 +13,9 @@ const SettingsPreferencesProvider: FC<SettingsPreferencesProviderProps> = ({
 	children,
 	...initialValue
 }) => {
-	const zustandStore = useMemo(() => {
+	const [zustandStore] = useState(() => {
 		return createSettingsPreferencesStore(initialValue);
-	}, [initialValue]);
+	});
 
 	return (
 		<SettingsPreferencesReactContext value={zustandStore}>

@@ -19,14 +19,14 @@ interface CategoryRowProps {
 
 const CategoryRow: FC<CategoryRowProps> = ({ categoryEntry }) => {
 	const { category, account, selectCategory, selectSegment } = useAccountsBrowser();
-	const { convertToUserCurrency } = useAccountsConvertion();
+	const { sumToUserCurrency } = useAccountsConvertion();
 
 	const color = useMemo(() => {
 		return categoryColor(categoryEntry.id);
 	}, [categoryEntry.id]);
 	const totalFormatted = useMemo(() => {
-		return convertToUserCurrency(categoryEntry.totalUsd);
-	}, [categoryEntry.totalUsd, convertToUserCurrency]);
+		return sumToUserCurrency(categoryEntry.accounts.map((account) => account.balance));
+	}, [categoryEntry.accounts, sumToUserCurrency]);
 	const segments = useMemo(() => {
 		return toAccountSegments(categoryEntry.accounts);
 	}, [categoryEntry.accounts]);
