@@ -1,15 +1,8 @@
-import { parseAmount } from "@shared/api";
+import { moneyFromApi } from "@feature/localization/currencies-api";
 
-import type { MoneyDto } from "@shared/api";
 import type { Action, ActionResolution, ResourceRef } from "@entity/assistance";
-import type { Money } from "@entity/localization";
 import type { ActionDto, ActionResolutionDto, ActionResourceRefDto } from "../types.ts";
 
-
-const moneyFromApi = (dto: MoneyDto): Money => ({
-	amount: parseAmount(dto.amount),
-	currency: dto.currency,
-});
 
 const resourceRefFromApi = (dto: ActionResourceRefDto): ResourceRef => ({
 	type: dto.type,

@@ -24,7 +24,7 @@ describe('useLocaleCurrency', () => {
 		const { result } = renderHook(() => useLocaleCurrency());
 
 		const format = result.current;
-		const formatted = format(1234.56, 'USD');
+		const formatted = format('1234.56', 'USD');
 
 		expect(formatted).toBe('$1,234.56');
 	});
@@ -35,7 +35,7 @@ describe('useLocaleCurrency', () => {
 		const { result } = renderHook(() => useLocaleCurrency());
 
 		const format = result.current;
-		const formatted = format(1234.56, 'EUR');
+		const formatted = format('1234.56', 'EUR');
 
 		expect(formatted).toBe('1.234,56 €');
 	});
@@ -46,7 +46,7 @@ describe('useLocaleCurrency', () => {
 		const { result } = renderHook(() => useLocaleCurrency());
 
 		const format = result.current;
-		const formatted = format(1234, 'JPY');
+		const formatted = format('1234', 'JPY');
 
 		expect(formatted).toBe('￥1,234');
 	});
@@ -55,7 +55,7 @@ describe('useLocaleCurrency', () => {
 		mockedUseSettingsContext.mockReturnValue({ locale: 'en-US' });
 
 		const { result } = renderHook(() => useLocaleCurrency());
-		const formatted = result.current(-1500.75, 'USD');
+		const formatted = result.current('-1500.75', 'USD');
 
 		expect(formatted).toBe('-$1,500.75');
 	});
@@ -64,7 +64,7 @@ describe('useLocaleCurrency', () => {
 		mockedUseSettingsContext.mockReturnValue({ locale: 'en-US' });
 
 		const { result } = renderHook(() => useLocaleCurrency());
-		const formatted = result.current(0, 'USD');
+		const formatted = result.current('0', 'USD');
 
 		expect(formatted).toBe('$0.00');
 	});
@@ -73,16 +73,25 @@ describe('useLocaleCurrency', () => {
 		mockedUseSettingsContext.mockReturnValue({ locale: '' });
 
 		const { result } = renderHook(() => useLocaleCurrency());
-		const formatted = result.current(1234.56, 'USD');
+		const formatted = result.current('1234.56', 'USD');
 
 		expect(formatted).toBe('$1,234.56');
+	});
+
+	test('keeps cents a float round-trip would lose', () => {
+		mockedUseSettingsContext.mockReturnValue({ locale: 'en-US' });
+
+		const { result } = renderHook(() => useLocaleCurrency());
+
+		expect(result.current('0.145', 'USD')).toBe('$0.15');
+		expect(result.current('1234567890123.45', 'USD')).toBe('$1,234,567,890,123.45');
 	});
 
 	test('falls back gracefully for unknown/invalid locale', () => {
 		mockedUseSettingsContext.mockReturnValue({ locale: 'INVALID' });
 
 		const { result } = renderHook(() => useLocaleCurrency());
-		const formatted = result.current(1000, 'USD');
+		const formatted = result.current('1000', 'USD');
 
 		expect(typeof formatted).toBe('string');
 		expect(formatted).toContain('$');

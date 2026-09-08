@@ -1,3 +1,5 @@
+import { walletGradient } from "@entity/wallets";
+import { isNegativeAmount } from "@shared/api";
 import { cn, FinanceMoney } from "@internal/ui-library";
 import { useCallback } from "react";
 import { WalletPinButton, WalletSwatch, walletTypeLabel } from "@entity/wallets";
@@ -44,7 +46,7 @@ const PinnableWalletRow: FC<PinnableWalletRowProps> = ({ wallet }) => {
 					: "border-l-transparent hover:bg-surface-2"
 			)}
 		>
-			<WalletSwatch size='md' color={wallet.color} />
+			<WalletSwatch size='md' color={walletGradient(wallet.color)} />
 			<div className="min-w-0 flex-1">
 				<RowTitle size="13.5" truncate>
 					{wallet.name}
@@ -55,7 +57,7 @@ const PinnableWalletRow: FC<PinnableWalletRowProps> = ({ wallet }) => {
 			</div>
 			<FinanceMoney
 				size="sm"
-				tone={wallet.balance.amount < 0 ? 'neg' : 'neutral'}
+				tone={isNegativeAmount(wallet.balance.amount) ? 'neg' : 'neutral'}
 				className={textClass({ size: '13.5' })}
 			>
 				{format(wallet.balance.amount, wallet.balance.currency)}

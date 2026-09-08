@@ -1,3 +1,4 @@
+import { serializeParams } from "./query.ts";
 import { toApiError } from "./to-api-error.ts";
 
 import type { AxiosInstance, AxiosRequestConfig } from "axios";
@@ -10,7 +11,10 @@ async function request<TResponse>(
 	writeVersions?: WriteVersionStore,
 ): Promise<TResponse> {
 	try {
-		const response = await instance.request<TResponse>(requestConfig);
+		const response = await instance.request<TResponse>({
+			paramsSerializer: { serialize: serializeParams },
+			...requestConfig,
+		});
 		writeVersions?.capture(response.headers as Record<string, unknown>);
 
 		return response.data;

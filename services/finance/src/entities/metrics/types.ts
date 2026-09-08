@@ -10,8 +10,10 @@ interface SparklinePoint {
 
 type NetDiffDirection = 'up' | 'down' | 'flat';
 
+type NetDiffSign = '+' | '−';
+
 interface NetDiff {
-	percentage: number;
+	percentage: number | null;
 	direction: NetDiffDirection;
 }
 
@@ -30,7 +32,7 @@ interface CashFlow {
 	inflow: Money;
 	outflow: Money;
 	totalNet: Money;
-	savingsRate: number;
+	savingsRate: number | null;
 }
 
 interface BalanceMetrics {
@@ -41,5 +43,20 @@ interface BalanceMetrics {
 	comments: string | null;
 }
 
+interface Metrics {
+	balance: BalanceMetrics | null;
+	netWorth: NetWorth | null;
+	cashFlow: CashFlow | null;
+}
+
 export type { Period, SparklinePoint };
-export type { BalanceMetrics, CashFlow, NetDiff, NetDiffDirection, NetWorth, NetWorthPoint };
+export type {
+	BalanceMetrics,
+	CashFlow,
+	Metrics,
+	NetDiff,
+	NetDiffDirection,
+	NetDiffSign,
+	NetWorth,
+	NetWorthPoint,
+};

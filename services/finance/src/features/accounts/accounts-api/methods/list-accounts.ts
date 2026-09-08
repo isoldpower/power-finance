@@ -1,4 +1,4 @@
-import { pageFromMeta, toAmountString } from "@shared/api";
+import { pageFromMeta } from "@shared/api";
 import { accountFromApi, groupCountsFromApi, moneyFromApi } from "../mutators";
 
 import type { Page, PageParams } from "@shared/api";
@@ -26,7 +26,7 @@ async function listAccounts(request: ListAccountsRequest): Promise<ListAccountsR
 		params: {
 			...request.page,
 			group: request.group,
-			lowbar: request.lowbar ? toAmountString(request.lowbar.amount) : undefined,
+			lowbar: request.lowbar?.amount,
 			currency: request.lowbar?.currency,
 		},
 	});

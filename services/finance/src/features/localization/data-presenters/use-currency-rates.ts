@@ -11,7 +11,7 @@ import type { CurrencyRates } from "@entity/localization";
 
 type UseCurrencyRatesReturn = UseQueryResult<CurrencyRates> & {
 	base: string;
-	rates: Record<string, number>;
+	rates: Record<string, string>;
 };
 
 const useCurrencyRates = (baseOverride?: string): UseCurrencyRatesReturn => {

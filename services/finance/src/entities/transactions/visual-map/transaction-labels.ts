@@ -9,6 +9,7 @@ const KIND_LABEL: Record<TransactionType, string> = {
 const ORIGIN_LABEL: Record<TransactionOrigin, string> = {
 	manual: 'Added manually',
 	scanned: 'Scanned receipt',
+	automation: 'Created by a rule',
 };
 
 const UNCATEGORIZED_LABEL = 'Uncategorized';

@@ -2,10 +2,11 @@ import { cn } from "@internal/ui-library";
 import { Text } from "@shared/pure-components/typography";
 
 import type { BaseHTMLAttributes, FC } from "react";
+import type { NetDiffSign } from "../../types.ts";
 
 
 interface NetWorthDeltaBadgeProps extends Omit<BaseHTMLAttributes<HTMLSpanElement>, 'className'> {
-	netDiffSign: '+' | '-';
+	netDiffSign: NetDiffSign;
 }
 
 const NetWorthDeltaBadge: FC<NetWorthDeltaBadgeProps> = ({ 

@@ -1,11 +1,11 @@
 import { subscriptionFromApi } from "../mutators";
 
 import type { WebhookSubscription } from "@entity/configuration";
-import type { IWebhookRESTApiClient } from "../rest-client";
+import type { IWebhooksRESTApiClient } from "../rest-client";
 
 
 interface SubscribeWebhookRequest {
-	handler: Pick<IWebhookRESTApiClient, 'subscribe'>;
+	handler: Pick<IWebhooksRESTApiClient, 'subscribe'>;
 	webhookId: string;
 	event: string;
 	idempotencyKey?: string;

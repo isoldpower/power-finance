@@ -1,4 +1,4 @@
-export { AssistantDjangoRESTApiClient } from './django-server.ts';
+export { AssistantHttpRESTApiClient } from './http-server.ts';
 export { AssistantMockRESTApiClient } from './mock-server.ts';
 export { ASSISTANT_MESSAGES_STORAGE_KEY } from './mock-seed.ts';
 

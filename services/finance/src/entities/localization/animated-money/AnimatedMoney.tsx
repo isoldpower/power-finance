@@ -1,5 +1,6 @@
 import { FinanceMoney } from "@internal/ui-library";
 
+import { parseAmount, toAmountString } from "@shared/api";
 import { useLocaleCurrency } from "@shared/formatting";
 import { useCountUp } from "@shared/motion";
 
@@ -10,7 +11,7 @@ import type { CountUpOptions } from "@shared/motion";
 type FinanceMoneyProps = ComponentProps<typeof FinanceMoney>;
 
 interface AnimatedMoneyProps extends Omit<FinanceMoneyProps, "children"> {
-	amount: number;
+	amount: string;
 	currency: string;
 	countUp?: CountUpOptions;
 	bare?: boolean;
@@ -24,8 +25,12 @@ const AnimatedMoney: FC<AnimatedMoneyProps> = ({
 	...moneyProps
 }) => {
 	const formatCurrency = useLocaleCurrency();
-	const value = useCountUp(amount, countUp);
-	const formatted = formatCurrency(value ?? amount, currency);
+	const target = parseAmount(amount);
+	const animatedValue = useCountUp(target, countUp);
+	const settled = animatedValue === null || animatedValue === target;
+	const formatted = settled
+		? formatCurrency(amount, currency)
+		: formatCurrency(toAmountString(animatedValue), currency);
 
 	return bare ? formatted : (
 		<FinanceMoney {...moneyProps}>

@@ -1,26 +1,30 @@
 import { useMemo } from "react";
-import { useAxiosInstance } from "@internal/shared";
 
-import { WebhookMockRESTApiClient } from "@feature/configuration";
-import { API_BASE_PATH } from "../config.ts";
-import type { IWebhookRESTApiClient } from "@feature/configuration";
+import { WebhooksHttpRESTApiClient, WebhooksMockRESTApiClient } from "@feature/configuration";
+import { useResourceAxios } from "./use-resource-axios.ts";
+
+import type { IWebhooksRESTApiClient } from "@feature/configuration";
+import type { ApiServerOptions } from "./types.ts";
+
+
+const WEBHOOKS_PATH = '/webhooks';
 
 interface UseWebhooksApiResponse {
-	rest: IWebhookRESTApiClient;
+	rest: IWebhooksRESTApiClient;
 }
 
-function useWebhooksApi(baseUrl: string): UseWebhooksApiResponse {
-	const webhooksAxiosInstance = useAxiosInstance({
-		baseUrl: `${baseUrl}${API_BASE_PATH}/webhooks`
-	});
+function useWebhooksApi(options: ApiServerOptions): UseWebhooksApiResponse {
+	const axiosInstance = useResourceAxios(options, WEBHOOKS_PATH);
 
-	const restWebhooksClient = useMemo<IWebhookRESTApiClient>(() => {
-		return new WebhookMockRESTApiClient();
-	}, [webhooksAxiosInstance]);
+	const restClient = useMemo<IWebhooksRESTApiClient>(() => {
+		return options.mode === 'live'
+			? new WebhooksHttpRESTApiClient(axiosInstance, options.versions)
+			: new WebhooksMockRESTApiClient();
+	}, [axiosInstance, options.mode, options.versions]);
 
 	return useMemo(() => ({
-		rest: restWebhooksClient
-	}), [restWebhooksClient]);
+		rest: restClient
+	}), [restClient]);
 }
 
 export { useWebhooksApi };

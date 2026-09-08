@@ -11,6 +11,7 @@ interface TransactionEntryFields {
 
 interface TransactionEntryValues extends TransactionEntryFields {
 	category?: string;
+	name?: string;
 }
 
 export type { TransactionEntryFields, TransactionEntryValues };

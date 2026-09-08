@@ -1,14 +1,16 @@
 import type {
 	ApiEnvelope,
 	CollectionResponse,
-	EmbeddedMeta,
 	MutationMeta,
+	EmbeddedMeta,
 	MutationResponse,
+	ResourceResponse,
 	PageParams
 } from "@shared/api";
 import type {
 	CategoryDto,
 	ReceiptScanDto,
+	TransactionAdjustBody,
 	TransactionChainBody,
 	TransactionChainDto,
 	TransactionCreateBody,
@@ -31,7 +33,7 @@ interface TransactionGetRequest {
 	params?: PageParams;
 }
 
-type TransactionGetResponse = ApiEnvelope<TransactionDetailDto, EmbeddedMeta<'postings'>>;
+type TransactionGetResponse = ResourceResponse<TransactionDetailDto>;
 
 interface TransactionSearchRequest {
 	data: TransactionSearchBody;
@@ -53,6 +55,14 @@ interface TransactionPatchRequest {
 }
 
 type TransactionPatchResponse = MutationResponse<TransactionDto>;
+
+interface TransactionAdjustRequest {
+	id: string;
+	data: TransactionAdjustBody;
+	idempotencyKey: string;
+}
+
+type TransactionAdjustResponse = MutationResponse<TransactionDto>;
 
 interface TransactionDeleteRequest {
 	id: string;
@@ -95,6 +105,7 @@ interface ITransactionsRESTApiClient {
 	search: (request: TransactionSearchRequest) => Promise<TransactionSearchResponse>;
 	post: (request: TransactionPostRequest) => Promise<TransactionPostResponse>;
 	patch: (request: TransactionPatchRequest) => Promise<TransactionPatchResponse>;
+	adjust: (request: TransactionAdjustRequest) => Promise<TransactionAdjustResponse>;
 	delete: (request: TransactionDeleteRequest) => Promise<TransactionDeleteResponse>;
 	postChain: (request: TransactionChainRequest) => Promise<TransactionChainResponse>;
 	deleteChain: (request: TransactionChainDeleteRequest) => Promise<TransactionChainDeleteResponse>;
@@ -104,6 +115,8 @@ interface ITransactionsRESTApiClient {
 
 export type {
 	ITransactionsRESTApiClient,
+	TransactionAdjustRequest,
+	TransactionAdjustResponse,
 	TransactionCategoriesRequest,
 	TransactionCategoriesResponse,
 	TransactionChainDeleteRequest,

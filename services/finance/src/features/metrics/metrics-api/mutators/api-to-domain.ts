@@ -1,15 +1,8 @@
-import { parseAmount } from "@shared/api";
+import { moneyFromApi } from "@feature/localization/currencies-api";
 
-import type { MoneyDto } from "@shared/api";
-import type { Money } from "@entity/localization";
-import type { BalanceMetrics, CashFlow, NetWorth } from "@entity/metrics";
-import type { BalanceMetricsDto, CashFlowDto, NetWorthDto } from "../types.ts";
+import type { BalanceMetrics, CashFlow, Metrics, NetWorth } from "@entity/metrics";
+import type { BalanceMetricsDto, CashFlowDto, MetricsDto, NetWorthDto } from "../types.ts";
 
-
-const moneyFromApi = (dto: MoneyDto): Money => ({
-	amount: parseAmount(dto.amount),
-	currency: dto.currency,
-});
 
 const balanceMetricsFromApi = (dto: BalanceMetricsDto): BalanceMetrics => ({
 	assets: moneyFromApi(dto.assets),
@@ -38,4 +31,10 @@ const cashFlowFromApi = (dto: CashFlowDto): CashFlow => ({
 	savingsRate: dto.savings_rate,
 });
 
-export { balanceMetricsFromApi, cashFlowFromApi, moneyFromApi, netWorthFromApi };
+const metricsFromApi = (dto: MetricsDto): Metrics => ({
+	balance: dto.balance === null ? null : balanceMetricsFromApi(dto.balance),
+	netWorth: dto.net_worth === null ? null : netWorthFromApi(dto.net_worth),
+	cashFlow: dto.cash_flow === null ? null : cashFlowFromApi(dto.cash_flow),
+});
+
+export { balanceMetricsFromApi, cashFlowFromApi, metricsFromApi, moneyFromApi, netWorthFromApi };

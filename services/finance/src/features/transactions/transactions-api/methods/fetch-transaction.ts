@@ -1,8 +1,6 @@
-import { pageFromMeta } from "@shared/api";
-import { ledgerEntryFromApi } from "@feature/accounts/accounts-api";
-import { transactionDetailsFromApi } from "../mutators";
+import { transactionDetailsFromApi, transactionPostingFromApi } from "../mutators";
 
-import type { Page, PageParams } from "@shared/api";
+import type { PageParams } from "@shared/api";
 import type { TransactionDetails, TransactionPosting } from "@entity/transactions";
 import type { ITransactionsRESTApiClient } from "../rest-client";
 
@@ -15,7 +13,7 @@ interface FetchTransactionRequest {
 
 interface FetchTransactionResponse {
 	transaction: TransactionDetails;
-	postings: Page<TransactionPosting>;
+	postings: TransactionPosting[];
 }
 
 async function fetchTransaction(request: FetchTransactionRequest): Promise<FetchTransactionResponse> {
@@ -23,7 +21,7 @@ async function fetchTransaction(request: FetchTransactionRequest): Promise<Fetch
 
 	return {
 		transaction: transactionDetailsFromApi(response.data),
-		postings: pageFromMeta(response.data.postings.map(ledgerEntryFromApi), response.meta.postings),
+		postings: response.data.postings.map(transactionPostingFromApi),
 	};
 }
 

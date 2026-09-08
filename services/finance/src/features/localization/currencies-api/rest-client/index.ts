@@ -1,4 +1,4 @@
-export { CurrenciesDjangoRESTApiClient } from './django-server.ts';
+export { CurrenciesHttpRESTApiClient } from './http-server.ts';
 export { CurrenciesMockRESTApiClient } from './mock-server.ts';
 export { CURRENCY_CATALOG } from './mock-seed.ts';
 

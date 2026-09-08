@@ -1,11 +1,11 @@
 import { webhookFromApi } from "../mutators";
 
 import type { WebhookEndpoint } from "@entity/configuration";
-import type { IWebhookRESTApiClient } from "../rest-client";
+import type { IWebhooksRESTApiClient } from "../rest-client";
 
 
 interface DeleteWebhookRequest {
-	handler: Pick<IWebhookRESTApiClient, 'delete'>;
+	handler: Pick<IWebhooksRESTApiClient, 'delete'>;
 	id: string;
 }
 

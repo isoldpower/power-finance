@@ -1,3 +1,4 @@
+import { toAmountString } from "@shared/api";
 import { PanelFooter } from "@shared/forms";
 import { BodyText, Text } from "@shared/pure-components/typography";
 import { ShowOn } from "@shared/visibility";
@@ -63,7 +64,7 @@ const ScanReceiptForm: FC<ScanReceiptFormProps> = ({ onClose }) => {
 								</ScanAmountCard.Label>
 								<ScanAmountCard.Value>
 									{formatMoney(
-										-scanProtected.amount,
+										toAmountString(-scanProtected.amount),
 										scanProtected.currency
 									)}
 								</ScanAmountCard.Value>

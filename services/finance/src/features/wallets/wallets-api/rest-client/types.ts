@@ -8,6 +8,9 @@ import type {
 import type {
 	WalletCreateBody,
 	WalletDetailDto,
+	WalletDetailParams,
+	WalletPeriodDto,
+	WalletReplaceBody,
 	WalletDto,
 	WalletPatchBody,
 	WalletSearchBody,
@@ -23,10 +26,10 @@ type WalletListResponse = CollectionResponse<WalletDto>;
 
 interface WalletGetRequest {
 	id: string;
-	params?: PageParams;
+	params?: WalletDetailParams;
 }
 
-type WalletGetResponse = ApiEnvelope<WalletDetailDto, EmbeddedMeta<'recent'>>;
+type WalletGetResponse = ApiEnvelope<WalletDetailDto, EmbeddedMeta<'recent', { period: WalletPeriodDto }>>;
 
 interface WalletPostRequest {
 	data: WalletCreateBody;
@@ -34,6 +37,13 @@ interface WalletPostRequest {
 }
 
 type WalletPostResponse = MutationResponse<WalletDto>;
+
+interface WalletPutRequest {
+	id: string;
+	data: WalletReplaceBody;
+}
+
+type WalletPutResponse = MutationResponse<WalletDto>;
 
 interface WalletPatchRequest {
 	id: string;
@@ -59,6 +69,7 @@ interface IWalletsRESTApiClient {
 	list: (request: WalletListRequest) => Promise<WalletListResponse>;
 	get: (request: WalletGetRequest) => Promise<WalletGetResponse>;
 	post: (request: WalletPostRequest) => Promise<WalletPostResponse>;
+	put: (request: WalletPutRequest) => Promise<WalletPutResponse>;
 	patch: (request: WalletPatchRequest) => Promise<WalletPatchResponse>;
 	delete: (request: WalletDeleteRequest) => Promise<WalletDeleteResponse>;
 	search: (request: WalletSearchRequest) => Promise<WalletSearchResponse>;
@@ -76,6 +87,8 @@ export type {
 	WalletPatchResponse,
 	WalletPostRequest,
 	WalletPostResponse,
+	WalletPutRequest,
+	WalletPutResponse,
 	WalletSearchRequest,
 	WalletSearchResponse,
 };

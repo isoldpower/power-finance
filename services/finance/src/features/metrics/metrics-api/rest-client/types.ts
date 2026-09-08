@@ -1,37 +1,15 @@
-import type { ApiEnvelope, CacheMeta } from "@shared/api";
-import type { BalanceMetricsDto, CashFlowDto, CashFlowParams, NetWorthDto, NetWorthParams } from "../types.ts";
+import type { ApiEnvelope } from "@shared/api";
+import type { MetricsDto, MetricsMetaDto, MetricsQuery } from "../types.ts";
 
 
-interface BalanceMetricsRequest {
-	params?: object;
+interface MetricsRequest {
+	params?: MetricsQuery;
 }
 
-type BalanceMetricsResponse = ApiEnvelope<BalanceMetricsDto, CacheMeta>;
-
-interface NetWorthRequest {
-	params?: NetWorthParams;
-}
-
-type NetWorthResponse = ApiEnvelope<NetWorthDto, CacheMeta & { since: string | null; points: number }>;
-
-interface CashFlowRequest {
-	params?: CashFlowParams;
-}
-
-type CashFlowResponse = ApiEnvelope<CashFlowDto, CacheMeta & { since: string | null }>;
+type MetricsResponse = ApiEnvelope<MetricsDto, MetricsMetaDto>;
 
 interface IMetricsRESTApiClient {
-	balance: (request: BalanceMetricsRequest) => Promise<BalanceMetricsResponse>;
-	netWorth: (request: NetWorthRequest) => Promise<NetWorthResponse>;
-	cashFlow: (request: CashFlowRequest) => Promise<CashFlowResponse>;
+	get: (request: MetricsRequest) => Promise<MetricsResponse>;
 }
 
-export type {
-	BalanceMetricsRequest,
-	BalanceMetricsResponse,
-	CashFlowRequest,
-	CashFlowResponse,
-	IMetricsRESTApiClient,
-	NetWorthRequest,
-	NetWorthResponse,
-};
+export type { IMetricsRESTApiClient, MetricsRequest, MetricsResponse };

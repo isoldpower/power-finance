@@ -21,12 +21,12 @@ interface TimezoneMeta {
 export type { CurrencyMeta, LocaleMeta, TimezoneMeta };
 
 interface Money {
-	amount: number;
+	amount: string;
 	currency: string;
 }
 
 interface ConvertedMoney {
-	amount: number;
+	amount: string;
 	currency: string;
 	formatted: string;
 	converted: boolean;
@@ -35,13 +35,13 @@ interface ConvertedMoney {
 interface MoneyConversion {
 	from: Money;
 	to: Money;
-	rate: number;
+	rate: string;
 	fetchedAt: string;
 }
 
 interface CurrencyRates {
 	base: string;
-	rates: Record<string, number>;
+	rates: Record<string, string>;
 	fetchedAt: string;
 }
 

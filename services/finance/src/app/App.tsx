@@ -1,15 +1,16 @@
 import { Suspense } from "react";
 import { AppLoader } from '@internal/ui-library';
 import { createRouter, RouterProvider } from "@tanstack/react-router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 
 import '@internal/ui-library/css';
 import './styles/_index.css'
 
+import { createQueryClient } from "./api/query-client.ts";
 import { routeTree } from "./routeTree.gen.ts";
 
 
-const queryClient = new QueryClient();
+const queryClient = createQueryClient();
 const router = createRouter({ routeTree });
 
 declare module '@tanstack/react-router' {

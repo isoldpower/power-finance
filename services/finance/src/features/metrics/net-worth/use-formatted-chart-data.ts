@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useConvertMoney } from "@feature/localization";
+import { absoluteAmount } from "@shared/api";
 
 import type { ChartPoint } from "./build-sparkline.ts";
 import type { Money } from "@entity/localization";
@@ -14,9 +15,9 @@ const useFormattedChartData = (netWorthValue: Money) => {
 			currency: netWorthValue.currency
 		}).formatted;
 	}, [convert, netWorthValue.currency]);
-	const formatDiff = useCallback((diff: number) => {
+	const formatDiff = useCallback((diff: string) => {
 		return convert({
-			amount: Math.abs(diff),
+			amount: absoluteAmount(diff),
 			currency: netWorthValue.currency,
 		}).formatted;
 	}, [convert, netWorthValue.currency]);

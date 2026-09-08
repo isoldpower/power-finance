@@ -1,3 +1,4 @@
+import { walletGradient } from "@entity/wallets";
 import { FinanceButton } from "@internal/ui-library";
 import { Caption, DisplayText } from "@shared/pure-components/typography";
 import { SlideOverTrigger } from "@shared/overlays";
@@ -21,7 +22,7 @@ const WalletDetailsThumbnail: FC<WalletDetailsThumbnailProps> = ({
 }) => {
 	return (
 		<div className="flex items-start gap-3.5">
-			<WalletSwatch size='lg' color={wallet.color} />
+			<WalletSwatch size='lg' color={walletGradient(wallet.color)} />
 			<div className="min-w-0 flex-1">
 				<DisplayText size="lg" truncate>
 					{wallet.name}

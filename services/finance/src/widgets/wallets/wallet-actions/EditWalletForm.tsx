@@ -1,3 +1,4 @@
+import { isNegativeAmount } from "@shared/api";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
@@ -86,7 +87,7 @@ const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, onClose }) => {
 					<WalletLockedField>
 						<WalletLockedField.Icon />
 						<WalletLockedField.Body>
-							<WalletLockedField.Value tone={wallet.balance.amount < 0 ? 'neg' : 'neutral'}>
+							<WalletLockedField.Value tone={isNegativeAmount(wallet.balance.amount) ? 'neg' : 'neutral'}>
 								{format(wallet.balance.amount, wallet.balance.currency)}
 							</WalletLockedField.Value>
 							<WalletLockedField.Hint>

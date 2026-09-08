@@ -1,26 +1,30 @@
 import { useMemo } from "react";
-import { useAxiosInstance } from "@internal/shared";
 
-import { ActionsMockRESTApiClient } from "@feature/assistance";
-import { API_BASE_PATH } from "../config.ts";
+import { ActionsHttpRESTApiClient, ActionsMockRESTApiClient } from "@feature/assistance";
+import { useResourceAxios } from "./use-resource-axios.ts";
+
 import type { IActionsRESTApiClient } from "@feature/assistance";
+import type { ApiServerOptions } from "./types.ts";
+
+
+const ACTIONS_PATH = '/actions';
 
 interface UseActionsApiResponse {
 	rest: IActionsRESTApiClient;
 }
 
-function useActionsApi(baseUrl: string): UseActionsApiResponse {
-	const actionsAxiosInstance = useAxiosInstance({
-		baseUrl: `${baseUrl}${API_BASE_PATH}/actions`
-	});
+function useActionsApi(options: ApiServerOptions): UseActionsApiResponse {
+	const axiosInstance = useResourceAxios(options, ACTIONS_PATH);
 
-	const restActionsClient = useMemo<IActionsRESTApiClient>(() => {
-		return new ActionsMockRESTApiClient();
-	}, [actionsAxiosInstance]);
+	const restClient = useMemo<IActionsRESTApiClient>(() => {
+		return options.mode === 'live'
+			? new ActionsHttpRESTApiClient(axiosInstance, options.versions)
+			: new ActionsMockRESTApiClient();
+	}, [axiosInstance, options.mode, options.versions]);
 
 	return useMemo(() => ({
-		rest: restActionsClient
-	}), [restActionsClient]);
+		rest: restClient
+	}), [restClient]);
 }
 
 export { useActionsApi };

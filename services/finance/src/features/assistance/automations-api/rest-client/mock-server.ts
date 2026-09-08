@@ -48,7 +48,7 @@ const orderAutomations = (automations: StoredAutomation[]): StoredAutomation[] =
 };
 
 const invalid = (field: string, code: 'required' | 'trigger_field_conflict' | 'effect_unknown_type' | 'effect_params_invalid' | 'effect_subject_mismatch', message: string): ApiError => {
-	return new ApiError('validation_failed', message, [{ field, code, message }]);
+	return new ApiError('validation_failed', message, { details: [{ field, code, message }] });
 };
 
 const subjectOf = (trigger: AutomationTriggerDto): TriggerSubject => {

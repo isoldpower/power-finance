@@ -1,3 +1,4 @@
+import { compareAmounts, ZERO_AMOUNT } from "@shared/api";
 import { useCallback } from "react";
 
 import { useTransactionsListMethods } from "@feature/transactions";
@@ -24,7 +25,7 @@ const DeleteGoalDialog: FC<DeleteGoalDialogProps> = ({ goal, children }) => {
 
 	const deleteGoal = useCallback((disposition: GoalDisposition, onDeleted: () => void) => {
 		const saved = goal.progress.amount;
-		const hasSavings = saved > 0;
+		const hasSavings = compareAmounts(saved, ZERO_AMOUNT) > 0;
 
 		const run = async () => {
 			if (hasSavings && disposition.mode === 'transfer' && disposition.toWalletId !== '') {

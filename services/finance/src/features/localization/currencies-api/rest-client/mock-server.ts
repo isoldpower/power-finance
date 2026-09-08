@@ -43,19 +43,23 @@ class CurrenciesMockRESTApiClient implements ICurrenciesRESTApiClient {
 		const amount = payload.params.amount;
 
 		if (!isCanonicalAmount(amount)) {
-			throw new ApiError('validation_failed', 'Amount is not a canonical decimal string', [
-				{ field: 'amount', code: 'amount_malformed', message: 'Amount must be a canonical decimal string' },
-			]);
+			throw new ApiError('validation_failed', 'Amount is not a canonical decimal string', {
+				details: [{
+					field: 'amount',
+					code: 'amount_malformed',
+					message: 'Amount must be a canonical decimal string',
+				}],
+			});
 		}
 
 		if (fractionDigits(amount) > from.decimals) {
-			throw new ApiError('validation_failed', 'Amount carries too many fraction digits', [
-				{
+			throw new ApiError('validation_failed', 'Amount carries too many fraction digits', {
+				details: [{
 					field: 'amount',
 					code: 'amount_precision',
 					message: `${from.code} allows ${String(from.decimals)} fraction digits`,
-				},
-			]);
+				}],
+			});
 		}
 
 		await delay();

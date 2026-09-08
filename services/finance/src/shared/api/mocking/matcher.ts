@@ -15,12 +15,14 @@ function scalarOf(leaf: FilterLeaf, field: string): string {
 	if (Array.isArray(leaf.value)) {
 		throw new ApiError(
 			'validation_failed',
-			'Filter value must be a scalar', 
-			[{
-				field: `filter_body.${field}`,
-				code: 'filter_value_type',
-				message: `${leaf.operator} expects a scalar`,
-			}]
+			'Filter value must be a scalar',
+			{
+				details: [{
+					field: `filter_body.${field}`,
+					code: 'filter_value_type',
+					message: `${leaf.operator} expects a scalar`,
+				}],
+			},
 		);
 	}
 
@@ -35,11 +37,13 @@ const compare = (
 ): boolean => {
 	if (compareLeaf.operator === 'in') {
 		if (!Array.isArray(compareLeaf.value)) {
-			throw new ApiError('validation_failed', 'Filter value must be an array', [{
-				field: `filter_body.${field}`,
-				code: 'filter_value_type',
-				message: 'in expects an array of scalars',
-			}]);
+			throw new ApiError('validation_failed', 'Filter value must be an array', {
+				details: [{
+					field: `filter_body.${field}`,
+					code: 'filter_value_type',
+					message: 'in expects an array of scalars',
+				}],
+			});
 		}
 
 		return actualValue !== null && compareLeaf.value.includes(actualValue);
@@ -80,17 +84,21 @@ const assertLeaf = <TField extends string>(
 	const allowed = whitelist[leaf.field_name];
 
 	if (!allowed) {
-		throw new ApiError('validation_failed', `Field ${leaf.field_name} is not filterable`, [{
-			field: `filter_body.${leaf.field_name}`,
-			code: 'filter_unknown_field',
-			message: 'Field is not whitelisted for this resource',
-		}]);
+		throw new ApiError('validation_failed', `Field ${leaf.field_name} is not filterable`, {
+			details: [{
+				field: `filter_body.${leaf.field_name}`,
+				code: 'filter_unknown_field',
+				message: 'Field is not whitelisted for this resource',
+			}],
+		});
 	} else if (!allowed.includes(leaf.operator)) {
-		throw new ApiError('validation_failed', `Operator ${leaf.operator} is not allowed`, [{
-			field: `filter_body.${leaf.field_name}`,
-			code: 'filter_operator_not_allowed',
-			message: `${leaf.operator} is not permitted on ${leaf.field_name}`,
-		}]);
+		throw new ApiError('validation_failed', `Operator ${leaf.operator} is not allowed`, {
+			details: [{
+				field: `filter_body.${leaf.field_name}`,
+				code: 'filter_operator_not_allowed',
+				message: `${leaf.operator} is not permitted on ${leaf.field_name}`,
+			}],
+		});
 	}
 
 	return allowed;

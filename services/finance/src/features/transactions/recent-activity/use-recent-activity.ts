@@ -36,7 +36,6 @@ const groupRecentByDay = (transactions: Transaction[]): RecentActivityGroup[] =>
 
 const useRecentActivity = () => {
 	const { transactions, isPending } = useTransactionsSearch(RECENT_QUERY, {
-		order: 'DESC',
 		limit: TXN_CAP,
 	});
 

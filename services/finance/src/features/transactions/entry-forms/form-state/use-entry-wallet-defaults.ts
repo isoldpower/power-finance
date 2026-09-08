@@ -1,17 +1,44 @@
 import { useMemo } from "react";
 
 import type { Wallet } from "@entity/wallets";
+import type { TransactionEntryValues } from "../types.ts";
 
 
-const useEntryWalletDefaults = (wallets: Wallet[]) => {
-	return useMemo(() => {
-		if (wallets.length === 0) return { fromWallet: '', toWallet: '' };
+type EntryType = TransactionEntryValues['type'];
 
-		const first = wallets[0];
-		const second = wallets.find((wallet) => wallet.id !== first.id);
-
-		return { fromWallet: first.id, toWallet: second?.id ?? '' };
-	}, [wallets]);
+interface EntryWallets {
+	fromWallet: string;
+	toWallet: string;
 }
 
-export { useEntryWalletDefaults };
+const EMPTY_WALLETS: EntryWallets = { fromWallet: '', toWallet: '' };
+
+const walletDefaultsFor = (
+	type: EntryType,
+	wallets: Wallet[],
+	preferredWalletId?: string,
+): EntryWallets => {
+	if (wallets.length === 0) {
+		return EMPTY_WALLETS;
+	}
+
+	const preferred = wallets.find((wallet) => wallet.id === preferredWalletId) ?? wallets[0];
+	const counterpart = wallets.find((wallet) => wallet.id !== preferred.id);
+
+	return type === 'income'
+		? { fromWallet: counterpart?.id ?? '', toWallet: preferred.id }
+		: { fromWallet: preferred.id, toWallet: counterpart?.id ?? '' };
+};
+
+const useEntryWalletDefaults = (
+	wallets: Wallet[],
+	type: EntryType,
+	preferredWalletId?: string,
+): EntryWallets => {
+	return useMemo(() => {
+		return walletDefaultsFor(type, wallets, preferredWalletId);
+	}, [type, wallets, preferredWalletId]);
+}
+
+export { useEntryWalletDefaults, walletDefaultsFor };
+export type { EntryType, EntryWallets };

@@ -1,3 +1,4 @@
+import { walletGradient } from "../visual-map";
 import type { Wallet } from "../types.ts";
 import type { WalletSelectItem } from "../form-fields";
 
@@ -7,7 +8,7 @@ const toWalletSelectOptions = (wallets: Wallet[]): WalletSelectItem[] => {
 		id: wallet.id,
 		name: wallet.name,
 		currency: wallet.balance.currency,
-		gradient: wallet.color,
+		gradient: walletGradient(wallet.color),
 	}));
 };
 

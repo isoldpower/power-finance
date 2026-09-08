@@ -5,6 +5,7 @@ const CATEGORY_ID: Record<AccountGroup, string> = {
 	assets: 'assets',
 	liabilities: 'liabilities',
 	equity: 'equity',
+	ungrouped: 'ungrouped',
 };
 
 const CATEGORY_ORDER: AccountGroup[] = ['assets', 'liabilities', 'equity'];

@@ -7,9 +7,11 @@ import { sanitizeAmountInput } from "@shared/formatting";
 import { quickAddSchema } from "./quick-add-schema.ts";
 import type { QuickAddSchema } from "./quick-add-schema.ts";
 
+const RATE = '1.087';
+
 vi.mock("@feature/localization", () => ({
 	useCurrencyPairRate: (from: string, to: string) => ({
-		rate: from === to ? 1 : 1.087,
+		rate: from === to ? '1' : RATE,
 		isPending: false,
 	}),
 }));
@@ -23,11 +25,9 @@ const { useEntryWalletOptions } = await import("../form-state/use-entry-wallet-o
 const { useQuickAddInitials } = await import("./use-quick-add-initials.ts");
 
 const WALLETS = [
-	{ id: 'a', name: 'A', balance: { amount: 0, currency: 'USD' }, color: 'x' },
-	{ id: 'b', name: 'B', balance: { amount: 0, currency: 'EUR' }, color: 'y' },
+	{ id: 'a', name: 'A', balance: { amount: '0.00', currency: 'USD' }, color: 'x' },
+	{ id: 'b', name: 'B', balance: { amount: '0.00', currency: 'EUR' }, color: 'y' },
 ] as never[];
-
-const RATE = 1.087;
 
 const renderQuickAddHooks = (counter: { renders: number }) => renderHook(() => {
 	counter.renders += 1;
@@ -45,7 +45,7 @@ const renderQuickAddHooks = (counter: { renders: number }) => renderHook(() => {
 	useEntryFormState(form);
 	useEntryWalletOptions(WALLETS, form);
 	const transfer = useCrossCurrencyTransfer(fromCurrency, toCurrency, form);
-	useEntryTypeEffects(defaultValues, form);
+	useEntryTypeEffects(defaultValues, form, { wallets: WALLETS });
 
 	return { form, transfer };
 });
@@ -79,7 +79,7 @@ describe("quick-add amount sync", () => {
 		typeInto(result, 'sent', ['1', '2', '3', '.', '5']);
 
 		expect(result.current.form.getValues('amount')).toBe('123.5');
-		expect(result.current.form.getValues('receiveAmount')).toBe((123.5 * RATE).toFixed(2));
+		expect(result.current.form.getValues('receiveAmount')).toBe('134.24');
 	});
 
 	it("preserves what the user types into the receive field", () => {
@@ -90,7 +90,7 @@ describe("quick-add amount sync", () => {
 		typeInto(result, 'received', ['5', '0', '.', '2', '5']);
 
 		expect(result.current.form.getValues('receiveAmount')).toBe('50.25');
-		expect(result.current.form.getValues('amount')).toBe((50.25 / RATE).toFixed(2));
+		expect(result.current.form.getValues('amount')).toBe('46.23');
 	});
 
 	it("settles without a render loop while editing", () => {

@@ -1,19 +1,17 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useApiContext } from "@app/api";
+import { staleRefetchInterval, useApiContext } from "@app/api";
 import { stringifySorted } from "@shared/data";
 import { searchTransactions } from "../transactions-api";
 import { CACHE_KEYS } from "./config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import type { PageParams, SearchOrder } from "@shared/api";
+import type { PageParams } from "@shared/api";
 import type { Transaction, TransactionQuery } from "@entity/transactions";
 import type { SearchTransactionsResponse } from "../transactions-api";
 
 
-interface UseTransactionsSearchParams extends PageParams {
-	order?: SearchOrder;
-}
+type UseTransactionsSearchParams = PageParams;
 
 type UseTransactionsSearchOptions = Omit<
 	UseQueryOptions<SearchTransactionsResponse>,
@@ -39,16 +37,15 @@ const useTransactionsSearch = (
 		queryKey: [
 			CACHE_KEYS.search,
 			stringifySorted(query),
-			params?.order ?? 'DESC',
 			params?.limit ?? 'default',
 			params?.cursor ?? 'first',
 		],
 		queryFn: () => searchTransactions({
 			handler: apiContext.transactionServers.rest,
 			query,
-			order: params?.order,
 			page: { limit: params?.limit, cursor: params?.cursor },
 		}),
+		refetchInterval: (searchQuery) => staleRefetchInterval(searchQuery.state.error),
 		...options ?? {},
 	});
 

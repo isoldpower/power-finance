@@ -4,22 +4,24 @@ import { CURRENCY_CATALOG } from "@feature/localization/currencies-api";
 import { TRANSACTIONS_STORAGE_KEY, walletDelta } from "@feature/transactions/transactions-api";
 import { WALLETS_STORAGE_KEY } from "@feature/wallets/wallets-api";
 import { GOALS_STORAGE_KEY } from "@feature/wallets/goals-api";
+import { POINTS_MAX, POINTS_MIN } from "../types.ts";
 import type { IStorage } from "@internal/shared";
 import type { MoneyDto } from "@shared/api";
 import type { StoredTransaction } from "@feature/transactions/transactions-api";
 import type { StoredWallet } from "@feature/wallets/wallets-api";
 import type { StoredGoal } from "@feature/wallets/goals-api";
-import type { NetDiffDirectionDto, NetWorthPointDto } from "../types.ts";
 import type {
-	BalanceMetricsRequest, BalanceMetricsResponse,
-	CashFlowRequest, CashFlowResponse,
-	IMetricsRESTApiClient,
-	NetWorthRequest, NetWorthResponse,
-} from "./types.ts";
+	BalanceMetricsDto,
+	CashFlowDto,
+	MetricsQuery,
+	NetDiffDirectionDto,
+	NetWorthDto,
+	NetWorthPointDto,
+} from "../types.ts";
+import type { IMetricsRESTApiClient, MetricsRequest, MetricsResponse } from "./types.ts";
 
 const PREFERRED_CURRENCY = 'USD';
 const DEFAULT_SERIES_POINTS = 10;
-const DEFAULT_WINDOW_DAYS = 30;
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 const FLAT_THRESHOLD = 0.01;
 
@@ -43,6 +45,12 @@ const direction = (current: number, start: number): NetDiffDirectionDto => {
 	if (Math.abs(current - start) < FLAT_THRESHOLD) return 'flat';
 
 	return current > start ? 'up' : 'down';
+};
+
+const isSelected = (selector: boolean | undefined): boolean => selector !== false;
+
+const clampPoints = (points: number | undefined): number => {
+	return Math.min(Math.max(points ?? DEFAULT_SERIES_POINTS, POINTS_MIN), POINTS_MAX);
 };
 
 class MetricsMockRESTApiClient implements IMetricsRESTApiClient {
@@ -91,40 +99,31 @@ class MetricsMockRESTApiClient implements IMetricsRESTApiClient {
 		return [...wallets, ...goals];
 	}
 
-	public async balance(_payload: BalanceMetricsRequest): Promise<BalanceMetricsResponse> {
-		await delay();
-
+	private balanceSheet(): BalanceMetricsDto {
 		const balances = this.holderBalancesUsd();
 		const assets = balances.reduce((sum, value) => (value > 0 ? sum + value : sum), 0);
 		const liabilities = balances.reduce((sum, value) => (value < 0 ? sum - value : sum), 0);
 
 		return {
-			data: {
-				assets: money(assets),
-				liabilities: money(liabilities),
-				equity: money(assets - liabilities),
-				balanced: true,
-				comments: null,
-			},
-			meta: { cached: false },
+			assets: money(assets),
+			liabilities: money(liabilities),
+			equity: money(assets - liabilities),
+			balanced: true,
+			comments: null,
 		};
 	}
 
-	public async netWorth(payload: NetWorthRequest): Promise<NetWorthResponse> {
-		await delay();
-
-		const points = payload.params?.points ?? DEFAULT_SERIES_POINTS;
-		const since = payload.params?.since ?? null;
+	private netWorth(since: number | null, points: number): NetWorthDto {
 		const ledger = this.ledger();
 		const baseline = this.baselineUsd();
 		const current = baseline + ledger.reduce((sum, entry) => sum + entry.usd, 0);
 		const now = Date.now();
-		const from = since ? new Date(since).getTime() : now - DEFAULT_WINDOW_DAYS * DAY_IN_MS;
+		const from = since ?? ledger.at(0)?.time ?? now - DAY_IN_MS;
 		const span = Math.max(now - from, DAY_IN_MS);
 		const valueAt = (cutoff: number): number => baseline
 			+ ledger.reduce((sum, entry) => (entry.time <= cutoff ? sum + entry.usd : sum), 0);
 
-		const series: NetWorthPointDto[] = Array.from({ length: Math.max(points, 1) }, (_, index) => {
+		const series: NetWorthPointDto[] = Array.from({ length: points }, (_, index) => {
 			const progress = points > 1 ? index / (points - 1) : 1;
 			const time = from + span * progress;
 
@@ -132,27 +131,21 @@ class MetricsMockRESTApiClient implements IMetricsRESTApiClient {
 		});
 
 		const start = parseAmount(series[0].money.amount);
-		const percentage = start !== 0 ? Math.abs(((current - start) / Math.abs(start)) * 100) : 0;
+		const percentage = start === 0
+			? null
+			: Math.round(Math.abs(((current - start) / Math.abs(start)) * 100) * 100) / 100;
 
 		return {
-			data: {
-				money: money(current),
-				net_diff: {
-					percentage: Math.round(percentage * 100) / 100,
-					direction: direction(current, start),
-				},
-				series,
-			},
-			meta: { since, points, cached: false },
+			money: money(current),
+			net_diff: { percentage, direction: direction(current, start) },
+			series,
 		};
 	}
 
-	public async cashFlow(payload: CashFlowRequest): Promise<CashFlowResponse> {
-		await delay();
-
-		const since = payload.params?.since ?? null;
-		const cutoff = since ? new Date(since).getTime() : 0;
-		const within = this.settled().filter((item) => new Date(item.created_at).getTime() >= cutoff);
+	private cashFlow(since: number | null): CashFlowDto {
+		const within = this.settled().filter((item) => (
+			item.chain_id === null && new Date(item.created_at).getTime() >= (since ?? 0)
+		));
 		const sumOf = (type: StoredTransaction['type']): number => within
 			.filter((item) => item.type === type)
 			.reduce((sum, item) => sum + toUsd(parseAmount(item.amount), item.currency), 0);
@@ -162,13 +155,41 @@ class MetricsMockRESTApiClient implements IMetricsRESTApiClient {
 		const net = inflow - outflow;
 
 		return {
+			inflow: money(inflow),
+			outflow: money(outflow),
+			total_net: money(net),
+			savings_rate: inflow > 0 ? Math.round((net / inflow) * 10000) / 100 : null,
+		};
+	}
+
+	private sections(params: MetricsQuery | undefined): string[] {
+		return [
+			isSelected(params?.balance) ? 'balance' : null,
+			isSelected(params?.netWorth) ? 'net_worth' : null,
+			isSelected(params?.cashFlow) ? 'cash_flow' : null,
+		].filter((section): section is string => section !== null);
+	}
+
+	public async get(payload: MetricsRequest): Promise<MetricsResponse> {
+		await delay();
+
+		const { params } = payload;
+		const since = params?.since ?? null;
+		const sinceTime = since === null ? null : new Date(since).getTime();
+		const points = clampPoints(params?.points);
+
+		return {
 			data: {
-				inflow: money(inflow),
-				outflow: money(outflow),
-				total_net: money(net),
-				savings_rate: inflow > 0 ? Math.round((net / inflow) * 10000) / 100 : 0,
+				balance: isSelected(params?.balance) ? this.balanceSheet() : null,
+				net_worth: isSelected(params?.netWorth) ? this.netWorth(sinceTime, points) : null,
+				cash_flow: isSelected(params?.cashFlow) ? this.cashFlow(sinceTime) : null,
 			},
-			meta: { since, cached: false },
+			meta: {
+				since,
+				points,
+				sections: this.sections(params),
+				cached: false,
+			},
 		};
 	}
 }

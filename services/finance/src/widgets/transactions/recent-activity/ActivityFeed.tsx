@@ -1,3 +1,4 @@
+import { isNegativeAmount } from "@shared/api";
 import { useMemo } from "react";
 import {
 	ActivityGroupHeader,
@@ -43,7 +44,7 @@ const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 						<Overline as="span" size="10" tracking="0.1em">
 							{day.dayLabel}
 						</Overline>
-						<ActivityGroupHeader.Money positive={day.dayTotal >= 0}>
+						<ActivityGroupHeader.Money positive={!isNegativeAmount(day.dayTotal)}>
 							{formatCurrency(day.dayTotal, targetCurrency)}
 						</ActivityGroupHeader.Money>
 					</ActivityGroupHeader>

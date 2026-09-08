@@ -1,9 +1,9 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 
 import { isApiError } from '@shared/api';
-import { WebhookMockRESTApiClient } from './mock-server.ts';
+import { WebhooksMockRESTApiClient } from './mock-server.ts';
 
-let client: WebhookMockRESTApiClient;
+let client: WebhooksMockRESTApiClient;
 
 const draft = (title = 'Ledger sync', url = 'https://hooks.example.com/finance/ledger') => ({
 	title,
@@ -21,10 +21,10 @@ beforeEach(() => {
 		clear: () => { store.clear(); },
 	});
 
-	client = new WebhookMockRESTApiClient('webhooks-test', 'subscriptions-test', 'deliveries-test');
+	client = new WebhooksMockRESTApiClient('webhooks-test', 'subscriptions-test', 'deliveries-test');
 });
 
-describe('WebhookMockRESTApiClient', () => {
+describe('WebhooksMockRESTApiClient', () => {
 	test('returns the secret on creation and never on a read', async () => {
 		const created = await client.post({ data: draft('Alerts', 'https://hooks.example.com/alerts') });
 		const fetched = await client.get({ id: created.data.id });

@@ -1,3 +1,5 @@
+import { ZERO_AMOUNT } from "@shared/api";
+
 import { z } from "zod";
 
 import type { WalletDraft, WalletPatch } from "@entity/wallets";
@@ -13,13 +15,13 @@ const walletFieldsShape = {
 
 const buildWalletDraft = (
 	values: WalletFormSchema,
-	gradient: string,
-	openingBalance: number
+	color: string,
+	openingBalance: string
 ): WalletDraft => ({
 	name: values.name.trim(),
-	color: gradient,
+	color,
 	openingBalance,
-	zeroBalance: 0,
+	zeroBalance: ZERO_AMOUNT,
 	currency: values.currency,
 	category: values.category.trim(),
 });

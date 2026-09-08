@@ -22,9 +22,11 @@ async function listAssistantMessages(
 		params: request.page
 	});
 
-	return { 
+	const oldestFirst = [...response.data].reverse();
+
+	return {
 		page: pageFromMeta(
-			response.data.map(assistantMessageFromApi),
+			oldestFirst.map(assistantMessageFromApi),
 			response.meta,
 		)
 	};

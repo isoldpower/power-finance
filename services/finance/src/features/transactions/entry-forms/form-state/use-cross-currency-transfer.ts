@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useWatch } from "react-hook-form";
 import { useCurrencyPairRate } from "@feature/localization";
+import { divideAmount, isCanonicalAmount, isZeroAmount, multiplyAmount } from "@shared/api";
+import { currencyFractionDigits, sanitizeAmountInput } from "@shared/formatting";
 
 import type { Control, FieldValues, UseFormReturn } from "react-hook-form";
 import type { TransactionEntryValues } from "../types.ts";
@@ -24,39 +26,45 @@ const useCrossCurrencyTransfer = <T extends TransactionEntryValues & FieldValues
 	});
 	const lastEditedSide = useRef<'sent' | 'received'>('sent');
 
-	const scaleAmount = useCallback((value: string, factor: number): string => {
-		const numericValue = parseFloat(value);
-		const scaledValue = numericValue * factor;
-		if (!Number.isFinite(scaledValue)) {
-			return '';
-		}
+	const applyRate = useCallback((value: string): string => {
+		const sanitized = sanitizeAmountInput(value);
 
-		return scaledValue.toFixed(2);
-	}, []);
+		return isCanonicalAmount(sanitized)
+			? multiplyAmount(sanitized, rate, currencyFractionDigits(toCurrency))
+			: '';
+	}, [rate, toCurrency]);
+
+	const reverseRate = useCallback((value: string): string => {
+		const sanitized = sanitizeAmountInput(value);
+
+		return isCanonicalAmount(sanitized) && !isZeroAmount(rate)
+			? divideAmount(sanitized, rate, currencyFractionDigits(fromCurrency))
+			: '';
+	}, [rate, fromCurrency]);
 
 	const handleSentChange = useCallback((value: string) => {
 		lastEditedSide.current = 'sent';
 		setValue('amount', value, { shouldValidate: true, shouldDirty: true });
-		setValue('receiveAmount', scaleAmount(value, rate), { shouldValidate: true });
-	}, [setValue, scaleAmount, rate]);
+		setValue('receiveAmount', applyRate(value), { shouldValidate: true });
+	}, [setValue, applyRate]);
 
 	const handleReceivedChange = useCallback((value: string) => {
 		lastEditedSide.current = 'received';
 		setValue('receiveAmount', value, { shouldValidate: true, shouldDirty: true });
-		setValue('amount', scaleAmount(value, 1 / rate), { shouldValidate: true });
-	}, [setValue, scaleAmount, rate]);
+		setValue('amount', reverseRate(value), { shouldValidate: true });
+	}, [setValue, reverseRate]);
 
 	useEffect(() => {
 		if (type !== 'transfer') return;
 
 		const values = getValues();
 		if (lastEditedSide.current === 'received') {
-			setValue('amount', scaleAmount(values.receiveAmount, 1 / rate), { shouldValidate: true });
+			setValue('amount', reverseRate(values.receiveAmount), { shouldValidate: true });
 			return;
 		}
 
-		setValue('receiveAmount', scaleAmount(values.amount, rate), { shouldValidate: true });
-	}, [rate, type, getValues, setValue, scaleAmount]);
+		setValue('receiveAmount', applyRate(values.amount), { shouldValidate: true });
+	}, [type, getValues, setValue, applyRate, reverseRate]);
 
 	return { handleSentChange, handleReceivedChange };
 }

@@ -1,3 +1,5 @@
+import { absoluteAmount } from "@shared/api";
+
 import { IN_TEMPORARY_ID, OUT_TEMPORARY_ID } from "./constants";
 
 import type { TransactionChainEntryDraft } from "@entity/transactions";
@@ -6,7 +8,7 @@ import type { TransactionChainEntryDraft } from "@entity/transactions";
 interface TransferLeg {
 	walletId: string;
 	currency: string;
-	amount: number;
+	amount: string;
 }
 
 function buildTransferChain(
@@ -21,7 +23,7 @@ function buildTransferChain(
 			after: null,
 			name,
 			currency: sent.currency,
-			amount: Math.abs(sent.amount),
+			amount: absoluteAmount(sent.amount),
 			walletId: sent.walletId,
 			origin: 'manual',
 			type: 'expense',
@@ -33,7 +35,7 @@ function buildTransferChain(
 			after: OUT_TEMPORARY_ID,
 			name,
 			currency: received.currency,
-			amount: Math.abs(received.amount),
+			amount: absoluteAmount(received.amount),
 			walletId: received.walletId,
 			origin: 'manual',
 			type: 'income',

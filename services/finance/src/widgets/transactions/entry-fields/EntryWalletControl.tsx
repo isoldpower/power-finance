@@ -1,5 +1,6 @@
 import { UiFormField } from "@internal/ui-library";
-import { selectedWalletOption, WalletSelectField } from "@entity/wallets";
+import { selectedWalletOption } from "@entity/wallets";
+import { WalletCombobox } from "@widget/wallets/wallet-select";
 
 import type { FC, ReactNode } from "react";
 import type { Control, FieldValues, Path } from "react-hook-form";
@@ -34,7 +35,7 @@ const EntryWalletControl = <TValues extends FieldValues>({
 		name={name}
 		disabled={disabled}
 		render={({ field }) => (
-			<WalletSelectField
+			<WalletCombobox
 				options={options}
 				selected={selectedWalletOption(options, String(field.value))}
 				emptyLabel={emptyLabel}

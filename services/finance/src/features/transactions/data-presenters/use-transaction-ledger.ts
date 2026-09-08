@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useApiContext } from "@app/api";
 import { fetchTransaction } from "../transactions-api";
-import { CACHE_KEYS } from "./config.ts";
+import { CACHE_KEYS, LEDGER_DISPATCH_POLL_MS } from "./config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { TransactionPosting } from "@entity/transactions";
@@ -16,6 +16,13 @@ type UseTransactionLedgerOptions = Omit<
 
 type UseTransactionLedgerReturn = UseQueryResult<FetchTransactionResponse> & {
 	entries: TransactionPosting[];
+	dispatching: boolean;
+};
+
+const EMPTY_POSTINGS: TransactionPosting[] = [];
+
+const isDispatching = (response: FetchTransactionResponse | undefined): boolean => {
+	return response !== undefined && response.postings.length === 0;
 };
 
 const useTransactionLedger = (
@@ -30,12 +37,16 @@ const useTransactionLedger = (
 			id,
 		}),
 		enabled: id !== '',
+		refetchInterval: (ledgerQuery) => (
+			isDispatching(ledgerQuery.state.data) ? LEDGER_DISPATCH_POLL_MS : false
+		),
 		...options ?? {},
 	});
 
 	return useMemo(() => ({
 		...query,
-		entries: query.data?.postings.items ?? [],
+		entries: query.data?.postings ?? EMPTY_POSTINGS,
+		dispatching: isDispatching(query.data),
 	}), [query]);
 };
 

@@ -11,7 +11,10 @@ interface StreamHandlers {
 	onMessage: (message: StreamMessage) => void;
 	onError?: (error: ApiError) => void;
 	onClose?: () => void;
+	onReconnect?: () => void;
 }
+
+type TokenSource = () => Promise<string | null>;
 
 interface StreamRequestInit {
 	url: string;
@@ -20,8 +23,10 @@ interface StreamRequestInit {
 	body?: unknown;
 	lastEventId?: string | null;
 	signal?: AbortSignal;
+	authorize?: TokenSource;
+	reconnect?: boolean;
 }
 
 type Unsubscribe = () => void;
 
-export type { StreamHandlers, StreamMessage, StreamRequestInit, Unsubscribe };
+export type { StreamHandlers, StreamMessage, StreamRequestInit, TokenSource, Unsubscribe };

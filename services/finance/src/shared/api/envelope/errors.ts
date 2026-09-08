@@ -1,4 +1,4 @@
-type ApiErrorCode =
+type KnownApiErrorCode =
 	| 'bad_request'
 	| 'validation_failed'
 	| 'unauthorized'
@@ -6,6 +6,9 @@ type ApiErrorCode =
 	| 'not_found'
 	| 'rate_limited'
 	| 'internal_error'
+	| 'service_unavailable'
+	| 'conflict'
+	| 'insufficient_funds'
 	| 'idempotency_key_required'
 	| 'idempotency_key_reuse'
 	| 'idempotency_key_in_flight'
@@ -25,8 +28,11 @@ type ApiErrorCode =
 	| 'unsupported_currency'
 	| 'rate_unavailable';
 
-type ApiDetailCode =
+type ApiErrorCode = KnownApiErrorCode | (string & {});
+
+type KnownApiDetailCode =
 	| 'required'
+	| 'invalid'
 	| 'unknown_field'
 	| 'amount_malformed'
 	| 'amount_precision'
@@ -45,6 +51,8 @@ type ApiDetailCode =
 	| 'filter_value_type'
 	| 'filter_malformed_group'
 	| 'filter_malformed_node';
+
+type ApiDetailCode = KnownApiDetailCode | (string & {});
 
 interface ApiErrorDetail {
 	field: string;
@@ -73,7 +81,7 @@ interface ApiErrorPayload {
 	meta?: Partial<ApiErrorMeta>;
 }
 
-const ERROR_STATUS: Record<ApiErrorCode, number> = {
+const FALLBACK_STATUS: Record<KnownApiErrorCode, number> = {
 	bad_request: 400,
 	validation_failed: 422,
 	unauthorized: 401,
@@ -81,6 +89,9 @@ const ERROR_STATUS: Record<ApiErrorCode, number> = {
 	not_found: 404,
 	rate_limited: 429,
 	internal_error: 500,
+	service_unavailable: 503,
+	conflict: 409,
+	insufficient_funds: 409,
 	idempotency_key_required: 400,
 	idempotency_key_reuse: 409,
 	idempotency_key_in_flight: 409,
@@ -101,28 +112,49 @@ const ERROR_STATUS: Record<ApiErrorCode, number> = {
 	rate_unavailable: 409,
 };
 
+const UNMAPPED_STATUS = 500;
+
+const STALE_READ_STATUS = 507;
+
+const STATUS_LOOKUP = new Map<string, number>(Object.entries(FALLBACK_STATUS));
+
+function statusForCode(code: ApiErrorCode): number {
+	return STATUS_LOOKUP.get(code) ?? UNMAPPED_STATUS;
+}
+
+interface ApiErrorOptions {
+	details?: ApiErrorDetail[];
+	requestId?: string | null;
+	status?: number | null;
+	retryAfterSeconds?: number | null;
+	enveloped?: boolean;
+}
+
 class ApiError extends Error {
 	public readonly code: ApiErrorCode;
 	public readonly status: number;
 	public readonly details: ApiErrorDetail[];
 	public readonly requestId: string | null;
+	public readonly retryAfterSeconds: number | null;
+	public readonly enveloped: boolean;
 
 	constructor(
 		code: ApiErrorCode,
 		message: string,
-		details: ApiErrorDetail[] = [],
-		requestId: string | null = null,
+		options: ApiErrorOptions = {},
 	) {
 		super(message);
 		this.name = 'ApiError';
 		this.code = code;
-		this.status = ERROR_STATUS[code];
-		this.details = details;
-		this.requestId = requestId;
+		this.status = options.status ?? statusForCode(code);
+		this.details = options.details ?? [];
+		this.requestId = options.requestId ?? null;
+		this.retryAfterSeconds = options.retryAfterSeconds ?? null;
+		this.enveloped = options.enveloped ?? true;
 	}
 }
 
-export { ApiError, ERROR_STATUS };
+export { ApiError, FALLBACK_STATUS, STALE_READ_STATUS, statusForCode };
 export type {
 	ApiDetailCode,
 	ApiErrorBody,
@@ -130,5 +162,8 @@ export type {
 	ApiErrorDetail,
 	ApiErrorEnvelope,
 	ApiErrorMeta,
-	ApiErrorPayload
+	ApiErrorOptions,
+	ApiErrorPayload,
+	KnownApiDetailCode,
+	KnownApiErrorCode,
 };

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { selectedWalletOption, toWalletSelectOptions } from "@entity/wallets";
+import { compareAmounts, ZERO_AMOUNT } from "@shared/api";
 import { useLocaleCurrency } from "@shared/formatting";
 import { useWalletsList } from "../data-presenters";
 
@@ -24,7 +25,7 @@ const useGoalDisposition = (goal: Goal): UseGoalDispositionReturn => {
 	const { wallets } = useWalletsList();
 	const formatCurrency = useLocaleCurrency();
 
-	const hasSavings = goal.progress.amount > 0;
+	const hasSavings = compareAmounts(goal.progress.amount, ZERO_AMOUNT) > 0;
 	const savedAmount = formatCurrency(goal.progress.amount, goal.progress.currency);
 	const walletOptions = useMemo(() => toWalletSelectOptions(wallets), [wallets]);
 

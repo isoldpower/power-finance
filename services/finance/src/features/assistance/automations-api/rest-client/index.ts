@@ -1,4 +1,4 @@
-export { AutomationsDjangoRESTApiClient } from './django-server.ts';
+export { AutomationsHttpRESTApiClient } from './http-server.ts';
 export { AutomationsMockRESTApiClient } from './mock-server.ts';
 export { AUTOMATIONS_STORAGE_KEY } from './mock-seed.ts';
 

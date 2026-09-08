@@ -8,6 +8,8 @@ import type {
 	WebhookEventTypeDto,
 	WebhookListParams,
 	WebhookPatchBody,
+	WebhookSearchBody,
+	WebhookSearchParams,
 	WebhookSecretDto,
 	WebhookSubscriptionDto,
 } from "../types.ts";
@@ -24,6 +26,13 @@ interface WebhookGetRequest {
 }
 
 type WebhookGetResponse = ResourceResponse<WebhookDto>;
+
+interface WebhookSearchRequest {
+	data: WebhookSearchBody;
+	params?: WebhookSearchParams;
+}
+
+type WebhookSearchResponse = CollectionResponse<WebhookDto>;
 
 interface WebhookPostRequest {
 	data: WebhookCreateBody;
@@ -87,9 +96,10 @@ interface DeliveryListRequest {
 
 type DeliveryListResponse = CollectionResponse<WebhookDeliveryDto>;
 
-interface IWebhookRESTApiClient {
+interface IWebhooksRESTApiClient {
 	list: (request: WebhookListRequest) => Promise<WebhookListResponse>;
 	get: (request: WebhookGetRequest) => Promise<WebhookGetResponse>;
+	search: (request: WebhookSearchRequest) => Promise<WebhookSearchResponse>;
 	post: (request: WebhookPostRequest) => Promise<WebhookPostResponse>;
 	patch: (request: WebhookPatchRequest) => Promise<WebhookPatchResponse>;
 	delete: (request: WebhookDeleteRequest) => Promise<WebhookDeleteResponse>;
@@ -102,7 +112,7 @@ interface IWebhookRESTApiClient {
 }
 
 export type {
-	IWebhookRESTApiClient,
+	IWebhooksRESTApiClient,
 	DeliveryListRequest,
 	DeliveryListResponse,
 	EventTypesRequest,
@@ -125,4 +135,6 @@ export type {
 	WebhookPostResponse,
 	WebhookRotateRequest,
 	WebhookRotateResponse,
+	WebhookSearchRequest,
+	WebhookSearchResponse,
 };

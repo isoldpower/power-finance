@@ -1,3 +1,5 @@
+import { absoluteAmount, negateAmount } from "@shared/api";
+
 import type { Transaction } from "../types.ts";
 import type { ConvertMoney, TransactionMoneyView } from "./types.ts";
 import type { FormatMoney } from "@shared/formatting";
@@ -10,10 +12,10 @@ const toTransactionMoneyView = (
 	targetCurrency: string
 ): TransactionMoneyView => {
 	const { currency } = transaction.money;
-	const signedAmount = transaction.type === 'expense' 
-		? -transaction.money.amount 
+	const signedAmount = transaction.type === 'expense'
+		? negateAmount(transaction.money.amount)
 		: transaction.money.amount;
-	const mainAmount = convert({ 
+	const mainAmount = convert({
 		amount: signedAmount,
 		currency,
 	});
@@ -22,7 +24,7 @@ const toTransactionMoneyView = (
 		walletName: transaction.wallet.name,
 		amountOriginal: formatMoney(signedAmount, currency),
 		amountMain: mainAmount.formatted,
-		amountAbsolute: formatMoney(Math.abs(signedAmount), currency),
+		amountAbsolute: formatMoney(absoluteAmount(signedAmount), currency),
 		converted: mainAmount.converted,
 		inTarget: mainAmount.currency === targetCurrency,
 	};

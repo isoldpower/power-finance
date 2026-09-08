@@ -1,7 +1,16 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { LocalStorageMock } from "@internal/shared";
-import { ApiError, delay, IdempotencyStore, paginate, stringifySortedQuery, unpaginated } from "@shared/api";
+import {
+	ApiError,
+	createMatcher,
+	delay,
+	IdempotencyStore,
+	paginate,
+	stringifySortedQuery,
+	unpaginated,
+	validateFilter,
+} from "@shared/api";
 import {
 	DELIVERIES_STORAGE_KEY,
 	EVENT_TYPES,
@@ -10,10 +19,11 @@ import {
 	WEBHOOKS_STORAGE_KEY,
 } from "./mock-seed.ts";
 import type { IStorage } from "@internal/shared";
+import type { FieldPolicy } from "@shared/api";
 import type { StoredDelivery, StoredSubscription, StoredWebhook } from "./mock-seed.ts";
-import type { WebhookDto, WebhookSecretDto, WebhookSubscriptionDto } from "../types.ts";
+import type { WebhookDto, WebhookSearchField, WebhookSecretDto, WebhookSubscriptionDto } from "../types.ts";
 import type {
-	IWebhookRESTApiClient,
+	IWebhooksRESTApiClient,
 	DeliveryListRequest, DeliveryListResponse,
 	EventTypesRequest, EventTypesResponse,
 	SubscriptionDeleteRequest, SubscriptionDeleteResponse,
@@ -25,6 +35,7 @@ import type {
 	WebhookPatchRequest, WebhookPatchResponse,
 	WebhookPostRequest, WebhookPostResponse,
 	WebhookRotateRequest, WebhookRotateResponse,
+	WebhookSearchRequest, WebhookSearchResponse,
 } from "./types.ts";
 
 const SECRET_BYTES = 24;
@@ -49,17 +60,17 @@ const orderByCreation = <TRecord extends { id: string; created_at: string }>(rec
 
 const assertUrl = (url: string): void => {
 	if (!ABSOLUTE_URL.test(url)) {
-		throw new ApiError('validation_failed', 'Webhook url must be absolute http or https', [
-			{ field: 'url', code: 'url_scheme', message: 'Use an absolute http or https url' },
-		]);
+		throw new ApiError('validation_failed', 'Webhook url must be absolute http or https', {
+			details: [{ field: 'url', code: 'url_scheme', message: 'Use an absolute http or https url' }],
+		});
 	}
 };
 
 const assertEventType = (event: string): void => {
 	if (!EVENT_TYPES.some((type) => type.event === event)) {
-		throw new ApiError('validation_failed', `${event} is not a published event type`, [
-			{ field: 'event', code: 'unknown_event_type', message: 'Event is not present in the catalog' },
-		]);
+		throw new ApiError('validation_failed', `${event} is not a published event type`, {
+			details: [{ field: 'event', code: 'unknown_event_type', message: 'Event is not present in the catalog' }],
+		});
 	}
 };
 
@@ -72,7 +83,19 @@ const withoutSecret = (webhook: StoredWebhook): WebhookDto => ({
 	enabled: webhook.enabled,
 });
 
-class WebhookMockRESTApiClient implements IWebhookRESTApiClient {
+const SEARCH_FIELDS: FieldPolicy<WebhookSearchField> = {
+	title: ['eq', 'neq', 'in', 'contains', 'icontains'],
+	url: ['eq', 'neq', 'in', 'contains', 'icontains'],
+	enabled: ['eq', 'neq'],
+	created_at: ['gt', 'gte', 'lt', 'lte'],
+};
+
+const matchesNode = createMatcher<StoredWebhook, WebhookSearchField>(
+	SEARCH_FIELDS,
+	(webhook, field) => (field === 'enabled' ? String(webhook.enabled) : webhook[field]),
+);
+
+class WebhooksMockRESTApiClient implements IWebhooksRESTApiClient {
 	private readonly storage: IStorage<StoredWebhook>;
 	private readonly subscriptions: IStorage<StoredSubscription>;
 	private readonly deliveries: IStorage<StoredDelivery>;
@@ -129,6 +152,21 @@ class WebhookMockRESTApiClient implements IWebhookRESTApiClient {
 			orderByCreation(matching),
 			payload.params,
 			stringifySortedQuery({ enabled: enabled ?? null }),
+		);
+
+		return { data: page.items.map(withoutSecret), meta: { ...page.meta, cached: false } };
+	}
+
+	public async search(payload: WebhookSearchRequest): Promise<WebhookSearchResponse> {
+		validateFilter(SEARCH_FIELDS, payload.data.filter_body);
+
+		await delay();
+
+		const matching = this.storage.list().filter((webhook) => matchesNode(webhook, payload.data.filter_body));
+		const page = paginate(
+			orderByCreation(matching),
+			payload.params,
+			stringifySortedQuery({ filter: payload.data.filter_body }),
 		);
 
 		return { data: page.items.map(withoutSecret), meta: { ...page.meta, cached: false } };
@@ -305,4 +343,4 @@ class WebhookMockRESTApiClient implements IWebhookRESTApiClient {
 	}
 }
 
-export { WebhookMockRESTApiClient };
+export { WebhooksMockRESTApiClient };

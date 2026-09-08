@@ -16,6 +16,8 @@ type UseTransactionReturn = UseQueryResult<FetchTransactionResponse> & {
 	postings: TransactionPosting[];
 };
 
+const EMPTY_POSTINGS: TransactionPosting[] = [];
+
 const useTransaction = (
 	id: string,
 	options?: UseTransactionOptions
@@ -33,7 +35,7 @@ const useTransaction = (
 	return useMemo<UseTransactionReturn>(() => ({
 		...query,
 		transaction: query.data?.transaction,
-		postings: query.data?.postings.items ?? [],
+		postings: query.data?.postings ?? EMPTY_POSTINGS,
 	}), [query]);
 };
 

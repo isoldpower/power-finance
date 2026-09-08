@@ -5,7 +5,7 @@ interface StoredGoal {
 	name: string;
 	url: string | null;
 	currency: string;
-	finish_at: string;
+	finish_at: string | null;
 	created_at: string;
 	updated_at: string | null;
 	deleted_at: string | null;

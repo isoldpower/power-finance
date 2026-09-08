@@ -1,1 +1,6 @@
-export { balanceMetricsFromApi, cashFlowFromApi, netWorthFromApi } from './api-to-domain.ts';
+export {
+	balanceMetricsFromApi,
+	cashFlowFromApi,
+	metricsFromApi,
+	netWorthFromApi,
+} from './api-to-domain.ts';

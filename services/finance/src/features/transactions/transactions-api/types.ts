@@ -1,10 +1,11 @@
-import type { LedgerEntryDto } from "@feature/accounts/accounts-api";
-import type { MoneyDto, PageParams, ResourceTimestamps, SearchOrder, SearchPayload } from "@shared/api";
+import type { MoneyDto, PageParams, ResourceTimestamps, SearchPayload } from "@shared/api";
 
 
 type TransactionTypeDto = 'expense' | 'income';
 
-type TransactionOriginDto = 'manual' | 'scanned';
+type TransactionOriginDto = 'manual' | 'scanned' | 'automation';
+
+type TransactionOriginBodyDto = 'manual' | 'scanned';
 
 interface TransactionWalletDto {
 	id: string;
@@ -31,10 +32,20 @@ interface TransactionAnalysisDto {
 	comment: string | null;
 }
 
+interface TransactionPostingDto {
+	id: string;
+	account_id: string;
+	title: string;
+	icon: string;
+	debit: boolean;
+	position: number;
+	money: MoneyDto;
+}
+
 interface TransactionDetailDto extends TransactionDto {
 	evidence: TransactionEvidenceDto | null;
-	postings: LedgerEntryDto[];
-	analysis: TransactionAnalysisDto;
+	postings: TransactionPostingDto[];
+	analysis: TransactionAnalysisDto | null;
 }
 
 interface TransactionCreateBody {
@@ -42,10 +53,14 @@ interface TransactionCreateBody {
 	currency: string;
 	amount: string;
 	wallet_id: string;
-	origin: TransactionOriginDto;
+	origin: TransactionOriginBodyDto;
 	type: TransactionTypeDto;
 	category: string | null;
 	evidence: TransactionEvidenceDto | null;
+}
+
+interface TransactionAdjustBody {
+	amount: string;
 }
 
 interface TransactionPatchBody {
@@ -81,14 +96,13 @@ type TransactionSearchField =
 
 type TransactionSearchBody = SearchPayload<TransactionSearchField>;
 
-interface TransactionSearchParams extends PageParams {
-	order?: SearchOrder;
-}
+type TransactionSearchParams = PageParams;
 
 const TRANSACTION_CHAIN_LIMIT = 100;
 
 export { TRANSACTION_CHAIN_LIMIT };
 export type {
+	TransactionAdjustBody,
 	TransactionAnalysisDto,
 	TransactionChainBody,
 	TransactionChainDto,
@@ -97,8 +111,10 @@ export type {
 	TransactionDetailDto,
 	TransactionDto,
 	TransactionEvidenceDto,
+	TransactionOriginBodyDto,
 	TransactionOriginDto,
 	TransactionPatchBody,
+	TransactionPostingDto,
 	TransactionSearchBody,
 	TransactionSearchField,
 	TransactionSearchParams,

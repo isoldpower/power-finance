@@ -1,11 +1,11 @@
-import {useMemo} from "react";
+import { useMemo } from "react";
 import { useConvertMoney } from "@feature/localization";
 
-import type { NetWorth } from "@entity/metrics";
+import { netDiffChange } from "./net-diff-amount.ts";
+
+import type { NetDiffSign, NetWorth } from "@entity/metrics";
 import type { ConvertedMoney } from "@entity/localization";
 
-
-type NetDiffSign = '+' | '-';
 
 interface ConvertedNetDiff {
 	netDiffConverted: ConvertedMoney
@@ -17,13 +17,18 @@ const useConvertedNetDiff = (
 ): ConvertedNetDiff => {
 	const { convert } = useConvertMoney();
 
-	return useMemo(() => ({
-		netDiffConverted: convert({
-			amount: Math.abs((netWorth.money.amount * netWorth.netDiff.percentage) / 100),
-			currency: netWorth.money.currency
-		}),
-		netDiffSign: (netWorth.netDiff.direction === 'up' ? '+' : '−') as NetDiffSign,
-	}), [convert, netWorth]);
+	return useMemo(() => {
+		const change = netDiffChange(netWorth);
+
+		return {
+			netDiffConverted: convert({
+				amount: change.amount,
+				currency: netWorth.money.currency,
+			}),
+			netDiffSign: change.sign,
+		};
+	}, [convert, netWorth]);
 }
 
 export { useConvertedNetDiff };
+export type { ConvertedNetDiff };

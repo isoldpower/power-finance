@@ -1,8 +1,7 @@
 import { useCallback } from "react";
-import { useSettingsContext } from "@internal/shared";
 
 import { useCreateGoal } from "../data-presenters";
-import { parseAmountInput } from "@shared/formatting";
+import { parseAmountDecimal } from "@shared/formatting";
 
 import type { FC, FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";
@@ -27,7 +26,6 @@ const GoalFormOnSubmit: FC<GoalFormOnSubmitProps> = ({
 	onSuccess,
 	onError,
 }) => {
-	const { mainCurrency } = useSettingsContext();
 	const createGoal = useCreateGoal();
 
 	const wrappedOnSubmit = useCallback(async (data: GoalFormSchema) => {
@@ -37,15 +35,15 @@ const GoalFormOnSubmit: FC<GoalFormOnSubmitProps> = ({
 			const payload = await createGoal.mutateAsync({
 				name: data.name,
 				finishAt: new Date(data.finishAt).toISOString(),
-				currency: mainCurrency,
-				target: parseAmountInput(data.target),
+				currency: data.currency,
+				target: parseAmountDecimal(data.target),
 			});
 			if (onSuccess) onSuccess(payload);
 		} catch (error: unknown) {
 			console.error(error);
 			if (onError) onError(error);
 		}
-	}, [createGoal, mainCurrency, onBeforeSubmit, onSuccess, onError]);
+	}, [createGoal, onBeforeSubmit, onSuccess, onError]);
 
 	const handleSubmitForm = useCallback((
 		event: FormEvent<HTMLFormElement>

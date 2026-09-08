@@ -1,5 +1,3 @@
-import { toAmountString } from "@shared/api";
-
 import type {
 	TransactionChainDraft,
 	TransactionDraft,
@@ -11,7 +9,7 @@ import type { TransactionChainBody, TransactionCreateBody, TransactionPatchBody 
 const transactionDraftToApi = (draft: TransactionDraft): TransactionCreateBody => ({
 	name: draft.name,
 	currency: draft.currency,
-	amount: toAmountString(draft.amount),
+	amount: draft.amount,
 	wallet_id: draft.walletId,
 	origin: draft.origin,
 	type: draft.type,

@@ -27,7 +27,7 @@ const SelectedWalletDetails = ({
 	const selectedWalletProtected = useMemo(() => {
 		return selectedWalletId ?? 'none';
 	}, [selectedWalletId]);
-	const { wallet, recent, isError, isPending } = useWallet(selectedWalletProtected, { 
+	const { wallet, recent, period, isError, isPending } = useWallet(selectedWalletProtected, { 
 		enabled: selectedWalletProtected !== 'none'
 	});
 
@@ -43,7 +43,7 @@ const SelectedWalletDetails = ({
 									transferPanelId={transferPanel}
 									editWalletPanelId={editWalletPanel}
 								/>
-								<WalletBalanceDetails wallet={wallet} />
+								<WalletBalanceDetails wallet={wallet} period={period} />
 							</div>
 							<WalletsRecentTitle>
 								Recent in this wallet

@@ -1,13 +1,13 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 
 import { isApiError } from '@shared/api';
-import { TransactionMockRESTApiClient } from './mock-server.ts';
+import { TransactionsMockRESTApiClient } from './mock-server.ts';
 import type { TransactionCreateBody } from '../types.ts';
 
 const WALLET = { id: 'wallet-1', name: 'Main Checking', deleted_at: null };
 const CLOSED_WALLET = { id: 'wallet-2', name: 'Closed Card', deleted_at: '2026-08-01T00:00:00-05:00' };
 
-let client: TransactionMockRESTApiClient;
+let client: TransactionsMockRESTApiClient;
 
 const body = (name: string, overrides: Partial<TransactionCreateBody> = {}): TransactionCreateBody => ({
 	name,
@@ -32,10 +32,10 @@ beforeEach(() => {
 		clear: () => { store.clear(); },
 	});
 
-	client = new TransactionMockRESTApiClient('transactions-test');
+	client = new TransactionsMockRESTApiClient('transactions-test');
 });
 
-describe('TransactionMockRESTApiClient', () => {
+describe('TransactionsMockRESTApiClient', () => {
 	test('creates a transaction in the preview shape', async () => {
 		const { data, meta } = await client.post({ data: body('Whole Foods'), idempotencyKey: 'key-1' });
 
@@ -67,12 +67,13 @@ describe('TransactionMockRESTApiClient', () => {
 	test('derives balanced double-entry postings for the detail shape', async () => {
 		const created = await client.post({ data: body('Whole Foods'), idempotencyKey: 'key-4' });
 
-		const { data, meta } = await client.get({ id: created.data.id });
+		const { data } = await client.get({ id: created.data.id });
 
 		expect(data.postings).toHaveLength(2);
 		expect(data.postings.filter((posting) => posting.debit)).toHaveLength(1);
-		expect(data.analysis.balanced).toBe(true);
-		expect(meta.postings.total).toBe(2);
+		expect(data.postings.map((posting) => posting.position)).toEqual([0, 1]);
+		expect(data.postings.every((posting) => posting.account_id !== '')).toBe(true);
+		expect(data.analysis?.balanced).toBe(true);
 	});
 
 	test('commits a chain and stamps both legs with the same chain id', async () => {

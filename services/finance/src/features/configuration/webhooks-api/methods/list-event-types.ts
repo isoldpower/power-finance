@@ -1,11 +1,11 @@
 import { eventTypeFromApi } from "../mutators";
 
 import type { WebhookEventType } from "@entity/configuration";
-import type { IWebhookRESTApiClient } from "../rest-client";
+import type { IWebhooksRESTApiClient } from "../rest-client";
 
 
 interface ListEventTypesRequest {
-	handler: Pick<IWebhookRESTApiClient, 'eventTypes'>;
+	handler: Pick<IWebhooksRESTApiClient, 'eventTypes'>;
 }
 
 interface ListEventTypesResponse {

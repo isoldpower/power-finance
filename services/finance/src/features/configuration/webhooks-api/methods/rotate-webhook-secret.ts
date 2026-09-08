@@ -1,11 +1,11 @@
 import { webhookSecretFromApi } from "../mutators";
 
 import type { WebhookEndpointSecret } from "@entity/configuration";
-import type { IWebhookRESTApiClient } from "../rest-client";
+import type { IWebhooksRESTApiClient } from "../rest-client";
 
 
 interface RotateWebhookSecretRequest {
-	handler: Pick<IWebhookRESTApiClient, 'rotateSecret'>;
+	handler: Pick<IWebhooksRESTApiClient, 'rotateSecret'>;
 	id: string;
 	idempotencyKey?: string;
 }

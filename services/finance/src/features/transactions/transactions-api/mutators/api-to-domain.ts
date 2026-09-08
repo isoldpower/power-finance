@@ -1,13 +1,13 @@
 import { parseAmount } from "@shared/api";
+import { moneyFromApi } from "@feature/localization/currencies-api";
 
-import type { MoneyDto } from "@shared/api";
-import type { Money } from "@entity/localization";
 import type {
 	ReceiptScan,
 	Transaction,
 	TransactionCategory,
 	TransactionChain,
 	TransactionDetails,
+	TransactionPosting,
 } from "@entity/transactions";
 import type {
 	CategoryDto,
@@ -15,13 +15,9 @@ import type {
 	TransactionChainDto,
 	TransactionDetailDto,
 	TransactionDto,
+	TransactionPostingDto,
 } from "../types.ts";
 
-
-const moneyFromApi = (dto: MoneyDto): Money => ({
-	amount: parseAmount(dto.amount),
-	currency: dto.currency,
-});
 
 const transactionFromApi = (dto: TransactionDto): Transaction => ({
 	id: dto.id,
@@ -37,10 +33,20 @@ const transactionFromApi = (dto: TransactionDto): Transaction => ({
 	chainId: dto.chain_id,
 });
 
+const transactionPostingFromApi = (dto: TransactionPostingDto): TransactionPosting => ({
+	id: dto.id,
+	accountId: dto.account_id,
+	title: dto.title,
+	icon: dto.icon,
+	debit: dto.debit,
+	position: dto.position,
+	money: moneyFromApi(dto.money),
+});
+
 const transactionDetailsFromApi = (dto: TransactionDetailDto): TransactionDetails => ({
 	...transactionFromApi(dto),
 	evidence: dto.evidence ? { url: dto.evidence.url } : null,
-	analysis: { 
+	analysis: dto.analysis === null ? null : {
 		balanced: dto.analysis.balanced,
 		comment: dto.analysis.comment,
 	},
@@ -70,4 +76,5 @@ export {
 	transactionChainFromApi,
 	transactionDetailsFromApi,
 	transactionFromApi,
+	transactionPostingFromApi,
 };

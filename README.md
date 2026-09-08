@@ -99,11 +99,14 @@ This is the list of known issues. It means that they are in the priority list to
  	- [ ] Cover with unit tests
 
 Finance TODO:
-- (DONE) merge common elements in layers;
-- (DONE) decide on navigation (move to shared?);
-- (DONE) drop unused code;
-- (DONE) adjust according to Claude Design;
-- (DONE) implement better loading states;
+- Optimistic updates;
+- Raise toasts on actions (failures, successes, notifications, etc.)
+- Decrease API response time;
+- Finish goal funding;
+- Test time-based automations;
+- Test actions (and actions dispatch);
+- Goals search;
+- Automations search;
 -----
 - review API data fetching (by-layer fetching patterns);
 - review each file manually one more time;

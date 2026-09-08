@@ -35,8 +35,6 @@ interface TransactionBrowserInternalContextProps {
 
 const TransactionBrowserInternalContext: FC<TransactionBrowserInternalContextProps> = ({ children }) => {
 	const {
-		sortBy,
-		sortDirection,
 		walletFilter,
 		categoryFilter,
 		typeFilter,
@@ -54,14 +52,13 @@ const TransactionBrowserInternalContext: FC<TransactionBrowserInternalContextPro
 	const resetToFirstPage = useCallback(() => { setCursors([null]); }, []);
 
 	useOnValuesChange(
-		[search, caseSensitive, walletFilter, categoryFilter, typeFilter, sortBy, sortDirection],
+		[search, caseSensitive, walletFilter, categoryFilter, typeFilter],
 		resetToFirstPage
 	);
 
 	const { searchResults: { transactions, total, nextCursor, prevCursor } } = useTransactionsBrowser({
 		search: { search, caseSensitive },
 		filters: { walletFilter, categoryFilter, typeFilter },
-		ordering: { direction: sortDirection },
 		page: { pageSize: TRANSACTIONS_PAGE_SIZE, cursor: cursors[cursors.length - 1] },
 	});
 

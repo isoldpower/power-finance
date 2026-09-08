@@ -1,4 +1,4 @@
-export { AccountsDjangoRESTApiClient } from './django-server.ts';
+export { AccountsHttpRESTApiClient } from './http-server.ts';
 export { AccountsMockRESTApiClient } from './mock-server.ts';
 
 export type {

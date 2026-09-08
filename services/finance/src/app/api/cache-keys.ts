@@ -23,9 +23,7 @@ const QUERY_KEYS = {
 	assistantOverview: 'assistant-overview',
 	assistantMessages: 'assistant-messages',
 	session: 'auth-session',
-	metricsBalance: 'metrics-balance',
-	metricsNetWorth: 'metrics-net-worth',
-	metricsCashFlow: 'metrics-cash-flow',
+	metrics: 'metrics',
 } as const;
 
 const DERIVED_KEYS = {
@@ -35,26 +33,20 @@ const DERIVED_KEYS = {
 		QUERY_KEYS.wallet,
 		QUERY_KEYS.goals,
 		QUERY_KEYS.accounts,
-		QUERY_KEYS.metricsBalance,
-		QUERY_KEYS.metricsNetWorth,
-		QUERY_KEYS.metricsCashFlow,
+		QUERY_KEYS.metrics,
 	],
 	onWalletChange: [
 		QUERY_KEYS.wallets,
 		QUERY_KEYS.walletsSearch,
 		QUERY_KEYS.wallet,
 		QUERY_KEYS.accounts,
-		QUERY_KEYS.metricsBalance,
-		QUERY_KEYS.metricsNetWorth,
-		QUERY_KEYS.metricsCashFlow,
+		QUERY_KEYS.metrics,
 	],
 	onGoalChange: [
 		QUERY_KEYS.goals,
 		QUERY_KEYS.goal,
 		QUERY_KEYS.accounts,
-		QUERY_KEYS.metricsBalance,
-		QUERY_KEYS.metricsNetWorth,
-		QUERY_KEYS.metricsCashFlow,
+		QUERY_KEYS.metrics,
 	],
 	onActionChange: [
 		QUERY_KEYS.actions,
@@ -78,6 +70,11 @@ const DERIVED_KEYS = {
 	],
 	onPreferencesChange: [
 		QUERY_KEYS.session,
+		QUERY_KEYS.metrics,
+		QUERY_KEYS.wallet,
+		QUERY_KEYS.wallets,
+		QUERY_KEYS.accounts,
+		QUERY_KEYS.account,
 	],
 	onAssistantChange: [
 		QUERY_KEYS.assistantMessages,

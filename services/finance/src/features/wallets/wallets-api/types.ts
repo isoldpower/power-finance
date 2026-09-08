@@ -1,5 +1,5 @@
 import type { TransactionDto } from "@feature/transactions";
-import type { MoneyDto, PageParams, ResourceTimestamps, SearchOrder, SearchPayload } from "@shared/api";
+import type { MoneyDto, PageParams, ResourceTimestamps, SearchPayload } from "@shared/api";
 
 
 interface WalletDto extends ResourceTimestamps {
@@ -18,18 +18,33 @@ interface WalletFlowsDto {
 	outflow: MoneyDto;
 }
 
+type WalletPeriodDto = 'last_week' | 'last_month' | 'last_year' | 'all_time';
+
 interface WalletDetailDto extends WalletDto {
-	last_month: WalletFlowsDto;
+	period: WalletFlowsDto;
 	recent: TransactionDto[];
+}
+
+interface WalletDetailParams extends PageParams {
+	period?: WalletPeriodDto;
 }
 
 interface WalletCreateBody {
 	name: string;
-	color: string;
-	opening_balance: string;
-	zero_balance: string;
 	currency: string;
-	category: string;
+	category?: string;
+	color?: string;
+	zero_balance?: string;
+	opening_balance?: string;
+}
+
+interface WalletReplaceBody {
+	name: string;
+	currency: string;
+	category?: string;
+	color?: string;
+	favorite?: boolean;
+	zero_balance?: string;
 }
 
 interface WalletPatchBody {
@@ -44,16 +59,17 @@ type WalletSearchField = 'name' | 'currency' | 'balance' | 'created_at';
 
 type WalletSearchBody = SearchPayload<WalletSearchField>;
 
-interface WalletSearchParams extends PageParams {
-	order?: SearchOrder;
-}
+type WalletSearchParams = PageParams;
 
 export type {
 	WalletCreateBody,
 	WalletDetailDto,
+	WalletDetailParams,
 	WalletDto,
+	WalletPeriodDto,
 	WalletFlowsDto,
 	WalletPatchBody,
+	WalletReplaceBody,
 	WalletSearchBody,
 	WalletSearchField,
 	WalletSearchParams,

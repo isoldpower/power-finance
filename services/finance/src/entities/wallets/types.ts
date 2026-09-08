@@ -15,13 +15,15 @@ interface Wallet {
 	color: string;
 }
 
+type WalletPeriod = 'last_week' | 'last_month' | 'last_year' | 'all_time';
+
 interface WalletFlows {
 	inflow: Money;
 	outflow: Money;
 }
 
 interface WalletDetails extends Wallet {
-	lastMonth: WalletFlows;
+	period: WalletFlows;
 }
 
 interface Goal {
@@ -29,7 +31,7 @@ interface Goal {
 	name: string;
 	url: string | null;
 	currency: string;
-	finishAt: string;
+	finishAt: string | null;
 	createdAt: string;
 	updatedAt: string | null;
 	deletedAt: string | null;
@@ -40,8 +42,8 @@ interface Goal {
 interface WalletDraft {
 	name: string;
 	color: string;
-	openingBalance: number;
-	zeroBalance: number;
+	openingBalance: string;
+	zeroBalance: string;
 	currency: string;
 	category: string;
 }
@@ -50,7 +52,7 @@ interface WalletPatch {
 	name?: string;
 	favorite?: boolean;
 	category?: string;
-	zeroBalance?: number;
+	zeroBalance?: string;
 	color?: string;
 }
 
@@ -58,13 +60,13 @@ interface GoalDraft {
 	name: string;
 	finishAt: string;
 	currency: string;
-	target: number;
+	target: string;
 }
 
 interface GoalPatch {
 	name?: string;
 	finishAt?: string;
-	target?: number;
+	target?: string;
 }
 
 interface WalletQuery {
@@ -97,6 +99,7 @@ export type {
 	Wallet,
 	WalletDetails,
 	WalletFlows,
+	WalletPeriod,
 	Goal,
 	PanelWallet,
 	GoalDispositionMode,

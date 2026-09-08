@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+import { compareAmounts, ZERO_AMOUNT } from "@shared/api";
+import { parseAmountDecimal } from "@shared/formatting";
+
+
+const CURRENCY_CODE_PATTERN = /^[A-Za-z]{3}$/;
 
 const FILTER_OPERATORS = [
 	'eq',
@@ -68,10 +73,19 @@ const ruleFormSchema = z.object({
 		if (values.toWalletId.trim() === '') {
 			context.addIssue({ code: 'custom', path: ['toWalletId'], message: 'Pick a target wallet' });
 		}
-		if (Number.isNaN(Number.parseFloat(values.amount))) {
-			context.addIssue({ code: 'custom', path: ['amount'], message: 'Enter an amount' });
+		if (values.fromWalletId !== '' && values.fromWalletId === values.toWalletId) {
+			context.addIssue({
+				code: 'custom',
+				path: ['toWalletId'],
+				message: 'A transfer needs two different wallets',
+			});
 		}
-		if (values.currency.trim() === '') {
+
+		const amount = parseAmountDecimal(values.amount);
+		if (compareAmounts(amount, ZERO_AMOUNT) <= 0) {
+			context.addIssue({ code: 'custom', path: ['amount'], message: 'Enter an amount above zero' });
+		}
+		if (!CURRENCY_CODE_PATTERN.test(values.currency.trim())) {
 			context.addIssue({ code: 'custom', path: ['currency'], message: 'Pick a currency' });
 		}
 	}

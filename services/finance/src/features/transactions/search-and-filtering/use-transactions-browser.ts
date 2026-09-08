@@ -28,7 +28,6 @@ const useTransactionsBrowser = (
 	const query = useMemo<TransactionQuery>(() => toQuery(setup), [setup]);
 
 	const { transactions, total, nextCursor, prevCursor, isPending } = useTransactionsSearch(query, {
-		order: setup.ordering.direction,
 		limit: setup.page.pageSize,
 		cursor: setup.page.cursor ?? undefined,
 	});

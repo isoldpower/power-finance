@@ -1,1 +1,1 @@
-export { DeletableGoalRow } from './DeletableGoalRow.tsx';
+export { GoalDirectoryRow } from './GoalDirectoryRow.tsx';

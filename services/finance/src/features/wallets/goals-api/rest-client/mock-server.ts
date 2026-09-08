@@ -27,8 +27,6 @@ import type {
 } from "./types.ts";
 
 
-const GOAL_ICON = '🎯';
-const WALLET_ICON = '💳';
 
 const compareDesc = (left: string, right: string): number => (left < right ? 1 : left > right ? -1 : 0);
 
@@ -67,11 +65,12 @@ class GoalsMockRESTApiClient implements IGoalsRESTApiClient {
 			const dto = storedTransactionToDto(item);
 
 			return {
+				id: dto.id,
 				title: dto.name,
 				debit: dto.type === 'income',
 				created_at: dto.created_at,
 				source_transaction: dto.id,
-				icon: dto.type === 'income' ? GOAL_ICON : WALLET_ICON,
+				icon: '',
 				money: dto.money,
 			};
 		});

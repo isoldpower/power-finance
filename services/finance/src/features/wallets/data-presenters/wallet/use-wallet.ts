@@ -2,11 +2,11 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useApiContext } from "@app/api";
 import { fetchWallet } from "../../wallets-api";
-import { WALLET_RECENT_LIMIT, WALLETS_CACHE_KEYS } from "../cache-config.ts";
+import { DEFAULT_WALLET_PERIOD, WALLET_RECENT_LIMIT, WALLETS_CACHE_KEYS } from "../cache-config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { Transaction } from "@entity/transactions";
-import type { WalletDetails } from "@entity/wallets";
+import type { WalletDetails, WalletPeriod } from "@entity/wallets";
 import type { FetchWalletResponse } from "../../wallets-api";
 
 
@@ -15,6 +15,7 @@ type UseWalletOptions = Omit<UseQueryOptions<FetchWalletResponse>, 'queryKey' | 
 type UseWalletReturn = UseQueryResult<FetchWalletResponse> & {
 	wallet: WalletDetails | undefined;
 	recent: Transaction[];
+	period: WalletPeriod;
 };
 
 const EMPTY_RECENT: Transaction[] = [];
@@ -38,6 +39,7 @@ const useWallet = (
 		...query,
 		wallet: query.data?.wallet,
 		recent: query.data?.recent.items ?? EMPTY_RECENT,
+		period: query.data?.period ?? DEFAULT_WALLET_PERIOD,
 	}), [query]);
 };
 

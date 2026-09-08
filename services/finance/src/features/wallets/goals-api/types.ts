@@ -7,7 +7,7 @@ interface GoalDto extends ResourceTimestamps {
 	name: string;
 	url: string | null;
 	currency: string;
-	finish_at: string;
+	finish_at: string | null;
 	target: MoneyDto;
 	progress: MoneyDto;
 }
@@ -18,7 +18,7 @@ interface GoalDetailDto extends GoalDto {
 
 interface GoalCreateBody {
 	name: string;
-	finish_at: string;
+	finish_at: string | null;
 	currency: string;
 	target: string;
 }

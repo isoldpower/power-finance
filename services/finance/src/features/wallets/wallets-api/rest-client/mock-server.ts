@@ -11,6 +11,7 @@ import {
 	serializeAmount,
 	stringifySortedQuery,
 	validateFilter,
+	ZERO_AMOUNT,
 } from "@shared/api";
 import { storedTransactionToDto, TRANSACTIONS_STORAGE_KEY, walletDelta } from "@feature/transactions/transactions-api";
 import { WALLETS_STORAGE_KEY } from "./mock-seed.ts";
@@ -18,7 +19,7 @@ import type { IStorage } from "@internal/shared";
 import type { FieldPolicy, MoneyDto } from "@shared/api";
 import type { StoredTransaction, TransactionDto } from "@feature/transactions/transactions-api";
 import type { StoredWallet } from "./mock-seed.ts";
-import type { WalletDetailDto, WalletDto, WalletSearchField } from "../types.ts";
+import type { WalletDetailDto, WalletDto, WalletPeriodDto, WalletSearchField } from "../types.ts";
 import type {
 	IWalletsRESTApiClient,
 	WalletDeleteRequest, WalletDeleteResponse,
@@ -26,10 +27,39 @@ import type {
 	WalletListRequest, WalletListResponse,
 	WalletPatchRequest, WalletPatchResponse,
 	WalletPostRequest, WalletPostResponse,
+	WalletPutRequest, WalletPutResponse,
 	WalletSearchRequest, WalletSearchResponse,
 } from "./types.ts";
 
-const MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
+const DEFAULT_PERIOD: WalletPeriodDto = 'last_month';
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
+const ROLLING_WINDOW_DAYS: Record<Exclude<WalletPeriodDto, 'all_time'>, number> = {
+	last_week: 7,
+	last_month: 30,
+	last_year: 365,
+};
+const DEFAULT_COLOR = '';
+const DEFAULT_CATEGORY = '';
+
+const HEX_COLOR_PATTERN = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
+
+const assertColor = (color: string | undefined): void => {
+	if (color !== undefined && color !== '' && !HEX_COLOR_PATTERN.test(color)) {
+		throw new ApiError('validation_failed', 'Request body failed validation', {
+			details: [{
+				field: 'color',
+				code: 'invalid',
+				message: 'This value does not match the required pattern.',
+			}],
+		});
+	}
+};
+
+const periodStart = (period: WalletPeriodDto, now: Date): number | null => {
+	return period === 'all_time'
+		? null
+		: now.getTime() - ROLLING_WINDOW_DAYS[period] * DAY_IN_MS;
+};
 
 const SEARCH_FIELDS: FieldPolicy<WalletSearchField> = {
 	name: ['eq', 'neq', 'in', 'contains', 'icontains'],
@@ -121,9 +151,10 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 		};
 	}
 
-	private lastMonth(walletId: string, currency: string): WalletDetailDto['last_month'] {
-		const since = Date.now() - MONTH_IN_MS;
-		const recent = this.ledger(walletId).filter((item) => new Date(item.created_at).getTime() >= since);
+	private periodFlows(walletId: string, currency: string, period: WalletPeriodDto): WalletDetailDto['period'] {
+		const since = periodStart(period, new Date());
+		const recent = this.ledger(walletId)
+			.filter((item) => since === null || new Date(item.created_at).getTime() >= since);
 		const sum = (type: StoredTransaction['type']): string => serializeAmount(
 			recent
 				.filter((item) => item.type === type)
@@ -178,23 +209,26 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 
 		const wallet = this.require(payload.id);
 		const record = this.record(wallet);
+		const period = payload.params?.period ?? DEFAULT_PERIOD;
 		const recent = paginate(
 			this.recent(wallet.id),
 			payload.params,
-			stringifySortedQuery({ id: payload.id }),
+			stringifySortedQuery({ id: payload.id, period }),
 		);
 
 		return {
 			data: {
 				...this.toDto(record),
-				last_month: this.lastMonth(wallet.id, wallet.currency),
+				period: this.periodFlows(wallet.id, wallet.currency, period),
 				recent: recent.items,
 			},
-			meta: { recent: recent.meta, cached: false },
+			meta: { recent: recent.meta, period, cached: false },
 		};
 	}
 
 	public async post(payload: WalletPostRequest): Promise<WalletPostResponse> {
+		assertColor(payload.data.color);
+
 		const replay = this.idempotency.replay(payload.idempotencyKey, payload.data);
 		if (replay) return { data: replay, meta: { idempotent_replay: true } };
 
@@ -206,12 +240,12 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 			created_at: new Date().toISOString(),
 			updated_at: null,
 			deleted_at: null,
-			category: payload.data.category,
+			category: payload.data.category ?? DEFAULT_CATEGORY,
 			currency: payload.data.currency,
-			opening_balance: payload.data.opening_balance,
-			zero_balance: payload.data.zero_balance,
+			opening_balance: payload.data.opening_balance ?? payload.data.zero_balance ?? ZERO_AMOUNT,
+			zero_balance: payload.data.zero_balance ?? ZERO_AMOUNT,
 			favorite: false,
-			color: payload.data.color,
+			color: payload.data.color ?? DEFAULT_COLOR,
 		};
 
 		this.storage.add(wallet);
@@ -222,7 +256,40 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 		return { data: dto, meta: { idempotent_replay: false } };
 	}
 
+	public async put(payload: WalletPutRequest): Promise<WalletPutResponse> {
+		assertColor(payload.data.color);
+
+		await delay();
+
+		const wallet = this.require(payload.id);
+		if (payload.data.currency !== wallet.currency) {
+			throw new ApiError('validation_failed', 'A wallet currency is fixed at creation', {
+				details: [{
+					field: 'currency',
+					code: 'currency_mismatch',
+					message: 'Currency cannot be changed after creation',
+				}],
+			});
+		}
+
+		const replaced: StoredWallet = {
+			...wallet,
+			name: payload.data.name,
+			category: payload.data.category ?? DEFAULT_CATEGORY,
+			color: payload.data.color ?? DEFAULT_COLOR,
+			favorite: payload.data.favorite ?? false,
+			zero_balance: payload.data.zero_balance ?? ZERO_AMOUNT,
+			updated_at: new Date().toISOString(),
+		};
+
+		this.replace(wallet, replaced);
+
+		return { data: this.toDto(this.record(replaced)), meta: {} };
+	}
+
 	public async patch(payload: WalletPatchRequest): Promise<WalletPatchResponse> {
+		assertColor(payload.data.color);
+
 		await delay();
 
 		const wallet = this.require(payload.id);
@@ -263,11 +330,10 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 		await delay();
 
 		const matching = this.open().filter((record) => matchesNode(record, payload.data.filter_body));
-		const ordered = payload.params?.order === 'ASC' ? [...matching].reverse() : matching;
 		const page = paginate(
-			ordered,
+			matching,
 			payload.params,
-			stringifySortedQuery({ filter: payload.data.filter_body, order: payload.params?.order ?? 'DESC' }),
+			stringifySortedQuery({ filter: payload.data.filter_body }),
 		);
 
 		return {

@@ -1,3 +1,4 @@
+import { isNegativeAmount } from "@shared/api";
 import { useMemo } from "react";
 import { textClass } from "@shared/pure-components/typography";
 import { AnimatedMoney } from "@entity/localization";
@@ -33,7 +34,7 @@ const CashFlowNet = ({
 			<AnimatedMoney
 				amount={cashNetAmount}
 				currency={cashNetCurrency}
-				tone={cashFlow.totalNet.amount >= 0 ? "pos" : "neg"}
+				tone={isNegativeAmount(cashFlow.totalNet.amount) ? "neg" : "pos"}
 				size="lg"
 				className={textClass({ size: '20' })}
 			/>

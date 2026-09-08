@@ -1,15 +1,8 @@
-import { parseAmount } from "@shared/api";
+import { moneyFromApi } from "@feature/localization/currencies-api";
 
-import type { MoneyDto } from "@shared/api";
-import type { Money } from "@entity/localization";
 import type { Wallet, WalletDetails, WalletFlows } from "@entity/wallets";
 import type { WalletDetailDto, WalletDto, WalletFlowsDto } from "../types.ts";
 
-
-const moneyFromApi = (dto: MoneyDto): Money => ({
-	amount: parseAmount(dto.amount),
-	currency: dto.currency,
-});
 
 const walletFromApi = (dto: WalletDto): Wallet => ({
 	id: dto.id,
@@ -32,7 +25,7 @@ const walletFlowsFromApi = (dto: WalletFlowsDto): WalletFlows => ({
 
 const walletDetailsFromApi = (dto: WalletDetailDto): WalletDetails => ({
 	...walletFromApi(dto),
-	lastMonth: walletFlowsFromApi(dto.last_month),
+	period: walletFlowsFromApi(dto.period),
 });
 
 export { moneyFromApi, walletDetailsFromApi, walletFlowsFromApi, walletFromApi };

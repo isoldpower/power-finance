@@ -1,3 +1,5 @@
+import { parseAmountDecimal } from "@shared/formatting";
+
 import type {
 	AutomationDraft,
 	AutomationEffect,
@@ -53,7 +55,7 @@ const effectFromForm = (values: RuleFormSchema): AutomationEffect => {
 				type: 'transfer',
 				fromWalletId: values.fromWalletId,
 				toWalletId: values.toWalletId,
-				money: { amount: Number.parseFloat(values.amount), currency: values.currency },
+				money: { amount: parseAmountDecimal(values.amount), currency: values.currency },
 			};
 	}
 };

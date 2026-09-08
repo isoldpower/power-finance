@@ -1,26 +1,30 @@
 import { useMemo } from "react";
-import { useAxiosInstance } from "@internal/shared";
 
-import { MetricsMockRESTApiClient } from "@feature/metrics";
-import { API_BASE_PATH } from "../config.ts";
+import { MetricsHttpRESTApiClient, MetricsMockRESTApiClient } from "@feature/metrics";
+import { useResourceAxios } from "./use-resource-axios.ts";
+
 import type { IMetricsRESTApiClient } from "@feature/metrics";
+import type { ApiServerOptions } from "./types.ts";
+
+
+const METRICS_PATH = '/metrics';
 
 interface UseMetricsApiResponse {
 	rest: IMetricsRESTApiClient;
 }
 
-function useMetricsApi(baseUrl: string): UseMetricsApiResponse {
-	const metricsAxiosInstance = useAxiosInstance({
-		baseUrl: `${baseUrl}${API_BASE_PATH}/metrics`
-	});
+function useMetricsApi(options: ApiServerOptions): UseMetricsApiResponse {
+	const axiosInstance = useResourceAxios(options, METRICS_PATH);
 
-	const restMetricsClient = useMemo<IMetricsRESTApiClient>(() => {
-		return new MetricsMockRESTApiClient();
-	}, [metricsAxiosInstance]);
+	const restClient = useMemo<IMetricsRESTApiClient>(() => {
+		return options.mode === 'live'
+			? new MetricsHttpRESTApiClient(axiosInstance, options.versions)
+			: new MetricsMockRESTApiClient();
+	}, [axiosInstance, options.mode, options.versions]);
 
 	return useMemo(() => ({
-		rest: restMetricsClient
-	}), [restMetricsClient]);
+		rest: restClient
+	}), [restClient]);
 }
 
 export { useMetricsApi };

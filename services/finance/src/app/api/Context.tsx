@@ -1,5 +1,7 @@
 import { createContext, useMemo } from 'react';
+import { WriteVersionStore } from "@shared/api";
 
+import { resolveApiMode } from "./config.ts";
 import { ApiQueryReactions } from "./query-reactions";
 import { useWalletsApi } from "./servers/use-wallets-api.ts";
 import { useGoalsApi } from "./servers/use-goals-api.ts";
@@ -18,11 +20,12 @@ import type { FC } from 'react';
 import type { IGoalsRESTApiClient, IWalletsRESTApiClient } from "@feature/wallets";
 import type { ITransactionsRESTApiClient } from "@feature/transactions";
 import type { IAccountsRESTApiClient } from "@feature/accounts";
-import type { IAuthRESTApiClient, IWebhookRESTApiClient } from "@feature/configuration";
+import type { IAuthRESTApiClient, IWebhooksRESTApiClient } from "@feature/configuration";
 import type { IMetricsRESTApiClient } from "@feature/metrics";
 import type { INotificationsRESTApiClient } from "@feature/assistance";
 import type { ICurrenciesRESTApiClient } from "@feature/localization";
 import type { IActionsRESTApiClient, IAutomationsRESTApiClient, IAssistantRESTApiClient } from "@feature/assistance";
+import type { ApiServerOptions } from "./servers/types.ts";
 
 
 interface ApiContextType {
@@ -39,7 +42,7 @@ interface ApiContextType {
 		readonly rest: IAccountsRESTApiClient
 	},
 	webhookServers: {
-		readonly rest: IWebhookRESTApiClient
+		readonly rest: IWebhooksRESTApiClient
 	},
 	authServers: {
 		readonly rest: IAuthRESTApiClient
@@ -76,17 +79,23 @@ const ApiProvider: FC<ApiProviderProps> = ({
 	children,
 	envVariables
 }) => {
-	const walletServers = useWalletsApi(envVariables.CLIENT_API_BASE_URL);
-	const goalServers = useGoalsApi(envVariables.CLIENT_API_BASE_URL);
-	const transactionServers = useTransactionsApi(envVariables.CLIENT_API_BASE_URL);
-	const accountServers = useAccountsApi(envVariables.CLIENT_API_BASE_URL);
-	const webhookServers = useWebhooksApi(envVariables.CLIENT_API_BASE_URL);
-	const metricsServers = useMetricsApi(envVariables.CLIENT_API_BASE_URL);
-	const actionServers = useActionsApi(envVariables.CLIENT_API_BASE_URL);
-	const automationServers = useAutomationsApi(envVariables.CLIENT_API_BASE_URL);
-	const notificationServers = useNotificationsApi(envVariables.CLIENT_API_BASE_URL);
-	const assistantServers = useAssistantApi(envVariables.CLIENT_API_BASE_URL);
-	const currencyServers = useCurrenciesApi(envVariables.CLIENT_API_BASE_URL);
+	const serverOptions = useMemo<ApiServerOptions>(() => ({
+		baseUrl: envVariables.CLIENT_API_BASE_URL,
+		mode: resolveApiMode(envVariables.CLIENT_API_MODE),
+		versions: new WriteVersionStore(),
+	}), [envVariables.CLIENT_API_BASE_URL, envVariables.CLIENT_API_MODE]);
+
+	const walletServers = useWalletsApi(serverOptions);
+	const goalServers = useGoalsApi(serverOptions);
+	const transactionServers = useTransactionsApi(serverOptions);
+	const accountServers = useAccountsApi(serverOptions);
+	const webhookServers = useWebhooksApi(serverOptions);
+	const metricsServers = useMetricsApi(serverOptions);
+	const actionServers = useActionsApi(serverOptions);
+	const automationServers = useAutomationsApi(serverOptions);
+	const notificationServers = useNotificationsApi(serverOptions);
+	const assistantServers = useAssistantApi(serverOptions);
+	const currencyServers = useCurrenciesApi(serverOptions);
 	const authServers = useAuthApi();
 
 	const contextValue = useMemo<ApiContextType>(() => ({

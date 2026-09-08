@@ -23,6 +23,8 @@ export const FALLBACK_TIMEZONE_IDS = [
 	'Australia/Sydney',
 ];
 
+export const UNIT_RATE = '1';
+
 export const RATES_STALE_TIME = 5 * 60 * 1000;
 
 export const CATALOG_STALE_TIME = 24 * 60 * 60 * 1000;

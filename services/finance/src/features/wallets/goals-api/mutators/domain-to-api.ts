@@ -1,5 +1,3 @@
-import { toAmountString } from "@shared/api";
-
 import type { GoalDraft, GoalPatch } from "@entity/wallets";
 import type { GoalCreateBody, GoalPatchBody } from "../types.ts";
 
@@ -8,7 +6,7 @@ const goalDraftToApi = (draft: GoalDraft): GoalCreateBody => ({
 	name: draft.name,
 	finish_at: draft.finishAt,
 	currency: draft.currency,
-	target: toAmountString(draft.target),
+	target: draft.target,
 });
 
 const goalPatchToApi = (patch: GoalPatch): GoalPatchBody => ({
@@ -20,7 +18,7 @@ const goalPatchToApi = (patch: GoalPatch): GoalPatchBody => ({
 		: { finish_at: patch.finishAt }),
 	...(patch.target === undefined 
 		? {} 
-		: { target: toAmountString(patch.target) }),
+		: { target: patch.target }),
 });
 
 export { goalDraftToApi, goalPatchToApi };

@@ -1,12 +1,13 @@
 import type { Money } from "@entity/localization";
-import type { LedgerEntry } from "@entity/accounts";
 
 
 type TransactionEntryType = 'expense' | 'income' | 'transfer';
 
 type TransactionType = 'expense' | 'income';
 
-type TransactionOrigin = 'manual' | 'scanned';
+type TransactionOrigin = 'manual' | 'scanned' | 'automation';
+
+type TransactionDraftOrigin = 'manual' | 'scanned';
 
 interface TransactionWalletRef {
 	id: string;
@@ -38,10 +39,18 @@ interface TransactionAnalysis {
 
 interface TransactionDetails extends Transaction {
 	evidence: TransactionEvidence | null;
-	analysis: TransactionAnalysis;
+	analysis: TransactionAnalysis | null;
 }
 
-type TransactionPosting = LedgerEntry;
+interface TransactionPosting {
+	id: string;
+	accountId: string;
+	title: string;
+	icon: string;
+	debit: boolean;
+	position: number;
+	money: Money;
+}
 
 interface TransactionChain {
 	chainId: string;
@@ -51,9 +60,9 @@ interface TransactionChain {
 interface TransactionDraft {
 	name: string;
 	currency: string;
-	amount: number;
+	amount: string;
 	walletId: string;
-	origin: TransactionOrigin;
+	origin: TransactionDraftOrigin;
 	type: TransactionType;
 	category: string | null;
 	evidence: TransactionEvidence | null;
@@ -110,6 +119,7 @@ interface ReceiptScan {
 export type {
 	Transaction,
 	TransactionDetails,
+	TransactionDraftOrigin,
 	TransactionType,
 	TransactionOrigin,
 	TransactionAnalysis,

@@ -1,26 +1,30 @@
 import { useMemo } from "react";
-import { useAxiosInstance } from "@internal/shared";
 
-import { TransactionMockRESTApiClient } from "@feature/transactions";
-import { API_BASE_PATH } from "../config.ts";
+import { TransactionsHttpRESTApiClient, TransactionsMockRESTApiClient } from "@feature/transactions";
+import { useResourceAxios } from "./use-resource-axios.ts";
+
 import type { ITransactionsRESTApiClient } from "@feature/transactions";
+import type { ApiServerOptions } from "./types.ts";
+
+
+const TRANSACTIONS_PATH = '/transactions';
 
 interface UseTransactionsApiResponse {
 	rest: ITransactionsRESTApiClient;
 }
 
-function useTransactionsApi(baseUrl: string): UseTransactionsApiResponse {
-	const transactionsAxiosInstance = useAxiosInstance({
-		baseUrl: `${baseUrl}${API_BASE_PATH}/transactions`
-	});
+function useTransactionsApi(options: ApiServerOptions): UseTransactionsApiResponse {
+	const axiosInstance = useResourceAxios(options, TRANSACTIONS_PATH);
 
-	const restTransactionsClient = useMemo<ITransactionsRESTApiClient>(() => {
-		return new TransactionMockRESTApiClient();
-	}, [transactionsAxiosInstance]);
+	const restClient = useMemo<ITransactionsRESTApiClient>(() => {
+		return options.mode === 'live'
+			? new TransactionsHttpRESTApiClient(axiosInstance, options.versions)
+			: new TransactionsMockRESTApiClient();
+	}, [axiosInstance, options.mode, options.versions]);
 
 	return useMemo(() => ({
-		rest: restTransactionsClient
-	}), [restTransactionsClient]);
+		rest: restClient
+	}), [restClient]);
 }
 
 export { useTransactionsApi };

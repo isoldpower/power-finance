@@ -3,11 +3,11 @@ import { webhookFromApi } from "../mutators";
 
 import type { Page, PageParams } from "@shared/api";
 import type { WebhookEndpoint } from "@entity/configuration";
-import type { IWebhookRESTApiClient } from "../rest-client";
+import type { IWebhooksRESTApiClient } from "../rest-client";
 
 
 interface ListWebhooksRequest {
-	handler: Pick<IWebhookRESTApiClient, 'list'>;
+	handler: Pick<IWebhooksRESTApiClient, 'list'>;
 	enabled?: boolean;
 	page?: PageParams;
 }

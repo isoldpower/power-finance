@@ -1,3 +1,5 @@
+import { negateAmount } from "@shared/api";
+
 import {
 	ledgerSideLabel,
 	transactionKindLabel,
@@ -34,7 +36,7 @@ const toTransactionRowView = (
 	return {
 		id: transaction.id,
 		amount,
-		signedAmount: transaction.type === 'expense' ? -amount : amount,
+		signedAmount: transaction.type === 'expense' ? negateAmount(amount) : amount,
 		currency: transaction.money.currency,
 		type: transaction.type,
 		walletId: transaction.wallet.id,

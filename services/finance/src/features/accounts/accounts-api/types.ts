@@ -1,17 +1,20 @@
 import type { MoneyDto, PageParams } from "@shared/api";
 
-type AccountGroupDto = 'assets' | 'liabilities' | 'equity';
+type AccountGroupDto = 'assets' | 'liabilities' | 'equity' | '';
 
-type AccountGroupFilterDto = AccountGroupDto | 'all';
+type AccountGroupFilterDto = 'assets' | 'liabilities' | 'equity' | 'all';
 
 interface AccountDto {
 	id: string;
 	group: AccountGroupDto;
 	name: string;
 	money: MoneyDto;
+	created_at: string;
+	updated_at: string | null;
 }
 
 interface LedgerEntryDto {
+	id: string;
 	title: string;
 	debit: boolean;
 	created_at: string;

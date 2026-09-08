@@ -1,26 +1,30 @@
 import { useMemo } from "react";
-import { useAxiosInstance } from "@internal/shared";
 
-import { AccountsMockRESTApiClient } from "@feature/accounts";
-import { API_BASE_PATH } from "../config.ts";
+import { AccountsHttpRESTApiClient, AccountsMockRESTApiClient } from "@feature/accounts";
+import { useResourceAxios } from "./use-resource-axios.ts";
+
 import type { IAccountsRESTApiClient } from "@feature/accounts";
+import type { ApiServerOptions } from "./types.ts";
+
+
+const ACCOUNTS_PATH = '/accounts';
 
 interface UseAccountsApiResponse {
 	rest: IAccountsRESTApiClient;
 }
 
-function useAccountsApi(baseUrl: string): UseAccountsApiResponse {
-	const accountsAxiosInstance = useAxiosInstance({
-		baseUrl: `${baseUrl}${API_BASE_PATH}/accounts`
-	});
+function useAccountsApi(options: ApiServerOptions): UseAccountsApiResponse {
+	const axiosInstance = useResourceAxios(options, ACCOUNTS_PATH);
 
-	const restAccountsClient = useMemo<IAccountsRESTApiClient>(() => {
-		return new AccountsMockRESTApiClient();
-	}, [accountsAxiosInstance]);
+	const restClient = useMemo<IAccountsRESTApiClient>(() => {
+		return options.mode === 'live'
+			? new AccountsHttpRESTApiClient(axiosInstance, options.versions)
+			: new AccountsMockRESTApiClient();
+	}, [axiosInstance, options.mode, options.versions]);
 
 	return useMemo(() => ({
-		rest: restAccountsClient
-	}), [restAccountsClient]);
+		rest: restClient
+	}), [restClient]);
 }
 
 export { useAccountsApi };

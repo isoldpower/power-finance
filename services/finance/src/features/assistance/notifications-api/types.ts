@@ -27,12 +27,17 @@ interface NotificationAcknowledgedDto {
 	acknowledged_at: string;
 }
 
+interface NotificationAckBatchBody {
+	ids: string[];
+}
+
 interface NotificationListParams extends PageParams {
 	acknowledged?: boolean;
 	severity?: NotificationSeverityDto;
 }
 
 export type {
+	NotificationAckBatchBody,
 	NotificationAcknowledgedDto,
 	NotificationCountsDto,
 	NotificationDto,

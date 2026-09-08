@@ -1,19 +1,19 @@
 import { useMemo } from "react";
 
 import { useEntryWalletDefaults } from "../form-state";
-import { DEFAULT_ENTRY_CATEGORY } from "../config.ts";
+import { DEFAULT_ENTRY_CATEGORY, INITIAL_ENTRY_TYPE } from "../config.ts";
 
 import type { Wallet } from "@entity/wallets";
 import type { QuickAddSchema } from "./quick-add-schema.ts";
 
 
-const useQuickAddInitials = (wallets: Wallet[]): QuickAddSchema => {
-	const { fromWallet, toWallet } = useEntryWalletDefaults(wallets);
+const useQuickAddInitials = (wallets: Wallet[], preferredWalletId?: string): QuickAddSchema => {
+	const { fromWallet, toWallet } = useEntryWalletDefaults(wallets, INITIAL_ENTRY_TYPE, preferredWalletId);
 
 	return useMemo(() => ({
 		fromWallet,
 		toWallet,
-		type: 'expense',
+		type: INITIAL_ENTRY_TYPE,
 		amount: '',
 		receiveAmount: '',
 		category: DEFAULT_ENTRY_CATEGORY,

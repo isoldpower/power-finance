@@ -1,4 +1,4 @@
-export { ApiError, ERROR_STATUS } from './errors.ts';
+export { ApiError, FALLBACK_STATUS, STALE_READ_STATUS, statusForCode } from './errors.ts';
 export { isApiError, isApiErrorEnvelope, apiErrorFromEnvelope } from './helpers.ts';
 
 export type {
@@ -22,4 +22,7 @@ export type {
 	ApiErrorDetail,
 	ApiErrorEnvelope,
 	ApiErrorMeta,
+	ApiErrorOptions,
+	KnownApiDetailCode,
+	KnownApiErrorCode,
 } from './errors.ts';

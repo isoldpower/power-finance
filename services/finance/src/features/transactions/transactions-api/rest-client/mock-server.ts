@@ -14,7 +14,6 @@ import { storedTransactionToDto, TRANSACTIONS_STORAGE_KEY } from "./mock-seed.ts
 import { TRANSACTION_CHAIN_LIMIT } from "../types.ts";
 import type { IStorage } from "@internal/shared";
 import type { FieldPolicy } from "@shared/api";
-import type { LedgerEntryDto } from "@feature/accounts/accounts-api";
 import type { StoredTransaction } from "./mock-seed.ts";
 import type {
 	CategoryDto,
@@ -22,12 +21,15 @@ import type {
 	TransactionChainEntryBody,
 	TransactionCreateBody,
 	TransactionDetailDto,
+	TransactionPostingDto,
 	TransactionDto,
 	TransactionSearchField,
 } from "../types.ts";
 import type {
 	ITransactionsRESTApiClient,
 	TransactionCategoriesRequest, TransactionCategoriesResponse,
+	TransactionAdjustRequest,
+	TransactionAdjustResponse,
 	TransactionChainDeleteRequest, TransactionChainDeleteResponse,
 	TransactionChainRequest, TransactionChainResponse,
 	TransactionDeleteRequest, TransactionDeleteResponse,
@@ -126,7 +128,7 @@ const matchesNode = createMatcher<StoredTransaction, TransactionSearchField>(
 	{ numericFields: ['amount'] },
 );
 
-class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
+class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 	private readonly storage: IStorage<StoredTransaction>;
 	private readonly postKeys = new IdempotencyStore<TransactionDto>();
 	private readonly chainKeys = new IdempotencyStore<TransactionDto[]>();
@@ -143,9 +145,13 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		const wallet = this.wallets().find((item) => item.id === walletId);
 
 		if (!wallet) {
-			throw new ApiError('validation_failed', `Wallet ${walletId} does not exist`, [
-				{ field: 'wallet_id', code: 'not_a_reference', message: 'Wallet does not resolve to an existing resource' },
-			]);
+			throw new ApiError('validation_failed', `Wallet ${walletId} does not exist`, {
+				details: [{
+					field: 'wallet_id',
+					code: 'not_a_reference',
+					message: 'Wallet does not resolve to an existing resource',
+				}],
+			});
 		}
 
 		if (wallet.deleted_at !== null) {
@@ -170,7 +176,7 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		return storedTransactionToDto(transaction);
 	}
 
-	private postings(transaction: StoredTransaction): LedgerEntryDto[] {
+	private postings(transaction: StoredTransaction): TransactionPostingDto[] {
 		const money = { amount: transaction.amount, currency: transaction.currency };
 		const counterpart = transaction.type === 'expense'
 			? { title: transaction.category ?? transaction.name, icon: EXPENSE_ICON }
@@ -178,25 +184,27 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 
 		return [
 			{
+				id: `${transaction.id}-counterpart`,
+				account_id: `${transaction.id}-counterpart-account`,
 				title: counterpart.title,
 				debit: transaction.type === 'expense',
-				created_at: transaction.created_at,
-				source_transaction: transaction.id,
+				position: 0,
 				icon: counterpart.icon,
 				money,
 			},
 			{
+				id: `${transaction.id}-wallet`,
+				account_id: transaction.wallet_id,
 				title: transaction.wallet_name,
 				debit: transaction.type === 'income',
-				created_at: transaction.created_at,
-				source_transaction: transaction.id,
+				position: 1,
 				icon: WALLET_ICON,
 				money,
 			},
 		];
 	}
 
-	private toDetailDto(transaction: StoredTransaction, postings: LedgerEntryDto[]): TransactionDetailDto {
+	private toDetailDto(transaction: StoredTransaction, postings: TransactionPostingDto[]): TransactionDetailDto {
 		const currencies = new Set(postings.map((posting) => posting.money.currency));
 		const balanced = currencies.size <= 1;
 
@@ -277,15 +285,9 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		await delay();
 
 		const transaction = this.require(payload.id);
-		const postings = paginate(
-			this.postings(transaction),
-			payload.params,
-			stringifySortedQuery({ id: payload.id }),
-		);
-
 		return {
-			data: this.toDetailDto(transaction, postings.items),
-			meta: { postings: postings.meta, cached: false },
+			data: this.toDetailDto(transaction, this.postings(transaction)),
+			meta: { cached: false },
 		};
 	}
 
@@ -295,11 +297,10 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		await delay();
 
 		const matching = this.settled().filter((item) => matchesNode(item, payload.data.filter_body));
-		const ordered = payload.params?.order === 'ASC' ? [...matching].reverse() : matching;
 		const page = paginate(
-			ordered,
+			matching,
 			payload.params,
-			stringifySortedQuery({ filter: payload.data.filter_body, order: payload.params?.order ?? 'DESC' }),
+			stringifySortedQuery({ filter: payload.data.filter_body }),
 		);
 
 		return {
@@ -341,6 +342,26 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 		this.storage.add(updated);
 
 		return { data: this.toDto(updated), meta: {} };
+	}
+
+	public async adjust(payload: TransactionAdjustRequest): Promise<TransactionAdjustResponse> {
+		await delay();
+
+		const transaction = this.require(payload.id);
+		if (transaction.deleted_at !== null) {
+			throw new ApiError('conflict', `Transaction ${payload.id} is cancelled`);
+		}
+
+		const adjusted: StoredTransaction = {
+			...transaction,
+			amount: payload.data.amount,
+			updated_at: new Date().toISOString(),
+		};
+
+		this.storage.remove(transaction);
+		this.storage.add(adjusted);
+
+		return { data: this.toDto(adjusted), meta: {} };
 	}
 
 	public async delete(payload: TransactionDeleteRequest): Promise<TransactionDeleteResponse> {
@@ -442,4 +463,4 @@ class TransactionMockRESTApiClient implements ITransactionsRESTApiClient {
 	}
 }
 
-export { TransactionMockRESTApiClient, SEARCH_FIELDS as TRANSACTION_SEARCH_FIELDS };
+export { TransactionsMockRESTApiClient, SEARCH_FIELDS as TRANSACTION_SEARCH_FIELDS };

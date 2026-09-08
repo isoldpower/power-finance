@@ -14,8 +14,8 @@ const MATCH_ALL: FilterNode<WalletSearchField> = {
 const walletDraftToApi = (draft: WalletDraft): WalletCreateBody => ({
 	name: draft.name,
 	color: draft.color,
-	opening_balance: toAmountString(draft.openingBalance),
-	zero_balance: toAmountString(draft.zeroBalance),
+	opening_balance: draft.openingBalance,
+	zero_balance: draft.zeroBalance,
 	currency: draft.currency,
 	category: draft.category,
 });
@@ -25,7 +25,7 @@ const walletPatchToApi = (patch: WalletPatch): WalletPatchBody => ({
 	...(patch.favorite === undefined ? {} : { favorite: patch.favorite }),
 	...(patch.category === undefined ? {} : { category: patch.category }),
 	...(patch.color === undefined ? {} : { color: patch.color }),
-	...(patch.zeroBalance === undefined ? {} : { zero_balance: toAmountString(patch.zeroBalance) }),
+	...(patch.zeroBalance === undefined ? {} : { zero_balance: patch.zeroBalance }),
 });
 
 const walletQueryToApi = (query: WalletQuery): WalletSearchBody => {

@@ -8,8 +8,9 @@ import type { FormatMoney } from "@shared/formatting";
 
 const MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
 
-const toEtaLabel = (finishAt: string, percent: number): string => {
+const toEtaLabel = (finishAt: string | null, percent: number): string => {
 	if (percent >= 100) return 'reached';
+	if (finishAt === null) return 'no deadline';
 
 	const remaining = new Date(finishAt).getTime() - Date.now();
 	if (Number.isNaN(remaining)) return 'in progress';

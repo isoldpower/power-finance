@@ -1,4 +1,4 @@
-import type { PageParams } from "@shared/api";
+import type { PageParams, SearchPayload } from "@shared/api";
 
 
 type DeliveryStatusDto = 'pending' | 'in_progress' | 'retry_scheduled' | 'success' | 'failed';
@@ -59,6 +59,12 @@ interface SubscriptionCreateBody {
 	event: string;
 }
 
+type WebhookSearchField = 'title' | 'url' | 'enabled' | 'created_at';
+
+type WebhookSearchBody = SearchPayload<WebhookSearchField>;
+
+type WebhookSearchParams = PageParams;
+
 interface WebhookListParams extends PageParams {
 	enabled?: boolean;
 }
@@ -78,6 +84,9 @@ export type {
 	WebhookEventTypeDto,
 	WebhookListParams,
 	WebhookPatchBody,
+	WebhookSearchBody,
+	WebhookSearchField,
+	WebhookSearchParams,
 	WebhookSecretDto,
 	WebhookSubscriptionDto,
 };

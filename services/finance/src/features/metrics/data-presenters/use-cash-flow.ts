@@ -1,42 +1,26 @@
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useApiContext } from "@app/api";
-import { getCashFlow } from "../metrics-api";
-import { METRICS_CACHE_KEYS } from "./cache-config.ts";
+import { useMetrics } from "./use-metrics.ts";
 
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { CashFlow } from "@entity/metrics";
+import type { UseMetricsReturn } from "./use-metrics.ts";
 
 
 interface UseCashFlowParams {
 	since?: string;
 }
 
-type UseCashFlowOptions = Omit<UseQueryOptions<CashFlow>, 'queryKey' | 'queryFn'>;
-
-type UseCashFlowReturn = UseQueryResult<CashFlow> & {
+type UseCashFlowReturn = UseMetricsReturn & {
 	cashFlow: CashFlow | undefined;
 };
 
-const useCashFlow = (
-	params?: UseCashFlowParams,
-	options?: UseCashFlowOptions
-): UseCashFlowReturn => {
-	const apiContext = useApiContext();
-	const query = useQuery<CashFlow>({
-		queryKey: [METRICS_CACHE_KEYS.cashFlow, params?.since ?? 'all'],
-		queryFn: () => getCashFlow({
-			handler: apiContext.metricsServers.rest,
-			since: params?.since,
-		}),
-		...options ?? {},
-	});
+const useCashFlow = (params?: UseCashFlowParams): UseCashFlowReturn => {
+	const query = useMetrics({ since: params?.since });
 
 	return useMemo(() => ({
 		...query,
-		cashFlow: query.data,
+		cashFlow: query.data?.metrics.cashFlow ?? undefined,
 	}), [query]);
 };
 
 export { useCashFlow };
-export type { UseCashFlowOptions, UseCashFlowParams, UseCashFlowReturn };
+export type { UseCashFlowParams, UseCashFlowReturn };

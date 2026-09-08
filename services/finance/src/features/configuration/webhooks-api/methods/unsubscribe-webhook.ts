@@ -1,11 +1,11 @@
 import { subscriptionFromApi } from "../mutators";
 
 import type { WebhookSubscription } from "@entity/configuration";
-import type { IWebhookRESTApiClient } from "../rest-client";
+import type { IWebhooksRESTApiClient } from "../rest-client";
 
 
 interface UnsubscribeWebhookRequest {
-	handler: Pick<IWebhookRESTApiClient, 'unsubscribe'>;
+	handler: Pick<IWebhooksRESTApiClient, 'unsubscribe'>;
 	webhookId: string;
 	subscriptionId: string;
 }

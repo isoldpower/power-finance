@@ -1,12 +1,4 @@
-export { MetricsDjangoRESTApiClient } from './django-server.ts';
+export { MetricsHttpRESTApiClient } from './http-server.ts';
 export { MetricsMockRESTApiClient } from './mock-server.ts';
 
-export type {
-	BalanceMetricsRequest,
-	BalanceMetricsResponse,
-	CashFlowRequest,
-	CashFlowResponse,
-	IMetricsRESTApiClient,
-	NetWorthRequest,
-	NetWorthResponse,
-} from './types.ts';
+export type { IMetricsRESTApiClient, MetricsRequest, MetricsResponse } from './types.ts';

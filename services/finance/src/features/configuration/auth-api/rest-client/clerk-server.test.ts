@@ -94,10 +94,10 @@ describe('AuthClerkRESTApiClient', () => {
 		expect(reload).toHaveBeenCalledTimes(1);
 	});
 
-	test('merges a partial patch into the preferences already stored', async () => {
+	test('merges a partial patch into the claims the gateway reads', async () => {
 		const update = vi.fn();
 		const user = fakeUser({
-			unsafeMetadata: { theme: 'dark', preferences: { locale: 'fr-FR', main_currency: 'EUR', timezone: 'Europe/Paris' } },
+			unsafeMetadata: { theme: 'dark', language: 'fr-FR', currency: 'EUR', timezone: 'Europe/Paris' },
 			update: update as types.UserResource['update'],
 		});
 		update.mockImplementation((params: { unsafeMetadata: UnsafeMetadata }) => {
@@ -108,9 +108,27 @@ describe('AuthClerkRESTApiClient', () => {
 		const updated = await client.patchPreferences({ data: { main_currency: 'GBP' } });
 
 		expect(update).toHaveBeenCalledWith({
-			unsafeMetadata: { theme: 'dark', preferences: { locale: 'fr-FR', main_currency: 'GBP', timezone: 'Europe/Paris' } },
+			unsafeMetadata: { theme: 'dark', language: 'fr-FR', currency: 'GBP', timezone: 'Europe/Paris' },
 		});
 		expect(updated.data.preferences).toEqual({ locale: 'fr-FR', main_currency: 'GBP', timezone: 'Europe/Paris' });
+	});
+
+	test('lifts preferences stored under the old nested key onto the claims', async () => {
+		const update = vi.fn();
+		const user = fakeUser({
+			unsafeMetadata: { preferences: { locale: 'fr-FR', main_currency: 'EUR', timezone: 'Europe/Paris' } },
+			update: update as types.UserResource['update'],
+		});
+		update.mockImplementation((params: { unsafeMetadata: UnsafeMetadata }) => {
+			return Promise.resolve(fakeUser({ unsafeMetadata: params.unsafeMetadata }));
+		});
+		const client = new AuthClerkRESTApiClient(() => user);
+
+		await client.patchPreferences({ data: { main_currency: 'GBP' } });
+
+		expect(update).toHaveBeenCalledWith({
+			unsafeMetadata: { language: 'fr-FR', currency: 'GBP', timezone: 'Europe/Paris' },
+		});
 	});
 
 	test('refuses to write preferences without a signed in user', async () => {

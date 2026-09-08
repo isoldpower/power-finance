@@ -1,11 +1,11 @@
 import { webhookFromApi } from "../mutators";
 
 import type { WebhookEndpoint } from "@entity/configuration";
-import type { IWebhookRESTApiClient } from "../rest-client";
+import type { IWebhooksRESTApiClient } from "../rest-client";
 
 
 interface FetchWebhookRequest {
-	handler: Pick<IWebhookRESTApiClient, 'get'>;
+	handler: Pick<IWebhooksRESTApiClient, 'get'>;
 	id: string;
 }
 

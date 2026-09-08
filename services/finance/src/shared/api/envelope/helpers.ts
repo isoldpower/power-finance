@@ -1,5 +1,7 @@
 import { ApiError, ApiErrorPayload } from "./errors.ts";
 
+import type { ApiErrorOptions } from "./errors.ts";
+
 
 function isApiError(error: unknown): error is ApiError {
 	return error instanceof ApiError;
@@ -14,17 +16,24 @@ function isApiErrorEnvelope(payload: unknown): payload is ApiErrorPayload {
 	return typeof candidate === 'object' && candidate !== null && 'code' in candidate;
 }
 
-function apiErrorFromEnvelope(payload: unknown, fallbackMessage: string): ApiError {
+function apiErrorFromEnvelope(
+	payload: unknown,
+	fallbackMessage: string,
+	options: ApiErrorOptions = {},
+): ApiError {
 	if (!isApiErrorEnvelope(payload)) {
-		return new ApiError('internal_error', fallbackMessage);
+		return new ApiError('internal_error', fallbackMessage, {
+			...options,
+			enveloped: false,
+		});
 	}
 
-	return new ApiError(
-		payload.error.code,
-		payload.error.message,
-		payload.error.details ?? [],
-		payload.meta?.request_id ?? null,
-	);
+	return new ApiError(payload.error.code, payload.error.message, {
+		...options,
+		details: payload.error.details ?? [],
+		requestId: payload.meta?.request_id ?? null,
+		enveloped: true,
+	});
 }
 
 export { isApiError, isApiErrorEnvelope, apiErrorFromEnvelope };

@@ -1,5 +1,3 @@
-import { toAmountString } from "@shared/api";
-
 import type { FilterNode } from "@shared/api";
 import type {
 	AutomationDraft,
@@ -64,8 +62,8 @@ const effectToApi = (effect: AutomationEffect): AutomationEffectDto => {
 				params: {
 					from_wallet_id: effect.fromWalletId,
 					to_wallet_id: effect.toWalletId,
-					money: { 
-						amount: toAmountString(effect.money.amount),
+					money: {
+						amount: effect.money.amount,
 						currency: effect.money.currency,
 					},
 				},

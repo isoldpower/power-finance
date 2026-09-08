@@ -1,4 +1,4 @@
-export { WalletsDjangoRESTApiClient } from './django-server.ts';
+export { WalletsHttpRESTApiClient } from './http-server.ts';
 export { WalletsMockRESTApiClient, WALLET_SEARCH_FIELDS } from './mock-server.ts';
 export { WALLETS_STORAGE_KEY } from './mock-seed.ts';
 
@@ -14,6 +14,8 @@ export type {
 	WalletPatchResponse,
 	WalletPostRequest,
 	WalletPostResponse,
+	WalletPutRequest,
+	WalletPutResponse,
 	WalletSearchRequest,
 	WalletSearchResponse,
 } from './types.ts';

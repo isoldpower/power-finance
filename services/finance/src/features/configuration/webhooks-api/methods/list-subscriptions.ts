@@ -3,11 +3,11 @@ import { subscriptionFromApi } from "../mutators";
 
 import type { Page, PageParams } from "@shared/api";
 import type { WebhookSubscription } from "@entity/configuration";
-import type { IWebhookRESTApiClient } from "../rest-client";
+import type { IWebhooksRESTApiClient } from "../rest-client";
 
 
 interface ListSubscriptionsRequest {
-	handler: Pick<IWebhookRESTApiClient, 'listSubscriptions'>;
+	handler: Pick<IWebhooksRESTApiClient, 'listSubscriptions'>;
 	webhookId: string;
 	page?: PageParams;
 }

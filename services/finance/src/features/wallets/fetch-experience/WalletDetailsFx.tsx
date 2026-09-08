@@ -3,7 +3,7 @@ import { WalletDetailsSkeleton } from "@entity/wallets";
 import { SpaceOccupant } from "@shared/pure-components/layout";
 import { textClass } from "@shared/pure-components/typography";
 
-import type { Wallet } from "@entity/wallets";
+import type { WalletDetails } from "@entity/wallets";
 import type { FC, ReactNode } from "react";
 
 
@@ -12,8 +12,8 @@ const PLACEHOLDER_ROWS = ['w1', 'w2', 'w3'];
 interface WalletDetailsFxProps {
 	isError: boolean;
 	isPending: boolean;
-	wallet: Wallet | undefined;
-	children: (wallet: Wallet) => ReactNode;
+	wallet: WalletDetails | undefined;
+	children: (wallet: WalletDetails) => ReactNode;
 }
 
 const WalletDetailsFx: FC<WalletDetailsFxProps> = ({

@@ -1,4 +1,4 @@
-import { parseAmount } from "@shared/api";
+import { ZERO_AMOUNT } from "@shared/api";
 
 import type { FilterNode, MoneyDto } from "@shared/api";
 import type {
@@ -30,7 +30,7 @@ const readMoney = (params: EffectParamsDto, key: string): Money => {
 	const value = params[key] as MoneyDto | undefined;
 
 	return {
-		amount: parseAmount(value?.amount ?? '0'),
+		amount: value?.amount ?? ZERO_AMOUNT,
 		currency: value?.currency ?? '',
 	};
 };

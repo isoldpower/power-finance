@@ -1,8 +1,8 @@
 import type { TransactionType } from "../types.ts";
 
 
-type ConvertMoney = (money: { amount: number; currency: string }) => { 
-	amount: number;
+type ConvertMoney = (money: { amount: string; currency: string }) => {
+	amount: string;
 	currency: string;
 	formatted: string;
 	converted: boolean;
@@ -17,8 +17,8 @@ interface LedgerEntryView {
 
 interface TransactionRowView {
 	id: string;
-	amount: number;
-	signedAmount: number;
+	amount: string;
+	signedAmount: string;
 	currency: string;
 	type: TransactionType;
 	walletId: string;
@@ -44,7 +44,7 @@ interface TransactionMoneyView {
 
 interface TransactionDayView {
 	dayLabel: string;
-	dayTotal: number;
+	dayTotal: string;
 	transactions: TransactionRowView[];
 }
 

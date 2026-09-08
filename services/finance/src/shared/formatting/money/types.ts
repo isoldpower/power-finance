@@ -1,3 +1,3 @@
-type FormatMoney = (amount: number, currency: string) => string;
+type FormatMoney = (amount: string, currency: string) => string;
 
 export type { FormatMoney };

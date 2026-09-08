@@ -13,8 +13,6 @@ const ResetTransactionOnBrowse: FC = () => {
 		walletFilter,
 		categoryFilter,
 		typeFilter,
-		sortBy,
-		sortDirection,
 	} = useTransactionsFiltersContext();
 	const { pageNumber } = useTransactionsPaginationContext();
 	const selectTransaction = useTransactionsSelection((state) => {
@@ -30,7 +28,7 @@ const ResetTransactionOnBrowse: FC = () => {
 	}, [clearChecked, selectTransaction]);
 
 	useOnValuesChange(
-		[search, caseSensitive, walletFilter, categoryFilter, typeFilter, sortBy, sortDirection, pageNumber],
+		[search, caseSensitive, walletFilter, categoryFilter, typeFilter, pageNumber],
 		resetSelection
 	);
 

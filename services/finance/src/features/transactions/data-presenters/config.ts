@@ -5,8 +5,11 @@ export const CACHE_KEYS = {
 	fetch: 'transaction',
 	delete: 'deleteTransaction',
 	replace: 'replaceTransaction',
+	adjust: 'adjustTransaction',
 	create: 'createTransaction',
 	chain: 'createTransactionChain',
 	categories: 'transactionCategories',
 	scan: 'transactionReceiptScan',
 } as const;
+
+export const LEDGER_DISPATCH_POLL_MS = 2000;

@@ -1,11 +1,11 @@
 import { webhookFromApi, webhookPatchToApi } from "../mutators";
 
 import type { WebhookEndpoint, WebhookPatch } from "@entity/configuration";
-import type { IWebhookRESTApiClient } from "../rest-client";
+import type { IWebhooksRESTApiClient } from "../rest-client";
 
 
 interface UpdateWebhookRequest {
-	handler: Pick<IWebhookRESTApiClient, 'patch'>;
+	handler: Pick<IWebhooksRESTApiClient, 'patch'>;
 	id: string;
 	patch: WebhookPatch;
 }

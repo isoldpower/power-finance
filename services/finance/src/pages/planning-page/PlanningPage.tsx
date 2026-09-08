@@ -11,7 +11,7 @@ import { PageTitle } from "@shared/pure-components/typography";
 import { CheckIcon } from "@shared/pure-components/icons";
 import { FinanceButton, FinanceCard } from "@internal/ui-library";
 import { PlanningAiAssistant, NeedsActionPanel, ToggleableAutomationRow } from "@process/assistance";
-import { DeletableGoalRow } from "@process/wallets";
+import { GoalDirectoryRow } from "@process/wallets";
 import {
 	AutomationsBrowserProvider,
 	AutomationsBrowserFilters,
@@ -116,7 +116,7 @@ const PlanningPage: FC = () => {
 									<GoalsBrowserFilters />
 									<FilteredGoalsDirectory>
 										{(goal, index) => (
-											<DeletableGoalRow
+											<GoalDirectoryRow
 												goal={goal}
 												order={index}
 											/>

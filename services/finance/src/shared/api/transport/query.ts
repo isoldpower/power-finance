@@ -3,26 +3,28 @@ import { QUERY_ARRAY_SEPARATOR } from "./config.ts";
 
 type QueryValue = string | number | boolean | string[] | undefined | null;
 
-function buildQuery(params: Record<string, QueryValue> | undefined): string {
+function serializeParams(params: Record<string, QueryValue> | undefined): string {
 	if (!params) {
 		return '';
 	}
 
 	const querySearch = new URLSearchParams();
 	for (const [paramName, paramValue] of Object.entries(params)) {
-		if (paramValue !== undefined && paramValue !== null) {
-			if (Array.isArray(paramValue) && paramValue.length !== 0) {
+		if (paramValue === undefined || paramValue === null) {
+			continue;
+		}
+
+		if (Array.isArray(paramValue)) {
+			if (paramValue.length !== 0) {
 				querySearch.set(paramName, paramValue.join(QUERY_ARRAY_SEPARATOR));
-			} else {
-				querySearch.set(paramName, String(paramValue));
 			}
+		} else {
+			querySearch.set(paramName, String(paramValue));
 		}
 	}
 
-	return querySearch.toString() 
-		? `?${querySearch.toString()}` 
-		: '';
+	return querySearch.toString();
 }
 
-export { buildQuery };
+export { serializeParams };
 export type { QueryValue };

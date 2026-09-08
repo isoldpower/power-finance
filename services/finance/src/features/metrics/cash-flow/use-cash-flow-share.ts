@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { addAmounts, isZeroAmount, parseAmount } from "@shared/api";
 
 import type { CashFlow } from "@entity/metrics";
 
@@ -7,14 +8,17 @@ const useCashFlowShare = (
 	cashFlow: CashFlow,
 ) => {
 	return useMemo(() => {
-		const allFlows = [cashFlow.inflow, cashFlow.outflow];
-		const total = allFlows.reduce((total, flow) => {
-			return total + flow.amount;
-		}, 0);
+		const total = addAmounts(cashFlow.inflow.amount, cashFlow.outflow.amount);
 
-		return total === 0 ? { inflowShare: 0, outflowShare: 0 } : {
-			inflowShare: (cashFlow.inflow.amount / total) * 100,
-			outflowShare: (cashFlow.outflow.amount / total) * 100,
+		if (isZeroAmount(total)) {
+			return { inflowShare: 0, outflowShare: 0 };
+		}
+
+		const totalValue = parseAmount(total);
+
+		return {
+			inflowShare: (parseAmount(cashFlow.inflow.amount) / totalValue) * 100,
+			outflowShare: (parseAmount(cashFlow.outflow.amount) / totalValue) * 100,
 		};
 	}, [cashFlow]);
 }

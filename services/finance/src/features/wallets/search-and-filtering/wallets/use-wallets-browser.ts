@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { compareAmounts } from "@shared/api";
 
 import { walletTypeLabel } from "@entity/wallets";
 
@@ -14,7 +15,7 @@ function matchesType(wallet: Wallet, typeFilter: string): boolean {
 
 function compareBy(field: string, first: Wallet, second: Wallet): number {
 	if (field === 'balance') {
-		return first.balance.amount - second.balance.amount;
+		return compareAmounts(first.balance.amount, second.balance.amount);
 	}
 
 	if (field === 'updatedAt') {

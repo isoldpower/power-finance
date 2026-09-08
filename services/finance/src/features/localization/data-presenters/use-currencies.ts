@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useApiContext } from "@app/api";
+import { rememberCurrencySymbol, rememberFractionDigits } from "@shared/formatting";
 import { listCurrencies } from "../currencies-api";
 import { CATALOG_STALE_TIME, CURRENCY_CACHE_KEYS } from "./cache-config.ts";
 
@@ -16,6 +17,13 @@ interface UseCurrenciesReturn {
 	isError: boolean;
 }
 
+const rememberCatalog = (currencies: CurrencyMeta[]): void => {
+	for (const currency of currencies) {
+		rememberFractionDigits(currency.code, currency.decimals);
+		rememberCurrencySymbol(currency.code, currency.symbol);
+	}
+};
+
 const useCurrencies = (): UseCurrenciesReturn => {
 	const apiContext = useApiContext();
 
@@ -27,6 +35,7 @@ const useCurrencies = (): UseCurrenciesReturn => {
 
 	return useMemo(() => {
 		const currencies = query.data?.currencies ?? [];
+		rememberCatalog(currencies);
 
 		return {
 			currencies,

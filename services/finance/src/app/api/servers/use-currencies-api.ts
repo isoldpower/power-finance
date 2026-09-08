@@ -1,26 +1,30 @@
 import { useMemo } from "react";
-import { useAxiosInstance } from "@internal/shared";
 
-import { CurrenciesMockRESTApiClient } from "@feature/localization";
-import { API_BASE_PATH } from "../config.ts";
+import { CurrenciesHttpRESTApiClient, CurrenciesMockRESTApiClient } from "@feature/localization";
+import { useResourceAxios } from "./use-resource-axios.ts";
+
 import type { ICurrenciesRESTApiClient } from "@feature/localization";
+import type { ApiServerOptions } from "./types.ts";
+
+
+const CURRENCIES_PATH = '/currencies';
 
 interface UseCurrenciesApiResponse {
 	rest: ICurrenciesRESTApiClient;
 }
 
-function useCurrenciesApi(baseUrl: string): UseCurrenciesApiResponse {
-	const currenciesAxiosInstance = useAxiosInstance({
-		baseUrl: `${baseUrl}${API_BASE_PATH}/currencies`
-	});
+function useCurrenciesApi(options: ApiServerOptions): UseCurrenciesApiResponse {
+	const axiosInstance = useResourceAxios(options, CURRENCIES_PATH);
 
-	const restCurrenciesClient = useMemo<ICurrenciesRESTApiClient>(() => {
-		return new CurrenciesMockRESTApiClient();
-	}, [currenciesAxiosInstance]);
+	const restClient = useMemo<ICurrenciesRESTApiClient>(() => {
+		return options.mode === 'live'
+			? new CurrenciesHttpRESTApiClient(axiosInstance, options.versions)
+			: new CurrenciesMockRESTApiClient();
+	}, [axiosInstance, options.mode, options.versions]);
 
 	return useMemo(() => ({
-		rest: restCurrenciesClient
-	}), [restCurrenciesClient]);
+		rest: restClient
+	}), [restClient]);
 }
 
 export { useCurrenciesApi };

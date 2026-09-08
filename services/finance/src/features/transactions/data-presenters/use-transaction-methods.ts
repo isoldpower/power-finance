@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import { useApiContext } from "@app/api";
+import { createIdempotencyKey } from "@shared/api";
 import {
+	adjustTransaction as adjustTransactionApi,
 	deleteTransaction as deleteTransactionApi,
 	fetchTransaction as fetchTransactionApi,
 	updateTransaction as updateTransactionApi,
@@ -11,20 +13,28 @@ import { CACHE_KEYS } from "./config.ts";
 import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import type { TransactionPatch } from "@entity/transactions";
 import type {
+	AdjustTransactionResponse,
 	DeleteTransactionResponse,
 	FetchTransactionResponse,
 	UpdateTransactionResponse,
 } from "../transactions-api";
 
 
+interface AdjustTransactionVariables {
+	amount: string;
+	idempotencyKey: string;
+}
+
 interface UseTransactionMethodsReturn {
 	meta: {
 		deleteMutation: UseMutationResult<DeleteTransactionResponse, Error, string>;
 		updateMutation: UseMutationResult<UpdateTransactionResponse, Error, TransactionPatch>;
+		adjustMutation: UseMutationResult<AdjustTransactionResponse, Error, AdjustTransactionVariables>;
 		query: UseQueryResult<FetchTransactionResponse>;
 	}
 	deleteTransaction: () => void;
 	updateTransaction: (patch: TransactionPatch) => Promise<UpdateTransactionResponse>;
+	adjustTransaction: (amount: string) => Promise<AdjustTransactionResponse>;
 	fetchTransaction: () => void;
 }
 
@@ -78,6 +88,21 @@ const useTransactionMethods = (
 		onSettled: invalidateTransaction,
 	});
 
+	const adjustMutation = useMutation({
+		mutationFn: (variables: AdjustTransactionVariables) => adjustTransactionApi({
+			handler: apiContext.transactionServers.rest,
+			id,
+			amount: variables.amount,
+			idempotencyKey: variables.idempotencyKey,
+		}),
+		mutationKey: [CACHE_KEYS.adjust, id],
+		onSettled: invalidateTransaction,
+	});
+
+	const adjustTransaction = useCallback((amount: string) => {
+		return adjustMutation.mutateAsync({ amount, idempotencyKey: createIdempotencyKey() });
+	}, [adjustMutation]);
+
 	const updateTransaction = useCallback((patch: TransactionPatch) => {
 		return updateMutation.mutateAsync(patch);
 	}, [updateMutation]);
@@ -89,16 +114,18 @@ const useTransactionMethods = (
 	const meta = useMemo(() => ({
 		deleteMutation,
 		updateMutation,
+		adjustMutation,
 		query: singleQuery
-	}), [singleQuery, deleteMutation, updateMutation]);
+	}), [singleQuery, deleteMutation, updateMutation, adjustMutation]);
 
 	return useMemo(() => ({
 		meta,
 		deleteTransaction,
 		updateTransaction,
+		adjustTransaction,
 		fetchTransaction,
-	}), [meta, fetchTransaction, deleteTransaction, updateTransaction]);
+	}), [meta, fetchTransaction, deleteTransaction, updateTransaction, adjustTransaction]);
 };
 
 export { useTransactionMethods };
-export type { UseTransactionMethodsReturn };
+export type { AdjustTransactionVariables, UseTransactionMethodsReturn };

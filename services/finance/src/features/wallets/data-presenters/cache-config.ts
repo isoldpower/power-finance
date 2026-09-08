@@ -16,3 +16,5 @@ export const GOALS_CACHE_KEYS = {
 	update: 'updateGoal',
 	delete: 'deleteGoal',
 };
+
+export const DEFAULT_WALLET_PERIOD = 'last_month' as const;

@@ -1,6 +1,6 @@
 import { FinanceMoney } from "@internal/ui-library";
 import { AnimatedMoney } from "@entity/localization";
-import { MetricCardDescriptor, NetWorthPanel } from "@entity/metrics";
+import { MetricCardDescriptor, netDiffBadgeLabel, NetWorthPanel } from "@entity/metrics";
 import { BodyText, textClass } from "@shared/pure-components/typography";
 import { useConvertedNetWorth, useConvertedNetDiff } from "@feature/metrics";
 
@@ -32,7 +32,7 @@ const ConvertedNetWorth: FC<ConvertedNetWorthProps> = ({ netWorth }) => {
 					/>
 				</FinanceMoney>
 				<NetWorthPanel.DeltaBadge netDiffSign={netDiffSign}>
-					{netDiffSign}{Math.abs(netWorthDiff.percentage)}%
+					{netDiffBadgeLabel(netWorthDiff, netDiffSign)}
 				</NetWorthPanel.DeltaBadge>
 			</div>
 			<MetricCardDescriptor>

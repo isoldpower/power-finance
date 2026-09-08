@@ -1,3 +1,5 @@
+import { absoluteAmount } from "@shared/api";
+import { parseAmountDecimal } from "@shared/formatting";
 import { buildTransferChain } from "./build-transfer-chain.ts";
 
 import type { TransactionChainDraft, TransactionDraft } from "@entity/transactions";
@@ -29,9 +31,9 @@ const submitEntry = (
 	currencies: EntryCurrencies,
 	{ createTransaction, createTransactionChain }: EntryApiMethods
 ): Promise<CreateTransactionResponse | CreateTransactionChainResponse> => {
-	const amount = Math.abs(parseFloat(entry.amount));
+	const amount = absoluteAmount(parseAmountDecimal(entry.amount));
 	const category = entry.category ?? null;
-	const name = entry.category ?? DEFAULT_NAMES[entry.type];
+	const name = entry.name ?? entry.category ?? DEFAULT_NAMES[entry.type];
 
 	if (entry.type === 'transfer') {
 		return createTransactionChain({
@@ -42,7 +44,7 @@ const submitEntry = (
 				{
 					walletId: entry.toWallet,
 					currency: currencies.toCurrency,
-					amount: Math.abs(parseFloat(entry.receiveAmount)),
+					amount: absoluteAmount(parseAmountDecimal(entry.receiveAmount)),
 				},
 			),
 		});

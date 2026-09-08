@@ -8,15 +8,12 @@ import { clerk } from "../../auth/index.ts";
 
 type UseAxiosInstanceParams = Omit<AxiosInstanceOptions, 'getToken'>;
 
-function useAxiosInstance({ ...params }: UseAxiosInstanceParams): AxiosInstance {
+function useAxiosInstance({ baseUrl }: UseAxiosInstanceParams): AxiosInstance {
 	const { getToken } = clerk.useAuth();
-	
+
 	return useMemo(() => {
-		return createAxiosInstance({
-			getToken,
-			...params
-		});
-	}, [getToken, params]);
+		return createAxiosInstance({ baseUrl, getToken });
+	}, [baseUrl, getToken]);
 }
 
 export { useAxiosInstance };

@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { useSettingsContext } from "@internal/shared";
-import { useLocaleCurrency } from "@shared/formatting";
+import { divideAmount } from "@shared/api";
+import { currencyFractionDigits, useLocaleCurrency } from "@shared/formatting";
 import { useCurrencyRates } from "./use-currency-rates.ts";
 
 import type { ConvertedMoney, Money } from "@entity/localization";
@@ -19,7 +20,7 @@ const useConvertMoney = (): UseConvertMoneyReturn => {
 
 	const convert = useCallback((money: Money): ConvertedMoney => {
 		const rate = rates[money.currency];
-		
+
 		if (money.currency === mainCurrency || !rate) {
 			return {
 				amount: money.amount,
@@ -29,7 +30,8 @@ const useConvertMoney = (): UseConvertMoneyReturn => {
 			};
 		}
 
-		const convertedAmount = money.amount / rate;
+		const convertedAmount = divideAmount(money.amount, rate, currencyFractionDigits(mainCurrency));
+
 		return {
 			amount: convertedAmount,
 			currency: mainCurrency,
@@ -46,4 +48,4 @@ const useConvertMoney = (): UseConvertMoneyReturn => {
 };
 
 export { useConvertMoney };
-export type {UseConvertMoneyReturn };
+export type { UseConvertMoneyReturn };

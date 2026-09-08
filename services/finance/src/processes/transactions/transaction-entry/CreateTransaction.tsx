@@ -8,7 +8,7 @@ import {
 	useTransactionCategories,
 	useTransactionEntryForm,
 } from "@feature/transactions";
-import { useWalletsList } from "@feature/wallets";
+import { useWalletsList, useWalletsSelection } from "@feature/wallets";
 import {
 	EntryAmountControl,
 	EntryCategoryControl,
@@ -31,7 +31,9 @@ const CreateTransaction: FC<CreateTransactionProps> = ({ scanPanelId }) => {
 	const { onClose, onSwitch } = useSlideOverContext();
 	const { categoryLabels } = useTransactionCategories();
 	const { wallets } = useWalletsList();
-	const defaultValues = useAddTransactionInitials(wallets);
+	const selectedWalletId = useWalletsSelection((state) => state.selectedWalletId);
+	const preferredWalletId = selectedWalletId ?? undefined;
+	const defaultValues = useAddTransactionInitials(wallets, preferredWalletId);
 	const {
 		form,
 		type,
@@ -43,7 +45,12 @@ const CreateTransaction: FC<CreateTransactionProps> = ({ scanPanelId }) => {
 		handleSentChange,
 		handleReceivedChange,
 		state: { loading, canSubmit, methods },
-	} = useTransactionEntryForm({ schema: addTransactionSchema, defaultValues, wallets });
+	} = useTransactionEntryForm({
+		schema: addTransactionSchema,
+		defaultValues,
+		wallets,
+		preferredWalletId,
+	});
 
 	const handleScanReceipt = useCallback(() => {
 		onSwitch(scanPanelId);

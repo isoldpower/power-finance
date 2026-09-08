@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import { useApiContext, DERIVED_KEYS } from "@app/api";
+import { createIdempotencyKey } from "@shared/api";
 import {
 	createTransaction as createTransactionApi,
 	createTransactionChain as createTransactionChainApi,
@@ -12,10 +13,20 @@ import type { TransactionChainDraft, TransactionDraft } from "@entity/transactio
 import type { CreateTransactionChainResponse, CreateTransactionResponse } from "../transactions-api";
 
 
+interface CreateTransactionVariables {
+	draft: TransactionDraft;
+	idempotencyKey: string;
+}
+
+interface CreateTransactionChainVariables {
+	draft: TransactionChainDraft;
+	idempotencyKey: string;
+}
+
 interface UseTransactionsReturn {
 	meta: {
-		createMutation: UseMutationResult<CreateTransactionResponse, Error, TransactionDraft>;
-		chainMutation: UseMutationResult<CreateTransactionChainResponse, Error, TransactionChainDraft>;
+		createMutation: UseMutationResult<CreateTransactionResponse, Error, CreateTransactionVariables>;
+		chainMutation: UseMutationResult<CreateTransactionChainResponse, Error, CreateTransactionChainVariables>;
 	}
 	createTransaction: (draft: TransactionDraft) => Promise<CreateTransactionResponse>;
 	createTransactionChain: (draft: TransactionChainDraft) => Promise<CreateTransactionChainResponse>;
@@ -34,8 +45,9 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 	}, [client]);
 
 	const createMutation = useMutation({
-		mutationFn: (draft: TransactionDraft) => createTransactionApi({
-			draft,
+		mutationFn: (variables: CreateTransactionVariables) => createTransactionApi({
+			draft: variables.draft,
+			idempotencyKey: variables.idempotencyKey,
 			handler: apiContext.transactionServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.create],
@@ -43,8 +55,9 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 	});
 
 	const chainMutation = useMutation({
-		mutationFn: (draft: TransactionChainDraft) => createTransactionChainApi({
-			draft,
+		mutationFn: (variables: CreateTransactionChainVariables) => createTransactionChainApi({
+			draft: variables.draft,
+			idempotencyKey: variables.idempotencyKey,
 			handler: apiContext.transactionServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.chain],
@@ -54,13 +67,13 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 	const createTransaction = useCallback((
 		draft: TransactionDraft
 	): Promise<CreateTransactionResponse> => {
-		return createMutation.mutateAsync(draft);
+		return createMutation.mutateAsync({ draft, idempotencyKey: createIdempotencyKey() });
 	}, [createMutation]);
 
 	const createTransactionChain = useCallback((
 		draft: TransactionChainDraft
 	): Promise<CreateTransactionChainResponse> => {
-		return chainMutation.mutateAsync(draft);
+		return chainMutation.mutateAsync({ draft, idempotencyKey: createIdempotencyKey() });
 	}, [chainMutation]);
 
 	const meta = useMemo(() => ({
@@ -76,4 +89,8 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 };
 
 export { useTransactionsListMethods };
-export type { UseTransactionsReturn };
+export type {
+	CreateTransactionChainVariables,
+	CreateTransactionVariables,
+	UseTransactionsReturn,
+};

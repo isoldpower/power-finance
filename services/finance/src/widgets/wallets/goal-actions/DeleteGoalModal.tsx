@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { GoalDialog, WalletSelectField } from "@entity/wallets";
+import { GoalDialog } from "@entity/wallets";
+import { WalletCombobox } from "@widget/wallets/wallet-select";
 import { useGoalDisposition } from "@feature/wallets";
 import { ConfirmModal } from "@shared/overlays";
 import { ShowOn } from "@shared/visibility";
@@ -66,7 +67,7 @@ const DeleteGoalModal: FC<DeleteGoalModalProps> = ({ goal, pending, onConfirm, c
 								onSelect={() => { selectMode('transfer'); }}
 							/>
 							<ShowOn condition={mode === 'transfer'}>
-								<WalletSelectField
+								<WalletCombobox
 									options={walletOptions}
 									selected={selectedWallet}
 									emptyLabel="No wallets to receive funds"

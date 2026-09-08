@@ -12,7 +12,7 @@ interface BalanceMetricsDto {
 }
 
 interface NetDiffDto {
-	percentage: number;
+	percentage: number | null;
 	direction: NetDiffDirectionDto;
 }
 
@@ -31,25 +31,49 @@ interface CashFlowDto {
 	inflow: MoneyDto;
 	outflow: MoneyDto;
 	total_net: MoneyDto;
-	savings_rate: number;
+	savings_rate: number | null;
 }
 
-interface NetWorthParams {
+interface MetricsDto {
+	balance: BalanceMetricsDto | null;
+	net_worth: NetWorthDto | null;
+	cash_flow: CashFlowDto | null;
+}
+
+interface MetricsSections {
+	balance?: boolean;
+	netWorth?: boolean;
+	cashFlow?: boolean;
+}
+
+interface MetricsParams {
 	since?: string;
 	points?: number;
 }
 
-interface CashFlowParams {
-	since?: string;
+interface MetricsQuery extends MetricsParams, MetricsSections {}
+
+interface MetricsMetaDto {
+	since: string | null;
+	points: number;
+	sections: string[];
+	cached?: boolean;
 }
 
+const POINTS_MIN = 1;
+const POINTS_MAX = 100;
+
+export { POINTS_MAX, POINTS_MIN };
 export type {
 	BalanceMetricsDto,
 	CashFlowDto,
-	CashFlowParams,
+	MetricsDto,
+	MetricsMetaDto,
+	MetricsParams,
+	MetricsQuery,
+	MetricsSections,
 	NetDiffDto,
 	NetDiffDirectionDto,
 	NetWorthDto,
-	NetWorthParams,
 	NetWorthPointDto,
 };

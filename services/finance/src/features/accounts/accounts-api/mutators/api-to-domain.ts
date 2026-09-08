@@ -1,24 +1,22 @@
-import { parseAmount } from "@shared/api";
+import { moneyFromApi } from "@feature/localization/currencies-api";
 
-import type { MoneyDto } from "@shared/api";
-import type { Money } from "@entity/localization";
-import type { Account, AccountGroupCounts, LedgerEntry } from "@entity/accounts";
+import type { Account, AccountGroup, AccountGroupCounts, LedgerEntry } from "@entity/accounts";
 import type { AccountDto, AccountGroupCountsDto, LedgerEntryDto } from "../types.ts";
 
 
-const moneyFromApi = (dto: MoneyDto): Money => ({
-	amount: parseAmount(dto.amount),
-	currency: dto.currency,
-});
+const UNGROUPED: AccountGroup = 'ungrouped';
 
 const accountFromApi = (dto: AccountDto): Account => ({
 	id: dto.id,
-	group: dto.group,
+	group: dto.group === '' ? UNGROUPED : dto.group,
 	name: dto.name,
 	money: moneyFromApi(dto.money),
+	createdAt: dto.created_at,
+	updatedAt: dto.updated_at,
 });
 
 const ledgerEntryFromApi = (dto: LedgerEntryDto): LedgerEntry => ({
+	id: dto.id,
 	title: dto.title,
 	debit: dto.debit,
 	createdAt: dto.created_at,

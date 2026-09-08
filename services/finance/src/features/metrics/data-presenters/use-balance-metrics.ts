@@ -1,36 +1,22 @@
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useApiContext } from "@app/api";
-import { getBalanceMetrics } from "../metrics-api";
-import { METRICS_CACHE_KEYS } from "./cache-config.ts";
+import { useMetrics } from "./use-metrics.ts";
 
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { BalanceMetrics } from "@entity/metrics";
+import type { UseMetricsReturn } from "./use-metrics.ts";
 
 
-type UseBalanceMetricsOptions = Omit<UseQueryOptions<BalanceMetrics>, 'queryKey' | 'queryFn'>;
-
-type UseBalanceMetricsReturn = UseQueryResult<BalanceMetrics> & {
+type UseBalanceMetricsReturn = UseMetricsReturn & {
 	balance: BalanceMetrics | undefined;
 };
 
-const useBalanceMetrics = (
-	options?: UseBalanceMetricsOptions
-): UseBalanceMetricsReturn => {
-	const apiContext = useApiContext();
-	const query = useQuery<BalanceMetrics>({
-		queryKey: [METRICS_CACHE_KEYS.balance],
-		queryFn: () => getBalanceMetrics({
-			handler: apiContext.metricsServers.rest,
-		}),
-		...options ?? {},
-	});
+const useBalanceMetrics = (): UseBalanceMetricsReturn => {
+	const query = useMetrics();
 
 	return useMemo(() => ({
 		...query,
-		balance: query.data,
+		balance: query.data?.metrics.balance ?? undefined,
 	}), [query]);
 };
 
 export { useBalanceMetrics };
-export type { UseBalanceMetricsOptions, UseBalanceMetricsReturn };
+export type { UseBalanceMetricsReturn };

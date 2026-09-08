@@ -1,11 +1,11 @@
 import { webhookDraftToApi, webhookSecretFromApi } from "../mutators";
 
 import type { WebhookDraft, WebhookEndpointSecret } from "@entity/configuration";
-import type { IWebhookRESTApiClient } from "../rest-client";
+import type { IWebhooksRESTApiClient } from "../rest-client";
 
 
 interface CreateWebhookRequest {
-	handler: Pick<IWebhookRESTApiClient, 'post'>;
+	handler: Pick<IWebhooksRESTApiClient, 'post'>;
 	draft: WebhookDraft;
 	idempotencyKey?: string;
 }

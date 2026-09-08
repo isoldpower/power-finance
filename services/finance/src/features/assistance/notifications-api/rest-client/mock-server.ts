@@ -8,8 +8,10 @@ import type { Unsubscribe } from "@shared/api";
 import type { StoredNotification } from "./mock-seed.ts";
 import type {
 	INotificationsRESTApiClient,
+	NotificationAckBatchRequest, NotificationAckBatchResponse,
 	NotificationAckRequest, NotificationAckResponse,
 	NotificationCountRequest, NotificationCountResponse,
+	NotificationDeleteRequest, NotificationDeleteResponse,
 	NotificationListRequest, NotificationListResponse,
 	NotificationStreamRequest,
 } from "./types.ts";
@@ -92,13 +94,9 @@ class NotificationsMockRESTApiClient implements INotificationsRESTApiClient {
 		};
 	}
 
-	public async ack(payload: NotificationAckRequest): Promise<NotificationAckResponse> {
-		await delay();
-
-		const notification = this.require(payload.id);
-
+	private acknowledge(notification: StoredNotification): StoredNotification {
 		if (notification.acknowledged_at !== null) {
-			return { data: notification, meta: {} };
+			return notification;
 		}
 
 		const acknowledgedAt = new Date().toISOString();
@@ -115,7 +113,42 @@ class NotificationsMockRESTApiClient implements INotificationsRESTApiClient {
 			listener.onAcknowledged({ id: acknowledged.id, acknowledged_at: acknowledgedAt });
 		}
 
-		return { data: acknowledged, meta: {} };
+		return acknowledged;
+	}
+
+	public async ack(payload: NotificationAckRequest): Promise<NotificationAckResponse> {
+		await delay();
+
+		return { data: this.acknowledge(this.require(payload.id)), meta: {} };
+	}
+
+	public async ackBatch(payload: NotificationAckBatchRequest): Promise<NotificationAckBatchResponse> {
+		await delay();
+
+		const acknowledged = payload.data.ids
+			.map((id) => this.storage.get(id))
+			.filter((notification): notification is StoredNotification => notification !== undefined)
+			.map((notification) => this.acknowledge(notification));
+
+		return {
+			data: acknowledged,
+			meta: {
+				limit: null,
+				total: acknowledged.length,
+				next_cursor: null,
+				prev_cursor: null,
+				cached: false,
+			},
+		};
+	}
+
+	public async delete(payload: NotificationDeleteRequest): Promise<NotificationDeleteResponse> {
+		await delay();
+
+		const notification = this.require(payload.id);
+		this.storage.remove(notification);
+
+		return { data: notification, meta: {} };
 	}
 
 	public stream(payload: NotificationStreamRequest): Unsubscribe {

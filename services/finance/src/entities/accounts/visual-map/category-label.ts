@@ -4,6 +4,7 @@ const CATEGORY_LABEL: Record<AccountGroup, string> = {
 	assets: 'Assets',
 	liabilities: 'Liabilities',
 	equity: 'Equity',
+	ungrouped: 'Ungrouped',
 };
 
 export { CATEGORY_LABEL };

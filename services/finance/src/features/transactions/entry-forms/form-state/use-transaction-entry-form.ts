@@ -19,6 +19,7 @@ interface UseTransactionEntryFormParams<T extends TransactionEntryValues & Field
 	schema: ZodType<T>;
 	defaultValues: T;
 	wallets: Wallet[];
+	preferredWalletId?: string;
 }
 
 interface UseTransactionEntryFormReturn<T extends TransactionEntryValues & FieldValues> {
@@ -38,6 +39,7 @@ const useTransactionEntryForm = <T extends TransactionEntryValues & FieldValues>
 	schema,
 	defaultValues,
 	wallets,
+	preferredWalletId,
 }: UseTransactionEntryFormParams<T>): UseTransactionEntryFormReturn<T> => {
 	const form = useForm<T>({
 		defaultValues: defaultValues as DefaultValues<T>,
@@ -53,7 +55,7 @@ const useTransactionEntryForm = <T extends TransactionEntryValues & FieldValues>
 		toCurrency,
 		form,
 	);
-	useEntryTypeEffects(defaultValues, form);
+	useEntryTypeEffects(defaultValues, form, { wallets, preferredWalletId });
 
 	return {
 		form,

@@ -1,3 +1,4 @@
+export { adjustTransaction } from './adjust-transaction.ts';
 export { createTransaction } from './create-transaction.ts';
 export { createTransactionChain } from './create-transaction-chain.ts';
 export { deleteTransaction } from './delete-transaction.ts';
@@ -9,6 +10,7 @@ export { scanReceipt } from './scan-receipt.ts';
 export { searchTransactions } from './search-transactions.ts';
 export { updateTransaction } from './update-transaction.ts';
 
+export type { AdjustTransactionRequest, AdjustTransactionResponse } from './adjust-transaction.ts';
 export type { CreateTransactionRequest, CreateTransactionResponse } from './create-transaction.ts';
 export type { CreateTransactionChainRequest, CreateTransactionChainResponse } from './create-transaction-chain.ts';
 export type { DeleteTransactionRequest, DeleteTransactionResponse } from './delete-transaction.ts';

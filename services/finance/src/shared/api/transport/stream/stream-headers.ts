@@ -7,15 +7,20 @@ import {
 import type { StreamRequestInit } from "./types.ts";
 
 
-function streamHeaders(init: StreamRequestInit): Record<string, string> {
+const AUTHORIZATION_HEADER = 'Authorization';
+
+async function streamHeaders(init: StreamRequestInit): Promise<Record<string, string>> {
+	const token = await init.authorize?.();
+
 	return {
 		Accept: EVENT_STREAM_CONTENT_TYPE,
-		...(init.body === undefined ?
-			{} 
+		...(init.body === undefined
+			? {}
 			: { 'Content-Type': JSON_CONTENT_TYPE }),
-		...(init.lastEventId 
+		...(init.lastEventId
 			? { [LAST_EVENT_ID_HEADER]: init.lastEventId }
 			: {}),
+		...(token ? { [AUTHORIZATION_HEADER]: `Bearer ${token}` } : {}),
 		...init.headers,
 	};
 }

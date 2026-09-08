@@ -1,4 +1,4 @@
-export { ActionsDjangoRESTApiClient } from './django-server.ts';
+export { ActionsHttpRESTApiClient } from './http-server.ts';
 export { ActionsMockRESTApiClient } from './mock-server.ts';
 export { ACTIONS_STORAGE_KEY } from './storage.ts';
 

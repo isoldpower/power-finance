@@ -1,4 +1,4 @@
-export { GoalsDjangoRESTApiClient } from './django-server.ts';
+export { GoalsHttpRESTApiClient } from './http-server.ts';
 export { GoalsMockRESTApiClient } from './mock-server.ts';
 export { GOALS_STORAGE_KEY } from './mock-seed.ts';
 

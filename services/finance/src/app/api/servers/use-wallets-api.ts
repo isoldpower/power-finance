@@ -1,26 +1,30 @@
 import { useMemo } from "react";
-import { useAxiosInstance } from "@internal/shared";
 
-import { WalletsMockRESTApiClient } from "@feature/wallets";
-import { API_BASE_PATH } from "../config.ts";
+import { WalletsHttpRESTApiClient, WalletsMockRESTApiClient } from "@feature/wallets";
+import { useResourceAxios } from "./use-resource-axios.ts";
+
 import type { IWalletsRESTApiClient } from "@feature/wallets";
+import type { ApiServerOptions } from "./types.ts";
+
+
+const WALLETS_PATH = '/wallets';
 
 interface UseWalletsApiResponse {
 	rest: IWalletsRESTApiClient;
 }
 
-function useWalletsApi(baseUrl: string): UseWalletsApiResponse {
-	const walletsAxiosInstance = useAxiosInstance({
-		baseUrl: `${baseUrl}${API_BASE_PATH}/wallets`
-	});
+function useWalletsApi(options: ApiServerOptions): UseWalletsApiResponse {
+	const axiosInstance = useResourceAxios(options, WALLETS_PATH);
 
-	const restWalletsClient = useMemo<IWalletsRESTApiClient>(() => {
-		return new WalletsMockRESTApiClient();
-	}, [walletsAxiosInstance]);
+	const restClient = useMemo<IWalletsRESTApiClient>(() => {
+		return options.mode === 'live'
+			? new WalletsHttpRESTApiClient(axiosInstance, options.versions)
+			: new WalletsMockRESTApiClient();
+	}, [axiosInstance, options.mode, options.versions]);
 
 	return useMemo(() => ({
-		rest: restWalletsClient
-	}), [restWalletsClient]);
+		rest: restClient
+	}), [restClient]);
 }
 
 export { useWalletsApi };

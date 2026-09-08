@@ -1,26 +1,30 @@
 import { useMemo } from "react";
-import { useAxiosInstance } from "@internal/shared";
 
-import { GoalsMockRESTApiClient } from "@feature/wallets";
-import { API_BASE_PATH } from "../config.ts";
+import { GoalsHttpRESTApiClient, GoalsMockRESTApiClient } from "@feature/wallets";
+import { useResourceAxios } from "./use-resource-axios.ts";
+
 import type { IGoalsRESTApiClient } from "@feature/wallets";
+import type { ApiServerOptions } from "./types.ts";
+
+
+const GOALS_PATH = '/goals';
 
 interface UseGoalsApiResponse {
 	rest: IGoalsRESTApiClient;
 }
 
-function useGoalsApi(baseUrl: string): UseGoalsApiResponse {
-	const goalsAxiosInstance = useAxiosInstance({
-		baseUrl: `${baseUrl}${API_BASE_PATH}/goals`
-	});
+function useGoalsApi(options: ApiServerOptions): UseGoalsApiResponse {
+	const axiosInstance = useResourceAxios(options, GOALS_PATH);
 
-	const restGoalsClient = useMemo<IGoalsRESTApiClient>(() => {
-		return new GoalsMockRESTApiClient();
-	}, [goalsAxiosInstance]);
+	const restClient = useMemo<IGoalsRESTApiClient>(() => {
+		return options.mode === 'live'
+			? new GoalsHttpRESTApiClient(axiosInstance, options.versions)
+			: new GoalsMockRESTApiClient();
+	}, [axiosInstance, options.mode, options.versions]);
 
 	return useMemo(() => ({
-		rest: restGoalsClient
-	}), [restGoalsClient]);
+		rest: restClient
+	}), [restClient]);
 }
 
 export { useGoalsApi };
