@@ -9,6 +9,7 @@ import type { ApiServerOptions } from "./types.ts";
 function useResourceAxios(options: ApiServerOptions, resourcePath: string): AxiosInstance {
 	return useAxiosInstance({
 		baseUrl: `${options.baseUrl}${API_BASE_PATH}${resourcePath}`,
+		sandbox: options.sandbox,
 	});
 }
 

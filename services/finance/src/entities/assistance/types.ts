@@ -1,6 +1,7 @@
 import type { FilterOperator } from "@shared/api";
 import type { Money } from "@entity/localization";
 import type { Types } from "@shared/formatting";
+import type { Pending } from "@shared/data";
 
 
 type Severity = 'info' | 'warning' | 'critical';
@@ -23,7 +24,7 @@ interface ActionResolution {
 	applies: boolean;
 }
 
-interface Action {
+interface Action extends Pending {
 	id: string;
 	createdAt: string;
 	updatedAt: string | null;
@@ -50,7 +51,7 @@ interface ActionQuery {
 	severity?: Severity;
 }
 
-interface Notification {
+interface Notification extends Pending {
 	id: string;
 	createdAt: string;
 	updatedAt: string | null;
@@ -137,7 +138,7 @@ type AutomationEffect =
 	| TransferEffect
 	| UnknownEffect;
 
-interface Automation {
+interface Automation extends Pending {
 	id: string;
 	createdAt: string;
 	updatedAt: string | null;
@@ -171,6 +172,18 @@ interface AutomationQuery {
 	enabled?: boolean;
 }
 
+interface AutomationSearchQuery {
+	name?: string;
+	enabled?: boolean;
+	triggerTypes?: AutomationTriggerType[];
+	events?: AutomationEvent[];
+	schedules?: AutomationSchedule[];
+	createdAfter?: string;
+	createdBefore?: string;
+	ranAfter?: string;
+	ranBefore?: string;
+}
+
 interface AssistantSignal {
 	label: string;
 	value: string;
@@ -186,7 +199,7 @@ type MessageRole = 'user' | 'assistant';
 
 type MessageStatus = 'complete' | 'streaming' | 'failed';
 
-interface AssistantMessage {
+interface AssistantMessage extends Pending {
 	id: string;
 	createdAt: string;
 	role: MessageRole;
@@ -217,6 +230,7 @@ export type {
 	AutomationEvent,
 	AutomationPatch,
 	AutomationQuery,
+	AutomationSearchQuery,
 	AutomationSchedule,
 	AutomationTrigger,
 	AutomationTriggerType,

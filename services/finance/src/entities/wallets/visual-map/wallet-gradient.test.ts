@@ -3,7 +3,6 @@ import { describe, expect, test } from 'vitest';
 import {
 	DEFAULT_WALLET_COLOR,
 	isWalletColor,
-	NEW_WALLET_GRADIENT,
 	walletGradient,
 } from './wallet-gradient.ts';
 
@@ -46,9 +45,5 @@ describe('walletGradient', () => {
 describe('the value sent on create', () => {
 	test('is a hex the API pattern accepts', () => {
 		expect(isWalletColor(DEFAULT_WALLET_COLOR)).toBe(true);
-	});
-
-	test('matches the gradient the create form previews', () => {
-		expect(NEW_WALLET_GRADIENT).toBe(walletGradient(DEFAULT_WALLET_COLOR));
 	});
 });

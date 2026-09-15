@@ -15,6 +15,7 @@ export const GOALS_CACHE_KEYS = {
 	create: 'createGoal',
 	update: 'updateGoal',
 	delete: 'deleteGoal',
+	search: 'searchGoal',
 };
 
 export const DEFAULT_WALLET_PERIOD = 'last_month' as const;

@@ -1,4 +1,5 @@
-import { FinanceCard } from "@internal/ui-library";
+import { cn, FinanceCard } from "@internal/ui-library";
+import { pendingClass } from "@shared/pure-components/feedback";
 import { WalletsRecentTitle } from "@entity/wallets";
 import {
 	useWallet,
@@ -7,6 +8,7 @@ import {
 	useWalletsSelection,
 } from "@feature/wallets";
 import {
+	WalletRecentSkeleton,
 	WalletRecentTransactions,
 	WalletBalanceDetails,
 	WalletDetailsThumbnail,
@@ -27,7 +29,7 @@ const SelectedWalletDetails = ({
 	const selectedWalletProtected = useMemo(() => {
 		return selectedWalletId ?? 'none';
 	}, [selectedWalletId]);
-	const { wallet, recent, period, isError, isPending } = useWallet(selectedWalletProtected, { 
+	const { wallet, recent, period, isError, isPending, isPlaceholderData } = useWallet(selectedWalletProtected, { 
 		enabled: selectedWalletProtected !== 'none'
 	});
 
@@ -37,18 +39,21 @@ const SelectedWalletDetails = ({
 				{(wallet) => (
 					<div className="relative">
 						<FinanceCard className="overflow-hidden">
-							<div className="border-b border-border px-6 py-[22px]">
+							<div className={cn("border-b border-border px-6 py-[22px]", pendingClass(wallet.pending))}>
 								<WalletDetailsThumbnail
 									wallet={wallet}
 									transferPanelId={transferPanel}
 									editWalletPanelId={editWalletPanel}
+									disabled={isPlaceholderData}
 								/>
 								<WalletBalanceDetails wallet={wallet} period={period} />
 							</div>
 							<WalletsRecentTitle>
 								Recent in this wallet
 							</WalletsRecentTitle>
-							<WalletRecentTransactions transactions={recent} />
+							{isPlaceholderData
+								? <WalletRecentSkeleton />
+								: <WalletRecentTransactions transactions={recent} />}
 						</FinanceCard>
 					</div>
 				)}

@@ -1,8 +1,8 @@
-import { Toaster, toast } from "@/entities/shadcn";
+import { SonnerToaster, sonnerToast } from "@/entities/shadcn";
 import { forwardUi } from "./forward-ui.tsx";
 
-export const UiToaster = forwardUi(Toaster, "UiToaster");
+export const UiToaster = forwardUi(SonnerToaster, "UiToaster");
 
-export { 
-	toast as uiToast,
+export {
+	sonnerToast as uiToast,
 };

@@ -24,7 +24,7 @@ function RootComponent() {
 				<AuthGuard>
 					<GlobalLayout>
 						<Outlet />
-					</GlobalLayout>
+		 			</GlobalLayout>
 					<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
 				</AuthGuard>
 			</ApiProvider>

@@ -1,7 +1,9 @@
+import { useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { BulkActionsBar } from "@entity/transactions";
-import { useTransactionsSelection } from "@feature/transactions";
+import { useDeleteTransactions, useTransactionsSelection } from "@feature/transactions";
 import { SpaceOccupant } from "@shared/pure-components/layout";
+import { DeleteTransactionsModal } from "./DeleteTransactionsModal.tsx";
 
 import type { FC } from "react";
 
@@ -13,6 +15,14 @@ const TransactionsBulkActions: FC = () => {
 			clearChecked: state.clearChecked,
 		}))
 	);
+	const { deleteTransactions, isPending } = useDeleteTransactions();
+
+	const handleConfirmDelete = useCallback((onDeleted: () => void) => {
+		deleteTransactions(checkedTransactionIds, () => {
+			clearChecked();
+			onDeleted();
+		});
+	}, [deleteTransactions, checkedTransactionIds, clearChecked]);
 
 	if (checkedTransactionIds.length === 0) {
 		return null;
@@ -29,9 +39,15 @@ const TransactionsBulkActions: FC = () => {
 			<BulkActionsBar.Action>
 				Change wallet
 			</BulkActionsBar.Action>
-			<BulkActionsBar.Action tone="danger">
-				Delete
-			</BulkActionsBar.Action>
+			<DeleteTransactionsModal
+				count={checkedTransactionIds.length}
+				pending={isPending}
+				onConfirm={handleConfirmDelete}
+			>
+				<BulkActionsBar.Action tone="danger">
+					{isPending ? 'Deleting…' : 'Delete'}
+				</BulkActionsBar.Action>
+			</DeleteTransactionsModal>
 			<SpaceOccupant />
 			<BulkActionsBar.Clear onClick={clearChecked}>
 				Clear

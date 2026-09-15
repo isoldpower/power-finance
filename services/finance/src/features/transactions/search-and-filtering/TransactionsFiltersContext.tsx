@@ -1,6 +1,7 @@
 import { createContext, use, useCallback, useMemo, useState } from "react";
 
 import type { FC, ReactNode } from "react";
+import type { OrderingType } from "@shared/data";
 
 
 interface TransactionsFiltersContextType {
@@ -14,6 +15,8 @@ interface TransactionsFiltersContextType {
 	setSearch: (search: string) => void;
 	caseSensitive: boolean;
 	setCaseSensitive: (caseSensitive: boolean) => void;
+	sortDirection: OrderingType;
+	toggleSortDirection: () => void;
 }
 
 const TransactionsFiltersContext = createContext<TransactionsFiltersContextType | null>(null);
@@ -31,6 +34,11 @@ const TransactionsFiltersContextProvider: FC<TransactionsFiltersContextProviderP
 	const [typeFilter, setTypeFilter] = useState<string>('all');
 	const [search, setSearch] = useState<string>('');
 	const [caseSensitive, setCaseSensitive] = useState<boolean>(false);
+	const [sortDirection, setSortDirection] = useState<OrderingType>('DESC');
+
+	const toggleSortDirection = useCallback(() => {
+		setSortDirection((current) => (current === 'DESC' ? 'ASC' : 'DESC'));
+	}, []);
 
 	const setWalletFilterProtected = useCallback((wallet: string | null) => {
 		setWalletFilter(wallet ?? 'all');
@@ -48,6 +56,8 @@ const TransactionsFiltersContextProvider: FC<TransactionsFiltersContextProviderP
 		typeFilter,
 		search,
 		caseSensitive,
+		sortDirection,
+		toggleSortDirection,
 		setSearch,
 		setCaseSensitive,
 		setWalletFilter: setWalletFilterProtected,
@@ -57,6 +67,8 @@ const TransactionsFiltersContextProvider: FC<TransactionsFiltersContextProviderP
 		caseSensitive,
 		categoryFilter,
 		search,
+		sortDirection,
+		toggleSortDirection,
 		setCategoryFilterProtected,
 		setTypeFilterProtected,
 		setWalletFilterProtected,

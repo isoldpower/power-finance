@@ -1,3 +1,6 @@
+import type { OrderingType } from "@shared/data";
+
+
 interface TransactionsSearch {
 	search?: string;
 	caseSensitive: boolean;
@@ -9,6 +12,10 @@ interface TransactionsFiltering {
 	typeFilter: string;
 }
 
+interface TransactionsOrdering {
+	direction: OrderingType;
+}
+
 interface TransactionsPaging {
 	pageSize: number;
 	cursor: string | null;
@@ -17,12 +24,14 @@ interface TransactionsPaging {
 interface TransactionsBrowseSetup {
 	search: TransactionsSearch;
 	filters: TransactionsFiltering;
+	ordering: TransactionsOrdering;
 	page: TransactionsPaging;
 }
 
 export type {
 	TransactionsSearch,
 	TransactionsFiltering,
+	TransactionsOrdering,
 	TransactionsPaging,
 	TransactionsBrowseSetup,
 };

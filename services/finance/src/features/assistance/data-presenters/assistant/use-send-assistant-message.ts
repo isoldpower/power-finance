@@ -3,7 +3,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useApiContext, DERIVED_KEYS } from "@app/api";
 import { sendAssistantMessage } from "../../assistant-api";
 import { ASSISTANT_CACHE_KEYS } from "../cache-config.ts";
+import { messageFromText, optimisticMessageId, useOptimisticMessages } from "./optimistic";
 
+import type { SendAssistantMessageResponse } from "../../assistant-api";
+import type { MessageCachesSnapshot } from "./optimistic";
+
+
+interface SendMessageContext {
+	snapshot: MessageCachesSnapshot;
+	temporaryId: string;
+}
 
 interface UseSendAssistantMessageReturn {
 	send: (text: string) => void;
@@ -15,15 +24,26 @@ interface UseSendAssistantMessageReturn {
 const useSendAssistantMessage = (): UseSendAssistantMessageReturn => {
 	const apiContext = useApiContext();
 	const queryClient = useQueryClient();
+	const optimistic = useOptimisticMessages();
 	const [streamed, setStreamed] = useState<string>('');
 
-	const mutation = useMutation({
+	const mutation = useMutation<SendAssistantMessageResponse, Error, string, SendMessageContext>({
 		mutationKey: [ASSISTANT_CACHE_KEYS.send],
 		mutationFn: (text: string) => sendAssistantMessage({
 			handler: apiContext.assistantServers.rest,
 			text,
 			onDelta: (chunk) => { setStreamed((previous) => previous + chunk); },
 		}),
+		onMutate: async (text: string) => {
+			const snapshot = await optimistic.capture();
+			const temporaryId = optimisticMessageId();
+			optimistic.applySend(messageFromText(text, temporaryId, new Date().toISOString()));
+
+			return { snapshot, temporaryId };
+		},
+		onError: (_error, _text, context) => {
+			optimistic.restore(context?.snapshot);
+		},
 		onSettled: () => {
 			setStreamed('');
 
@@ -47,4 +67,4 @@ const useSendAssistantMessage = (): UseSendAssistantMessageReturn => {
 };
 
 export { useSendAssistantMessage };
-export type { UseSendAssistantMessageReturn };
+export type { SendMessageContext, UseSendAssistantMessageReturn };

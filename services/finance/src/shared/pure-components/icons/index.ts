@@ -1,5 +1,6 @@
 export { CheckIcon, AlertIcon, DuplicateIcon, QuestionIcon, RecurringIcon } from './StatusIcons.tsx';
-export { TransferGlyph, FromIcon, ToIcon, IncomeIcon, ExpenseIcon, ForwardIcon } from './ArrowIcons.tsx';
+export { TransferGlyph, TransferOutGlyph, TransferInGlyph } from './ArrowIcons.tsx';
+export { FromIcon, ToIcon, IncomeIcon, ExpenseIcon, ForwardIcon } from './ArrowIcons.tsx';
 export { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from './ArrowIcons.tsx';
 export { SearchIcon } from './SearchIcon.tsx';
 export { EllipsisIcon } from './EllipsisIcon.tsx';

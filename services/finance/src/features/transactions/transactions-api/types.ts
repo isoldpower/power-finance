@@ -1,4 +1,4 @@
-import type { MoneyDto, PageParams, ResourceTimestamps, SearchPayload } from "@shared/api";
+import type { MoneyDto, PageParams, SearchOrder, ResourceTimestamps, SearchPayload } from "@shared/api";
 
 
 type TransactionTypeDto = 'expense' | 'income';
@@ -16,6 +16,11 @@ interface TransactionEvidenceDto {
 	url: string;
 }
 
+interface TransactionChainRefDto {
+	id: string;
+	size: number;
+}
+
 interface TransactionDto extends ResourceTimestamps {
 	id: string;
 	name: string;
@@ -24,7 +29,7 @@ interface TransactionDto extends ResourceTimestamps {
 	origin: TransactionOriginDto;
 	wallet: TransactionWalletDto;
 	category: string | null;
-	chain_id: string | null;
+	chain?: TransactionChainRefDto | null;
 }
 
 interface TransactionAnalysisDto {
@@ -96,7 +101,9 @@ type TransactionSearchField =
 
 type TransactionSearchBody = SearchPayload<TransactionSearchField>;
 
-type TransactionSearchParams = PageParams;
+type TransactionSearchParams = PageParams & {
+	order?: SearchOrder;
+};
 
 const TRANSACTION_CHAIN_LIMIT = 100;
 
@@ -106,6 +113,7 @@ export type {
 	TransactionAnalysisDto,
 	TransactionChainBody,
 	TransactionChainDto,
+	TransactionChainRefDto,
 	TransactionChainEntryBody,
 	TransactionCreateBody,
 	TransactionDetailDto,

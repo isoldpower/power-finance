@@ -18,6 +18,22 @@ const TransferGlyph: FC<GlyphProps & { size?: number }> = ({ className, size = 2
 	</svg>
 );
 
+const TransferOutGlyph: FC<GlyphProps & { size?: number }> = ({ className, size = 24 }) => (
+	<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+		<path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
+		<path d="M12 15V3" />
+		<polyline points="7 8 12 3 17 8" />
+	</svg>
+);
+
+const TransferInGlyph: FC<GlyphProps & { size?: number }> = ({ className, size = 24 }) => (
+	<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+		<path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
+		<path d="M12 3v12" />
+		<polyline points="7 10 12 15 17 10" />
+	</svg>
+);
+
 const FromIcon: FC<GlyphProps> = ({ className }) => (
 	<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
 		<line x1="7" y1="17" x2="17" y2="7" />
@@ -62,12 +78,15 @@ ChevronDownIcon.displayName = 'ChevronDownIcon';
 ChevronLeftIcon.displayName = 'ChevronLeftIcon';
 ChevronRightIcon.displayName = 'ChevronRightIcon';
 TransferGlyph.displayName = 'TransferGlyph';
+TransferOutGlyph.displayName = 'TransferOutGlyph';
+TransferInGlyph.displayName = 'TransferInGlyph';
 FromIcon.displayName = 'FromIcon';
 ToIcon.displayName = 'ToIcon';
 IncomeIcon.displayName = 'IncomeIcon';
 ExpenseIcon.displayName = 'ExpenseIcon';
 ForwardIcon.displayName = 'ForwardIcon';
 
-export { TransferGlyph, FromIcon, ToIcon, IncomeIcon, ExpenseIcon, ForwardIcon };
+export { TransferGlyph, TransferOutGlyph, TransferInGlyph };
+export { FromIcon, ToIcon, IncomeIcon, ExpenseIcon, ForwardIcon };
 export { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon };
 export type { AmountDirectionIconProps, GlyphProps };

@@ -15,6 +15,7 @@ export const AUTOMATIONS_CACHE_KEYS = {
 	create: 'createAutomation',
 	update: 'updateAutomation',
 	delete: 'deleteAutomation',
+	search: 'searchAutomation',
 };
 
 export const ASSISTANT_CACHE_KEYS = {

@@ -1,4 +1,5 @@
 import { ZERO_AMOUNT } from "@shared/api";
+import { WALLET_COLOR_PATTERN } from "@entity/wallets";
 
 import { z } from "zod";
 
@@ -11,15 +12,15 @@ const walletFieldsShape = {
 	category: z.string(),
 	currency: z.string().min(1, "Please select a currency"),
 	balance: z.string(),
+	color: z.string().regex(WALLET_COLOR_PATTERN, "Please pick a colour"),
 };
 
 const buildWalletDraft = (
 	values: WalletFormSchema,
-	color: string,
 	openingBalance: string
 ): WalletDraft => ({
 	name: values.name.trim(),
-	color,
+	color: values.color,
 	openingBalance,
 	zeroBalance: ZERO_AMOUNT,
 	currency: values.currency,
@@ -29,6 +30,7 @@ const buildWalletDraft = (
 const buildWalletPatch = (values: WalletFormSchema): WalletPatch => ({
 	name: values.name.trim(),
 	category: values.category.trim(),
+	color: values.color,
 });
 
 export { walletFieldsShape, buildWalletDraft, buildWalletPatch };

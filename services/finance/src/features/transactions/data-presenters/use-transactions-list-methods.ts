@@ -7,10 +7,12 @@ import {
 	createTransactionChain as createTransactionChainApi,
 } from "../transactions-api";
 import { CACHE_KEYS } from "./config.ts";
+import { useOptimisticTransactions } from "./optimistic";
 
 import type { UseMutationResult } from "@tanstack/react-query";
 import type { TransactionChainDraft, TransactionDraft } from "@entity/transactions";
 import type { CreateTransactionChainResponse, CreateTransactionResponse } from "../transactions-api";
+import type { TransactionCachesSnapshot } from "./optimistic";
 
 
 interface CreateTransactionVariables {
@@ -23,10 +25,25 @@ interface CreateTransactionChainVariables {
 	idempotencyKey: string;
 }
 
+interface CreateTransactionContext {
+	snapshot: TransactionCachesSnapshot;
+	temporaryIds: string[];
+}
+
 interface UseTransactionsReturn {
 	meta: {
-		createMutation: UseMutationResult<CreateTransactionResponse, Error, CreateTransactionVariables>;
-		chainMutation: UseMutationResult<CreateTransactionChainResponse, Error, CreateTransactionChainVariables>;
+		createMutation: UseMutationResult<
+			CreateTransactionResponse,
+			Error,
+			CreateTransactionVariables,
+			CreateTransactionContext
+		>;
+		chainMutation: UseMutationResult<
+			CreateTransactionChainResponse,
+			Error,
+			CreateTransactionChainVariables,
+			CreateTransactionContext
+		>;
 	}
 	createTransaction: (draft: TransactionDraft) => Promise<CreateTransactionResponse>;
 	createTransactionChain: (draft: TransactionChainDraft) => Promise<CreateTransactionChainResponse>;
@@ -35,6 +52,7 @@ interface UseTransactionsReturn {
 const useTransactionsListMethods = (): UseTransactionsReturn => {
 	const apiContext = useApiContext();
 	const client = useQueryClient();
+	const optimistic = useOptimisticTransactions();
 
 	const settleLedger = useCallback(() => {
 		void client.invalidateQueries({ queryKey: [CACHE_KEYS.list] });
@@ -44,23 +62,58 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 		}
 	}, [client]);
 
-	const createMutation = useMutation({
+	const openDrafts = useCallback(async (
+		drafts: TransactionDraft[],
+		chained: boolean,
+	): Promise<CreateTransactionContext> => {
+		const snapshot = await optimistic.capture();
+		const projection = optimistic.project({ drafts, chained });
+		optimistic.applyCreate(projection.transactions);
+
+		return { snapshot, temporaryIds: projection.temporaryIds };
+	}, [optimistic]);
+
+	const createMutation = useMutation<
+		CreateTransactionResponse,
+		Error,
+		CreateTransactionVariables,
+		CreateTransactionContext
+	>({
 		mutationFn: (variables: CreateTransactionVariables) => createTransactionApi({
 			draft: variables.draft,
 			idempotencyKey: variables.idempotencyKey,
 			handler: apiContext.transactionServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.create],
+		onMutate: (variables: CreateTransactionVariables) => openDrafts([variables.draft], false),
+		onError: (_error, _variables, context) => {
+			optimistic.restore(context?.snapshot);
+		},
+		onSuccess: (response, _variables, context) => {
+			optimistic.applySettledBatch(context.temporaryIds, [response.transaction]);
+		},
 		onSettled: settleLedger
 	});
 
-	const chainMutation = useMutation({
+	const chainMutation = useMutation<
+		CreateTransactionChainResponse,
+		Error,
+		CreateTransactionChainVariables,
+		CreateTransactionContext
+	>({
 		mutationFn: (variables: CreateTransactionChainVariables) => createTransactionChainApi({
 			draft: variables.draft,
 			idempotencyKey: variables.idempotencyKey,
 			handler: apiContext.transactionServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.chain],
+		onMutate: (variables: CreateTransactionChainVariables) => openDrafts(variables.draft.entries, true),
+		onError: (_error, _variables, context) => {
+			optimistic.restore(context?.snapshot);
+		},
+		onSuccess: (response, _variables, context) => {
+			optimistic.applySettledBatch(context.temporaryIds, response.chain.transactions);
+		},
 		onSettled: settleLedger
 	});
 
@@ -91,6 +144,7 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 export { useTransactionsListMethods };
 export type {
 	CreateTransactionChainVariables,
+	CreateTransactionContext,
 	CreateTransactionVariables,
 	UseTransactionsReturn,
 };

@@ -3,6 +3,7 @@ import { WriteVersionStore } from "@shared/api";
 
 import { resolveApiMode } from "./config.ts";
 import { ApiQueryReactions } from "./query-reactions";
+import { ApiToasts } from "./toasts";
 import { useWalletsApi } from "./servers/use-wallets-api.ts";
 import { useGoalsApi } from "./servers/use-goals-api.ts";
 import { useTransactionsApi } from "./servers/use-transactions-api.ts";
@@ -82,8 +83,13 @@ const ApiProvider: FC<ApiProviderProps> = ({
 	const serverOptions = useMemo<ApiServerOptions>(() => ({
 		baseUrl: envVariables.CLIENT_API_BASE_URL,
 		mode: resolveApiMode(envVariables.CLIENT_API_MODE),
+		sandbox: envVariables.CLIENT_API_SANDBOX,
 		versions: new WriteVersionStore(),
-	}), [envVariables.CLIENT_API_BASE_URL, envVariables.CLIENT_API_MODE]);
+	}), [
+		envVariables.CLIENT_API_BASE_URL,
+		envVariables.CLIENT_API_MODE,
+		envVariables.CLIENT_API_SANDBOX,
+	]);
 
 	const walletServers = useWalletsApi(serverOptions);
 	const goalServers = useGoalsApi(serverOptions);
@@ -129,6 +135,7 @@ const ApiProvider: FC<ApiProviderProps> = ({
 	return (
 		<ApiContext value={contextValue}>
 			<ApiQueryReactions/>
+			<ApiToasts/>
 			{children}
 		</ApiContext>
 	);

@@ -3,6 +3,7 @@ import {
 	AmountDirectionIcon,
 	LedgerRow,
 	RowSelectCheckbox,
+	TransactionChainBadge,
 	resolveToneWithDirection,
 	toTransactionMoneyView,
 	toTransactionRowView,
@@ -17,6 +18,8 @@ import type { Transaction } from "@entity/transactions";
 
 interface LedgerTransactionRowProps {
 	transaction: Transaction;
+	chainLink: boolean;
+	chainSize: number | null;
 	expanded: boolean;
 	checked: boolean;
 	onToggle: () => void;
@@ -25,6 +28,8 @@ interface LedgerTransactionRowProps {
 
 const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 	transaction,
+	chainLink,
+	chainSize,
 	expanded,
 	checked,
 	onToggle,
@@ -41,7 +46,7 @@ const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 	const tone = useMemo(() => resolveToneWithDirection(row.type), [row.type]);
 
 	return (
-		<LedgerRow expanded={expanded} onClick={onToggle}>
+		<LedgerRow expanded={expanded} pending={row.pending} onClick={onToggle}>
 			<LedgerRow.SelectCell>
 				<RowSelectCheckbox selected={checked} onClick={onCheck} />
 			</LedgerRow.SelectCell>
@@ -58,9 +63,12 @@ const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 					<AmountDirectionIcon type={row.type} />
 				</LedgerRow.Icon>
 				<div className="min-w-0">
-					<RowTitle truncate>
-						{row.description}
-					</RowTitle>
+					<div className="flex items-center gap-1.5">
+						<RowTitle truncate>
+							{row.description}
+						</RowTitle>
+						{chainLink ? <TransactionChainBadge size={chainSize} /> : null}
+					</div>
 					{row.scanned ? (
 						<Text as="div" size="10.5" tone="accent" className="flex items-center gap-1">
 							⛶ scanned receipt

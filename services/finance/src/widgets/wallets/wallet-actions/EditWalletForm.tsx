@@ -2,7 +2,13 @@ import { isNegativeAmount } from "@shared/api";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
-import { WalletLockedField, WalletPreviewCard } from "@entity/wallets";
+import {
+	DEFAULT_WALLET_COLOR,
+	WalletColorField,
+	WalletLockedField,
+	WalletPreviewCard,
+	walletGradient,
+} from "@entity/wallets";
 import { WalletFormOnSubmit, useWalletFormInitials, useWalletFormState, walletFormSchema } from "@feature/wallets";
 import { FieldLabel, PanelFooter } from "@shared/forms";
 import { useLocaleCurrency } from "@shared/formatting";
@@ -27,7 +33,7 @@ const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, onClose }) => {
 	
 	const { loading, canSubmit, methods } = useWalletFormState(form);
 	const format = useLocaleCurrency();
-	const { name, category } = useWatch({ control: form.control });
+	const { name, category, color } = useWatch({ control: form.control });
 	
 	return (
 		<UiForm {...form}>
@@ -40,7 +46,7 @@ const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, onClose }) => {
 				onError={methods.handleFailedLoading}
 			>
 				<div className="flex-1 overflow-auto p-5">
-					<WalletPreviewCard gradient={wallet.gradient}>
+					<WalletPreviewCard gradient={walletGradient(color ?? DEFAULT_WALLET_COLOR)}>
 						<WalletPreviewCard.Header>
 							<WalletPreviewCard.Type>
 								{category ?? ''}
@@ -60,6 +66,19 @@ const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, onClose }) => {
 						name="name"
 						render={({ field }) => (
 							<FinanceInput placeholder="e.g. Travel Card" className="mb-4" {...field} />
+						)} />
+					<FieldLabel>Colour</FieldLabel>
+					<UiFormField
+						disabled={loading}
+						control={form.control}
+						name="color"
+						render={({ field }) => (
+							<WalletColorField
+								value={field.value}
+								onChange={field.onChange}
+								disabled={loading}
+								className="mb-4"
+							/>
 						)} />
 					<FieldLabel>Category</FieldLabel>
 					<UiFormField

@@ -1,30 +1,5 @@
-const QUERY_KEYS = {
-	wallets: 'wallets',
-	walletsSearch: 'searchWallet',
-	wallet: 'wallet',
-	goals: 'goals',
-	goal: 'goal',
-	transactions: 'transactions',
-	transactionsSearch: 'transactionsSearch',
-	transaction: 'transaction',
-	accounts: 'accounts',
-	account: 'account',
-	accountEntries: 'account-entries',
-	actions: 'actions',
-	automations: 'automations',
-	automation: 'automation',
-	notifications: 'notifications',
-	notificationsCount: 'notifications-count',
-	webhooks: 'webhooks',
-	webhook: 'webhook',
-	webhookEventTypes: 'webhook-event-types',
-	webhookSubscriptions: 'webhook-subscriptions',
-	webhookDeliveries: 'webhook-deliveries',
-	assistantOverview: 'assistant-overview',
-	assistantMessages: 'assistant-messages',
-	session: 'auth-session',
-	metrics: 'metrics',
-} as const;
+import { QUERY_KEYS } from "@shared/api";
+
 
 const DERIVED_KEYS = {
 	onLedgerChange: [
@@ -32,6 +7,7 @@ const DERIVED_KEYS = {
 		QUERY_KEYS.walletsSearch,
 		QUERY_KEYS.wallet,
 		QUERY_KEYS.goals,
+		QUERY_KEYS.goalsSearch,
 		QUERY_KEYS.accounts,
 		QUERY_KEYS.metrics,
 	],
@@ -44,6 +20,7 @@ const DERIVED_KEYS = {
 	],
 	onGoalChange: [
 		QUERY_KEYS.goals,
+		QUERY_KEYS.goalsSearch,
 		QUERY_KEYS.goal,
 		QUERY_KEYS.accounts,
 		QUERY_KEYS.metrics,
@@ -59,6 +36,7 @@ const DERIVED_KEYS = {
 	],
 	onAutomationChange: [
 		QUERY_KEYS.automations,
+		QUERY_KEYS.automationsSearch,
 		QUERY_KEYS.automation,
 	],
 	onWebhookChange: [
@@ -82,4 +60,4 @@ const DERIVED_KEYS = {
 	],
 } as const;
 
-export { DERIVED_KEYS, QUERY_KEYS };
+export { DERIVED_KEYS };

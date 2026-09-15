@@ -17,6 +17,7 @@ interface StoredTransaction {
 	wallet_name: string;
 	category: string | null;
 	chain_id: string | null;
+	chain_size?: number;
 	evidence: { url: string } | null;
 }
 
@@ -40,7 +41,9 @@ const storedTransactionToDto = (transaction: StoredTransaction): TransactionDto 
 	origin: transaction.origin,
 	wallet: { id: transaction.wallet_id, name: transaction.wallet_name },
 	category: transaction.category,
-	chain_id: transaction.chain_id,
+	chain: transaction.chain_id
+		? { id: transaction.chain_id, size: transaction.chain_size ?? 1 }
+		: null,
 });
 
 export { TRANSACTIONS_STORAGE_KEY, isSettled, storedTransactionToDto, walletDelta };

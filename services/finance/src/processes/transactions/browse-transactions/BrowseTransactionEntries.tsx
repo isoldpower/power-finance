@@ -1,21 +1,33 @@
+import { useMemo } from "react";
 import { Icons } from "@internal/ui-library";
 import { List } from "@shared/pure-components/collections";
-import { TransactionsEmptyState } from "@entity/transactions";
+import { toChainBound, TransactionsEmptyState } from "@entity/transactions";
 import { useTransactionsPaginationContext } from "@feature/transactions";
 import { ProtectBrowseSpace } from "@feature/wallets";
 
 import type { FC, ReactNode } from "react";
-import type { Transaction } from "@entity/transactions";
+import type { ChainBoundTransaction } from "@entity/transactions";
 
 
 interface BrowseTransactionEntriesProps {
-	children: (entry: Transaction) => ReactNode;
+	children: (entry: ChainBoundTransaction) => ReactNode;
 }
+
+const continuesChain = (entry: ChainBoundTransaction | undefined): boolean => (
+	entry?.position === 'middle' || entry?.position === 'end'
+);
 
 const BrowseTransactionEntries: FC<BrowseTransactionEntriesProps> = ({
 	children,
 }) => {
-	const { paginatedTransactions, from, to } = useTransactionsPaginationContext();
+	const { paginatedTransactions, from, to, hasNext, hasPrev } = useTransactionsPaginationContext();
+	const boundTransactions = useMemo(
+		() => toChainBound(paginatedTransactions, {
+			continuesBefore: hasPrev,
+			continuesAfter: hasNext,
+		}),
+		[paginatedTransactions, hasPrev, hasNext]
+	);
 	const pageSize = to - from + 1;
 	const ROW_HEIGHT = 56;
 	const SEPARATOR_HEIGHT = 1;
@@ -41,10 +53,13 @@ const BrowseTransactionEntries: FC<BrowseTransactionEntriesProps> = ({
 			className="flex flex-col overflow-y-auto" 
 			style={{ minHeight: pageSize * ROW_HEIGHT + (pageSize - 1) * SEPARATOR_HEIGHT }}
 		>
-			<List className="divide-y divide-border">
-				{paginatedTransactions.map((transaction) => {
-					return children(transaction);
+			<List
+				className="divide-y divide-border"
+				elementProps={(index) => ({
+					className: continuesChain(boundTransactions[index]) ? 'border-t-transparent' : undefined,
 				})}
+			>
+				{boundTransactions.map((entry) => children(entry))}
 			</List>
 			<ProtectBrowseSpace resources={paginatedTransactions} pageSize={pageSize}>
 				This is all we found.

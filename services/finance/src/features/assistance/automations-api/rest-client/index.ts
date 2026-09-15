@@ -1,5 +1,5 @@
 export { AutomationsHttpRESTApiClient } from './http-server.ts';
-export { AutomationsMockRESTApiClient } from './mock-server.ts';
+export { AutomationsMockRESTApiClient, AUTOMATION_SEARCH_FIELDS } from './mock-server.ts';
 export { AUTOMATIONS_STORAGE_KEY } from './mock-seed.ts';
 
 export type {
@@ -14,5 +14,7 @@ export type {
 	AutomationPatchResponse,
 	AutomationPostRequest,
 	AutomationPostResponse,
+	AutomationSearchRequest,
+	AutomationSearchResponse,
 } from './types.ts';
 export type { StoredAutomation } from './mock-seed.ts';

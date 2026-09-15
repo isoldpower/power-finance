@@ -1,3 +1,4 @@
+export * from './caching';
 export * from './envelope';
 export * from './filtration';
 export * from './mocking';

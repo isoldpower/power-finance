@@ -8,6 +8,7 @@ import type {
 	AutomationListRequest, AutomationListResponse,
 	AutomationPatchRequest, AutomationPatchResponse,
 	AutomationPostRequest, AutomationPostResponse,
+	AutomationSearchRequest, AutomationSearchResponse,
 } from "./types.ts";
 
 
@@ -58,6 +59,16 @@ class AutomationsHttpRESTApiClient implements IAutomationsRESTApiClient {
 		return request<AutomationDeleteResponse>(this.axiosInstance, {
 			method: 'DELETE',
 			url: `/${payload.id}`,
+		}, this.versions);
+	}
+
+	public search(payload: AutomationSearchRequest): Promise<AutomationSearchResponse> {
+		return request<AutomationSearchResponse>(this.axiosInstance, {
+			method: 'POST',
+			url: `/search`,
+			params: { ...payload.params },
+			data: payload.data,
+			headers: this.versions.headers(),
 		}, this.versions);
 	}
 }

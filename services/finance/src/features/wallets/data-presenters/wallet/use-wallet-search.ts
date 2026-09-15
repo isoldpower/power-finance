@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { staleRefetchInterval, useApiContext } from "@app/api";
-import { stringifySorted } from "@shared/data";
+import { useApiContext } from "@app/api";
 import { searchWallets as searchWalletsApi } from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
 
@@ -22,11 +21,10 @@ const useWalletSearch = (query: WalletQuery, params?: UseWalletSearchParams) => 
 		}),
 		queryKey: [
 			WALLETS_CACHE_KEYS.search,
-			stringifySorted(query),
+			query,
 			params?.limit ?? 'default',
 			params?.cursor ?? 'first',
 		],
-		refetchInterval: (walletsQuery) => staleRefetchInterval(walletsQuery.state.error),
 	});
 
 	return useMemo(() => ({

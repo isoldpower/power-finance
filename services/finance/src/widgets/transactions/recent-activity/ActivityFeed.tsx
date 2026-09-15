@@ -5,7 +5,9 @@ import {
 	ActivityRow,
 	AmountDirectionIcon,
 	resolveToneWithDirection,
+	toChainBound,
 	toTransactionDayView,
+	TransactionChainBadge,
 } from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
 import { LadderAppearance, ProtectActivityEmpty } from "@feature/transactions";
@@ -32,7 +34,7 @@ const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 			const startPosition = position;
 			position += day.transactions.length;
 
-			return { ...day, startPosition };
+			return { ...day, startPosition, entries: toChainBound(day.transactions) };
 		});
 	}, [groups, convert]);
 
@@ -48,38 +50,43 @@ const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 							{formatCurrency(day.dayTotal, targetCurrency)}
 						</ActivityGroupHeader.Money>
 					</ActivityGroupHeader>
-					{day.transactions.map((transaction, index) => (
-						<LadderAppearance order={day.startPosition + index} key={transaction.id}>
-							<ActivityRow>
-								<ActivityRow.Icon tone={transaction.type === 'income' ? 'positive' : 'negative'}>
-									<AmountDirectionIcon type={transaction.type} />
+					{day.entries.map((entry, index) => (
+						<LadderAppearance order={day.startPosition + index} key={entry.item.id}>
+							<ActivityRow position={entry.position} pending={entry.item.pending}>
+								<ActivityRow.Icon tone={entry.item.type === 'income' ? 'positive' : 'negative'}>
+									<AmountDirectionIcon type={entry.item.type} />
 								</ActivityRow.Icon>
 								<div className="min-w-0 flex-1">
-									<RowTitle>
-										{transaction.description}
-									</RowTitle>
+									<div className="flex items-center gap-1.5">
+										<RowTitle>
+											{entry.item.description}
+										</RowTitle>
+										{entry.index === 0 && entry.position !== 'single'
+											? <TransactionChainBadge size={entry.chain?.size ?? null} />
+											: null}
+									</div>
 									<ActivityRow.Body>
-										<span>{transaction.walletName}</span>
+										<span>{entry.item.walletName}</span>
 										<ActivityRow.Separator />
-										<span>{transaction.category}</span>
+										<span>{entry.item.category}</span>
 									</ActivityRow.Body>
 								</div>
 								<div className="text-right">
 									<ActivityRow.Money
 										tone={resolveToneWithDirection(
-											transaction.type
+											entry.item.type
 										)}
 										amount={formatCurrency(
-											transaction.amount,
-											transaction.currency
+											entry.item.amount,
+											entry.item.currency
 										)}
 										converted={convert({
-											amount: transaction.amount,
-											currency: transaction.currency,
+											amount: entry.item.amount,
+											currency: entry.item.currency,
 										}).formatted}
 									/>
-									<MetaText size="10.5" dateTime={transaction.createdAt}>
-										{transaction.time}
+									<MetaText as="time" size="10.5" dateTime={entry.item.createdAt} className="block">
+										{entry.item.time}
 									</MetaText>
 								</div>
 							</ActivityRow>

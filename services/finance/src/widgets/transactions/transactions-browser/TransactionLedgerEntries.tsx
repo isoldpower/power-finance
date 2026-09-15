@@ -29,7 +29,7 @@ const TransactionLedgerEntries: FC<LedgerTransactionEntriesProps> = ({ transacti
 	const { convert, targetCurrency } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
 
-	const { entries, isPending } = useTransactionLedger(transaction.id);
+	const { entries, isPending, ledgerState } = useTransactionLedger(transaction.id);
 
 	const row = useMemo(() => toTransactionRowView(transaction), [transaction]);
 	const money = useMemo(
@@ -73,7 +73,7 @@ const TransactionLedgerEntries: FC<LedgerTransactionEntriesProps> = ({ transacti
 					tone={resolveToneWithDirection(transaction.type)}
 				/>
 			</PostingsContainer>
-			<TransactionLedgerFx isPending={isPending}>
+			<TransactionLedgerFx isPending={isPending} ledgerState={ledgerState}>
 				{lines.map((entry, index) => (
 					<LedgerLineRow key={`${row.id}-${entry.account}-${index.toString()}`}>
 						<LedgerLineRow.Side debit={entry.debit}>

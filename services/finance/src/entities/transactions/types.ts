@@ -1,7 +1,10 @@
 import type { Money } from "@entity/localization";
+import type { Pending } from "@shared/data";
 
 
 type TransactionEntryType = 'expense' | 'income' | 'transfer';
+
+type TransferDirection = 'out' | 'in';
 
 type TransactionType = 'expense' | 'income';
 
@@ -18,7 +21,12 @@ interface TransactionEvidence {
 	url: string;
 }
 
-interface Transaction {
+interface TransactionChainRef {
+	id: string;
+	size: number;
+}
+
+interface Transaction extends Pending {
 	id: string;
 	name: string;
 	createdAt: string;
@@ -29,7 +37,7 @@ interface Transaction {
 	origin: TransactionOrigin;
 	wallet: TransactionWalletRef;
 	category: string | null;
-	chainId: string | null;
+	chain: TransactionChainRef | null;
 }
 
 interface TransactionAnalysis {
@@ -125,6 +133,7 @@ export type {
 	TransactionAnalysis,
 	TransactionEvidence,
 	TransactionPosting,
+	TransactionChainRef,
 	TransactionWalletRef,
 	TransactionChain,
 	TransactionDraft,
@@ -135,5 +144,6 @@ export type {
 	TransactionCategory,
 	ReceiptScan,
 	ReceiptScanField,
-	TransactionEntryType
+	TransactionEntryType,
+	TransferDirection
 };

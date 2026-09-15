@@ -1,13 +1,13 @@
 import { isNegativeAmount } from "@shared/api";
 import { FinanceMoney } from "@internal/ui-library";
 import { MoneyInOriginal } from "@entity/localization";
-import { walletHasCreditLine, walletOwnedMoney, walletPeriodLabel } from "@entity/wallets";
+import { WalletDetailsSkeleton, walletHasCreditLine, walletOwnedMoney, walletPeriodLabel } from "@entity/wallets";
 import { useConvertMoney } from "@feature/localization";
 import { useLocaleCurrency } from "@shared/formatting";
 import { Caption, Overline } from "@shared/pure-components/typography";
 
 import type { FC } from "react";
-import type { WalletDetails, WalletPeriod } from "@entity/wallets";
+import type { WalletDetails, WalletFlows, WalletPeriod } from "@entity/wallets";
 
 
 interface WalletBalanceDetailsProps {
@@ -20,6 +20,7 @@ const WalletBalanceDetails: FC<WalletBalanceDetailsProps> = ({ wallet, period })
 	const { convert } = useConvertMoney();
 	const owned = walletOwnedMoney(wallet);
 	const periodLabel = walletPeriodLabel(period);
+	const flows = wallet.period;
 
 	return (
 		<div className="mt-[18px] flex items-end gap-5">
@@ -45,21 +46,42 @@ const WalletBalanceDetails: FC<WalletBalanceDetailsProps> = ({ wallet, period })
 				) : null}
 			</div>
 			<div className="flex-1" />
-			<div>
-				<Caption size="11">In · {periodLabel}</Caption>
-				<FinanceMoney tone="pos" size="md">
-					{format(wallet.period.inflow.amount, wallet.period.inflow.currency)}
-				</FinanceMoney>
-			</div>
-			<div>
-				<Caption size="11">Out · {periodLabel}</Caption>
-				<FinanceMoney tone="neg" size="md">
-					{format(wallet.period.outflow.amount, wallet.period.outflow.currency)}
-				</FinanceMoney>
-			</div>
+			{flows === undefined ? (
+				<>
+					<WalletDetailsSkeleton.Metric />
+					<WalletDetailsSkeleton.Metric />
+				</>
+			) : (
+				<WalletPeriodFlows flows={flows} periodLabel={periodLabel} format={format} />
+			)}
 		</div>
 	);
 }
+
+interface WalletPeriodFlowsProps {
+	flows: WalletFlows;
+	periodLabel: string;
+	format: (amount: string, currency: string) => string;
+}
+
+const WalletPeriodFlows: FC<WalletPeriodFlowsProps> = ({ flows, periodLabel, format }) => (
+	<>
+		<div>
+			<Caption size="11">In · {periodLabel}</Caption>
+			<FinanceMoney tone="pos" size="md">
+				{format(flows.inflow.amount, flows.inflow.currency)}
+			</FinanceMoney>
+		</div>
+		<div>
+			<Caption size="11">Out · {periodLabel}</Caption>
+			<FinanceMoney tone="neg" size="md">
+				{format(flows.outflow.amount, flows.outflow.currency)}
+			</FinanceMoney>
+		</div>
+	</>
+);
+
+WalletPeriodFlows.displayName = 'WalletPeriodFlows';
 
 export { WalletBalanceDetails };
 export type { WalletBalanceDetailsProps };

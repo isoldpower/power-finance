@@ -1,4 +1,5 @@
 import { cn } from "@internal/ui-library";
+import { pendingClass } from "@shared/pure-components/feedback";
 import { AutomationConditionLine } from "./row/AutomationConditionLine.tsx";
 import { AutomationFrequencyBadge } from "./row/AutomationFrequencyBadge.tsx";
 import { AutomationIcon } from "./row/AutomationIcon.tsx";
@@ -15,7 +16,9 @@ import type { AutomationRowTitleProps } from "./row/AutomationRowTitle.tsx";
 import type { AutomationStatusBadgeProps } from "./row/AutomationStatusBadge.tsx";
 
 
-type AutomationRowProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+type AutomationRowProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> & {
+	pending?: boolean;
+}>;
 type AutomationRowObject = FC<AutomationRowProps> & {
 	Body: FC<AutomationRowBodyProps>;
 	ConditionLine: FC<AutomationConditionLineProps>;
@@ -27,12 +30,14 @@ type AutomationRowObject = FC<AutomationRowProps> & {
 
 const AutomationRow: AutomationRowObject = ({
 	children,
+	pending = false,
 	...props
 }) => (
 	<div
 		className={cn(
 			"fx-slidein flex items-center gap-3 border-b border-border px-[18px] py-3.5",
-			"last:border-b-0 hover:bg-secondary"
+			"last:border-b-0 hover:bg-secondary",
+			pendingClass(pending)
 		)}
 		{...props}
 	>

@@ -1,4 +1,4 @@
-import type { FilterNode, PageParams, ResourceTimestamps } from "@shared/api";
+import type { FilterNode, PageParams, ResourceTimestamps, SearchPayload } from "@shared/api";
 
 
 type AutomationTriggerTypeDto = 'event' | 'schedule';
@@ -61,6 +61,19 @@ interface AutomationListParams extends PageParams {
 	enabled?: boolean;
 }
 
+type AutomationSearchField =
+	| 'name'
+	| 'enabled'
+	| 'trigger_type'
+	| 'event'
+	| 'schedule'
+	| 'created_at'
+	| 'last_run_at';
+
+type AutomationSearchBody = SearchPayload<AutomationSearchField>;
+
+type AutomationSearchParams = PageParams;
+
 export type {
 	AutomationCreateBody,
 	AutomationDto,
@@ -70,6 +83,9 @@ export type {
 	AutomationListParams,
 	AutomationPatchBody,
 	AutomationScheduleDto,
+	AutomationSearchBody,
+	AutomationSearchField,
+	AutomationSearchParams,
 	AutomationTriggerBody,
 	AutomationTriggerDto,
 	AutomationTriggerTypeDto,

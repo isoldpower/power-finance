@@ -1,7 +1,8 @@
 import type { Money } from "@entity/localization";
+import type { Pending } from "@shared/data";
 
 
-interface Wallet {
+interface Wallet extends Pending {
 	id: string;
 	name: string;
 	createdAt: string;
@@ -23,10 +24,10 @@ interface WalletFlows {
 }
 
 interface WalletDetails extends Wallet {
-	period: WalletFlows;
+	period?: WalletFlows;
 }
 
-interface Goal {
+interface Goal extends Pending {
 	id: string;
 	name: string;
 	url: string | null;
@@ -69,6 +70,19 @@ interface GoalPatch {
 	target?: string;
 }
 
+interface GoalQuery {
+	name?: string;
+	currencies?: string[];
+	minTarget?: number;
+	maxTarget?: number;
+	minProgress?: number;
+	maxProgress?: number;
+	finishAfter?: string;
+	finishBefore?: string;
+	createdAfter?: string;
+	createdBefore?: string;
+}
+
 interface WalletQuery {
 	name?: string;
 	currencies?: string[];
@@ -84,7 +98,7 @@ interface PanelWallet {
 	name: string;
 	category: string;
 	currency: string;
-	gradient: string;
+	color: string;
 	balance: Money;
 }
 
@@ -108,5 +122,6 @@ export type {
 	WalletPatch,
 	GoalDraft,
 	GoalPatch,
+	GoalQuery,
 	WalletQuery
 };

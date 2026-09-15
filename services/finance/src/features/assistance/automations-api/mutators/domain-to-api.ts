@@ -4,12 +4,15 @@ import type {
 	AutomationEffect,
 	AutomationPatch,
 	AutomationQuery,
+	AutomationSearchQuery,
 	AutomationTrigger,
 	RuleNode,
 } from "@entity/assistance";
 import type {
 	AutomationCreateBody,
 	AutomationEffectDto,
+	AutomationSearchBody,
+	AutomationSearchField,
 	AutomationListParams,
 	AutomationPatchBody,
 	AutomationTriggerBody,
@@ -121,4 +124,51 @@ const automationQueryToApi = (query: AutomationQuery | undefined): AutomationLis
 		: { enabled: query.enabled }),
 });
 
-export { automationDraftToApi, automationPatchToApi, automationQueryToApi, conditionToApi, effectToApi };
+const SEARCH_MATCH_ALL: FilterNode<AutomationSearchField> = {
+	field_name: 'created_at',
+	operator: 'gte',
+	value: '1970-01-01T00:00:00+00:00',
+};
+
+const automationSearchToApi = (query: AutomationSearchQuery): AutomationSearchBody => {
+	const leaves: FilterNode<AutomationSearchField>[] = [];
+
+	if (query.name) {
+		leaves.push({ field_name: 'name', operator: 'icontains', value: query.name });
+	}
+	if (query.enabled !== undefined) {
+		leaves.push({ field_name: 'enabled', operator: 'eq', value: String(query.enabled) });
+	}
+	if (query.triggerTypes?.length) {
+		leaves.push({ field_name: 'trigger_type', operator: 'in', value: query.triggerTypes });
+	}
+	if (query.events?.length) {
+		leaves.push({ field_name: 'event', operator: 'in', value: query.events });
+	}
+	if (query.schedules?.length) {
+		leaves.push({ field_name: 'schedule', operator: 'in', value: query.schedules });
+	}
+	if (query.createdAfter) {
+		leaves.push({ field_name: 'created_at', operator: 'gte', value: query.createdAfter });
+	}
+	if (query.createdBefore) {
+		leaves.push({ field_name: 'created_at', operator: 'lte', value: query.createdBefore });
+	}
+	if (query.ranAfter) {
+		leaves.push({ field_name: 'last_run_at', operator: 'gte', value: query.ranAfter });
+	}
+	if (query.ranBefore) {
+		leaves.push({ field_name: 'last_run_at', operator: 'lte', value: query.ranBefore });
+	}
+
+	return { filter_body: { and: leaves.length > 0 ? leaves : [SEARCH_MATCH_ALL] } };
+};
+
+export {
+	automationDraftToApi,
+	automationPatchToApi,
+	automationQueryToApi,
+	automationSearchToApi,
+	conditionToApi,
+	effectToApi,
+};

@@ -1,8 +1,8 @@
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApiContext } from "@app/api";
 import { fetchTransaction } from "../transactions-api";
-import { CACHE_KEYS, LEDGER_DISPATCH_POLL_MS } from "./config.ts";
+import { CACHE_KEYS, LEDGER_DISPATCH_POLL_MS, MAX_DISPATCH_POLLS } from "./config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { TransactionPosting } from "@entity/transactions";
@@ -14,15 +14,26 @@ type UseTransactionLedgerOptions = Omit<
 	'queryKey' | 'queryFn'
 >;
 
+type LedgerState = 'ready' | 'dispatching' | 'unavailable';
+
 type UseTransactionLedgerReturn = UseQueryResult<FetchTransactionResponse> & {
 	entries: TransactionPosting[];
-	dispatching: boolean;
+	ledgerState: LedgerState;
 };
 
 const EMPTY_POSTINGS: TransactionPosting[] = [];
 
-const isDispatching = (response: FetchTransactionResponse | undefined): boolean => {
+const hasNoPostings = (response: FetchTransactionResponse | undefined): boolean => {
 	return response !== undefined && response.postings.length === 0;
+};
+
+const ledgerStateOf = (
+	response: FetchTransactionResponse | undefined,
+	dataUpdateCount: number,
+): LedgerState => {
+	if (!hasNoPostings(response)) return 'ready';
+
+	return dataUpdateCount < MAX_DISPATCH_POLLS ? 'dispatching' : 'unavailable';
 };
 
 const useTransactionLedger = (
@@ -30,25 +41,31 @@ const useTransactionLedger = (
 	options?: UseTransactionLedgerOptions
 ): UseTransactionLedgerReturn => {
 	const apiContext = useApiContext();
+	const client = useQueryClient();
+	const ledgerKey = [CACHE_KEYS.ledger, id];
 	const query = useQuery<FetchTransactionResponse>({
-		queryKey: [CACHE_KEYS.ledger, id],
+		queryKey: ledgerKey,
 		queryFn: () => fetchTransaction({
 			handler: apiContext.transactionServers.rest,
 			id,
 		}),
 		enabled: id !== '',
 		refetchInterval: (ledgerQuery) => (
-			isDispatching(ledgerQuery.state.data) ? LEDGER_DISPATCH_POLL_MS : false
+			ledgerStateOf(ledgerQuery.state.data, ledgerQuery.state.dataUpdateCount) === 'dispatching'
+				? LEDGER_DISPATCH_POLL_MS
+				: false
 		),
 		...options ?? {},
 	});
 
+	const polls = client.getQueryState<FetchTransactionResponse>(ledgerKey)?.dataUpdateCount ?? 0;
+
 	return useMemo(() => ({
 		...query,
 		entries: query.data?.postings ?? EMPTY_POSTINGS,
-		dispatching: isDispatching(query.data),
-	}), [query]);
+		ledgerState: ledgerStateOf(query.data, polls),
+	}), [query, polls]);
 };
 
 export { useTransactionLedger };
-export type { UseTransactionLedgerOptions, UseTransactionLedgerReturn };
+export type { LedgerState, UseTransactionLedgerOptions, UseTransactionLedgerReturn };

@@ -86,8 +86,8 @@ const ManagementPage: FC = () => {
 								<TransactionsBulkActions />
 								<TransactionsTableColumns />
 								<BrowseTransactionEntries>
-									{(transaction) => (
-										<LedgerBasedTransaction transaction={transaction} />
+									{(entry) => (
+										<LedgerBasedTransaction key={entry.item.id} entry={entry} />
 									)}
 								</BrowseTransactionEntries>
 								<TransactionsBrowserPagination />

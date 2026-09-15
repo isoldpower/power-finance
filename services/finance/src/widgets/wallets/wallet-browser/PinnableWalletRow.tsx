@@ -3,9 +3,10 @@ import { isNegativeAmount } from "@shared/api";
 import { cn, FinanceMoney } from "@internal/ui-library";
 import { useCallback } from "react";
 import { WalletPinButton, WalletSwatch, walletTypeLabel } from "@entity/wallets";
-import { useWalletFavorite, useWalletsSelection } from "@feature/wallets";
+import { isOptimisticWalletId, useWalletFavorite, useWalletsSelection } from "@feature/wallets";
 import { useShallow } from "zustand/react/shallow";
 import { useLocaleCurrency } from "@shared/formatting";
+import { pendingClass } from "@shared/pure-components/feedback";
 import { Caption, RowTitle, textClass } from "@shared/pure-components/typography";
 
 import type { FC, MouseEvent } from "react";
@@ -27,14 +28,19 @@ const PinnableWalletRow: FC<PinnableWalletRowProps> = ({ wallet }) => {
 	const format = useLocaleCurrency();
 
 	const selected = wallet.id === selectedWalletId;
+	const unsaved = isOptimisticWalletId(wallet.id);
 
 	const handleSelect = useCallback(() => {
+		if (unsaved) return;
+
 		selectWallet(wallet.id);
-	}, [selectWallet, wallet.id]);
+	}, [unsaved, selectWallet, wallet.id]);
 	const handleTogglePin = useCallback((event: MouseEvent<HTMLButtonElement>) => {
 		event.stopPropagation();
+		if (unsaved) return;
+
 		toggleFavorite(wallet);
-	}, [toggleFavorite, wallet]);
+	}, [unsaved, toggleFavorite, wallet]);
 
 	return (
 		<div
@@ -43,7 +49,9 @@ const PinnableWalletRow: FC<PinnableWalletRowProps> = ({ wallet }) => {
 				"flex cursor-pointer items-center gap-[11px] border-l-[3px] px-3.5 py-[11px] transition-colors",
 				selected
 					? "border-l-primary bg-[var(--accent-soft)]"
-					: "border-l-transparent hover:bg-surface-2"
+					: "border-l-transparent hover:bg-surface-2",
+				unsaved && "pointer-events-none",
+				pendingClass(wallet.pending)
 			)}
 		>
 			<WalletSwatch size='md' color={walletGradient(wallet.color)} />

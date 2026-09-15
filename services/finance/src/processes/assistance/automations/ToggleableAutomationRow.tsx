@@ -34,7 +34,7 @@ const ToggleableAutomationRow: FC<ToggleableAutomationRowProps> = ({
 	}, [rule.id, toggle]);
 
 	return (
-		<AutomationRow style={{ animationDelay: `${(order * 0.04).toString()}s` }}>
+		<AutomationRow pending={rule.pending} style={{ animationDelay: `${(order * 0.04).toString()}s` }}>
 			<AutomationRow.Icon>
 				{resolveAutomationIcon(rule.icon)}
 			</AutomationRow.Icon>

@@ -1,5 +1,5 @@
 import type { LedgerEntryDto } from "@feature/accounts/accounts-api";
-import type { MoneyDto, ResourceTimestamps } from "@shared/api";
+import type { MoneyDto, PageParams, ResourceTimestamps, SearchPayload } from "@shared/api";
 
 
 interface GoalDto extends ResourceTimestamps {
@@ -29,4 +29,18 @@ interface GoalPatchBody {
 	target?: string;
 }
 
-export type { GoalCreateBody, GoalDetailDto, GoalDto, GoalPatchBody };
+type GoalSearchField = 'name' | 'currency' | 'target' | 'progress' | 'finish_at' | 'created_at';
+
+type GoalSearchBody = SearchPayload<GoalSearchField>;
+
+type GoalSearchParams = PageParams;
+
+export type {
+	GoalCreateBody,
+	GoalDetailDto,
+	GoalDto,
+	GoalPatchBody,
+	GoalSearchBody,
+	GoalSearchField,
+	GoalSearchParams,
+};

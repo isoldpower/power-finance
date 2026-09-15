@@ -30,7 +30,7 @@ const transactionFromApi = (dto: TransactionDto): Transaction => ({
 	origin: dto.origin,
 	wallet: { id: dto.wallet.id, name: dto.wallet.name },
 	category: dto.category,
-	chainId: dto.chain_id,
+	chain: dto.chain ?? null,
 });
 
 const transactionPostingFromApi = (dto: TransactionPostingDto): TransactionPosting => ({

@@ -1,10 +1,14 @@
 import { useCallback, useMemo } from "react";
-import { FilterChip, TransactionSearchInput } from "@entity/transactions";
+import {
+	FilterChip,
+	FilterCombobox,
+	SortDirectionButton,
+	TransactionSearchInput,
+} from "@entity/transactions";
 import { useTransactionCategories, useTransactionsFiltersContext } from "@feature/transactions";
 import { useWalletsList } from "@feature/wallets";
-import { Caption } from "@shared/pure-components/typography";
 
-import { TRANSACTION_ORDER_LABEL, TRANSACTION_TYPE_FILTER_OPTIONS } from "./config.ts";
+import { TRANSACTION_TYPE_FILTER_OPTIONS } from "./config.ts";
 
 
 const TransactionBrowserFilters = () => {
@@ -15,6 +19,7 @@ const TransactionBrowserFilters = () => {
 		walletFilter, setWalletFilter,
 		categoryFilter, setCategoryFilter,
 		typeFilter, setTypeFilter,
+		sortDirection, toggleSortDirection,
 	} = useTransactionsFiltersContext();
 
 	const walletOptions = useMemo(() => ([
@@ -38,7 +43,7 @@ const TransactionBrowserFilters = () => {
 	}, [setSearch]);
 
 	return (
-		<div className="relative z-10 flex flex-wrap items-center gap-2 border-b border-border px-4 py-3">
+		<div className="relative z-10 flex flex-wrap items-stretch gap-2 border-b border-border px-4 py-3">
 			<TransactionSearchInput>
 				<TransactionSearchInput.Icon />
 				<TransactionSearchInput.Field
@@ -52,42 +57,49 @@ const TransactionBrowserFilters = () => {
 					</TransactionSearchInput.Clear>
 				) : null}
 			</TransactionSearchInput>
-			<FilterChip>
-				<FilterChip.Trigger active={walletFilter !== 'all'}>
+			<FilterCombobox>
+				<FilterCombobox.Trigger active={walletFilter !== 'all'}>
 					{walletFilter === 'all' ? 'Wallet' : walletLabel}
-					<FilterChip.Caret />
-				</FilterChip.Trigger>
-				<FilterChip.Options>
-					{walletOptions.map((option) => (
-						<FilterChip.Option
-							key={option.value}
-							onSelect={() => { setWalletFilter(option.value); }}
-						>
-							{option.label}
-						</FilterChip.Option>
-					))}
-				</FilterChip.Options>
-			</FilterChip>
-			<FilterChip>
-				<FilterChip.Trigger active={categoryFilter !== 'all'}>
+				</FilterCombobox.Trigger>
+				<FilterCombobox.Options>
+					<FilterCombobox.Search placeholder="Search wallets…" />
+					<FilterCombobox.List emptyLabel="No wallets match.">
+						{walletOptions.map((option) => (
+							<FilterCombobox.Option
+								key={option.value}
+								value={option.value}
+								keywords={[option.label]}
+								onSelect={() => { setWalletFilter(option.value); }}
+							>
+								{option.label}
+							</FilterCombobox.Option>
+						))}
+					</FilterCombobox.List>
+				</FilterCombobox.Options>
+			</FilterCombobox>
+			<FilterCombobox>
+				<FilterCombobox.Trigger active={categoryFilter !== 'all'}>
 					{categoryFilter === 'all' ? 'Category' : categoryFilter}
-					<FilterChip.Caret />
-				</FilterChip.Trigger>
-				<FilterChip.Options>
-					{categoryOptions.map((option) => (
-						<FilterChip.Option
-							key={option.value}
-							onSelect={() => { setCategoryFilter(option.value); }}
-						>
-							{option.label}
-						</FilterChip.Option>
-					))}
-				</FilterChip.Options>
-			</FilterChip>
+				</FilterCombobox.Trigger>
+				<FilterCombobox.Options>
+					<FilterCombobox.Search placeholder="Search categories…" />
+					<FilterCombobox.List emptyLabel="No categories match.">
+						{categoryOptions.map((option) => (
+							<FilterCombobox.Option
+								key={option.value}
+								value={option.value}
+								keywords={[option.label]}
+								onSelect={() => { setCategoryFilter(option.value); }}
+							>
+								{option.label}
+							</FilterCombobox.Option>
+						))}
+					</FilterCombobox.List>
+				</FilterCombobox.Options>
+			</FilterCombobox>
 			<FilterChip>
 				<FilterChip.Trigger active={typeFilter !== 'all'}>
 					{typeFilter === 'all' ? 'Type' : typeLabel}
-					<FilterChip.Caret />
 				</FilterChip.Trigger>
 				<FilterChip.Options>
 					{TRANSACTION_TYPE_FILTER_OPTIONS.map((option) => (
@@ -100,7 +112,7 @@ const TransactionBrowserFilters = () => {
 					))}
 				</FilterChip.Options>
 			</FilterChip>
-			<Caption size="11">{TRANSACTION_ORDER_LABEL}</Caption>
+			<SortDirectionButton direction={sortDirection} onToggle={toggleSortDirection} />
 		</div>
 	);
 };

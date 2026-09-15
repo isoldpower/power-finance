@@ -21,7 +21,7 @@ const SkeletonText: FC<SkeletonTextProps> = ({ size, family, width, className })
 		className={cn("relative block select-none text-transparent", width, className)}
 	>
 		&nbsp;
-		<span className="absolute inset-x-0 inset-y-[14%] animate-pulse rounded-md bg-accent" />
+		<span className="absolute inset-x-0 top-1/2 h-[0.8em] -translate-y-1/2 animate-pulse rounded-md bg-accent" />
 	</Text>
 );
 

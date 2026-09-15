@@ -3,8 +3,8 @@ export { GOAL_ICONS, resolveGoalIcon } from './goal-icons.ts';
 export { walletTypeLabel } from './wallet-type-label.ts';
 export {
 	DEFAULT_WALLET_COLOR,
+	WALLET_COLORS,
 	isWalletColor,
-	NEW_WALLET_GRADIENT,
 	walletGradient,
 	WALLET_COLOR_PATTERN,
 } from './wallet-gradient.ts';

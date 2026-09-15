@@ -7,6 +7,7 @@ import {
 	updateWallet as updateWalletApi,
 } from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
+import { useOptimisticWallets } from "./optimistic";
 
 import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import type { WalletPatch } from "@entity/wallets";
@@ -15,12 +16,13 @@ import type {
 	FetchWalletResponse,
 	UpdateWalletResponse,
 } from "../../wallets-api";
+import type { WalletCachesSnapshot } from "./optimistic";
 
 
 interface UseWalletMethodsReturn {
 	meta: {
-		updateMutation: UseMutationResult<UpdateWalletResponse, Error, WalletPatch>;
-		deleteMutation: UseMutationResult<DeleteWalletResponse, Error, string>;
+		updateMutation: UseMutationResult<UpdateWalletResponse, Error, WalletPatch, WalletCachesSnapshot>;
+		deleteMutation: UseMutationResult<DeleteWalletResponse, Error, string, WalletCachesSnapshot>;
 		query: UseQueryResult<FetchWalletResponse>;
 	}
 	updateWallet: (patch: WalletPatch) => Promise<UpdateWalletResponse>;
@@ -33,6 +35,7 @@ const useWalletMethods = (
 ): UseWalletMethodsReturn => {
 	const apiContext = useApiContext();
 	const client = useQueryClient();
+	const optimistic = useOptimisticWallets();
 
 	const invalidateWallets = useCallback(() => {
 		for (const key of DERIVED_KEYS.onWalletChange) {
@@ -52,22 +55,43 @@ const useWalletMethods = (
 		})
 	});
 
-	const updateMutation = useMutation({
+	const updateMutation = useMutation<UpdateWalletResponse, Error, WalletPatch, WalletCachesSnapshot>({
 		mutationFn: (patch: WalletPatch) => updateWalletApi({
 			id,
 			patch,
 			handler: apiContext.walletServers.rest
 		}),
 		mutationKey: [WALLETS_CACHE_KEYS.update, id],
+		onMutate: async (patch: WalletPatch) => {
+			const snapshot = await optimistic.capture();
+			optimistic.applyPatch(id, patch);
+
+			return snapshot;
+		},
+		onError: (_error, _patch, snapshot) => {
+			optimistic.restore(snapshot);
+		},
+		onSuccess: (wallet) => {
+			optimistic.applySettled(id, wallet);
+		},
 		onSettled: invalidateWallets
 	});
 
-	const deleteMutation = useMutation({
+	const deleteMutation = useMutation<DeleteWalletResponse, Error, string, WalletCachesSnapshot>({
 		mutationFn: (walletId: string) => deleteWalletApi({
 			id: walletId,
 			handler: apiContext.walletServers.rest
 		}),
 		mutationKey: [WALLETS_CACHE_KEYS.delete, id],
+		onMutate: async (walletId: string) => {
+			const snapshot = await optimistic.capture();
+			optimistic.applyRemove(walletId, new Date().toISOString());
+
+			return snapshot;
+		},
+		onError: (_error, _walletId, snapshot) => {
+			optimistic.restore(snapshot);
+		},
 		onSettled: invalidateWallets
 	});
 

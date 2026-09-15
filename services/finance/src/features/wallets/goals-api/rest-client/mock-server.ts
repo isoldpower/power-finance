@@ -3,12 +3,14 @@ import { v4 as uuidv4 } from "uuid";
 import { LocalStorageMock } from "@internal/shared";
 import {
 	ApiError,
+	createMatcher,
 	delay,
 	IdempotencyStore,
 	paginate,
 	parseAmount,
 	serializeAmount,
 	stringifySortedQuery,
+	validateFilter,
 } from "@shared/api";
 import { storedTransactionToDto, TRANSACTIONS_STORAGE_KEY, walletDelta } from "@feature/transactions/transactions-api";
 import { GOALS_STORAGE_KEY } from "./mock-seed.ts";
@@ -16,7 +18,8 @@ import type { IStorage } from "@internal/shared";
 import type { LedgerEntryDto } from "@feature/accounts/accounts-api";
 import type { StoredTransaction } from "@feature/transactions/transactions-api";
 import type { StoredGoal } from "./mock-seed.ts";
-import type { GoalDto } from "../types.ts";
+import type { FieldPolicy } from "@shared/api";
+import type { GoalDto, GoalSearchField } from "../types.ts";
 import type {
 	IGoalsRESTApiClient,
 	GoalDeleteRequest, GoalDeleteResponse,
@@ -24,9 +27,47 @@ import type {
 	GoalListRequest, GoalListResponse,
 	GoalPatchRequest, GoalPatchResponse,
 	GoalPostRequest, GoalPostResponse,
+	GoalSearchRequest, GoalSearchResponse,
 } from "./types.ts";
 
 
+
+const SEARCH_FIELDS: FieldPolicy<GoalSearchField> = {
+	name: ['eq', 'neq', 'in', 'contains', 'icontains'],
+	currency: ['eq', 'neq', 'in'],
+	target: ['eq', 'gt', 'gte', 'lt', 'lte'],
+	progress: ['eq', 'gt', 'gte', 'lt', 'lte'],
+	finish_at: ['gt', 'gte', 'lt', 'lte'],
+	created_at: ['gt', 'gte', 'lt', 'lte'],
+};
+
+interface GoalRecord {
+	goal: StoredGoal;
+	progress: string;
+}
+
+const leafValue = (record: GoalRecord, field: GoalSearchField): string | null => {
+	switch (field) {
+		case 'name':
+			return record.goal.name;
+		case 'currency':
+			return record.goal.currency;
+		case 'target':
+			return record.goal.target;
+		case 'progress':
+			return record.progress;
+		case 'finish_at':
+			return record.goal.finish_at;
+		case 'created_at':
+			return record.goal.created_at;
+	}
+};
+
+const matchesNode = createMatcher<GoalRecord, GoalSearchField>(
+	SEARCH_FIELDS,
+	(record, field) => leafValue(record, field),
+	{ numericFields: ['target', 'progress'] },
+);
 
 const compareDesc = (left: string, right: string): number => (left < right ? 1 : left > right ? -1 : 0);
 
@@ -115,6 +156,27 @@ class GoalsMockRESTApiClient implements IGoalsRESTApiClient {
 		};
 	}
 
+	public async search(payload: GoalSearchRequest): Promise<GoalSearchResponse> {
+		validateFilter(SEARCH_FIELDS, payload.data.filter_body);
+
+		await delay();
+
+		const open = orderGoals(this.storage.list().filter((goal) => goal.deleted_at === null));
+		const matching = open
+			.map((goal) => ({ goal, progress: this.progress(goal) }))
+			.filter((record) => matchesNode(record, payload.data.filter_body));
+		const page = paginate(
+			matching,
+			payload.params,
+			stringifySortedQuery({ filter: payload.data.filter_body }),
+		);
+
+		return {
+			data: page.items.map((record) => this.toDto(record.goal)),
+			meta: { ...page.meta, cached: false },
+		};
+	}
+
 	public async get(payload: GoalGetRequest): Promise<GoalGetResponse> {
 		await delay();
 
@@ -190,4 +252,4 @@ class GoalsMockRESTApiClient implements IGoalsRESTApiClient {
 	}
 }
 
-export { GoalsMockRESTApiClient };
+export { GoalsMockRESTApiClient, SEARCH_FIELDS as GOAL_SEARCH_FIELDS };

@@ -4,6 +4,8 @@ import type {
 	AutomationDto,
 	AutomationListParams,
 	AutomationPatchBody,
+	AutomationSearchBody,
+	AutomationSearchParams,
 } from "../types.ts";
 
 
@@ -39,12 +41,20 @@ interface AutomationDeleteRequest {
 
 type AutomationDeleteResponse = MutationResponse<AutomationDto>;
 
+interface AutomationSearchRequest {
+	data: AutomationSearchBody;
+	params?: AutomationSearchParams;
+}
+
+type AutomationSearchResponse = CollectionResponse<AutomationDto>;
+
 interface IAutomationsRESTApiClient {
 	list: (request: AutomationListRequest) => Promise<AutomationListResponse>;
 	get: (request: AutomationGetRequest) => Promise<AutomationGetResponse>;
 	post: (request: AutomationPostRequest) => Promise<AutomationPostResponse>;
 	patch: (request: AutomationPatchRequest) => Promise<AutomationPatchResponse>;
 	delete: (request: AutomationDeleteRequest) => Promise<AutomationDeleteResponse>;
+	search: (request: AutomationSearchRequest) => Promise<AutomationSearchResponse>;
 }
 
 export type {
@@ -59,4 +69,6 @@ export type {
 	AutomationPatchResponse,
 	AutomationPostRequest,
 	AutomationPostResponse,
+	AutomationSearchRequest,
+	AutomationSearchResponse,
 };

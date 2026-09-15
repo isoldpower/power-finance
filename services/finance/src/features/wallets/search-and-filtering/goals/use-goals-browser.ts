@@ -1,42 +1,39 @@
 import { useMemo } from "react";
+import { useDebounce } from "@internal/shared";
 
 import { goalProgressPercent } from "@entity/wallets";
 
-import { useGoals } from "../../data-presenters";
+import { useGoalsSearch } from "../../data-presenters";
 
+import type { Goal, GoalQuery } from "@entity/wallets";
 import type { GoalsBrowseSetup } from "../types.ts";
-import type { Goal } from "@entity/wallets";
 
 
-function matchesSearch(goal: Goal, search: string): boolean {
-	if (search === '') {
-		return true;
-	}
-
-	return goal.name.toLowerCase().includes(search);
-}
+const REACHED_PERCENT = 100;
 
 function matchesStatus(goal: Goal, statusFilter: string): boolean {
 	if (statusFilter === 'all') {
 		return true;
 	}
 
-	const reached = goalProgressPercent(goal) >= 100;
+	const reached = goalProgressPercent(goal) >= REACHED_PERCENT;
 
 	return statusFilter === 'reached' ? reached : !reached;
 }
 
 const useGoalsBrowser = (setup: GoalsBrowseSetup) => {
-	const { goals, isPending, isError } = useGoals();
+	const needle = useDebounce(setup.search.search?.trim() ?? '');
+	const query = useMemo<GoalQuery>(
+		() => ({ name: needle === '' ? undefined : needle }),
+		[needle]
+	);
+	const { goals, total, isPending, isError } = useGoalsSearch(query);
 
 	const searchResults = useMemo(() => {
-		const search = setup.search.search?.trim().toLowerCase() ?? '';
-		const filtered = goals.filter((goal) => {
-			return matchesSearch(goal, search) && matchesStatus(goal, setup.filters.statusFilter);
-		});
+		const filtered = goals.filter((goal) => matchesStatus(goal, setup.filters.statusFilter));
 
-		return { goals: filtered, total: filtered.length, totalCount: goals.length };
-	}, [goals, setup.filters.statusFilter, setup.search.search]);
+		return { goals: filtered, total: filtered.length, totalCount: total };
+	}, [goals, total, setup.filters.statusFilter]);
 
 	return { searchResults, isPending, isError };
 }

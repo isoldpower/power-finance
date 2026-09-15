@@ -6,7 +6,7 @@ import type { FC } from "react";
 const WalletDetailsSkeletonMetric: FC = () => (
 	<div>
 		<SkeletonText size="11" width="w-16" />
-		<SkeletonText family="display" width="w-20" className="text-[17px]" />
+		<SkeletonText family="display" width="w-20" className="inline-block text-[17px]" />
 	</div>
 );
 

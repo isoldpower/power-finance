@@ -1,0 +1,3 @@
+const FILTER_CONTROL_WIDTH = 'w-[152px]';
+
+export { FILTER_CONTROL_WIDTH };

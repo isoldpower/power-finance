@@ -1,20 +1,35 @@
 import { LedgerLineSkeleton } from "@entity/transactions";
+import { Caption } from "@shared/pure-components/typography";
 
 import type { FC, ReactNode } from "react";
+import type { LedgerState } from "../data-presenters";
 
 
 interface TransactionLedgerFxProps {
 	isPending: boolean;
+	ledgerState: LedgerState;
 	children: ReactNode;
 }
 
-const TransactionLedgerFx: FC<TransactionLedgerFxProps> = ({ isPending, children }) => {
-	if (isPending) {
+const TransactionLedgerFx: FC<TransactionLedgerFxProps> = ({
+	isPending,
+	ledgerState,
+	children,
+}) => {
+	if (isPending || ledgerState === 'dispatching') {
 		return <LedgerLinesSkeleton />;
+	} else if (ledgerState === 'unavailable') {
+		return <LedgerLinesUnavailable />;
 	}
 
 	return children;
 };
+
+const LedgerLinesUnavailable: FC = () => (
+	<Caption size="12.5" className="ml-[17px] mt-2 px-3 py-2.5">
+		No postings were derived for this transaction yet.
+	</Caption>
+);
 
 const LedgerLinesSkeleton: FC = () => (
 	<>
@@ -30,6 +45,7 @@ const LedgerLinesSkeleton: FC = () => (
 );
 
 LedgerLinesSkeleton.displayName = 'LedgerLinesSkeleton';
+LedgerLinesUnavailable.displayName = 'LedgerLinesUnavailable';
 
 TransactionLedgerFx.displayName = 'TransactionLedgerFx';
 

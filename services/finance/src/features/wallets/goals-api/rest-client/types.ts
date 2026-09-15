@@ -1,5 +1,12 @@
 import type { ApiEnvelope, CollectionResponse, EmbeddedMeta, MutationResponse, PageParams } from "@shared/api";
-import type { GoalCreateBody, GoalDetailDto, GoalDto, GoalPatchBody } from "../types.ts";
+import type {
+	GoalCreateBody,
+	GoalDetailDto,
+	GoalDto,
+	GoalPatchBody,
+	GoalSearchBody,
+	GoalSearchParams,
+} from "../types.ts";
 
 
 interface GoalListRequest {
@@ -35,12 +42,20 @@ interface GoalDeleteRequest {
 
 type GoalDeleteResponse = MutationResponse<GoalDto>;
 
+interface GoalSearchRequest {
+	data: GoalSearchBody;
+	params?: GoalSearchParams;
+}
+
+type GoalSearchResponse = CollectionResponse<GoalDto>;
+
 interface IGoalsRESTApiClient {
 	list: (request: GoalListRequest) => Promise<GoalListResponse>;
 	get: (request: GoalGetRequest) => Promise<GoalGetResponse>;
 	post: (request: GoalPostRequest) => Promise<GoalPostResponse>;
 	patch: (request: GoalPatchRequest) => Promise<GoalPatchResponse>;
 	delete: (request: GoalDeleteRequest) => Promise<GoalDeleteResponse>;
+	search: (request: GoalSearchRequest) => Promise<GoalSearchResponse>;
 }
 
 export type {
@@ -55,4 +70,6 @@ export type {
 	GoalPatchResponse,
 	GoalPostRequest,
 	GoalPostResponse,
+	GoalSearchRequest,
+	GoalSearchResponse,
 };

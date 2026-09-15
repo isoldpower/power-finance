@@ -2,5 +2,5 @@ export * from './themes';
 export * from './utils';
 export * from './components';
 export * from './entities';
-export * from './assets';
-export * as Icons from 'lucide-react';
+export { Icons } from './icons.ts';
+export type { LucideProps } from './icons.ts';

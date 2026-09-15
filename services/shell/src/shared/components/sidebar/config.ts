@@ -3,11 +3,13 @@ import type {ForwardRefExoticComponent, RefAttributes} from "react";
 import { getAnalyticsRoute, getFinanceRoute } from "@internal/shared";
 import { Icons } from "@internal/ui-library";
 
+import type { LucideProps } from "@internal/ui-library";
+
 
 interface NavigationLink {
 	title: string;
 	url: string;
-	icon?: ForwardRefExoticComponent<Omit<Icons.LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
+	icon?: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>;
 	items?: never;
 }
 

@@ -42,7 +42,7 @@ describe('TransactionsMockRESTApiClient', () => {
 		expect(meta.idempotent_replay).toBe(false);
 		expect(data.money).toEqual({ amount: '25.00', currency: 'USD' });
 		expect(data.wallet).toEqual({ id: WALLET.id, name: WALLET.name });
-		expect(data.chain_id).toBeNull();
+		expect(data.chain).toBeNull();
 	});
 
 	test('replays a repeated key instead of creating twice', async () => {
@@ -89,7 +89,8 @@ describe('TransactionsMockRESTApiClient', () => {
 
 		expect(meta.idempotent_replay).toBe(false);
 		expect(data.transactions).toHaveLength(2);
-		expect(new Set(data.transactions.map((entry) => entry.chain_id))).toEqual(new Set([data.chain_id]));
+		expect(new Set(data.transactions.map((entry) => entry.chain?.id))).toEqual(new Set([data.chain_id]));
+		expect(data.transactions.map((entry) => entry.chain?.size)).toEqual([2, 2]);
 	});
 
 	test('rejects a chain whose after references form a cycle', async () => {
@@ -144,6 +145,35 @@ describe('TransactionsMockRESTApiClient', () => {
 		});
 
 		expect(data).toHaveLength(0);
+	});
+
+	test('returns newest first by default and flips when the search asks for ascending', async () => {
+		await client.post({ data: body('First'), idempotencyKey: 'order-1' });
+		await client.post({ data: body('Second'), idempotencyKey: 'order-2' });
+		await client.post({ data: body('Third'), idempotencyKey: 'order-3' });
+
+		const filter = { filter_body: { and: [{ field_name: 'wallet_id' as const, operator: 'eq' as const, value: WALLET.id }] } };
+
+		const newest = await client.search({ data: filter });
+		const oldest = await client.search({ data: filter, params: { order: 'ASC' } });
+
+		expect(newest.data.map((entry) => entry.name)).toEqual(['Third', 'Second', 'First']);
+		expect(oldest.data.map((entry) => entry.name)).toEqual(['First', 'Second', 'Third']);
+	});
+
+	test('binds a search cursor to the requested order', async () => {
+		await client.post({ data: body('One'), idempotencyKey: 'cursor-1' });
+		await client.post({ data: body('Two'), idempotencyKey: 'cursor-2' });
+
+		const filter = { filter_body: { and: [{ field_name: 'wallet_id' as const, operator: 'eq' as const, value: WALLET.id }] } };
+		const first = await client.search({ data: filter, params: { limit: 1 } });
+
+		expect(first.meta.next_cursor).not.toBeNull();
+
+		await expect(client.search({
+			data: filter,
+			params: { limit: 1, cursor: first.meta.next_cursor ?? '', order: 'ASC' },
+		})).rejects.toSatisfy(isApiError);
 	});
 
 	test('narrows a search by type, category and text across name and category', async () => {

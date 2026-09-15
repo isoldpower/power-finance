@@ -1,43 +1,34 @@
 import { useMemo } from "react";
+import { useDebounce } from "@internal/shared";
 
-import { automationSummary } from "@entity/assistance";
-import { useAutomations } from "../data-presenters";
+import { useAutomationsSearch } from "../data-presenters";
 
-import type { Automation } from "@entity/assistance";
+import type { AutomationSearchQuery } from "@entity/assistance";
 import type { AutomationsBrowseSetup } from "./types.ts";
 
 
-function matchesSearch(rule: Automation, search: string): boolean {
-	if (search === '') {
-		return true;
-	}
+const ALL = 'all';
+const ACTIVE = 'active';
 
-	const summary = automationSummary(rule);
+const enabledFilter = (statusFilter: string): boolean | undefined => {
+	if (statusFilter === ALL) return undefined;
 
-	return rule.name.toLowerCase().includes(search)
-		|| summary.when.toLowerCase().includes(search)
-		|| summary.then.toLowerCase().includes(search);
-}
-
-function matchesStatus(rule: Automation, statusFilter: string): boolean {
-	if (statusFilter === 'all') {
-		return true;
-	}
-
-	return statusFilter === 'active' ? rule.enabled : !rule.enabled;
-}
+	return statusFilter === ACTIVE;
+};
 
 const useAutomationsBrowser = (setup: AutomationsBrowseSetup) => {
-	const { rules, isPending, isError } = useAutomations();
+	const needle = useDebounce(setup.search.search?.trim() ?? '');
+	const query = useMemo<AutomationSearchQuery>(() => ({
+		name: needle === '' ? undefined : needle,
+		enabled: enabledFilter(setup.filters.statusFilter),
+	}), [needle, setup.filters.statusFilter]);
+	const { rules, total, isPending, isError } = useAutomationsSearch(query);
 
-	const searchResults = useMemo(() => {
-		const search = setup.search.search?.trim().toLowerCase() ?? '';
-		const filtered = rules.filter((rule) => {
-			return matchesSearch(rule, search) && matchesStatus(rule, setup.filters.statusFilter);
-		});
-
-		return { rules: filtered, total: filtered.length, totalCount: rules.length };
-	}, [rules, setup.filters.statusFilter, setup.search.search]);
+	const searchResults = useMemo(() => ({
+		rules,
+		total,
+		totalCount: total,
+	}), [rules, total]);
 
 	return { searchResults, isPending, isError };
 }

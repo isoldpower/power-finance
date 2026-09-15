@@ -10,6 +10,11 @@ export { useWebhookEventTypes } from './use-webhook-event-types.ts';
 export { useWebhookSubscriptionMethods } from './use-webhook-subscription-methods.ts';
 export { useWebhookSubscriptions } from './use-webhook-subscriptions.ts';
 export { useWebhooksList } from './use-webhooks-list.ts';
+export {
+	isOptimisticWebhookId,
+	useOptimisticSubscriptions,
+	useOptimisticWebhooks,
+} from './optimistic';
 
 export type { UseCurrentUserOptions, UseCurrentUserReturn } from './use-current-user.ts';
 export type { UseUserPreferencesReturn } from './use-user-preferences.ts';
@@ -18,3 +23,11 @@ export type { UseWebhookEventTypesOptions, UseWebhookEventTypesReturn } from './
 export type { UseWebhookSubscriptionMethodsReturn } from './use-webhook-subscription-methods.ts';
 export type { UseWebhookSubscriptionsOptions, UseWebhookSubscriptionsReturn } from './use-webhook-subscriptions.ts';
 export type { UseWebhooksListOptions, UseWebhooksListReturn } from './use-webhooks-list.ts';
+export type { CreateWebhookContext } from './use-create-webhook.ts';
+export type { SubscribeContext } from './use-webhook-subscription-methods.ts';
+export type {
+	SubscriptionCachesSnapshot,
+	UseOptimisticSubscriptionsReturn,
+	UseOptimisticWebhooksReturn,
+	WebhookCachesSnapshot,
+} from './optimistic';

@@ -18,17 +18,21 @@ const NeedsActionPanel: FC<NeedsActionPanelProps> = ({
 	clearDescriptor = 'nothing pending',
 }) => {
 	const { actions, isPending, isError } = useActions();
+	const settled = !isPending && !isError;
+	const alerting = useMemo(() => {
+		return settled && actions.length > 0;
+	}, [actions.length, settled]);
 	const isAllClear = useMemo(() => {
-		return !isPending && !isError && actions.length === 0;
-	}, [actions.length, isError, isPending]);
+		return settled && actions.length === 0;
+	}, [actions.length, settled]);
 
 	return (
 		<FinanceCard
-			variant={isAllClear ? 'default' : 'accent'}
-			className={cn("overflow-hidden", isAllClear && "border-border bg-secondary")}
+			variant={alerting ? 'accent' : 'default'}
+			className={cn("overflow-hidden", !alerting && "border-border bg-secondary")}
 		>
-			<NeedsActionHeader tone={isAllClear ? 'positive' : 'accent'}>
-				{isAllClear ? <CheckIcon size={16} className="text-pos" /> : <AlertIcon />}
+			<NeedsActionHeader tone={alerting ? 'accent' : 'neutral'} divided={!isAllClear}>
+				{isAllClear ? <CheckIcon size={16} className="text-text-3" /> : <AlertIcon />}
 				<RowTitle as="h2" size="14.5">
 					{isAllClear ? 'Nothing needs your action' : 'Needs your action'}
 				</RowTitle>

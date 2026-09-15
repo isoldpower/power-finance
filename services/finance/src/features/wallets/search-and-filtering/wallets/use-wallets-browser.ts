@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useDebounce } from "@internal/shared";
 import { compareAmounts } from "@shared/api";
 
 import { walletTypeLabel } from "@entity/wallets";
@@ -26,11 +27,11 @@ function compareBy(field: string, first: Wallet, second: Wallet): number {
 }
 
 const useWalletsBrowser = (setup: WalletsBrowseSetup) => {
-	const query = useMemo<WalletQuery>(() => {
-		const needle = setup.search.search?.trim() ?? '';
-
-		return { name: needle === '' ? undefined : needle };
-	}, [setup.search.search]);
+	const needle = useDebounce(setup.search.search?.trim() ?? '');
+	const query = useMemo<WalletQuery>(
+		() => ({ name: needle === '' ? undefined : needle }),
+		[needle]
+	);
 	const searchResults = useWalletSearch(query);
 
 	const browsedResults = useMemo(() => {

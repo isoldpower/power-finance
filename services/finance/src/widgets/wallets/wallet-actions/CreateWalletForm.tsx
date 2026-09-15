@@ -2,7 +2,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
 import { CurrencyCombobox } from "@entity/localization";
-import { NEW_WALLET_GRADIENT, WalletPreviewCard } from "@entity/wallets";
+import { DEFAULT_WALLET_COLOR, WalletColorField, WalletPreviewCard, walletGradient } from "@entity/wallets";
 import { WalletFormOnSubmit, useWalletFormInitials, useWalletFormState, walletFormSchema } from "@feature/wallets";
 import { FieldLabel, PanelFooter } from "@shared/forms";
 
@@ -28,7 +28,7 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 	});
 
 	const { loading, canSubmit, methods } = useWalletFormState(form);
-	const { name, category, currency } = useWatch({ control: form.control });
+	const { name, category, currency, color } = useWatch({ control: form.control });
 	
 	return (
 		<UiForm {...form}>
@@ -40,7 +40,7 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 				onError={methods.handleFailedLoading}
 			>
 				<div className="flex-1 overflow-auto p-5">
-					<WalletPreviewCard gradient={NEW_WALLET_GRADIENT}>
+					<WalletPreviewCard gradient={walletGradient(color ?? DEFAULT_WALLET_COLOR)}>
 						<WalletPreviewCard.Header>
 							<WalletPreviewCard.Type>
 								{category ?? ''}
@@ -62,6 +62,19 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 						name="name"
 						render={({ field }) => (
 							<FinanceInput placeholder="e.g. Travel Card" className="mb-4" {...field} />
+						)} />
+					<FieldLabel>Colour</FieldLabel>
+					<UiFormField
+						disabled={loading}
+						control={form.control}
+						name="color"
+						render={({ field }) => (
+							<WalletColorField
+								value={field.value}
+								onChange={field.onChange}
+								disabled={loading}
+								className="mb-4"
+							/>
 						)} />
 					<FieldLabel>Category</FieldLabel>
 					<UiFormField

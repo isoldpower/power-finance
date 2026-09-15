@@ -1,4 +1,5 @@
 import { EditWalletForm } from "@widget/wallets";
+import { toPanelWallet } from "@entity/wallets";
 import {
 	EditWalletDetailsFx,
 	useWallet,
@@ -30,10 +31,7 @@ const EditWallet: FC = () => {
 			<EditWalletDetailsFx wallet={fetchedWallet} isError={isError} isPending={isPending}>
 				{(loadedWallet) => (
 					<EditWalletForm
-						wallet={{
-							...loadedWallet,
-							gradient: loadedWallet.color,
-						}}
+						wallet={toPanelWallet(loadedWallet)}
 						onClose={onClose}
 					/>
 				)}

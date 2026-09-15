@@ -1,4 +1,4 @@
-import type { TransactionType } from "../types.ts";
+import type { Transaction, TransactionChainRef, TransactionType } from "../types.ts";
 
 
 type ConvertMoney = (money: { amount: string; currency: string }) => {
@@ -7,6 +7,28 @@ type ConvertMoney = (money: { amount: string; currency: string }) => {
 	formatted: string;
 	converted: boolean;
 };
+
+type ChainPosition = 'single' | 'start' | 'middle' | 'end';
+
+interface Chainable {
+	chain: TransactionChainRef | null;
+}
+
+interface ChainBoundOptions {
+	continuesBefore?: boolean;
+	continuesAfter?: boolean;
+}
+
+interface ChainBound<TItem extends Chainable> {
+	item: TItem;
+	chain: TransactionChainRef | null;
+	position: ChainPosition;
+	index: number;
+	visible: number;
+	truncated: boolean;
+}
+
+type ChainBoundTransaction = ChainBound<Transaction>;
 
 interface LedgerEntryView {
 	label: string;
@@ -23,6 +45,7 @@ interface TransactionRowView {
 	type: TransactionType;
 	walletId: string;
 	walletName: string;
+	chain: TransactionChainRef | null;
 	createdAt: string;
 	date: string;
 	time: string;
@@ -31,6 +54,7 @@ interface TransactionRowView {
 	scanned: boolean;
 	kind: string;
 	provenance: string;
+	pending: boolean;
 }
 
 interface TransactionMoneyView {
@@ -48,4 +72,4 @@ interface TransactionDayView {
 	transactions: TransactionRowView[];
 }
 
-export type { ConvertMoney, LedgerEntryView, TransactionDayView, TransactionMoneyView, TransactionRowView };
+export type { Chainable, ChainBound, ChainBoundOptions, ChainBoundTransaction, ChainPosition, ConvertMoney, LedgerEntryView, TransactionDayView, TransactionMoneyView, TransactionRowView };

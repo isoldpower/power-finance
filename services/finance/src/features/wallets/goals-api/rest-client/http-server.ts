@@ -8,6 +8,7 @@ import type {
 	GoalListRequest, GoalListResponse,
 	GoalPatchRequest, GoalPatchResponse,
 	GoalPostRequest, GoalPostResponse,
+	GoalSearchRequest, GoalSearchResponse,
 } from "./types.ts";
 
 
@@ -59,6 +60,16 @@ class GoalsHttpRESTApiClient implements IGoalsRESTApiClient {
 		return request<GoalDeleteResponse>(this.axiosInstance, {
 			method: 'DELETE',
 			url: `/${payload.id}`,
+		}, this.versions);
+	}
+
+	public search(payload: GoalSearchRequest): Promise<GoalSearchResponse> {
+		return request<GoalSearchResponse>(this.axiosInstance, {
+			method: 'POST',
+			url: `/search`,
+			params: { ...payload.params },
+			data: payload.data,
+			headers: this.versions.headers(),
 		}, this.versions);
 	}
 }

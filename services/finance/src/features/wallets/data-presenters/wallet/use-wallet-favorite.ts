@@ -3,10 +3,10 @@ import { useCallback, useMemo } from "react";
 import { useApiContext, DERIVED_KEYS } from "@app/api";
 import { updateWallet as updateWalletApi } from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
+import { useOptimisticWallets } from "./optimistic";
 
-import type { QueryKey } from "@tanstack/react-query";
 import type { Wallet } from "@entity/wallets";
-import type { ListWalletsResponse } from "../../wallets-api";
+import type { WalletCachesSnapshot } from "./optimistic";
 
 
 interface FavoriteInput {
@@ -14,22 +14,17 @@ interface FavoriteInput {
 	favorite: boolean;
 }
 
-interface FavoriteSnapshot {
-	previous: [QueryKey, ListWalletsResponse | undefined][];
-}
-
 interface UseWalletFavoriteReturn {
 	toggleFavorite: (wallet: Wallet) => void;
 	isPending: boolean;
 }
 
-const PAGED_KEYS = [WALLETS_CACHE_KEYS.list, WALLETS_CACHE_KEYS.search];
-
 const useWalletFavorite = (): UseWalletFavoriteReturn => {
 	const apiContext = useApiContext();
 	const client = useQueryClient();
+	const optimistic = useOptimisticWallets();
 
-	const mutation = useMutation<Wallet, Error, FavoriteInput, FavoriteSnapshot>({
+	const mutation = useMutation<Wallet, Error, FavoriteInput, WalletCachesSnapshot>({
 		mutationKey: [WALLETS_CACHE_KEYS.update],
 		mutationFn: (input: FavoriteInput) => updateWalletApi({
 			id: input.id,
@@ -37,33 +32,16 @@ const useWalletFavorite = (): UseWalletFavoriteReturn => {
 			handler: apiContext.walletServers.rest,
 		}),
 		onMutate: async (input: FavoriteInput) => {
-			await Promise.all(PAGED_KEYS.map((key) => client.cancelQueries({ queryKey: [key] })));
+			const snapshot = await optimistic.capture();
+			optimistic.applyPatch(input.id, { favorite: input.favorite });
 
-			const previous = PAGED_KEYS.flatMap((key) => (
-				client.getQueriesData<ListWalletsResponse>({ queryKey: [key] })
-			));
-
-			for (const key of PAGED_KEYS) {
-				client.setQueriesData<ListWalletsResponse>({ queryKey: [key] }, (response) => {
-					if (!response) return response;
-
-					return {
-						page: {
-							...response.page,
-							items: response.page.items.map((wallet) => (
-								wallet.id === input.id ? { ...wallet, favorite: input.favorite } : wallet
-							)),
-						},
-					};
-				});
-			}
-
-			return { previous };
+			return snapshot;
 		},
-		onError: (_error, _input, context) => {
-			for (const [key, snapshot] of context?.previous ?? []) {
-				client.setQueryData(key, snapshot);
-			}
+		onError: (_error, _input, snapshot) => {
+			optimistic.restore(snapshot);
+		},
+		onSuccess: (wallet, input) => {
+			optimistic.applySettled(input.id, wallet);
 		},
 		onSettled: () => {
 			for (const key of DERIVED_KEYS.onWalletChange) {

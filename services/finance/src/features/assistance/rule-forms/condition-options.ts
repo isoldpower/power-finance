@@ -6,8 +6,11 @@ type ConditionKey = 'field' | 'operator' | 'value';
 type ConditionPath = `conditions.${number}.${ConditionKey}`;
 
 
-const conditionPath = (index: number, key: ConditionKey): ConditionPath => {
-	return `conditions.${index.toString()}.${key}` as ConditionPath;
+const conditionPath = <TKey extends ConditionKey>(
+	index: number,
+	key: TKey,
+): `conditions.${number}.${TKey}` => {
+	return `conditions.${index.toString()}.${key}` as `conditions.${number}.${TKey}`;
 };
 
 const toFieldOptions = (filterFields: FilterFieldOption[]): SelectOption[] => {

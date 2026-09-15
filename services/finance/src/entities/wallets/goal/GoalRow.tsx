@@ -1,4 +1,5 @@
 import { cn } from "@internal/ui-library";
+import { pendingClass } from "@shared/pure-components/feedback";
 import { GoalIcon } from "./row/GoalIcon.tsx";
 import { GoalProgressBar } from "./row/GoalProgressBar.tsx";
 import { GoalRowAmounts } from "./row/GoalRowAmounts.tsx";
@@ -15,7 +16,9 @@ import type { GoalRowHeadProps } from "./row/GoalRowHead.tsx";
 import type { GoalRowTargetProps } from "./row/GoalRowTarget.tsx";
 
 
-type GoalRowProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'>>;
+type GoalRowProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> & {
+	pending?: boolean;
+}>;
 type GoalRowObject = FC<GoalRowProps> & {
 	Amounts: FC<GoalRowAmountsProps>;
 	Body: FC<GoalRowBodyProps>;
@@ -27,11 +30,13 @@ type GoalRowObject = FC<GoalRowProps> & {
 
 const GoalRow: GoalRowObject = ({
 	children,
+	pending = false,
 	...props
 }) => (
 	<div
 		className={cn(
-			"fx-slidein border-b border-border px-[18px] py-3.5 last:border-b-0"
+			"fx-slidein border-b border-border px-[18px] py-3.5 last:border-b-0",
+			pendingClass(pending)
 		)}
 		{...props}
 	>

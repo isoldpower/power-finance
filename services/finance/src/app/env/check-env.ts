@@ -1,25 +1,35 @@
+const REQUIRED_KEYS = [
+	'CLIENT_CLERK_PUBLIC_KEY',
+	'CLIENT_API_BASE_URL',
+	'CLIENT_API_MODE',
+] as const;
+
+type RequiredEnvKey = typeof REQUIRED_KEYS[number];
+
 const checkEnvVariables = (
 	defaults: Partial<ImportMetaEnv> = {}
 ): ImportMetaEnv => {
 	const realEnv = import.meta.env as Partial<ImportMetaEnv>;
-	const envDictionary: Record<keyof ImportMetaEnv, ImportMetaEnv[keyof ImportMetaEnv] | undefined> = {
-		...import.meta.env,
-		CLIENT_CLERK_PUBLIC_KEY: realEnv.CLIENT_CLERK_PUBLIC_KEY ?? defaults.CLIENT_CLERK_PUBLIC_KEY,
-		CLIENT_API_BASE_URL: realEnv.CLIENT_API_BASE_URL ?? defaults.CLIENT_API_BASE_URL,
-		CLIENT_API_MODE: realEnv.CLIENT_API_MODE ?? defaults.CLIENT_API_MODE
-	};
+	const requiredDictionary = REQUIRED_KEYS.reduce<Record<RequiredEnvKey, string | undefined>>(
+		(dictionary, key) => ({ ...dictionary, [key]: realEnv[key] ?? defaults[key] }),
+		{} as Record<RequiredEnvKey, string | undefined>
+	);
 
-	const undefinedEntries = Object.entries(envDictionary).filter(([, value]) => value === undefined);
-	const receivedEntries = Object.entries(envDictionary).filter(([, value]) => value !== undefined);
+	const undefinedEntries = Object.entries(requiredDictionary).filter(([, value]) => value === undefined);
+	const receivedEntries = Object.entries(requiredDictionary).filter(([, value]) => value !== undefined);
 
-	if (Object.entries(envDictionary).find(([, value]) => value === undefined)) {
+	if (undefinedEntries.length > 0) {
 		throw new Error('Your .env file is not configured correctly. \n' +
-			`Expected variables: ${Object.keys(envDictionary).join(', ')}\n` +
+			`Expected variables: ${Object.keys(requiredDictionary).join(', ')}\n` +
 			`Received variables: ${receivedEntries.join(', ')}\n` +
 			`Missing variables: ${undefinedEntries.join(', ')}\n`);
 	}
 
-	return envDictionary as ImportMetaEnv;
+	return {
+		...import.meta.env,
+		...requiredDictionary,
+		CLIENT_API_SANDBOX: realEnv.CLIENT_API_SANDBOX ?? defaults.CLIENT_API_SANDBOX,
+	} as ImportMetaEnv;
 }
 
-export {checkEnvVariables};
+export { checkEnvVariables };

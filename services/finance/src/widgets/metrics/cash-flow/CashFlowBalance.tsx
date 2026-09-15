@@ -33,7 +33,8 @@ const CashFlowBalance = ({
 				{title}
 			</Text>
 			<AnimatedMoney
-				{...relatedFlow}
+				amount={relatedFlow.amount}
+				currency={relatedFlow.currency}
 				tone={isPositive ? "pos" : "neg"}
 				size="xl"
 				className={cn(textClass({ size: '26' }), "mt-1 block")}

@@ -1,5 +1,7 @@
 import { parseAmountDecimal } from "@shared/formatting";
 
+import { parseMultiValue } from "./filter-policy.ts";
+
 import type {
 	AutomationDraft,
 	AutomationEffect,
@@ -9,13 +11,11 @@ import type {
 import type { RuleFormSchema } from "./rule-form-schema.ts";
 
 
-const IN_SEPARATOR = ',';
-
 const conditionValue = (
 	operator: RuleFormSchema['conditions'][number]['operator'],
 	value: string,
 ): string | string[] => {
-	return operator === 'in' ? value.split(IN_SEPARATOR).map((entry) => entry.trim()) : value;
+	return operator === 'in' ? parseMultiValue(value) : value;
 };
 
 const triggerFromForm = (values: RuleFormSchema): AutomationTrigger => {

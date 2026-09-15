@@ -1,6 +1,5 @@
 import { parseAmountDecimal } from "@shared/formatting";
 import { useCallback } from "react";
-import { DEFAULT_WALLET_COLOR } from "@entity/wallets";
 import { buildWalletDraft, buildWalletPatch } from "./wallet-fields.ts";
 import { useWalletsListMethods, useWalletMethods } from "../data-presenters";
 
@@ -39,7 +38,7 @@ const WalletFormOnSubmit: FC<WalletFormOnSubmitProps> = ({
 		}
 
 		return await meta.createMutation.mutateAsync(
-			buildWalletDraft(data, DEFAULT_WALLET_COLOR, parseAmountDecimal(data.balance))
+			buildWalletDraft(data, parseAmountDecimal(data.balance))
 		);
 	}, [wallet, updateWallet, meta]);
 

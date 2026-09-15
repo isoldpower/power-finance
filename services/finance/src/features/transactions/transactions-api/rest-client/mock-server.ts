@@ -13,7 +13,7 @@ import {
 import { storedTransactionToDto, TRANSACTIONS_STORAGE_KEY } from "./mock-seed.ts";
 import { TRANSACTION_CHAIN_LIMIT } from "../types.ts";
 import type { IStorage } from "@internal/shared";
-import type { FieldPolicy } from "@shared/api";
+import type { FieldPolicy, SearchOrder } from "@shared/api";
 import type { StoredTransaction } from "./mock-seed.ts";
 import type {
 	CategoryDto,
@@ -83,9 +83,16 @@ const toCategoryId = (label: string): string => label.toLowerCase().replace(/\s+
 
 const compareDesc = (left: string, right: string): number => (left < right ? 1 : left > right ? -1 : 0);
 
-const orderTransactions = (transactions: StoredTransaction[]): StoredTransaction[] => {
+const DEFAULT_ORDER: SearchOrder = 'DESC';
+
+const orderTransactions = (
+	transactions: StoredTransaction[],
+	order: SearchOrder = DEFAULT_ORDER,
+): StoredTransaction[] => {
+	const sign = order === 'ASC' ? -1 : 1;
+
 	return [...transactions].sort((left, right) => {
-		const byDate = compareDesc(left.created_at, right.created_at);
+		const byDate = compareDesc(left.created_at, right.created_at) * sign;
 		if (byDate !== 0) return byDate;
 
 		if (left.chain_id !== right.chain_id) {
@@ -95,7 +102,7 @@ const orderTransactions = (transactions: StoredTransaction[]): StoredTransaction
 			return left.chain_id < right.chain_id ? -1 : 1;
 		}
 
-		return compareDesc(left.id, right.id);
+		return compareDesc(left.id, right.id) * sign;
 	});
 };
 
@@ -161,8 +168,11 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 		return wallet;
 	}
 
-	private settled(): StoredTransaction[] {
-		return orderTransactions(this.storage.list().filter((item) => item.deleted_at === null));
+	private settled(order?: SearchOrder): StoredTransaction[] {
+		return orderTransactions(
+			this.storage.list().filter((item) => item.deleted_at === null),
+			order,
+		);
 	}
 
 	private require(id: string): StoredTransaction {
@@ -219,7 +229,12 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 		};
 	}
 
-	private build(body: TransactionCreateBody, chainId: string | null, createdAt: string): StoredTransaction {
+	private build(
+		body: TransactionCreateBody,
+		chainId: string | null,
+		chainSize: number,
+		createdAt: string,
+	): StoredTransaction {
 		const wallet = this.requireWallet(body.wallet_id);
 
 		return {
@@ -236,6 +251,7 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 			wallet_name: wallet.name,
 			category: body.category,
 			chain_id: chainId,
+			chain_size: chainSize,
 			evidence: body.evidence,
 		};
 	}
@@ -296,11 +312,12 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 
 		await delay();
 
-		const matching = this.settled().filter((item) => matchesNode(item, payload.data.filter_body));
+		const order = payload.params?.order ?? DEFAULT_ORDER;
+		const matching = this.settled(order).filter((item) => matchesNode(item, payload.data.filter_body));
 		const page = paginate(
 			matching,
 			payload.params,
-			stringifySortedQuery({ filter: payload.data.filter_body }),
+			stringifySortedQuery({ filter: payload.data.filter_body, order }),
 		);
 
 		return {
@@ -317,7 +334,7 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 
 		await delay();
 
-		const transaction = this.build(payload.data, null, new Date().toISOString());
+		const transaction = this.build(payload.data, null, 0, new Date().toISOString());
 		this.storage.add(transaction);
 
 		const dto = this.toDto(transaction);
@@ -385,7 +402,7 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 		const replay = this.chainKeys.replay(payload.idempotencyKey, payload.data);
 		if (replay) {
 			return {
-				data: { chain_id: replay[0]?.chain_id ?? '', transactions: replay },
+				data: { chain_id: replay[0]?.chain?.id ?? '', transactions: replay },
 				meta: {
 					idempotent_replay: true,
 					transactions: { limit: replay.length, total: replay.length, next_cursor: null, prev_cursor: null },
@@ -402,7 +419,7 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 		const chainId = uuidv4();
 		const createdAt = new Date().toISOString();
 		const ordered = this.orderChainEntries(payload.data.transactions);
-		const created = ordered.map((entry) => this.build(entry, chainId, createdAt));
+		const created = ordered.map((entry) => this.build(entry, chainId, ordered.length, createdAt));
 
 		created.forEach((transaction) => { this.storage.add(transaction); });
 

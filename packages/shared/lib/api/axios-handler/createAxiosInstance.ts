@@ -5,16 +5,19 @@ import {
 	CORRELATION_HEADER,
 	REQUEST_TIMEOUT_MESSAGE,
 	REQUEST_TIMEOUT_MS,
+	SANDBOX_HEADER,
 } from './config.ts';
 
 interface AxiosInstanceOptions {
 	baseUrl: string;
 	getToken: () => Promise<string | null>;
+	sandbox?: string;
 }
 
 const createAxiosInstance = ({
 	baseUrl,
-	getToken
+	getToken,
+	sandbox
 }: AxiosInstanceOptions) => {
 	const axiosInstance = axios.create({
 		baseURL: baseUrl,
@@ -33,6 +36,12 @@ const createAxiosInstance = ({
 		}
 
 		config.headers[CORRELATION_HEADER] = crypto.randomUUID();
+
+		if (sandbox) {
+			config.headers[SANDBOX_HEADER] = sandbox;
+		} else {
+			delete config.headers[SANDBOX_HEADER];
+		}
 
 		return config;
 	});

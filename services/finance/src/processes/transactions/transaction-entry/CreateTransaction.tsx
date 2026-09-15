@@ -114,6 +114,7 @@ const CreateTransaction: FC<CreateTransactionProps> = ({ scanPanelId }) => {
 								name="amount"
 								type={type}
 								currency={fromCurrency}
+								direction="out"
 								label="Send"
 								emphasis="accent"
 								className="mb-2.5"
@@ -125,6 +126,7 @@ const CreateTransaction: FC<CreateTransactionProps> = ({ scanPanelId }) => {
 								name="receiveAmount"
 								type={type}
 								currency={toCurrency}
+								direction="in"
 								label="Receive"
 								emphasis="accent"
 								className="mb-3.5"

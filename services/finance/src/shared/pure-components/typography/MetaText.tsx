@@ -8,10 +8,18 @@ type MetaTextProps = Omit<TextProps, 'family' | 'uppercase'> & {
 	size?: Extract<TextProps['size'], '9' | '9.5' | '10' | '10.5' | '11' | '12'>;
 };
 
-const MetaText: FC<MetaTextProps> = ({ as, dateTime, size = '11', tone = 'subtle', ...props }) => (
+const MetaText: FC<MetaTextProps> = ({
+	as,
+	dateTime,
+	leading = 'tight',
+	size = '11',
+	tone = 'subtle',
+	...props
+}) => (
 	<Text
 		as={as ?? (dateTime ? 'time' : 'span')}
 		family="numeric"
+		leading={leading}
 		size={size}
 		tone={tone}
 		dateTime={dateTime}

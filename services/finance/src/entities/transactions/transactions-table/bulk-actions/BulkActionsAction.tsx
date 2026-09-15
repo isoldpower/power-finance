@@ -9,14 +9,17 @@ type BulkActionsActionProps = PropsWithChildren<{
 }>;
 
 const BulkActionsAction: FC<BulkActionsActionProps> = ({ children, tone = 'default' }) => (
-	<span
+	<button
+		type="button"
 		className={cn(
-			"cursor-pointer hover:underline",
+			"cursor-pointer bg-transparent p-0 text-inherit outline-none hover:underline",
+			"focus-visible:rounded-[var(--radius-sm)] focus-visible:ring-[3px]",
+			"focus-visible:ring-[var(--accent-soft)]",
 			tone === 'danger' ? "text-neg" : "text-text-2"
 		)}
 	>
 		{children}
-	</span>
+	</button>
 );
 
 BulkActionsAction.displayName = 'BulkActionsAction';

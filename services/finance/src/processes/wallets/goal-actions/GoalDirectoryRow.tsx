@@ -23,7 +23,7 @@ const GoalDirectoryRow: FC<GoalDirectoryRowProps> = ({ goal, order }) => {
 	}, [goal, formatCurrency]);
 
 	return (
-		<GoalRow style={{ animationDelay: `${(order * 0.04).toString()}s` }}>
+		<GoalRow pending={goal.pending} style={{ animationDelay: `${(order * 0.04).toString()}s` }}>
 			<GoalRow.Head>
 				<GoalRow.Icon icon={goalView.icon} color={goalView.color} />
 				<GoalRow.Body>

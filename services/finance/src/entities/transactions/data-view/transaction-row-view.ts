@@ -41,6 +41,7 @@ const toTransactionRowView = (
 		type: transaction.type,
 		walletId: transaction.wallet.id,
 		walletName: transaction.wallet.name,
+		chain: transaction.chain,
 		createdAt: transaction.createdAt,
 		date: created.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
 		time: created.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }),
@@ -49,6 +50,7 @@ const toTransactionRowView = (
 		scanned: transaction.origin === 'scanned',
 		kind: transactionKindLabel(transaction.type),
 		provenance: `${transactionOriginLabel(transaction.origin)} · ${created.toLocaleString()}`,
+		pending: transaction.pending ?? false,
 	};
 };
 

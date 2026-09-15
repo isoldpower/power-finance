@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { LocalStorageMock } from "@internal/shared";
 import {
 	ApiError,
+	createMatcher,
 	delay,
 	IdempotencyStore,
 	isCanonicalAmount,
@@ -14,13 +15,14 @@ import { WALLET_SEARCH_FIELDS } from "@feature/wallets/wallets-api";
 import { AUTOMATIONS_STORAGE_KEY, SEED_AUTOMATIONS } from "./mock-seed.ts";
 
 import type { IStorage } from "@internal/shared";
-import type { FilterNode } from "@shared/api";
+import type { FieldPolicy, FilterNode } from "@shared/api";
 import type { StoredAutomation } from "./mock-seed.ts";
 import type {
 	AutomationDto,
 	AutomationEffectDto,
 	AutomationTriggerBody,
 	AutomationTriggerDto,
+	AutomationSearchField,
 	EffectParamsDto,
 } from "../types.ts";
 import type {
@@ -28,6 +30,7 @@ import type {
 	AutomationDeleteRequest, AutomationDeleteResponse,
 	AutomationGetRequest, AutomationGetResponse,
 	AutomationListRequest, AutomationListResponse,
+	AutomationSearchRequest, AutomationSearchResponse,
 	AutomationPatchRequest, AutomationPatchResponse,
 	AutomationPostRequest, AutomationPostResponse,
 } from "./types.ts";
@@ -38,6 +41,43 @@ type TriggerSubject = 'transaction' | 'wallet';
 const SEVERITIES = ['info', 'warning', 'critical'];
 
 const compareDesc = (left: string, right: string): number => (left < right ? 1 : left > right ? -1 : 0);
+
+const SEARCH_FIELDS: FieldPolicy<AutomationSearchField> = {
+	name: ['eq', 'neq', 'in', 'contains', 'icontains'],
+	enabled: ['eq', 'neq'],
+	trigger_type: ['eq', 'neq', 'in'],
+	event: ['eq', 'neq', 'in'],
+	schedule: ['eq', 'neq', 'in'],
+	created_at: ['gt', 'gte', 'lt', 'lte'],
+	last_run_at: ['gt', 'gte', 'lt', 'lte'],
+};
+
+const leafValue = (
+	automation: StoredAutomation,
+	field: AutomationSearchField,
+): string | null => {
+	switch (field) {
+		case 'name':
+			return automation.name;
+		case 'enabled':
+			return String(automation.enabled);
+		case 'trigger_type':
+			return automation.trigger.type;
+		case 'event':
+			return automation.trigger.event;
+		case 'schedule':
+			return automation.trigger.schedule;
+		case 'created_at':
+			return automation.created_at;
+		case 'last_run_at':
+			return automation.last_run_at;
+	}
+};
+
+const matchesNode = createMatcher<StoredAutomation, AutomationSearchField>(
+	SEARCH_FIELDS,
+	(automation, field) => leafValue(automation, field),
+);
 
 const orderAutomations = (automations: StoredAutomation[]): StoredAutomation[] => {
 	return [...automations].sort((left, right) => {
@@ -216,6 +256,22 @@ class AutomationsMockRESTApiClient implements IAutomationsRESTApiClient {
 		return { data: page.items, meta: { ...page.meta, cached: false } };
 	}
 
+	public async search(payload: AutomationSearchRequest): Promise<AutomationSearchResponse> {
+		validateFilter(SEARCH_FIELDS, payload.data.filter_body);
+
+		await delay();
+
+		const open = this.storage.list().filter((automation) => automation.deleted_at === null);
+		const matching = open.filter((automation) => matchesNode(automation, payload.data.filter_body));
+		const page = paginate(
+			orderAutomations(matching),
+			payload.params,
+			stringifySortedQuery({ filter: payload.data.filter_body }),
+		);
+
+		return { data: page.items, meta: { ...page.meta, cached: false } };
+	}
+
 	public async get(payload: AutomationGetRequest): Promise<AutomationGetResponse> {
 		await delay();
 
@@ -292,4 +348,4 @@ class AutomationsMockRESTApiClient implements IAutomationsRESTApiClient {
 	}
 }
 
-export { AutomationsMockRESTApiClient };
+export { AutomationsMockRESTApiClient, SEARCH_FIELDS as AUTOMATION_SEARCH_FIELDS };

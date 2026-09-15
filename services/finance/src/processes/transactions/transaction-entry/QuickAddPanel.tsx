@@ -113,6 +113,7 @@ const QuickAddPanel: FC<QuickAddPanelProps> = ({ className }) => {
 							name="amount"
 							type={type}
 							currency={fromCurrency}
+							direction="out"
 							label="Send"
 							className="mt-2"
 							disabled={loading}
@@ -123,6 +124,7 @@ const QuickAddPanel: FC<QuickAddPanelProps> = ({ className }) => {
 							name="receiveAmount"
 							type={type}
 							currency={toCurrency}
+							direction="in"
 							label="Receive"
 							className="mt-2"
 							disabled={loading}

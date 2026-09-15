@@ -1,5 +1,5 @@
 export { GoalsHttpRESTApiClient } from './http-server.ts';
-export { GoalsMockRESTApiClient } from './mock-server.ts';
+export { GoalsMockRESTApiClient, GOAL_SEARCH_FIELDS } from './mock-server.ts';
 export { GOALS_STORAGE_KEY } from './mock-seed.ts';
 
 export type {
@@ -14,5 +14,7 @@ export type {
 	GoalPatchResponse,
 	GoalPostRequest,
 	GoalPostResponse,
+	GoalSearchRequest,
+	GoalSearchResponse,
 } from './types.ts';
 export type { StoredGoal } from './mock-seed.ts';

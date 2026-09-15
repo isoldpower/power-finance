@@ -40,6 +40,7 @@ const TransactionBrowserInternalContext: FC<TransactionBrowserInternalContextPro
 		typeFilter,
 		search,
 		caseSensitive,
+		sortDirection,
 	} = useTransactionsFiltersContext();
 	const { selectedTransactionId, selectTransaction } = useTransactionsSelection(
 		useShallow((state) => ({
@@ -52,13 +53,14 @@ const TransactionBrowserInternalContext: FC<TransactionBrowserInternalContextPro
 	const resetToFirstPage = useCallback(() => { setCursors([null]); }, []);
 
 	useOnValuesChange(
-		[search, caseSensitive, walletFilter, categoryFilter, typeFilter],
+		[search, caseSensitive, walletFilter, categoryFilter, typeFilter, sortDirection],
 		resetToFirstPage
 	);
 
 	const { searchResults: { transactions, total, nextCursor, prevCursor } } = useTransactionsBrowser({
 		search: { search, caseSensitive },
 		filters: { walletFilter, categoryFilter, typeFilter },
+		ordering: { direction: sortDirection },
 		page: { pageSize: TRANSACTIONS_PAGE_SIZE, cursor: cursors[cursors.length - 1] },
 	});
 

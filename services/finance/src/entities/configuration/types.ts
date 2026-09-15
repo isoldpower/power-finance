@@ -1,4 +1,7 @@
-interface WebhookEndpoint {
+import type { Pending } from "@shared/data";
+
+
+interface WebhookEndpoint extends Pending {
 	id: string;
 	createdAt: string;
 	updatedAt: string | null;
@@ -29,7 +32,7 @@ interface WebhookEventType {
 	description: string;
 }
 
-interface WebhookSubscription {
+interface WebhookSubscription extends Pending {
 	id: string;
 	createdAt: string;
 	webhookId: string;

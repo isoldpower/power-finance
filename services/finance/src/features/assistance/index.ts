@@ -4,6 +4,7 @@ export * from './assistant-api';
 export * from './automations-api';
 export * from './data-presenters';
 export * from './fetch-experience';
+export * from './filtration';
 export * from './notifications-api';
 export * from './render-guards';
 export * from './rule-forms';

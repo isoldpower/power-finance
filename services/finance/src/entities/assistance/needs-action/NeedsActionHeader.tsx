@@ -7,9 +7,10 @@ import type { NeedsActionHeaderBadgeProps } from "./header/NeedsActionHeaderBadg
 import type { NeedsActionHeaderDescriptorProps } from "./header/NeedsActionHeaderDescriptor.tsx";
 
 
-type NeedsActionHeaderTone = 'accent' | 'positive';
+type NeedsActionHeaderTone = 'accent' | 'neutral';
 type NeedsActionHeaderProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> & {
 	tone?: NeedsActionHeaderTone;
+	divided?: boolean;
 }>;
 type NeedsActionHeaderObject = FC<NeedsActionHeaderProps> & {
 	Badge: FC<NeedsActionHeaderBadgeProps>;
@@ -19,13 +20,14 @@ type NeedsActionHeaderObject = FC<NeedsActionHeaderProps> & {
 const NeedsActionHeader: NeedsActionHeaderObject = ({
 	children,
 	tone = 'accent',
+	divided = true,
 	...props
 }) => (
 	<div
 		className={cn(
-			"flex items-center gap-2.5 border-b border-border px-[18px] py-3.5",
-			tone === 'accent' && "bg-[var(--accent-soft)]",
-			tone === 'positive' && "border-b-0 bg-pos-soft"
+			"flex items-center gap-2.5 px-[18px] py-3.5",
+			divided && "border-b border-border",
+			tone === 'accent' && "bg-[var(--accent-soft)]"
 		)}
 		{...props}
 	>

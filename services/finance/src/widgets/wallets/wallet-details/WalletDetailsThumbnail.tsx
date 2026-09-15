@@ -13,12 +13,14 @@ interface WalletDetailsThumbnailProps {
 	wallet: Wallet;
 	transferPanelId: string;
 	editWalletPanelId: string;
+	disabled?: boolean;
 }
 
 const WalletDetailsThumbnail: FC<WalletDetailsThumbnailProps> = ({ 
 	wallet,
 	transferPanelId,
 	editWalletPanelId,
+	disabled = false,
 }) => {
 	return (
 		<div className="flex items-start gap-3.5">
@@ -38,12 +40,12 @@ const WalletDetailsThumbnail: FC<WalletDetailsThumbnailProps> = ({
 			</div>
 			<div className="flex gap-2">
 				<SlideOverTrigger asChild={true} panelId={transferPanelId}>
-					<FinanceButton variant="outline" size="sm">
+					<FinanceButton variant="outline" size="sm" disabled={disabled}>
 						Transfer
 					</FinanceButton>
 				</SlideOverTrigger>
 				<SlideOverTrigger asChild={true} panelId={editWalletPanelId}>
-					<FinanceButton variant="outline" size="sm">
+					<FinanceButton variant="outline" size="sm" disabled={disabled}>
 						Edit
 					</FinanceButton>
 				</SlideOverTrigger>

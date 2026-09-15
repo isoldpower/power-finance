@@ -31,7 +31,7 @@ export default (env: ConfigEnv) => {
 		],
 		server: {
 			headers: {
-				'Cache-Control': 'no-store'
+				'Cache-Control': 'no-cache'
 			}
 		},
 		test: {

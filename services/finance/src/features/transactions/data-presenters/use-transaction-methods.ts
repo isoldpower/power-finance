@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
-import { useApiContext } from "@app/api";
+import { useApiContext, DERIVED_KEYS } from "@app/api";
 import { createIdempotencyKey } from "@shared/api";
 import {
 	adjustTransaction as adjustTransactionApi,
@@ -9,6 +9,7 @@ import {
 	updateTransaction as updateTransactionApi,
 } from "../transactions-api";
 import { CACHE_KEYS } from "./config.ts";
+import { useOptimisticTransactions } from "./optimistic";
 
 import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import type { TransactionPatch } from "@entity/transactions";
@@ -18,6 +19,7 @@ import type {
 	FetchTransactionResponse,
 	UpdateTransactionResponse,
 } from "../transactions-api";
+import type { TransactionCachesSnapshot } from "./optimistic";
 
 
 interface AdjustTransactionVariables {
@@ -27,9 +29,9 @@ interface AdjustTransactionVariables {
 
 interface UseTransactionMethodsReturn {
 	meta: {
-		deleteMutation: UseMutationResult<DeleteTransactionResponse, Error, string>;
-		updateMutation: UseMutationResult<UpdateTransactionResponse, Error, TransactionPatch>;
-		adjustMutation: UseMutationResult<AdjustTransactionResponse, Error, AdjustTransactionVariables>;
+		deleteMutation: UseMutationResult<DeleteTransactionResponse, Error, string, TransactionCachesSnapshot>;
+		updateMutation: UseMutationResult<UpdateTransactionResponse, Error, TransactionPatch, TransactionCachesSnapshot>;
+		adjustMutation: UseMutationResult<AdjustTransactionResponse, Error, AdjustTransactionVariables, TransactionCachesSnapshot>;
 		query: UseQueryResult<FetchTransactionResponse>;
 	}
 	deleteTransaction: () => void;
@@ -43,6 +45,7 @@ const useTransactionMethods = (
 ): UseTransactionMethodsReturn => {
 	const apiContext = useApiContext();
 	const client = useQueryClient();
+	const optimistic = useOptimisticTransactions();
 	const singleQuery = useQuery({
 		queryKey: [CACHE_KEYS.fetch, id],
 		refetchOnMount: false,
@@ -55,22 +58,34 @@ const useTransactionMethods = (
 	});
 
 	const invalidateTransaction = useCallback(() => {
-		[
+		const keys: unknown[][] = [
 			[CACHE_KEYS.list],
 			[CACHE_KEYS.search],
 			[CACHE_KEYS.ledger, id],
 			[CACHE_KEYS.fetch, id],
-		].map((keys) => {
-			void client.invalidateQueries({ queryKey: keys });
-		})
+			...DERIVED_KEYS.onLedgerChange.map((key) => [key]),
+		];
+
+		for (const queryKey of keys) {
+			void client.invalidateQueries({ queryKey });
+		}
 	}, [client, id]);
 
-	const deleteMutation = useMutation({
+	const deleteMutation = useMutation<DeleteTransactionResponse, Error, string, TransactionCachesSnapshot>({
 		mutationFn: (transactionId: string) => deleteTransactionApi({
 			id: transactionId,
 			handler: apiContext.transactionServers.rest
 		}),
 		mutationKey: [CACHE_KEYS.delete, id],
+		onMutate: async (transactionId: string) => {
+			const snapshot = await optimistic.capture();
+			optimistic.applyRemove(transactionId, new Date().toISOString());
+
+			return snapshot;
+		},
+		onError: (_error, _transactionId, snapshot) => {
+			optimistic.restore(snapshot);
+		},
 		onSettled: invalidateTransaction
 	});
 
@@ -78,17 +93,29 @@ const useTransactionMethods = (
 		return singleQuery.refetch();
 	}, [singleQuery]);
 
-	const updateMutation = useMutation({
+	const updateMutation = useMutation<UpdateTransactionResponse, Error, TransactionPatch, TransactionCachesSnapshot>({
 		mutationFn: (patch: TransactionPatch) => updateTransactionApi({
 			handler: apiContext.transactionServers.rest,
 			id,
 			patch,
 		}),
 		mutationKey: [CACHE_KEYS.replace, id],
+		onMutate: async (patch: TransactionPatch) => {
+			const snapshot = await optimistic.capture();
+			optimistic.applyPatch(id, patch);
+
+			return snapshot;
+		},
+		onError: (_error, _patch, snapshot) => {
+			optimistic.restore(snapshot);
+		},
+		onSuccess: (transaction) => {
+			optimistic.applySettled(id, transaction);
+		},
 		onSettled: invalidateTransaction,
 	});
 
-	const adjustMutation = useMutation({
+	const adjustMutation = useMutation<AdjustTransactionResponse, Error, AdjustTransactionVariables, TransactionCachesSnapshot>({
 		mutationFn: (variables: AdjustTransactionVariables) => adjustTransactionApi({
 			handler: apiContext.transactionServers.rest,
 			id,
@@ -96,6 +123,18 @@ const useTransactionMethods = (
 			idempotencyKey: variables.idempotencyKey,
 		}),
 		mutationKey: [CACHE_KEYS.adjust, id],
+		onMutate: async (variables: AdjustTransactionVariables) => {
+			const snapshot = await optimistic.capture();
+			optimistic.applyAdjust(id, variables.amount);
+
+			return snapshot;
+		},
+		onError: (_error, _variables, snapshot) => {
+			optimistic.restore(snapshot);
+		},
+		onSuccess: (response) => {
+			optimistic.applySettled(id, response.transaction);
+		},
 		onSettled: invalidateTransaction,
 	});
 

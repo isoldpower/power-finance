@@ -18,3 +18,7 @@ export { ShowOnOpen } from './disclosure/ShowOnOpen.tsx';
 export { useDisclosure } from './disclosure/use-disclosure.ts';
 
 export { useSlideOverContext } from './slide-over/context/use-context-value.ts';
+
+export { ToastHost } from './toast/ToastHost.tsx';
+export { notify } from './toast/notify.ts';
+export type { ToastId, ToastOptions, ToastTone } from './toast/types.ts';

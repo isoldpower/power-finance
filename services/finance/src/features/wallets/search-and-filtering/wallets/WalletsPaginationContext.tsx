@@ -15,6 +15,7 @@ interface WalletsPaginationContextType {
 	scrollForward: () => void;
 	scrollBackward: () => void;
 	paginatedWallets: Wallet[];
+	isPending: boolean;
 }
 
 const WalletsPaginationContext = createContext<WalletsPaginationContextType | null>(null);
@@ -25,6 +26,7 @@ interface WalletsPaginationContextProviderProps {
 	total: number;
 	wallets: Wallet[];
 	resetKey: string;
+	isPending: boolean;
 }
 
 const WalletsPaginationContextProvider: FC<WalletsPaginationContextProviderProps> = ({ 
@@ -33,6 +35,7 @@ const WalletsPaginationContextProvider: FC<WalletsPaginationContextProviderProps
 	total,
 	wallets,
 	resetKey,
+	isPending,
 }) => {
 	const [page, setPage] = useState<number>(1);
 
@@ -74,6 +77,7 @@ const WalletsPaginationContextProvider: FC<WalletsPaginationContextProviderProps
 		pageSize,
 		pageCount,
 		pageNumber,
+		isPending,
 		from: startIndex,
 		to: endIndex,
 	}), [
@@ -84,6 +88,7 @@ const WalletsPaginationContextProvider: FC<WalletsPaginationContextProviderProps
 		pageSize,
 		pageCount,
 		pageNumber,
+		isPending,
 		startIndex,
 		endIndex,
 	]);

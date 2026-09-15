@@ -1,24 +1,29 @@
 import { useCallback, useMemo } from "react";
 import { Controller, useWatch } from "react-hook-form";
-import { cn, FinanceInput } from "@internal/ui-library";
 
 import { RuleForm } from "@entity/assistance";
-import { conditionPath, toFieldOptions, toOperatorOptions } from "@feature/assistance";
+import {
+	conditionPath,
+	resolveFilterInput,
+	toFieldOptions,
+	toOperatorOptions,
+} from "@feature/assistance";
 import { OPERATOR_LABELS } from "@shared/api";
 import { RowDeleteButton } from "@shared/pure-components/collections";
-import { RULE_FIELD_TEXT } from "./config.ts";
+import { RuleConditionValueField } from "./RuleConditionValueField.tsx";
 import { RuleSelectField } from "./RuleSelectField.tsx";
 
 import type { FC } from "react";
 import type { Control } from "react-hook-form";
 import type { FilterFieldOption } from "@shared/api";
-import type { RuleFormSchema } from "@feature/assistance";
+import type { FilterPolicySource, RuleFormSchema } from "@feature/assistance";
 
 
 interface RuleConditionRowProps {
 	control: Control<RuleFormSchema>;
 	index: number;
 	filterFields: FilterFieldOption[];
+	policySource: FilterPolicySource;
 	disabled?: boolean;
 	onRemove: (index: number) => void;
 }
@@ -27,10 +32,16 @@ const RuleConditionRow: FC<RuleConditionRowProps> = ({
 	control,
 	index,
 	filterFields,
+	policySource,
 	disabled,
 	onRemove,
 }) => {
 	const selectedField = useWatch({ control, name: conditionPath(index, 'field') });
+	const selectedOperator = useWatch({ control, name: conditionPath(index, 'operator') });
+	const valueInput = useMemo(
+		() => resolveFilterInput(policySource, selectedField, selectedOperator),
+		[policySource, selectedField, selectedOperator]
+	);
 	const fieldOptions = useMemo(() => toFieldOptions(filterFields), [filterFields]);
 	const operatorOptions = useMemo(() => {
 		return toOperatorOptions(filterFields, selectedField, OPERATOR_LABELS);
@@ -74,11 +85,9 @@ const RuleConditionRow: FC<RuleConditionRowProps> = ({
 				control={control}
 				name={conditionPath(index, 'value')}
 				render={({ field }) => (
-					<FinanceInput
+					<RuleConditionValueField
+						input={valueInput}
 						value={field.value}
-						placeholder="Value to match"
-						aria-label="Condition value"
-						className={cn("flex-1", RULE_FIELD_TEXT)}
 						disabled={disabled}
 						onChange={field.onChange}
 					/>

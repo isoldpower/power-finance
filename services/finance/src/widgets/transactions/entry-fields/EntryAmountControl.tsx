@@ -4,7 +4,7 @@ import { currencySymbol } from "@shared/formatting";
 
 import type { FC } from "react";
 import type { Control, FieldValues, Path } from "react-hook-form";
-import type { TransactionEntryType } from "@entity/transactions";
+import type { TransactionEntryType, TransferDirection } from "@entity/transactions";
 import type { EntryAmountEmphasis } from "@entity/transactions";
 
 
@@ -12,6 +12,7 @@ interface EntryAmountControlProps<TValues extends FieldValues> {
 	control: Control<TValues>;
 	name: Path<TValues>;
 	type: TransactionEntryType;
+	direction?: TransferDirection;
 	currency: string;
 	label?: string;
 	emphasis?: EntryAmountEmphasis;
@@ -24,6 +25,7 @@ const EntryAmountControl = <TValues extends FieldValues>({
 	control,
 	name,
 	type,
+	direction,
 	currency,
 	label,
 	emphasis,
@@ -45,7 +47,7 @@ const EntryAmountControl = <TValues extends FieldValues>({
 					) : null}
 					<EntryAmountField.Box emphasis={emphasis}>
 						{type === 'transfer' ? (
-							<EntryAmountField.Glyph type={type} emphasis={emphasis} />
+							<EntryAmountField.Glyph type={type} direction={direction} emphasis={emphasis} />
 						) : (
 							<EntryAmountField.Sign type={type}>
 								{type === 'income' ? '+' : '−'}

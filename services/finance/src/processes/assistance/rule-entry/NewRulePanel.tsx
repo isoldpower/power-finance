@@ -48,7 +48,7 @@ const NewRulePanel: FC = () => {
 		defaultValues: RULE_FORM_DEFAULTS,
 	});
 	const { loading, methods } = useRuleFormState();
-	const { conditionRows, filterFields, onAppend, onRemove } = useRuleConditions(control);
+	const { conditionRows, filterFields, policySource, onAppend, onRemove } = useRuleConditions(control);
 
 	return (
 		<>
@@ -117,6 +117,7 @@ const NewRulePanel: FC = () => {
 						control={control}
 						conditionRows={conditionRows}
 						filterFields={filterFields}
+						policySource={policySource}
 						combinatorOptions={COMBINATOR_OPTIONS}
 						label={CONDITIONS_LABEL}
 						emptyHint={CONDITIONS_HINT}

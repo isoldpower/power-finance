@@ -1,4 +1,5 @@
 import { cn } from "@internal/ui-library";
+import { pendingClass } from "@shared/pure-components/feedback";
 import { LedgerRowAmount } from "./row/LedgerRowAmount.tsx";
 import { LedgerRowCategory } from "./row/LedgerRowCategory.tsx";
 import { LedgerRowChevron } from "./row/LedgerRowChevron.tsx";
@@ -23,6 +24,7 @@ import type { LedgerRowWalletProps } from "./row/LedgerRowWallet.tsx";
 
 type LedgerRowProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> & {
 	expanded: boolean;
+	pending?: boolean;
 }>;
 type LedgerRowObject = FC<LedgerRowProps> & {
 	Amount: FC<LedgerRowAmountProps>;
@@ -39,12 +41,14 @@ type LedgerRowObject = FC<LedgerRowProps> & {
 const LedgerRow: LedgerRowObject = ({
 	children,
 	expanded,
+	pending = false,
 	...props
 }) => (
 	<div
 		className={cn(
 			"flex h-14 cursor-pointer items-center px-4",
-			!expanded && "hover:bg-secondary"
+			!expanded && "hover:bg-secondary",
+			pendingClass(pending)
 		)}
 		{...props}
 	>

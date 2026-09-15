@@ -8,7 +8,7 @@ import { Caption } from "@shared/pure-components/typography";
 import type { FC } from "react";
 import type { Control } from "react-hook-form";
 import type { FilterFieldOption } from "@shared/api";
-import type { RuleFormSchema } from "@feature/assistance";
+import type { FilterPolicySource, RuleFormSchema } from "@feature/assistance";
 import type { SelectOption } from "@shared/forms";
 
 
@@ -16,6 +16,7 @@ interface RuleConditionsControlProps {
 	control: Control<RuleFormSchema>;
 	conditionRows: { id: string }[];
 	filterFields: FilterFieldOption[];
+	policySource: FilterPolicySource;
 	combinatorOptions: SelectOption[];
 	label: string;
 	emptyHint: string;
@@ -29,6 +30,7 @@ const RuleConditionsControl: FC<RuleConditionsControlProps> = ({
 	control,
 	conditionRows,
 	filterFields,
+	policySource,
 	combinatorOptions,
 	label,
 	emptyHint,
@@ -63,6 +65,7 @@ const RuleConditionsControl: FC<RuleConditionsControlProps> = ({
 							control={control}
 							index={index}
 							filterFields={filterFields}
+							policySource={policySource}
 							disabled={disabled}
 							onRemove={onRemove}
 						/>

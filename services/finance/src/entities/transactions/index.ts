@@ -1,5 +1,6 @@
 export * from './activity-feed';
 export * from './data-view';
+export * from './dialog';
 export * from './direction-icon';
 export * from './quick-add';
 export * from './receipt-scan';

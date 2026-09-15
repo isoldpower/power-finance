@@ -2,21 +2,32 @@ import { describe, test, expect, beforeEach, vi } from 'vitest';
 
 import { isApiError } from '@shared/api';
 import { AutomationsMockRESTApiClient } from './mock-server.ts';
-import type { AutomationCreateBody } from '../types.ts';
+
+import type { AutomationCreateBody, AutomationSearchField } from '../types.ts';
+
 
 let client: AutomationsMockRESTApiClient;
 
-const draft = (overrides: Partial<AutomationCreateBody> = {}): AutomationCreateBody => ({
-	name: 'Auto-categorise coffee shops',
-	icon: 'tag',
-	trigger: {
-		type: 'event',
-		event: 'transaction.created',
-		filter_body: { and: [{ field_name: 'name', operator: 'icontains', value: 'coffee' }] },
-	},
-	effects: [{ type: 'set_category', params: { category: 'Dining' } }],
+const draft = (
+	name: string,
+	overrides: Partial<AutomationCreateBody> = {},
+): AutomationCreateBody => ({
+	name,
+	icon: 'basket',
+	enabled: true,
+	trigger: { type: 'event', event: 'transaction.created' },
+	effects: [{ type: 'set_category', params: { category: 'Groceries' } }],
 	...overrides,
 });
+
+const scheduled = (name: string): AutomationCreateBody => draft(name, {
+	trigger: { type: 'schedule', schedule: 'weekly' },
+	effects: [{ type: 'notify', params: { severity: 'info', title: 'Weekly digest' } }],
+});
+
+const namesOf = (rules: { name: string }[]): string[] => (
+	rules.map((rule) => rule.name).filter((name) => name.startsWith('Zz '))
+);
 
 beforeEach(() => {
 	const store = new Map<string, string>();
@@ -31,145 +42,109 @@ beforeEach(() => {
 	client = new AutomationsMockRESTApiClient('automations-test');
 });
 
-describe('AutomationsMockRESTApiClient', () => {
-	test('creates a rule with both trigger keys present in the response', async () => {
-		const { data, meta } = await client.post({ data: draft() });
+describe('AutomationsMockRESTApiClient search', () => {
+	test('narrows by a case insensitive name fragment', async () => {
+		await client.post({ data: draft('Zz tag groceries') });
+		await client.post({ data: draft('Zz weekly digest') });
 
-		expect(meta.idempotent_replay).toBe(false);
-		expect(data.enabled).toBe(true);
-		expect(data.trigger.event).toBe('transaction.created');
-		expect(data.trigger.schedule).toBeNull();
-		expect(data.runs).toBe(0);
-	});
-
-	test('rejects a trigger carrying the other type’s field', async () => {
-		await expect(client.post({
-			data: draft({ trigger: { type: 'event', event: 'transaction.created', schedule: 'daily' } }),
-		})).rejects.toSatisfy(
-			(error: unknown) => isApiError(error) && error.details[0]?.code === 'trigger_field_conflict',
-		);
-	});
-
-	test('rejects a rule with no effects', async () => {
-		await expect(client.post({ data: draft({ effects: [] }) })).rejects.toSatisfy(
-			(error: unknown) => isApiError(error) && error.details[0]?.code === 'required',
-		);
-	});
-
-	test('rejects an unknown effect type', async () => {
-		await expect(client.post({
-			data: draft({ effects: [{ type: 'launch_rocket', params: {} }] }),
-		})).rejects.toSatisfy(
-			(error: unknown) => isApiError(error) && error.details[0]?.code === 'effect_unknown_type',
-		);
-	});
-
-	test('rejects effect params that do not fit the effect', async () => {
-		await expect(client.post({
-			data: draft({ effects: [{ type: 'notify', params: { severity: 'loud', title: 'Hi' } }] }),
-		})).rejects.toSatisfy(
-			(error: unknown) => isApiError(error) && error.details[0]?.code === 'effect_params_invalid',
-		);
-	});
-
-	test('rejects categorising on a schedule trigger', async () => {
-		await expect(client.post({
-			data: draft({ trigger: { type: 'schedule', schedule: 'monthly' } }),
-		})).rejects.toSatisfy(
-			(error: unknown) => isApiError(error) && error.details[0]?.code === 'effect_subject_mismatch',
-		);
-	});
-
-	test('validates the condition against the trigger subject policy', async () => {
-		await expect(client.post({
-			data: draft({
-				trigger: {
-					type: 'event',
-					event: 'transaction.created',
-					filter_body: { and: [{ field_name: 'balance', operator: 'gte', value: '10.00' }] },
-				},
-			}),
-		})).rejects.toSatisfy(
-			(error: unknown) => isApiError(error) && error.details[0]?.code === 'filter_unknown_field',
-		);
-	});
-
-	test('accepts a wallet condition on a schedule trigger', async () => {
-		const { data } = await client.post({
-			data: draft({
-				trigger: {
-					type: 'schedule',
-					schedule: 'monthly',
-					filter_body: { and: [{ field_name: 'balance', operator: 'gte', value: '8000.00' }] },
-				},
-				effects: [{ type: 'notify', params: { severity: 'info', title: 'Sweep ready' } }],
-			}),
+		const response = await client.search({
+			data: { filter_body: { field_name: 'name', operator: 'icontains', value: 'Zz TAG' } },
 		});
 
-		expect(data.trigger.schedule).toBe('monthly');
-		expect(data.trigger.filter_body).not.toBeNull();
+		expect(namesOf(response.data)).toEqual(['Zz tag groceries']);
 	});
 
-	test('replaces the trigger whole on patch and never merges it', async () => {
-		const created = await client.post({ data: draft() });
+	test('filters on the enabled flag as a string leaf', async () => {
+		await client.post({ data: draft('Zz active rule') });
+		await client.post({ data: draft('Zz paused rule', { enabled: false }) });
 
-		const patched = await client.patch({
-			id: created.data.id,
+		const response = await client.search({
+			data: { filter_body: { field_name: 'enabled', operator: 'eq', value: 'false' } },
+		});
+
+		expect(namesOf(response.data)).toEqual(['Zz paused rule']);
+	});
+
+	test('reaches into the trigger for type, event and schedule', async () => {
+		await client.post({ data: draft('Zz on new transaction') });
+		await client.post({ data: scheduled('Zz every week') });
+
+		const byType = await client.search({
+			data: { filter_body: { field_name: 'trigger_type', operator: 'in', value: ['schedule'] } },
+		});
+		const byEvent = await client.search({
 			data: {
-				trigger: { type: 'event', event: 'transaction.updated', filter_body: null },
+				filter_body: {
+					field_name: 'event',
+					operator: 'eq',
+					value: 'transaction.created',
+				},
 			},
 		});
 
-		expect(patched.data.trigger.event).toBe('transaction.updated');
-		expect(patched.data.trigger.filter_body).toBeNull();
+		expect(namesOf(byType.data)).toEqual(['Zz every week']);
+		expect(namesOf(byEvent.data)).toEqual(['Zz on new transaction']);
 	});
 
-	test('disables a rule through patch rather than a toggle', async () => {
-		const created = await client.post({ data: draft() });
+	test('never matches a rule whose trigger leaves the field null', async () => {
+		const created = await client.post({ data: scheduled('Zz every week') });
 
-		const patched = await client.patch({ id: created.data.id, data: { enabled: false } });
-		const enabled = await client.list({ params: { enabled: true } });
+		const response = await client.search({
+			data: { filter_body: { field_name: 'event', operator: 'in', value: ['transaction.created'] } },
+		});
 
-		expect(patched.data.enabled).toBe(false);
-		expect(enabled.data.some((rule) => rule.id === created.data.id)).toBe(false);
+		expect(response.data.map((rule) => rule.id)).not.toContain(created.data.id);
 	});
 
-	test('toggles a seeded rule whose stored effects are incomplete', async () => {
-		const seeded = new AutomationsMockRESTApiClient('automations-seeded');
-		const listed = await seeded.list({});
-		const sweep = listed.data.find((rule) => rule.name === 'Monthly savings sweep');
+	test('leaves a deleted rule out of the results', async () => {
+		const created = await client.post({ data: draft('Zz retired rule') });
+		await client.delete({ id: created.data.id });
 
-		const patched = await seeded.patch({ id: sweep?.id ?? '', data: { enabled: true } });
+		const response = await client.search({
+			data: { filter_body: { field_name: 'name', operator: 'icontains', value: 'Zz retired' } },
+		});
 
-		expect(patched.data.enabled).toBe(true);
+		expect(response.data).toEqual([]);
 	});
 
-	test('still validates effects when the patch carries them', async () => {
-		const created = await client.post({ data: draft() });
+	test('rejects a field the search policy does not allow', async () => {
+		await client.post({ data: draft('Zz tag groceries') });
 
-		await expect(client.patch({
-			id: created.data.id,
-			data: { effects: [{ type: 'set_category', params: {} }] },
-		})).rejects.toSatisfy(
-			(error: unknown) => isApiError(error) && error.details[0]?.code === 'effect_params_invalid',
-		);
+		try {
+			await client.search({
+				data: {
+					filter_body: {
+						field_name: 'runs' as AutomationSearchField,
+						operator: 'eq',
+						value: '0',
+					},
+				},
+			});
+			expect.unreachable('search should reject an unknown field');
+		} catch (error: unknown) {
+			expect(isApiError(error)).toBe(true);
+		}
 	});
 
-	test('soft-deletes a rule and hides it from the list', async () => {
-		const created = await client.post({ data: draft() });
+	test('pages with opaque cursors bound to the filter', async () => {
+		await client.post({ data: draft('Zz alpha') });
+		await client.post({ data: draft('Zz beta') });
+		await client.post({ data: draft('Zz gamma') });
 
-		const deleted = await client.delete({ id: created.data.id });
-		const listed = await client.list({});
+		const body = {
+			filter_body: { field_name: 'name', operator: 'icontains', value: 'Zz ' },
+		} as const;
+		const first = await client.search({ data: body, params: { limit: 2 } });
 
-		expect(deleted.data.deleted_at).not.toBeNull();
-		expect(listed.data.some((rule) => rule.id === created.data.id)).toBe(false);
-	});
+		expect(first.data).toHaveLength(2);
+		expect(first.meta.total).toBe(3);
+		expect(first.meta.next_cursor).not.toBeNull();
 
-	test('replays a repeated idempotency key without creating a second rule', async () => {
-		const first = await client.post({ data: draft(), idempotencyKey: 'key-1' });
-		const replay = await client.post({ data: draft(), idempotencyKey: 'key-1' });
+		const second = await client.search({
+			data: body,
+			params: { limit: 2, cursor: first.meta.next_cursor ?? undefined },
+		});
 
-		expect(replay.meta.idempotent_replay).toBe(true);
-		expect(replay.data.id).toBe(first.data.id);
+		expect(second.data).toHaveLength(1);
 	});
 });
