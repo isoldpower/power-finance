@@ -1,4 +1,4 @@
-import { isApiError, STALE_READ_STATUS } from "@shared/api";
+import { isApiError, isQuotaExhausted, STALE_READ_STATUS } from "@shared/api";
 
 import type { ApiError } from "@shared/api";
 
@@ -29,6 +29,10 @@ function isRateLimited(error: ApiError): boolean {
 function retryQuery(failureCount: number, error: Error): boolean {
 	if (!isApiError(error)) {
 		return failureCount < MAX_SERVER_RETRIES;
+	}
+
+	if (isQuotaExhausted(error)) {
+		return false;
 	}
 
 	if (isStaleProjection(error) || isRerouteHole(error) || isRateLimited(error)) {

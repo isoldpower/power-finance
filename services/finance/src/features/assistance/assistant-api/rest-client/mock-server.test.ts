@@ -51,10 +51,18 @@ describe('AssistantMockRESTApiClient', () => {
 		const reply = await client.send({ data: { text: 'Where did my money go?' } });
 		const { data } = await client.messages({});
 
-		expect(reply.status).toBe('complete');
-		expect(reply.role).toBe('assistant');
+		expect(reply.message.status).toBe('complete');
+		expect(reply.message.role).toBe('assistant');
 		expect(data).toHaveLength(5);
-		expect(data[0].id).toBe(reply.id);
+		expect(data[0].id).toBe(reply.message.id);
+	});
+
+	test('reports the remaining allowance with every reply', async () => {
+		const first = await client.send({ data: { text: 'Where did my money go?' } });
+		const second = await client.send({ data: { text: 'And on dining?' } });
+
+		expect(first.quota).toEqual({ messages_left: 9, allowance: 10 });
+		expect(second.quota).toEqual({ messages_left: 8, allowance: 10 });
 	});
 
 	test('streams deltas that concatenate into the reply', async () => {
@@ -65,7 +73,17 @@ describe('AssistantMockRESTApiClient', () => {
 			onDelta: (delta) => { streamed += delta.text; },
 		});
 
-		expect(streamed).toBe(reply.text);
+		expect(streamed).toBe(reply.message.text);
+	});
+
+	test('refuses the turn once the allowance is spent', async () => {
+		const stingy = new AssistantMockRESTApiClient('assistant-messages-test', 1);
+
+		const spending = await stingy.send({ data: { text: 'my one question' } });
+		expect(spending.quota).toEqual({ messages_left: 0, allowance: 1 });
+
+		await expect(stingy.send({ data: { text: 'one more' } }))
+			.rejects.toMatchObject({ code: 'assistant_quota_exhausted' });
 	});
 
 	test('clears the whole conversation and reports the count', async () => {

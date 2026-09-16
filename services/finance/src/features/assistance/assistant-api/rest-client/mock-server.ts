@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { LocalStorageMock } from "@internal/shared";
-import { delay, paginate, stringifySortedQuery } from "@shared/api";
+import { ApiError, delay, paginate, stringifySortedQuery } from "@shared/api";
 import {
 	ASSISTANT_MESSAGES_STORAGE_KEY,
 	MOCK_REPLY,
@@ -9,6 +9,7 @@ import {
 } from "./mock-seed.ts";
 
 import type { IStorage } from "@internal/shared";
+import type { AssistantQuotaDto } from "../types.ts";
 import type { StoredMessage } from "./mock-seed.ts";
 import type {
 	IAssistantRESTApiClient,
@@ -21,6 +22,7 @@ import type {
 
 const DELTA_LATENCY = 120;
 const DELTA_WORDS = 6;
+const MOCK_ALLOWANCE = 10;
 
 const compareDesc = (left: string, right: string): number => (left < right ? 1 : left > right ? -1 : 0);
 
@@ -47,9 +49,15 @@ const chunkReply = (reply: string): string[] => {
 
 class AssistantMockRESTApiClient implements IAssistantRESTApiClient {
 	private readonly storage: IStorage<StoredMessage>;
+	private readonly allowance: number;
+	private spent = 0;
 
-	constructor(storageKey: string = ASSISTANT_MESSAGES_STORAGE_KEY) {
+	constructor(
+		storageKey: string = ASSISTANT_MESSAGES_STORAGE_KEY,
+		allowance: number = MOCK_ALLOWANCE,
+	) {
 		this.storage = new LocalStorageMock<StoredMessage>(storageKey);
+		this.allowance = allowance;
 		this.seed();
 	}
 
@@ -84,6 +92,12 @@ class AssistantMockRESTApiClient implements IAssistantRESTApiClient {
 	}
 
 	public async send(payload: AssistantSendRequest): Promise<AssistantSendResponse> {
+		if (this.spent >= this.allowance) {
+			throw new ApiError('assistant_quota_exhausted', 'You have used all your assistant messages', {
+				enveloped: true,
+			});
+		}
+
 		const sentAt = new Date().toISOString();
 		const question: StoredMessage = {
 			id: uuidv4(),
@@ -119,7 +133,16 @@ class AssistantMockRESTApiClient implements IAssistantRESTApiClient {
 		const answered: StoredMessage = { ...reply, status: 'complete', text: text || MOCK_REPLY };
 		this.storage.add(answered);
 
-		return answered;
+		return { message: answered, quota: this.spend() };
+	}
+
+	private spend(): AssistantQuotaDto {
+		this.spent += 1;
+
+		return {
+			messages_left: Math.max(this.allowance - this.spent, 0),
+			allowance: this.allowance,
+		};
 	}
 
 	public async clear(_payload: AssistantClearRequest): Promise<AssistantClearResponse> {

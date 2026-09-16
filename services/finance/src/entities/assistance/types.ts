@@ -208,10 +208,16 @@ interface AssistantMessage extends Pending {
 	refs: ResourceRef[];
 }
 
+interface AssistantQuota {
+	messagesLeft: number;
+	allowance: number;
+}
+
 interface AssistantReply {
 	userMessageId: string;
 	messageId: string;
 	message: AssistantMessage;
+	quota: AssistantQuota | null;
 }
 
 export type {
@@ -222,6 +228,7 @@ export type {
 	ActionStatus,
 	AssistantMessage,
 	AssistantOverview,
+	AssistantQuota,
 	AssistantReply,
 	AssistantSignal,
 	Automation,

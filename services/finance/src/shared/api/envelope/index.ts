@@ -1,5 +1,5 @@
 export { ApiError, FALLBACK_STATUS, STALE_READ_STATUS, statusForCode } from './errors.ts';
-export { isApiError, isApiErrorEnvelope, apiErrorFromEnvelope } from './helpers.ts';
+export { isApiError, isApiErrorEnvelope, isQuotaExhausted, apiErrorFromEnvelope } from './helpers.ts';
 
 export type {
 	ApiEnvelope,

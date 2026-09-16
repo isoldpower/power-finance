@@ -1,1 +1,1 @@
-export { assistantMessageFromApi, overviewFromApi } from './api-to-domain.ts';
+export { assistantMessageFromApi, assistantQuotaFromApi, overviewFromApi } from './api-to-domain.ts';

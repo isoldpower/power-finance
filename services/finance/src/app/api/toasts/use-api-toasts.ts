@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { hasStaleRecovery } from "../stale-refetch.ts";
-import { API_MUTATION_TOAST_POLICY, API_QUERY_TOAST_POLICY } from "./config.ts";
+import { API_MUTATION_TOAST_POLICY, API_QUERY_TOAST_POLICY, isSilentMutation } from "./config.ts";
 import { readCacheKey } from "./read-cache-key.ts";
 import { reportApiToast } from "./report-api-toast.ts";
 
@@ -81,9 +81,14 @@ const useApiToasts = (): void => {
 			return;
 		}
 
+		const key = readCacheKey(event.mutation.options.mutationKey);
+		if (isSilentMutation(key)) {
+			return;
+		}
+
 		reportApiToast({
 			id: `mutation:${String(event.mutation.mutationId)}`,
-			key: readCacheKey(event.mutation.options.mutationKey),
+			key,
 			phase,
 			error: readActionError(event.action),
 		});

@@ -1,5 +1,7 @@
 import { cn } from "@internal/ui-library";
 
+import { HIDDEN_SCROLLBAR } from "../scroll-row.ts";
+
 import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 
 
@@ -11,7 +13,8 @@ const AssistantPromptsRow: FC<AssistantPromptsRowProps> = ({
 }) => (
 	<div
 		className={cn(
-			"mb-2.5 flex flex-wrap gap-1.5"
+			"mb-2 flex gap-1.5 overflow-x-auto",
+			HIDDEN_SCROLLBAR
 		)}
 		{...props}
 	>

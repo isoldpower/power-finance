@@ -22,6 +22,7 @@ type KnownApiErrorCode =
 	| 'goal_not_empty'
 	| 'already_deleted'
 	| 'assistant_unavailable'
+	| 'assistant_quota_exhausted'
 	| 'subscription_exists'
 	| 'unknown_resolution'
 	| 'action_already_resolved'
@@ -105,6 +106,7 @@ const FALLBACK_STATUS: Record<KnownApiErrorCode, number> = {
 	goal_not_empty: 409,
 	already_deleted: 404,
 	assistant_unavailable: 503,
+	assistant_quota_exhausted: 429,
 	subscription_exists: 409,
 	unknown_resolution: 422,
 	action_already_resolved: 409,

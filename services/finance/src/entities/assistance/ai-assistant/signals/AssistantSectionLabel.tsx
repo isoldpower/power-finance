@@ -14,7 +14,7 @@ const AssistantSectionLabel: FC<AssistantSectionLabelProps> = ({
 		size="9.5"
 		tracking="0.1em"
 		tone="subtle"
-		className="mb-2"
+		className="mb-1.5"
 		{...props}
 	>
 		{children}

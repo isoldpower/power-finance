@@ -12,7 +12,11 @@ function parseSocketFrame(raw: string): SocketFrame | null {
 		const candidate = parsed as { event?: unknown; data?: unknown };
 
 		return typeof candidate.event === 'string'
-			? { event: candidate.event, data: candidate.data }
+			? {
+				event: candidate.event,
+				data: candidate.data,
+				envelope: parsed as Record<string, unknown>,
+			}
 			: null;
 	} catch {
 		return null;

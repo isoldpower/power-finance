@@ -6,6 +6,7 @@ import type {
 	AssistantMessageDto,
 	AssistantMessagesParams,
 	AssistantOverviewDto,
+	AssistantQuotaDto,
 	AssistantSendBody,
 } from "../types.ts";
 
@@ -30,7 +31,10 @@ interface AssistantSendRequest {
 	signal?: AbortSignal;
 }
 
-type AssistantSendResponse = AssistantMessageDto;
+interface AssistantSendResponse {
+	message: AssistantMessageDto;
+	quota: AssistantQuotaDto | null;
+}
 
 interface AssistantClearRequest {
 	params?: object;

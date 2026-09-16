@@ -166,6 +166,30 @@ describe('useApiToasts', () => {
 		expect(successId).toBe(pendingId);
 	});
 
+	test('stays silent for a mutation that renders its own progress', async () => {
+		const client = createClient();
+		const wrapper = buildWrapper(client);
+
+		const { result } = renderHook(() => {
+			useApiToasts();
+
+			return useMutation({
+				mutationKey: ['sendAssistantMessage'],
+				mutationFn: () => Promise.resolve('reply'),
+			});
+		}, { wrapper });
+
+		result.current.mutate();
+
+		await waitFor(() => {
+			expect(result.current.isSuccess).toBe(true);
+		});
+
+		expect(notify.pending).not.toHaveBeenCalled();
+		expect(notify.success).not.toHaveBeenCalled();
+		expect(notify.error).not.toHaveBeenCalled();
+	});
+
 	test('toasts a mutation from pending through to its failure, describing the error', async () => {
 		const client = createClient();
 		const wrapper = buildWrapper(client);

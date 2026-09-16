@@ -4,3 +4,4 @@ export { parseSocketFrame } from './parse-socket-frame.ts';
 export { toSocketUrl } from './socket-url.ts';
 
 export type { SocketConnection, SocketFrame, SocketHandlers, SocketRequestInit } from './types.ts';
+export type { SocketUrlOptions } from './socket-url.ts';

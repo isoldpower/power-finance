@@ -1,4 +1,4 @@
-import { assistantMessageFromApi } from "../mutators";
+import { assistantMessageFromApi, assistantQuotaFromApi } from "../mutators";
 
 import type { AssistantReply } from "@entity/assistance";
 import type { IAssistantRESTApiClient } from "../rest-client";
@@ -21,7 +21,7 @@ async function sendAssistantMessage(
 	let userMessageId = '';
 	let messageId = '';
 
-	const message = await request.handler.send({
+	const reply = await request.handler.send({
 		data: { text: request.text },
 		idempotencyKey: request.idempotencyKey,
 		signal: request.signal,
@@ -37,8 +37,9 @@ async function sendAssistantMessage(
 
 	return {
 		userMessageId,
-		messageId: messageId || message.id,
-		message: assistantMessageFromApi(message),
+		messageId: messageId || reply.message.id,
+		message: assistantMessageFromApi(reply.message),
+		quota: reply.quota === null ? null : assistantQuotaFromApi(reply.quota),
 	};
 }
 

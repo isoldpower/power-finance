@@ -37,6 +37,11 @@ interface AssistantDeltaDto {
 	text: string;
 }
 
+interface AssistantQuotaDto {
+	messages_left: number;
+	allowance: number;
+}
+
 interface AssistantClearedDto {
 	deleted: number;
 }
@@ -54,6 +59,7 @@ export type {
 	AssistantMessageDto,
 	AssistantMessagesParams,
 	AssistantOverviewDto,
+	AssistantQuotaDto,
 	AssistantSendBody,
 	AssistantSignalDto,
 	MessageRoleDto,

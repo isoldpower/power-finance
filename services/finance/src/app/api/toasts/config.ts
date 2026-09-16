@@ -20,5 +20,9 @@ const API_MUTATION_TOAST_POLICY: ApiToastPolicy = {
 	failed: true,
 };
 
-export { API_MUTATION_TOAST_POLICY, API_QUERY_TOAST_POLICY, API_TOAST_DURATIONS };
+const SILENT_MUTATION_KEYS: string[] = ['sendAssistantMessage'];
+
+const isSilentMutation = (key: string): boolean => SILENT_MUTATION_KEYS.includes(key);
+
+export { API_MUTATION_TOAST_POLICY, API_QUERY_TOAST_POLICY, API_TOAST_DURATIONS, isSilentMutation };
 export type { ApiToastPolicy };

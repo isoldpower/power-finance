@@ -83,7 +83,11 @@ describe('openSocket', () => {
 
 		socket.emit('message', { data: '{"event":"accepted","data":{"message_id":"m1"}}' });
 
-		expect(frames).toEqual([{ event: 'accepted', data: { message_id: 'm1' } }]);
+		expect(frames).toEqual([{
+			event: 'accepted',
+			data: { message_id: 'm1' },
+			envelope: { event: 'accepted', data: { message_id: 'm1' } },
+		}]);
 	});
 
 	test('sends the turn as a json frame', async () => {

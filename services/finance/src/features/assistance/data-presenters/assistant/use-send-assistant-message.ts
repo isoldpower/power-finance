@@ -1,10 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useApiContext, DERIVED_KEYS } from "@app/api";
+import { isQuotaExhausted } from "@shared/api";
 import { sendAssistantMessage } from "../../assistant-api";
 import { ASSISTANT_CACHE_KEYS } from "../cache-config.ts";
 import { messageFromText, optimisticMessageId, useOptimisticMessages } from "./optimistic";
 
+import type { AssistantQuota } from "@entity/assistance";
 import type { SendAssistantMessageResponse } from "../../assistant-api";
 import type { MessageCachesSnapshot } from "./optimistic";
 
@@ -17,6 +19,8 @@ interface SendMessageContext {
 interface UseSendAssistantMessageReturn {
 	send: (text: string) => void;
 	streamed: string;
+	quota: AssistantQuota | null;
+	exhausted: boolean;
 	isPending: boolean;
 	isError: boolean;
 }
@@ -26,6 +30,8 @@ const useSendAssistantMessage = (): UseSendAssistantMessageReturn => {
 	const queryClient = useQueryClient();
 	const optimistic = useOptimisticMessages();
 	const [streamed, setStreamed] = useState<string>('');
+	const [quota, setQuota] = useState<AssistantQuota | null>(null);
+	const [exhausted, setExhausted] = useState<boolean>(false);
 
 	const mutation = useMutation<SendAssistantMessageResponse, Error, string, SendMessageContext>({
 		mutationKey: [ASSISTANT_CACHE_KEYS.send],
@@ -41,8 +47,21 @@ const useSendAssistantMessage = (): UseSendAssistantMessageReturn => {
 
 			return { snapshot, temporaryId };
 		},
-		onError: (_error, _text, context) => {
+		onSuccess: (reply) => {
+			optimistic.applyReply(reply.message);
+
+			if (reply.quota !== null) {
+				setQuota(reply.quota);
+				setExhausted(reply.quota.messagesLeft <= 0);
+			}
+		},
+		onError: (error, _text, context) => {
 			optimistic.restore(context?.snapshot);
+
+			if (isQuotaExhausted(error)) {
+				setExhausted(true);
+				setQuota((current) => (current === null ? null : { ...current, messagesLeft: 0 }));
+			}
 		},
 		onSettled: () => {
 			setStreamed('');
@@ -61,9 +80,11 @@ const useSendAssistantMessage = (): UseSendAssistantMessageReturn => {
 	return useMemo(() => ({
 		send,
 		streamed,
+		quota,
+		exhausted,
 		isPending: mutation.isPending,
 		isError: mutation.isError,
-	}), [send, streamed, mutation.isPending, mutation.isError]);
+	}), [send, streamed, quota, exhausted, mutation.isPending, mutation.isError]);
 };
 
 export { useSendAssistantMessage };

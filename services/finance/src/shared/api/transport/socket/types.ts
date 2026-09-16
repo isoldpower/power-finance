@@ -5,6 +5,7 @@ import type { TokenSource } from "../stream";
 interface SocketFrame {
 	event: string;
 	data: unknown;
+	envelope: Record<string, unknown>;
 }
 
 interface SocketHandlers {

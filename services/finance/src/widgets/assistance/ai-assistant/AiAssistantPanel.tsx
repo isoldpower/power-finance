@@ -1,40 +1,48 @@
-import { AssistantChat, AssistantPanel, AssistantSignals } from "@entity/assistance";
-import { ShowOn } from "@shared/visibility";
+import { AssistantPanel, AssistantSignals } from "@entity/assistance";
+
+import { AiAssistantChat } from "./AiAssistantChat.tsx";
 
 import type { FC } from "react";
-import type { AssistantMessage, AssistantSignal } from "@entity/assistance";
+import type { AssistantMessage, AssistantQuota, AssistantSignal } from "@entity/assistance";
 
 
 interface AiAssistantPanelProps {
 	signals: AssistantSignal[];
 	chat: AssistantMessage[];
 	prompts: string[];
+	streamed: string;
+	quota: AssistantQuota | null;
+	exhausted: boolean;
+	isPending: boolean;
+	isError: boolean;
+	onSend: (text: string) => void;
 	onClose?: () => void;
 	className?: string;
-	comingSoon?: boolean;
 }
 
 const AiAssistantPanel: FC<AiAssistantPanelProps> = ({
 	signals,
 	chat,
 	prompts,
+	streamed,
+	quota,
+	exhausted,
+	isPending,
+	isError,
+	onSend,
 	onClose,
 	className,
-	comingSoon = false,
 }) => {
 	return (
 		<div className={className}>
 			<AssistantPanel>
-				<ShowOn condition={comingSoon}>
-					<AssistantPanel.ComingSoon />
-				</ShowOn>
-				<AssistantPanel.Body muted={comingSoon}>
+				<AssistantPanel.Body>
 					<AssistantPanel.Header onClose={onClose} />
 					<AssistantSignals>
 						<AssistantSignals.Label>
 							SIGNALS
 						</AssistantSignals.Label>
-						<AssistantSignals.Grid>
+						<AssistantSignals.Row>
 							{signals.map((signal) => (
 								<AssistantSignals.Tile
 									key={signal.label}
@@ -43,33 +51,18 @@ const AiAssistantPanel: FC<AiAssistantPanelProps> = ({
 									tone={signal.tone}
 								/>
 							))}
-						</AssistantSignals.Grid>
+						</AssistantSignals.Row>
 					</AssistantSignals>
-					<AssistantChat>
-						{chat.map((message) => (
-							message.role === 'user' ? (
-								<AssistantChat.UserBubble
-									key={message.id}
-									text={message.text}
-									refs={message.refs}
-								/>
-							) : (
-								<AssistantChat.AiBubble
-									key={message.id}
-									text={message.text}
-									refs={message.refs}
-								/>
-							)
-						))}
-					</AssistantChat>
-					<AssistantChat.Composer>
-						<AssistantChat.Prompts>
-							{prompts.map((prompt) => (
-								<AssistantChat.PromptChip key={prompt} prompt={prompt} />
-							))}
-						</AssistantChat.Prompts>
-						<AssistantChat.Input />
-					</AssistantChat.Composer>
+					<AiAssistantChat
+						messages={chat}
+						prompts={prompts}
+						streamed={streamed}
+						quota={quota}
+						exhausted={exhausted}
+						isPending={isPending}
+						isError={isError}
+						onSend={onSend}
+					/>
 				</AssistantPanel.Body>
 			</AssistantPanel>
 		</div>

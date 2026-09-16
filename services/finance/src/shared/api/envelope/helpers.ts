@@ -3,8 +3,14 @@ import { ApiError, ApiErrorPayload } from "./errors.ts";
 import type { ApiErrorOptions } from "./errors.ts";
 
 
+const QUOTA_EXHAUSTED_CODE = 'assistant_quota_exhausted';
+
 function isApiError(error: unknown): error is ApiError {
 	return error instanceof ApiError;
+}
+
+function isQuotaExhausted(error: unknown): boolean {
+	return isApiError(error) && error.code === QUOTA_EXHAUSTED_CODE;
 }
 
 function isApiErrorEnvelope(payload: unknown): payload is ApiErrorPayload {
@@ -36,4 +42,4 @@ function apiErrorFromEnvelope(
 	});
 }
 
-export { isApiError, isApiErrorEnvelope, apiErrorFromEnvelope };
+export { isApiError, isApiErrorEnvelope, isQuotaExhausted, apiErrorFromEnvelope };

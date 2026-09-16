@@ -1,8 +1,10 @@
 import { resourceRefFromApi } from "@feature/assistance/actions-api";
 
-import type { AssistantMessage, AssistantOverview, AssistantSignal } from "@entity/assistance";
+import type { AssistantMessage, AssistantOverview, AssistantQuota, AssistantSignal } from "@entity/assistance";
 import type { Types } from "@shared/formatting";
-import type { AssistantMessageDto, AssistantOverviewDto, AssistantSignalDto, SignalToneDto } from "../types.ts";
+import type {
+	AssistantMessageDto, AssistantOverviewDto, AssistantQuotaDto, AssistantSignalDto, SignalToneDto,
+} from "../types.ts";
 
 
 const TONE_BY_SIGNAL: Record<SignalToneDto, Types> = {
@@ -32,4 +34,9 @@ const assistantMessageFromApi = (dto: AssistantMessageDto): AssistantMessage => 
 	refs: dto.refs.map(resourceRefFromApi),
 });
 
-export { assistantMessageFromApi, overviewFromApi, signalFromApi };
+const assistantQuotaFromApi = (dto: AssistantQuotaDto): AssistantQuota => ({
+	messagesLeft: dto.messages_left,
+	allowance: dto.allowance,
+});
+
+export { assistantMessageFromApi, assistantQuotaFromApi, overviewFromApi, signalFromApi };

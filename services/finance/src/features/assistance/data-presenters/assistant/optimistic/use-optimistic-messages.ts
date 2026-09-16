@@ -11,6 +11,7 @@ interface UseOptimisticMessagesReturn {
 	capture: () => Promise<MessageCachesSnapshot>;
 	restore: (snapshot: MessageCachesSnapshot | undefined) => void;
 	applySend: (message: AssistantMessage) => void;
+	applyReply: (message: AssistantMessage) => void;
 }
 
 const useOptimisticMessages = (): UseOptimisticMessagesReturn => {
@@ -20,11 +21,16 @@ const useOptimisticMessages = (): UseOptimisticMessagesReturn => {
 		cache.insertPaged([message]);
 	}, [cache]);
 
+	const applyReply = useCallback((message: AssistantMessage): void => {
+		cache.settleInserted([message]);
+	}, [cache]);
+
 	return useMemo(() => ({
 		capture: cache.capture,
 		restore: cache.restore,
 		applySend,
-	}), [cache.capture, cache.restore, applySend]);
+		applyReply,
+	}), [cache.capture, cache.restore, applySend, applyReply]);
 };
 
 export { useOptimisticMessages };

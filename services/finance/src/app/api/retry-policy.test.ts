@@ -46,6 +46,13 @@ describe('retryQuery', () => {
 });
 
 describe('retryDelay', () => {
+	test('never retries a spent assistant quota, though it maps to 429', () => {
+		const error = new ApiError('assistant_quota_exhausted', 'No messages left', { enveloped: true });
+
+		expect(error.status).toBe(429);
+		expect(retryQuery(0, error)).toBe(false);
+	});
+
 	test('honours Retry-After when the gateway sends one', () => {
 		const limited = new ApiError('rate_limited', 'Too many requests', {
 			status: 429,

@@ -1,7 +1,9 @@
 import { ApiError, apiErrorFromEnvelope, openSocket } from "@shared/api";
 
+import { readQuota } from "./read-quota.ts";
 import type { SocketConnection, SocketFrame, TokenSource } from "@shared/api";
-import type { AssistantAcceptedDto, AssistantDeltaDto, AssistantMessageDto } from "../types.ts";
+import type { AssistantAcceptedDto, AssistantDeltaDto } from "../types.ts";
+import type { AssistantSendResponse } from "./types.ts";
 
 
 const ACCEPTED_EVENT = 'accepted';
@@ -10,7 +12,7 @@ const MESSAGE_EVENT = 'message';
 const ERROR_EVENT = 'error';
 
 interface AdviceTurn {
-	resolve: (message: AssistantMessageDto) => void;
+	resolve: (reply: AssistantSendResponse) => void;
 	reject: (error: ApiError) => void;
 	onAccepted?: (accepted: AssistantAcceptedDto) => void;
 	onDelta?: (delta: AssistantDeltaDto) => void;
@@ -30,10 +32,10 @@ class AdviceSocket {
 		this.options = options;
 	}
 
-	public async send(text: string, turn: Omit<AdviceTurn, 'resolve' | 'reject'>): Promise<AssistantMessageDto> {
+	public async send(text: string, turn: Omit<AdviceTurn, 'resolve' | 'reject'>): Promise<AssistantSendResponse> {
 		const connection = await this.connect();
 
-		return new Promise<AssistantMessageDto>((resolve, reject) => {
+		return new Promise<AssistantSendResponse>((resolve, reject) => {
 			this.turns.push({ ...turn, resolve, reject });
 			connection.send({ text });
 		});
@@ -80,7 +82,10 @@ class AdviceSocket {
 
 		if (frame.event === MESSAGE_EVENT) {
 			this.turns.shift();
-			turn.resolve(frame.data as AssistantMessageDto);
+			turn.resolve({
+				message: frame.data as AssistantSendResponse['message'],
+				quota: readQuota(frame.envelope),
+			});
 
 			return;
 		}
