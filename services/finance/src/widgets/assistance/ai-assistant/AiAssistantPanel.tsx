@@ -18,6 +18,7 @@ interface AiAssistantPanelProps {
 	onSend: (text: string) => void;
 	onClose?: () => void;
 	className?: string;
+	id?: string;
 }
 
 const AiAssistantPanel: FC<AiAssistantPanelProps> = ({
@@ -32,9 +33,10 @@ const AiAssistantPanel: FC<AiAssistantPanelProps> = ({
 	onSend,
 	onClose,
 	className,
+	id,
 }) => {
 	return (
-		<div className={className}>
+		<div id={id} className={className}>
 			<AssistantPanel>
 				<AssistantPanel.Body>
 					<AssistantPanel.Header onClose={onClose} />

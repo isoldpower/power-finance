@@ -13,6 +13,7 @@ interface RuleTriggerTypeControlProps {
 	label: string;
 	options: SelectOption[];
 	disabled?: boolean;
+	onAfterChange?: (value: string) => void;
 }
 
 const RuleTriggerTypeControl: FC<RuleTriggerTypeControlProps> = ({
@@ -20,6 +21,7 @@ const RuleTriggerTypeControl: FC<RuleTriggerTypeControlProps> = ({
 	label,
 	options,
 	disabled,
+	onAfterChange,
 }) => (
 	<RuleField label={label}>
 		<Controller
@@ -30,7 +32,10 @@ const RuleTriggerTypeControl: FC<RuleTriggerTypeControlProps> = ({
 					value={field.value}
 					options={options}
 					disabled={disabled}
-					onChange={field.onChange}
+					onChange={(next) => {
+						field.onChange(next);
+						onAfterChange?.(next);
+					}}
 				/>
 			)}
 		/>

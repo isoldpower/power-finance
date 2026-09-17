@@ -8,7 +8,11 @@ import { useAssistantMessages, useAssistantOverview, useSendAssistantMessage } f
 import type { FC } from "react";
 
 
-const PlanningAiAssistant: FC = () => {
+interface PlanningAiAssistantProps {
+	id?: string;
+}
+
+const PlanningAiAssistant: FC<PlanningAiAssistantProps> = ({ id }) => {
 	const { open, onOpen, onClose } = useDisclosure();
 	const { overview } = useAssistantOverview();
 	const { messages } = useAssistantMessages();
@@ -29,6 +33,7 @@ const PlanningAiAssistant: FC = () => {
 					isPending={isPending}
 					isError={isError}
 					onSend={send}
+					id={id}
 					className="sticky top-[70px]"
 				/>
 			</ShowOnDesktop>
@@ -57,3 +62,4 @@ const PlanningAiAssistant: FC = () => {
 PlanningAiAssistant.displayName = 'PlanningAiAssistant';
 
 export { PlanningAiAssistant };
+export type { PlanningAiAssistantProps };

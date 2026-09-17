@@ -21,6 +21,12 @@ const conditionText = (node: RuleNode): string => {
 		return node.nodes.length > 1 ? `(${joined})` : joined;
 	}
 
+	/* A null value is a presence check, so it reads as one rather than as a
+	   comparison against nothing. */
+	if (node.value === null) {
+		return `${node.field} ${node.operator === 'eq' ? 'is not set' : 'is set'}`;
+	}
+
 	const value = Array.isArray(node.value) ? node.value.join(', ') : node.value;
 
 	return `${node.field} ${operatorLabel(node.operator)} ${value}`;

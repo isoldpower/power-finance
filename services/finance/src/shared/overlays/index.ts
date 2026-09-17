@@ -8,6 +8,7 @@ export { SlideOverTrigger } from './slide-over/SlideOverTrigger.tsx';
 export { SlideOverPanel } from './slide-over/SlideOverPanel.tsx';
 export type { SlideOverEvent, SlideOverPanelsRegistry, SlideOverComponent, SlideOverProps } from './slide-over/types.ts';
 
+export { ModalContent } from './modal/ModalContent.tsx';
 export { ModalShell } from './modal/ModalShell.tsx';
 export { ConfirmModal } from './modal/ConfirmModal.tsx';
 
@@ -22,3 +23,4 @@ export { useSlideOverContext } from './slide-over/context/use-context-value.ts';
 export { ToastHost } from './toast/ToastHost.tsx';
 export { notify } from './toast/notify.ts';
 export type { ToastId, ToastOptions, ToastTone } from './toast/types.ts';
+export type { ModalContentProps } from './modal/ModalContent.tsx';

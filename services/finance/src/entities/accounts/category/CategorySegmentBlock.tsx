@@ -24,13 +24,13 @@ const CategorySegmentBlock: FC<CategorySegmentBlockProps> = ({
 		title={title}
 		onClick={onClick}
 		className={cn(
-			"relative h-full min-w-[7px] cursor-pointer rounded-[3px] transition-transform",
-			selected && "z-10 scale-y-110"
+			"relative h-full min-w-[7px] cursor-pointer rounded-[3px] transition-shadow",
+			selected && "z-10"
 		)}
 		style={{
 			width,
-			background: `color-mix(in srgb, ${color} ${shade.toString()}%, white)`,
-			boxShadow: selected ? '0 2px 6px rgba(17,20,28,0.22)' : undefined,
+			background: `color-mix(in srgb, ${color} ${shade.toString()}%, transparent)`,
+			boxShadow: selected ? '0 0 0 2px var(--surface), 0 0 0 3px var(--text)' : undefined,
 		}}
 	/>
 );

@@ -40,6 +40,8 @@ import {
 	PlanningStatusSyncBadge,
 } from "@entity/assistance";
 import { GoalsToolbar } from "@entity/wallets";
+import { SITE_TOUR_ANCHORS } from "@feature/onboarding";
+
 import { planningSlides, planningSlidesRegistry } from "./SlideOverRegistry.tsx";
 
 import type { FC } from "react";
@@ -79,7 +81,7 @@ const PlanningPage: FC = () => {
 			</RevealMotion>
 			<RevealMotion delay={0.1}>
 				<SidebarColumnsContainer sidebarWidth="380px">
-					<StackedList>
+					<StackedList id={SITE_TOUR_ANCHORS.planningAutomations}>
 						<AutomationsBrowserProvider>
 							<FinanceCard className="overflow-hidden">
 								<AutomationsBrowserHeader>
@@ -128,7 +130,7 @@ const PlanningPage: FC = () => {
 						</GoalsBrowserProvider>
 						<WhatIfCard />
 					</StackedList>
-					<PlanningAiAssistant />
+					<PlanningAiAssistant id={SITE_TOUR_ANCHORS.planningAssistant} />
 				</SidebarColumnsContainer>
 			</RevealMotion>
 			<SlideOver panelsRegistry={planningSlidesRegistry} />

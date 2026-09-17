@@ -9,6 +9,8 @@ import {
 	FinanceComboboxTrigger,
 } from "@internal/ui-library";
 
+import { CheckIcon } from "@shared/pure-components/icons";
+
 import type { FC } from "react";
 import type { SelectOption } from "@shared/forms";
 
@@ -17,6 +19,7 @@ interface RuleValueComboboxProps {
 	label: string;
 	unset: boolean;
 	options: SelectOption[];
+	selected?: string[];
 	searchPlaceholder: string;
 	emptyLabel: string;
 	ariaLabel: string;
@@ -25,10 +28,13 @@ interface RuleValueComboboxProps {
 	onSelect: (value: string) => void;
 }
 
+const NO_SELECTION: string[] = [];
+
 const RuleValueCombobox: FC<RuleValueComboboxProps> = ({
 	label,
 	unset,
 	options,
+	selected = NO_SELECTION,
 	searchPlaceholder,
 	emptyLabel,
 	ariaLabel,
@@ -46,7 +52,7 @@ const RuleValueCombobox: FC<RuleValueComboboxProps> = ({
 				className
 			)}
 		>
-			<span className="truncate">{label}</span>
+			<span className="truncate" title={label}>{label}</span>
 		</FinanceComboboxTrigger>
 		<FinanceComboboxContent>
 			<FinanceComboboxInput placeholder={searchPlaceholder} />
@@ -59,7 +65,12 @@ const RuleValueCombobox: FC<RuleValueComboboxProps> = ({
 						keywords={[option.label]}
 						onSelect={() => { onSelect(option.value); }}
 					>
-						{option.label}
+						{selected.includes(option.value) ? (
+							<CheckIcon size={14} className="flex-none text-primary" />
+						) : (
+							<span aria-hidden className="size-3.5 flex-none" />
+						)}
+						<span className="min-w-0 truncate">{option.label}</span>
 					</FinanceComboboxItem>
 				))}
 			</FinanceComboboxList>

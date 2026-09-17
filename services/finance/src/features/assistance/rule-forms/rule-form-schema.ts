@@ -28,7 +28,8 @@ const ruleFormSchema = z.object({
 	name: z.string().min(1, "Name is required"),
 	icon: z.string().min(1, "Icon is required"),
 	triggerType: z.enum(['event', 'schedule']),
-	event: z.enum(['transaction.created', 'transaction.updated']).or(z.literal('')),
+	eventCategory: z.enum(['transaction']),
+	eventName: z.enum(['created', 'changed']).or(z.literal('')),
 	schedule: z.enum(['daily', 'weekly', 'monthly']),
 	combinator: z.enum(['and', 'or']),
 	conditions: z.array(ruleConditionSchema),
@@ -42,8 +43,8 @@ const ruleFormSchema = z.object({
 	amount: z.string(),
 	currency: z.string(),
 }).superRefine((values, context) => {
-	if (values.triggerType === 'event' && values.event === '') {
-		context.addIssue({ code: 'custom', path: ['event'], message: 'Select an event' });
+	if (values.triggerType === 'event' && values.eventName === '') {
+		context.addIssue({ code: 'custom', path: ['eventName'], message: 'Select an event' });
 	}
 
 	if (values.effectType === 'set_category' && values.triggerType !== 'event') {
@@ -98,7 +99,8 @@ const RULE_FORM_DEFAULTS: RuleFormSchema = {
 	name: '',
 	icon: 'rule',
 	triggerType: 'event',
-	event: '',
+	eventCategory: 'transaction',
+	eventName: '',
 	schedule: 'monthly',
 	combinator: 'and',
 	conditions: [],

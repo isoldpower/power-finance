@@ -1,4 +1,4 @@
-import type { FilterOperator } from "@shared/api";
+import type { FilterOperator, FilterValue } from "@shared/api";
 import type { Money } from "@entity/localization";
 import type { Types } from "@shared/formatting";
 import type { Pending } from "@shared/data";
@@ -78,7 +78,7 @@ type RuleCombinator = 'and' | 'or';
 interface RuleCondition {
 	field: string;
 	operator: FilterOperator;
-	value: string | string[];
+	value: FilterValue;
 }
 
 interface RuleConditionGroup {

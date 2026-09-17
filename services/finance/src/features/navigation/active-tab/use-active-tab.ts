@@ -2,6 +2,7 @@ import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { getFinanceRoute } from "@internal/shared";
 import { useCallback, useMemo } from "react";
 import { resolveActiveTab } from "./resolve-active.ts";
+import { OFF_TAB_LABEL } from "./config.ts";
 
 import type { TabKey, NavTab } from "@entity/navigation";
 
@@ -13,10 +14,12 @@ const useActiveTab = (tabs: NavTab[]) => {
 	});
 	
 	const activeTab = useMemo(() => {
-		return resolveActiveTab(pathname, 'dashboard');
+		return resolveActiveTab(pathname);
 	}, [pathname]);
 	const activeLabel = useMemo(() => {
-		return tabs.find((tab) => tab.key === activeTab)?.label ?? 'Dashboard';
+		if (activeTab === null) return OFF_TAB_LABEL;
+
+		return tabs.find((tab) => tab.key === activeTab)?.label ?? OFF_TAB_LABEL;
 	}, [activeTab, tabs]);
 
 	const onTabChange = useCallback((tabValue: string) => {

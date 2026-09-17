@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UiButton, UiForm, UiFormField } from "@internal/ui-library";
+import { FinanceButton, FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
 import { DeleteWebhook, deleteWebhookSchema, useDeleteDefaultValues } from "@feature/configuration";
 import { FieldLayout } from "@shared/forms";
-import { InputField } from "@shared/forms";
 
 import type { FC, PropsWithChildren } from "react";
 import type { WebhookEndpoint } from "@entity/configuration";
@@ -37,17 +36,21 @@ const DeleteWebhookForm: FC<DeleteWebhookFormProps> = ({
 						control={form.control}
 						name="id"
 						render={({ field }) => (
-							<FieldLayout label="Target ID">
-								<InputField disabled={true} placeholder="Oooops...." {...field} />
+							<FieldLayout label="Endpoint ID">
+								<FinanceInput readOnly {...field} />
 							</FieldLayout>
 						)} />
 					<div className="flex gap-2 justify-end">
-						<UiButton variant='secondary' type='button' onClick={closeModal}>
+						<FinanceButton variant="secondary" type="button" onClick={closeModal}>
 							Cancel
-						</UiButton>
-						<UiButton variant='destructive' type='submit'>
-							Delete
-						</UiButton>
+						</FinanceButton>
+						<FinanceButton
+							variant="danger"
+							type="submit"
+							className="border-transparent bg-neg text-white hover:bg-neg hover:brightness-95"
+						>
+							Delete endpoint
+						</FinanceButton>
 					</div>
 				</div>
 			</DeleteWebhook>

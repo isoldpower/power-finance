@@ -7,6 +7,7 @@ import {
 	CategoryPanel,
 	categoryColor,
 	accountAmountTone,
+	accountBalanceTone,
 	ledgerIconClass,
 	ledgerSideTone,
 	HistoryToolbar,
@@ -68,6 +69,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 						<AccountListItem
 							key={entry.id}
 							active={entry.id === accountId}
+							accentColor={categoryColor(category.id)}
 							onClick={() => { setAccountId(entry.id); }}
 						>
 							<AccountListItem.Swatch color={categoryColor(category.id)} />
@@ -79,7 +81,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 									{entry.group}
 								</Caption>
 							</div>
-							<AccountListItem.Balance tone={accountAmountTone(entry.balance.amount)}>
+							<AccountListItem.Balance tone={accountBalanceTone(entry.balance.amount)}>
 								{convertToUserCurrency(entry.balance)}
 							</AccountListItem.Balance>
 						</AccountListItem>
@@ -88,13 +90,14 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 			</CategoryPanel>
 			<AccountSummary>
 				<AccountSummary.Hero>
+					<AccountSummary.Glow />
 					<AccountSummary.HeroRow>
 						<div className="min-w-0 flex-1">
 							<AccountSummary.NameRow>
 								<Heading as="h3" size="19">
 									{account.name}
 								</Heading>
-								<AccountSummary.Type>
+								<AccountSummary.Type color={categoryColor(category.id)}>
 									{account.group}
 								</AccountSummary.Type>
 							</AccountSummary.NameRow>
@@ -103,7 +106,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 							<Overline size="10" tracking="0.1em">
 								Balance
 							</Overline>
-							<AccountSummary.Balance tone={accountAmountTone(account.balance.amount)}>
+							<AccountSummary.Balance tone={accountBalanceTone(account.balance.amount)}>
 								{convertToUserCurrency(account.balance)}
 							</AccountSummary.Balance>
 						</div>
@@ -150,7 +153,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 								</MetaText>
 							</div>
 							<AccountHistoryRow.Badge sideTone={ledgerSideTone(entry.debit)}>
-								{entry.debit ? 'DR' : 'CR'}
+								{entry.debit ? 'Debit' : 'Credit'}
 							</AccountHistoryRow.Badge>
 							<AccountHistoryRow.Value tone={accountAmountTone(entry.amount.amount)}>
 								{convertToUserCurrencyWithSign(entry.amount)}

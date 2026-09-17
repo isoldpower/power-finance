@@ -9,4 +9,6 @@ const NUMERIC_OPERATORS: FilterOperator[] = ['eq', 'gt', 'gte', 'lt', 'lte'];
 
 const DATE_OPERATORS: FilterOperator[] = ['gt', 'gte', 'lt', 'lte'];
 
-export { DATE_OPERATORS, NUMERIC_OPERATORS, REFERENCE_OPERATORS, TEXT_OPERATORS };
+const BOOLEAN_OPERATORS: FilterOperator[] = ['eq'];
+
+export { BOOLEAN_OPERATORS, DATE_OPERATORS, NUMERIC_OPERATORS, REFERENCE_OPERATORS, TEXT_OPERATORS };

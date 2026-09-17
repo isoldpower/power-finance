@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UiButton, UiForm, UiFormField } from "@internal/ui-library";
+import { FinanceButton, FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
 import { useCallback, useState } from "react";
 import {
 	EditWebhook,
@@ -8,7 +8,6 @@ import {
 	webhookSchema,
 } from "@feature/configuration";
 import { FieldLayout } from "@shared/forms";
-import { InputField } from "@shared/forms";
 
 import type { FC, PropsWithChildren } from "react";
 import type { WebhookSchema } from "@feature/configuration";
@@ -55,8 +54,8 @@ const EditWebhookForm: FC<EditWebhookFormProps> = ({
 						control={form.control}
 						name="title"
 						render={({field}) => (
-							<FieldLayout label="Webhook Title">
-								<InputField placeholder="e.g., My Website Hook" {...field} />
+							<FieldLayout label="Name">
+								<FinanceInput placeholder="e.g. Ledger sync" {...field} />
 							</FieldLayout>
 						)} />
 					<UiFormField
@@ -65,17 +64,25 @@ const EditWebhookForm: FC<EditWebhookFormProps> = ({
 						name="url"
 						render={({field}) => (
 							<FieldLayout label="Endpoint URL">
-								<InputField
+								<FinanceInput
 									placeholder="https://example.com/webhooks"
 									type="url"
 									{...field}
 								/>
 							</FieldLayout>
 						)} />
-					<div className="flex justify-end">
-						<UiButton variant="default" type="submit">
-							Save Changes
-						</UiButton>
+					<div className="flex justify-end gap-2">
+						<FinanceButton
+							variant="secondary"
+							type="button"
+							disabled={loading}
+							onClick={closeModal}
+						>
+							Cancel
+						</FinanceButton>
+						<FinanceButton type="submit" disabled={loading}>
+							{loading ? 'Saving…' : 'Save changes'}
+						</FinanceButton>
 					</div>
 				</div>
 			</EditWebhook>

@@ -8,8 +8,8 @@ import type { FinanceRouteKey } from "../types.ts";
 const useRouteNavigate = () => {
 	const navigate = useNavigate();
 
-	return useCallback((to: FinanceRouteKey) => {
-		void navigate({ to: getFinanceRoute(to) });
+	return useCallback((to: FinanceRouteKey, search?: Record<string, string>) => {
+		void navigate({ to: getFinanceRoute(to), search });
 	}, [navigate]);
 };
 

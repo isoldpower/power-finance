@@ -14,7 +14,7 @@ const AccountsBrowserHeader: FC = () => {
 			<SectionHeader.Title>
 				Chart of accounts
 			</SectionHeader.Title>
-			<FinanceBadge tone="neutral" appearance="outline" size="sm">
+			<FinanceBadge tone="neutral" appearance="outline" size="sm" className="uppercase">
 				<LockIcon /> Read-only
 			</FinanceBadge>
 			<SectionHeader.Border />

@@ -75,7 +75,10 @@ const TransactionLedgerEntries: FC<LedgerTransactionEntriesProps> = ({ transacti
 			</PostingsContainer>
 			<TransactionLedgerFx isPending={isPending} ledgerState={ledgerState}>
 				{lines.map((entry, index) => (
-					<LedgerLineRow key={`${row.id}-${entry.account}-${index.toString()}`}>
+					<LedgerLineRow
+						key={`${row.id}-${entry.account}-${index.toString()}`}
+						last={index === lines.length - 1}
+					>
 						<LedgerLineRow.Side debit={entry.debit}>
 							{entry.label}
 						</LedgerLineRow.Side>

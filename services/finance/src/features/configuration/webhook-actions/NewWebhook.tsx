@@ -11,12 +11,14 @@ interface NewWebhookProps {
 	handleSubmit: UseFormHandleSubmit<WebhookSchema>;
 	onBeforeCreate?: () => void;
 	onSuccess?: (webhook: WebhookEndpointSecret) => void;
+	onFailure?: () => void;
 	children?: ReactNode;
 }
 
 function NewWebhook({
 	handleSubmit,
 	onSuccess,
+	onFailure,
 	children,
 	onBeforeCreate
 }: NewWebhookProps) {
@@ -25,19 +27,23 @@ function NewWebhook({
 	const onSubmit = useCallback(async (data: WebhookSchema) => {
 		if (onBeforeCreate) onBeforeCreate();
 
-		const created = await createWebhook.mutateAsync({
-			title: data.title,
-			url: data.url,
-			enabled: true,
-		});
+		try {
+			const created = await createWebhook.mutateAsync({
+				title: data.title,
+				url: data.url,
+				enabled: true,
+			});
 
-		if (onSuccess) onSuccess(created.webhook);
-	}, [createWebhook, onBeforeCreate, onSuccess]);
+			if (onSuccess) onSuccess(created.webhook);
+		} catch {
+			if (onFailure) onFailure();
+		}
+	}, [createWebhook, onBeforeCreate, onFailure, onSuccess]);
 
 	const handleSubmitForm = useCallback((
 		e: FormEvent<HTMLFormElement>
 	) => {
-		handleSubmit(onSubmit)(e).catch(console.error);
+		void handleSubmit(onSubmit)(e);
 	}, [handleSubmit, onSubmit]);
 
 	return (

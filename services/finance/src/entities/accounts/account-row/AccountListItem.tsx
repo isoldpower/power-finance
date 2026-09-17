@@ -9,6 +9,7 @@ import type { AccountListItemSwatchProps } from "./list-item/AccountListItemSwat
 
 type AccountListItemProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> & {
 	active: boolean;
+	accentColor: string;
 }>;
 type AccountListItemObject = FC<AccountListItemProps> & {
 	Balance: FC<AccountListItemBalanceProps>;
@@ -18,13 +19,15 @@ type AccountListItemObject = FC<AccountListItemProps> & {
 const AccountListItem: AccountListItemObject = ({
 	children,
 	active,
+	accentColor,
 	...props
 }) => (
 	<div
 		className={cn(
-			"flex cursor-pointer items-center gap-2.5 border-b border-border px-4 py-3 hover:bg-secondary",
-			active && "bg-[var(--accent-soft)]"
+			"flex cursor-pointer items-center gap-2.5 border-b border-l-[3px] border-border px-4 py-3",
+			active ? "bg-secondary" : "hover:bg-secondary"
 		)}
+		style={{ borderLeftColor: active ? accentColor : 'transparent' }}
 		{...props}
 	>
 		{children}

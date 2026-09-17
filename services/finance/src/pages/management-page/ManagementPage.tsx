@@ -22,6 +22,8 @@ import { Overline, PageTitle } from "@shared/pure-components/typography";
 import { CenteredList, PageContainer, SidebarColumnsContainer, SpaceBetween } from "@shared/pure-components/layout";
 import { ScanReceiptIcon } from "@shared/pure-components/icons";
 import { FinanceButton, FinanceCard } from "@internal/ui-library";
+import { SITE_TOUR_ANCHORS } from "@feature/onboarding";
+
 import { managementSlides, managementSlidesRegistry } from "./SlideOverRegistry.tsx";
 
 import type { FC } from "react";
@@ -64,7 +66,7 @@ const ManagementPage: FC = () => {
 					<RevealMotion delay={0.1}>
 						<LedgerBalanceBand />
 					</RevealMotion>
-					<RevealMotion delay={0.18}>
+					<RevealMotion delay={0.18} id={SITE_TOUR_ANCHORS.managementWorkspace}>
 						<WalletBrowserHeader createWalletPanel={managementSlides.createWallet} />
 						<SidebarColumnsContainer sidebar="start" sidebarWidth="340px" from="md">
 							<WalletBrowserProvider>

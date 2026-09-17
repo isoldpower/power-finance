@@ -9,7 +9,7 @@ type FilterOperator =
 	| 'contains'
 	| 'icontains';
 
-type FilterValue = string | string[];
+type FilterValue = string | string[] | null;
 
 interface FilterLeaf<TField extends string = string> {
 	field_name: TField;

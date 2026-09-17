@@ -1,16 +1,16 @@
 import { FinanceBadge } from "@internal/ui-library";
 
 import type { FC } from "react";
-import type { Types } from "@shared/formatting";
+import type { LedgerSideTone } from "../../visual-map";
 
 
 interface AccountRowBadgeProps {
 	children: string;
-	sideTone: Types;
+	sideTone: LedgerSideTone;
 }
 
 const AccountRowBadge: FC<AccountRowBadgeProps> = ({ children, sideTone }) => (
-	<FinanceBadge tone={sideTone === 'pos' ? 'pos' : 'neg'} appearance="soft" size="sm">
+	<FinanceBadge tone={sideTone} appearance="soft" size="sm" className="rounded-[4px] border-border uppercase">
 		{children}
 	</FinanceBadge>
 );

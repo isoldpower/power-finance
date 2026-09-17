@@ -1,3 +1,4 @@
+import { useCallback, useRef } from "react";
 import {
 	FinanceIconButton,
 	FinanceMenu,
@@ -5,6 +6,7 @@ import {
 	FinanceMenuContent,
 } from "@internal/ui-library";
 import { RouteLink } from "@shared/routing";
+import { useDisclosure } from "@shared/overlays";
 import {
 	useNotifications,
 	useNotificationsCount,
@@ -13,9 +15,9 @@ import {
 } from "@feature/assistance";
 import { NotificationBell, NotificationEmpty, NotificationList } from "@entity/assistance";
 import { CardTitle, textClass } from "@shared/pure-components/typography";
-import { NOTIFICATIONS_PAGE_SIZE } from "./config.ts";
+import { NOTIFICATIONS_PAGE_SIZE, TRIGGER_DISMISS_WINDOW } from "./config.ts";
 
-import type { ReactNode, FC } from "react";
+import type { MouseEvent, ReactNode, FC } from "react";
 import type { Notification } from "@entity/assistance";
 
 
@@ -26,13 +28,33 @@ interface NavbarNotificationsProps {
 const NavbarNotifications: FC<NavbarNotificationsProps> = ({ children }) => {
 	const { notifications } = useNotifications(undefined, { limit: NOTIFICATIONS_PAGE_SIZE });
 	const { unacknowledged } = useNotificationsCount();
+	const { open, setOpen } = useDisclosure();
+	const dismissedAt = useRef(0);
 
 	useNotificationsStream();
 
+	const handleOpenChange = useCallback((next: boolean) => {
+		if (!next) dismissedAt.current = Date.now();
+
+		setOpen(next);
+	}, [setOpen]);
+
+	const handleTriggerClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+
+		const dismissedByThisPress = Date.now() - dismissedAt.current < TRIGGER_DISMISS_WINDOW;
+
+		setOpen(dismissedByThisPress ? false : !open);
+	}, [open, setOpen]);
+
 	return (
-		<FinanceMenu>
+		<FinanceMenu open={open} onOpenChange={handleOpenChange}>
 			<FinanceMenuTrigger asChild>
-				<FinanceIconButton aria-label="Notifications">
+				<FinanceIconButton
+					aria-label="Notifications"
+					variant={open ? 'active' : 'default'}
+					onClick={handleTriggerClick}
+				>
 					<NotificationBell unreadCount={unacknowledged} />
 				</FinanceIconButton>
 			</FinanceMenuTrigger>

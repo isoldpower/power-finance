@@ -12,4 +12,11 @@ const TRANSACTION_ORIGIN_OPTIONS: SelectOption[] = [
 	{ value: 'automation', label: 'Automation' },
 ];
 
-export { TRANSACTION_ORIGIN_OPTIONS, TRANSACTION_TYPE_OPTIONS };
+const BOOLEAN_VALUE_OPTIONS: SelectOption[] = [
+	{ value: 'yes', label: 'Yes' },
+	{ value: 'no', label: 'No' },
+];
+
+const VALUE_SEPARATOR = ', ';
+
+export { BOOLEAN_VALUE_OPTIONS, TRANSACTION_ORIGIN_OPTIONS, TRANSACTION_TYPE_OPTIONS, VALUE_SEPARATOR };

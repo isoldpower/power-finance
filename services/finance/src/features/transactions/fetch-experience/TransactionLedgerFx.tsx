@@ -26,15 +26,15 @@ const TransactionLedgerFx: FC<TransactionLedgerFxProps> = ({
 };
 
 const LedgerLinesUnavailable: FC = () => (
-	<Caption size="12.5" className="ml-[17px] mt-2 px-3 py-2.5">
+	<Caption size="12.5" className="ml-[34px] mt-2 px-3 py-2.5">
 		No postings were derived for this transaction yet.
 	</Caption>
 );
 
 const LedgerLinesSkeleton: FC = () => (
 	<>
-		{['l1', 'l2'].map((line) => (
-			<LedgerLineSkeleton key={line}>
+		{['l1', 'l2'].map((line, index, lines) => (
+			<LedgerLineSkeleton key={line} last={index === lines.length - 1}>
 				<LedgerLineSkeleton.Side />
 				<LedgerLineSkeleton.Account />
 				<LedgerLineSkeleton.Kind />

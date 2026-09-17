@@ -32,6 +32,7 @@ import {
 	SEVERITY_OPTIONS,
 	SUBMIT_LABEL,
 	SUBMIT_PENDING_LABEL,
+	EVENT_CATEGORY_OPTIONS,
 	TRIGGER_EVENT_OPTIONS,
 	TRIGGER_SCHEDULE_OPTIONS,
 	TRIGGER_TYPE_OPTIONS,
@@ -48,7 +49,16 @@ const NewRulePanel: FC = () => {
 		defaultValues: RULE_FORM_DEFAULTS,
 	});
 	const { loading, methods } = useRuleFormState();
-	const { conditionRows, filterFields, policySource, onAppend, onRemove } = useRuleConditions(control);
+	const {
+		conditionRows,
+		filterFields,
+		policySource,
+		onAppend,
+		onRemove,
+		onEventCategoryChange,
+		onEventChange,
+		onTriggerTypeChange,
+	} = useRuleConditions(control);
 
 	return (
 		<>
@@ -88,17 +98,28 @@ const NewRulePanel: FC = () => {
 						label="When should the rule run?"
 						options={TRIGGER_TYPE_OPTIONS}
 						disabled={loading}
+						onAfterChange={onTriggerTypeChange}
 					/>
 					<ShowOnFormValue valueKey="triggerType" showOn={['event']} control={control}>
 						<RuleChoiceControl
 							control={control}
-							name="event"
+							name="eventCategory"
+							label="What does the rule watch?"
+							options={EVENT_CATEGORY_OPTIONS}
+							ariaLabel="Event category"
+							disabled={loading}
+							onAfterChange={onEventCategoryChange}
+						/>
+						<RuleChoiceControl
+							control={control}
+							name="eventName"
 							label="Which event starts the rule?"
 							options={TRIGGER_EVENT_OPTIONS}
 							ariaLabel="Trigger event"
 							placeholder="Select event"
-							error={errors.event?.message}
+							error={errors.eventName?.message}
 							disabled={loading}
+							onAfterChange={onEventChange}
 						/>
 					</ShowOnFormValue>
 					<HideOnFormValue valueKey="triggerType" hideOn={['event']} control={control}>

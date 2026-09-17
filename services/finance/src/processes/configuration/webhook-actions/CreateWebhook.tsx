@@ -1,49 +1,68 @@
-import { useState } from "react";
-import { useCallback } from "react";
-import { UiCard, UiCardContent, UiCardHeader, UiCardTitle } from "@internal/ui-library";
-import { NewWebhookForm, CreateWebhookFinishModal } from "@widget/configuration";
+import { useCallback, useState } from "react";
+import {
+	FinanceButton,
+	Icons,
+	UiDialog,
+	UiDialogDescription,
+	UiDialogFooter,
+	UiDialogHeader,
+	UiDialogTitle,
+} from "@internal/ui-library";
+import { NewWebhookForm, WebhookSecretPanel } from "@widget/configuration";
+import { ModalContent, useDisclosure } from "@shared/overlays";
+
+import { CREATE_HINT, CREATED_HINT } from "./config.ts";
 
 import type { WebhookEndpointSecret } from "@entity/configuration";
 import type { FC } from "react";
 
 
 const CreateWebhook: FC = () => {
-	const [createdWebhook, setCreatedWebhook] = useState<WebhookEndpointSecret | null>(null);
-	const [finishCreateOpen, setFinishCreateOpen] = useState<boolean>(false);
-	
-	const handleWebhookCreated = useCallback((webhook: WebhookEndpointSecret) => {
-		setCreatedWebhook(webhook);
-		setFinishCreateOpen(true);
-	}, []);
-	
-	const handleFinishCreateOpenChange = useCallback((isNowOpen: boolean) => {
-		if (isNowOpen && !createdWebhook) throw Error(
-			"Attempt to open the WebhookFinishCreate modal while no data on create webhook is stored"
-		);
-		
-		setFinishCreateOpen(isNowOpen);
+	const { open, setOpen, onOpen, onClose } = useDisclosure();
+	const [created, setCreated] = useState<WebhookEndpointSecret | null>(null);
+
+	const handleOpenChange = useCallback((isNowOpen: boolean) => {
+		setOpen(isNowOpen);
+
 		if (!isNowOpen) {
-			setCreatedWebhook(null);
+			setCreated(null);
 		}
-	}, [createdWebhook]);
-	
+	}, [setOpen]);
+
 	return (
-		<UiCard>
-			<UiCardHeader>
-				<UiCardTitle>
-					Create New Webhook
-				</UiCardTitle>
-			</UiCardHeader>
-			<UiCardContent>
-				<NewWebhookForm onWebhookCreated={handleWebhookCreated} />
-			</UiCardContent>
-			<CreateWebhookFinishModal 
-				open={finishCreateOpen}
-				onOpenChange={handleFinishCreateOpenChange}
-				webhook={createdWebhook}
-			/>
-		</UiCard>
+		<>
+			<FinanceButton size="sm" onClick={onOpen}>
+				<Icons.Plus size={14} />
+				New endpoint
+			</FinanceButton>
+			<UiDialog open={open} onOpenChange={handleOpenChange}>
+				<ModalContent>
+					<UiDialogHeader>
+						<UiDialogTitle>
+							{created === null ? 'New webhook endpoint' : 'Endpoint created'}
+						</UiDialogTitle>
+						<UiDialogDescription>
+							{created === null ? CREATE_HINT : CREATED_HINT}
+						</UiDialogDescription>
+					</UiDialogHeader>
+					{created === null ? (
+						<NewWebhookForm onWebhookCreated={setCreated} onCancel={onClose} />
+					) : (
+						<>
+							<WebhookSecretPanel webhook={created} />
+							<UiDialogFooter>
+								<FinanceButton onClick={onClose}>
+									Done
+								</FinanceButton>
+							</UiDialogFooter>
+						</>
+					)}
+				</ModalContent>
+			</UiDialog>
+		</>
 	);
-}
+};
+
+CreateWebhook.displayName = 'CreateWebhook';
 
 export { CreateWebhook };

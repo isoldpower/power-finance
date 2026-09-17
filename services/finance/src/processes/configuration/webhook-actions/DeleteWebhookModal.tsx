@@ -1,13 +1,12 @@
 import {
 	UiDialog,
-	UiDialogContent, 
 	UiDialogDescription,
 	UiDialogHeader,
 	UiDialogTitle,
 	UiDialogTrigger,
 } from "@internal/ui-library";
 import { DeleteWebhookForm } from "@widget/configuration";
-import { useDisclosure } from "@shared/overlays";
+import { ModalContent, useDisclosure } from "@shared/overlays";
 
 import type { FC, PropsWithChildren } from "react";
 import type { WebhookEndpoint } from "@entity/configuration";
@@ -28,7 +27,7 @@ const DeleteWebhookModal: FC<DeleteWebhookModalProps> = ({
 			<UiDialogTrigger>
 				{children}
 			</UiDialogTrigger>
-			<UiDialogContent>
+			<ModalContent>
 				<UiDialogHeader>
 					<UiDialogTitle>
 						Delete Webhook
@@ -41,7 +40,7 @@ const DeleteWebhookModal: FC<DeleteWebhookModalProps> = ({
 					targetWebhook={targetWebhook}
 					closeModal={onClose}
 				/>
-			</UiDialogContent>
+			</ModalContent>
 		</UiDialog>
 	);
 }

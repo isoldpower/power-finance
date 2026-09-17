@@ -11,6 +11,8 @@ import { RevealMotion } from "@shared/motion";
 import { PageContainer, SidebarColumnsContainer, TwoColumnsContainer } from "@shared/pure-components/layout";
 import { PageTitle } from "@shared/pure-components/typography";
 
+import { SITE_TOUR_ANCHORS } from "@feature/onboarding";
+
 import { PERIODS } from "./config.ts";
 
 
@@ -32,7 +34,7 @@ const DashboardPage: FC = () => {
 						</div>
 					</div>
 				</RevealMotion>
-				<TwoColumnsContainer>
+				<TwoColumnsContainer id={SITE_TOUR_ANCHORS.dashboardMetrics}>
 					<RevealMotion delay={0.1}>
 						<NetWorthHeroWithFx className="h-full" />
 					</RevealMotion>
@@ -43,7 +45,7 @@ const DashboardPage: FC = () => {
 				<RevealMotion delay={0.1}>
 					<LedgerStatusSummary />
 				</RevealMotion>
-				<RevealMotion delay={0.1}>
+				<RevealMotion delay={0.1} id={SITE_TOUR_ANCHORS.dashboardActions}>
 					<NeedsActionPanel />
 				</RevealMotion>
 				<RevealMotion delay={0.1}>

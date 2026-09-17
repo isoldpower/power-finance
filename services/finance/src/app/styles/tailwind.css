@@ -75,3 +75,40 @@
 		animation: none !important;
 	}
 }
+
+/* Native number spinners add arrows the design has no place for. */
+input[type='number'] {
+	appearance: textfield;
+	-moz-appearance: textfield;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* The native picker icon cannot be sized or positioned, so it is the first thing
+   clipped when a date input is squeezed. Where a field is too narrow to hold it,
+   .date-bare drops it and the field supplies its own icon instead. */
+input[type='date']::-webkit-calendar-picker-indicator {
+	flex: none;
+	margin-inline-start: 0.25rem;
+	padding: 0;
+	cursor: pointer;
+	opacity: 0.55;
+	transition: opacity 0.15s ease;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator:hover {
+	opacity: 1;
+}
+
+.date-bare::-webkit-calendar-picker-indicator {
+	display: none;
+}
+
+.date-bare::-webkit-inner-spin-button,
+.date-bare::-webkit-clear-button {
+	display: none;
+}

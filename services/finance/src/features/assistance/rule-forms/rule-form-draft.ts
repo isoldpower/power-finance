@@ -1,7 +1,9 @@
 import { parseAmountDecimal } from "@shared/formatting";
 
-import { parseMultiValue } from "./filter-policy.ts";
+import { composeEvent } from "./event-composition.ts";
+import { isBooleanField, parseMultiValue } from "./filter-policy.ts";
 
+import type { FilterValue } from "@shared/api";
 import type {
 	AutomationDraft,
 	AutomationEffect,
@@ -11,27 +13,45 @@ import type {
 import type { RuleFormSchema } from "./rule-form-schema.ts";
 
 
+type RuleCondition = RuleFormSchema['conditions'][number];
+
 const conditionValue = (
-	operator: RuleFormSchema['conditions'][number]['operator'],
+	operator: RuleCondition['operator'],
 	value: string,
-): string | string[] => {
+): FilterValue => {
 	return operator === 'in' ? parseMultiValue(value) : value;
 };
 
+/* A yes/no field asks whether the column is set at all, so it travels as a null
+   check rather than as the word the form collected. */
+const booleanLeaf = (field: string, value: string): RuleNode => ({
+	field,
+	operator: value === 'yes' ? 'neq' : 'eq',
+	value: null,
+});
+
+const conditionLeaf = (condition: RuleCondition): RuleNode => (
+	isBooleanField(condition.field)
+		? booleanLeaf(condition.field, condition.value)
+		: {
+			field: condition.field,
+			operator: condition.operator,
+			value: conditionValue(condition.operator, condition.value),
+		}
+);
+
 const triggerFromForm = (values: RuleFormSchema): AutomationTrigger => {
-	const leaves: RuleNode[] = values.conditions.map((condition) => ({
-		field: condition.field,
-		operator: condition.operator,
-		value: conditionValue(condition.operator, condition.value),
-	}));
+	const leaves: RuleNode[] = values.conditions.map(conditionLeaf);
 
 	const condition = leaves.length === 0
 		? null
 		: leaves.length === 1 ? leaves[0] : { combinator: values.combinator, nodes: leaves };
 
+	const event = composeEvent(values.eventCategory, values.eventName);
+
 	return {
 		type: values.triggerType,
-		event: values.triggerType === 'event' && values.event !== '' ? values.event : null,
+		event: values.triggerType === 'event' && event !== '' ? event : null,
 		schedule: values.triggerType === 'schedule' ? values.schedule : null,
 		condition,
 	};

@@ -2,6 +2,7 @@ export { CheckIcon, AlertIcon, DuplicateIcon, QuestionIcon, RecurringIcon } from
 export { TransferGlyph, TransferOutGlyph, TransferInGlyph } from './ArrowIcons.tsx';
 export { FromIcon, ToIcon, IncomeIcon, ExpenseIcon, ForwardIcon } from './ArrowIcons.tsx';
 export { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from './ArrowIcons.tsx';
+export { CalendarIcon } from './CalendarIcon.tsx';
 export { SearchIcon } from './SearchIcon.tsx';
 export { SendIcon } from './SendIcon.tsx';
 export { EllipsisIcon } from './EllipsisIcon.tsx';
@@ -12,6 +13,7 @@ export { ScanReceiptIcon } from './ScanReceiptIcon.tsx';
 
 export type { IconProps } from './StatusIcons.tsx';
 export type { AmountDirectionIconProps, GlyphProps } from './ArrowIcons.tsx';
+export type { CalendarIconProps } from './CalendarIcon.tsx';
 export type { SearchIconProps } from './SearchIcon.tsx';
 export type { SendIconProps } from './SendIcon.tsx';
 export type { EllipsisIconProps } from './EllipsisIcon.tsx';

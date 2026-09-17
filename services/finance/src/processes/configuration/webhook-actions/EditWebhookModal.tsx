@@ -1,12 +1,11 @@
 import {
 	UiDialog,
-	UiDialogContent,
 	UiDialogHeader,
 	UiDialogTitle,
 	UiDialogTrigger,
 } from "@internal/ui-library";
 import { EditWebhookForm } from "@widget/configuration";
-import { useDisclosure } from "@shared/overlays";
+import { ModalContent, useDisclosure } from "@shared/overlays";
 
 import type { FC, PropsWithChildren } from "react";
 import type { WebhookEndpoint } from "@entity/configuration";
@@ -27,7 +26,7 @@ const EditWebhookModal: FC<EditWebhookModalProps> = ({
 			<UiDialogTrigger>
 				{children}
 			</UiDialogTrigger>
-			<UiDialogContent>
+			<ModalContent>
 				<UiDialogHeader>
 					<UiDialogTitle>
 						Edit Webhook
@@ -37,7 +36,7 @@ const EditWebhookModal: FC<EditWebhookModalProps> = ({
 					targetWebhook={targetWebhook}
 					closeModal={onClose}
 				/>
-			</UiDialogContent>
+			</ModalContent>
 		</UiDialog>
 	);
 }

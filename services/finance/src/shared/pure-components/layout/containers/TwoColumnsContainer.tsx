@@ -3,11 +3,12 @@ import type { FC, ReactNode } from "react";
 
 interface TwoColumnsContainerProps {
 	children?: ReactNode
+	id?: string
 }
 
-const TwoColumnsContainer: FC<TwoColumnsContainerProps> = ({ children }) => {
+const TwoColumnsContainer: FC<TwoColumnsContainerProps> = ({ children, id }) => {
 	return (
-		<div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.15fr_1fr]">
+		<div id={id} className="grid grid-cols-1 gap-4 lg:grid-cols-[1.15fr_1fr]">
 			{children}
 		</div>
 	);

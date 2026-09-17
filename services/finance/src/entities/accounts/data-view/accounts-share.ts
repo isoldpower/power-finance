@@ -1,21 +1,27 @@
 import { parseAmount } from "@shared/api";
 
-import { SHADE_MAX, SHADE_MIN } from "./config.ts";
+import { SHADE_FADE_LIMIT, SHADE_STEP } from "./config.ts";
 
-import type { AccountSegment, AccountView } from "./types.ts";
+import type { AccountCategoryView, AccountSegment, AccountView } from "./types.ts";
 
 
-const toAccountSegments = (accounts: AccountView[]): AccountSegment[] => {
-	const magnitudes = accounts.map((account) => Math.abs(parseAmount(account.balance.amount)));
-	const total = magnitudes.reduce((sum, magnitude) => sum + magnitude, 0) || 1;
-	const span = SHADE_MAX - SHADE_MIN;
+const categoryMagnitude = (accounts: AccountView[]): number => {
+	return accounts.reduce((sum, account) => sum + Math.abs(parseAmount(account.balance.amount)), 0);
+};
 
+const toSegmentsScale = (categories: AccountCategoryView[]): number => {
+	const totals = categories.map((category) => categoryMagnitude(category.accounts));
+
+	return Math.max(...totals, 0) || 1;
+};
+
+const toAccountSegments = (accounts: AccountView[], scale: number): AccountSegment[] => {
 	return accounts.map((account, index) => ({
 		accountId: account.id,
 		name: account.name,
-		width: `${((magnitudes[index] / total) * 100).toFixed(1)}%`,
-		shade: accounts.length === 1 ? SHADE_MAX : Math.round(SHADE_MAX - (index * span) / (accounts.length - 1)),
+		width: `${((Math.abs(parseAmount(account.balance.amount)) / scale) * 100).toFixed(1)}%`,
+		shade: Math.round((1 - Math.min(index * SHADE_STEP, SHADE_FADE_LIMIT)) * 100),
 	}));
 };
 
-export { toAccountSegments };
+export { toAccountSegments, toSegmentsScale };

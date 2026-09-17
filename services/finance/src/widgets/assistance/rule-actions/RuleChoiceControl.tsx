@@ -9,7 +9,7 @@ import type { RuleFormSchema } from "@feature/assistance";
 import type { SelectOption } from "@shared/forms";
 
 
-type RuleChoiceName = 'event' | 'schedule' | 'effectType' | 'severity';
+type RuleChoiceName = 'eventCategory' | 'eventName' | 'schedule' | 'effectType' | 'severity';
 
 interface RuleChoiceControlProps {
 	control: Control<RuleFormSchema>;
@@ -20,6 +20,7 @@ interface RuleChoiceControlProps {
 	placeholder?: string;
 	error?: string;
 	disabled?: boolean;
+	onAfterChange?: (value: string) => void;
 }
 
 const RuleChoiceControl: FC<RuleChoiceControlProps> = ({
@@ -31,6 +32,7 @@ const RuleChoiceControl: FC<RuleChoiceControlProps> = ({
 	placeholder,
 	error,
 	disabled,
+	onAfterChange,
 }) => (
 	<RuleField label={label} error={error}>
 		<Controller
@@ -43,7 +45,10 @@ const RuleChoiceControl: FC<RuleChoiceControlProps> = ({
 					ariaLabel={ariaLabel}
 					placeholder={placeholder}
 					disabled={disabled}
-					onChange={field.onChange}
+					onChange={(next) => {
+						field.onChange(next);
+						onAfterChange?.(next);
+					}}
 				/>
 			)}
 		/>

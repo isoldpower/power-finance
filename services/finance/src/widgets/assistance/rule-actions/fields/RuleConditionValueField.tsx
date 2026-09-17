@@ -1,4 +1,5 @@
 import { RuleCategoryValue } from "./value/RuleCategoryValue.tsx";
+import { RuleBooleanValue } from "./value/RuleBooleanValue.tsx";
 import { RuleCurrencyValue } from "./value/RuleCurrencyValue.tsx";
 import { RuleOptionValue } from "./value/RuleOptionValue.tsx";
 import { RuleTextValue } from "./value/RuleTextValue.tsx";
@@ -25,6 +26,8 @@ const RuleConditionValueField: FC<RuleConditionValueFieldProps> = ({
 	const shared = { value, multiple: input.multiple, disabled, onChange };
 
 	switch (input.kind) {
+		case 'boolean':
+			return <RuleBooleanValue value={value} disabled={disabled} onChange={onChange} />;
 		case 'currency':
 			return <RuleCurrencyValue {...shared} />;
 		case 'category':

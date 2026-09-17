@@ -10,12 +10,16 @@ const useDisclosure = (initial = false) => {
 	const handleOnClose = useCallback(() => {
 		setOpen(false);
 	}, []);
+	const handleOnToggle = useCallback(() => {
+		setOpen((current) => !current);
+	}, []);
 	
 	return {
 		open,
 		setOpen,
 		onOpen: handleOnOpen,
 		onClose: handleOnClose,
+		onToggle: handleOnToggle,
 	};
 };
 

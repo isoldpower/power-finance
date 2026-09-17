@@ -1,31 +1,22 @@
 import type { TabKey } from "@entity/navigation";
 
 
-const resolveActiveTab = (
-	pathname: string,
-	defaultTab: TabKey,
-): TabKey => {
-	const pathnameChunks = pathname.split('/')
-		.filter((item) => item.length > 0);
-	
-	const tabPathnameConditions: Record<TabKey, (pathname: string) => boolean> = {
-		'management': (pathname: string) => pathname.includes('management'),
-		'planning': (pathname: string) => pathname.includes('planning'),
-		'dashboard': (pathname: string) => pathname.includes('dashboard') && pathnameChunks.length === 1,
-	}
-	
-	const allFitting = Object.entries(tabPathnameConditions)
-		.filter(([, condition]) => condition(pathname))
-		.map(([tabName]) => tabName as TabKey);
-	
-	if (allFitting.length > 1) {
-		throw new Error(
-			'Got more than 1 occurrence while trying to resolve active tab. Expected 1 max. ' + 
-			`All occurrences: ${allFitting.join(', ')}`
-		);
-	}
-	
-	return allFitting.at(0) ?? defaultTab;
+const TAB_SEGMENTS: Record<TabKey, string> = {
+	dashboard: 'dashboard',
+	management: 'management',
+	planning: 'planning',
+};
+
+const segmentsOf = (pathname: string): string[] => (
+	pathname.split('/').filter((segment) => segment.length > 0)
+);
+
+const resolveActiveTab = (pathname: string): TabKey | null => {
+	const segments = segmentsOf(pathname);
+	const entries = Object.entries(TAB_SEGMENTS) as [TabKey, string][];
+	const match = entries.find(([, segment]) => segments.includes(segment));
+
+	return match?.[0] ?? null;
 };
 
 export { resolveActiveTab };

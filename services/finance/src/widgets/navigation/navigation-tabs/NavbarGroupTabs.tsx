@@ -14,7 +14,7 @@ const NavbarGroupTabs: FC<NavbarGroupTabsProps> = ({ children }) => {
 	const { tabs, activeTab, onTabChange } = useActiveTab(NAVIGATION_TABS);
 	
 	return (
-		<FinanceSegmented value={activeTab} onValueChange={onTabChange}>
+		<FinanceSegmented value={activeTab ?? ''} onValueChange={onTabChange}>
 			{tabs.map((tab) => (
 				<FinanceSegmentedItem key={tab.key} value={tab.key} className="h-7">
 					{children(tab)}

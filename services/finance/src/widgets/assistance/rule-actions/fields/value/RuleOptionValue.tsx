@@ -3,6 +3,7 @@ import { RuleForm } from "@entity/assistance";
 import { formatMultiValue, parseMultiValue } from "@feature/assistance";
 
 import { RuleSelectField } from "../RuleSelectField.tsx";
+import { VALUE_SEPARATOR } from "./config.ts";
 
 import type { FC } from "react";
 import type { SelectOption } from "@shared/forms";
@@ -36,22 +37,25 @@ const RuleOptionValue: FC<RuleOptionValueProps> = ({
 	onChange,
 }) => {
 	const picked = useMemo(() => (multiple ? parseMultiValue(value) : []), [multiple, value]);
-	const tokens = useMemo(
-		() => picked.map((entry) => ({ value: entry, label: labelFor(options, entry) })),
-		[options, picked]
-	);
-	const pickable = useMemo(
-		() => (multiple ? options.filter((option) => !picked.includes(option.value)) : options),
-		[multiple, options, picked]
-	);
 
-	const handlePick = useCallback((next: string) => {
-		onChange(multiple ? formatMultiValue([...picked, next]) : next);
+	const label = useMemo(() => {
+		if (!multiple) return value === '' ? placeholder : labelFor(options, value);
+		if (picked.length === 0) return placeholder;
+
+		return picked.map((entry) => labelFor(options, entry)).join(VALUE_SEPARATOR);
+	}, [multiple, options, picked, placeholder, value]);
+
+	const handleSelect = useCallback((next: string) => {
+		if (!multiple) {
+			onChange(next);
+
+			return;
+		}
+
+		onChange(picked.includes(next)
+			? formatMultiValue(picked.filter((entry) => entry !== next))
+			: formatMultiValue([...picked, next]));
 	}, [multiple, onChange, picked]);
-
-	const handleRemove = useCallback((next: string) => {
-		onChange(formatMultiValue(picked.filter((entry) => entry !== next)));
-	}, [onChange, picked]);
 
 	if (!multiple && !searchable) {
 		return (
@@ -68,21 +72,18 @@ const RuleOptionValue: FC<RuleOptionValueProps> = ({
 	}
 
 	return (
-		<div className="flex min-w-0 flex-1 flex-col gap-1">
-			<RuleForm.ValueCombobox
-				label={multiple ? placeholder : (value === '' ? placeholder : labelFor(options, value))}
-				unset={multiple || value === ''}
-				options={pickable}
-				searchPlaceholder={searchPlaceholder}
-				emptyLabel={emptyLabel}
-				ariaLabel="Condition value"
-				disabled={disabled}
-				onSelect={handlePick}
-			/>
-			{multiple ? (
-				<RuleForm.ValueTokens tokens={tokens} disabled={disabled} onRemove={handleRemove} />
-			) : null}
-		</div>
+		<RuleForm.ValueCombobox
+			label={label}
+			unset={multiple ? picked.length === 0 : value === ''}
+			options={options}
+			selected={picked}
+			searchPlaceholder={searchPlaceholder}
+			emptyLabel={emptyLabel}
+			ariaLabel="Condition value"
+			className="min-w-0 flex-1"
+			disabled={disabled}
+			onSelect={handleSelect}
+		/>
 	);
 };
 

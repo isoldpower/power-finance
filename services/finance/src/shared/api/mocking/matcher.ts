@@ -12,6 +12,20 @@ interface MatcherOptions<TField extends string> {
 
 
 function scalarOf(leaf: FilterLeaf, field: string): string {
+	if (leaf.value === null) {
+		throw new ApiError(
+			'validation_failed',
+			'Filter value must be a scalar',
+			{
+				details: [{
+					field: `filter_body.${field}`,
+					code: 'filter_value_type',
+					message: `${leaf.operator} expects a scalar`,
+				}],
+			},
+		);
+	}
+
 	if (Array.isArray(leaf.value)) {
 		throw new ApiError(
 			'validation_failed',
@@ -47,6 +61,20 @@ const compare = (
 		}
 
 		return actualValue !== null && compareLeaf.value.includes(actualValue);
+	}
+
+	/* A null filter value asks whether the column is set at all. */
+	if (compareLeaf.value === null) {
+		if (compareLeaf.operator === 'eq') return actualValue === null;
+		if (compareLeaf.operator === 'neq') return actualValue !== null;
+
+		throw new ApiError('validation_failed', 'Filter value must be a scalar', {
+			details: [{
+				field: `filter_body.${field}`,
+				code: 'filter_value_type',
+				message: `${compareLeaf.operator} expects a scalar`,
+			}],
+		});
 	}
 
 	const expectedValue = scalarOf(compareLeaf, field);

@@ -8,9 +8,15 @@ interface CategoryHeaderProps {
 	label: string;
 	color: string;
 	totalFormatted: string;
+	selected?: boolean;
 }
 
-const CategoryHeader: FC<CategoryHeaderProps> = ({ label, color, totalFormatted }) => (
+const CategoryHeader: FC<CategoryHeaderProps> = ({
+	label,
+	color,
+	totalFormatted,
+	selected = false
+}) => (
 	<div className="mb-1.5 flex items-center gap-2.5">
 		<span className="size-[9px] flex-none rounded-[2px]" style={{ background: color }} />
 		<RowTitle as="span" size="13">
@@ -20,7 +26,7 @@ const CategoryHeader: FC<CategoryHeaderProps> = ({ label, color, totalFormatted 
 		<FinanceMoney size="sm">
 			{totalFormatted}
 		</FinanceMoney>
-		<Caption as="span" size="11">
+		<Caption as="span" size="11" tone={selected ? 'strong' : 'subtle'}>
 			›
 		</Caption>
 	</div>

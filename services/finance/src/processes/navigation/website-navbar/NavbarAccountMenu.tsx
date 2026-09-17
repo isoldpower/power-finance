@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
 	FinanceBadge,
 	FinanceMenu,
@@ -12,15 +13,23 @@ import { UserAvatar } from "@entity/navigation";
 import { PopoverBottom, PopoverSettings } from "@entity/configuration";
 import { useCurrentUser } from "@feature/configuration";
 import { Caption, CardTitle } from "@shared/pure-components/typography";
+import { useDisclosure } from "@shared/overlays";
+import { useRoutePathname } from "@shared/routing";
 
 import type { FC } from "react";
 
 
 const NavbarAccountMenu: FC = () => {
 	const { profile } = useCurrentUser();
-	
+	const { open, setOpen, onClose } = useDisclosure();
+	const pathname = useRoutePathname();
+
+	useEffect(() => {
+		onClose();
+	}, [pathname, onClose]);
+
 	return (
-		<FinanceMenu>
+		<FinanceMenu open={open} onOpenChange={setOpen}>
 			<FinanceMenuTrigger asChild>
 				<button type="button" aria-label="Account" className="rounded-full">
 					<UserAvatar 
@@ -57,7 +66,7 @@ const NavbarAccountMenu: FC = () => {
 				</PopoverSettings>
 				<PopoverBottom>
 					<NavigateToSettings className="w-full">
-						<FinanceMenuItem>
+						<FinanceMenuItem onClick={onClose}>
 							<FinanceBadge tone="neutral" appearance="outline" size="md">
 								<Icons.Settings />
 							</FinanceBadge>

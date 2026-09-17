@@ -1,5 +1,5 @@
 const CATEGORY_COLOR: Record<string, string> = {
-	assets: 'var(--pos)',
+	assets: 'var(--primary)',
 	liabilities: 'var(--neg)',
 	equity: 'var(--viol)',
 };

@@ -1,5 +1,7 @@
 export { conditionPath, firstFieldValue, toFieldOptions, toOperatorOptions } from './condition-options.ts';
 export { ruleFieldsFor } from './rule-fields.ts';
+export { blankCondition, defaultOperator, levelsBelow, resetBelow, CONDITION_LEVELS } from './condition-cascade.ts';
+export { composeEvent, splitEvent, EVENT_CATEGORIES, EVENT_NAMES } from './event-composition.ts';
 export {
 	FILTER_POLICY_INPUTS,
 	filterPolicySource,
@@ -14,6 +16,8 @@ export { ruleFormSchema, RULE_FORM_DEFAULTS } from './rule-form-schema.ts';
 export { useRuleFormState } from './use-rule-form-state.ts';
 
 export type { RuleConditionSchema, RuleFormSchema } from './rule-form-schema.ts';
+export type { ConditionLevel } from './condition-cascade.ts';
+export type { EventCategory, EventName } from './event-composition.ts';
 export type {
 	FilterInputKind,
 	FilterPolicyInput,

@@ -10,8 +10,8 @@ const CATEGORY_ID: Record<AccountGroup, string> = {
 
 const CATEGORY_ORDER: AccountGroup[] = ['assets', 'liabilities', 'equity'];
 
-const SHADE_MIN = 42;
+const SHADE_STEP = 0.17;
 
-const SHADE_MAX = 100;
+const SHADE_FADE_LIMIT = 0.72;
 
-export { CATEGORY_ID, CATEGORY_ORDER, SHADE_MIN, SHADE_MAX };
+export { CATEGORY_ID, CATEGORY_ORDER, SHADE_FADE_LIMIT, SHADE_STEP };

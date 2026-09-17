@@ -21,9 +21,13 @@ const TRIGGER_TYPE_OPTIONS: SelectOption[] = [
 	{ value: 'schedule', label: 'Schedule' },
 ];
 
+const EVENT_CATEGORY_OPTIONS: SelectOption[] = [
+	{ value: 'transaction', label: 'Transaction' },
+];
+
 const TRIGGER_EVENT_OPTIONS: SelectOption[] = [
-	{ value: 'transaction.created', label: 'Transaction recorded' },
-	{ value: 'transaction.updated', label: 'Transaction changed' },
+	{ value: 'created', label: 'Created' },
+	{ value: 'changed', label: 'Changed' },
 ];
 
 const TRIGGER_SCHEDULE_OPTIONS: SelectOption[] = [
@@ -78,6 +82,7 @@ export {
 	CONDITIONS_HINT,
 	CONDITIONS_LABEL,
 	EFFECT_TYPE_OPTIONS,
+	EVENT_CATEGORY_OPTIONS,
 	OPERATOR_LABELS,
 	RULE_ICON_OPTIONS,
 	PANEL_DESCRIPTION,

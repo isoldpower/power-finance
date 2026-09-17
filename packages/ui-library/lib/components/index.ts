@@ -3,3 +3,4 @@ export * from './app-loader';
 export * from './form-wizard';
 export * from './logo-component';
 export * from './password-input';
+export * from './website-tour';
