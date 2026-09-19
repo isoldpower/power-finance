@@ -1,18 +1,18 @@
 import type { FC, ReactNode } from "react";
 
 import { NavbarAccountMenu } from "@process/navigation";
-import { SiteTour } from "@process/onboarding";
-import { SiteTourProvider } from "@feature/onboarding";
+import { SiteTour } from "@process/navigation";
+import { SiteTourProvider } from "@feature/navigation";
 import {
 	FinanceBackground, 
 	NavbarDropdownTabs,
 	NavbarGroupTabs,
 	NavbarNotifications,
-	NavbarSearch
+	NavbarSearch,
+	NavbarNotificationItem
 } from "@widget/navigation";
 import { RouteLink } from "@shared/routing";
 import { BrandIcon, HeaderNavbar } from "@entity/navigation";
-import {NavbarNotificationItem} from "@widget/navigation/navbar/NavbarNotificationItem.tsx";
 
 
 interface GlobalLayoutProps {

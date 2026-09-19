@@ -26,7 +26,9 @@ const WalletBrowserFilters = () => {
 		sortDirection, setSortDirection,
 	} = useWalletsFiltersContext();
 	const { wallets } = useWalletsList();
-	const categoryOptions = useMemo(() => toWalletCategoryOptions(wallets), [wallets]);
+	const categoryOptions = useMemo(() => {
+		return toWalletCategoryOptions(wallets);
+	}, [wallets]);
 
 	const setSearchCallback = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		setSearch(event.target.value);

@@ -18,7 +18,9 @@ const PlanningAiAssistant: FC<PlanningAiAssistantProps> = ({ id }) => {
 	const { messages } = useAssistantMessages();
 	const { send, streamed, quota, exhausted, isPending, isError } = useSendAssistantMessage();
 
-	const history = useMemo(() => chatHistory(messages), [messages]);
+	const history = useMemo(() => {
+		return chatHistory(messages);
+	}, [messages]);
 
 	return (
 		<>

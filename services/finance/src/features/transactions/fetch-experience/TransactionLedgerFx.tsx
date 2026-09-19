@@ -46,7 +46,6 @@ const LedgerLinesSkeleton: FC = () => (
 
 LedgerLinesSkeleton.displayName = 'LedgerLinesSkeleton';
 LedgerLinesUnavailable.displayName = 'LedgerLinesUnavailable';
-
 TransactionLedgerFx.displayName = 'TransactionLedgerFx';
 
 export { TransactionLedgerFx };

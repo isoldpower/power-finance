@@ -1,4 +1,9 @@
-import { SECURE_HTTP_PROTOCOL, SECURE_SOCKET_PROTOCOL, SOCKET_PROTOCOL, SOCKET_SANDBOX_PARAM } from "./config.ts";
+import {
+	SECURE_HTTP_PROTOCOL,
+	SECURE_SOCKET_PROTOCOL,
+	SOCKET_PROTOCOL,
+	SOCKET_SANDBOX_PARAM,
+} from "./socket-config.ts";
 
 
 interface SocketUrlOptions {
@@ -6,16 +11,16 @@ interface SocketUrlOptions {
 }
 
 function toSocketUrl(httpUrl: string, options: SocketUrlOptions = {}): string {
-	const parsed = new URL(httpUrl);
-	parsed.protocol = parsed.protocol === SECURE_HTTP_PROTOCOL
+	const parsedUrl = new URL(httpUrl);
+	parsedUrl.protocol = parsedUrl.protocol === SECURE_HTTP_PROTOCOL
 		? SECURE_SOCKET_PROTOCOL
 		: SOCKET_PROTOCOL;
 
 	if (options.sandbox !== undefined && options.sandbox !== '') {
-		parsed.searchParams.set(SOCKET_SANDBOX_PARAM, options.sandbox);
+		parsedUrl.searchParams.set(SOCKET_SANDBOX_PARAM, options.sandbox);
 	}
 
-	return parsed.toString();
+	return parsedUrl.toString();
 }
 
 export { toSocketUrl };

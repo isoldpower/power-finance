@@ -5,7 +5,10 @@ import {
 	SortDirectionButton,
 	TransactionSearchInput,
 } from "@entity/transactions";
-import { useTransactionCategories, useTransactionsFiltersContext } from "@feature/transactions";
+import { 
+	useTransactionCategories,
+	useTransactionsFiltersContext,
+} from "@feature/transactions";
 import { useWalletsList } from "@feature/wallets";
 
 import { TRANSACTION_TYPE_FILTER_OPTIONS } from "./config.ts";
@@ -24,18 +27,28 @@ const TransactionBrowserFilters = () => {
 
 	const walletOptions = useMemo(() => ([
 		{ value: 'all', label: 'All wallets' },
-		...wallets.map((wallet) => ({ value: wallet.id, label: wallet.name })),
+		...wallets.map((wallet) => ({ 
+			value: wallet.id,
+			label: wallet.name,
+		})),
 	]), [wallets]);
 	const categoryOptions = useMemo(() => ([
 		{ value: 'all', label: 'All categories' },
-		...categories.map((category) => ({ value: category.label, label: category.label })),
+		...categories.map((category) => ({ 
+			value: category.label,
+			label: category.label,
+		})),
 	]), [categories]);
 
 	const walletLabel = useMemo(() => {
-		return walletOptions.find((option) => option.value === walletFilter)?.label ?? 'Wallet';
+		return walletOptions.find((option) => {
+			return option.value === walletFilter;
+		})?.label ?? 'Wallet';
 	}, [walletFilter, walletOptions]);
 	const typeLabel = useMemo(() => {
-		return TRANSACTION_TYPE_FILTER_OPTIONS.find((option) => option.value === typeFilter)?.label ?? 'Type';
+		return TRANSACTION_TYPE_FILTER_OPTIONS.find((option) => {
+			return option.value === typeFilter;
+		})?.label ?? 'Type';
 	}, [typeFilter]);
 
 	const clearSearch = useCallback(() => {
@@ -112,7 +125,10 @@ const TransactionBrowserFilters = () => {
 					))}
 				</FilterChip.Options>
 			</FilterChip>
-			<SortDirectionButton direction={sortDirection} onToggle={toggleSortDirection} />
+			<SortDirectionButton 
+				direction={sortDirection} 
+				onToggle={toggleSortDirection} 
+			/>
 		</div>
 	);
 };

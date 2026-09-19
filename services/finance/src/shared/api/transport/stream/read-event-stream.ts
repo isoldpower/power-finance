@@ -1,48 +1,56 @@
 import { ApiError } from "../../envelope";
-import { STREAM_FRAME_SEPARATOR } from "../config.ts";
+import { FALLBACK_API_ERROR_CODE } from "../errors";
 import { parseStreamFrame } from "./parse-stream-frame.ts";
+import { STREAM_FRAME_SEPARATOR } from "./stream-config.ts";
 
-import type { StreamMessage } from "./types.ts";
+import type { StreamMessageListener } from "./types.ts";
 
 
-function drainFrames(
-	frameBuffer: string,
-	onMessage: (message: StreamMessage) => void,
+function drainCompletedFrames(
+	bufferedText: string,
+	onStreamMessage: StreamMessageListener,
 ): string {
-	let frameEnd = frameBuffer.indexOf(STREAM_FRAME_SEPARATOR);
+	let remainingText = bufferedText;
+	let frameEndIndex = remainingText.indexOf(STREAM_FRAME_SEPARATOR);
 
-	while (frameEnd !== -1) {
-		const streamMessage = parseStreamFrame(frameBuffer.slice(0, frameEnd));
+	while (frameEndIndex !== -1) {
+		const streamMessage = parseStreamFrame(
+			remainingText.slice(0, frameEndIndex)
+		);
+
 		if (streamMessage) {
-			onMessage(streamMessage);
+			onStreamMessage(streamMessage);
 		}
-		
-		frameBuffer = frameBuffer.slice(frameEnd + STREAM_FRAME_SEPARATOR.length);
-		frameEnd = frameBuffer.indexOf(STREAM_FRAME_SEPARATOR);
+
+		remainingText = remainingText.slice(frameEndIndex + STREAM_FRAME_SEPARATOR.length);
+		frameEndIndex = remainingText.indexOf(STREAM_FRAME_SEPARATOR);
 	}
 
-	return frameBuffer;
+	return remainingText;
 }
 
 async function readEventStream(
-	response: Response,
-	onMessage: (message: StreamMessage) => void,
+	streamResponse: Response,
+	onStreamMessage: StreamMessageListener,
 ): Promise<void> {
-	const streamBody = response.body;
-	if (!streamBody) throw new ApiError(
-		'internal_error',
-		'Response carries no stream body',
-	);
+	const responseBody = streamResponse.body;
+	if (!responseBody) {
+		throw new ApiError(FALLBACK_API_ERROR_CODE, 'Response carries no stream body');
+	}
 
-	const streamReader = streamBody
+	const decodedReader = responseBody
 		.pipeThrough(new TextDecoderStream())
 		.getReader();
-	
-	let frameBuffer = '';
-	let streamChunk = await streamReader.read();
-	while (!streamChunk.done) {
-		frameBuffer = drainFrames(frameBuffer + streamChunk.value, onMessage);
-		streamChunk = await streamReader.read();
+
+	let bufferedText = '';
+	let decodedChunk = await decodedReader.read();
+
+	while (!decodedChunk.done) {
+		bufferedText = drainCompletedFrames(
+			bufferedText + decodedChunk.value,
+			onStreamMessage,
+		);
+		decodedChunk = await decodedReader.read();
 	}
 }
 

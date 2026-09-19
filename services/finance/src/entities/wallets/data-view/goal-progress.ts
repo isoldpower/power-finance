@@ -17,7 +17,9 @@ const goalProgressPercent = (goal: Goal): number => {
 const goalRemainingAmount = (goal: Goal): string => {
 	const remaining = subtractAmounts(goal.target.amount, goal.progress.amount);
 
-	return compareAmounts(remaining, ZERO_AMOUNT) > 0 ? remaining : ZERO_AMOUNT;
+	return compareAmounts(remaining, ZERO_AMOUNT) > 0 
+		? remaining 
+		: ZERO_AMOUNT;
 };
 
 export { goalProgressPercent, goalRemainingAmount };

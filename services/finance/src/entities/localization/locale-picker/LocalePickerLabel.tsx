@@ -19,9 +19,13 @@ const LocalePickerLabel: FC<LocalePickerLabelProps> = ({
 	placeholder = "Select locale",
 }) => {
 	const currentLabel = useMemo(() => {
-		const selected = locales.find((locale) => locale.tag === value);
+		const selected = locales.find((locale) => {
+			return locale.tag === value;
+		});
 
-		if (!selected) return value ?? placeholder;
+		if (!selected) {
+			return value ?? placeholder;
+		}
 
 		return variant === 'pill' || !selected.region
 			? selected.name

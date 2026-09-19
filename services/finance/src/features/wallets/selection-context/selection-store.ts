@@ -25,7 +25,9 @@ const createWalletsSelectionStore = (
 		...initialState,
 		...initialValues,
 		selectWallet: (walletId: string) => {
-			setState(() => ({ selectedWalletId: walletId }));
+			setState(() => ({ 
+				selectedWalletId: walletId,
+			}));
 		},
 	}), persistenceStorageConfig));
 }

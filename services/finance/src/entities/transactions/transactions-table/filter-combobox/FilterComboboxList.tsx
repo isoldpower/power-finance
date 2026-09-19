@@ -9,7 +9,9 @@ type FilterComboboxListProps = PropsWithChildren<{
 
 const FilterComboboxList: FC<FilterComboboxListProps> = ({ children, emptyLabel }) => (
 	<FinanceComboboxList>
-		<FinanceComboboxEmpty>{emptyLabel}</FinanceComboboxEmpty>
+		<FinanceComboboxEmpty>
+			{emptyLabel}
+		</FinanceComboboxEmpty>
 		{children}
 	</FinanceComboboxList>
 );

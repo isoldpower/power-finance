@@ -1,7 +1,10 @@
 import type { Chainable, ChainBound, ChainBoundOptions, ChainPosition } from "./types.ts";
 
 
-const positionOf = (hasAbove: boolean, hasBelow: boolean): ChainPosition => {
+const positionOf = (
+	hasAbove: boolean,
+	hasBelow: boolean,
+): ChainPosition => {
 	if (hasAbove && hasBelow) return 'middle';
 	if (hasAbove) return 'end';
 
@@ -18,7 +21,9 @@ const joinsRun = <TItem extends Chainable>(
 	return run[0]?.chain?.id === chainId;
 };
 
-const toChainRuns = <TItem extends Chainable>(items: TItem[]): TItem[][] => {
+const toChainRuns = <TItem extends Chainable>(
+	items: TItem[],
+): TItem[][] => {
 	const runs: TItem[][] = [];
 
 	for (const item of items) {

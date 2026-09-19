@@ -21,7 +21,9 @@ const FilterComboboxTrigger: FC<FilterComboboxTriggerProps> = ({ children, activ
 				: "border-border-strong text-text-2"
 		)}
 	>
-		<span className="truncate">{children}</span>
+		<span className="truncate">
+			{children}
+		</span>
 	</FinanceComboboxTrigger>
 );
 

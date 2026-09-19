@@ -40,7 +40,7 @@ import {
 	PlanningStatusSyncBadge,
 } from "@entity/assistance";
 import { GoalsToolbar } from "@entity/wallets";
-import { SITE_TOUR_ANCHORS } from "@feature/onboarding";
+import { SITE_TOUR_ANCHORS } from "@feature/navigation";
 
 import { planningSlides, planningSlidesRegistry } from "./SlideOverRegistry.tsx";
 

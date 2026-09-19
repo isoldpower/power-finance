@@ -18,7 +18,9 @@ const useWalletsCurrencies = <T extends TransactionEntryValues & FieldValues>(
 	const type = useWatch({ control, name: 'type' });
 
 	const currencyOf = useCallback((walletId: string) => {
-		return wallets.find((wallet) => wallet.id === walletId)?.balance.currency ?? DEFAULT_ENTRY_CURRENCY;
+		return wallets.find((wallet) => {
+			return wallet.id === walletId;
+		})?.balance.currency ?? DEFAULT_ENTRY_CURRENCY;
 	}, [wallets]);
 
 	const fromCurrency = useMemo(() => {

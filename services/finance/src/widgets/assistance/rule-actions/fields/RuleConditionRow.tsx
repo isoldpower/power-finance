@@ -44,9 +44,18 @@ const RuleConditionRow: FC<RuleConditionRowProps> = ({
 	disabled,
 	onRemove,
 }) => {
-	const fieldField = useController({ control, name: conditionPath(index, 'field') }).field;
-	const operatorField = useController({ control, name: conditionPath(index, 'operator') }).field;
-	const valueField = useController({ control, name: conditionPath(index, 'value') }).field;
+	const fieldField = useController({ 
+		control,
+		name: conditionPath(index, 'field')
+	}).field;
+	const operatorField = useController({ 
+		control,
+		name: conditionPath(index, 'operator')
+	}).field;
+	const valueField = useController({ 
+		control,
+		name: conditionPath(index, 'value')
+	}).field;
 
 	const condition = useMemo(() => ({
 		field: fieldField.value,
@@ -54,24 +63,29 @@ const RuleConditionRow: FC<RuleConditionRowProps> = ({
 		value: valueField.value,
 	}), [fieldField.value, operatorField.value, valueField.value]);
 
-	const valueInput = useMemo(
-		() => resolveFilterInput(policySource, condition.field, condition.operator),
-		[condition.field, condition.operator, policySource]
-	);
-	const fieldOptions = useMemo(() => toFieldOptions(filterFields), [filterFields]);
+	const valueInput = useMemo(() => {
+		return resolveFilterInput(policySource, condition.field, condition.operator);
+	}, [condition.field, condition.operator, policySource]);
+	const fieldOptions = useMemo(() => {
+		return toFieldOptions(filterFields);
+	}, [filterFields]);
 	const operatorOptions = useMemo(() => {
 		return toOperatorOptions(filterFields, condition.field, OPERATOR_LABELS);
 	}, [condition.field, filterFields]);
 
-	const operatorAllowed = useMemo(
-		() => operatorOptions.some((option) => option.value === condition.operator),
-		[condition.operator, operatorOptions]
-	);
+	const operatorAllowed = useMemo(() => {
+		return operatorOptions.some((option) => option.value === condition.operator);
+	}, [condition.operator, operatorOptions]);
 
 	useEffect(() => {
 		if (operatorAllowed) return;
 
-		operatorField.onChange(defaultOperator(filterFields, condition.field));
+		operatorField.onChange(
+			defaultOperator(
+				filterFields,
+				condition.field,
+			)
+		);
 	}, [condition.field, filterFields, operatorAllowed, operatorField]);
 
 	const applyLevel = useCallback((next: RuleConditionSchema, level: ConditionLevel) => {
@@ -121,7 +135,11 @@ const RuleConditionRow: FC<RuleConditionRowProps> = ({
 				disabled={disabled}
 				onChange={valueField.onChange}
 			/>
-			<RowDeleteButton label="Remove condition" disabled={disabled} onClick={handleRemove} />
+			<RowDeleteButton 
+				label="Remove condition" 
+				disabled={disabled} 
+				onClick={handleRemove} 
+			/>
 		</RuleForm.ConditionRow>
 	);
 };

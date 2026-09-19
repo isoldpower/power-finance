@@ -35,7 +35,9 @@ const useWalletsBrowser = (setup: WalletsBrowseSetup) => {
 	const searchResults = useWalletSearch(query);
 
 	const browsedResults = useMemo(() => {
-		const filtered = searchResults.wallets.filter((wallet) => matchesType(wallet, setup.filters.typeFilter));
+		const filtered = searchResults.wallets.filter((wallet) => {
+			return matchesType(wallet, setup.filters.typeFilter);
+		});
 		const ordered = [...filtered].sort((first, second) => {
 			const byFavorite = Number(second.favorite) - Number(first.favorite);
 			if (byFavorite !== 0) return byFavorite;
@@ -45,7 +47,11 @@ const useWalletsBrowser = (setup: WalletsBrowseSetup) => {
 			return setup.ordering.direction === 'ASC' ? comparison : -comparison;
 		});
 
-		return { ...searchResults, wallets: ordered, total: filtered.length };
+		return { 
+			...searchResults,
+			wallets: ordered,
+			total: filtered.length,
+		};
 	}, [searchResults, setup.filters.typeFilter, setup.ordering.direction, setup.ordering.field]);
 
 	return { searchResults: browsedResults };

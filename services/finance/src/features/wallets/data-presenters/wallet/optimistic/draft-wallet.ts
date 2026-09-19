@@ -5,11 +5,19 @@ import type { Wallet, WalletDraft } from "@entity/wallets";
 
 const OPTIMISTIC_ID_PREFIX = 'optimistic';
 
-const optimisticWalletId = (): string => `${OPTIMISTIC_ID_PREFIX}:${uuidv4()}`;
+const optimisticWalletId = (): string => {
+	return `${OPTIMISTIC_ID_PREFIX}:${uuidv4()}`;
+}
 
-const isOptimisticWalletId = (id: string): boolean => id.startsWith(`${OPTIMISTIC_ID_PREFIX}:`);
+const isOptimisticWalletId = (id: string): boolean => {
+	return id.startsWith(`${OPTIMISTIC_ID_PREFIX}:`);
+}
 
-const walletFromDraft = (draft: WalletDraft, id: string, createdAt: string): Wallet => ({
+const walletFromDraft = (
+	draft: WalletDraft,
+	id: string,
+	createdAt: string,
+): Wallet => ({
 	id,
 	name: draft.name,
 	createdAt,
@@ -17,8 +25,14 @@ const walletFromDraft = (draft: WalletDraft, id: string, createdAt: string): Wal
 	deletedAt: null,
 	category: draft.category,
 	currency: draft.currency,
-	balance: { amount: draft.openingBalance, currency: draft.currency },
-	zeroBalance: { amount: draft.zeroBalance, currency: draft.currency },
+	balance: { 
+		amount: draft.openingBalance,
+		currency: draft.currency,
+	},
+	zeroBalance: { 
+		amount: draft.zeroBalance,
+		currency: draft.currency,
+	},
 	favorite: false,
 	color: draft.color,
 });

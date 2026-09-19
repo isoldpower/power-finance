@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
-import type { MouseEvent } from "react";
 
+import type { MouseEvent } from "react";
 import type { ChartPoint } from "./build-sparkline.ts";
+
 
 interface SparklineTip {
 	x: number;
@@ -9,8 +10,6 @@ interface SparklineTip {
 	onLeft: boolean;
 }
 
-// Owns the crosshair interaction: tracks the hovered point index and the tooltip anchor as the
-// pointer moves across the chart. Pure geometry — no currency/formatting concerns.
 const useSparklineHover = (points: ChartPoint[]) => {
 	const ref = useRef<HTMLDivElement>(null);
 	const [hover, setHover] = useState<number | null>(null);

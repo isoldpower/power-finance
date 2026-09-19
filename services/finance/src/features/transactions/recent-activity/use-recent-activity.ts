@@ -31,7 +31,10 @@ const groupRecentByDay = (transactions: Transaction[]): RecentActivityGroup[] =>
 		}
 	}
 
-	return [...dayGroups].map(([dayKey, transactions]) => ({ dayKey, transactions }));
+	return [...dayGroups].map(([dayKey, transactions]) => ({
+		dayKey,
+		transactions,
+	}));
 };
 
 const useRecentActivity = () => {

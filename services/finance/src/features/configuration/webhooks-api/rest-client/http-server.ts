@@ -32,7 +32,7 @@ class WebhooksHttpRESTApiClient implements IWebhooksRESTApiClient {
 			method: 'GET',
 			url: '',
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -40,7 +40,7 @@ class WebhooksHttpRESTApiClient implements IWebhooksRESTApiClient {
 		return request<WebhookGetResponse>(this.axiosInstance, {
 			method: 'GET',
 			url: `/${payload.id}`,
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -50,7 +50,7 @@ class WebhooksHttpRESTApiClient implements IWebhooksRESTApiClient {
 			url: `/search`,
 			params: { ...payload.params },
 			data: payload.data,
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -90,7 +90,7 @@ class WebhooksHttpRESTApiClient implements IWebhooksRESTApiClient {
 		return request<EventTypesResponse>(this.axiosInstance, {
 			method: 'GET',
 			url: '/event-types',
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -99,7 +99,7 @@ class WebhooksHttpRESTApiClient implements IWebhooksRESTApiClient {
 			method: 'GET',
 			url: `/${payload.webhookId}/events`,
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -124,7 +124,7 @@ class WebhooksHttpRESTApiClient implements IWebhooksRESTApiClient {
 			method: 'GET',
 			url: `/${payload.webhookId}/deliveries`,
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 }

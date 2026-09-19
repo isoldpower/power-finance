@@ -19,8 +19,12 @@ const TransactionAmountStack: FC<TransactionAmountStackProps> = ({ original, mai
 		tone === 'neg' && 'text-neg',
 		(tone === 'neutral' || tone === 'muted') && 'text-text-2',
 	)}>
-		<span>{original}</span>
-		{converted ? <span>{main}</span> : null}
+		<span>
+			{original}
+		</span>
+		{converted 
+			? <span>{main}</span> 
+			: null}
 	</MetaText>
 );
 

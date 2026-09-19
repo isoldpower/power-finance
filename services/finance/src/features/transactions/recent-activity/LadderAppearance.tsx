@@ -1,5 +1,7 @@
-import {cn} from "@internal/ui-library";
-import {BaseHTMLAttributes, type CSSProperties, FC, useMemo} from "react";
+import { cn } from "@internal/ui-library";
+import { useMemo } from "react";
+
+import type { BaseHTMLAttributes, CSSProperties, FC } from "react";
 
 
 interface LadderAppearanceProps extends BaseHTMLAttributes<HTMLDivElement> {

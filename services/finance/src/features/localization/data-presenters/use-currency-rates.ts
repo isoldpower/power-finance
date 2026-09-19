@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useApiContext } from "@app/api";
 import { getRates } from "../currencies-api";
 import { useSettingsContext } from "@internal/shared";
-import { CURRENCY_CACHE_KEYS, RATES_STALE_TIME } from "./cache-config.ts";
+import { CURRENCY_CACHE_KEYS } from "./cache-config.ts";
+import { RATES_STALE_TIME } from "./api-config.ts";
 
 import type { UseQueryResult } from "@tanstack/react-query";
 import type { CurrencyRates } from "@entity/localization";

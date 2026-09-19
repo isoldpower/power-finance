@@ -12,7 +12,9 @@ const MATCH_ALL: WalletQuery = {};
 const searchQueryOf = (key: QueryKey): WalletQuery => {
 	const [, query] = key;
 
-	return typeof query === 'object' && query !== null ? query as WalletQuery : MATCH_ALL;
+	return typeof query === 'object' && query !== null 
+		? query as WalletQuery 
+		: MATCH_ALL;
 };
 
 const WALLET_RESOURCE: OptimisticResource<Wallet, WalletDetails, FetchWalletResponse> = {
@@ -20,14 +22,20 @@ const WALLET_RESOURCE: OptimisticResource<Wallet, WalletDetails, FetchWalletResp
 		{ key: WALLETS_CACHE_KEYS.list },
 		{
 			key: WALLETS_CACHE_KEYS.search,
-			accepts: (key, wallet) => matchesWalletQuery(wallet, searchQueryOf(key)),
+			accepts: (key, wallet) => matchesWalletQuery(
+				wallet,
+				searchQueryOf(key),
+			),
 		},
 	],
 	details: [
 		{
 			key: WALLETS_CACHE_KEYS.fetch,
 			read: (response) => response.wallet,
-			write: (response, wallet) => ({ ...response, wallet }),
+			write: (response, wallet) => ({ 
+				...response,
+				wallet,
+			}),
 		},
 	],
 };

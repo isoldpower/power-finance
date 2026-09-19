@@ -1,7 +1,7 @@
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
-import { CurrencyCombobox } from "@entity/localization";
+import { CurrencyPicker } from "@widget/localization";
 import { DEFAULT_WALLET_COLOR, WalletColorField, WalletPreviewCard, walletGradient } from "@entity/wallets";
 import { WalletFormOnSubmit, useWalletFormInitials, useWalletFormState, walletFormSchema } from "@feature/wallets";
 import { FieldLabel, PanelFooter } from "@shared/forms";
@@ -92,7 +92,7 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 						control={form.control}
 						name="currency"
 						render={({ field }) => (
-							<CurrencyCombobox
+							<CurrencyPicker
 								currencies={currencies}
 								value={field.value}
 								onSelected={field.onChange}

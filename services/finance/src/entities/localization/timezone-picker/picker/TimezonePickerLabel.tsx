@@ -1,36 +1,13 @@
-import { useMemo } from "react";
-
-import type { FC } from "react";
-import type { TimezoneMeta } from "../../types.ts";
+import type { FC, PropsWithChildren } from "react";
 
 
-interface TimezonePickerLabelProps {
-	timezones: TimezoneMeta[];
-	children?: string;
-	placeholder?: string;
-}
+type TimezonePickerLabelProps = PropsWithChildren;
 
-const TimezonePickerLabel: FC<TimezonePickerLabelProps> = ({
-	timezones,
-	children: value,
-	placeholder = "Select timezone",
-}) => {
-	const currentLabel = useMemo(() => {
-		const selected = timezones.find((timezone) => timezone.id === value);
-
-		if (!selected) return value ?? placeholder;
-
-		return selected.offset
-			? `${selected.city} · ${selected.offset}`
-			: selected.city;
-	}, [timezones, placeholder, value]);
-
-	return (
-		<span className="truncate">
-			{currentLabel}
-		</span>
-	);
-};
+const TimezonePickerLabel: FC<TimezonePickerLabelProps> = ({ children }) => (
+	<span className="truncate">
+		{children}
+	</span>
+);
 
 TimezonePickerLabel.displayName = 'TimezonePickerLabel';
 

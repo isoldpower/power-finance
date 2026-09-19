@@ -16,7 +16,12 @@ const WebsiteTourSpotlight: FC<WebsiteTourSpotlightProps> = ({ className }) => {
 
 	return (
 		<>
-			<div className={cn("pointer-events-auto fixed inset-0 z-50", styles.websiteTour__blocker)} />
+			<div
+				className={cn(
+					"pointer-events-auto fixed inset-0 z-50",
+					styles.websiteTour__blocker
+				)} 
+			/>
 			<div
 				aria-hidden
 				className={cn(

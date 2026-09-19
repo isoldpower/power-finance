@@ -1,6 +1,8 @@
-import type { FC } from "react";
 import { ClerkLoaded, RedirectToSignIn, useAuth } from "@clerk/clerk-react";
 import { useLocation } from "@tanstack/react-router";
+
+import type { FC } from "react";
+
 
 interface AuthGuardProps {
 	children: React.ReactNode;

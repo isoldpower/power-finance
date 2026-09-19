@@ -1,8 +1,9 @@
-import {createContext, PropsWithChildren, useContext, useMemo} from "react";
+import { createContext, PropsWithChildren, useContext, useMemo } from "react";
 import { ClerkProvider as OriginalClerkProvider } from "@clerk/clerk-react";
-import type { ClerkProviderProps as OriginalClerkProviderProps } from "@clerk/clerk-react";
 
+import type { ClerkProviderProps as OriginalClerkProviderProps } from "@clerk/clerk-react";
 import type { FC } from "react";
+
 
 const ClerkBridgeContext = createContext(false);
 

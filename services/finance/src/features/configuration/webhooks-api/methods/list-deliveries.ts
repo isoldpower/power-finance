@@ -20,7 +20,10 @@ interface ListDeliveriesResponse {
 async function listDeliveries(request: ListDeliveriesRequest): Promise<ListDeliveriesResponse> {
 	const response = await request.handler.listDeliveries({
 		webhookId: request.webhookId,
-		params: { ...deliveryQueryToApi(request.query), ...request.page },
+		params: { 
+			...deliveryQueryToApi(request.query), 
+			...request.page,
+		},
 	});
 
 	return { 

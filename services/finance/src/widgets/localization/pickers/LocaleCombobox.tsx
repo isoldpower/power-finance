@@ -44,7 +44,11 @@ const LocaleCombobox: FC<LocaleComboboxProps> = ({
 				aria-busy={isSaving}
 				className={cn("w-full transition-opacity", isSaving && "opacity-60", className)}
 			>
-				<LocalePickerLabel variant={variant} locales={locales} placeholder={placeholder}>
+				<LocalePickerLabel
+					variant={variant}
+					locales={locales}
+					placeholder={placeholder}
+				>
 					{currentLocale}
 				</LocalePickerLabel>
 			</FinanceComboboxTrigger>

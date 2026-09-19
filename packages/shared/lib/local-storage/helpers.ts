@@ -1,4 +1,5 @@
-import {LocalStorageEvent} from "./use-data.ts";
+import { LocalStorageEvent } from "./use-data.ts";
+
 
 function localStorageAvailable() {
   try {

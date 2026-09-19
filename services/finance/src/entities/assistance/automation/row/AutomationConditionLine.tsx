@@ -9,7 +9,9 @@ interface AutomationConditionLineProps {
 }
 
 const AutomationConditionLine: FC<AutomationConditionLineProps> = ({ when, then }) => (
-	<MetaText as="div" size="10.5" className="mt-0.5">when {when} → {then}</MetaText>
+	<MetaText as="div" size="10.5" className="mt-0.5">
+		when {when} → {then}
+	</MetaText>
 );
 
 AutomationConditionLine.displayName = 'AutomationConditionLine';

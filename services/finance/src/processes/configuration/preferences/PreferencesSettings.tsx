@@ -1,4 +1,4 @@
-import { SettingsSection } from "@entity/configuration";
+import { SettingsLayout, SettingsSectionRow, SettingsSectionTitle } from "@entity/configuration";
 import { CurrencySelector, LocaleCombobox, TimezoneSelector } from "@widget/localization";
 
 import type { FC } from "react";
@@ -6,29 +6,57 @@ import type { FC } from "react";
 
 const PreferencesSettings: FC = () => {
 	return (
-		<SettingsSection>
-			<SettingsSection.Title description="Saved to your account, so they follow you to every device.">
-				Regional preferences
-			</SettingsSection.Title>
-			<SettingsSection.Row
-				label="Main currency"
-				description="Balances and totals are converted into this currency."
-			>
-				<CurrencySelector variant="field" className="w-full" />
-			</SettingsSection.Row>
-			<SettingsSection.Row
-				label="Locale"
-				description="Sets how amounts and dates are written."
-			>
-				<LocaleCombobox variant="field" className="w-full" />
-			</SettingsSection.Row>
-			<SettingsSection.Row
-				label="Timezone"
-				description="Dates and times are shown in this zone."
-			>
-				<TimezoneSelector className="w-full" />
-			</SettingsSection.Row>
-		</SettingsSection>
+		<SettingsLayout.Section>
+			<SettingsSectionTitle>
+				<SettingsSectionTitle.Info>
+					<SettingsSectionTitle.Heading>
+						Regional preferences
+					</SettingsSectionTitle.Heading>
+					<SettingsSectionTitle.Description>
+						Saved to your account, so they follow you to every device.
+					</SettingsSectionTitle.Description>
+				</SettingsSectionTitle.Info>
+			</SettingsSectionTitle>
+			<SettingsSectionRow>
+				<SettingsSectionRow.Info>
+					<SettingsSectionRow.Label>
+						Main currency
+					</SettingsSectionRow.Label>
+					<SettingsSectionRow.Description>
+						Balances and totals are converted into this currency.
+					</SettingsSectionRow.Description>
+				</SettingsSectionRow.Info>
+				<SettingsSectionRow.Control>
+					<CurrencySelector variant="field" className="w-full" />
+				</SettingsSectionRow.Control>
+			</SettingsSectionRow>
+			<SettingsSectionRow>
+				<SettingsSectionRow.Info>
+					<SettingsSectionRow.Label>
+						Locale
+					</SettingsSectionRow.Label>
+					<SettingsSectionRow.Description>
+						Sets how amounts and dates are written.
+					</SettingsSectionRow.Description>
+				</SettingsSectionRow.Info>
+				<SettingsSectionRow.Control>
+					<LocaleCombobox variant="field" className="w-full" />
+				</SettingsSectionRow.Control>
+			</SettingsSectionRow>
+			<SettingsSectionRow>
+				<SettingsSectionRow.Info>
+					<SettingsSectionRow.Label>
+						Timezone
+					</SettingsSectionRow.Label>
+					<SettingsSectionRow.Description>
+						Dates and times are shown in this zone.
+					</SettingsSectionRow.Description>
+				</SettingsSectionRow.Info>
+				<SettingsSectionRow.Control>
+					<TimezoneSelector className="w-full" />
+				</SettingsSectionRow.Control>
+			</SettingsSectionRow>
+		</SettingsLayout.Section>
 	);
 };
 

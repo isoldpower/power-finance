@@ -2,6 +2,9 @@ import { cn } from "@internal/ui-library";
 import { pendingClass } from "@shared/pure-components/feedback";
 import { GoalIcon } from "./row/GoalIcon.tsx";
 import { GoalProgressBar } from "./row/GoalProgressBar.tsx";
+import { GoalProgressFill } from "./row/GoalProgressFill.tsx";
+import { GoalProgressTrack } from "./row/GoalProgressTrack.tsx";
+import { GoalProgressValue } from "./row/GoalProgressValue.tsx";
 import { GoalRowAmounts } from "./row/GoalRowAmounts.tsx";
 import { GoalRowBody } from "./row/GoalRowBody.tsx";
 import { GoalRowHead } from "./row/GoalRowHead.tsx";
@@ -10,6 +13,9 @@ import { GoalRowTarget } from "./row/GoalRowTarget.tsx";
 import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 import type { GoalIconProps } from "./row/GoalIcon.tsx";
 import type { GoalProgressBarProps } from "./row/GoalProgressBar.tsx";
+import type { GoalProgressFillProps } from "./row/GoalProgressFill.tsx";
+import type { GoalProgressTrackProps } from "./row/GoalProgressTrack.tsx";
+import type { GoalProgressValueProps } from "./row/GoalProgressValue.tsx";
 import type { GoalRowAmountsProps } from "./row/GoalRowAmounts.tsx";
 import type { GoalRowBodyProps } from "./row/GoalRowBody.tsx";
 import type { GoalRowHeadProps } from "./row/GoalRowHead.tsx";
@@ -25,6 +31,9 @@ type GoalRowObject = FC<GoalRowProps> & {
 	Head: FC<GoalRowHeadProps>;
 	Icon: FC<GoalIconProps>;
 	ProgressBar: FC<GoalProgressBarProps>;
+	ProgressFill: FC<GoalProgressFillProps>;
+	ProgressTrack: FC<GoalProgressTrackProps>;
+	ProgressValue: FC<GoalProgressValueProps>;
 	Target: FC<GoalRowTargetProps>;
 }
 
@@ -49,6 +58,9 @@ GoalRow.Body = GoalRowBody;
 GoalRow.Head = GoalRowHead;
 GoalRow.Icon = GoalIcon;
 GoalRow.ProgressBar = GoalProgressBar;
+GoalRow.ProgressFill = GoalProgressFill;
+GoalRow.ProgressTrack = GoalProgressTrack;
+GoalRow.ProgressValue = GoalProgressValue;
 GoalRow.Target = GoalRowTarget;
 GoalRow.displayName = 'GoalRow';
 

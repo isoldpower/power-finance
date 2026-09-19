@@ -1,24 +1,28 @@
 import { ApiError, apiErrorFromEnvelope } from "../../envelope";
-import { codeForStatus } from "../to-api-error.ts";
+import { apiErrorCodeForStatus } from "../errors";
 
 
-async function toStreamError(response: Response): Promise<ApiError> {
-	const options = { status: response.status };
+function toStatusApiError(streamResponse: Response): ApiError {
+	return new ApiError(
+		apiErrorCodeForStatus(streamResponse.status),
+		streamResponse.statusText,
+		{ status: streamResponse.status, enveloped: false }
+	);
+}
 
+async function toStreamError(streamResponse: Response): Promise<ApiError> {
 	try {
-		const envelopedError = apiErrorFromEnvelope(await response.json(), response.statusText, options);
+		const envelopedError = apiErrorFromEnvelope(
+			await streamResponse.json(),
+			streamResponse.statusText,
+			{ status: streamResponse.status },
+		);
 
-		return envelopedError.enveloped
-			? envelopedError
-			: new ApiError(codeForStatus(response.status), response.statusText, {
-				...options,
-				enveloped: false,
-			});
+		return envelopedError.enveloped 
+			? envelopedError 
+			: toStatusApiError(streamResponse);
 	} catch {
-		return new ApiError(codeForStatus(response.status), response.statusText, {
-			...options,
-			enveloped: false,
-		});
+		return toStatusApiError(streamResponse);
 	}
 }
 

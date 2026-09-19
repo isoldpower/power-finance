@@ -19,26 +19,22 @@ const useAccountsCategorySelection = (): BrowseAccountsContextType => {
 			return entry.id === categoryId
 		});
 
-		if (selected) {
-			return selected;
-		}
-
+		if (selected) return selected;
 		return categories.length > 0 ? categories[0] : null;
 	}, [categories, categoryId]);
 	const account = useMemo(() => {
-		if (!category) {
-			return null;
+		if (category) {
+			const selected = category.accounts.find((entry) => {
+				return entry.id === accountId
+			});
+
+			if (selected) return selected;
+			return category.accounts.length > 0
+				? category.accounts[0]
+				: null;
 		}
 
-		const selected = category.accounts.find((entry) => {
-			return entry.id === accountId
-		});
-
-		if (selected) {
-			return selected;
-		}
-
-		return category.accounts.length > 0 ? category.accounts[0] : null;
+		return null;
 	}, [category, accountId]);
 	const accountCount = useMemo(() => {
 		return categories.reduce((sum, entry) => {
@@ -54,7 +50,10 @@ const useAccountsCategorySelection = (): BrowseAccountsContextType => {
 			setAccountId(nextCategory.accounts[0].id);
 		}
 	}, [categories]);
-	const selectSegment = useCallback((nextCategoryId: string, nextAccountId: string) => {
+	const selectSegment = useCallback((
+		nextCategoryId: string,
+		nextAccountId: string,
+	) => {
 		setCategoryId(nextCategoryId);
 		setAccountId(nextAccountId);
 	}, []);

@@ -1,5 +1,5 @@
 import { Controller } from "react-hook-form";
-import { CurrencyCombobox } from "@entity/localization";
+import { CurrencyPicker } from "@widget/localization";
 import { GoalForm } from "@entity/wallets";
 import { FieldLabel } from "@shared/forms";
 
@@ -32,7 +32,7 @@ const GoalCurrencyField: FC<GoalCurrencyFieldProps> = ({
 			control={control}
 			name="currency"
 			render={({ field }) => (
-				<CurrencyCombobox
+				<CurrencyPicker
 					currencies={currencies}
 					value={field.value}
 					onSelected={field.onChange}

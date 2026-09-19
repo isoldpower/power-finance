@@ -5,9 +5,13 @@ import type { Automation, AutomationDraft } from "@entity/assistance";
 
 const OPTIMISTIC_ID_PREFIX = 'optimistic';
 
-const optimisticAutomationId = (): string => `${OPTIMISTIC_ID_PREFIX}:${uuidv4()}`;
+const optimisticAutomationId = (): string => {
+	return `${OPTIMISTIC_ID_PREFIX}:${uuidv4()}`;
+}
 
-const isOptimisticAutomationId = (id: string): boolean => id.startsWith(`${OPTIMISTIC_ID_PREFIX}:`);
+const isOptimisticAutomationId = (id: string): boolean => {
+	return id.startsWith(`${OPTIMISTIC_ID_PREFIX}:`);
+}
 
 const automationFromDraft = (
 	draft: AutomationDraft,

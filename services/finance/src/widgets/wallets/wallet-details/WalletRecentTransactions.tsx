@@ -39,11 +39,14 @@ const WalletRecentTransactions: FC<WalletRecentRowProps> = ({ transactions }) =>
 					<WalletTransactionIcon tone={resolveToneWithDirection(row.type)}>
 						<AmountDirectionIcon type={row.type} />
 					</WalletTransactionIcon>
-					<RecentTransactionMeta
-						description={row.description}
-						category={row.category}
-						date={row.date}
-					/>
+					<RecentTransactionMeta>
+						<RecentTransactionMeta.Description>
+							{row.description}
+						</RecentTransactionMeta.Description>
+						<RecentTransactionMeta.Details>
+							{row.category} · {row.date}
+						</RecentTransactionMeta.Details>
+					</RecentTransactionMeta>
 					<MoneyInOriginal align="end">
 						<MoneyInOriginal.Amount tone={resolveToneWithDirection(row.type)} size="sm">
 							{format(row.amount, row.currency)}

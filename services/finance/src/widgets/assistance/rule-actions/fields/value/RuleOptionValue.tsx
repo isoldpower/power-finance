@@ -72,18 +72,32 @@ const RuleOptionValue: FC<RuleOptionValueProps> = ({
 	}
 
 	return (
-		<RuleForm.ValueCombobox
-			label={label}
-			unset={multiple ? picked.length === 0 : value === ''}
-			options={options}
-			selected={picked}
-			searchPlaceholder={searchPlaceholder}
-			emptyLabel={emptyLabel}
-			ariaLabel="Condition value"
-			className="min-w-0 flex-1"
-			disabled={disabled}
-			onSelect={handleSelect}
-		/>
+		<RuleForm.ValueCombobox>
+			<RuleForm.ValueTrigger
+				label={label}
+				unset={multiple ? picked.length === 0 : value === ''}
+				ariaLabel="Condition value"
+				className="min-w-0 flex-1"
+				disabled={disabled}
+			/>
+			<RuleForm.ValueContent>
+				<RuleForm.ValueSearch placeholder={searchPlaceholder} />
+				<RuleForm.ValueList>
+					<RuleForm.ValueEmpty>
+						{emptyLabel}
+					</RuleForm.ValueEmpty>
+					{options.map((option) => (
+						<RuleForm.ValueOption
+							key={option.value}
+							value={option.value}
+							label={option.label}
+							selected={picked.includes(option.value)}
+							onSelect={handleSelect}
+						/>
+					))}
+				</RuleForm.ValueList>
+			</RuleForm.ValueContent>
+		</RuleForm.ValueCombobox>
 	);
 };
 

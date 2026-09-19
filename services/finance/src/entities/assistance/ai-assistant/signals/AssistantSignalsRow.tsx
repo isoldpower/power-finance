@@ -1,7 +1,5 @@
 import { cn } from "@internal/ui-library";
 
-import { HIDDEN_SCROLLBAR } from "../scroll-row.ts";
-
 import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 
 
@@ -14,7 +12,7 @@ const AssistantSignalsRow: FC<AssistantSignalsRowProps> = ({
 	<div
 		className={cn(
 			"flex gap-2 overflow-x-auto",
-			HIDDEN_SCROLLBAR
+			'[scrollbar-width:none] [&::-webkit-scrollbar]:hidden'
 		)}
 		{...props}
 	>

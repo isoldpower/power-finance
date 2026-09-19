@@ -37,7 +37,10 @@ const RuleIconSelect: FC<RuleIconSelectProps> = ({ value, options, disabled, onC
 				<FinanceSelectItem
 					key={option.value}
 					value={option.value}
-					className={cn(RULE_FIELD_TEXT, "font-normal data-[state=checked]:font-normal")}
+					className={cn(
+						RULE_FIELD_TEXT,
+						"font-normal data-[state=checked]:font-normal",
+					)}
 				>
 					<span className="flex items-center gap-2">
 						<AutomationGlyph size={15}>

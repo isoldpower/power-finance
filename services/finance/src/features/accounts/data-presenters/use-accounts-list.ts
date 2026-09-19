@@ -16,7 +16,10 @@ interface UseAccountsListParams extends PageParams {
 	lowbar?: Money;
 }
 
-type UseAccountsListOptions = Omit<UseQueryOptions<ListAccountsResponse>, 'queryKey' | 'queryFn'>;
+type UseAccountsListOptions = Omit<
+	UseQueryOptions<ListAccountsResponse>,
+	'queryKey' | 'queryFn'
+>;
 
 type UseAccountsListReturn = UseQueryResult<ListAccountsResponse> & {
 	accounts: Account[];
@@ -28,7 +31,11 @@ type UseAccountsListReturn = UseQueryResult<ListAccountsResponse> & {
 
 const EMPTY_ACCOUNTS: Account[] = [];
 
-const EMPTY_GROUPS: AccountGroupCounts = { assets: 0, liabilities: 0, equity: 0 };
+const EMPTY_GROUPS: AccountGroupCounts = { 
+	assets: 0,
+	liabilities: 0,
+	equity: 0,
+};
 
 const useAccountsList = (
 	params?: UseAccountsListParams,

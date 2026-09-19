@@ -19,7 +19,10 @@ const webhookEventGroups = (eventTypes: WebhookEventType[]): WebhookEventGroupVi
 		}
 	}
 
-	return [...bySubject].map(([subject, events]) => ({ subject, events }));
+	return [...bySubject].map(([subject, events]) => ({ 
+		subject,
+		events,
+	}));
 };
 
 export { webhookEventGroups };

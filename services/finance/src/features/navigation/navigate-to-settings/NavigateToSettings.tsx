@@ -1,6 +1,7 @@
 import { useRouteNavigate } from "@shared/routing";
-import {BaseHTMLAttributes, useCallback} from "react";
+import { useCallback } from "react";
 
+import type { BaseHTMLAttributes } from "react";
 import type { FC } from "react";
 
 

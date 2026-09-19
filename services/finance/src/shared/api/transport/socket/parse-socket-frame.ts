@@ -1,26 +1,37 @@
 import type { SocketFrame } from "./types.ts";
 
 
-function parseSocketFrame(raw: string): SocketFrame | null {
-	try {
-		const parsed: unknown = JSON.parse(raw);
+interface SocketFrameCandidate {
+	event?: unknown;
+	data?: unknown;
+}
 
-		if (typeof parsed !== 'object' || parsed === null) {
+function readFrameCandidate(rawFrame: string): SocketFrameCandidate | null {
+	try {
+		const parsedFrame: unknown = JSON.parse(rawFrame);
+
+		if (typeof parsedFrame !== 'object' || parsedFrame === null) {
 			return null;
 		}
 
-		const candidate = parsed as { event?: unknown; data?: unknown };
-
-		return typeof candidate.event === 'string'
-			? {
-				event: candidate.event,
-				data: candidate.data,
-				envelope: parsed as Record<string, unknown>,
-			}
-			: null;
+		return parsedFrame as SocketFrameCandidate;
 	} catch {
 		return null;
 	}
+}
+
+function parseSocketFrame(rawFrame: string): SocketFrame | null {
+	const frameCandidate = readFrameCandidate(rawFrame);
+
+	if (frameCandidate === null || typeof frameCandidate.event !== 'string') {
+		return null;
+	}
+
+	return {
+		event: frameCandidate.event,
+		data: frameCandidate.data,
+		envelope: frameCandidate as Record<string, unknown>,
+	};
 }
 
 export { parseSocketFrame };

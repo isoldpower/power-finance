@@ -12,7 +12,9 @@ const MATCH_ALL: GoalQuery = {};
 const searchQueryOf = (key: QueryKey): GoalQuery => {
 	const [, query] = key;
 
-	return typeof query === 'object' && query !== null ? query as GoalQuery : MATCH_ALL;
+	return typeof query === 'object' && query !== null 
+		? query as GoalQuery 
+		: MATCH_ALL;
 };
 
 const GOAL_RESOURCE: OptimisticResource<Goal, Goal, FetchGoalResponse> = {
@@ -27,7 +29,10 @@ const GOAL_RESOURCE: OptimisticResource<Goal, Goal, FetchGoalResponse> = {
 		{
 			key: GOALS_CACHE_KEYS.fetch,
 			read: (response) => response.goal,
-			write: (response, goal) => ({ ...response, goal }),
+			write: (response, goal) => ({ 
+				...response,
+				goal,
+			}),
 		},
 	],
 };

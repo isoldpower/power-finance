@@ -18,8 +18,6 @@ interface TimezoneMeta {
 	offset: string;
 }
 
-export type { CurrencyMeta, LocaleMeta, TimezoneMeta };
-
 interface Money {
 	amount: string;
 	currency: string;
@@ -45,4 +43,5 @@ interface CurrencyRates {
 	fetchedAt: string;
 }
 
+export type { CurrencyMeta, LocaleMeta, TimezoneMeta };
 export type { Money, ConvertedMoney, MoneyConversion, CurrencyRates };

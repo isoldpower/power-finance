@@ -3,8 +3,6 @@ import { FinanceButton, FinanceInput, financeInputVariants, Icons, PasswordInput
 import { WebhookSecretList } from "@entity/configuration";
 import { notify } from "@shared/overlays";
 
-import { SECRET_COPIED, SECRET_COPY_FAILED, SECRET_NOTICE } from "./config.ts";
-
 import type { FC } from "react";
 import type { WebhookEndpointSecret } from "@entity/configuration";
 
@@ -16,15 +14,15 @@ interface WebhookSecretPanelProps {
 const WebhookSecretPanel: FC<WebhookSecretPanelProps> = ({ webhook }) => {
 	const handleCopy = useCallback(() => {
 		navigator.clipboard.writeText(webhook.secret).then(
-			() => { notify.success(SECRET_COPIED); },
-			() => { notify.error(SECRET_COPY_FAILED); },
+			() => { notify.success('Signing secret copied'); },
+			() => { notify.error("Couldn't copy the secret"); },
 		);
 	}, [webhook.secret]);
 
 	return (
 		<WebhookSecretList>
 			<WebhookSecretList.Notice>
-				{SECRET_NOTICE}
+				This secret signs every payload. Copy it now — it cannot be shown again, only rotated.
 			</WebhookSecretList.Notice>
 			<WebhookSecretList.Row label="Webhook ID">
 				<FinanceInput readOnly value={webhook.id} />

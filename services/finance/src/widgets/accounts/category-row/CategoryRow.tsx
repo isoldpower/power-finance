@@ -46,12 +46,16 @@ const CategoryRow: FC<CategoryRowProps> = ({ categoryEntry }) => {
 					: "hover:bg-secondary",
 			)}
 		>
-			<CategoryHeader 
-				label={categoryEntry.label}
-				color={color}
-				totalFormatted={totalFormatted}
-				selected={selected}
-			/>
+			<CategoryHeader>
+				<CategoryHeader.Swatch color={color} />
+				<CategoryHeader.Label>
+					{categoryEntry.label}
+				</CategoryHeader.Label>
+				<CategoryHeader.Total>
+					{totalFormatted}
+				</CategoryHeader.Total>
+				<CategoryHeader.Chevron selected={selected} />
+			</CategoryHeader>
 			<CompositionBar>
 				{segments.map((segment) => (
 					<CategorySegmentBlock

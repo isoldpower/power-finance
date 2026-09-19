@@ -22,7 +22,7 @@ import { Overline, PageTitle } from "@shared/pure-components/typography";
 import { CenteredList, PageContainer, SidebarColumnsContainer, SpaceBetween } from "@shared/pure-components/layout";
 import { ScanReceiptIcon } from "@shared/pure-components/icons";
 import { FinanceButton, FinanceCard } from "@internal/ui-library";
-import { SITE_TOUR_ANCHORS } from "@feature/onboarding";
+import { SITE_TOUR_ANCHORS } from "@feature/navigation";
 
 import { managementSlides, managementSlidesRegistry } from "./SlideOverRegistry.tsx";
 

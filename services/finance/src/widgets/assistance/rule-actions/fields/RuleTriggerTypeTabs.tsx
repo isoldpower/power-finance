@@ -17,10 +17,17 @@ const RuleTriggerTypeTabs: FC<RuleTriggerTypeTabsProps> = ({ value, options, dis
 		disabled={disabled}
 		className="h-10 w-full"
 		aria-label="Trigger kind"
-		onValueChange={(next) => { if (next) onChange(next); }}
+		onValueChange={(next) => { 
+			if (next) onChange(next);
+		}}
 	>
 		{options.map((option) => (
-			<FinanceSegmentedItem key={option.value} value={option.value} accent className="h-full flex-1">
+			<FinanceSegmentedItem 
+				key={option.value}
+				value={option.value}
+				accent
+				className="h-full flex-1"
+			>
 				{option.label}
 			</FinanceSegmentedItem>
 		))}

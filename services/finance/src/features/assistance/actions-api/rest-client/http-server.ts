@@ -22,7 +22,7 @@ class ActionsHttpRESTApiClient implements IActionsRESTApiClient {
 			method: 'GET',
 			url: '',
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 

@@ -26,7 +26,7 @@ class GoalsHttpRESTApiClient implements IGoalsRESTApiClient {
 			method: 'GET',
 			url: '',
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -35,7 +35,7 @@ class GoalsHttpRESTApiClient implements IGoalsRESTApiClient {
 			method: 'GET',
 			url: `/${payload.id}`,
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -69,7 +69,7 @@ class GoalsHttpRESTApiClient implements IGoalsRESTApiClient {
 			url: `/search`,
 			params: { ...payload.params },
 			data: payload.data,
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 }

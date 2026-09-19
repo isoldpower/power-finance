@@ -17,9 +17,16 @@ import type {
 } from "./types.ts";
 
 
-const SEED_OFFSETS_MS = [8 * 60 * 1000, 60 * 60 * 1000, 70 * 60 * 1000, 26 * 60 * 60 * 1000];
+const SEED_OFFSETS_MS = [
+	8 * 60 * 1000,
+	60 * 60 * 1000,
+	70 * 60 * 1000,
+	26 * 60 * 60 * 1000,
+];
 
-const compareDesc = (left: string, right: string): number => (left < right ? 1 : left > right ? -1 : 0);
+const compareDesc = (left: string, right: string): number => {
+	return (left < right ? 1 : left > right ? -1 : 0);
+}
 
 const orderNotifications = (notifications: StoredNotification[]): StoredNotification[] => {
 	return [...notifications].sort((left, right) => {
@@ -52,7 +59,10 @@ class NotificationsMockRESTApiClient implements INotificationsRESTApiClient {
 
 	private require(id: string): StoredNotification {
 		const notification = this.storage.get(id);
-		if (!notification) throw new ApiError('not_found', `Notification ${id} does not exist`);
+		if (!notification) throw new ApiError(
+			'not_found',
+			`Notification ${id} does not exist`,
+		);
 
 		return notification;
 	}
@@ -74,10 +84,19 @@ class NotificationsMockRESTApiClient implements INotificationsRESTApiClient {
 		const page = paginate(
 			orderNotifications(matching),
 			payload.params,
-			stringifySortedQuery({ acknowledged: acknowledged ?? null, severity: severity ?? null }),
+			stringifySortedQuery({
+				acknowledged: acknowledged ?? null,
+				severity: severity ?? null,
+			}),
 		);
 
-		return { data: page.items, meta: { ...page.meta, cached: false } };
+		return { 
+			data: page.items,
+			meta: { 
+				...page.meta,
+				cached: false,
+			},
+		};
 	}
 
 	public async count(_payload: NotificationCountRequest): Promise<NotificationCountResponse> {
@@ -110,7 +129,10 @@ class NotificationsMockRESTApiClient implements INotificationsRESTApiClient {
 		this.storage.add(acknowledged);
 
 		for (const listener of this.listeners) {
-			listener.onAcknowledged({ id: acknowledged.id, acknowledged_at: acknowledgedAt });
+			listener.onAcknowledged({ 
+				id: acknowledged.id,
+				acknowledged_at: acknowledgedAt,
+			});
 		}
 
 		return acknowledged;
@@ -119,7 +141,10 @@ class NotificationsMockRESTApiClient implements INotificationsRESTApiClient {
 	public async ack(payload: NotificationAckRequest): Promise<NotificationAckResponse> {
 		await delay();
 
-		return { data: this.acknowledge(this.require(payload.id)), meta: {} };
+		return { 
+			data: this.acknowledge(this.require(payload.id)), 
+			meta: {},
+		};
 	}
 
 	public async ackBatch(payload: NotificationAckBatchRequest): Promise<NotificationAckBatchResponse> {
@@ -148,13 +173,18 @@ class NotificationsMockRESTApiClient implements INotificationsRESTApiClient {
 		const notification = this.require(payload.id);
 		this.storage.remove(notification);
 
-		return { data: notification, meta: {} };
+		return { 
+			data: notification,
+			meta: {},
+		};
 	}
 
 	public stream(payload: NotificationStreamRequest): Unsubscribe {
 		this.listeners.add(payload);
 
-		return () => { this.listeners.delete(payload); };
+		return () => { 
+			this.listeners.delete(payload);
+		};
 	}
 }
 

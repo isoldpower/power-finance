@@ -3,13 +3,19 @@ import { compareAmounts, toAmountString } from "@shared/api";
 import type { Wallet, WalletQuery } from "@entity/wallets";
 
 
-const matchesName = (wallet: Wallet, needle: string | undefined): boolean => {
+const matchesName = (
+	wallet: Wallet,
+	needle: string | undefined,
+): boolean => {
 	if (!needle) return true;
 
 	return wallet.name.toLowerCase().includes(needle.toLowerCase());
 };
 
-const matchesCurrency = (wallet: Wallet, currencies: string[] | undefined): boolean => {
+const matchesCurrency = (
+	wallet: Wallet,
+	currencies: string[] | undefined,
+): boolean => {
 	if (!currencies?.length) return true;
 
 	return currencies.includes(wallet.currency);
@@ -39,11 +45,14 @@ const matchesCreation = (
 	return since && until;
 };
 
-const matchesWalletQuery = (wallet: Wallet, query: WalletQuery): boolean => (
-	matchesName(wallet, query.name)
-	&& matchesCurrency(wallet, query.currencies)
-	&& matchesBalance(wallet, query.minBalance, query.maxBalance)
-	&& matchesCreation(wallet, query.createdAfter, query.createdBefore)
+const matchesWalletQuery = (
+	wallet: Wallet,
+	query: WalletQuery,
+): boolean => (
+	matchesName(wallet, query.name) &&
+	matchesCurrency(wallet, query.currencies) &&
+	matchesBalance(wallet, query.minBalance, query.maxBalance) &&
+	matchesCreation(wallet, query.createdAfter, query.createdBefore)
 );
 
 export { matchesWalletQuery };

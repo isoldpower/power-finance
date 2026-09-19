@@ -23,7 +23,9 @@ const AssistantSignalTile: FC<AssistantSignalTileProps> = ({ label, value, tone 
 		)}
 	>
 		<Caption size="10">{label}</Caption>
-		<DisplayText size="15" className={toneClass[tone]}>{value}</DisplayText>
+		<DisplayText size="15" className={toneClass[tone]}>
+			{value}
+		</DisplayText>
 	</div>
 );
 

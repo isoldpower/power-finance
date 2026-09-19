@@ -1,8 +1,8 @@
 import { useEffect, useMemo } from "react";
-import type { ReactNode } from "react";
-
 import { SPOTLIGHT_PADDING, SPOTLIGHT_RADIUS } from "./context/config.ts";
 import { useWebsiteTourContext } from "./context/context.ts";
+
+import type { ReactNode } from "react";
 import type { ResolvedTourStep, TourPlacement } from "./context/types.ts";
 
 

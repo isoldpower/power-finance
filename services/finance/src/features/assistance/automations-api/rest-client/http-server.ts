@@ -26,7 +26,7 @@ class AutomationsHttpRESTApiClient implements IAutomationsRESTApiClient {
 			method: 'GET',
 			url: '',
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -34,7 +34,7 @@ class AutomationsHttpRESTApiClient implements IAutomationsRESTApiClient {
 		return request<AutomationGetResponse>(this.axiosInstance, {
 			method: 'GET',
 			url: `/${payload.id}`,
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -68,7 +68,7 @@ class AutomationsHttpRESTApiClient implements IAutomationsRESTApiClient {
 			url: `/search`,
 			params: { ...payload.params },
 			data: payload.data,
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 }

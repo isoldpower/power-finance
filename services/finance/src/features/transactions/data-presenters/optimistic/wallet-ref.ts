@@ -19,10 +19,12 @@ interface WalletDetailLike {
 }
 
 const WALLET_PAGE_KEYS = [QUERY_KEYS.wallets, QUERY_KEYS.walletsSearch];
-
 const UNRESOLVED_NAME = '';
 
-const fromPagedWallets = (client: QueryClient, walletId: string): NamedWallet | undefined => {
+const fromPagedWallets = (
+	client: QueryClient,
+	walletId: string,
+): NamedWallet | undefined => {
 	for (const family of WALLET_PAGE_KEYS) {
 		const entries = client.getQueriesData<WalletPageLike>({ queryKey: [family] });
 

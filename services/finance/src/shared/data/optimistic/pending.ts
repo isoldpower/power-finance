@@ -2,11 +2,16 @@ interface Pending {
 	pending?: boolean;
 }
 
-const isPending = (item: unknown): boolean => (
-	typeof item === 'object' && item !== null && (item as Pending).pending === true
-);
+const isPending = (item: unknown): boolean => {
+	return typeof item === 'object' && 
+		item !== null && 
+		(item as Pending).pending === true;
+};
 
-const markPending = <TItem extends object>(item: TItem): TItem => ({ ...item, pending: true });
+const markPending = <TItem extends object>(item: TItem): TItem => ({ 
+	...item,
+	pending: true,
+});
 
 const clearPending = <TItem extends object>(item: TItem): TItem => {
 	if (!isPending(item)) return item;

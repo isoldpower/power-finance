@@ -1,6 +1,5 @@
 import { cn, FinanceMenuTrigger } from "@internal/ui-library";
 import { textClass } from "@shared/pure-components/typography";
-
 import { FILTER_CONTROL_WIDTH } from "../filter-control.ts";
 import { FilterChipCaret } from "./FilterChipCaret.tsx";
 
@@ -24,7 +23,9 @@ const FilterChipTrigger: FC<FilterChipTriggerProps> = ({ children, active }) => 
 					: "border-border-strong text-text-2"
 			)}
 		>
-			<span className="truncate">{children}</span>
+			<span className="truncate">
+				{children}
+			</span>
 			<FilterChipCaret />
 		</button>
 	</FinanceMenuTrigger>

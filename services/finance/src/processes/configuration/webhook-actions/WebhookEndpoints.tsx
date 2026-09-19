@@ -1,61 +1,48 @@
-import { SettingsSection } from "@entity/configuration";
-import { SITE_TOUR_ANCHORS } from "@feature/onboarding";
+import { SettingsLayout, SettingsSectionTitle } from "@entity/configuration";
+import { SITE_TOUR_ANCHORS } from "@feature/navigation";
 import { useWebhooksList, WebhooksListFx } from "@feature/configuration";
-import { SkeletonText } from "@shared/pure-components/feedback";
 import { Caption } from "@shared/pure-components/typography";
+import { ShowOn } from "@shared/visibility";
 
-import { CreateWebhook } from "./CreateWebhook.tsx";
-import { WebhookEndpointEntry } from "./WebhookEndpointEntry.tsx";
-import { ENDPOINTS_EMPTY, ENDPOINTS_HINT, ENDPOINTS_UNAVAILABLE, ENDPOINT_SAMPLE_SIZE } from "./config.ts";
+import { CreateWebhook } from "./endpoints/CreateWebhook.tsx";
+import { WebhookEndpointEntry } from "./endpoints/WebhookEndpointEntry.tsx";
 
 import type { FC } from "react";
 
-
-const EndpointSkeleton: FC = () => (
-	<div className="rounded-[var(--radius-md)] border border-border bg-surface p-4">
-		<SkeletonText size="14.5" width="w-40" className="mb-2" />
-		<SkeletonText size="11.5" width="w-64" />
-	</div>
-);
-
-EndpointSkeleton.displayName = 'EndpointSkeleton';
-
-const EndpointsUnavailable: FC = () => (
-	<Caption size="12">
-		{ENDPOINTS_UNAVAILABLE}
-	</Caption>
-);
-
-EndpointsUnavailable.displayName = 'EndpointsUnavailable';
 
 const WebhookEndpoints: FC = () => {
 	const { webhooks, status } = useWebhooksList();
 
 	return (
-		<SettingsSection id={SITE_TOUR_ANCHORS.settingsWebhooks}>
-			<SettingsSection.Title
-				description={ENDPOINTS_HINT}
-				action={<CreateWebhook />}
-			>
-				Webhook endpoints
-			</SettingsSection.Title>
+		<SettingsLayout.Section id={SITE_TOUR_ANCHORS.settingsWebhooks}>
+			<SettingsSectionTitle>
+				<SettingsSectionTitle.Info>
+					<SettingsSectionTitle.Heading>
+						Webhook endpoints
+					</SettingsSectionTitle.Heading>
+					<SettingsSectionTitle.Description>
+						Each endpoint receives a signed POST for the events you pick.
+					</SettingsSectionTitle.Description>
+				</SettingsSectionTitle.Info>
+				<SettingsSectionTitle.Action>
+					<CreateWebhook />
+				</SettingsSectionTitle.Action>
+			</SettingsSectionTitle>
 			<div className="flex flex-col gap-3">
-				<WebhooksListFx
-					status={status}
-					fxSampleSize={ENDPOINT_SAMPLE_SIZE}
-					pendingElement={<EndpointSkeleton />}
-					errorElement={<EndpointsUnavailable />}
-				>
-					{webhooks.length === 0 ? (
+				<WebhooksListFx status={status}>
+					<ShowOn condition={webhooks.length === 0}>
 						<Caption size="12">
-							{ENDPOINTS_EMPTY}
+							No endpoints yet. Add one to start receiving events.
 						</Caption>
-					) : webhooks.map((webhook) => (
-						<WebhookEndpointEntry key={webhook.id} webhook={webhook} />
-					))}
+					</ShowOn>
+					<ShowOn condition={webhooks.length > 0}>
+						{webhooks.map((webhook) => (
+							<WebhookEndpointEntry key={webhook.id} webhook={webhook} />
+						))}
+					</ShowOn>
 				</WebhooksListFx>
 			</div>
-		</SettingsSection>
+		</SettingsLayout.Section>
 	);
 };
 

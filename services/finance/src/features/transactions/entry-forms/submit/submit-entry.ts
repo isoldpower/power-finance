@@ -40,7 +40,11 @@ const submitEntry = (
 			entries: buildTransferChain(
 				name,
 				category,
-				{ walletId: entry.fromWallet, currency: currencies.fromCurrency, amount },
+				{ 
+					walletId: entry.fromWallet,
+					currency: currencies.fromCurrency,
+					amount,
+				},
 				{
 					walletId: entry.toWallet,
 					currency: currencies.toCurrency,

@@ -35,7 +35,7 @@ class NotificationsHttpRESTApiClient implements INotificationsRESTApiClient {
 			method: 'GET',
 			url: '',
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -43,7 +43,7 @@ class NotificationsHttpRESTApiClient implements INotificationsRESTApiClient {
 		return request<NotificationCountResponse>(this.axiosInstance, {
 			method: 'GET',
 			url: '/count',
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -76,13 +76,17 @@ class NotificationsHttpRESTApiClient implements INotificationsRESTApiClient {
 		}, {
 			onMessage: (message) => {
 				if (message.event === CREATED_EVENT) {
-					payload.onCreated(JSON.parse(message.data) as NotificationDto);
+					payload.onCreated(
+						JSON.parse(message.data) as NotificationDto
+					);
 
 					return;
 				}
 
 				if (message.event === ACKNOWLEDGED_EVENT) {
-					payload.onAcknowledged(JSON.parse(message.data) as NotificationAcknowledgedDto);
+					payload.onAcknowledged(
+						JSON.parse(message.data) as NotificationAcknowledgedDto
+					);
 				}
 			},
 			onError: payload.onError,

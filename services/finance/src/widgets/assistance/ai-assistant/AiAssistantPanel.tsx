@@ -39,7 +39,21 @@ const AiAssistantPanel: FC<AiAssistantPanelProps> = ({
 		<div id={id} className={className}>
 			<AssistantPanel>
 				<AssistantPanel.Body>
-					<AssistantPanel.Header onClose={onClose} />
+					<AssistantPanel.Header>
+						<AssistantPanel.Badge />
+						<AssistantPanel.Titles>
+							<AssistantPanel.Title>
+								AI assistant
+							</AssistantPanel.Title>
+							<AssistantPanel.Hint>
+								grounded in your data
+							</AssistantPanel.Hint>
+						</AssistantPanel.Titles>
+						<AssistantPanel.Status />
+						{onClose ? (
+							<AssistantPanel.Close onClick={onClose} />
+						) : null}
+					</AssistantPanel.Header>
 					<AssistantSignals>
 						<AssistantSignals.Label>
 							SIGNALS

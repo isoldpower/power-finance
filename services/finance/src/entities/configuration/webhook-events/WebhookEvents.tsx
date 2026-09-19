@@ -1,33 +1,21 @@
-import { Caption } from "@shared/pure-components/typography";
-import { WebhookEventGroup } from "./events/WebhookEventGroup.tsx";
-import { WebhookEventRow } from "./events/WebhookEventRow.tsx";
+import { WebhookEventsHint } from "./events/WebhookEventsHint.tsx";
 
-import type { FC, PropsWithChildren, ReactNode } from "react";
-import type { WebhookEventGroupProps } from "./events/WebhookEventGroup.tsx";
-import type { WebhookEventRowProps } from "./events/WebhookEventRow.tsx";
+import type { FC, PropsWithChildren } from "react";
+import type { WebhookEventsHintProps } from "./events/WebhookEventsHint.tsx";
 
 
-type WebhookEventsProps = PropsWithChildren<{
-	hint?: ReactNode;
-}>;
+type WebhookEventsProps = PropsWithChildren;
 type WebhookEventsObject = FC<WebhookEventsProps> & {
-	Group: FC<WebhookEventGroupProps>;
-	Row: FC<WebhookEventRowProps>;
+	Hint: FC<WebhookEventsHintProps>;
 };
 
-const WebhookEvents: WebhookEventsObject = ({ hint, children }) => (
+const WebhookEvents: WebhookEventsObject = ({ children }) => (
 	<div className="flex flex-col">
-		{hint === undefined ? null : (
-			<Caption size="11" className="mb-2">
-				{hint}
-			</Caption>
-		)}
 		{children}
 	</div>
 );
 
-WebhookEvents.Group = WebhookEventGroup;
-WebhookEvents.Row = WebhookEventRow;
+WebhookEvents.Hint = WebhookEventsHint;
 WebhookEvents.displayName = 'WebhookEvents';
 
 export { WebhookEvents };

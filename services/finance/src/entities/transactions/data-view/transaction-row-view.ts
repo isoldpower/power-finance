@@ -25,7 +25,11 @@ const toLedgerEntryView = (
 const toLedgerEntryViews = (
 	entries: TransactionPosting[],
 	formatMoney: FormatMoney
-): LedgerEntryView[] => entries.map((entry) => toLedgerEntryView(entry, formatMoney));
+): LedgerEntryView[] => {
+	return entries.map((entry) => {
+		return toLedgerEntryView(entry, formatMoney);
+	});
+}
 
 const toTransactionRowView = (
 	transaction: Transaction
@@ -43,8 +47,14 @@ const toTransactionRowView = (
 		walletName: transaction.wallet.name,
 		chain: transaction.chain,
 		createdAt: transaction.createdAt,
-		date: created.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
-		time: created.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }),
+		date: created.toLocaleDateString(undefined, { 
+			month: 'short',
+			day: 'numeric',
+		}),
+		time: created.toLocaleTimeString(undefined, { 
+			hour: '2-digit',
+			minute: '2-digit',
+		}),
 		category: transaction.category ?? UNCATEGORIZED_LABEL,
 		description: transaction.name || transactionKindLabel(transaction.type),
 		scanned: transaction.origin === 'scanned',
@@ -57,7 +67,9 @@ const toTransactionRowView = (
 const toTransactionRowViews = (
 	transactions: Transaction[]
 ): TransactionRowView[] => {
-	return transactions.map((transaction) => toTransactionRowView(transaction));
+	return transactions.map((transaction) => {
+		return toTransactionRowView(transaction);
+	});
 };
 
 export { toTransactionRowView, toTransactionRowViews, toLedgerEntryViews };

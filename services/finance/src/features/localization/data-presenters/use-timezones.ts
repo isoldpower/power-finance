@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { FALLBACK_TIMEZONE_IDS } from "./cache-config.ts";
+import { FALLBACK_TIMEZONE_IDS } from "./api-config.ts";
 
 import type { TimezoneMeta } from "@entity/localization";
 

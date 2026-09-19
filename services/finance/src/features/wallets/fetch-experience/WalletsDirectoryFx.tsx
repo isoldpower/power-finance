@@ -22,7 +22,15 @@ const WalletsDirectoryFx: FC<WalletsDirectoryFxProps> = ({ isPending, children }
 const WalletsDirectorySkeleton: FC = () => (
 	<List className="divide-y divide-border">
 		{PLACEHOLDER_KEYS.map((key) => (
-			<WalletSkeletonRow key={key} />
+			<WalletSkeletonRow key={key}>
+				<WalletSkeletonRow.Thumbnail />
+				<WalletSkeletonRow.Info>
+					<WalletSkeletonRow.Title />
+					<WalletSkeletonRow.Subtitle />
+				</WalletSkeletonRow.Info>
+				<WalletSkeletonRow.Amount />
+				<WalletSkeletonRow.Action />
+			</WalletSkeletonRow>
 		))}
 	</List>
 );

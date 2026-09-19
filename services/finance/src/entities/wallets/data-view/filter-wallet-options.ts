@@ -14,7 +14,9 @@ const filterWalletOptions = (
 
 	return normalized === ''
 		? options
-		: options.filter((option) => matchesQuery(option, normalized));
+		: options.filter((option) => {
+			return matchesQuery(option, normalized);
+		});
 };
 
 export { filterWalletOptions };

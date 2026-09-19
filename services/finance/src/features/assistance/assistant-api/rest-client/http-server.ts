@@ -36,7 +36,7 @@ class AssistantHttpRESTApiClient implements IAssistantRESTApiClient {
 		return request<AssistantOverviewResponse>(this.axiosInstance, {
 			method: 'GET',
 			url: '/overview',
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -45,7 +45,7 @@ class AssistantHttpRESTApiClient implements IAssistantRESTApiClient {
 			method: 'GET',
 			url: `/messages`,
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 

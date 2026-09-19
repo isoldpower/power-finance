@@ -35,7 +35,9 @@ const KeepWalletSelected: FC<KeepWalletSelectedProps> = ({ wallets }) => {
 	);
 
 	useEffect(() => {
-		const selectionAvailable = wallets.some((wallet) => wallet.id === selectedWalletId);
+		const selectionAvailable = wallets.some((wallet) => {
+			return wallet.id === selectedWalletId;
+		});
 
 		if (!selectionAvailable) {
 			selectFirstWallet();

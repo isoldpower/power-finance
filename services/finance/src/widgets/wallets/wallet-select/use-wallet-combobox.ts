@@ -40,7 +40,9 @@ const useWalletCombobox = ({
 	const [highlighted, setHighlighted] = useState(NO_HIGHLIGHT);
 	const inputRef = useRef<HTMLInputElement | null>(null);
 
-	const matches = useMemo(() => filterWalletOptions(options, query), [options, query]);
+	const comboboxMatches = useMemo(() => {
+		return filterWalletOptions(options, query);
+	}, [options, query]);
 
 	useEffect(() => {
 		if (!open) {
@@ -49,8 +51,8 @@ const useWalletCombobox = ({
 	}, [open]);
 
 	useEffect(() => {
-		setHighlighted(matches.length === 0 ? NO_HIGHLIGHT : 0);
-	}, [matches]);
+		setHighlighted(comboboxMatches.length === 0 ? NO_HIGHLIGHT : 0);
+	}, [comboboxMatches]);
 
 	const choose = useCallback((id: string) => {
 		onSelect(id);
@@ -62,25 +64,25 @@ const useWalletCombobox = ({
 			event.preventDefault();
 			const step = event.key === 'ArrowDown' ? 1 : -1;
 
-			setHighlighted((previous) => clampHighlight(previous + step, matches.length));
+			setHighlighted((previous) => clampHighlight(previous + step, comboboxMatches.length));
 
 			return;
 		}
 
 		if (event.key === 'Enter') {
-			const option = matches[highlighted] as WalletSelectItem | undefined;
+			const option = comboboxMatches[highlighted] as WalletSelectItem | undefined;
 
 			if (option) {
 				event.preventDefault();
 				choose(option.id);
 			}
 		}
-	}, [matches, highlighted, choose]);
+	}, [comboboxMatches, highlighted, choose]);
 
 	return {
 		open,
 		query,
-		matches,
+		matches: comboboxMatches,
 		highlighted,
 		inputRef,
 		setOpen,

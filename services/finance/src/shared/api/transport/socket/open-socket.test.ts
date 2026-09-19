@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { openSocket } from './open-socket.ts';
-import { SOCKET_TOKEN_MARKER } from './config.ts';
+import { SOCKET_TOKEN_MARKER } from './socket-config.ts';
 
 import type { SocketFrame } from './types.ts';
 

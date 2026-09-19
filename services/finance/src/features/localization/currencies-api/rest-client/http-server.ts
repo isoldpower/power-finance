@@ -23,7 +23,7 @@ class CurrenciesHttpRESTApiClient implements ICurrenciesRESTApiClient {
 			method: 'GET',
 			url: '',
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -32,7 +32,7 @@ class CurrenciesHttpRESTApiClient implements ICurrenciesRESTApiClient {
 			method: 'GET',
 			url: `/convert`,
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -41,7 +41,7 @@ class CurrenciesHttpRESTApiClient implements ICurrenciesRESTApiClient {
 			method: 'GET',
 			url: `/rates/${payload.code}`,
 			params: { target: payload.params?.target },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 }

@@ -1,6 +1,5 @@
 import { compareAmounts, ZERO_AMOUNT } from "@shared/api";
 import { useCallback } from "react";
-
 import { useTransactionsListMethods } from "@feature/transactions";
 
 import { useDeleteGoal } from "../data-presenters";
@@ -23,7 +22,10 @@ const DeleteGoalDialog: FC<DeleteGoalDialogProps> = ({ goal, children }) => {
 	const { createTransaction, createTransactionChain, meta } = useTransactionsListMethods();
 	const deleteGoalMutation = useDeleteGoal();
 
-	const deleteGoal = useCallback((disposition: GoalDisposition, onDeleted: () => void) => {
+	const deleteGoal = useCallback((
+		disposition: GoalDisposition,
+		onDeleted: () => void,
+	) => {
 		const saved = goal.progress.amount;
 		const hasSavings = compareAmounts(saved, ZERO_AMOUNT) > 0;
 

@@ -8,6 +8,8 @@ const PERIOD_LABEL: Record<WalletPeriod, string> = {
 	all_time: 'All Time',
 };
 
-const walletPeriodLabel = (period: WalletPeriod): string => PERIOD_LABEL[period];
+const walletPeriodLabel = (period: WalletPeriod): string => {
+	return PERIOD_LABEL[period];
+}
 
 export { walletPeriodLabel };

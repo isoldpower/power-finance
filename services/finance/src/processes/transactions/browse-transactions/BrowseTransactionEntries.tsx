@@ -1,8 +1,7 @@
-import { useMemo } from "react";
-import { Icons } from "@internal/ui-library";
+import {useCallback, useMemo} from "react";
 import { List } from "@shared/pure-components/collections";
-import { toChainBound, TransactionsEmptyState } from "@entity/transactions";
-import { useTransactionsPaginationContext } from "@feature/transactions";
+import { LedgerViewport, toChainBound } from "@entity/transactions";
+import { BrowseTransactionsEmptyUX, useTransactionsPaginationContext } from "@feature/transactions";
 import { ProtectBrowseSpace } from "@feature/wallets";
 
 import type { FC, ReactNode } from "react";
@@ -13,58 +12,42 @@ interface BrowseTransactionEntriesProps {
 	children: (entry: ChainBoundTransaction) => ReactNode;
 }
 
-const continuesChain = (entry: ChainBoundTransaction | undefined): boolean => (
-	entry?.position === 'middle' || entry?.position === 'end'
-);
-
 const BrowseTransactionEntries: FC<BrowseTransactionEntriesProps> = ({
 	children,
 }) => {
 	const { paginatedTransactions, from, to, hasNext, hasPrev } = useTransactionsPaginationContext();
-	const boundTransactions = useMemo(
-		() => toChainBound(paginatedTransactions, {
+	const boundTransactions = useMemo(() => {
+		return toChainBound(paginatedTransactions, {
 			continuesBefore: hasPrev,
 			continuesAfter: hasNext,
-		}),
-		[paginatedTransactions, hasPrev, hasNext]
-	);
-	const pageSize = to - from + 1;
-	const ROW_HEIGHT = 56;
-	const SEPARATOR_HEIGHT = 1;
-
-	if (paginatedTransactions.length === 0) {
-		return (
-			<TransactionsEmptyState>
-				<TransactionsEmptyState.Icon>
-					<Icons.CircleOff size={10} />
-				</TransactionsEmptyState.Icon>
-				<TransactionsEmptyState.Title>
-					No matching transactions
-				</TransactionsEmptyState.Title>
-				<TransactionsEmptyState.Hint>
-					Try a different search or clear your filters.
-				</TransactionsEmptyState.Hint>
-			</TransactionsEmptyState>
-		);
-	}
+		});
+	}, [paginatedTransactions, hasPrev, hasNext]);
+	const pageSize = useMemo(() => {
+		return to - from + 1;
+	}, [from, to]);
+	
+	const continuesChain = useCallback((entry: ChainBoundTransaction | undefined) => {
+		return entry?.position === 'middle' || entry?.position === 'end';
+	}, []);
 
 	return (
-		<div 
-			className="flex flex-col overflow-y-auto" 
-			style={{ minHeight: pageSize * ROW_HEIGHT + (pageSize - 1) * SEPARATOR_HEIGHT }}
-		>
-			<List
-				className="divide-y divide-border"
-				elementProps={(index) => ({
-					className: continuesChain(boundTransactions[index]) ? 'border-t-transparent' : undefined,
-				})}
-			>
-				{boundTransactions.map((entry) => children(entry))}
-			</List>
-			<ProtectBrowseSpace resources={paginatedTransactions} pageSize={pageSize}>
-				This is all we found.
-			</ProtectBrowseSpace>
-		</div>
+		<BrowseTransactionsEmptyUX dataset={paginatedTransactions}>
+			<LedgerViewport pageSize={pageSize}>
+				<List
+					className="divide-y divide-border"
+					elementProps={(index) => ({
+						className: continuesChain(boundTransactions[index]) 
+							? 'border-t-transparent' 
+							: undefined,
+					})}
+				>
+					{boundTransactions.map((entry) => children(entry))}
+				</List>
+				<ProtectBrowseSpace resources={paginatedTransactions} pageSize={pageSize}>
+					This is all we found.
+				</ProtectBrowseSpace>
+			</LedgerViewport>
+		</BrowseTransactionsEmptyUX>
 	);
 }
 

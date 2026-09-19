@@ -79,7 +79,9 @@ const FundGoalForm: FC<FundGoalFormProps> = ({ goal, onClose }) => {
 				</div>
 				<PanelFooter
 					submitType="submit"
-					submitLabel={loading ? FUND_GOAL_LABELS.pending : FUND_GOAL_LABELS.submit}
+					submitLabel={loading 
+						? FUND_GOAL_LABELS.pending 
+						: FUND_GOAL_LABELS.submit}
 					onClose={onClose}
 					submitDisabled={!canSubmit}
 				/>

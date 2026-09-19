@@ -22,12 +22,22 @@ const walletDefaultsFor = (
 		return EMPTY_WALLETS;
 	}
 
-	const preferred = wallets.find((wallet) => wallet.id === preferredWalletId) ?? wallets[0];
-	const counterpart = wallets.find((wallet) => wallet.id !== preferred.id);
+	const preferred = wallets.find((wallet) => {
+		return wallet.id === preferredWalletId;
+	}) ?? wallets[0];
+	const counterpart = wallets.find((wallet) => {
+		return wallet.id !== preferred.id;
+	});
 
 	return type === 'income'
-		? { fromWallet: counterpart?.id ?? '', toWallet: preferred.id }
-		: { fromWallet: preferred.id, toWallet: counterpart?.id ?? '' };
+		? {
+			fromWallet: counterpart?.id ?? '',
+			toWallet: preferred.id
+		}
+		: {
+			fromWallet: preferred.id,
+			toWallet: counterpart?.id ?? ''
+		};
 };
 
 const useEntryWalletDefaults = (
@@ -36,7 +46,11 @@ const useEntryWalletDefaults = (
 	preferredWalletId?: string,
 ): EntryWallets => {
 	return useMemo(() => {
-		return walletDefaultsFor(type, wallets, preferredWalletId);
+		return walletDefaultsFor(
+			type,
+			wallets,
+			preferredWalletId,
+		);
 	}, [type, wallets, preferredWalletId]);
 }
 

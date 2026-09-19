@@ -15,8 +15,12 @@ const useAccountHistoryPage = (history: AccountHistoryView[], resetKey: string) 
 	const pageCount = useMemo(() => {
 		return Math.max(1, Math.ceil(history.length / HISTORY_PAGE_SIZE));
 	}, [history.length]);
-	const from = useMemo(() => (page - 1) * HISTORY_PAGE_SIZE, [page]);
-	const to = useMemo(() => page * HISTORY_PAGE_SIZE - 1, [page]);
+	const from = useMemo(() => {
+		return (page - 1) * HISTORY_PAGE_SIZE;
+	}, [page]);
+	const to = useMemo(() => {
+		return page * HISTORY_PAGE_SIZE - 1;
+	}, [page]);
 	const paginatedHistory = useMemo(() => {
 		return history.slice(from, to + 1);
 	}, [from, history, to]);

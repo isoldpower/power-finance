@@ -27,8 +27,16 @@ const CONTROL_BY_VARIANT: Record<WalletFormSkeletonFieldVariant, string> = {
 
 const WalletFormSkeletonField: FC<WalletFormSkeletonFieldProps> = ({ variant, spaced = true }) => (
 	<div>
-		<SkeletonText size="11.5" width={LABEL_BY_VARIANT[variant]} className="mb-1.5" />
-		<UiSkeleton className={cn("w-full", CONTROL_BY_VARIANT[variant], spaced && "mb-4")} />
+		<SkeletonText 
+			size="11.5"
+			width={LABEL_BY_VARIANT[variant]}
+			className="mb-1.5" />
+		<UiSkeleton
+			className={cn(
+				"w-full",
+				CONTROL_BY_VARIANT[variant],
+				spaced && "mb-4",
+			)} />
 	</div>
 );
 

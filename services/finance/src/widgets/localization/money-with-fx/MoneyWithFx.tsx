@@ -17,14 +17,18 @@ const MoneyWithFx: FC<MoneyWithFxProps> = ({
 }) => {
 	const { convert } = useConvertMoney();
 	const placeholder = useMemo(() => {
-		return isPending ? '…' : '—';
+		return isPending ? '...' : '—';
 	}, [isPending]);
 	const moneyConverted = useMemo(() => {
 		return money ? convert(money) : null;
 	}, [convert, money]);
 
 	return moneyConverted ? (
-		<AnimatedMoney bare amount={moneyConverted.amount} currency={moneyConverted.currency} />
+		<AnimatedMoney 
+			bare
+			amount={moneyConverted.amount}
+			currency={moneyConverted.currency} 
+		/>
 	) : placeholder;
 };
 

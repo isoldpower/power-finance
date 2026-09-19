@@ -10,6 +10,7 @@ import { SETTINGS_PAGE_HINT } from "./config.ts";
 
 import type { FC } from "react";
 import type { SettingsTab } from "@entity/configuration";
+import {ShowOn} from "@shared/visibility";
 
 
 const SettingsWorkspace: FC = () => {
@@ -20,10 +21,15 @@ const SettingsWorkspace: FC = () => {
 		}))
 	);
 
-	const selectPreferences = useCallback(() => { changeTab('preferences'); }, [changeTab]);
-	const selectWebhooks = useCallback(() => { changeTab('webhooks'); }, [changeTab]);
-
-	const isTab = (tab: SettingsTab): boolean => settingsTab === tab;
+	const selectPreferences = useCallback(() => { 
+		changeTab('preferences');
+	}, [changeTab]);
+	const selectWebhooks = useCallback(() => { 
+		changeTab('webhooks');
+	}, [changeTab]);
+	const isTab = useCallback((tab: SettingsTab) => {
+		return settingsTab === tab;
+	}, [settingsTab]);
 
 	return (
 		<SettingsLayout>
@@ -48,8 +54,12 @@ const SettingsWorkspace: FC = () => {
 					</SettingsLayout.NavItem>
 				</SettingsLayout.Nav>
 				<SettingsLayout.Content>
-					{isTab('preferences') ? <PreferencesSettings /> : null}
-					{isTab('webhooks') ? <WebhookEndpoints /> : null}
+					<ShowOn condition={isTab('preferences')}>
+						<PreferencesSettings />
+					</ShowOn>
+					<ShowOn condition={isTab('webhooks')}>
+						<WebhookEndpoints />
+					</ShowOn>
 				</SettingsLayout.Content>
 			</div>
 		</SettingsLayout>

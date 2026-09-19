@@ -33,13 +33,13 @@ const matchesAutomationQuery = (
 	automation: Automation,
 	query: AutomationSearchQuery,
 ): boolean => (
-	matchesName(automation, query.name)
-	&& matchesEnabled(automation, query.enabled)
-	&& matchesMembership(automation.trigger.type, query.triggerTypes)
-	&& matchesMembership(automation.trigger.event, query.events)
-	&& matchesMembership(automation.trigger.schedule, query.schedules)
-	&& withinWindow(automation.createdAt, query.createdAfter, query.createdBefore)
-	&& withinWindow(automation.lastRunAt, query.ranAfter, query.ranBefore)
+	matchesName(automation, query.name) &&
+	matchesEnabled(automation, query.enabled) &&
+	matchesMembership(automation.trigger.type, query.triggerTypes) &&
+	matchesMembership(automation.trigger.event, query.events) &&
+	matchesMembership(automation.trigger.schedule, query.schedules) &&
+	withinWindow(automation.createdAt, query.createdAfter, query.createdBefore) &&
+	withinWindow(automation.lastRunAt, query.ranAfter, query.ranBefore)
 );
 
 export { matchesAutomationQuery };

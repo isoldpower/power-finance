@@ -39,7 +39,10 @@ const useGoalsSearch = (
 		queryFn: () => searchGoals({
 			handler: apiContext.goalServers.rest,
 			query,
-			page: { limit: params?.limit, cursor: params?.cursor },
+			page: { 
+				limit: params?.limit,
+				cursor: params?.cursor,
+			},
 		}),
 		...options ?? {},
 	});

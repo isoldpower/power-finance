@@ -1,66 +1,83 @@
 import { ApiError } from "../../envelope";
-import { NORMAL_CLOSURE_CODE, SOCKET_TOKEN_MARKER } from "./config.ts";
 import { parseSocketFrame } from "./parse-socket-frame.ts";
+import { NORMAL_CLOSURE_CODE, SOCKET_TOKEN_MARKER } from "./socket-config.ts";
 
 import type { SocketConnection, SocketHandlers, SocketRequestInit } from "./types.ts";
 
 
-function protocolsFor(token: string | null): string[] {
-	return token === null ? [] : [SOCKET_TOKEN_MARKER, token];
+const UNREADABLE_FRAME_MESSAGE = 'Assistant sent an unreadable frame';
+const SOCKET_FAILURE_MESSAGE = 'Assistant socket failed';
+
+function socketProtocolsForToken(accessToken: string | null): string[] {
+	return accessToken === null ? [] : [SOCKET_TOKEN_MARKER, accessToken];
 }
 
-async function openSocket(
-	init: SocketRequestInit,
-	handlers: SocketHandlers,
-): Promise<SocketConnection> {
-	const token = await init.authorize?.() ?? null;
-	const socket = new WebSocket(init.url, protocolsFor(token));
+function listenForFrames(openedSocket: WebSocket, handlers: SocketHandlers): void {
+	openedSocket.addEventListener('message', (messageEvent: MessageEvent<string>) => {
+		const socketFrame = parseSocketFrame(messageEvent.data);
 
-	socket.addEventListener('message', (event: MessageEvent<string>) => {
-		const frame = parseSocketFrame(event.data);
-
-		if (frame === null) {
-			handlers.onError?.(new ApiError('internal_error', 'Assistant sent an unreadable frame', {
+		if (socketFrame === null) {
+			handlers.onError?.(new ApiError('internal_error', UNREADABLE_FRAME_MESSAGE, {
 				enveloped: false,
 			}));
 
 			return;
 		}
 
-		handlers.onFrame(frame);
+		handlers.onFrame(socketFrame);
 	});
 
-	socket.addEventListener('close', (event: CloseEvent) => {
-		handlers.onClose?.(event.code);
+	openedSocket.addEventListener('close', (closeEvent: CloseEvent) => {
+		handlers.onClose?.(closeEvent.code);
 	});
 
-	socket.addEventListener('error', () => {
-		handlers.onError?.(new ApiError('assistant_unavailable', 'Assistant socket failed', {
+	openedSocket.addEventListener('error', () => {
+		handlers.onError?.(new ApiError('assistant_unavailable', SOCKET_FAILURE_MESSAGE, {
 			enveloped: false,
 		}));
 	});
+}
 
-	await new Promise<void>((resolve, reject) => {
-		if (socket.readyState === WebSocket.OPEN) {
-			resolve();
+function awaitHandshake(openedSocket: WebSocket): Promise<void> {
+	return new Promise<void>((resolveHandshake, rejectHandshake) => {
+		if (openedSocket.readyState === WebSocket.OPEN) {
+			resolveHandshake();
 
 			return;
 		}
 
-		socket.addEventListener('open', () => { resolve(); }, { once: true });
-		socket.addEventListener('close', (event: CloseEvent) => {
-			reject(new ApiError(
+		openedSocket.addEventListener('open', () => { resolveHandshake(); }, { once: true });
+		openedSocket.addEventListener('close', (closeEvent: CloseEvent) => {
+			rejectHandshake(new ApiError(
 				'assistant_unavailable',
-				`Assistant socket closed during the handshake (${event.code.toString()})`,
+				`Assistant socket closed during the handshake (${closeEvent.code.toString()})`,
 				{ enveloped: false },
 			));
 		}, { once: true });
 	});
+}
 
+function toSocketConnection(openedSocket: WebSocket): SocketConnection {
 	return {
-		send: (payload: unknown) => { socket.send(JSON.stringify(payload)); },
-		close: () => { socket.close(NORMAL_CLOSURE_CODE); },
+		send: (payload: unknown) => { openedSocket.send(JSON.stringify(payload)); },
+		close: () => { openedSocket.close(NORMAL_CLOSURE_CODE); },
 	};
+}
+
+async function openSocket(
+	socketRequestInit: SocketRequestInit,
+	handlers: SocketHandlers,
+): Promise<SocketConnection> {
+	const accessToken = await socketRequestInit.authorize?.() ?? null;
+	const openedSocket = new WebSocket(
+		socketRequestInit.url,
+		socketProtocolsForToken(accessToken),
+	);
+
+	listenForFrames(openedSocket, handlers);
+	await awaitHandshake(openedSocket);
+
+	return toSocketConnection(openedSocket);
 }
 
 export { openSocket };

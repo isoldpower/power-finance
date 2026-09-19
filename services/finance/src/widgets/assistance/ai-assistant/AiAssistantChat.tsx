@@ -39,7 +39,10 @@ const AiAssistantChat: FC<AiAssistantChatProps> = ({
 		list.scrollTop = list.scrollHeight;
 	}, [messages, streamed, isPending, isError]);
 
-	const note = useMemo(() => (quota === null ? null : quotaNote(quota)), [quota]);
+	const note = useMemo(() => (quota === null 
+		? null 
+		: quotaNote(quota)
+	), [quota]);
 	const spent = exhausted || (note?.exhausted ?? false);
 	const locked = isPending || spent;
 
@@ -52,8 +55,12 @@ const AiAssistantChat: FC<AiAssistantChatProps> = ({
 		onSend(trimmed);
 	}, [locked, onSend]);
 
-	const handleSubmit = useCallback(() => { submit(draft); }, [draft, submit]);
-	const handleRetry = useCallback(() => { submit(lastSent); }, [lastSent, submit]);
+	const handleSubmit = useCallback(() => { 
+		submit(draft);
+	}, [draft, submit]);
+	const handleRetry = useCallback(() => { 
+		submit(lastSent);
+	}, [lastSent, submit]);
 
 	return (
 		<>

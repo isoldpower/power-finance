@@ -1,40 +1,49 @@
 import { isNegativeAmount } from "@shared/api";
-import { useMemo } from "react";
-import {
-	ActivityGroupHeader,
-	ActivityRow,
-	AmountDirectionIcon,
-	resolveToneWithDirection,
-	toChainBound,
-	toTransactionDayView,
-	TransactionChainBadge,
-} from "@entity/transactions";
+import { useMemo, Fragment } from "react";
+import { ActivityGroupHeader, toChainBound, toTransactionDayView } from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
-import { LadderAppearance, ProtectActivityEmpty } from "@feature/transactions";
+import { ProtectActivityEmpty } from "@feature/transactions";
 import { useLocaleCurrency } from "@shared/formatting";
-import { MetaText, Overline, RowTitle } from "@shared/pure-components/typography";
+import { Overline } from "@shared/pure-components/typography";
 
-import type { FC } from "react";
+import type { ChainBound, TransactionRowView } from "@entity/transactions";
+import type { FC, ReactNode } from "react";
 import type { RecentActivityGroup } from "@feature/transactions";
+import type { DayOfActivityData } from "./types.ts";
 
 
 interface ActivityFeedProps {
 	groups: RecentActivityGroup[];
+	children: (
+		entry: ChainBound<TransactionRowView>,
+		order: number,
+	) => ReactNode;
 }
 
-const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
+const ActivityFeed: FC<ActivityFeedProps> = ({ 
+	groups,
+	children,
+}) => {
 	const { convert, targetCurrency } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
 
 	const dailyGroups = useMemo(() => {
 		let position = 0;
 
-		return groups.map((group) => {
-			const day = toTransactionDayView(group.dayKey, group.transactions, convert);
+		return groups.map((group): DayOfActivityData => {
+			const day = toTransactionDayView(
+				group.dayKey,
+				group.transactions,
+				convert,
+			);
 			const startPosition = position;
 			position += day.transactions.length;
 
-			return { ...day, startPosition, entries: toChainBound(day.transactions) };
+			return { 
+				...day,
+				startPosition,
+				entries: toChainBound(day.transactions),
+			};
 		});
 	}, [groups, convert]);
 
@@ -50,48 +59,13 @@ const ActivityFeed: FC<ActivityFeedProps> = ({ groups }) => {
 							{formatCurrency(day.dayTotal, targetCurrency)}
 						</ActivityGroupHeader.Money>
 					</ActivityGroupHeader>
-					{day.entries.map((entry, index) => (
-						<LadderAppearance order={day.startPosition + index} key={entry.item.id}>
-							<ActivityRow position={entry.position} pending={entry.item.pending}>
-								<ActivityRow.Icon tone={entry.item.type === 'income' ? 'positive' : 'negative'}>
-									<AmountDirectionIcon type={entry.item.type} />
-								</ActivityRow.Icon>
-								<div className="min-w-0 flex-1">
-									<div className="flex items-center gap-1.5">
-										<RowTitle>
-											{entry.item.description}
-										</RowTitle>
-										{entry.index === 0 && entry.position !== 'single'
-											? <TransactionChainBadge size={entry.chain?.size ?? null} />
-											: null}
-									</div>
-									<ActivityRow.Body>
-										<span>{entry.item.walletName}</span>
-										<ActivityRow.Separator />
-										<span>{entry.item.category}</span>
-									</ActivityRow.Body>
-								</div>
-								<div className="text-right">
-									<ActivityRow.Money
-										tone={resolveToneWithDirection(
-											entry.item.type
-										)}
-										amount={formatCurrency(
-											entry.item.amount,
-											entry.item.currency
-										)}
-										converted={convert({
-											amount: entry.item.amount,
-											currency: entry.item.currency,
-										}).formatted}
-									/>
-									<MetaText as="time" size="10.5" dateTime={entry.item.createdAt} className="block">
-										{entry.item.time}
-									</MetaText>
-								</div>
-							</ActivityRow>
-						</LadderAppearance>
-					))}
+					{day.entries.map((entry, index) => {
+						return (
+							<Fragment key={entry.index}>
+								{children(entry, day.startPosition + index)}
+							</Fragment>
+						);
+					})}
 				</div>
 			))}
 		</ProtectActivityEmpty>

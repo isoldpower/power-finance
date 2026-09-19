@@ -16,9 +16,15 @@ const toDayLabel = (dayKey: string): string => {
 
 const sumInTargetCurrency = (transactions: TransactionRowView[], convert: ConvertMoney): string => {
 	return transactions.reduce((total, transaction) => {
-		const converted = convert({ amount: transaction.signedAmount, currency: transaction.currency });
+		const converted = convert({ 
+			amount: transaction.signedAmount,
+			currency: transaction.currency,
+		});
 
-		return addAmounts(total, roundToCurrency(converted.amount, converted.currency));
+		return addAmounts(
+			total,
+			roundToCurrency(converted.amount, converted.currency),
+		);
 	}, ZERO_AMOUNT);
 };
 

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useCurrencyRates } from "./use-currency-rates.ts";
-import { UNIT_RATE } from "./cache-config.ts";
+import { UNIT_RATE } from "./api-config.ts";
 
 
 interface UseCurrencyPairRateReturn {

@@ -134,8 +134,8 @@ const ApiProvider: FC<ApiProviderProps> = ({
 
 	return (
 		<ApiContext value={contextValue}>
-			<ApiQueryReactions/>
-			<ApiToasts/>
+			<ApiQueryReactions />
+			<ApiToasts />
 			{children}
 		</ApiContext>
 	);

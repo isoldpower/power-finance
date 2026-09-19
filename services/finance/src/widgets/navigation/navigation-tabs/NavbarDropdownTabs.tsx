@@ -36,7 +36,11 @@ const NavbarDropdownTabs: FC<NavbarDropdownTabsProps> = ({ children }) => {
 					<button
 						type="button"
 						aria-label="Navigation"
-						className={cn(textClass({ size: '13', weight: 'semibold' }), "inline-flex items-center gap-1.5 rounded-[var(--radius-md)] border border-border-strong bg-card px-3 py-1.5")}
+						className={cn(
+							textClass({ size: '13', weight: 'semibold' }),
+							"inline-flex items-center gap-1.5 rounded-[var(--radius-md)]",
+							"border border-border-strong bg-card px-3 py-1.5"
+						)}
 					>
 						{activeLabel}
 						<ChevronDownIcon />

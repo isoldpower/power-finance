@@ -5,7 +5,9 @@ const selectedWalletOption = (
 	options: WalletSelectItem[],
 	walletId: string,
 ): WalletSelectItem | undefined => {
-	return options.find((option) => option.id === walletId);
+	return options.find((option) => {
+		return option.id === walletId;
+	});
 };
 
 export { selectedWalletOption };

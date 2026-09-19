@@ -15,36 +15,44 @@ type MutationAction = Extract<MutationCompareArgument, { type: 'updated' }>['act
 const queryPhase = (action: QueryAction): ApiToastPhase | null => {
 	if (action.type === 'fetch') {
 		return 'requested';
-	}
-	if (action.type === 'success' && !action.manual) {
+	} else if (action.type === 'success' && !action.manual) {
 		return 'succeeded';
 	}
 
-	return action.type === 'error' ? 'failed' : null;
+	return action.type === 'error' 
+		? 'failed' 
+		: null;
 };
 
 const mutationPhase = (action: MutationAction): ApiToastPhase | null => {
 	if (action.type === 'pending') {
 		return 'requested';
-	}
-	if (action.type === 'success') {
+	} else if (action.type === 'success') {
 		return 'succeeded';
 	}
 
 	return action.type === 'error' ? 'failed' : null;
 };
 
-const readActionError = (action: QueryAction | MutationAction): unknown =>
-	'error' in action ? action.error : undefined;
+const readActionError = (action: QueryAction | MutationAction): unknown => {
+	return 'error' in action 
+		? action.error 
+		: undefined;
+}
 
 interface QueryFailureState {
 	error: Error | null;
 	errorUpdateCount: number;
 }
 
-const isRecovering = (query: { state: QueryFailureState }): boolean => (
-	hasStaleRecovery(query.state.error, query.state.errorUpdateCount)
-);
+const isRecovering = (
+	query: { state: QueryFailureState }
+): boolean => {
+	return hasStaleRecovery(
+		query.state.error,
+		query.state.errorUpdateCount,
+	);
+}
 
 const useApiToasts = (): void => {
 	const queryClient = useQueryClient();
@@ -54,19 +62,17 @@ const useApiToasts = (): void => {
 			return;
 		}
 
-		const phase = queryPhase(event.action);
-		if (phase === null || !API_QUERY_TOAST_POLICY[phase]) {
+		const currentPhase = queryPhase(event.action);
+		if (currentPhase === null || !API_QUERY_TOAST_POLICY[currentPhase]) {
 			return;
-		}
-
-		if (isRecovering(event.query)) {
+		} else if (isRecovering(event.query)) {
 			return;
 		}
 
 		reportApiToast({
 			id: `query:${event.query.queryHash}`,
 			key: readCacheKey(event.query.queryKey),
-			phase,
+			phase: currentPhase,
 			error: readActionError(event.action),
 		});
 	}, []);
@@ -76,20 +82,20 @@ const useApiToasts = (): void => {
 			return;
 		}
 
-		const phase = mutationPhase(event.action);
-		if (phase === null || !API_MUTATION_TOAST_POLICY[phase]) {
+		const currentPhase = mutationPhase(event.action);
+		if (currentPhase === null || !API_MUTATION_TOAST_POLICY[currentPhase]) {
 			return;
 		}
 
-		const key = readCacheKey(event.mutation.options.mutationKey);
-		if (isSilentMutation(key)) {
+		const cacheKey = readCacheKey(event.mutation.options.mutationKey);
+		if (isSilentMutation(cacheKey)) {
 			return;
 		}
 
 		reportApiToast({
 			id: `mutation:${String(event.mutation.mutationId)}`,
-			key,
-			phase,
+			key: cacheKey,
+			phase: currentPhase,
 			error: readActionError(event.action),
 		});
 	}, []);

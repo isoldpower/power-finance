@@ -10,9 +10,13 @@ import type {
 
 const OPTIMISTIC_ID_PREFIX = 'optimistic';
 
-const optimisticTransactionId = (): string => `${OPTIMISTIC_ID_PREFIX}:${uuidv4()}`;
+const optimisticTransactionId = (): string => {
+	return `${OPTIMISTIC_ID_PREFIX}:${uuidv4()}`;
+}
 
-const isOptimisticTransactionId = (id: string): boolean => id.startsWith(`${OPTIMISTIC_ID_PREFIX}:`);
+const isOptimisticTransactionId = (id: string): boolean => {
+	return id.startsWith(`${OPTIMISTIC_ID_PREFIX}:`);
+}
 
 interface OptimisticTransactionInput {
 	draft: TransactionDraft;

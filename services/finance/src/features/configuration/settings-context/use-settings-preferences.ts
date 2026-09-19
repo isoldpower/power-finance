@@ -10,7 +10,10 @@ function useSettingsPreferences<T>(selector: (state: SettingsPreferencesState) =
 	const context = use(SettingsPreferencesReactContext);
 
 	if (!context) {
-		throw new Error('SettingsPreferencesReactContext.Provider is missing. useSettingsPreferences<T> must be used within the settings');
+		throw new Error(
+			'SettingsPreferencesReactContext.Provider is missing. ' +
+			'useSettingsPreferences<T> must be used within the settings'
+		);
 	}
 
 	return useStore(context, selector);

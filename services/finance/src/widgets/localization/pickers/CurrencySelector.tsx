@@ -1,7 +1,8 @@
-import { CurrencyCombobox } from "@entity/localization";
 import { useSettingsContext } from "@internal/shared";
 import { CurrencySelectorFx, useCurrencies } from "@feature/localization";
 import { useSelectMainCurrency } from "@feature/configuration";
+
+import { CurrencyPicker } from "./CurrencyPicker.tsx";
 
 import type { FinanceComboboxPivot } from "@internal/ui-library";
 import type { CurrencyPickerVariant } from "@entity/localization";
@@ -14,14 +15,18 @@ interface CurrencySelectorProps {
 	className?: string;
 }
 
-const CurrencySelector: FC<CurrencySelectorProps> = ({ variant = 'pill', pivot, className }) => {
+const CurrencySelector: FC<CurrencySelectorProps> = ({ 
+	variant = 'pill',
+	pivot,
+	className,
+}) => {
 	const { mainCurrency } = useSettingsContext();
 	const { currencies, isPending } = useCurrencies();
 	const { onSelect, isSaving } = useSelectMainCurrency();
 
 	return (
 		<CurrencySelectorFx isPending={isPending} className={className}>
-			<CurrencyCombobox
+			<CurrencyPicker
 				currencies={currencies}
 				value={mainCurrency}
 				onSelected={onSelect}

@@ -20,7 +20,13 @@ const DeleteGoalActions: FC<DeleteGoalActionsProps> = ({
 	onConfirm,
 }) => (
 	<GoalDialog.Actions>
-		<FinanceButton type="button" size="lg" variant="outline" className="flex-1" onClick={onCancel}>
+		<FinanceButton
+			type="button"
+			size="lg"
+			variant="outline"
+			className="flex-1"
+			onClick={onCancel}
+		>
 			{cancelLabel}
 		</FinanceButton>
 		<FinanceButton

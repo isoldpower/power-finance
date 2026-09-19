@@ -27,7 +27,10 @@ function EditWebhook({
 	const onSubmit = useCallback(async (data: WebhookSchema) => {
 		if (onBeforeEdit) onBeforeEdit();
 
-		const updated = await updateWebhook.mutateAsync({ title: data.title, url: data.url });
+		const updated = await updateWebhook.mutateAsync({ 
+			title: data.title,
+			url: data.url,
+		});
 
 		if (onSuccess) onSuccess(updated);
 	}, [updateWebhook, onBeforeEdit, onSuccess]);

@@ -25,7 +25,9 @@ const SettingsNavItem: FC<SettingsNavItemProps> = ({ active, onSelect, icon, chi
 		)}
 	>
 		{icon === undefined ? null : (
-			<span className="flex-none">{icon}</span>
+			<span className="flex-none">
+				{icon}
+			</span>
 		)}
 		<Text as="span" size="13" weight={active ? 'semibold' : 'medium'}>
 			{children}

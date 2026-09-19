@@ -3,13 +3,19 @@ import { compareAmounts, toAmountString } from "@shared/api";
 import type { Goal, GoalQuery } from "@entity/wallets";
 
 
-const matchesName = (goal: Goal, needle: string | undefined): boolean => {
+const matchesName = (
+	goal: Goal,
+	needle: string | undefined,
+): boolean => {
 	if (!needle) return true;
 
 	return goal.name.toLowerCase().includes(needle.toLowerCase());
 };
 
-const matchesCurrency = (goal: Goal, currencies: string[] | undefined): boolean => {
+const matchesCurrency = (
+	goal: Goal,
+	currencies: string[] | undefined
+): boolean => {
 	if (!currencies?.length) return true;
 
 	return currencies.includes(goal.currency);
@@ -39,13 +45,16 @@ const withinWindow = (
 	return (!after || moment >= after) && (!before || moment <= before);
 };
 
-const matchesGoalQuery = (goal: Goal, query: GoalQuery): boolean => (
-	matchesName(goal, query.name)
-	&& matchesCurrency(goal, query.currencies)
-	&& withinAmount(goal.target.amount, query.minTarget, query.maxTarget)
-	&& withinAmount(goal.progress.amount, query.minProgress, query.maxProgress)
-	&& withinWindow(goal.finishAt, query.finishAfter, query.finishBefore)
-	&& withinWindow(goal.createdAt, query.createdAfter, query.createdBefore)
+const matchesGoalQuery = (
+	goal: Goal,
+	query: GoalQuery,
+): boolean => (
+	matchesName(goal, query.name) &&
+	matchesCurrency(goal, query.currencies) &&
+	withinAmount(goal.target.amount, query.minTarget, query.maxTarget) &&
+	withinAmount(goal.progress.amount, query.minProgress, query.maxProgress) &&
+	withinWindow(goal.finishAt, query.finishAfter, query.finishBefore) &&
+	withinWindow(goal.createdAt, query.createdAfter, query.createdBefore)
 );
 
 export { matchesGoalQuery };

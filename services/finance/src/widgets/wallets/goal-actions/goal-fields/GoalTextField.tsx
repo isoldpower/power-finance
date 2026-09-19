@@ -27,7 +27,12 @@ const GoalTextField: FC<GoalTextFieldProps> = ({
 		<FieldLabel htmlFor={id}>
 			{label}
 		</FieldLabel>
-		<FinanceInput id={id} type={type} placeholder={placeholder} {...registration} />
+		<FinanceInput
+			id={id}
+			type={type}
+			placeholder={placeholder}
+			{...registration} 
+		/>
 		{error ? (
 			<GoalForm.FieldError>
 				{error}

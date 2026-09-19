@@ -7,6 +7,7 @@ import { getFinanceRoute } from "../../config";
 import { useRouteWithOrigin } from "../../helpers";
 import { ClerkProvider } from './ClerkProvider.tsx';
 
+
 interface AuthProviderProps {
 	children: ReactNode;
 	publicKey: string;

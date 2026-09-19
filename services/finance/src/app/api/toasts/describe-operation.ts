@@ -12,17 +12,22 @@ interface ApiOperationMessages {
 
 const FALLBACK_SUBJECT = 'data';
 
-const toWords = (key: string): string[] => key
-	.replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-	.replace(/[-_]+/g, ' ')
-	.toLowerCase()
-	.split(' ')
-	.filter(Boolean);
+const toWords = (key: string): string[] => {
+	return key
+		.replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+		.replace(/[-_]+/g, ' ')
+		.toLowerCase()
+		.split(' ')
+		.filter(Boolean);
+}
 
-const capitalize = (phrase: string): string => phrase.charAt(0).toUpperCase() + phrase.slice(1);
+const capitalize = (phrase: string): string => {
+	return phrase.charAt(0).toUpperCase() + phrase.slice(1);
+}
 
-const resolveVerb = (name: string | undefined): OperationVerb =>
-	(name === undefined ? undefined : OPERATION_VERBS[name]) ?? READ_VERB;
+const resolveVerb = (name: string | undefined): OperationVerb => {
+	return (name === undefined ? undefined : OPERATION_VERBS[name]) ?? READ_VERB;
+}
 
 const describeApiOperation = (key: string): ApiOperationMessages => {
 	const override = OPERATION_OVERRIDES[key] ?? {};

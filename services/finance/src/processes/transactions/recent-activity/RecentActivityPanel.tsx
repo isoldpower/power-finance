@@ -1,5 +1,5 @@
 import { cn, FinanceCard } from "@internal/ui-library";
-import { ActivityFeed } from "@widget/transactions";
+import { ActivityFeed, DayOfActivityFeed } from "@widget/transactions";
 import { useRecentActivity, RecentActivityFx } from "@feature/transactions";
 import { ActivityFeedHeader, ActivityFeedSkeleton } from "@entity/transactions";
 import { CardTitle } from "@shared/pure-components/typography";
@@ -24,8 +24,15 @@ const RecentActivityPanel: FC<RecentActivityPanelProps> = ({ className }) => {
 					View all in Management →
 				</ActivityFeedHeader.Link>
 			</ActivityFeedHeader>
-			<RecentActivityFx isPending={isPending} pending={<RecentActivitySkeleton />}>
-				<ActivityFeed groups={groups} />
+			<RecentActivityFx 
+				isPending={isPending}
+				pending={<RecentActivitySkeleton />}
+			>
+				<ActivityFeed groups={groups}>
+					{(entry, order) => (
+						<DayOfActivityFeed entry={entry} order={order} />
+					)}
+				</ActivityFeed>
 			</RecentActivityFx>
 		</FinanceCard>
 	);

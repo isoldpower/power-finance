@@ -33,7 +33,11 @@ const RuleSelectField: FC<RuleSelectFieldProps> = ({
 }) => (
 	<FinanceSelect value={value} disabled={disabled} onValueChange={onChange}>
 		<FinanceSelectTrigger
-			className={cn("h-10 w-full px-3.5 font-normal", RULE_FIELD_TEXT, className)}
+			className={cn(
+				"h-10 w-full px-3.5 font-normal",
+				RULE_FIELD_TEXT,
+				className,
+			)}
 			aria-label={ariaLabel}
 		>
 			<FinanceSelectValue placeholder={placeholder} />
@@ -43,7 +47,10 @@ const RuleSelectField: FC<RuleSelectFieldProps> = ({
 				<FinanceSelectItem
 					key={option.value}
 					value={option.value}
-					className={cn(RULE_FIELD_TEXT, "font-normal data-[state=checked]:font-normal")}
+					className={cn(
+						RULE_FIELD_TEXT,
+						"font-normal data-[state=checked]:font-normal",
+					)}
 				>
 					{option.label}
 				</FinanceSelectItem>

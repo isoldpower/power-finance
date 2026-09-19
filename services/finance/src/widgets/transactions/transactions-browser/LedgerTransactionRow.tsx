@@ -38,12 +38,15 @@ const LedgerTransactionRow: FC<LedgerTransactionRowProps> = ({
 	const { convert, targetCurrency } = useConvertMoney();
 	const formatCurrency = useLocaleCurrency();
 
-	const row = useMemo(() => toTransactionRowView(transaction), [transaction]);
-	const money = useMemo(
-		() => toTransactionMoneyView(transaction, convert, formatCurrency, targetCurrency),
-		[transaction, convert, formatCurrency, targetCurrency]
-	);
-	const tone = useMemo(() => resolveToneWithDirection(row.type), [row.type]);
+	const row = useMemo(() => {
+		return toTransactionRowView(transaction);
+	}, [transaction]);
+	const money = useMemo(() => {
+		return toTransactionMoneyView(transaction, convert, formatCurrency, targetCurrency);
+	}, [transaction, convert, formatCurrency, targetCurrency]);
+	const tone = useMemo(() => {
+		return resolveToneWithDirection(row.type);
+	}, [row.type]);
 
 	return (
 		<LedgerRow expanded={expanded} pending={row.pending} onClick={onToggle}>

@@ -1,78 +1,90 @@
-import { ApiError } from "@shared/api";
-import { STREAM_DEFAULT_METHOD } from "../config.ts";
+import { ApiError } from "../../envelope";
+import { FALLBACK_API_ERROR_CODE } from "../errors";
+import { buildStreamHeaders } from "./build-stream-headers.ts";
 import { readEventStream } from "./read-event-stream.ts";
 import { INITIAL_RECONNECT_DELAY_MS, nextReconnectDelay } from "./reconnect-delay.ts";
-import { streamHeaders } from "./stream-headers.ts";
+import { STREAM_DEFAULT_METHOD } from "./stream-config.ts";
 import { toStreamError } from "./to-stream-error.ts";
 
-import type { StreamHandlers, StreamRequestInit, Unsubscribe } from "./types.ts";
+import type { StreamHandlers, StreamMessageListener, StreamRequestInit, Unsubscribe } from "./types.ts";
 
 
-async function consumeStream(
-	init: StreamRequestInit,
-	onMessage: StreamHandlers['onMessage'],
+async function consumeEventStream(
+	streamRequestInit: StreamRequestInit,
+	onStreamMessage: StreamMessageListener,
 	abortSignal: AbortSignal,
 ): Promise<void> {
-	const response = await fetch(init.url, {
-		method: init.method ?? STREAM_DEFAULT_METHOD,
-		headers: await streamHeaders(init),
-		body: init.body === undefined ? undefined : JSON.stringify(init.body),
+	const streamResponse = await fetch(streamRequestInit.url, {
+		method: streamRequestInit.method ?? STREAM_DEFAULT_METHOD,
+		headers: await buildStreamHeaders(streamRequestInit),
+		body: streamRequestInit.body === undefined
+			? undefined
+			: JSON.stringify(streamRequestInit.body),
 		signal: abortSignal,
 	});
 
-	if (!response.ok) throw await toStreamError(response);
-	await readEventStream(response, onMessage);
+	if (!streamResponse.ok) {
+		throw await toStreamError(streamResponse);
+	}
+
+	await readEventStream(streamResponse, onStreamMessage);
 }
 
-function toApiFailure(error: unknown): ApiError {
-	return error instanceof ApiError
-		? error
-		: new ApiError('internal_error', 'Stream failed', { enveloped: false });
+function toStreamApiError(thrownFailure: unknown): ApiError {
+	if (thrownFailure instanceof ApiError) {
+		return thrownFailure;
+	}
+
+	return new ApiError(
+		FALLBACK_API_ERROR_CODE,
+		'Stream failed',
+		{ enveloped: false },
+	);
 }
 
 function openEventStream(
-	init: StreamRequestInit,
+	streamRequestInit: StreamRequestInit,
 	handlers: StreamHandlers,
 ): Unsubscribe {
 	const abortController = new AbortController();
-	const abortSignal = init.signal ?? abortController.signal;
-	let reconnectDelay = INITIAL_RECONNECT_DELAY_MS;
+	const abortSignal = streamRequestInit.signal ?? abortController.signal;
+	let reconnectDelayMs = INITIAL_RECONNECT_DELAY_MS;
 	let reconnectTimer: ReturnType<typeof setTimeout> | undefined;
-	let attempted = false;
+	let hasAttemptedBefore = false;
 
-	const scheduleReconnect = (): void => {
-		if (init.reconnect === false || abortSignal.aborted) {
+	function scheduleReconnect(): void {
+		if (streamRequestInit.reconnect === false || abortSignal.aborted) {
 			return;
 		}
 
 		reconnectTimer = setTimeout(() => {
-			reconnectDelay = nextReconnectDelay(reconnectDelay);
-			runStream();
-		}, reconnectDelay);
-	};
+			reconnectDelayMs = nextReconnectDelay(reconnectDelayMs);
+			startStreamAttempt();
+		}, reconnectDelayMs);
+	}
 
-	function runStream(): void {
-		if (attempted) {
+	function startStreamAttempt(): void {
+		if (hasAttemptedBefore) {
 			handlers.onReconnect?.();
 		}
-		attempted = true;
+		hasAttemptedBefore = true;
 
-		consumeStream(init, handlers.onMessage, abortSignal)
+		consumeEventStream(streamRequestInit, handlers.onMessage, abortSignal)
 			.then(() => {
 				handlers.onClose?.();
 				scheduleReconnect();
 			})
-			.catch((error: unknown) => {
+			.catch((thrownFailure: unknown) => {
 				if (abortSignal.aborted) return;
 
-				handlers.onError?.(toApiFailure(error));
+				handlers.onError?.(toStreamApiError(thrownFailure));
 				scheduleReconnect();
 			});
 	}
 
-	runStream();
+	startStreamAttempt();
 
-	return () => {
+	return function unsubscribeFromStream(): void {
 		clearTimeout(reconnectTimer);
 		abortController.abort();
 	};

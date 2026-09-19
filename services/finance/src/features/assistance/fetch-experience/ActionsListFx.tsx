@@ -20,9 +20,13 @@ const ActionsListFx: FC<ActionsListFxProps> = ({
 	children,
 }) => {
 	if (isPending) {
-		return <ActionsListSkeleton />;
+		return (
+			<ActionsListSkeleton />
+		);
 	} else if (isError || !actions) {
-		return <ActionsListFailed />;
+		return (
+			<ActionsListFailed />
+		);
 	}
 
 	return children(actions);

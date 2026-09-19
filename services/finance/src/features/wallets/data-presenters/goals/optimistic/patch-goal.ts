@@ -7,7 +7,10 @@ const patchGoal = (goal: Goal, patch: GoalPatch): Goal => ({
 	finishAt: patch.finishAt ?? goal.finishAt,
 	target: patch.target === undefined
 		? goal.target
-		: { amount: patch.target, currency: goal.currency },
+		: { 
+			amount: patch.target,
+			currency: goal.currency,
+		},
 });
 
 export { patchGoal };

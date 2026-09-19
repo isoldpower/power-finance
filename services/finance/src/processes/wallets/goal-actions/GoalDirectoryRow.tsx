@@ -57,7 +57,14 @@ const GoalDirectoryRow: FC<GoalDirectoryRowProps> = ({ goal, order }) => {
 					)}
 				</DeleteGoalDialog>
 			</GoalRow.Head>
-			<GoalRow.ProgressBar percent={goalView.percent} />
+			<GoalRow.ProgressBar>
+				<GoalRow.ProgressTrack>
+					<GoalRow.ProgressFill percent={goalView.percent} />
+				</GoalRow.ProgressTrack>
+				<GoalRow.ProgressValue>
+					{goalView.percent}%
+				</GoalRow.ProgressValue>
+			</GoalRow.ProgressBar>
 		</GoalRow>
 	);
 }

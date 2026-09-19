@@ -1,7 +1,7 @@
 import { walletGradient } from "@entity/wallets";
 import { isNegativeAmount } from "@shared/api";
 import { cn, FinanceMoney } from "@internal/ui-library";
-import { useCallback } from "react";
+import {useCallback, useMemo} from "react";
 import { WalletPinButton, WalletSwatch, walletTypeLabel } from "@entity/wallets";
 import { isOptimisticWalletId, useWalletFavorite, useWalletsSelection } from "@feature/wallets";
 import { useShallow } from "zustand/react/shallow";
@@ -18,17 +18,21 @@ interface PinnableWalletRowProps {
 }
 
 const PinnableWalletRow: FC<PinnableWalletRowProps> = ({ wallet }) => {
+	const format = useLocaleCurrency();
+	const { toggleFavorite } = useWalletFavorite();
 	const { selectedWalletId, selectWallet } = useWalletsSelection(
 		useShallow((state) => ({
 			selectedWalletId: state.selectedWalletId,
 			selectWallet: state.selectWallet,
 		}))
 	);
-	const { toggleFavorite } = useWalletFavorite();
-	const format = useLocaleCurrency();
 
-	const selected = wallet.id === selectedWalletId;
-	const unsaved = isOptimisticWalletId(wallet.id);
+	const selected = useMemo(() => {
+		return wallet.id === selectedWalletId;
+	}, [selectedWalletId, wallet.id]);
+	const unsaved = useMemo(() => {
+		return isOptimisticWalletId(wallet.id);
+	}, [wallet.id]);
 
 	const handleSelect = useCallback(() => {
 		if (unsaved) return;

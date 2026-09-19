@@ -6,7 +6,7 @@ import { useConvertMoney } from "@feature/localization";
 import { useLocaleCurrency } from "@shared/formatting";
 import { Caption, Overline } from "@shared/pure-components/typography";
 
-import type { FC } from "react";
+import {FC, useMemo} from "react";
 import type { WalletDetails, WalletFlows, WalletPeriod } from "@entity/wallets";
 
 
@@ -18,9 +18,12 @@ interface WalletBalanceDetailsProps {
 const WalletBalanceDetails: FC<WalletBalanceDetailsProps> = ({ wallet, period }) => {
 	const format = useLocaleCurrency();
 	const { convert } = useConvertMoney();
-	const owned = walletOwnedMoney(wallet);
-	const periodLabel = walletPeriodLabel(period);
-	const flows = wallet.period;
+	
+	const { ownedMoney, periodLabel, walletFlows } = useMemo(() => ({
+		ownedMoney: walletOwnedMoney(wallet),
+		periodLabel: walletPeriodLabel(period),
+		walletFlows: wallet.period,
+	}), [period, wallet]);
 
 	return (
 		<div className="mt-[18px] flex items-end gap-5">
@@ -41,18 +44,22 @@ const WalletBalanceDetails: FC<WalletBalanceDetailsProps> = ({ wallet, period })
 				</MoneyInOriginal>
 				{walletHasCreditLine(wallet) ? (
 					<Caption size="11">
-						Yours · {format(owned.amount, owned.currency)}
+						Yours · {format(ownedMoney.amount, ownedMoney.currency)}
 					</Caption>
 				) : null}
 			</div>
 			<div className="flex-1" />
-			{flows === undefined ? (
+			{walletFlows === undefined ? (
 				<>
 					<WalletDetailsSkeleton.Metric />
 					<WalletDetailsSkeleton.Metric />
 				</>
 			) : (
-				<WalletPeriodFlows flows={flows} periodLabel={periodLabel} format={format} />
+				<WalletPeriodFlows
+					flows={walletFlows}
+					periodLabel={periodLabel}
+					format={format}
+				/>
 			)}
 		</div>
 	);

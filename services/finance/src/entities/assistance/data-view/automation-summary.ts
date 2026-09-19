@@ -21,15 +21,19 @@ const conditionText = (node: RuleNode): string => {
 		return node.nodes.length > 1 ? `(${joined})` : joined;
 	}
 
-	/* A null value is a presence check, so it reads as one rather than as a
-	   comparison against nothing. */
 	if (node.value === null) {
-		return `${node.field} ${node.operator === 'eq' ? 'is not set' : 'is set'}`;
+		const operatorVerbose = node.operator === 'eq' 
+			? 'is not set' 
+			: 'is set';
+		
+		return `${node.field} ${operatorVerbose}`;
 	}
 
-	const value = Array.isArray(node.value) ? node.value.join(', ') : node.value;
+	const nodeValue = Array.isArray(node.value) 
+		? node.value.join(', ') 
+		: node.value;
 
-	return `${node.field} ${operatorLabel(node.operator)} ${value}`;
+	return `${node.field} ${operatorLabel(node.operator)} ${nodeValue}`;
 };
 
 const triggerText = (trigger: AutomationTrigger): string => {
@@ -37,7 +41,9 @@ const triggerText = (trigger: AutomationTrigger): string => {
 		? eventLabel(trigger.event ?? '')
 		: `every ${trigger.schedule ?? 'run'}`;
 
-	return trigger.condition === null ? occasion : `${occasion} matching ${conditionText(trigger.condition)}`;
+	return trigger.condition === null 
+		? occasion 
+		: `${occasion} matching ${conditionText(trigger.condition)}`;
 };
 
 const effectText = (effect: AutomationEffect): string => {
@@ -56,7 +62,9 @@ const effectText = (effect: AutomationEffect): string => {
 };
 
 const frequencyText = (trigger: AutomationTrigger): string => {
-	return trigger.type === 'event' ? 'realtime' : trigger.schedule ?? 'scheduled';
+	return trigger.type === 'event' 
+		? 'realtime' 
+		: trigger.schedule ?? 'scheduled';
 };
 
 const automationSummary = (automation: Automation): AutomationSummary => ({

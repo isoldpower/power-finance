@@ -11,7 +11,7 @@ import { RevealMotion } from "@shared/motion";
 import { PageContainer, SidebarColumnsContainer, TwoColumnsContainer } from "@shared/pure-components/layout";
 import { PageTitle } from "@shared/pure-components/typography";
 
-import { SITE_TOUR_ANCHORS } from "@feature/onboarding";
+import { SITE_TOUR_ANCHORS } from "@feature/navigation";
 
 import { PERIODS } from "./config.ts";
 

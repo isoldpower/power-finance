@@ -84,7 +84,9 @@ const NewGoalForm: FC<NewGoalFormProps> = ({ onClose }) => {
 			</GoalForm>
 			<PanelFooter
 				submitType="submit"
-				submitLabel={loading ? NEW_GOAL_LABELS.pending : NEW_GOAL_LABELS.submit}
+				submitLabel={loading 
+					? NEW_GOAL_LABELS.pending 
+					: NEW_GOAL_LABELS.submit}
 				onClose={onClose}
 				submitDisabled={loading}
 			/>

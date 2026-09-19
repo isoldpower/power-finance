@@ -40,7 +40,10 @@ const GoalTargetField: FC<GoalTargetFieldProps> = ({
 					placeholder={placeholder}
 					value={field.value}
 					onChange={(event) => {
-						field.onChange(formatAmountInput(event.target.value, symbol));
+						field.onChange(formatAmountInput(
+							event.target.value,
+							symbol,
+						));
 					}}
 				/>
 			)}

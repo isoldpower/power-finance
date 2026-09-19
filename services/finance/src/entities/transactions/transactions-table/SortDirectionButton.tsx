@@ -29,7 +29,9 @@ const SortDirectionButton: FC<SortDirectionButtonProps> = ({ direction, onToggle
 		title="Switch sort direction"
 		className={cn(FILTER_CONTROL_WIDTH, "h-auto justify-start gap-1.5 px-3 text-xs")}
 	>
-		<span aria-hidden>{DIRECTION_ARROW[direction]}</span>
+		<span aria-hidden>
+			{DIRECTION_ARROW[direction]}
+		</span>
 		{DIRECTION_LABEL[direction]}
 	</FinanceButton>
 );

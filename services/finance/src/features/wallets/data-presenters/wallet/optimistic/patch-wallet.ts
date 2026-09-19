@@ -9,7 +9,10 @@ const patchWallet = <TWallet extends Wallet>(wallet: TWallet, patch: WalletPatch
 	color: patch.color ?? wallet.color,
 	zeroBalance: patch.zeroBalance === undefined
 		? wallet.zeroBalance
-		: { amount: patch.zeroBalance, currency: wallet.currency },
+		: { 
+			amount: patch.zeroBalance,
+			currency: wallet.currency,
+		},
 });
 
 export { patchWallet };

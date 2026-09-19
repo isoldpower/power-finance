@@ -27,7 +27,11 @@ const useGoals = (
 ): UseGoalsReturn => {
 	const apiContext = useApiContext();
 	const query = useQuery<ListGoalsResponse>({
-		queryKey: [GOALS_CACHE_KEYS.list, page?.limit ?? 'default', page?.cursor ?? 'first'],
+		queryKey: [
+			GOALS_CACHE_KEYS.list,
+			page?.limit ?? 'default',
+			page?.cursor ?? 'first',
+		],
 		queryFn: () => listGoals({
 			handler: apiContext.goalServers.rest,
 			page,

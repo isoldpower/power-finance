@@ -21,7 +21,7 @@ class AccountsHttpRESTApiClient implements IAccountsRESTApiClient {
 			method: 'GET',
 			url: '',
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 
@@ -30,7 +30,7 @@ class AccountsHttpRESTApiClient implements IAccountsRESTApiClient {
 			method: 'GET',
 			url: `/${payload.id}`,
 			params: { ...payload.params },
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 }

@@ -13,9 +13,15 @@ const SECTION_PARAMS = {
 
 function metricsQuery(params: MetricsQuery | undefined): Record<string, string | number | undefined> {
 	return {
-		[SECTION_PARAMS.balance]: params?.balance === undefined ? undefined : String(params.balance),
-		[SECTION_PARAMS.netWorth]: params?.netWorth === undefined ? undefined : String(params.netWorth),
-		[SECTION_PARAMS.cashFlow]: params?.cashFlow === undefined ? undefined : String(params.cashFlow),
+		[SECTION_PARAMS.balance]: params?.balance === undefined 
+			? undefined 
+			: String(params.balance),
+		[SECTION_PARAMS.netWorth]: params?.netWorth === undefined 
+			? undefined 
+			: String(params.netWorth),
+		[SECTION_PARAMS.cashFlow]: params?.cashFlow === undefined 
+			? undefined 
+			: String(params.cashFlow),
 		since: params?.since,
 		points: params?.points,
 	};
@@ -35,7 +41,7 @@ class MetricsHttpRESTApiClient implements IMetricsRESTApiClient {
 			method: 'GET',
 			url: '',
 			params: metricsQuery(payload.params),
-			headers: this.versions.headers(),
+			headers: this.versions.readAtLeastHeaders(),
 		}, this.versions);
 	}
 }

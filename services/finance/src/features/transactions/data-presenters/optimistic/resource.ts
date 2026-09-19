@@ -13,10 +13,14 @@ const MATCH_ALL: TransactionQuery = {};
 const searchQueryOf = (key: QueryKey): TransactionQuery => {
 	const [, query] = key;
 
-	return typeof query === 'object' && query !== null ? query as TransactionQuery : MATCH_ALL;
+	return typeof query === 'object' && query !== null 
+		? query as TransactionQuery 
+		: MATCH_ALL;
 };
 
-const readDetail = (response: FetchTransactionResponse): TransactionDetails => response.transaction;
+const readDetail = (response: FetchTransactionResponse): TransactionDetails => {
+	return response.transaction;
+}
 
 const writeDetail = (
 	response: FetchTransactionResponse,
@@ -29,15 +33,28 @@ const TRANSACTION_RESOURCE: OptimisticResource<
 	FetchTransactionResponse
 > = {
 	paged: [
-		{ key: CACHE_KEYS.list },
+		{
+			key: CACHE_KEYS.list,
+		},
 		{
 			key: CACHE_KEYS.search,
-			accepts: (key, transaction) => matchesTransactionQuery(transaction, searchQueryOf(key)),
+			accepts: (key, transaction) => matchesTransactionQuery(
+				transaction,
+				searchQueryOf(key),
+			),
 		},
 	],
 	details: [
-		{ key: CACHE_KEYS.fetch, read: readDetail, write: writeDetail },
-		{ key: CACHE_KEYS.ledger, read: readDetail, write: writeDetail },
+		{ 
+			key: CACHE_KEYS.fetch,
+			read: readDetail,
+			write: writeDetail,
+		},
+		{ 
+			key: CACHE_KEYS.ledger,
+			read: readDetail,
+			write: writeDetail,
+		},
 	],
 };
 

@@ -10,7 +10,9 @@ interface WebhookSecretRowProps {
 
 const WebhookSecretRow: FC<WebhookSecretRowProps> = ({ label, children }) => (
 	<div className="flex flex-col gap-1.5">
-		<UiLabel>{label}</UiLabel>
+		<UiLabel>
+			{label}
+		</UiLabel>
 		{children}
 	</div>
 );

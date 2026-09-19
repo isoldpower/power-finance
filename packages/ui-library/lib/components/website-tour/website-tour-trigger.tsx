@@ -1,12 +1,14 @@
 import { cloneElement, useCallback } from "react";
-
 import { useWebsiteTourContext } from "./context/context.ts";
 
 import type { ButtonHTMLAttributes, FC, ReactElement } from "react";
 
 
 interface WebsiteTourTriggerProps {
-	children: ReactElement<{ onClick: () => void, type: ButtonHTMLAttributes<unknown>['type'] }>;
+	children: ReactElement<{ 
+		onClick: () => void,
+		type: ButtonHTMLAttributes<unknown>['type'],
+	}>;
 }
 
 const WebsiteTourTrigger: FC<WebsiteTourTriggerProps> = ({ children }) => {

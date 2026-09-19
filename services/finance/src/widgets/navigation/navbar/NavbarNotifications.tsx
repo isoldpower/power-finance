@@ -26,7 +26,9 @@ interface NavbarNotificationsProps {
 }
 
 const NavbarNotifications: FC<NavbarNotificationsProps> = ({ children }) => {
-	const { notifications } = useNotifications(undefined, { limit: NOTIFICATIONS_PAGE_SIZE });
+	const { notifications } = useNotifications(undefined, { 
+		limit: NOTIFICATIONS_PAGE_SIZE
+	});
 	const { unacknowledged } = useNotificationsCount();
 	const { open, setOpen } = useDisclosure();
 	const dismissedAt = useRef(0);

@@ -1,8 +1,9 @@
 import { useState } from "react";
-import type { Meta, StoryObj } from "@storybook/react-vite";
-
 import { WebsiteTour } from "./website-tour.tsx";
 import { UiButton, UiCard, UiCardContent, UiCardHeader, UiCardTitle } from "@/entities/root";
+
+import type { Meta, StoryObj } from "@storybook/react-vite";
+
 
 const meta = {
 	title: "Components/WebsiteTour",
@@ -19,7 +20,6 @@ const meta = {
 	},
 } satisfies Meta;
 
-export default meta;
 type Story = StoryObj<typeof meta>;
 
 const TourStage = () => (
@@ -39,7 +39,7 @@ const TourStage = () => (
 	</div>
 );
 
-export const Guided: Story = {
+const Guided: Story = {
 	parameters: {
 		docs: { description: { story: "Two steps over a small dashboard. `WebsiteTour.Trigger` wraps any button to start the walkthrough." } },
 	},
@@ -92,9 +92,13 @@ const FirstLaunch = () => {
 	);
 };
 
-export const WithInvite: Story = {
+const WithInvite: Story = {
 	parameters: {
 		docs: { description: { story: "The first-launch shape — `WebsiteTour.Invite` offers the tour before anything is highlighted, and skipping marks it complete." } },
 	},
 	render: () => <FirstLaunch />,
 };
+
+
+export { Guided, WithInvite };
+export default meta;

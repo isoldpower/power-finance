@@ -1,5 +1,4 @@
 import { QUERY_KEYS } from "@shared/api";
-
 import { DEFAULT_WALLET_PERIOD } from "../cache-config.ts";
 
 import type { QueryClient } from "@tanstack/react-query";
@@ -13,8 +12,6 @@ interface WalletPageResponse {
 	page: Page<Wallet>;
 }
 
-const PAGED_KEYS = [QUERY_KEYS.wallets, QUERY_KEYS.walletsSearch];
-
 const NO_RECENT: Page<Transaction> = {
 	items: [],
 	limit: 0,
@@ -24,11 +21,14 @@ const NO_RECENT: Page<Transaction> = {
 };
 
 const fromPagedWallets = (client: QueryClient, id: string): Wallet | undefined => {
-	for (const family of PAGED_KEYS) {
+	for (const family of [QUERY_KEYS.wallets, QUERY_KEYS.walletsSearch]) {
 		const entries = client.getQueriesData<WalletPageResponse>({ queryKey: [family] });
 
 		for (const [, response] of entries) {
-			const wallet = response?.page.items.find((item) => item.id === id);
+			const wallet = response?.page.items.find((item) => {
+				return item.id === id;
+			});
+			
 			if (wallet) return wallet;
 		}
 	}
@@ -41,9 +41,15 @@ const walletDetailsPlaceholder = (
 	id: string,
 ): FetchWalletResponse | undefined => {
 	const wallet = fromPagedWallets(client, id);
-	if (wallet === undefined) return undefined;
+	if (wallet === undefined) {
+		return undefined;
+	}
 
-	return { wallet, recent: NO_RECENT, period: DEFAULT_WALLET_PERIOD };
+	return { 
+		wallet, 
+		recent: NO_RECENT,
+		period: DEFAULT_WALLET_PERIOD,
+	};
 };
 
 export { walletDetailsPlaceholder };

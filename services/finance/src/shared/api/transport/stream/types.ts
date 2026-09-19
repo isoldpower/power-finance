@@ -27,6 +27,15 @@ interface StreamRequestInit {
 	reconnect?: boolean;
 }
 
+type StreamMessageListener = (streamMessage: StreamMessage) => void;
+
 type Unsubscribe = () => void;
 
-export type { StreamHandlers, StreamMessage, StreamRequestInit, TokenSource, Unsubscribe };
+export type {
+	StreamHandlers,
+	StreamMessage,
+	StreamMessageListener,
+	StreamRequestInit,
+	TokenSource,
+	Unsubscribe,
+};

@@ -27,13 +27,21 @@ const RuleConditionValueField: FC<RuleConditionValueFieldProps> = ({
 
 	switch (input.kind) {
 		case 'boolean':
-			return <RuleBooleanValue value={value} disabled={disabled} onChange={onChange} />;
+			return (
+				<RuleBooleanValue value={value} disabled={disabled} onChange={onChange} />
+			);
 		case 'currency':
-			return <RuleCurrencyValue {...shared} />;
+			return (
+				<RuleCurrencyValue {...shared} />
+			);
 		case 'category':
-			return <RuleCategoryValue {...shared} />;
+			return (
+				<RuleCategoryValue {...shared} />
+			);
 		case 'wallet':
-			return <RuleWalletValue {...shared} />;
+			return (
+				<RuleWalletValue {...shared} />
+			);
 		case 'transactionType':
 			return (
 				<RuleOptionValue
@@ -57,7 +65,9 @@ const RuleConditionValueField: FC<RuleConditionValueFieldProps> = ({
 				/>
 			);
 		default:
-			return <RuleTextValue {...shared} kind={input.kind} />;
+			return (
+				<RuleTextValue {...shared} kind={input.kind} />
+			);
 	}
 };
 

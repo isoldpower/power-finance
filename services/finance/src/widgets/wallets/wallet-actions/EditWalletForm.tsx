@@ -106,7 +106,9 @@ const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, onClose }) => {
 					<WalletLockedField>
 						<WalletLockedField.Icon />
 						<WalletLockedField.Body>
-							<WalletLockedField.Value tone={isNegativeAmount(wallet.balance.amount) ? 'neg' : 'neutral'}>
+							<WalletLockedField.Value 
+								tone={isNegativeAmount(wallet.balance.amount) ? 'neg' : 'neutral'}
+							>
 								{format(wallet.balance.amount, wallet.balance.currency)}
 							</WalletLockedField.Value>
 							<WalletLockedField.Hint>

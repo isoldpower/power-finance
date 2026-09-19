@@ -1,12 +1,11 @@
 import axios from 'axios';
 
-import {
-	AUTHORIZATION_HEADER,
-	CORRELATION_HEADER,
-	REQUEST_TIMEOUT_MESSAGE,
-	REQUEST_TIMEOUT_MS,
-	SANDBOX_HEADER,
-} from './config.ts';
+import { REQUEST_TIMEOUT_MESSAGE, REQUEST_TIMEOUT_MS } from './config.ts';
+import { AxiosInterceptor } from "./interceptors/interface.ts";
+import { AxiosCorrelationInterceptor } from "./interceptors/correlation-interceptor.ts";
+import { AxiosAuthInterceptor } from "./interceptors/auth-interceptor.ts";
+import { AxiosSandboxInterceptor } from "./interceptors/sandbox-interceptor.ts";
+
 
 interface AxiosInstanceOptions {
 	baseUrl: string;
@@ -25,26 +24,21 @@ const createAxiosInstance = ({
 		timeoutErrorMessage: REQUEST_TIMEOUT_MESSAGE,
 		withCredentials: false
 	});
+	const interceptors: AxiosInterceptor[] = [
+		new AxiosAuthInterceptor(getToken),
+		new AxiosCorrelationInterceptor(),
+		new AxiosSandboxInterceptor(sandbox),
+	]
 
-	axiosInstance.interceptors.request.use(async (config) => {
-		const token = await getToken();
-
-		if (token) {
-			config.headers[AUTHORIZATION_HEADER] = `Bearer ${token}`;
-		} else {
-			delete config.headers[AUTHORIZATION_HEADER];
-		}
-
-		config.headers[CORRELATION_HEADER] = crypto.randomUUID();
-
-		if (sandbox) {
-			config.headers[SANDBOX_HEADER] = sandbox;
-		} else {
-			delete config.headers[SANDBOX_HEADER];
-		}
-
-		return config;
-	});
+	for (const interceptor of interceptors) {
+		axiosInstance.interceptors.response.use(
+			interceptor.interceptResponseSuccess,
+			interceptor.interceptResponseFault,
+		);
+		axiosInstance.interceptors.request.use(
+			interceptor.interceptRequest
+		);
+	}
 
 	return axiosInstance;
 }
