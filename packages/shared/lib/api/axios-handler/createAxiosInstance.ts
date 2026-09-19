@@ -30,13 +30,15 @@ const createAxiosInstance = ({
 		new AxiosSandboxInterceptor(sandbox),
 	]
 
+	/* The handlers are registered as closures: axios calls them detached, so a
+	   bare method reference would lose the interceptor it belongs to. */
 	for (const interceptor of interceptors) {
 		axiosInstance.interceptors.response.use(
-			interceptor.interceptResponseSuccess,
-			interceptor.interceptResponseFault,
+			(response) => interceptor.interceptResponseSuccess(response),
+			(error: unknown) => interceptor.interceptResponseFault(error),
 		);
 		axiosInstance.interceptors.request.use(
-			interceptor.interceptRequest
+			(config) => interceptor.interceptRequest(config)
 		);
 	}
 

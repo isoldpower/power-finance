@@ -1,17 +1,19 @@
 import { AUTHORIZATION_HEADER } from "../config.ts";
+import { BaseAxiosInterceptor } from "./base-interceptor.ts";
 
-import type {AxiosResponse, InternalAxiosRequestConfig} from "axios";
+import type { InternalAxiosRequestConfig } from "axios";
 
 
 type GetTokenCallback = () => Promise<string | null>;
 
-class AxiosAuthInterceptor  {
+class AxiosAuthInterceptor extends BaseAxiosInterceptor {
 	constructor(getToken: GetTokenCallback) {
+		super();
 		this.tokenCallback = getToken;
 	}
-	
-	private tokenCallback: GetTokenCallback;
-	
+
+	private readonly tokenCallback: GetTokenCallback;
+
 	public async interceptRequest(
 		config: InternalAxiosRequestConfig
 	): Promise<InternalAxiosRequestConfig> {
@@ -24,16 +26,6 @@ class AxiosAuthInterceptor  {
 		}
 
 		return config;
-	}
-
-	public interceptResponseSuccess(
-		value: AxiosResponse<unknown, unknown>
-	): AxiosResponse<unknown, unknown> | Promise<AxiosResponse<unknown, unknown>> {
-		return value;
-	}
-
-	public interceptResponseFault(error: unknown): unknown {
-		return error;
 	}
 }
 

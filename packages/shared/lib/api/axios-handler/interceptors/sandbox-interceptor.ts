@@ -1,36 +1,27 @@
 import { SANDBOX_HEADER } from "../config.ts";
+import { BaseAxiosInterceptor } from "./base-interceptor.ts";
 
-import type {AxiosResponse, InternalAxiosRequestConfig} from "axios";
-import type { AxiosInterceptor } from "./interface.ts";
+import type { InternalAxiosRequestConfig } from "axios";
 
 
-class AxiosSandboxInterceptor implements AxiosInterceptor {
+class AxiosSandboxInterceptor extends BaseAxiosInterceptor {
 	constructor(sandbox?: string) {
-		this.sandbox = sandbox || null;
+		super();
+		this.sandbox = sandbox === undefined || sandbox === '' ? null : sandbox;
 	}
-	
-	private sandbox: string | null;
-	
-	public async interceptRequest(
+
+	private readonly sandbox: string | null;
+
+	public interceptRequest(
 		config: InternalAxiosRequestConfig
 	): Promise<InternalAxiosRequestConfig> {
-		if (this.sandbox) {
-			config.headers[SANDBOX_HEADER] = this.sandbox;
-		} else {
+		if (this.sandbox === null) {
 			delete config.headers[SANDBOX_HEADER];
+		} else {
+			config.headers[SANDBOX_HEADER] = this.sandbox;
 		}
 
-		return config;
-	}
-	
-	public interceptResponseSuccess(
-		value: AxiosResponse<unknown, unknown>
-	): AxiosResponse<unknown, unknown> | Promise<AxiosResponse<unknown, unknown>> {
-		return value;
-	}
-	
-	public interceptResponseFault(error: unknown): unknown {
-		return error;
+		return Promise.resolve(config);
 	}
 }
 
