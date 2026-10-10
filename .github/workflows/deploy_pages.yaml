@@ -14,7 +14,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      NODE_OPTIONS: --require ts-node/register
       NX_NO_CLOUD: "true"
       CLIENT_CLERK_PUBLIC_KEY: ${{ vars.CLIENT_CLERK_PUBLIC_KEY }}
       CLIENT_FINANCE_APP_URL: ${{ vars.CLIENT_FINANCE_APP_URL }}
@@ -34,8 +33,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build finance remote
+        env:
+          NODE_OPTIONS: --require ts-node/register
         run: npx nx run @power/finance:build --skip-nx-cache
       - name: Build shell host
+        env:
+          NODE_OPTIONS: --require ts-node/register
         run: npx nx run @power/shell:build --skip-nx-cache
       - name: Deploy finance to manage.powerfinance.site
         uses: cloudflare/wrangler-action@v3
