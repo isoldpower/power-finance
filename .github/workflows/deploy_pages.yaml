@@ -31,7 +31,7 @@ jobs:
           node-version: 24
           cache: 'pnpm'
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm run install:safe
       - name: Build finance remote
         env:
           NODE_OPTIONS: --require ts-node/register
