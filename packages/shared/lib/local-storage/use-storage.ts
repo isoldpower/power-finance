@@ -10,9 +10,9 @@ function useLocalStorage<T>(
 	initialState: T,
 ): UseLocalStorageReturn<T> {
 	const actualValue = useStorageData(key);
-	const [state, set] = useState(initialState);
-
 	const multiValue = useMemo(() => initialState && typeof initialState === 'object', [initialState]);
+	const [state, set] = useState<T>(() => readStoredState(key, initialState));
+
 	const canReset = useMemo(() => !isDeepEqual(state, initialState), [state, initialState]);
 
 	useEffect(() => {
@@ -43,9 +43,10 @@ function useLocalStorage<T>(
 		(updateState: Partial<T> | T) => {
 			if (multiValue) {
 				set((prevValue) => {
-					setStorage<T>(key, { ...prevValue, ...updateState });
+					const nextValue = { ...prevValue, ...getStorage<T>(key), ...updateState };
+					setStorage<T>(key, nextValue);
 
-					return { ...prevValue, ...updateState };
+					return nextValue;
 				});
 			} else {
 				setStorage<T>(key, updateState as T);
@@ -81,11 +82,23 @@ function useLocalStorage<T>(
 	);
 }
 
+function readStoredState<T>(key: string, initialState: T): T {
+	const storedValue = getStorage<T>(key);
+
+	if (storedValue === null) {
+		return initialState;
+	}
+
+	return initialState && typeof initialState === 'object'
+		? { ...initialState, ...storedValue }
+		: storedValue;
+}
+
 function getStorage<T>(key: string): T | null {
 	try {
 		const result = localStorageGetItem(key);
 
-		return parseStorageValue<T>(result);
+		return result ? parseStorageValue<T>(result) : null;
 	} catch (error) {
 		console.error('Error while getting from storage:', error);
 	}

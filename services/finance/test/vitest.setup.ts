@@ -16,7 +16,9 @@ function mockLocalStorage() {
 
 		return {
 			getItem: (key: string) => store[key] || null,
-			setItem: (key: string, value: string) => { store[key] = value.toString() }
+			setItem: (key: string, value: string) => { store[key] = value.toString() },
+			removeItem: (key: string) => { delete store[key] },
+			clear: () => { store = {} }
 		};
 	})();
 
