@@ -5,8 +5,19 @@ import type { ConfigEnv } from "vite";
 import { resolve } from "path";
 import { env as processEnv } from "node:process";
 
-import { buildFederationHost } from "./config/federation.ts";
+import { buildFederationHost, buildUnavailableRemoteFallback } from "./config/federation.ts";
 import type { FederationRemoteOptions } from "./config/types.ts";
+
+const remoteDefinitions = [
+	{ name: 'finance', url: processEnv.CLIENT_FINANCE_APP_URL },
+	{ name: 'analytics', url: processEnv.CLIENT_ANALYTICS_APP_URL },
+];
+const availableRemotes = remoteDefinitions.filter(
+	(remote) => Boolean(remote.url)
+) as FederationRemoteOptions['remotes'];
+const unavailableRemoteNames = remoteDefinitions
+	.filter((remote) => !remote.url)
+	.map((remote) => remote.name);
 
 export default (env: ConfigEnv) => {
 	const options: ViteConfigOptions = {
@@ -22,12 +33,13 @@ export default (env: ConfigEnv) => {
 	return buildViteConfig({
 		envPrefix: 'CLIENT_',
 		plugins: [
+			buildUnavailableRemoteFallback(
+				unavailableRemoteNames,
+				resolve(options.paths.src, 'widgets', 'remotes', 'unavailable-remote', 'UnavailableRemoteApp.tsx')
+			),
 			buildFederationHost({
 				name: 'shell',
-				remotes: [
-					processEnv.CLIENT_FINANCE_APP_URL && { name: 'finance', url: processEnv.CLIENT_FINANCE_APP_URL },
-					processEnv.CLIENT_ANALYTICS_APP_URL && { name: 'analytics', url: processEnv.CLIENT_ANALYTICS_APP_URL },
-				].filter(Boolean) as FederationRemoteOptions['remotes']
+				remotes: availableRemotes
 			}),
 			TanStackRouterVite({
 				target: 'react',

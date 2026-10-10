@@ -1,10 +1,10 @@
-import { useSignIn } from "@internal/shared";
+import { clerk } from "@internal/shared";
 import { useCallback, useState } from "react";
 
 const useRecoveryCode = () => {
 	const [error, setError] = useState<string | null>(null);
 	const [secondFactor, setSecondFactor] = useState(false);
-	const {signIn, setActive, isLoaded} = useSignIn();
+	const {signIn, setActive, isLoaded} = clerk.useSignIn();
 
 	const verifyEmail = useCallback(async (
 		email: string
