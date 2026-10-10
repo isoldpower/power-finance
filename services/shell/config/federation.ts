@@ -1,4 +1,5 @@
 import { federation } from "@module-federation/vite";
+import type { Plugin } from "vite";
 import type { FederationRemoteOptions } from "./types.ts";
 
 export function buildFederationHost(
@@ -35,4 +36,21 @@ export function buildFederationHost(
 			}
 		},
 	})
+}
+
+export function buildUnavailableRemoteFallback(
+	unavailableRemoteNames: string[],
+	fallbackModulePath: string
+): Plugin {
+	return {
+		name: 'unavailable-remote-fallback',
+		enforce: 'pre',
+		resolveId(source) {
+			const isUnavailableRemoteImport = unavailableRemoteNames.some(
+				(remoteName) => source.startsWith(`${remoteName}/`)
+			);
+
+			return isUnavailableRemoteImport ? fallbackModulePath : null;
+		}
+	}
 }

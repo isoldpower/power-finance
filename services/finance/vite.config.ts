@@ -1,12 +1,18 @@
 /// <reference types="vitest/config" />
 import type { ConfigEnv } from "vite";
 import { resolve } from "path";
+import { env as processEnv } from "node:process";
 
 import type { ViteConfigOptions } from "@internal/config";
 import { buildFederationRemote } from "./config/federation.js";
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import { buildViteConfig } from "@internal/config";
 
+
+const financeApplicationUrl = processEnv.CLIENT_FINANCE_APP_URL;
+const publicBasePath = financeApplicationUrl
+	? `${financeApplicationUrl.replace(/\/+$/, '')}/`
+	: '/';
 
 export default (env: ConfigEnv) => {
 	const options: ViteConfigOptions = {
@@ -20,6 +26,7 @@ export default (env: ConfigEnv) => {
 	}
 
 	return buildViteConfig({
+		base: publicBasePath,
 		plugins: [
 			buildFederationRemote({ name: 'finance' }, env),
 			TanStackRouterVite({
