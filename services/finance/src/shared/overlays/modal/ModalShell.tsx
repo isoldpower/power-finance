@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { cn } from "@internal/ui-library";
+import { cn, usePortalTarget } from "@internal/ui-library";
 import { ShowOn } from "@shared/visibility";
 
 import type { FC, ReactNode } from "react";
@@ -13,9 +13,11 @@ interface ModalShellProps {
 }
 
 const ModalShell: FC<ModalShellProps> = ({ open, onClose, children, className }) => {
+	const portalContainer = usePortalTarget();
+
 	return (
 		<ShowOn condition={open}>
-			{createPortal(
+			{portalContainer && createPortal(
 				<div className="finance-theme">
 					<div 
 						onClick={onClose}
@@ -35,7 +37,7 @@ const ModalShell: FC<ModalShellProps> = ({ open, onClose, children, className })
 						{children}
 					</div>
 				</div>,
-				document.body
+				portalContainer
 			)}
 		</ShowOn>
 	);

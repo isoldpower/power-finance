@@ -2,7 +2,7 @@ import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { ChevronDownIcon } from "lucide-react";
 
-import { cn } from "@/utils";
+import { cn, usePortalContainer } from "@/utils";
 import { Select, SelectValue } from "@/entities/shadcn";
 
 const FinanceSelect = Select;
@@ -38,8 +38,10 @@ function FinanceSelectContent({
 	sideOffset = 6,
 	...props
 }: React.ComponentProps<typeof SelectPrimitive.Content>) {
+	const portalContainer = usePortalContainer();
+
 	return (
-		<SelectPrimitive.Portal>
+		<SelectPrimitive.Portal container={portalContainer}>
 			<SelectPrimitive.Content
 				position="popper"
 				sideOffset={sideOffset}

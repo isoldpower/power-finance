@@ -1,4 +1,5 @@
 import { createPortal } from "react-dom";
+import { usePortalTarget } from "@internal/ui-library";
 
 import { SlideOverOverlay } from "./SlideOverOverlay.tsx";
 import { SlideOverBody } from "./SlideOverBody.tsx";
@@ -15,8 +16,9 @@ function SlideOver<T extends SlideOverPanelsRegistry>({
 	panelsRegistry,
 }: SlideOverProps<T>) {
 	const slideOverState = useContextState(panelsRegistry);
+	const portalContainer = usePortalTarget();
 
-	return slideOverState.currentPanel ? createPortal(
+	return slideOverState.currentPanel && portalContainer ? createPortal(
 		<SlideOverContext value={slideOverState.contextValue}>
 			<div className="finance-theme">
 				<SlideOverOverlay />
@@ -25,7 +27,7 @@ function SlideOver<T extends SlideOverPanelsRegistry>({
 				</SlideOverBody>
 			</div>
 		</SlideOverContext>,
-		document.body
+		portalContainer
 	) : null;
 }
 

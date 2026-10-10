@@ -1,5 +1,6 @@
 import type { FC, ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { usePortalTarget } from "@internal/ui-library";
 
 import { Heading } from "@shared/pure-components/typography";
 
@@ -17,6 +18,7 @@ interface SlideOverPanelProps {
 // The body is a render-prop given `close` so submit handlers can dismiss the panel.
 const SlideOverPanel: FC<SlideOverPanelProps> = ({ trigger, title, onClose, children }) => {
 	const { open, onOpen, onClose: closeState } = useDisclosure();
+	const portalContainer = usePortalTarget();
 
 	const close = () => {
 		closeState();
@@ -26,7 +28,7 @@ const SlideOverPanel: FC<SlideOverPanelProps> = ({ trigger, title, onClose, chil
 	return (
 		<>
 			<DisclosureTrigger onOpen={onOpen}>{trigger}</DisclosureTrigger>
-			{open ? createPortal(
+			{open && portalContainer ? createPortal(
 				<div className="finance-theme">
 					<div onClick={close} className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px]" />
 					<div className="fixed inset-y-0 right-0 z-[41] flex w-[440px] max-w-[92vw] flex-col border-l border-border bg-card shadow-[var(--shadow-lg)] animate-in slide-in-from-right duration-200">
@@ -44,7 +46,7 @@ const SlideOverPanel: FC<SlideOverPanelProps> = ({ trigger, title, onClose, chil
 						{children({ close })}
 					</div>
 				</div>,
-				document.body
+				portalContainer
 			) : null}
 		</>
 	);

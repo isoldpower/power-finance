@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { cn } from "@internal/ui-library";
+import { cn, usePortalTarget } from "@internal/ui-library";
 
 import type { FC } from "react";
 import { DisplayText, Text } from "@shared/pure-components/typography";
@@ -25,7 +25,10 @@ const NetWorthTooltip: FC<NetWorthTooltipProps> = ({
 	diffPositive,
 	diffFormatted,
 	ago
-}) => createPortal(
+}) => {
+	const portalContainer = usePortalTarget();
+
+	return portalContainer ? createPortal(
 	<div
 		className={cn(
 			"finance-theme pointer-events-none fixed z-[60] -translate-y-1/2 whitespace-nowrap",
@@ -53,8 +56,9 @@ const NetWorthTooltip: FC<NetWorthTooltipProps> = ({
 			<span className="text-[var(--surface)] opacity-55">· {ago}</span>
 		</Text>
 	</div>,
-	document.body
-);
+	portalContainer
+) : null;
+};
 
 NetWorthTooltip.displayName = 'NetWorthTooltip';
 

@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { AppLoader } from '@internal/ui-library';
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { OverlayRoot } from "@shared/overlays";
 
 import uiLibraryStyles from '@internal/ui-library/css?inline';
 import financeStyles from './styles/_index.css?inline';
@@ -27,9 +28,11 @@ declare module '@tanstack/react-router' {
 function App() {
 	return (
 		<Suspense fallback={<AppLoader />}>
-			<QueryClientProvider client={queryClient}>
-				<RouterProvider router={router} />
-			</QueryClientProvider>
+			<OverlayRoot>
+				<QueryClientProvider client={queryClient}>
+					<RouterProvider router={router} />
+				</QueryClientProvider>
+			</OverlayRoot>
 		</Suspense>
 	)
 }
