@@ -14,8 +14,8 @@ const checkEnvVariables = (
 	if (Object.entries(envDictionary).find(([, value]) => value === undefined)) {
 		throw new Error('Your .env file is not configured correctly. \n' +
 			`Expected variables: ${Object.keys(envDictionary).join(', ')}\n` +
-			`Received variables: ${receivedEntries.join(', ')}\n` +
-			`Missing variables: ${undefinedEntries.join(', ')}\n`);
+			`Received variables: ${receivedEntries.map(([key, value]) => `${key}=${String(value)}`).join(', ')}\n` +
+			`Missing variables: ${undefinedEntries.map(([key]) => key).join(', ')}\n`);
 	}
 
 	return envDictionary as ImportMetaEnv;
