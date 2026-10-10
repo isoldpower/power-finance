@@ -29,10 +29,11 @@ function useAssistantApi(options: ApiServerOptions): UseAssistantApiResponse {
 		return new AssistantHttpRESTApiClient(axiosInstance, options.versions, {
 			url: toSocketUrl(`${options.baseUrl}${API_BASE_PATH}${ADVICE_SOCKET_PATH}`, {
 				sandbox: options.sandbox,
+				demoSession: options.demoSession,
 			}),
 			authorize: () => getToken(),
 		});
-	}, [axiosInstance, options.mode, options.versions, options.baseUrl, options.sandbox, getToken]);
+	}, [axiosInstance, options.mode, options.versions, options.baseUrl, options.sandbox, options.demoSession, getToken]);
 
 	return useMemo(() => ({
 		rest: restClient

@@ -1,25 +1,16 @@
 import { CORRELATION_HEADER } from "../config.ts";
+import { BaseAxiosInterceptor } from "./base-interceptor.ts";
 
-import type {AxiosResponse, InternalAxiosRequestConfig} from "axios";
+import type { InternalAxiosRequestConfig } from "axios";
 
 
-class AxiosCorrelationInterceptor {
-	public async interceptRequest(
+class AxiosCorrelationInterceptor extends BaseAxiosInterceptor {
+	public interceptRequest(
 		config: InternalAxiosRequestConfig
 	): Promise<InternalAxiosRequestConfig> {
 		config.headers[CORRELATION_HEADER] = crypto.randomUUID();
 
-		return config;
-	}
-
-	public interceptResponseSuccess(
-		value: AxiosResponse<unknown, unknown>
-	): AxiosResponse<unknown, unknown> | Promise<AxiosResponse<unknown, unknown>> {
-		return value;
-	}
-
-	public interceptResponseFault(error: unknown): unknown {
-		return error;
+		return Promise.resolve(config);
 	}
 }
 

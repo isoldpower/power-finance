@@ -10,6 +10,7 @@ function useResourceAxios(options: ApiServerOptions, resourcePath: string): Axio
 	return useAxiosInstance({
 		baseUrl: `${options.baseUrl}${API_BASE_PATH}${resourcePath}`,
 		sandbox: options.sandbox,
+		demoSession: options.demoSession,
 	});
 }
 

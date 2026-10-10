@@ -12,7 +12,7 @@ interface AxiosInterceptor<TRequest = unknown, TResponse = unknown> {
 	
 	interceptResponseFault(
 		error: unknown
-	): unknown;
+	): Promise<never>;
 }
 
 export type { AxiosInterceptor };
