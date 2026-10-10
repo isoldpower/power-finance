@@ -1,0 +1,51 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: --require ts-node/register
+      NX_NO_CLOUD: "true"
+      CLIENT_CLERK_PUBLIC_KEY: ${{ vars.CLIENT_CLERK_PUBLIC_KEY }}
+      CLIENT_FINANCE_APP_URL: ${{ vars.CLIENT_FINANCE_APP_URL }}
+      CLIENT_API_BASE_URL: ${{ vars.CLIENT_API_BASE_URL }}
+      CLIENT_API_MODE: live
+      CLIENT_API_SANDBOX: ""
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build finance remote
+        run: npx nx run @power/finance:build --skip-nx-cache
+      - name: Build shell host
+        run: npx nx run @power/shell:build --skip-nx-cache
+      - name: Deploy finance to manage.powerfinance.site
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy services/finance/dist --project-name=power-finance-manage --branch=main --commit-dirty=true
+      - name: Deploy shell to powerfinance.site
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy services/shell/dist --project-name=power-finance-shell --branch=main --commit-dirty=true
