@@ -25,6 +25,11 @@ describe('toSocketUrl', () => {
 			.toBe('ws://localhost:8080/chat?sandbox=feature%2Fai+chat');
 	});
 
+	test('carries the demo session in the query beside the sandbox', () => {
+		expect(toSocketUrl('http://localhost:8080/chat', { sandbox: 'nikita', demoSession: 'demo-42' }))
+			.toBe('ws://localhost:8080/chat?sandbox=nikita&demo_session=demo-42');
+	});
+
 	test('leaves the query alone when no sandbox is configured', () => {
 		expect(toSocketUrl('http://localhost:8080/chat', {}))
 			.toBe('ws://localhost:8080/chat');

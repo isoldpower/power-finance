@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { checkEnvVariables } from "@app/env/check-env.ts";
+import {} from "@app/env/demo-session.ts";
 import App from '@app/App.tsx'
 
 

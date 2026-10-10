@@ -56,6 +56,21 @@ describe('the sandbox header', () => {
 		expect(headers['X-Sandbox']).toBeUndefined();
 	});
 
+	test('the demo session rides along as its own header', async () => {
+		const instance = createAxiosInstance({ baseUrl: 'http://api.test', getToken: noToken, demoSession: 'demo-42' });
+		const headers = await captureHeaders(instance, (client, options) => client.get('/wallets', options));
+
+		expect(headers['X-Demo-Session']).toBe('demo-42');
+		expect(headers['X-Sandbox']).toBeUndefined();
+	});
+
+	test('the demo session is absent outside the portfolio embed', async () => {
+		const instance = createAxiosInstance({ baseUrl: 'http://api.test', getToken: noToken });
+		const headers = await captureHeaders(instance, (client, options) => client.get('/wallets', options));
+
+		expect(headers['X-Demo-Session']).toBeUndefined();
+	});
+
 	test('sits alongside the correlation id and the bearer token', async () => {
 		const instance = createAxiosInstance({
 			baseUrl: 'http://api.test',

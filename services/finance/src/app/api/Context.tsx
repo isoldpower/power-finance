@@ -1,6 +1,7 @@
 import { createContext, useMemo } from 'react';
 import { WriteVersionStore } from "@shared/api";
 
+import { getDemoSession } from "../env/demo-session.ts";
 import { resolveApiMode } from "./config.ts";
 import { ApiQueryReactions } from "./query-reactions";
 import { ApiToasts } from "./toasts";
@@ -84,6 +85,7 @@ const ApiProvider: FC<ApiProviderProps> = ({
 		baseUrl: envVariables.CLIENT_API_BASE_URL,
 		mode: resolveApiMode(envVariables.CLIENT_API_MODE),
 		sandbox: envVariables.CLIENT_API_SANDBOX,
+		demoSession: getDemoSession(),
 		versions: new WriteVersionStore(),
 	}), [
 		envVariables.CLIENT_API_BASE_URL,

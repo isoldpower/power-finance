@@ -6,6 +6,7 @@ interface ApiServerOptions {
 	baseUrl: string;
 	mode: ApiMode;
 	sandbox?: string;
+	demoSession?: string;
 	versions: WriteVersionStore;
 }
 
