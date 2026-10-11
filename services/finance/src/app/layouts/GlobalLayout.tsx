@@ -12,6 +12,7 @@ import {
 	NavbarNotificationItem
 } from "@widget/navigation";
 import { RouteLink } from "@shared/routing";
+import { ShowOnStandalone } from "@shared/visibility";
 import { BrandIcon, HeaderNavbar } from "@entity/navigation";
 
 
@@ -34,9 +35,11 @@ const GlobalLayout: FC<GlobalLayoutProps> = ({ children }) => {
 						<HeaderNavbar>
 							<div className="flex w-full justify-between items-center">
 								<div className="flex items-center gap-4">
-									<RouteLink to="dashboard" className="flex items-center gap-2.5">
-										<BrandIcon />
-									</RouteLink>
+									<ShowOnStandalone>
+										<RouteLink to="dashboard" className="flex items-center gap-2.5">
+											<BrandIcon />
+										</RouteLink>
+									</ShowOnStandalone>
 									<div className="hidden md:block">
 										<NavbarGroupTabs>
 											{(tab) => <>{tab.label}</>}

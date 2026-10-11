@@ -5,6 +5,8 @@ import { SettingsProvider } from "@internal/shared";
 
 import { getTanStackPageFx } from "@shared/pure-components/feedback";
 
+import { useRouteDocumentTitle } from "../document-title";
+
 
 export const Route = createRootRoute({
 	pendingComponent: AppLoader,
@@ -16,6 +18,8 @@ export const Route = createRootRoute({
 const RootComponent = lazy(() => import('../RootComponent.tsx'));
 
 function RootLayout () {
+	useRouteDocumentTitle();
+
 	return (
 		<SettingsProvider>
 			<RootComponent />

@@ -7,7 +7,11 @@ interface FormLogoProps {
 
 const FormLogo: FC<FormLogoProps> = () => {
 	return (
-		<img src={logoUrl} alt="Logo" className={`${classes.recoveryForm__logo} w-12 h-6`} />
+		<img 
+			src={logoUrl}
+			alt="Power Finance logo"
+			className={`${classes.recoveryForm__logo} w-12 h-6`}
+		/>
 	);
 };
 

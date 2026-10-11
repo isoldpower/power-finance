@@ -10,17 +10,17 @@ const LogoComponent: FC<LogoComponentProps> = ({ withText }) => {
   return (
 	<div className='flex items-center gap-4'>
 	  <img
-			alt="Company logo"
+			alt="Power Finance logo"
 			className='w-6 h-6'
 			src={logoAsset} />
 		{withText && (
-			<span>Company</span>
+			<span>Power Finance</span>
 		)}
 	</div>
   )
 }
 
-LogoComponent.displayName = 'LogoWithText';
+LogoComponent.displayName = 'LogoComponent';
 
 export { LogoComponent };
 export type { LogoComponentProps };

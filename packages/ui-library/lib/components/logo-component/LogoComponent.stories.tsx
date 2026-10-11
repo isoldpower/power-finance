@@ -10,7 +10,7 @@ const meta = {
 		docs: {
 			description: {
 				component: [
-					"`LogoComponent` renders the company logo mark, optionally followed by the wordmark.",
+					"`LogoComponent` renders the Power Finance logo mark, optionally followed by the wordmark.",
 					"Use the icon-only form in tight spots (a collapsed sidebar, a mobile header) and the `withText` form where there is room for the full brand.",
 				].join("\n\n"),
 			},

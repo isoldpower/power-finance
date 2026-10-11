@@ -4,6 +4,7 @@ import { getTanStackPageFx } from "@shared/components";
 import { LoginPage } from "@page/login-page";
 
 export const Route = createFileRoute('/auth/login')({
-  component: LoginPage,
+	staticData: {title: 'Sign in'},
+	component: LoginPage,
 	...getTanStackPageFx('default-page')
-})
+});
