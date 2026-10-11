@@ -40,7 +40,7 @@ const SidebarAuthentication: FC<SidebarAuthenticationProps> = () => {
 			<clerk.SignedOut>
 				<NavigateToSignIn>
 					<SignInButton>
-						Sign in
+						{sidebarOpen && 'Sign in'}
 					</SignInButton>
 				</NavigateToSignIn>
 			</clerk.SignedOut>

@@ -1,6 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { captureDemoSession } from '@internal/shared'
 import App from './app/App.tsx'
+
+captureDemoSession();
 
 const rootElement = document.getElementById('root')
 

@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import { clerk } from "@internal/shared";
 import { toSocketUrl } from "@shared/api";
 
 import { AssistantHttpRESTApiClient, AssistantMockRESTApiClient } from "@feature/assistance";
 import { API_BASE_PATH } from "../config.ts";
+import { useApiTokenGetter } from "../guest-demo/use-api-token-getter.ts";
 import { useResourceAxios } from "./use-resource-axios.ts";
 
 import type { IAssistantRESTApiClient } from "@feature/assistance";
@@ -19,7 +19,7 @@ interface UseAssistantApiResponse {
 
 function useAssistantApi(options: ApiServerOptions): UseAssistantApiResponse {
 	const axiosInstance = useResourceAxios(options, ASSISTANT_PATH);
-	const { getToken } = clerk.useAuth();
+	const getToken = useApiTokenGetter(options);
 
 	const restClient = useMemo<IAssistantRESTApiClient>(() => {
 		if (options.mode !== 'live') {
@@ -33,7 +33,15 @@ function useAssistantApi(options: ApiServerOptions): UseAssistantApiResponse {
 			}),
 			authorize: () => getToken(),
 		});
-	}, [axiosInstance, options.mode, options.versions, options.baseUrl, options.sandbox, options.demoSession, getToken]);
+	}, [
+		axiosInstance,
+		options.mode,
+		options.versions,
+		options.baseUrl,
+		options.sandbox,
+		options.demoSession,
+		getToken
+	]);
 
 	return useMemo(() => ({
 		rest: restClient

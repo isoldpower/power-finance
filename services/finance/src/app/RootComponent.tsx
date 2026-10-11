@@ -2,18 +2,20 @@ import { Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { AuthGuard, AuthProvider, getIsEmbedded, useIsClerkProvided, ClerkProvider } from "@internal/shared";
 import { useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
-
 import { UserPreferencesSync } from "@feature/configuration";
 
 import { ApiProvider } from "./api";
 import { checkEnvVariables } from "./env/check-env.ts";
+import { getDemoSession } from "./env/demo-session.ts";
 import { GlobalLayout } from "./layouts/GlobalLayout.tsx";
-import type { FC, ReactNode } from "react";
+
+import {FC, ReactNode, useMemo} from "react";
 
 
 function RootComponent() {
 	const envVariables = checkEnvVariables();
-	
+	const isGuestDemo = useMemo(() => getDemoSession() !== undefined, []);
+
 	return (
 		<DynamicAuthProvider
 			key={getIsEmbedded() ? 'embedded' : 'primary'} 
@@ -21,16 +23,25 @@ function RootComponent() {
 		>
 			<ApiProvider envVariables={envVariables}>
 				<UserPreferencesSync />
-				<AuthGuard>
+				<SignedInOrGuestDemo isGuestDemo={isGuestDemo}>
 					<GlobalLayout>
 						<Outlet />
 		 			</GlobalLayout>
 					<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
-				</AuthGuard>
+				</SignedInOrGuestDemo>
 			</ApiProvider>
 		</DynamicAuthProvider>
 	)
 }
+
+const SignedInOrGuestDemo: FC<{ isGuestDemo: boolean; children: ReactNode }> = ({
+	isGuestDemo,
+	children
+}) => {
+	return isGuestDemo
+		? children
+		: <AuthGuard>{children}</AuthGuard>;
+};
 
 const DynamicAuthProvider: FC<{ envVariables: ImportMetaEnv; children: ReactNode }> = ({
 	envVariables,
