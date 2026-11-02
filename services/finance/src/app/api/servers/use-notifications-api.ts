@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import { NotificationsHttpRESTApiClient, NotificationsMockRESTApiClient } from "@feature/assistance";
-import { useApiTokenGetter } from "../guest-demo/use-api-token-getter.ts";
+import { useApiTokenGetter } from "./use-api-token-getter.ts";
 import { useResourceAxios } from "./use-resource-axios.ts";
 
 import type { INotificationsRESTApiClient } from "@feature/assistance";
@@ -16,7 +16,7 @@ interface UseNotificationsApiResponse {
 
 function useNotificationsApi(options: ApiServerOptions): UseNotificationsApiResponse {
 	const axiosInstance = useResourceAxios(options, NOTIFICATIONS_PATH);
-	const getToken = useApiTokenGetter(options);
+	const getToken = useApiTokenGetter();
 
 	const restClient = useMemo<INotificationsRESTApiClient>(() => {
 		return options.mode === 'live'

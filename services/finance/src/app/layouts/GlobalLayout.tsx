@@ -14,6 +14,7 @@ import {
 import { RouteLink } from "@shared/routing";
 import { ShowOnStandalone } from "@shared/visibility";
 import { BrandIcon, HeaderNavbar } from "@entity/navigation";
+import { DemoModeBar } from "@widget/accounts";
 
 
 interface GlobalLayoutProps {
@@ -32,39 +33,42 @@ const GlobalLayout: FC<GlobalLayoutProps> = ({ children }) => {
 				<SiteTourProvider>
 					<FinanceBackground />
 					<div className="relative z-[1] flex min-h-screen flex-col">
-						<HeaderNavbar>
-							<div className="flex w-full justify-between items-center">
-								<div className="flex items-center gap-4">
-									<ShowOnStandalone>
-										<RouteLink to="dashboard" className="flex items-center gap-2.5">
-											<BrandIcon />
-										</RouteLink>
-									</ShowOnStandalone>
-									<div className="hidden md:block">
-										<NavbarGroupTabs>
-											{(tab) => <>{tab.label}</>}
-										</NavbarGroupTabs>
+						<div className="sticky top-0 z-30">
+							<HeaderNavbar>
+								<div className="flex w-full justify-between items-center">
+									<div className="flex items-center gap-4">
+										<ShowOnStandalone>
+											<RouteLink to="dashboard" className="flex items-center gap-2.5">
+												<BrandIcon />
+											</RouteLink>
+										</ShowOnStandalone>
+										<div className="hidden md:block">
+											<NavbarGroupTabs>
+												{(tab) => <>{tab.label}</>}
+											</NavbarGroupTabs>
+										</div>
+										<div className="md:hidden">
+											<NavbarDropdownTabs>
+												{(tab) => <>{tab.label}</>}
+											</NavbarDropdownTabs>
+										</div>
 									</div>
-									<div className="md:hidden">
-										<NavbarDropdownTabs>
-											{(tab) => <>{tab.label}</>}
-										</NavbarDropdownTabs>
+									<div className="flex gap-2">
+										<NavbarSearch />
+										<NavbarNotifications>
+											{(notification) => (
+												<NavbarNotificationItem
+													key={notification.id}
+													notification={notification}
+												/>
+											)}
+										</NavbarNotifications>
+										<NavbarAccountMenu />
 									</div>
 								</div>
-								<div className="flex gap-2">
-									<NavbarSearch />
-									<NavbarNotifications>
-										{(notification) => (
-											<NavbarNotificationItem
-												key={notification.id}
-												notification={notification}
-											/>
-										)}
-									</NavbarNotifications>
-									<NavbarAccountMenu />
-								</div>
-							</div>
-						</HeaderNavbar>
+							</HeaderNavbar>
+							<DemoModeBar />
+						</div>
 						<main className="flex-1">
 							{children}
 						</main>

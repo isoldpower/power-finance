@@ -1,46 +1,84 @@
+import { useMemo } from "react";
 import { Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { AuthGuard, AuthProvider, getIsEmbedded, useIsClerkProvided, ClerkProvider } from "@internal/shared";
 import { useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
 import { UserPreferencesSync } from "@feature/configuration";
+import { GuestDemoPreparationGuard, GuestDemoSessionProvider, useGuestDemoPreparation } from "@feature/accounts";
+import { DemoPreparationPage } from "@page/demo-preparation-page";
 
-import { ApiProvider } from "./api";
+import { ApiProvider, resolveApiMode, useGuestDemoSessionsApi } from "./api";
 import { checkEnvVariables } from "./env/check-env.ts";
 import { getDemoSession } from "./env/demo-session.ts";
 import { GlobalLayout } from "./layouts/GlobalLayout.tsx";
 
-import {FC, ReactNode, useMemo} from "react";
+import type { FC, ReactNode } from "react";
 
 
 function RootComponent() {
 	const envVariables = checkEnvVariables();
-	const isGuestDemo = useMemo(() => getDemoSession() !== undefined, []);
+	const demoSession = useMemo(() => getDemoSession(), []);
 
 	return (
 		<DynamicAuthProvider
 			key={getIsEmbedded() ? 'embedded' : 'primary'} 
 			envVariables={envVariables}
 		>
-			<ApiProvider envVariables={envVariables}>
-				<UserPreferencesSync />
-				<SignedInOrGuestDemo isGuestDemo={isGuestDemo}>
-					<GlobalLayout>
-						<Outlet />
-		 			</GlobalLayout>
-					<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
-				</SignedInOrGuestDemo>
-			</ApiProvider>
+			<GuestDemoSessionScope demoSession={demoSession} envVariables={envVariables}>
+				<ApiProvider envVariables={envVariables}>
+					<UserPreferencesSync />
+					<SignedInOrGuestDemo demoSession={demoSession}>
+						<GlobalLayout>
+							<Outlet />
+						</GlobalLayout>
+						<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
+					</SignedInOrGuestDemo>
+				</ApiProvider>
+			</GuestDemoSessionScope>
 		</DynamicAuthProvider>
 	)
 }
 
-const SignedInOrGuestDemo: FC<{ isGuestDemo: boolean; children: ReactNode }> = ({
-	isGuestDemo,
+const GuestDemoSessionScope: FC<{ demoSession?: string; envVariables: ImportMetaEnv; children: ReactNode }> = ({
+	demoSession,
+	envVariables,
 	children
 }) => {
-	return isGuestDemo
-		? children
-		: <AuthGuard>{children}</AuthGuard>;
+	const mode = resolveApiMode(envVariables.CLIENT_API_MODE);
+	const client = useGuestDemoSessionsApi({
+		baseUrl: envVariables.CLIENT_API_BASE_URL,
+		mode,
+		sandbox: envVariables.CLIENT_API_SANDBOX,
+		demoSession,
+	});
+
+	return (
+		<GuestDemoSessionProvider
+			demoSession={mode === 'live' ? demoSession ?? null : null}
+			client={client}
+		>
+			{children}
+		</GuestDemoSessionProvider>
+	);
+};
+
+const SignedInOrGuestDemo: FC<{ demoSession?: string; children: ReactNode }> = ({
+	demoSession,
+	children
+}) => {
+	return demoSession === undefined
+		? <AuthGuard>{children}</AuthGuard>
+		: <GuestDemoPreparationGate>{children}</GuestDemoPreparationGate>;
+};
+
+const GuestDemoPreparationGate: FC<{ children: ReactNode }> = ({ children }) => {
+	const preparing = useGuestDemoPreparation();
+
+	return (
+		<GuestDemoPreparationGuard preparing={preparing} pending={<DemoPreparationPage />}>
+			{children}
+		</GuestDemoPreparationGuard>
+	);
 };
 
 const DynamicAuthProvider: FC<{ envVariables: ImportMetaEnv; children: ReactNode }> = ({

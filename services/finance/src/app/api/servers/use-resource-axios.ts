@@ -1,13 +1,13 @@
 import { useAxiosInstance } from "@internal/shared";
 import { API_BASE_PATH } from "../config.ts";
-import { useApiTokenGetter } from "../guest-demo/use-api-token-getter.ts";
+import { useApiTokenGetter } from "./use-api-token-getter.ts";
 
 import type { AxiosInstance } from "axios";
 import type { ApiServerOptions } from "./types.ts";
 
 
 function useResourceAxios(options: ApiServerOptions, resourcePath: string): AxiosInstance {
-	const getToken = useApiTokenGetter(options);
+	const getToken = useApiTokenGetter();
 
 	return useAxiosInstance({
 		getToken,

@@ -3,7 +3,7 @@ import { toSocketUrl } from "@shared/api";
 
 import { AssistantHttpRESTApiClient, AssistantMockRESTApiClient } from "@feature/assistance";
 import { API_BASE_PATH } from "../config.ts";
-import { useApiTokenGetter } from "../guest-demo/use-api-token-getter.ts";
+import { useApiTokenGetter } from "./use-api-token-getter.ts";
 import { useResourceAxios } from "./use-resource-axios.ts";
 
 import type { IAssistantRESTApiClient } from "@feature/assistance";
@@ -19,7 +19,7 @@ interface UseAssistantApiResponse {
 
 function useAssistantApi(options: ApiServerOptions): UseAssistantApiResponse {
 	const axiosInstance = useResourceAxios(options, ASSISTANT_PATH);
-	const getToken = useApiTokenGetter(options);
+	const getToken = useApiTokenGetter();
 
 	const restClient = useMemo<IAssistantRESTApiClient>(() => {
 		if (options.mode !== 'live') {

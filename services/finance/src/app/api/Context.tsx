@@ -17,11 +17,12 @@ import { useAssistantApi } from "./servers/use-assistant-api.ts";
 import { useCurrenciesApi } from "./servers/use-currencies-api.ts";
 import { useAccountsApi } from "./servers/use-accounts-api.ts";
 import { useAuthApi } from "./servers/use-auth-api.ts";
+import { useGuestDemoReadinessApi } from "./servers/use-guest-demo-readiness-api.ts";
 
 import type { FC } from 'react';
 import type { IGoalsRESTApiClient, IWalletsRESTApiClient } from "@feature/wallets";
 import type { ITransactionsRESTApiClient } from "@feature/transactions";
-import type { IAccountsRESTApiClient } from "@feature/accounts";
+import type { IAccountsRESTApiClient, IGuestDemoReadinessRESTApiClient } from "@feature/accounts";
 import type { IAuthRESTApiClient, IWebhooksRESTApiClient } from "@feature/configuration";
 import type { IMetricsRESTApiClient } from "@feature/metrics";
 import type { INotificationsRESTApiClient } from "@feature/assistance";
@@ -67,6 +68,9 @@ interface ApiContextType {
 	},
 	currencyServers: {
 		readonly rest: ICurrenciesRESTApiClient
+	},
+	guestDemoServers: {
+		readonly rest: IGuestDemoReadinessRESTApiClient
 	}
 }
 
@@ -105,6 +109,7 @@ const ApiProvider: FC<ApiProviderProps> = ({
 	const assistantServers = useAssistantApi(serverOptions);
 	const currencyServers = useCurrenciesApi(serverOptions);
 	const authServers = useAuthApi();
+	const guestDemoServers = useGuestDemoReadinessApi(serverOptions);
 
 	const contextValue = useMemo<ApiContextType>(() => ({
 		walletServers,
@@ -118,7 +123,8 @@ const ApiProvider: FC<ApiProviderProps> = ({
 		automationServers,
 		notificationServers,
 		currencyServers,
-		authServers
+		authServers,
+		guestDemoServers
 	}), [
 		transactionServers,
 		walletServers,
@@ -131,7 +137,8 @@ const ApiProvider: FC<ApiProviderProps> = ({
 		notificationServers,
 		assistantServers,
 		currencyServers,
-		authServers
+		authServers,
+		guestDemoServers
 	]);
 
 	return (
