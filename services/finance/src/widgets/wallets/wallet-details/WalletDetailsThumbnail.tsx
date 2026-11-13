@@ -5,7 +5,7 @@ import { SlideOverTrigger } from "@shared/overlays";
 import { WalletSwatch, walletTypeLabel } from "@entity/wallets";
 import { ShowWhenUpdated } from "@feature/wallets";
 
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import type { Wallet } from "@entity/wallets";
 
 
@@ -14,6 +14,7 @@ interface WalletDetailsThumbnailProps {
 	transferPanelId: string;
 	editWalletPanelId: string;
 	disabled?: boolean;
+	children?: ReactNode;
 }
 
 const WalletDetailsThumbnail: FC<WalletDetailsThumbnailProps> = ({ 
@@ -21,9 +22,10 @@ const WalletDetailsThumbnail: FC<WalletDetailsThumbnailProps> = ({
 	transferPanelId,
 	editWalletPanelId,
 	disabled = false,
+	children,
 }) => {
 	return (
-		<div className="flex items-start gap-3.5">
+		<div className="flex flex-wrap items-start gap-3.5 sm:flex-nowrap">
 			<WalletSwatch size='lg' color={walletGradient(wallet.color)} />
 			<div className="min-w-0 flex-1">
 				<DisplayText size="lg" truncate>
@@ -38,7 +40,7 @@ const WalletDetailsThumbnail: FC<WalletDetailsThumbnailProps> = ({
 					</ShowWhenUpdated>
 				</Caption>
 			</div>
-			<div className="flex gap-2">
+			<div className="flex w-full gap-2 sm:w-auto [&_button]:flex-1 sm:[&_button]:flex-none">
 				<SlideOverTrigger asChild={true} panelId={transferPanelId}>
 					<FinanceButton variant="outline" size="sm" disabled={disabled}>
 						Transfer
@@ -49,6 +51,7 @@ const WalletDetailsThumbnail: FC<WalletDetailsThumbnailProps> = ({
 						Edit
 					</FinanceButton>
 				</SlideOverTrigger>
+				{children}
 			</div>
 		</div>
 	);

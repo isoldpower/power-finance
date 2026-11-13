@@ -1,7 +1,7 @@
 import { cn, FinanceComboboxTrigger } from "@internal/ui-library";
 import { textClass } from "@shared/pure-components/typography";
 
-import { FILTER_CONTROL_WIDTH } from "../filter-control.ts";
+import { FILTER_CONTROL_SIZE } from "../filter-control.ts";
 
 import type { FC, PropsWithChildren } from "react";
 
@@ -14,7 +14,7 @@ const FilterComboboxTrigger: FC<FilterComboboxTriggerProps> = ({ children, activ
 	<FinanceComboboxTrigger
 		className={cn(
 			textClass({ size: 'xs', weight: 'semibold' }),
-			FILTER_CONTROL_WIDTH,
+			FILTER_CONTROL_SIZE,
 			"rounded-[var(--radius-md)] bg-transparent px-3 py-0",
 			active
 				? "border-[var(--accent-border)] bg-[var(--accent-soft)] text-primary"

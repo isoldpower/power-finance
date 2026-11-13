@@ -85,7 +85,7 @@ const PlanningPage: FC = () => {
 						<AutomationsBrowserProvider>
 							<FinanceCard className="overflow-hidden">
 								<AutomationsBrowserHeader>
-									<SlideOverTrigger panelId={planningSlides.newRule}>
+									<SlideOverTrigger asChild={true} panelId={planningSlides.newRule}>
 										<AutomationsToolbar.Action>
 											＋ New rule
 										</AutomationsToolbar.Action>

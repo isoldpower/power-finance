@@ -1,3 +1,4 @@
+import { useShallow } from "zustand/react/shallow";
 import { EditWalletForm } from "@widget/wallets";
 import { toPanelWallet } from "@entity/wallets";
 import {
@@ -12,9 +13,14 @@ import type { FC } from "react";
 
 
 const EditWallet: FC = () => {
-	const selectedWalletId = useWalletsSelection((state) => state.selectedWalletId);
+	const { selectedWalletId, selectionConfirmed } = useWalletsSelection(
+		useShallow((state) => ({
+			selectedWalletId: state.selectedWalletId,
+			selectionConfirmed: state.selectionConfirmed,
+		}))
+	);
 	const { isPending, isError, wallet: fetchedWallet } = useWallet(selectedWalletId ?? 'none', {
-		enabled: selectedWalletId !== null,
+		enabled: selectedWalletId !== null && selectionConfirmed,
 	});
 	const { onClose } = useSlideOverContext();
 

@@ -5,6 +5,7 @@ import { WalletDetailsSkeletonBalances } from "./details-skeleton/WalletDetailsS
 import { WalletDetailsSkeletonBody } from "./details-skeleton/WalletDetailsSkeletonBody.tsx";
 import { WalletDetailsSkeletonHeader } from "./details-skeleton/WalletDetailsSkeletonHeader.tsx";
 import { WalletDetailsSkeletonMetric } from "./details-skeleton/WalletDetailsSkeletonMetric.tsx";
+import { WalletDetailsSkeletonMetrics } from "./details-skeleton/WalletDetailsSkeletonMetrics.tsx";
 import { WalletDetailsSkeletonRow } from "./details-skeleton/WalletDetailsSkeletonRow.tsx";
 import { WalletDetailsSkeletonRows } from "./details-skeleton/WalletDetailsSkeletonRows.tsx";
 import { WalletDetailsSkeletonSection } from "./details-skeleton/WalletDetailsSkeletonSection.tsx";
@@ -19,6 +20,7 @@ import type { WalletDetailsSkeletonActionsProps } from "./details-skeleton/Walle
 import type { WalletDetailsSkeletonBalancesProps } from "./details-skeleton/WalletDetailsSkeletonBalances.tsx";
 import type { WalletDetailsSkeletonBodyProps } from "./details-skeleton/WalletDetailsSkeletonBody.tsx";
 import type { WalletDetailsSkeletonHeaderProps } from "./details-skeleton/WalletDetailsSkeletonHeader.tsx";
+import type { WalletDetailsSkeletonMetricsProps } from "./details-skeleton/WalletDetailsSkeletonMetrics.tsx";
 import type { WalletDetailsSkeletonRowsProps } from "./details-skeleton/WalletDetailsSkeletonRows.tsx";
 import type { WalletDetailsSkeletonThumbnailProps } from "./details-skeleton/WalletDetailsSkeletonThumbnail.tsx";
 
@@ -34,6 +36,7 @@ type WalletDetailsSkeletonObject = FC<WalletDetailsSkeletonProps> & {
 	Body: FC<WalletDetailsSkeletonBodyProps>;
 	Header: FC<WalletDetailsSkeletonHeaderProps>;
 	Metric: FC;
+	Metrics: FC<WalletDetailsSkeletonMetricsProps>;
 	Row: FC;
 	Rows: FC<WalletDetailsSkeletonRowsProps>;
 	Section: FC;
@@ -59,6 +62,7 @@ WalletDetailsSkeleton.Balances = WalletDetailsSkeletonBalances;
 WalletDetailsSkeleton.Body = WalletDetailsSkeletonBody;
 WalletDetailsSkeleton.Header = WalletDetailsSkeletonHeader;
 WalletDetailsSkeleton.Metric = WalletDetailsSkeletonMetric;
+WalletDetailsSkeleton.Metrics = WalletDetailsSkeletonMetrics;
 WalletDetailsSkeleton.Row = WalletDetailsSkeletonRow;
 WalletDetailsSkeleton.Rows = WalletDetailsSkeletonRows;
 WalletDetailsSkeleton.Section = WalletDetailsSkeletonSection;

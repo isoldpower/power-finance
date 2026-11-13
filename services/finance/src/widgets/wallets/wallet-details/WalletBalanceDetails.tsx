@@ -26,8 +26,8 @@ const WalletBalanceDetails: FC<WalletBalanceDetailsProps> = ({ wallet, period })
 	}), [period, wallet]);
 
 	return (
-		<div className="mt-[18px] flex items-end gap-5">
-			<div className="flex flex-col">
+		<div className="mt-[18px] flex flex-wrap items-end gap-x-5 gap-y-3 sm:flex-nowrap">
+			<div className="flex w-full flex-col sm:w-auto">
 				<Overline size="10" tracking="0.1em">
 					{walletHasCreditLine(wallet) ? 'Spendable' : 'Balance'}
 				</Overline>
@@ -48,19 +48,20 @@ const WalletBalanceDetails: FC<WalletBalanceDetailsProps> = ({ wallet, period })
 					</Caption>
 				) : null}
 			</div>
-			<div className="flex-1" />
-			{walletFlows === undefined ? (
-				<>
-					<WalletDetailsSkeleton.Metric />
-					<WalletDetailsSkeleton.Metric />
-				</>
-			) : (
-				<WalletPeriodFlows
-					flows={walletFlows}
-					periodLabel={periodLabel}
-					format={format}
-				/>
-			)}
+			<WalletDetailsSkeleton.Metrics>
+				{walletFlows === undefined ? (
+					<>
+						<WalletDetailsSkeleton.Metric />
+						<WalletDetailsSkeleton.Metric />
+					</>
+				) : (
+					<WalletPeriodFlows
+						flows={walletFlows}
+						periodLabel={periodLabel}
+						format={format}
+					/>
+				)}
+			</WalletDetailsSkeleton.Metrics>
 		</div>
 	);
 }
@@ -73,13 +74,13 @@ interface WalletPeriodFlowsProps {
 
 const WalletPeriodFlows: FC<WalletPeriodFlowsProps> = ({ flows, periodLabel, format }) => (
 	<>
-		<div>
+		<div className="min-w-0">
 			<Caption size="11">In · {periodLabel}</Caption>
 			<FinanceMoney tone="pos" size="md">
 				{format(flows.inflow.amount, flows.inflow.currency)}
 			</FinanceMoney>
 		</div>
-		<div>
+		<div className="min-w-0">
 			<Caption size="11">Out · {periodLabel}</Caption>
 			<FinanceMoney tone="neg" size="md">
 				{format(flows.outflow.amount, flows.outflow.currency)}

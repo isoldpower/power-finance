@@ -6,13 +6,19 @@ import type { PersistOptions } from 'zustand/middleware';
 import type { WalletsSelection, WalletsSelectionState } from "./types.ts";
 
 
+type PersistedWalletsSelection = Pick<WalletsSelection, 'selectedWalletId'>;
+
 const initialState: WalletsSelection = {
 	selectedWalletId: null,
+	selectionConfirmed: false,
 };
 
-const persistenceStorageConfig: PersistOptions<WalletsSelectionState> = {
+const persistenceStorageConfig: PersistOptions<WalletsSelectionState, PersistedWalletsSelection> = {
 	name: "wallets-selection",
 	version: 1,
+	partialize: (state) => ({
+		selectedWalletId: state.selectedWalletId,
+	}),
 	migrate: (_, version) => {
 		throw new Error(`Obsolete persisted state configuration (version: ${version.toString()})`);
 	}
@@ -25,8 +31,20 @@ const createWalletsSelectionStore = (
 		...initialState,
 		...initialValues,
 		selectWallet: (walletId: string) => {
-			setState(() => ({ 
+			setState(() => ({
 				selectedWalletId: walletId,
+				selectionConfirmed: true,
+			}));
+		},
+		confirmSelection: () => {
+			setState(() => ({
+				selectionConfirmed: true,
+			}));
+		},
+		clearSelection: () => {
+			setState(() => ({
+				selectedWalletId: null,
+				selectionConfirmed: false,
 			}));
 		},
 	}), persistenceStorageConfig));

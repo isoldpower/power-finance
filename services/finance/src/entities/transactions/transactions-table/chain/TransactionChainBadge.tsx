@@ -11,7 +11,7 @@ interface TransactionChainBadgeProps {
 const TransactionChainBadge: FC<TransactionChainBadgeProps> = ({ size, className }) => (
 	<span
 		className={cn(
-			"inline-flex items-center gap-1 rounded-full bg-[var(--accent-soft)] px-1.5 py-0.5",
+			"inline-flex flex-none items-center gap-1 whitespace-nowrap rounded-full bg-[var(--accent-soft)] px-1.5 py-0.5",
 			"text-[10px] font-medium leading-none text-primary",
 			className
 		)}

@@ -11,7 +11,7 @@ const AccountSummaryNameRow: FC<AccountSummaryNameRowProps> = ({
 }) => (
 	<div
 		className={cn(
-			"mb-0.5 flex items-center gap-2.5"
+			"mb-0.5 flex flex-wrap items-center gap-x-2.5 gap-y-1"
 		)}
 		{...props}
 	>

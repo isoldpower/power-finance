@@ -92,7 +92,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 				<AccountSummary.Hero>
 					<AccountSummary.Glow />
 					<AccountSummary.HeroRow>
-						<div className="min-w-0 flex-1">
+						<div className="w-full min-w-0 sm:w-auto sm:flex-1">
 							<AccountSummary.NameRow>
 								<Heading as="h3" size="19">
 									{account.name}
@@ -102,7 +102,7 @@ const AccountsDrillDown: FC<AccountsDrillDownProps> = ({
 								</AccountSummary.Type>
 							</AccountSummary.NameRow>
 						</div>
-						<div className="flex-none text-right">
+						<div className="flex-none sm:text-right">
 							<Overline size="10" tracking="0.1em">
 								Balance
 							</Overline>

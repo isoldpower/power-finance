@@ -24,7 +24,7 @@ const WalletBrowserHeader: FC<WalletBrowserHeaderProps> = ({
 				{wallets.length.toString()} accounts
 			</SectionHeader.Caption>
 			<SectionHeader.Border />
-			<SlideOverTrigger panelId={createWalletPanel}>
+			<SlideOverTrigger asChild={true} panelId={createWalletPanel}>
 				<NewWalletButton>
 					<span>＋</span>
 					<span>New wallet</span>

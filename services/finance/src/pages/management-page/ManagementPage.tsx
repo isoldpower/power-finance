@@ -54,7 +54,7 @@ const ManagementPage: FC = () => {
 								</SlideOverTrigger>
 								<SlideOverTrigger asChild={true} panelId={managementSlides.createTransaction}>
 									<FinanceButton variant="primary">
-										<div className="hidden items-center gap-2 sm:flex">
+										<div className="flex items-center gap-2">
 											<span>＋</span>
 											<span>Add</span>
 										</div>

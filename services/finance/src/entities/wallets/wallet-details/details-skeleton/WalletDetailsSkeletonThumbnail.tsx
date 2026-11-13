@@ -13,7 +13,7 @@ const WalletDetailsSkeletonThumbnail: FC<WalletDetailsSkeletonThumbnailProps> = 
 }) => (
 	<div
 		className={cn(
-			"flex items-start gap-3.5"
+			"flex flex-wrap items-start gap-3.5 sm:flex-nowrap"
 		)}
 		{...props}
 	>

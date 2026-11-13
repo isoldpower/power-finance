@@ -31,7 +31,7 @@ interface WalletBrowserInternalContextProps {
 
 const WalletBrowserInternalContext: FC<WalletBrowserInternalContextProps> = ({ children }) => {
 	const { sortBy, sortDirection, typeFilter, search, caseSensitive } = useWalletsFiltersContext();
-	const { searchResults: { wallets, total, isPending } } = useWalletsBrowser({
+	const { searchResults: { wallets, total, isPending, isSuccess } } = useWalletsBrowser({
 		search: { search, caseSensitive },
 		filters: { typeFilter },
 		ordering: { field: sortBy, direction: sortDirection },
@@ -48,7 +48,7 @@ const WalletBrowserInternalContext: FC<WalletBrowserInternalContextProps> = ({ c
 			resetKey={resetKey}
 			isPending={isPending}
 		>
-			<KeepWalletSelected wallets={wallets} />
+			<KeepWalletSelected wallets={wallets} loaded={isSuccess} />
 			{children}
 		</WalletsPaginationContextProvider>
 	);

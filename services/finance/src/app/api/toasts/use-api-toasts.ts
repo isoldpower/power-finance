@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { isCancelledError, useQueryClient } from "@tanstack/react-query";
 
 import { hasStaleRecovery } from "../stale-refetch.ts";
 import { API_MUTATION_TOAST_POLICY, API_QUERY_TOAST_POLICY, isSilentMutation } from "./config.ts";
@@ -63,9 +63,11 @@ const useApiToasts = (): void => {
 		}
 
 		const currentPhase = queryPhase(event.action);
-		if (currentPhase === null || !API_QUERY_TOAST_POLICY[currentPhase]) {
-			return;
-		} else if (isRecovering(event.query)) {
+		if (
+			(currentPhase === null || !API_QUERY_TOAST_POLICY[currentPhase]) ||
+			isCancelledError(readActionError(event.action)) ||
+			isRecovering(event.query)
+		) {
 			return;
 		}
 
@@ -83,21 +85,22 @@ const useApiToasts = (): void => {
 		}
 
 		const currentPhase = mutationPhase(event.action);
-		if (currentPhase === null || !API_MUTATION_TOAST_POLICY[currentPhase]) {
+		if (
+			(currentPhase === null || !API_MUTATION_TOAST_POLICY[currentPhase]) ||
+			isCancelledError(readActionError(event.action))
+		) {
 			return;
 		}
-
+		
 		const cacheKey = readCacheKey(event.mutation.options.mutationKey);
-		if (isSilentMutation(cacheKey)) {
-			return;
+		if (!isSilentMutation(cacheKey)) {
+			reportApiToast({
+				id: `mutation:${String(event.mutation.mutationId)}`,
+				key: cacheKey,
+				phase: currentPhase,
+				error: readActionError(event.action),
+			});
 		}
-
-		reportApiToast({
-			id: `mutation:${String(event.mutation.mutationId)}`,
-			key: cacheKey,
-			phase: currentPhase,
-			error: readActionError(event.action),
-		});
 	}, []);
 
 	useEffect(() => {

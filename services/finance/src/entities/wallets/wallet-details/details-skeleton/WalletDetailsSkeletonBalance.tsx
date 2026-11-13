@@ -4,7 +4,7 @@ import type { FC } from "react";
 
 
 const WalletDetailsSkeletonBalance: FC = () => (
-	<div className="flex flex-col">
+	<div className="flex w-full flex-col sm:w-auto">
 		<SkeletonText size="10" width="w-14" />
 		<div className="flex flex-col items-start leading-tight">
 			<SkeletonText family="display" width="w-40" className="text-[30px]" />

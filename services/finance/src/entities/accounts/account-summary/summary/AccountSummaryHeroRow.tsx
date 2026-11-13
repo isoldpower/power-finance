@@ -11,7 +11,7 @@ const AccountSummaryHeroRow: FC<AccountSummaryHeroRowProps> = ({
 }) => (
 	<div
 		className={cn(
-			"relative flex items-start gap-3.5"
+			"relative flex flex-wrap items-start gap-x-3.5 gap-y-3 sm:flex-nowrap"
 		)}
 		{...props}
 	>

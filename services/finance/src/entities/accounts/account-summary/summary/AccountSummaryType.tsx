@@ -18,7 +18,7 @@ const AccountSummaryType: FC<AccountSummaryTypeProps> = ({
 		weight="semibold"
 		tracking="0.04em"
 		uppercase
-		className="rounded-[4px] border border-border bg-secondary px-1.5 py-0.5"
+		className="flex-none whitespace-nowrap rounded-[4px] border border-border bg-secondary px-1.5 py-0.5"
 		style={{ color }}
 		{...props}
 	>

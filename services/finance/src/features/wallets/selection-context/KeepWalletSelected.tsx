@@ -10,14 +10,24 @@ import type { Wallet } from "@entity/wallets";
 
 interface KeepWalletSelectedProps {
 	wallets: Wallet[];
+	loaded: boolean;
 }
 
-const KeepWalletSelected: FC<KeepWalletSelectedProps> = ({ wallets }) => {
+const KeepWalletSelected: FC<KeepWalletSelectedProps> = ({ wallets, loaded }) => {
 	const { search, caseSensitive, typeFilter, sortBy, sortDirection } = useWalletsFiltersContext();
-	const { selectedWalletId, selectWallet } = useWalletsSelection(
+	const {
+		selectedWalletId,
+		selectionConfirmed,
+		selectWallet,
+		confirmSelection,
+		clearSelection,
+	} = useWalletsSelection(
 		useShallow((state) => ({
 			selectedWalletId: state.selectedWalletId,
+			selectionConfirmed: state.selectionConfirmed,
 			selectWallet: state.selectWallet,
+			confirmSelection: state.confirmSelection,
+			clearSelection: state.clearSelection,
 		}))
 	);
 
@@ -35,14 +45,29 @@ const KeepWalletSelected: FC<KeepWalletSelectedProps> = ({ wallets }) => {
 	);
 
 	useEffect(() => {
+		if (!loaded) return;
+
 		const selectionAvailable = wallets.some((wallet) => {
 			return wallet.id === selectedWalletId;
 		});
 
-		if (!selectionAvailable) {
-			selectFirstWallet();
+		if (selectionAvailable) {
+			if (!selectionConfirmed) confirmSelection();
+		} else if (firstWalletId) {
+			selectWallet(firstWalletId);
+		} else if (!selectionConfirmed && selectedWalletId !== null) {
+			clearSelection();
 		}
-	}, [selectFirstWallet, selectedWalletId, wallets]);
+	}, [
+		loaded,
+		wallets,
+		selectedWalletId,
+		selectionConfirmed,
+		firstWalletId,
+		selectWallet,
+		confirmSelection,
+		clearSelection,
+	]);
 
 	return null;
 }

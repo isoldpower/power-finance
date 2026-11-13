@@ -109,6 +109,12 @@ interface GoalDisposition {
 	toWalletId: string;
 }
 
+interface WalletLeftoverTransfer {
+	toWalletId: string;
+	toCurrency: string;
+	receiveAmount: string;
+}
+
 export type {
 	Wallet,
 	WalletDetails,
@@ -118,6 +124,7 @@ export type {
 	PanelWallet,
 	GoalDispositionMode,
 	GoalDisposition,
+	WalletLeftoverTransfer,
 	WalletDraft,
 	WalletPatch,
 	GoalDraft,

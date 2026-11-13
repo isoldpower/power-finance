@@ -25,7 +25,7 @@ const JournalPostingHeader: JournalPostingHeaderObject = ({
 }) => (
 	<div
 		className={cn(
-			"mb-3 flex items-center gap-2"
+			"mb-3 flex flex-wrap items-center gap-x-2 gap-y-1.5"
 		)}
 		{...props}
 	>

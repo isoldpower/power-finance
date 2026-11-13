@@ -1,19 +1,22 @@
-import { cn, FinanceCard } from "@internal/ui-library";
+import { cn, FinanceButton, FinanceCard } from "@internal/ui-library";
 import { pendingClass } from "@shared/pure-components/feedback";
 import { WalletsRecentTitle } from "@entity/wallets";
 import {
+	DeleteWalletDialog,
 	useWallet,
 	WalletDetailsFx,
 	ProtectSelectedNone,
 	useWalletsSelection,
 } from "@feature/wallets";
 import {
+	DeleteWalletModal,
 	WalletRecentSkeleton,
 	WalletRecentTransactions,
 	WalletBalanceDetails,
 	WalletDetailsThumbnail,
 } from "@widget/wallets";
 import { useMemo } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 
 interface BrowserWalletDetailsProps {
@@ -25,12 +28,17 @@ const SelectedWalletDetails = ({
 	editWalletPanel,
 	transferPanel,
 }: BrowserWalletDetailsProps) => {
-	const selectedWalletId = useWalletsSelection((state) => state.selectedWalletId);
+	const { selectedWalletId, selectionConfirmed } = useWalletsSelection(
+		useShallow((state) => ({
+			selectedWalletId: state.selectedWalletId,
+			selectionConfirmed: state.selectionConfirmed,
+		}))
+	);
 	const selectedWalletProtected = useMemo(() => {
 		return selectedWalletId ?? 'none';
 	}, [selectedWalletId]);
-	const { wallet, recent, period, isError, isPending, isPlaceholderData } = useWallet(selectedWalletProtected, { 
-		enabled: selectedWalletProtected !== 'none'
+	const { wallet, recent, period, isError, isPending, isPlaceholderData } = useWallet(selectedWalletProtected, {
+		enabled: selectedWalletProtected !== 'none' && selectionConfirmed
 	});
 
 	return (
@@ -45,7 +53,21 @@ const SelectedWalletDetails = ({
 									transferPanelId={transferPanel}
 									editWalletPanelId={editWalletPanel}
 									disabled={isPlaceholderData}
-								/>
+								>
+									<DeleteWalletDialog wallet={wallet}>
+										{({ deleteWallet, isPending: isDeleting }) => (
+											<DeleteWalletModal
+												wallet={wallet}
+												pending={isDeleting}
+												onConfirm={deleteWallet}
+											>
+												<FinanceButton variant="danger" size="sm" disabled={isPlaceholderData}>
+													Delete
+												</FinanceButton>
+											</DeleteWalletModal>
+										)}
+									</DeleteWalletDialog>
+								</WalletDetailsThumbnail>
 								<WalletBalanceDetails wallet={wallet} period={period} />
 							</div>
 							<WalletsRecentTitle>

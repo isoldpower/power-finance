@@ -139,6 +139,33 @@ describe('useApiToasts', () => {
 		expect(notify.error).toHaveBeenCalledWith("Couldn't load wallet", expect.anything());
 	});
 
+	test('stays silent when an in-flight query is cancelled', async () => {
+		const client = createClient();
+		const wrapper = buildWrapper(client);
+
+		const { result } = renderHook(() => {
+			useApiToasts();
+
+			return useQuery({
+				queryKey: ['wallet', 'w1'],
+				queryFn: ({ signal }) => new Promise((_resolve, reject) => {
+					signal.addEventListener('abort', () => { reject(new Error('aborted')); });
+				}),
+			});
+		}, { wrapper });
+
+		await waitFor(() => {
+			expect(result.current.fetchStatus).toBe('fetching');
+		});
+
+		await act(async () => {
+			await client.cancelQueries({ queryKey: ['wallet'] });
+		});
+
+		expect(result.current.isError).toBe(false);
+		expect(notify.error).not.toHaveBeenCalled();
+	});
+
 	test('reuses one toast id so a mutation settles into its pending toast', async () => {
 		const client = createClient();
 		const wrapper = buildWrapper(client);

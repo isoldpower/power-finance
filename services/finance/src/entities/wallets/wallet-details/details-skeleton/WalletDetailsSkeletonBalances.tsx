@@ -13,7 +13,7 @@ const WalletDetailsSkeletonBalances: FC<WalletDetailsSkeletonBalancesProps> = ({
 }) => (
 	<div
 		className={cn(
-			"mt-[18px] flex items-end gap-5"
+			"mt-[18px] flex flex-wrap items-end gap-x-5 gap-y-3 sm:flex-nowrap"
 		)}
 		{...props}
 	>

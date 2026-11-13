@@ -24,7 +24,7 @@ const TransactionsBrowserHeader: FC<TransactionsBrowserHeaderProps> = ({
 				{total.toString()} transactions
 			</SectionHeader.Caption>
 			<SectionHeader.Border />
-			<SlideOverTrigger panelId={createTransactionPanel}>
+			<SlideOverTrigger asChild={true} panelId={createTransactionPanel}>
 				<NewWalletButton>
 					<span>＋</span>
 					<span>New transaction</span>

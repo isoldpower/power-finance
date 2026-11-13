@@ -1,6 +1,6 @@
 import { cn, FinanceMenuTrigger } from "@internal/ui-library";
 import { textClass } from "@shared/pure-components/typography";
-import { FILTER_CONTROL_WIDTH } from "../filter-control.ts";
+import { FILTER_CONTROL_SIZE } from "../filter-control.ts";
 import { FilterChipCaret } from "./FilterChipCaret.tsx";
 
 import type { FC, PropsWithChildren } from "react";
@@ -16,7 +16,7 @@ const FilterChipTrigger: FC<FilterChipTriggerProps> = ({ children, active }) => 
 			type="button"
 			className={cn(
 				textClass({ size: 'xs', weight: 'semibold' }),
-				FILTER_CONTROL_WIDTH,
+				FILTER_CONTROL_SIZE,
 				"flex items-center justify-between gap-1.5 rounded-[var(--radius-md)] border px-3",
 				active
 					? "border-[var(--accent-border)] bg-[var(--accent-soft)] text-primary"

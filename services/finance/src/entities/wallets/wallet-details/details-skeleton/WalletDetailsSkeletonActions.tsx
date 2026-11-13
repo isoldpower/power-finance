@@ -13,7 +13,7 @@ const WalletDetailsSkeletonActions: FC<WalletDetailsSkeletonActionsProps> = ({
 }) => (
 	<div
 		className={cn(
-			"flex gap-2"
+			"flex w-full gap-2 sm:w-auto [&>*]:flex-1 sm:[&>*]:flex-none"
 		)}
 		{...props}
 	>

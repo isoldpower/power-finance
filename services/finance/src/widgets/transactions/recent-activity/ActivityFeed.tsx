@@ -61,7 +61,7 @@ const ActivityFeed: FC<ActivityFeedProps> = ({
 					</ActivityGroupHeader>
 					{day.entries.map((entry, index) => {
 						return (
-							<Fragment key={entry.index}>
+							<Fragment key={entry.item.id}>
 								{children(entry, day.startPosition + index)}
 							</Fragment>
 						);

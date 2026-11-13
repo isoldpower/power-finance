@@ -1,6 +1,5 @@
 import { FinanceCard, cn } from "@internal/ui-library";
 import { WalletDetailsSkeleton } from "@entity/wallets";
-import { SpaceOccupant } from "@shared/pure-components/layout";
 import { textClass } from "@shared/pure-components/typography";
 
 import type { WalletDetails } from "@entity/wallets";
@@ -46,9 +45,10 @@ const WalletDetailsFx: FC<WalletDetailsFxProps> = ({
 						</WalletDetailsSkeleton.Thumbnail>
 						<WalletDetailsSkeleton.Balances>
 							<WalletDetailsSkeleton.Balance />
-							<SpaceOccupant />
-							<WalletDetailsSkeleton.Metric />
-							<WalletDetailsSkeleton.Metric />
+							<WalletDetailsSkeleton.Metrics>
+								<WalletDetailsSkeleton.Metric />
+								<WalletDetailsSkeleton.Metric />
+							</WalletDetailsSkeleton.Metrics>
 						</WalletDetailsSkeleton.Balances>
 					</WalletDetailsSkeleton.Header>
 					<WalletDetailsSkeleton.Section />
