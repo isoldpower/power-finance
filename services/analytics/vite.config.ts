@@ -1,12 +1,18 @@
 /// <reference types="vitest/config" />
 import type { ConfigEnv } from "vite";
 import { resolve } from "path";
+import { env as processEnv } from "node:process";
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 
 import type { ViteConfigOptions } from "@internal/config";
 import { buildViteConfig } from "@internal/config";
 import { buildFederationRemote } from "./config/federation.js";
 
+
+const analyticsApplicationUrl = processEnv.CLIENT_ANALYTICS_APP_URL;
+const publicBasePath = analyticsApplicationUrl
+	? `${analyticsApplicationUrl.replace(/\/+$/, '')}/`
+	: '/';
 
 export default (env: ConfigEnv) => {
 	const options: ViteConfigOptions = {
@@ -20,6 +26,7 @@ export default (env: ConfigEnv) => {
 	}
 
 	return buildViteConfig({
+		base: publicBasePath,
 		plugins: [
 			buildFederationRemote({ name: 'analytics' }, env),
 			TanStackRouterVite({
