@@ -13,10 +13,8 @@ import {
 	HistoryToolbar,
 } from "@entity/accounts";
 import { useAccountHistoryPage, useAccountsConvertion } from "@feature/accounts";
-import { Caption, Heading, MetaText, Overline, RowTitle } from "@shared/pure-components/typography";
+import { Caption, Heading, MetaText, Overline, RowTitle, ShowOn, SidebarColumnsContainer } from "@internal/shared";
 import { Pagination, PaginationRange, toPageEntries } from "@shared/pure-components/collections";
-import { SidebarColumnsContainer } from "@shared/pure-components/layout";
-import { ShowOn } from "@shared/visibility";
 
 import type { FC } from "react";
 import type { AccountHistoryView, AccountView, AccountCategoryView } from "@entity/accounts";

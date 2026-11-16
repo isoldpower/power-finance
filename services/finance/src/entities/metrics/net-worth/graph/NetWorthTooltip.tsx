@@ -2,7 +2,7 @@ import { createPortal } from "react-dom";
 import { cn, usePortalTarget } from "@internal/ui-library";
 
 import type { FC } from "react";
-import { DisplayText, Text } from "@shared/pure-components/typography";
+import { DisplayText, Text } from "@internal/shared";
 
 
 interface NetWorthTooltipProps {

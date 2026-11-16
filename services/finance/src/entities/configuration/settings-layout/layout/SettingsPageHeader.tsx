@@ -1,4 +1,4 @@
-import { Caption, PageTitle } from "@shared/pure-components/typography";
+import { Caption, PageTitle } from "@internal/shared";
 
 import type { FC, ReactNode } from "react";
 

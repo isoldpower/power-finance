@@ -3,7 +3,7 @@ import { QueryClient } from '@tanstack/react-query';
 
 import { walletDetailsPlaceholder } from './wallet-placeholder.ts';
 
-import type { Page } from '@shared/api';
+import type { Page } from '@internal/shared';
 import type { Wallet } from '@entity/wallets';
 
 
@@ -16,7 +16,7 @@ const buildWallet = (overrides: Partial<Wallet> = {}): Wallet => ({
 	createdAt: '2026-03-01T00:00:00.000Z',
 	updatedAt: null,
 	deletedAt: null,
-	category: 'checking',
+	category: { id: 'c-checking', name: 'Checking', isGlobal: false },
 	currency: 'USD',
 	balance: { amount: '120.00', currency: 'USD' },
 	zeroBalance: { amount: '0.00', currency: 'USD' },

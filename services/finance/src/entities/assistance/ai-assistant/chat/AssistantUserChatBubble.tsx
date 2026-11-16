@@ -1,6 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { BodyText } from "@shared/pure-components/typography";
-import { pendingClass } from "@shared/pure-components/feedback";
+import { BodyText, pendingClass } from "@internal/shared";
 import { AssistantChatRefs } from "./AssistantChatRefs.tsx";
 
 import type { FC } from "react";

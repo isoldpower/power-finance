@@ -1,4 +1,5 @@
-import { parseAmountDecimal } from "@shared/formatting";
+import { parseAmountDecimal } from "@internal/shared";
+import type { FilterValue } from "@internal/shared";
 import { composeEvent } from "../events";
 import { isBooleanField, parseMultiValue } from "../filters";
 
@@ -8,7 +9,6 @@ import type {
 	AutomationTrigger,
 	RuleNode,
 } from "@entity/assistance";
-import type { FilterValue } from "@shared/api";
 import type { RuleFormSchema } from "../schema";
 
 
@@ -65,7 +65,7 @@ function effectFromForm(values: RuleFormSchema): AutomationEffect {
 		case 'set_category':
 			return { 
 				type: 'set_category',
-				category: values.category.trim(),
+				categoryId: values.categoryId,
 			};
 		case 'notify':
 			return { 

@@ -1,7 +1,7 @@
 import { cn } from "@internal/ui-library";
 
 import type { BaseHTMLAttributes, FC } from "react";
-import type { Types } from "@shared/formatting";
+import type { Types } from "@internal/shared";
 
 
 interface PostingsDirectionIconProps extends Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> {

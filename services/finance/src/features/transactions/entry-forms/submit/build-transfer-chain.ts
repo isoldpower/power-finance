@@ -1,7 +1,8 @@
-import { absoluteAmount } from "@shared/api";
+import { absoluteAmount } from "@internal/shared";
 
 import { IN_TEMPORARY_ID, OUT_TEMPORARY_ID } from "./constants";
 
+import type { CategoryRef } from "@entity/categories";
 import type { TransactionChainEntryDraft } from "@entity/transactions";
 
 
@@ -13,7 +14,7 @@ interface TransferLeg {
 
 function buildTransferChain(
 	name: string,
-	category: string | null,
+	category: CategoryRef | null,
 	sent: TransferLeg,
 	received: TransferLeg
 ): TransactionChainEntryDraft[] {

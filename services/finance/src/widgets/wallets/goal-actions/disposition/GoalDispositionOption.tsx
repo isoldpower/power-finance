@@ -1,5 +1,5 @@
 import { GoalDialog } from "@entity/wallets";
-import { BodyText, RowTitle } from "@shared/pure-components/typography";
+import { BodyText, RowTitle } from "@internal/shared";
 
 import type { FC } from "react";
 

@@ -4,9 +4,9 @@ import {
 	NUMERIC_OPERATORS,
 	REFERENCE_OPERATORS,
 	TEXT_OPERATORS,
-} from "@shared/api";
+} from "@internal/shared";
+import type { FilterFieldOption } from "@internal/shared";
 
-import type { FilterFieldOption } from "@shared/api";
 
 
 const TRANSACTION_FILTER_FIELDS: FilterFieldOption[] = [

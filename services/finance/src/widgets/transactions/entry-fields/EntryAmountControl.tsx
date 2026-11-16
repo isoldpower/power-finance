@@ -1,6 +1,6 @@
 import { UiFormField } from "@internal/ui-library";
 import { EntryAmountField } from "@entity/transactions";
-import { currencySymbol } from "@shared/formatting";
+import { currencySymbol } from "@internal/shared";
 
 import type { FC } from "react";
 import type { Control, FieldValues, Path } from "react-hook-form";

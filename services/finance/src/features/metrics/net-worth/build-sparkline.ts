@@ -1,4 +1,4 @@
-import { parseAmount } from "@shared/api";
+import { parseAmount } from "@internal/shared";
 import { PAD, VIEW_H, VIEW_W } from "@entity/metrics";
 
 import type { NetWorthPoint } from "@entity/metrics";

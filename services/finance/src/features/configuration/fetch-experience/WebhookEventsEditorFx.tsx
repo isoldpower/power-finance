@@ -1,5 +1,4 @@
-import { SkeletonText } from "@shared/pure-components/feedback";
-import { Caption } from "@shared/pure-components/typography";
+import { Caption, SkeletonText } from "@internal/shared";
 
 import type { FC, PropsWithChildren } from "react";
 

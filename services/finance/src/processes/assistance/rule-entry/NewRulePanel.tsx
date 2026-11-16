@@ -10,6 +10,7 @@ import {
 	useRuleFormState,
 } from "@feature/assistance";
 import {
+	RuleCategoryControl,
 	RuleChoiceControl,
 	RuleConditionsControl,
 	RuleNameControl,
@@ -18,8 +19,7 @@ import {
 } from "@widget/assistance";
 import { SlideOver, useSlideOverContext } from "@shared/overlays";
 import { HideOnFormValue, PanelFooter, ShowOnFormValue } from "@shared/forms";
-import { StackedList } from "@shared/pure-components/layout";
-import { BodyText } from "@shared/pure-components/typography";
+import { BodyText, StackedList } from "@internal/shared";
 import {
 	ADD_CONDITION_LABEL,
 	COMBINATOR_OPTIONS,
@@ -158,12 +158,10 @@ const NewRulePanel: FC = () => {
 						disabled={loading}
 					/>
 					<ShowOnFormValue valueKey="effectType" showOn={['set_category']} control={control}>
-						<RuleTextControl
+						<RuleCategoryControl
 							control={control}
-							name="category"
 							label="Category to apply"
-							placeholder="Dining"
-							error={errors.category?.message}
+							error={errors.categoryId?.message}
 							disabled={loading}
 						/>
 					</ShowOnFormValue>

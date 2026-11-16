@@ -2,7 +2,7 @@ import { cn, FinanceCard } from "@internal/ui-library";
 import { ActivityFeed, DayOfActivityFeed } from "@widget/transactions";
 import { useRecentActivity, RecentActivityFx } from "@feature/transactions";
 import { ActivityFeedHeader, ActivityFeedSkeleton } from "@entity/transactions";
-import { CardTitle } from "@shared/pure-components/typography";
+import { CardTitle } from "@internal/shared";
 
 import type { FC } from "react";
 

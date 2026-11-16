@@ -1,4 +1,4 @@
-import { textClass } from "@shared/pure-components/typography";
+import { textClass } from "@internal/shared";
 
 import type { ButtonHTMLAttributes, FC, PropsWithChildren } from "react";
 

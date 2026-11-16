@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useOptimisticTransactions } from './use-optimistic-transactions.ts';
 
 import type { FC, ReactNode } from 'react';
-import type { Page } from '@shared/api';
+import type { Page } from '@internal/shared';
 import type {
 	Transaction,
 	TransactionDetails,
@@ -15,6 +15,7 @@ import type { FetchTransactionResponse } from '../../transactions-api';
 import type { TransactionCachesSnapshot, TransactionPageResponse } from './types.ts';
 
 
+const GROCERIES = { id: 'builtin-transaction-groceries', name: 'Groceries', isGlobal: true };
 const LIST_KEY = ['transactions', 'default', 'first'];
 const LIST_SECOND_KEY = ['transactions', 'default', 'cursor-2'];
 const GROCERY_SEARCH_KEY = ['transactionsSearch', { search: 'coffee' }, 'default', 'first'];
@@ -33,7 +34,7 @@ const buildTransaction = (overrides: Partial<Transaction> = {}): Transaction => 
 	type: 'expense',
 	origin: 'manual',
 	wallet: { id: 'w1', name: 'Everyday' },
-	category: 'Groceries',
+	category: GROCERIES,
 	chain: null,
 	...overrides,
 });
@@ -45,7 +46,7 @@ const buildDraft = (overrides: Partial<TransactionDraft> = {}): TransactionDraft
 	walletId: 'w1',
 	origin: 'manual',
 	type: 'expense',
-	category: 'Groceries',
+	category: GROCERIES,
 	evidence: null,
 	...overrides,
 });
@@ -138,7 +139,7 @@ describe('useOptimisticTransactions', () => {
 			result.current.applyPatch('t1', { name: 'Renamed' });
 		});
 
-		expect(pageOf(client, LIST_KEY).items[0]?.category).toBe('Groceries');
+		expect(pageOf(client, LIST_KEY).items[0]?.category).toEqual(GROCERIES);
 	});
 
 	test('rewrites the amount for an adjustment and keeps the currency', () => {

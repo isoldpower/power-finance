@@ -7,7 +7,7 @@ import { blankCondition } from "./condition-cascade.ts";
 import { ruleFieldsFor } from "./rule-fields.ts";
 
 import type { Control } from "react-hook-form";
-import type { FilterFieldOption } from "@shared/api";
+import type { FilterFieldOption } from "@internal/shared";
 import type { FilterPolicySource } from "../filters";
 import type { RuleFormSchema } from "../schema";
 

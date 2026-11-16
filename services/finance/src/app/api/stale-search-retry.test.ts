@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { toApiError } from '@shared/api';
+import { toApiError } from '@internal/shared';
 import { retryDelay, retryQuery } from './retry-policy.ts';
 
 const MAX_TRANSIENT_ATTEMPTS = 6;

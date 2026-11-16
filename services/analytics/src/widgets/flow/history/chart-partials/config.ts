@@ -1,0 +1,28 @@
+const WALLET_DOT_RADIUS = 3.5;
+const FADE_OPACITY = 0.1;
+const CLIP_BLEED = 2;
+const BRUSH_FADE_OPACITY = 0.2;
+const BRUSH_LINE_WIDTH = 1.2;
+const BRUSH_HANDLE_SIZE = 8;
+const BRUSH_TRACK_RADIUS = 8;
+const BRUSH_TRACK_OPACITY = 0.6;
+const BRUSH_TRACK_FILL = 'var(--chart-heat-0)';
+const BRUSH_SELECTED_BOX_STYLE = {
+	fill: 'var(--accent-soft)',
+	stroke: 'var(--primary)',
+	strokeWidth: 1,
+	strokeOpacity: 0.6,
+};
+
+export {
+	BRUSH_FADE_OPACITY,
+	BRUSH_HANDLE_SIZE,
+	BRUSH_LINE_WIDTH,
+	BRUSH_SELECTED_BOX_STYLE,
+	BRUSH_TRACK_FILL,
+	BRUSH_TRACK_OPACITY,
+	BRUSH_TRACK_RADIUS,
+	CLIP_BLEED,
+	FADE_OPACITY,
+	WALLET_DOT_RADIUS,
+};

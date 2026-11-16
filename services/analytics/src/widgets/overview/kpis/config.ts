@@ -1,0 +1,3 @@
+const KPI_STAGGER_SECONDS = 0.05;
+
+export { KPI_STAGGER_SECONDS };

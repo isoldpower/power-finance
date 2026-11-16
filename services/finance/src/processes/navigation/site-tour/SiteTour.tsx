@@ -1,7 +1,7 @@
 import { WebsiteTour } from "@internal/ui-library";
 import { SITE_TOUR_ANCHORS } from "@feature/navigation";
 import { useDisclosure } from "@shared/overlays";
-import { Caption, RowTitle } from "@shared/pure-components/typography";
+import { Caption, RowTitle } from "@internal/shared";
 
 import type { FC } from "react";
 

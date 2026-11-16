@@ -10,7 +10,7 @@ import {
 } from "@internal/ui-library";
 import { NewWebhookForm, WebhookSecretPanel } from "@widget/configuration";
 import { ModalContent, useDisclosure } from "@shared/overlays";
-import { ShowOn } from "@shared/visibility";
+import { ShowOn } from "@internal/shared";
 
 import type { WebhookEndpointSecret } from "@entity/configuration";
 import type { FC } from "react";

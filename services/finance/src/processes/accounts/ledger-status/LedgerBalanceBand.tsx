@@ -4,8 +4,7 @@ import { BalanceMetricsBadge, ExplanatoryNeutralBadge, AskAiForHelp } from "@wid
 import { LedgerCard, LedgerSymbol } from "@entity/accounts";
 import { useBalanceMetrics } from "@feature/metrics";
 import { Tooltip } from "@shared/overlays";
-import { CenteredList, EndList, SpaceOccupant } from "@shared/pure-components/layout";
-import { Overline } from "@shared/pure-components/typography";
+import { CenteredList, EndList, Overline, SpaceOccupant } from "@internal/shared";
 
 import type { FC } from "react";
 

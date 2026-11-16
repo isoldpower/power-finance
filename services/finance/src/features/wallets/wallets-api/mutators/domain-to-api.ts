@@ -1,6 +1,7 @@
-import { toAmountString } from "@shared/api";
+import { toAmountString } from "@internal/shared";
+import { categoryIdToApi } from "@feature/categories/categories-api";
+import type { FilterNode } from "@internal/shared";
 
-import type { FilterNode } from "@shared/api";
 import type { WalletDraft, WalletPatch, WalletQuery } from "@entity/wallets";
 import type { WalletCreateBody, WalletPatchBody, WalletSearchBody, WalletSearchField } from "../types.ts";
 
@@ -17,13 +18,13 @@ const walletDraftToApi = (draft: WalletDraft): WalletCreateBody => ({
 	opening_balance: draft.openingBalance,
 	zero_balance: draft.zeroBalance,
 	currency: draft.currency,
-	category: draft.category,
+	category_id: categoryIdToApi(draft.category),
 });
 
 const walletPatchToApi = (patch: WalletPatch): WalletPatchBody => ({
 	...(patch.name === undefined ? {} : { name: patch.name }),
 	...(patch.favorite === undefined ? {} : { favorite: patch.favorite }),
-	...(patch.category === undefined ? {} : { category: patch.category }),
+	...(patch.category === undefined ? {} : { category_id: categoryIdToApi(patch.category) }),
 	...(patch.color === undefined ? {} : { color: patch.color }),
 	...(patch.zeroBalance === undefined ? {} : { zero_balance: patch.zeroBalance }),
 });

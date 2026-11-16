@@ -7,7 +7,7 @@ import {
 	FinanceMenuItem,
 } from "@internal/ui-library";
 import { ChevronDownIcon } from "@shared/pure-components/icons";
-import { textClass } from "@shared/pure-components/typography";
+import { textClass } from "@internal/shared";
 import { useDisclosure } from "@shared/overlays";
 import { useActiveTab } from "@feature/navigation";
 import { NAVIGATION_TABS } from "./config.ts";

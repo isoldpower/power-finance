@@ -8,6 +8,7 @@ import type { Control, FieldValues, Path } from "react-hook-form";
 interface EntryTypeControlProps<TValues extends FieldValues> {
 	control: Control<TValues>;
 	name: Path<TValues>;
+	allowTransfer?: boolean;
 	className?: string;
 	disabled?: boolean;
 }
@@ -15,6 +16,7 @@ interface EntryTypeControlProps<TValues extends FieldValues> {
 const EntryTypeControl = <TValues extends FieldValues>({
 	control,
 	name,
+	allowTransfer,
 	className,
 	disabled,
 }: EntryTypeControlProps<TValues>) => (
@@ -25,6 +27,7 @@ const EntryTypeControl = <TValues extends FieldValues>({
 		render={({ field }) => (
 			<EntryTypeSelector
 				value={field.value}
+				allowTransfer={allowTransfer}
 				className={className}
 				onChange={field.onChange}
 			/>

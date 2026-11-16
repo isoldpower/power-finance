@@ -1,7 +1,7 @@
-import { pageFromMeta } from "@shared/api";
+import { pageFromMeta } from "@internal/shared";
+import type { Page, PageParams } from "@internal/shared";
 import { deliveryFromApi, deliveryQueryToApi } from "../mutators";
 
-import type { Page, PageParams } from "@shared/api";
 import type { DeliveryQuery, WebhookDelivery } from "@entity/configuration";
 import type { IWebhooksRESTApiClient } from "../rest-client";
 

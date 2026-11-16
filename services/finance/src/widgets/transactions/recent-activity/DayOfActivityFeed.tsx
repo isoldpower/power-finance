@@ -1,8 +1,7 @@
 import { ActivityRow, AmountDirectionIcon, resolveToneWithDirection, TransactionChainBadge } from "@entity/transactions";
 import { LadderAppearance } from "@feature/transactions";
 import { useConvertMoney } from "@feature/localization";
-import { useLocaleCurrency } from "@shared/formatting";
-import { MetaText, RowTitle } from "@shared/pure-components/typography";
+import { MetaText, RowTitle, useLocaleCurrency } from "@internal/shared";
 
 import type { TransactionRowView, ChainBound } from "@entity/transactions";
 import type { FC } from "react";

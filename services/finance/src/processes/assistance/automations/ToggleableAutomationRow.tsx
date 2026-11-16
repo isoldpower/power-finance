@@ -7,6 +7,7 @@ import {
 	resolveAutomationStatus,
 } from "@entity/assistance";
 import { DeleteRuleDialog, useUpdateAutomation } from "@feature/assistance";
+import { useCategoryNames } from "@feature/categories";
 import { DeleteRuleModal } from "@widget/assistance";
 import { RowDeleteButton } from "@shared/pure-components/collections";
 
@@ -25,9 +26,10 @@ const ToggleableAutomationRow: FC<ToggleableAutomationRowProps> = ({
 }) => {
 	const toggle = useUpdateAutomation();
 	const status = resolveAutomationStatus(rule.enabled);
+	const categoryNames = useCategoryNames('transaction');
 	const summary = useMemo(() => {
-		return automationSummary(rule);
-	}, [rule]);
+		return automationSummary(rule, categoryNames);
+	}, [rule, categoryNames]);
 
 	const handleToggle = useCallback((enabled: boolean) => {
 		toggle.mutate({ id: rule.id, patch: { enabled } });

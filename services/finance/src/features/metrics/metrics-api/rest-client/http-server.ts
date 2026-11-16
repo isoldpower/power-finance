@@ -1,4 +1,4 @@
-import { request, WriteVersionStore } from "@shared/api";
+import { request, WriteVersionStore } from "@internal/shared";
 
 import type { AxiosInstance } from "axios";
 import type { MetricsQuery } from "../types.ts";

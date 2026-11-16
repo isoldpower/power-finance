@@ -1,8 +1,8 @@
-import { request, WriteVersionStore } from "@shared/api";
+import { request, WriteVersionStore } from "@internal/shared";
+import type { TokenSource } from "@internal/shared";
 
 import { AdviceSocket } from "./advice-socket.ts";
 import type { AxiosInstance } from "axios";
-import type { TokenSource } from "@shared/api";
 import type {
 	IAssistantRESTApiClient,
 	AssistantClearRequest, AssistantClearResponse,

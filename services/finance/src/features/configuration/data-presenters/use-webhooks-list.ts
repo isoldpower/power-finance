@@ -5,7 +5,7 @@ import { listWebhooks } from "../webhooks-api";
 import { CACHE_KEYS } from "./cache-config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import type { PageParams } from "@shared/api";
+import type { PageParams } from "@internal/shared";
 import type { WebhookEndpoint } from "@entity/configuration";
 import type { ListWebhooksResponse } from "../webhooks-api";
 

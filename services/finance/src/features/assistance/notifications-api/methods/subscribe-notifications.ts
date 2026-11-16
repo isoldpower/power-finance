@@ -1,6 +1,6 @@
 import { notificationFromApi } from "../mutators";
 
-import type { ApiError, Unsubscribe } from "@shared/api";
+import type { ApiError, Unsubscribe } from "@internal/shared";
 import type { Notification } from "@entity/assistance";
 import type { INotificationsRESTApiClient } from "../rest-client";
 

@@ -5,8 +5,7 @@ import { useBalanceMetrics } from "@feature/metrics";
 import { RouteLink } from "@shared/routing";
 import { FormulaOperator, LedgerBalanceCard } from "@entity/accounts";
 import { Tooltip } from "@shared/overlays";
-import { Overline, UnderlinedLink } from "@shared/pure-components/typography";
-import {CenteredList, SpaceOccupant} from "@shared/pure-components/layout";
+import { CenteredList, Overline, SpaceOccupant, UnderlinedLink } from "@internal/shared";
 
 import type { FC } from "react";
 

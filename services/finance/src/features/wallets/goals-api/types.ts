@@ -1,5 +1,5 @@
 import type { LedgerEntryDto } from "@feature/accounts/accounts-api";
-import type { MoneyDto, PageParams, ResourceTimestamps, SearchPayload } from "@shared/api";
+import type { MoneyDto, PageParams, ResourceTimestamps, SearchPayload } from "@internal/shared";
 
 
 interface GoalDto extends ResourceTimestamps {

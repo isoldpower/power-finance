@@ -11,7 +11,7 @@ const RULE_FORM_DEFAULTS: RuleFormSchema = {
 	combinator: 'and',
 	conditions: [],
 	effectType: 'set_category',
-	category: '',
+	categoryId: '',
 	severity: 'info',
 	title: '',
 	body: '',

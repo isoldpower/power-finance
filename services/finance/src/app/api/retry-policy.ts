@@ -1,6 +1,6 @@
-import { isApiError, isQuotaExhausted, STALE_READ_STATUS } from "@shared/api";
+import { isApiError, isQuotaExhausted, STALE_READ_STATUS } from "@internal/shared";
+import type { ApiError } from "@internal/shared";
 
-import type { ApiError } from "@shared/api";
 
 
 const MAX_TRANSIENT_RETRIES = 6;

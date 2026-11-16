@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useOptimisticWallets } from './use-optimistic-wallets.ts';
 
 import type { FC, ReactNode } from 'react';
-import type { Page } from '@shared/api';
+import type { Page } from '@internal/shared';
 import type { Transaction } from '@entity/transactions';
 import type { Wallet, WalletDetails } from '@entity/wallets';
 import type { FetchWalletResponse } from '../../../wallets-api';
@@ -24,7 +24,7 @@ const buildWallet = (overrides: Partial<Wallet> = {}): Wallet => ({
 	createdAt: '2026-03-01T00:00:00.000Z',
 	updatedAt: null,
 	deletedAt: null,
-	category: 'checking',
+	category: { id: 'c-checking', name: 'Checking', isGlobal: false },
 	currency: 'USD',
 	balance: { amount: '120.00', currency: 'USD' },
 	zeroBalance: { amount: '0.00', currency: 'USD' },

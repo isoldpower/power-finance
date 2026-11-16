@@ -5,7 +5,7 @@ import { listAccounts } from "../accounts-api";
 import { ACCOUNTS_CACHE_KEYS } from "./cache-config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import type { PageParams } from "@shared/api";
+import type { PageParams } from "@internal/shared";
 import type { Account, AccountGroupCounts, AccountGroupFilter } from "@entity/accounts";
 import type { Money } from "@entity/localization";
 import type { ListAccountsResponse } from "../accounts-api";

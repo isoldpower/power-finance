@@ -1,5 +1,5 @@
 import { cn, FinanceComboboxTrigger } from "@internal/ui-library";
-import { textClass } from "@shared/pure-components/typography";
+import { textClass } from "@internal/shared";
 
 import { FILTER_CONTROL_SIZE } from "../filter-control.ts";
 

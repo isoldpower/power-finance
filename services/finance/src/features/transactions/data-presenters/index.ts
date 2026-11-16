@@ -1,6 +1,5 @@
 export { useDeleteTransactions } from './use-delete-transactions.ts';
 export { useReceiptScan } from './use-receipt-scan.ts';
-export { useTransactionCategories } from './use-transaction-categories.ts';
 export { useTransactionMethods } from './use-transaction-methods.ts';
 export { useTransaction } from './use-transaction.ts';
 export { useTransactionsListMethods } from './use-transactions-list-methods.ts';

@@ -1,4 +1,5 @@
 import type { Money } from "@entity/localization";
+import type { CategoryRef } from "@entity/categories";
 import type { Pending } from "@shared/data";
 
 
@@ -36,7 +37,7 @@ interface Transaction extends Pending {
 	type: TransactionType;
 	origin: TransactionOrigin;
 	wallet: TransactionWalletRef;
-	category: string | null;
+	category: CategoryRef | null;
 	chain: TransactionChainRef | null;
 }
 
@@ -72,13 +73,13 @@ interface TransactionDraft {
 	walletId: string;
 	origin: TransactionDraftOrigin;
 	type: TransactionType;
-	category: string | null;
+	category: CategoryRef | null;
 	evidence: TransactionEvidence | null;
 }
 
 interface TransactionPatch {
 	name?: string;
-	category?: string | null;
+	category?: CategoryRef | null;
 	evidence?: TransactionEvidence | null;
 }
 
@@ -95,7 +96,7 @@ interface TransactionQuery {
 	walletIds?: string[];
 	chainId?: string;
 	currencies?: string[];
-	categories?: string[];
+	categoryIds?: string[];
 	types?: TransactionType[];
 	search?: string;
 	caseSensitive?: boolean;
@@ -103,12 +104,6 @@ interface TransactionQuery {
 	maxAmount?: number;
 	createdAfter?: string;
 	createdBefore?: string;
-}
-
-
-interface TransactionCategory {
-	id: string;
-	label: string;
 }
 
 interface ReceiptScanField {
@@ -141,7 +136,6 @@ export type {
 	TransactionChainDraft,
 	TransactionChainEntryDraft,
 	TransactionQuery,
-	TransactionCategory,
 	ReceiptScan,
 	ReceiptScanField,
 	TransactionEntryType,

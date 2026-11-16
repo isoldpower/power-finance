@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { ZERO_AMOUNT } from "@shared/api";
+import { ZERO_AMOUNT } from "@internal/shared";
 
 import type { Goal, GoalDraft } from "@entity/wallets";
 

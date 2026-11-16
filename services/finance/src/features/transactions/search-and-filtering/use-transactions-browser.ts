@@ -18,7 +18,7 @@ const toQuery = (
 		: { walletIds: [filters.walletFilter] }),
 	...(filters.categoryFilter === ALL
 		? {}
-		: { categories: [filters.categoryFilter] }),
+		: { categoryIds: [filters.categoryFilter] }),
 	...(filters.typeFilter === ALL
 		? {}
 		: { types: [filters.typeFilter as TransactionType] }),

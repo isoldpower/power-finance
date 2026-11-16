@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useTransactionCategories } from "@feature/transactions";
+import { useCategories } from "@feature/categories";
 
 import { RuleOptionValue } from "./RuleOptionValue.tsx";
 
@@ -7,18 +7,27 @@ import type { FC } from "react";
 import type { SelectOption } from "@shared/forms";
 
 
+type RuleCategoryValueKey = 'id' | 'name';
+
 interface RuleCategoryValueProps {
 	value: string;
+	valueKey?: RuleCategoryValueKey;
 	multiple: boolean;
 	disabled?: boolean;
 	onChange: (value: string) => void;
 }
 
-const RuleCategoryValue: FC<RuleCategoryValueProps> = ({ value, multiple, disabled, onChange }) => {
-	const { categories } = useTransactionCategories();
+const RuleCategoryValue: FC<RuleCategoryValueProps> = ({
+	value,
+	valueKey = 'name',
+	multiple,
+	disabled,
+	onChange,
+}) => {
+	const { categories } = useCategories('transaction');
 	const options = useMemo<SelectOption[]>(
-		() => categories.map((category) => ({ value: category.label, label: category.label })),
-		[categories]
+		() => categories.map((category) => ({ value: category[valueKey], label: category.name })),
+		[categories, valueKey]
 	);
 
 	return (
@@ -39,4 +48,4 @@ const RuleCategoryValue: FC<RuleCategoryValueProps> = ({ value, multiple, disabl
 RuleCategoryValue.displayName = 'RuleCategoryValue';
 
 export { RuleCategoryValue };
-export type { RuleCategoryValueProps };
+export type { RuleCategoryValueKey, RuleCategoryValueProps };

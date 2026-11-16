@@ -5,7 +5,7 @@ import { searchTransactions } from "../transactions-api";
 import { CACHE_KEYS } from "./config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import type { PageParams, SearchOrder } from "@shared/api";
+import type { PageParams, SearchOrder } from "@internal/shared";
 import type { Transaction, TransactionQuery } from "@entity/transactions";
 import type { SearchTransactionsResponse } from "../transactions-api";
 

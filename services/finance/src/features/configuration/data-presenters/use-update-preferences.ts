@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DERIVED_KEYS, useApiContext } from "@app/api";
-import { updateUserPreferences } from "../auth-api";
+import { updateUserPreferences } from "@internal/shared";
 import { CACHE_KEYS } from "./cache-config.ts";
 
 import type { UserPreferences, UserPreferencesPatch } from "@entity/configuration";
-import type { GetSessionResponse } from "../auth-api";
+import type { GetSessionResponse } from "@internal/shared";
 
 
 const patchedPreferences = (

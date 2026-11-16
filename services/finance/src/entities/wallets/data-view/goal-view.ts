@@ -3,7 +3,7 @@ import { goalProgressPercent } from "./goal-progress.ts";
 
 import type { Goal } from "../types.ts";
 import type { GoalView } from "./types.ts";
-import type { FormatMoney } from "@shared/formatting";
+import type { FormatMoney } from "@internal/shared";
 
 
 const MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;

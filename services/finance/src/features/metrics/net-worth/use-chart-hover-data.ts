@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { compareAmounts, parseAmount, subtractAmounts, ZERO_AMOUNT } from "@shared/api";
+import { compareAmounts, parseAmount, subtractAmounts, ZERO_AMOUNT } from "@internal/shared";
 
 import type { NetWorthPoint } from "@entity/metrics";
 import type { ChartPoint } from "./build-sparkline.ts";

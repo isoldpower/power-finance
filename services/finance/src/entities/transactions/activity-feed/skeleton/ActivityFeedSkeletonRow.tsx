@@ -1,5 +1,5 @@
 import { cn, UiSkeleton } from "@internal/ui-library";
-import { SkeletonText } from "@shared/pure-components/feedback";
+import { SkeletonText } from "@internal/shared";
 
 import type { FC } from "react";
 

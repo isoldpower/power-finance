@@ -1,6 +1,6 @@
 import { ActionsListFx } from "@feature/assistance";
 import { ActionKindIcon, NeedsActionRow } from "@entity/assistance";
-import { RowTitle } from "@shared/pure-components/typography";
+import { RowTitle } from "@internal/shared";
 import { ActionResolutions } from "./ActionResolutions.tsx";
 
 import type { FC } from "react";

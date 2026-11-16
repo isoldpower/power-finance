@@ -1,5 +1,5 @@
 import { BalanceComposition } from "@entity/accounts";
-import { CardTitle } from "@shared/pure-components/typography";
+import { CardTitle } from "@internal/shared";
 
 import type { FC } from "react";
 

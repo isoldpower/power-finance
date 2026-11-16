@@ -1,6 +1,6 @@
 import { FinanceBadge } from "@internal/ui-library";
 import { WhatIf } from "@entity/assistance";
-import { BodyText, RowTitle, Text } from "@shared/pure-components/typography";
+import { BodyText, RowTitle, Text } from "@internal/shared";
 
 import type { FC } from "react";
 

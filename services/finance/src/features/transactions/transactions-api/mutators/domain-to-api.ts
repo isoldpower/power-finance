@@ -1,3 +1,5 @@
+import { categoryIdToApi } from "@feature/categories/categories-api";
+
 import type {
 	TransactionChainDraft,
 	TransactionDraft,
@@ -13,13 +15,13 @@ const transactionDraftToApi = (draft: TransactionDraft): TransactionCreateBody =
 	wallet_id: draft.walletId,
 	origin: draft.origin,
 	type: draft.type,
-	category: draft.category,
+	category_id: categoryIdToApi(draft.category),
 	evidence: draft.evidence ? { url: draft.evidence.url } : null,
 });
 
 const transactionPatchToApi = (patch: TransactionPatch): TransactionPatchBody => ({
 	...(patch.name === undefined ? {} : { name: patch.name }),
-	...(patch.category === undefined ? {} : { category: patch.category }),
+	...(patch.category === undefined ? {} : { category_id: categoryIdToApi(patch.category) }),
 	...(patch.evidence === undefined ? {} : { evidence: patch.evidence }),
 });
 
@@ -31,4 +33,14 @@ const transactionChainDraftToApi = (draft: TransactionChainDraft): TransactionCh
 	})),
 });
 
-export { transactionChainDraftToApi, transactionDraftToApi, transactionPatchToApi };
+const ADJUSTED_TEMPORARY_ID = 'adjusted';
+const ADJUSTMENT_TEMPORARY_ID = 'adjustment';
+
+const transactionAdjustmentToApi = (adjustedId: string, draft: TransactionDraft): TransactionChainBody => ({
+	transactions: [
+		{ temporary_id: ADJUSTED_TEMPORARY_ID, after: null, transaction_id: adjustedId },
+		{ ...transactionDraftToApi(draft), temporary_id: ADJUSTMENT_TEMPORARY_ID, after: ADJUSTED_TEMPORARY_ID },
+	],
+});
+
+export { transactionAdjustmentToApi, transactionChainDraftToApi, transactionDraftToApi, transactionPatchToApi };

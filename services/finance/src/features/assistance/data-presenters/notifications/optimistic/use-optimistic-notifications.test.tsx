@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useOptimisticNotifications } from './use-optimistic-notifications.ts';
 
 import type { FC, ReactNode } from 'react';
-import type { Page } from '@shared/api';
+import type { Page } from '@internal/shared';
 import type { PagedResponse } from '@shared/data';
 import type { Notification, NotificationCounts } from '@entity/assistance';
 import type { NotificationCachesSnapshot } from './types.ts';
@@ -73,6 +73,32 @@ const renderOptimistic = () => {
 };
 
 describe('useOptimisticNotifications', () => {
+	test('puts a streamed notification at the top of every list it belongs to and counts it', () => {
+		const { client, result } = renderOptimistic();
+		const received = buildNotification({ id: 'n2', severity: 'critical', title: 'Large charge' });
+
+		act(() => {
+			result.current.applyReceived(received);
+		});
+
+		expect(pageOf(client, UNREAD_KEY).items.map((item) => item.id)).toEqual(['n2', 'n1']);
+		expect(pageOf(client, CRITICAL_KEY).items.map((item) => item.id)).toEqual(['n2']);
+		expect(pageOf(client, ANY_KEY).items.map((item) => item.id)).toEqual(['n2', 'n1']);
+		expect(pageOf(client, READ_KEY).items).toEqual([]);
+		expect(client.getQueryData<NotificationCounts>(COUNT_KEY)).toEqual({ unacknowledged: 2, total: 5 });
+	});
+
+	test('ignores a streamed notification that is already listed', () => {
+		const { client, result } = renderOptimistic();
+
+		act(() => {
+			result.current.applyReceived(buildNotification());
+		});
+
+		expect(pageOf(client, UNREAD_KEY).items.map((item) => item.id)).toEqual(['n1']);
+		expect(client.getQueryData<NotificationCounts>(COUNT_KEY)).toEqual({ unacknowledged: 1, total: 4 });
+	});
+
 	test('drops an acknowledged notification from the unread list only', () => {
 		const { client, result } = renderOptimistic();
 

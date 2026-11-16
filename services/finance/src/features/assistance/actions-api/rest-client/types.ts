@@ -1,4 +1,4 @@
-import type { CollectionResponse, MutationResponse } from "@shared/api";
+import type { CollectionResponse, MutationResponse } from "@internal/shared";
 import type { ActionDto, ActionListParams, ActionResolveBody } from "../types.ts";
 
 

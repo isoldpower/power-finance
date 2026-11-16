@@ -1,5 +1,5 @@
 import { LedgerLineSkeleton } from "@entity/transactions";
-import { Caption } from "@shared/pure-components/typography";
+import { Caption } from "@internal/shared";
 
 import type { FC, ReactNode } from "react";
 import type { LedgerState } from "../data-presenters";

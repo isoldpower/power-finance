@@ -1,7 +1,7 @@
 import { MoneyInOriginal } from "@entity/localization";
 
 import type { FC } from "react";
-import type { Types } from "@shared/formatting";
+import type { Types } from "@internal/shared";
 
 
 interface ActivityRowMoneyProps {

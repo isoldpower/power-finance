@@ -1,6 +1,6 @@
-import { toAmountString } from "@shared/api";
+import { toAmountString } from "@internal/shared";
+import type { FilterLeaf, FilterNode } from "@internal/shared";
 
-import type { FilterLeaf, FilterNode } from "@shared/api";
 import type { TransactionQuery } from "@entity/transactions";
 import type { TransactionSearchBody, TransactionSearchField } from "../types.ts";
 
@@ -29,11 +29,13 @@ const transactionQueryToApi = (query: TransactionQuery): TransactionSearchBody =
 		operator: 'in',
 		value: query.currencies 
 	});
-	if (query.categories?.length) leaves.push({ 
-		field_name: 'category',
-		operator: 'in',
-		value: query.categories 
-	});
+	if (query.categoryIds?.length) {
+		leaves.push({
+			field_name: 'category_id',
+			operator: 'in',
+			value: query.categoryIds,
+		});
+	}
 	if (query.types?.length) leaves.push({ 
 		field_name: 'type',
 		operator: 'in',

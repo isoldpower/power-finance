@@ -1,6 +1,6 @@
-import { toAmountString } from "@shared/api";
+import { toAmountString } from "@internal/shared";
+import type { FilterNode } from "@internal/shared";
 
-import type { FilterNode } from "@shared/api";
 import type { GoalDraft, GoalPatch, GoalQuery } from "@entity/wallets";
 import type { GoalCreateBody, GoalPatchBody, GoalSearchBody, GoalSearchField } from "../types.ts";
 

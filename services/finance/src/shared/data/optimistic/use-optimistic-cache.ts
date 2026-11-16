@@ -6,7 +6,7 @@ import { isFirstPage } from "./first-page.ts";
 import { clearPending, markPending } from "./pending.ts";
 
 import type { QueryClient, QueryKey } from "@tanstack/react-query";
-import type { Page } from "@shared/api";
+import type { Page } from "@internal/shared";
 import type { Identified } from "../page-writers.ts";
 import type {
 	CacheEntry,

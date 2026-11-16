@@ -1,4 +1,4 @@
-import { ApiError, delay, isCanonicalAmount, parseAmount, serializeAmount, unpaginated } from "@shared/api";
+import { ApiError, delay, isCanonicalAmount, parseAmount, serializeAmount, unpaginated } from "@internal/shared";
 import { CURRENCY_CATALOG } from "./mock-seed.ts";
 import type { CatalogEntry } from "./mock-seed.ts";
 import type {

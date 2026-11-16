@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { BulkActionsBar } from "@entity/transactions";
 import { useDeleteTransactions, useTransactionsSelection } from "@feature/transactions";
-import { SpaceOccupant } from "@shared/pure-components/layout";
+import { SpaceOccupant } from "@internal/shared";
 import { DeleteTransactionsModal } from "./DeleteTransactionsModal.tsx";
 
 import type { FC } from "react";

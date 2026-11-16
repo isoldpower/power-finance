@@ -4,21 +4,26 @@ import { FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
 import { CurrencyPicker } from "@widget/localization";
 import { DEFAULT_WALLET_COLOR, WalletColorField, WalletPreviewCard, walletGradient } from "@entity/wallets";
 import { WalletFormOnSubmit, useWalletFormInitials, useWalletFormState, walletFormSchema } from "@feature/wallets";
-import { FieldLabel, PanelFooter } from "@shared/forms";
+import { FieldLabel, FieldLabelRow, PanelFooter } from "@shared/forms";
+import { ManageCategoriesLink } from "@feature/navigation";
+import { WalletCategorySelect } from "./form-partials/WalletCategorySelect.tsx";
+import { useCallback } from "react";
 
 import type { FC } from "react";
-import type { WalletFormSchema } from "@feature/wallets";
+import type { CreateWalletResponse, UpdateWalletResponse, WalletFormSchema } from "@feature/wallets";
 import type { CurrencyMeta } from "@entity/localization";
 
 
 interface CreateWalletFormProps {
 	onClose: () => void;
 	currencies: CurrencyMeta[];
+	onCreated?: (walletId: string) => void;
 }
 
 const CreateWalletForm: FC<CreateWalletFormProps> = ({ 
 	onClose,
 	currencies,
+	onCreated,
 }) => {
 	const defaultValues = useWalletFormInitials();
 	const form = useForm<WalletFormSchema>({
@@ -29,6 +34,16 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 
 	const { loading, canSubmit, methods } = useWalletFormState(form);
 	const { name, category, currency, color } = useWatch({ control: form.control });
+
+	const handleSuccess = useCallback((result: CreateWalletResponse | UpdateWalletResponse) => {
+		methods.handleDoneLoading();
+
+		if ('replayed' in result && onCreated) {
+			onCreated(result.wallet.id);
+		}
+
+		onClose();
+	}, [methods, onCreated, onClose]);
 	
 	return (
 		<UiForm {...form}>
@@ -36,14 +51,14 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 				className="flex flex-1 flex-col overflow-hidden"
 				handleSubmit={form.handleSubmit}
 				onBeforeEdit={methods.handleLoading}
-				onSuccess={() => { methods.handleDoneLoading(); onClose(); }}
+				onSuccess={handleSuccess}
 				onError={methods.handleFailedLoading}
 			>
 				<div className="flex-1 overflow-auto p-5">
 					<WalletPreviewCard gradient={walletGradient(color ?? DEFAULT_WALLET_COLOR)}>
 						<WalletPreviewCard.Header>
 							<WalletPreviewCard.Type>
-								{category ?? ''}
+								{category?.name ?? ''}
 							</WalletPreviewCard.Type>
 							<WalletPreviewCard.Currency>
 								{currency ?? ''}
@@ -76,13 +91,20 @@ const CreateWalletForm: FC<CreateWalletFormProps> = ({
 								className="mb-4"
 							/>
 						)} />
-					<FieldLabel>Category</FieldLabel>
+					<FieldLabelRow action={<ManageCategoriesLink />}>
+						Category
+					</FieldLabelRow>
 					<UiFormField
 						disabled={loading}
 						control={form.control}
 						name="category"
 						render={({ field }) => (
-							<FinanceInput placeholder="e.g. Savings" className="mb-4" {...field} />
+							<WalletCategorySelect
+								value={field.value}
+								onChange={field.onChange}
+								disabled={loading}
+								className="mb-4 w-full"
+							/>
 						)} />
 					<FieldLabel>
 						Currency

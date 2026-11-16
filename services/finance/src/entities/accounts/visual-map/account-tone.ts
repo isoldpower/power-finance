@@ -1,6 +1,6 @@
-import { isNegativeAmount } from "@shared/api";
+import { isNegativeAmount } from "@internal/shared";
+import type { Types } from "@internal/shared";
 
-import type { Types } from "@shared/formatting";
 
 
 type LedgerSideTone = 'accent' | 'neutral';

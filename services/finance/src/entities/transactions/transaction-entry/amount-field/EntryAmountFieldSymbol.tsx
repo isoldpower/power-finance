@@ -1,5 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { DisplayText } from "@shared/pure-components/typography";
+import { DisplayText } from "@internal/shared";
 
 import type { FC, PropsWithChildren } from "react";
 import type { TransactionEntryType } from "../../types.ts";

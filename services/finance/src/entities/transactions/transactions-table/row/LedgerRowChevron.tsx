@@ -1,5 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { Caption } from "@shared/pure-components/typography";
+import { Caption } from "@internal/shared";
 
 import type { BaseHTMLAttributes, FC } from "react";
 

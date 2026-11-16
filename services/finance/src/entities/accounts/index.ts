@@ -4,8 +4,6 @@ export * from './account-summary';
 export * from './balance-composition';
 export * from './category';
 export * from './data-view';
-export * from './demo-mode-banner';
-export * from './demo-preparation';
 export * from './ledger-balance';
 export * from './read-only-notice';
 export * from './visual-map';

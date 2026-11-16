@@ -1,8 +1,14 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useWatch } from "react-hook-form";
 import { useCurrencyPairRate } from "@feature/localization";
-import { divideAmount, isCanonicalAmount, isZeroAmount, multiplyAmount } from "@shared/api";
-import { currencyFractionDigits, sanitizeAmountInput } from "@shared/formatting";
+import {
+	currencyFractionDigits,
+	divideAmount,
+	isCanonicalAmount,
+	isZeroAmount,
+	multiplyAmount,
+	sanitizeAmountInput,
+} from "@internal/shared";
 
 import type { Control, FieldValues, UseFormReturn } from "react-hook-form";
 import type { TransactionEntryValues } from "../types.ts";

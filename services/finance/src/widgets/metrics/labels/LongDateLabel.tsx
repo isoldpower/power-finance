@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Overline } from "@shared/pure-components/typography";
+import { Overline } from "@internal/shared";
 import { useLongDateLabel } from "@feature/localization";
 
 import type { FC } from "react";

@@ -6,7 +6,8 @@ interface StoredWallet {
 	created_at: string;
 	updated_at: string | null;
 	deleted_at: string | null;
-	category: string;
+	category_id?: string | null;
+	category?: string;
 	currency: string;
 	opening_balance: string;
 	zero_balance: string;

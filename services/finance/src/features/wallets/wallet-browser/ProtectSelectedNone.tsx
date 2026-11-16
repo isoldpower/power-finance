@@ -1,6 +1,6 @@
 import { cn } from "@internal/ui-library";
 import { FinanceCard } from "@internal/ui-library";
-import { textClass } from "@shared/pure-components/typography";
+import { textClass } from "@internal/shared";
 
 import type { FC, ReactNode } from "react";
 

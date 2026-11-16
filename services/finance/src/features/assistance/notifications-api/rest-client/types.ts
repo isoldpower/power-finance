@@ -1,4 +1,4 @@
-import type { ApiError, CollectionResponse, MutationResponse, ResourceResponse, Unsubscribe } from "@shared/api";
+import type { ApiError, CollectionResponse, MutationResponse, ResourceResponse, Unsubscribe } from "@internal/shared";
 import type {
 	NotificationAckBatchBody,
 	NotificationAcknowledgedDto,

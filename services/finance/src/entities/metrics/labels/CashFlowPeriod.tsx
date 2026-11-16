@@ -1,4 +1,4 @@
-import { BodyText } from "@shared/pure-components/typography";
+import { BodyText } from "@internal/shared";
 import { rangeVerbose } from "../visual-map";
 
 import type { FC } from "react";

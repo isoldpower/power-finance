@@ -1,7 +1,7 @@
 import { QUERY_KEYS } from "@shared/api";
 
 import type { QueryClient } from "@tanstack/react-query";
-import type { Page } from "@shared/api";
+import type { Page } from "@internal/shared";
 import type { TransactionWalletRef } from "@entity/transactions";
 
 

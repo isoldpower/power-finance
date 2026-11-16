@@ -1,85 +1,64 @@
-import { useMemo } from "react";
 import { Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { AuthGuard, AuthProvider, getIsEmbedded, useIsClerkProvided, ClerkProvider } from "@internal/shared";
-import { useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
+import {
+	AuthProvider,
+	ClerkProvider,
+	DemoSessionProvider,
+	getIsEmbedded,
+	GuestDemoSessionProvider,
+	SignedInOrGuestDemo,
+	useIsClerkProvided,
+} from "@internal/shared";
+import { FinanceButton, useClerkDarkTheme, useClerkLightTheme } from "@internal/ui-library";
 import { UserPreferencesSync } from "@feature/configuration";
-import { GuestDemoPreparationGuard, GuestDemoSessionProvider, useGuestDemoPreparation } from "@feature/accounts";
 import { DemoPreparationPage } from "@page/demo-preparation-page";
 
-import { ApiProvider, resolveApiMode, useGuestDemoSessionsApi } from "./api";
+import { ApiProvider, resolveApiMode } from "./api";
 import { checkEnvVariables } from "./env/check-env.ts";
-import { getDemoSession } from "./env/demo-session.ts";
 import { GlobalLayout } from "./layouts/GlobalLayout.tsx";
 
 import type { FC, ReactNode } from "react";
 
 
+const renderDemoRetry = (retry: () => void): ReactNode => (
+	<FinanceButton type="button" variant="danger" onClick={retry}>
+		Try again
+	</FinanceButton>
+);
+
 function RootComponent() {
 	const envVariables = checkEnvVariables();
-	const demoSession = useMemo(() => getDemoSession(), []);
 
 	return (
 		<DynamicAuthProvider
 			key={getIsEmbedded() ? 'embedded' : 'primary'} 
 			envVariables={envVariables}
 		>
-			<GuestDemoSessionScope demoSession={demoSession} envVariables={envVariables}>
-				<ApiProvider envVariables={envVariables}>
-					<UserPreferencesSync />
-					<SignedInOrGuestDemo demoSession={demoSession}>
-						<GlobalLayout>
-							<Outlet />
-						</GlobalLayout>
-						<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
-					</SignedInOrGuestDemo>
-				</ApiProvider>
-			</GuestDemoSessionScope>
+			<DemoSessionProvider
+				baseUrl={envVariables.CLIENT_API_BASE_URL}
+				mode={resolveApiMode(envVariables.CLIENT_API_MODE)}
+				sandbox={envVariables.CLIENT_API_SANDBOX}
+				renderRetry={renderDemoRetry}
+			>
+				<GuestDemoSessionProvider
+					baseUrl={envVariables.CLIENT_API_BASE_URL}
+					mode={resolveApiMode(envVariables.CLIENT_API_MODE)}
+					sandbox={envVariables.CLIENT_API_SANDBOX}
+				>
+					<ApiProvider envVariables={envVariables}>
+						<UserPreferencesSync />
+						<SignedInOrGuestDemo pending={<DemoPreparationPage />} renderRetry={renderDemoRetry}>
+							<GlobalLayout>
+								<Outlet />
+							</GlobalLayout>
+							<TanStackRouterDevtools initialIsOpen={false} position='bottom-left' />
+						</SignedInOrGuestDemo>
+					</ApiProvider>
+				</GuestDemoSessionProvider>
+			</DemoSessionProvider>
 		</DynamicAuthProvider>
 	)
 }
-
-const GuestDemoSessionScope: FC<{ demoSession?: string; envVariables: ImportMetaEnv; children: ReactNode }> = ({
-	demoSession,
-	envVariables,
-	children
-}) => {
-	const mode = resolveApiMode(envVariables.CLIENT_API_MODE);
-	const client = useGuestDemoSessionsApi({
-		baseUrl: envVariables.CLIENT_API_BASE_URL,
-		mode,
-		sandbox: envVariables.CLIENT_API_SANDBOX,
-		demoSession,
-	});
-
-	return (
-		<GuestDemoSessionProvider
-			demoSession={mode === 'live' ? demoSession ?? null : null}
-			client={client}
-		>
-			{children}
-		</GuestDemoSessionProvider>
-	);
-};
-
-const SignedInOrGuestDemo: FC<{ demoSession?: string; children: ReactNode }> = ({
-	demoSession,
-	children
-}) => {
-	return demoSession === undefined
-		? <AuthGuard>{children}</AuthGuard>
-		: <GuestDemoPreparationGate>{children}</GuestDemoPreparationGate>;
-};
-
-const GuestDemoPreparationGate: FC<{ children: ReactNode }> = ({ children }) => {
-	const preparing = useGuestDemoPreparation();
-
-	return (
-		<GuestDemoPreparationGuard preparing={preparing} pending={<DemoPreparationPage />}>
-			{children}
-		</GuestDemoPreparationGuard>
-	);
-};
 
 const DynamicAuthProvider: FC<{ envVariables: ImportMetaEnv; children: ReactNode }> = ({
 	envVariables,

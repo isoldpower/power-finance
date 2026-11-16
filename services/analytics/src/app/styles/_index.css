@@ -2,6 +2,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "@internal/ui-library/preset.css";
+@import "./charts.css";
 
 @source "../../../node_modules/@internal/ui-library/lib";
 @source not "../../../node_modules/@internal/ui-library/lib/**/*.stories.tsx";
+@source "../../../node_modules/@internal/shared/lib";
+@source not "../../../node_modules/@internal/shared/lib/**/*.test.{ts,tsx}";

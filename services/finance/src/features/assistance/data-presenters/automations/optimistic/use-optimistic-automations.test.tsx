@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useOptimisticAutomations } from './use-optimistic-automations.ts';
 
 import type { FC, ReactNode } from 'react';
-import type { Page } from '@shared/api';
+import type { Page } from '@internal/shared';
 import type { PagedResponse } from '@shared/data';
 import type { Automation } from '@entity/assistance';
 import type { AutomationCachesSnapshot } from './types.ts';
@@ -25,7 +25,7 @@ const buildAutomation = (overrides: Partial<Automation> = {}): Automation => ({
 	icon: 'basket',
 	enabled: true,
 	trigger: { type: 'event', event: 'transaction.created', schedule: null, condition: null },
-	effects: [{ type: 'set_category', category: 'Groceries' }],
+	effects: [{ type: 'set_category', categoryId: 'builtin-transaction-groceries' }],
 	lastRunAt: null,
 	runs: 0,
 	...overrides,
@@ -103,7 +103,7 @@ describe('useOptimisticAutomations', () => {
 
 		const [rule] = pageOf(client, ANY_KEY).items;
 		expect(rule.name).toBe('Tag food');
-		expect(rule.effects).toEqual([{ type: 'set_category', category: 'Groceries' }]);
+		expect(rule.effects).toEqual([{ type: 'set_category', categoryId: 'builtin-transaction-groceries' }]);
 	});
 
 	test('restores the toggle when the request fails', async () => {

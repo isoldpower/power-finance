@@ -1,18 +1,11 @@
-import type { MoneyDto } from "@shared/api";
-import type { CurrencyMeta, CurrencyRates, Money, MoneyConversion } from "@entity/localization";
-import type { CurrencyConversionDto, CurrencyDto, CurrencyRatesDto } from "../types.ts";
+import type { MoneyDto } from "@internal/shared";
+import type { CurrencyRates, Money, MoneyConversion } from "@entity/localization";
+import type { CurrencyConversionDto, CurrencyRatesDto } from "../types.ts";
 
 
 const moneyFromApi = (dto: MoneyDto): Money => ({
 	amount: dto.amount,
 	currency: dto.currency,
-});
-
-const currencyFromApi = (dto: CurrencyDto): CurrencyMeta => ({
-	code: dto.code,
-	symbol: dto.symbol,
-	name: dto.name,
-	decimals: dto.decimals,
 });
 
 const conversionFromApi = (dto: CurrencyConversionDto, fetchedAt: string): MoneyConversion => ({
@@ -28,4 +21,4 @@ const ratesFromApi = (dto: CurrencyRatesDto, fetchedAt: string): CurrencyRates =
 	fetchedAt,
 });
 
-export { conversionFromApi, currencyFromApi, moneyFromApi, ratesFromApi };
+export { conversionFromApi, moneyFromApi, ratesFromApi };

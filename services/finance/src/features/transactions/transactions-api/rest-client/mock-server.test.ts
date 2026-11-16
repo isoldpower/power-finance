@@ -1,8 +1,13 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 
-import { isApiError } from '@shared/api';
+import { isApiError } from '@internal/shared';
+import { builtInCategoryId } from '@feature/categories/categories-api';
 import { TransactionsMockRESTApiClient } from './mock-server.ts';
 import type { TransactionCreateBody } from '../types.ts';
+
+const GROCERIES = builtInCategoryId('transaction', 'Groceries');
+const HOUSING = builtInCategoryId('transaction', 'Housing');
+const INCOME = builtInCategoryId('transaction', 'Income');
 
 const WALLET = { id: 'wallet-1', name: 'Main Checking', deleted_at: null };
 const CLOSED_WALLET = { id: 'wallet-2', name: 'Closed Card', deleted_at: '2026-08-01T00:00:00-05:00' };
@@ -16,7 +21,7 @@ const body = (name: string, overrides: Partial<TransactionCreateBody> = {}): Tra
 	wallet_id: WALLET.id,
 	origin: 'manual',
 	type: 'expense',
-	category: 'Groceries',
+	category_id: GROCERIES,
 	evidence: null,
 	...overrides,
 });
@@ -118,6 +123,56 @@ describe('TransactionsMockRESTApiClient', () => {
 		);
 	});
 
+	test('starts a chain around an existing transaction', async () => {
+		const existing = await client.post({ data: body('Dinner'), idempotencyKey: 'key-existing' });
+		const { data } = await client.postChain({
+			idempotencyKey: 'chain-existing',
+			data: {
+				transactions: [
+					{ temporary_id: 'adjusted', after: null, transaction_id: existing.data.id },
+					{ ...body('Refund', { type: 'income', amount: '5.00' }), temporary_id: 'refund', after: 'adjusted' },
+				],
+			},
+		});
+
+		expect(data.transactions.map((item) => item.name)).toEqual(['Dinner', 'Refund']);
+		expect(data.transactions[0]?.id).toBe(existing.data.id);
+		expect(data.transactions.every((item) => item.chain?.id === data.chain_id && item.chain.size === 2)).toBe(true);
+	});
+
+	test('refuses to chain a transaction that already belongs to a chain', async () => {
+		const chain = await client.postChain({
+			idempotencyKey: 'chain-taken',
+			data: { transactions: [{ ...body('First'), temporary_id: 'a', after: null }] },
+		});
+		const takenId = chain.data.transactions[0]?.id ?? '';
+
+		await expect(client.postChain({
+			idempotencyKey: 'chain-retake',
+			data: { transactions: [{ temporary_id: 'x', after: null, transaction_id: takenId }] },
+		})).rejects.toSatisfy((error) => isApiError(error) && error.code === 'conflict');
+	});
+
+	test('appends one transaction to an existing chain and returns it last', async () => {
+		const chain = await client.postChain({
+			idempotencyKey: 'chain-base',
+			data: {
+				transactions: [
+					{ ...body('Out'), temporary_id: 'out', after: null },
+					{ ...body('In', { type: 'income' }), temporary_id: 'in', after: 'out' },
+				],
+			},
+		});
+		const { data } = await client.appendChain({
+			chainId: chain.data.chain_id,
+			data: body('Fee', { amount: '1.00' }),
+			idempotencyKey: 'append-1',
+		});
+
+		expect(data.transactions.map((item) => item.name)).toEqual(['Out', 'In', 'Fee']);
+		expect(data.transactions.every((item) => item.chain?.size === 3)).toBe(true);
+	});
+
 	test('cancels a whole chain and drops it from the feed', async () => {
 		const chain = await client.postChain({
 			idempotencyKey: 'chain-4',
@@ -177,9 +232,9 @@ describe('TransactionsMockRESTApiClient', () => {
 	});
 
 	test('narrows a search by type, category and text across name and category', async () => {
-		await client.post({ data: body('Whole Foods', { category: 'Groceries' }), idempotencyKey: 'n-1' });
-		await client.post({ data: body('Rent', { category: 'Housing', amount: '900.00' }), idempotencyKey: 'n-2' });
-		await client.post({ data: body('Salary', { category: 'Income', type: 'income' }), idempotencyKey: 'n-3' });
+		await client.post({ data: body('Whole Foods', { category_id: GROCERIES }), idempotencyKey: 'n-1' });
+		await client.post({ data: body('Rent', { category_id: HOUSING, amount: '900.00' }), idempotencyKey: 'n-2' });
+		await client.post({ data: body('Salary', { category_id: INCOME, type: 'income' }), idempotencyKey: 'n-3' });
 
 		const income = await client.search({
 			data: { filter_body: { and: [{ field_name: 'type', operator: 'in', value: ['income'] }] } },
@@ -205,10 +260,35 @@ describe('TransactionsMockRESTApiClient', () => {
 		expect(needle.data.map((entry) => entry.name)).toEqual(['Whole Foods']);
 	});
 
+	test('filters by category id and returns the category object', async () => {
+		await client.post({ data: body('Whole Foods'), idempotencyKey: 'c-1' });
+		await client.post({ data: body('Rent', { category_id: HOUSING }), idempotencyKey: 'c-2' });
+
+		const { data } = await client.search({
+			data: { filter_body: { and: [{ field_name: 'category_id', operator: 'in', value: [HOUSING] }] } },
+		});
+
+		expect(data.map((entry) => entry.category)).toEqual([{ id: HOUSING, name: 'Housing', is_global: true }]);
+	});
+
+	test('refuses a category that does not exist', async () => {
+		await expect(client.post({
+			data: body('Mystery', { category_id: 'missing' }),
+			idempotencyKey: 'c-3',
+		})).rejects.toSatisfy((error: unknown) => isApiError(error) && error.code === 'not_found');
+	});
+
+	test('refuses a wallet category on a transaction', async () => {
+		await expect(client.post({
+			data: body('Mismatch', { category_id: builtInCategoryId('wallet', 'Cash') }),
+			idempotencyKey: 'c-4',
+		})).rejects.toSatisfy((error: unknown) => isApiError(error) && error.code === 'validation_failed');
+	});
+
 	test('reports the narrowed total so paging stays truthful', async () => {
 		await client.post({ data: body('Whole Foods'), idempotencyKey: 't-1' });
-		await client.post({ data: body('Rent', { category: 'Housing' }), idempotencyKey: 't-2' });
-		await client.post({ data: body('Salary', { category: 'Income', type: 'income' }), idempotencyKey: 't-3' });
+		await client.post({ data: body('Rent', { category_id: HOUSING }), idempotencyKey: 't-2' });
+		await client.post({ data: body('Salary', { category_id: INCOME, type: 'income' }), idempotencyKey: 't-3' });
 
 		const { meta } = await client.search({
 			data: { filter_body: { and: [{ field_name: 'type', operator: 'in', value: ['expense'] }] } },

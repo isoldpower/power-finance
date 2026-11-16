@@ -1,16 +1,3 @@
-interface CurrencyMeta {
-	code: string;
-	symbol: string;
-	name: string;
-	decimals: number;
-}
-
-interface LocaleMeta {
-	tag: string;
-	name: string;
-	region: string;
-}
-
 interface TimezoneMeta {
 	id: string;
 	city: string;
@@ -43,5 +30,6 @@ interface CurrencyRates {
 	fetchedAt: string;
 }
 
-export type { CurrencyMeta, LocaleMeta, TimezoneMeta };
+export type { TimezoneMeta };
+export type { CurrencyMeta, LocaleMeta, LocalePickerVariant } from "@internal/shared";
 export type { Money, ConvertedMoney, MoneyConversion, CurrencyRates };

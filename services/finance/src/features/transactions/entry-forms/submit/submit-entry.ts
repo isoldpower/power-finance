@@ -1,9 +1,9 @@
-import { absoluteAmount } from "@shared/api";
-import { parseAmountDecimal } from "@shared/formatting";
+import { absoluteAmount, parseAmountDecimal } from "@internal/shared";
 import { buildTransferChain } from "./build-transfer-chain.ts";
 
-import type { TransactionChainDraft, TransactionDraft } from "@entity/transactions";
+import type { Transaction, TransactionChainDraft, TransactionDraft } from "@entity/transactions";
 import type {
+	CreateTransactionAdjustmentResponse,
 	CreateTransactionChainResponse,
 	CreateTransactionResponse,
 } from "../../transactions-api";
@@ -24,16 +24,26 @@ interface EntryCurrencies {
 interface EntryApiMethods {
 	createTransaction: (draft: TransactionDraft) => Promise<CreateTransactionResponse>;
 	createTransactionChain: (draft: TransactionChainDraft) => Promise<CreateTransactionChainResponse>;
+	createAdjustment: (adjusted: Transaction, draft: TransactionDraft) => Promise<CreateTransactionAdjustmentResponse>;
 }
+
+type EntrySubmitResponse =
+	| CreateTransactionResponse
+	| CreateTransactionChainResponse
+	| CreateTransactionAdjustmentResponse;
 
 const submitEntry = (
 	entry: TransactionEntryValues,
 	currencies: EntryCurrencies,
-	{ createTransaction, createTransactionChain }: EntryApiMethods
-): Promise<CreateTransactionResponse | CreateTransactionChainResponse> => {
+	{ createTransaction, createTransactionChain, createAdjustment }: EntryApiMethods,
+	adjusted: Transaction | null = null,
+): Promise<EntrySubmitResponse> => {
 	const amount = absoluteAmount(parseAmountDecimal(entry.amount));
 	const category = entry.category ?? null;
-	const name = entry.name ?? entry.category ?? DEFAULT_NAMES[entry.type];
+	const name = entry.name
+		?? (adjusted ? `${adjusted.name} adjustment` : undefined)
+		?? entry.category?.name
+		?? DEFAULT_NAMES[entry.type];
 
 	if (entry.type === 'transfer') {
 		return createTransactionChain({
@@ -55,8 +65,7 @@ const submitEntry = (
 	}
 
 	const income = entry.type === 'income';
-
-	return createTransaction({
+	const draft: TransactionDraft = {
 		name,
 		currency: income ? currencies.toCurrency : currencies.fromCurrency,
 		amount,
@@ -65,8 +74,10 @@ const submitEntry = (
 		type: income ? 'income' : 'expense',
 		category,
 		evidence: null,
-	});
+	};
+
+	return adjusted ? createAdjustment(adjusted, draft) : createTransaction(draft);
 };
 
 export { submitEntry };
-export type { EntryApiMethods, EntryCurrencies };
+export type { EntryApiMethods, EntryCurrencies, EntrySubmitResponse };

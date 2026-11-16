@@ -1,7 +1,7 @@
 import { cn } from "@internal/ui-library";
 
 import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
-import type { NonNeutralTone } from "@shared/formatting";
+import type { NonNeutralTone } from "@internal/shared";
 
 
 type ActivityRowIconProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> & {

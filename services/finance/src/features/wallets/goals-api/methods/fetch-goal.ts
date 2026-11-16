@@ -1,8 +1,8 @@
-import { pageFromMeta } from "@shared/api";
+import { pageFromMeta } from "@internal/shared";
+import type { Page, PageParams } from "@internal/shared";
 import { ledgerEntryFromApi } from "@feature/accounts/accounts-api";
 import { goalFromApi } from "../mutators";
 
-import type { Page, PageParams } from "@shared/api";
 import type { LedgerEntry } from "@entity/accounts";
 import type { Goal } from "@entity/wallets";
 import type { IGoalsRESTApiClient } from "../rest-client";

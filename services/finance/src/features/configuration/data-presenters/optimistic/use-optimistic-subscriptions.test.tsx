@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useOptimisticSubscriptions } from './use-optimistic-subscriptions.ts';
 
 import type { FC, ReactNode } from 'react';
-import type { Page } from '@shared/api';
+import type { Page } from '@internal/shared';
 import type { PagedResponse } from '@shared/data';
 import type { WebhookSubscription } from '@entity/configuration';
 

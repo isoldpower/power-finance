@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { ApiError } from '@shared/api';
+import { ApiError } from '@internal/shared';
 import {
 	hasStaleRecovery,
 	staleRefetchInterval,

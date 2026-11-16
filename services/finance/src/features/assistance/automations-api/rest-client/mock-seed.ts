@@ -1,3 +1,5 @@
+import { builtInCategoryId } from "@feature/categories/categories-api";
+
 import type { AutomationDto } from "../types.ts";
 
 
@@ -23,7 +25,7 @@ const SEED_AUTOMATIONS: Omit<StoredAutomation, 'id' | 'created_at'>[] = [
 				],
 			},
 		},
-		effects: [{ type: 'set_category', params: { category: 'Dining' } }],
+		effects: [{ type: 'set_category', params: { category_id: builtInCategoryId('transaction', 'Dining') } }],
 		last_run_at: null,
 		runs: 14,
 	},

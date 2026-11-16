@@ -7,7 +7,7 @@ import {
 	useFormattedChartData,
 	useChartHoverData,
 } from "@feature/metrics";
-import { relativeAgo } from "@shared/formatting";
+import { relativeAgo } from "@internal/shared";
 
 import type { FC } from "react";
 import type { NetWorth } from "@entity/metrics";

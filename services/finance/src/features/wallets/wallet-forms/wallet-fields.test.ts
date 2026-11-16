@@ -6,9 +6,11 @@ import { buildWalletDraft, buildWalletPatch, walletFieldsShape } from './wallet-
 import type { WalletFormSchema } from './wallet-form-schema.ts';
 
 
+const SAVINGS = { id: 'builtin-wallet-savings', name: 'Savings', isGlobal: true };
+
 const buildValues = (overrides: Partial<WalletFormSchema> = {}): WalletFormSchema => ({
 	name: '  Travel Card  ',
-	category: '  Savings  ',
+	category: SAVINGS,
 	currency: 'USD',
 	balance: '120.00',
 	color: '#10B981',
@@ -38,11 +40,11 @@ describe('buildWalletDraft', () => {
 		expect(buildWalletDraft(buildValues(), '120.00').color).toBe('#10B981');
 	});
 
-	test('trims the text the user typed', () => {
+	test('trims the name and carries the picked category', () => {
 		const draft = buildWalletDraft(buildValues(), '120.00');
 
 		expect(draft.name).toBe('Travel Card');
-		expect(draft.category).toBe('Savings');
+		expect(draft.category).toEqual(SAVINGS);
 	});
 });
 
@@ -51,10 +53,14 @@ describe('buildWalletPatch', () => {
 		expect(buildWalletPatch(buildValues({ color: '#EC4899' })).color).toBe('#EC4899');
 	});
 
-	test('trims the text the user typed', () => {
+	test('trims the name and carries the picked category', () => {
 		const patch = buildWalletPatch(buildValues());
 
 		expect(patch.name).toBe('Travel Card');
-		expect(patch.category).toBe('Savings');
+		expect(patch.category).toEqual(SAVINGS);
+	});
+
+	test('sends an explicit null to clear the category', () => {
+		expect(buildWalletPatch(buildValues({ category: null })).category).toBeNull();
 	});
 });

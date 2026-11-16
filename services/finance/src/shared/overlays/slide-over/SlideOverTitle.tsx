@@ -1,5 +1,5 @@
 import type {FC, ReactNode} from "react";
-import { Heading } from "@shared/pure-components/typography";
+import { Heading } from "@internal/shared";
 
 
 interface SlideOverTitleProps {

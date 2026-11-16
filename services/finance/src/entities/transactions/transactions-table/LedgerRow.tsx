@@ -1,5 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { pendingClass } from "@shared/pure-components/feedback";
+import { pendingClass } from "@internal/shared";
 import { LedgerRowAmount } from "./row/LedgerRowAmount.tsx";
 import { LedgerRowCategory } from "./row/LedgerRowCategory.tsx";
 import { LedgerRowChevron } from "./row/LedgerRowChevron.tsx";

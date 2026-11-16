@@ -1,4 +1,4 @@
-import type { ApiEnvelope } from "@shared/api";
+import type { ApiEnvelope } from "@internal/shared";
 import type { MetricsDto, MetricsMetaDto, MetricsQuery } from "../types.ts";
 
 

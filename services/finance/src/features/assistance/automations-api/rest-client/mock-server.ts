@@ -1,21 +1,21 @@
 import { v4 as uuidv4 } from "uuid";
-import { LocalStorageMock } from "@internal/shared";
 import {
 	ApiError,
 	createMatcher,
 	delay,
 	IdempotencyStore,
 	isCanonicalAmount,
+	LocalStorageMock,
 	paginate,
 	stringifySortedQuery,
 	validateFilter,
-} from "@shared/api";
+} from "@internal/shared";
+import type { FieldPolicy, FilterNode, IStorage } from "@internal/shared";
 import { TRANSACTION_SEARCH_FIELDS } from "@feature/transactions/transactions-api";
 import { WALLET_SEARCH_FIELDS } from "@feature/wallets/wallets-api";
+import { CategoryCatalogMock } from "@feature/categories/categories-api";
 import { AUTOMATIONS_STORAGE_KEY, SEED_AUTOMATIONS } from "./mock-seed.ts";
 
-import type { IStorage } from "@internal/shared";
-import type { FieldPolicy, FilterNode } from "@shared/api";
 import type { StoredAutomation } from "./mock-seed.ts";
 import type {
 	AutomationDto,
@@ -39,6 +39,8 @@ import type {
 type TriggerSubject = 'transaction' | 'wallet';
 
 const SEVERITIES = ['info', 'warning', 'critical'];
+
+const CATEGORY_CATALOG = new CategoryCatalogMock();
 
 const compareDesc = (left: string, right: string): number => (left < right ? 1 : left > right ? -1 : 0);
 
@@ -123,9 +125,11 @@ const assertEffect = (effect: AutomationEffectDto, index: number, subject: Trigg
 			if (subject !== 'transaction') {
 				throw invalid(`effects[${String(index)}]`, 'effect_subject_mismatch', 'set_category applies to transactions only');
 			}
-			if (stringParam(effect.params, 'category') === null) {
-				throw invalid(field, 'effect_params_invalid', 'set_category needs a category');
+			const categoryId = stringParam(effect.params, 'category_id');
+			if (categoryId === null) {
+				throw invalid(field, 'effect_params_invalid', 'set_category needs a category_id');
 			}
+			CATEGORY_CATALOG.requireAssignable(categoryId, 'transaction', `${field}.category_id`);
 
 			return;
 		}
@@ -213,8 +217,41 @@ class AutomationsMockRESTApiClient implements IAutomationsRESTApiClient {
 		this.seed();
 	}
 
+	private migrateLegacyCategories(automation: StoredAutomation): StoredAutomation {
+		const effects = automation.effects.flatMap((effect): AutomationEffectDto[] => {
+			if (effect.type !== 'set_category' || stringParam(effect.params, 'category_id') !== null) {
+				return [effect];
+			}
+
+			const categoryId = CATEGORY_CATALOG.builtInIdByName('transaction', stringParam(effect.params, 'category'));
+
+			return categoryId === null ? [] : [{ type: effect.type, params: { category_id: categoryId } }];
+		});
+
+		return {
+			...automation,
+			effects,
+			enabled: automation.enabled && effects.length > 0,
+		};
+	}
+
 	private seed(): void {
-		if (this.storage.list().length > 0) return;
+		const stored = this.storage.list();
+
+		if (stored.length > 0) {
+			for (const automation of stored) {
+				const migrated = this.migrateLegacyCategories(automation);
+
+				if (JSON.stringify(migrated) === JSON.stringify(automation)) {
+					continue;
+				}
+
+				this.storage.remove(automation);
+				this.storage.add(migrated);
+			}
+
+			return;
+		}
 
 		const now = Date.now();
 

@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { useOptimisticCache } from "@shared/data";
 
-import { patchGoal } from "./patch-goal.ts";
+import { fundGoal, patchGoal } from "./patch-goal.ts";
 import { GOAL_RESOURCE } from "./resource.ts";
 
 import type { Goal, GoalPatch } from "@entity/wallets";
@@ -12,6 +12,7 @@ interface UseOptimisticGoalsReturn {
 	capture: () => Promise<GoalCachesSnapshot>;
 	restore: (snapshot: GoalCachesSnapshot | undefined) => void;
 	applyPatch: (id: string, patch: GoalPatch) => void;
+	applyFunding: (id: string, amount: string) => void;
 	applyCreate: (goal: Goal) => void;
 	applyRemove: (id: string, closedAt: string) => void;
 	applySettled: (id: string, goal: Goal) => void;
@@ -23,6 +24,11 @@ const useOptimisticGoals = (): UseOptimisticGoalsReturn => {
 	const applyPatch = useCallback((id: string, patch: GoalPatch): void => {
 		cache.patchPaged(id, (goal) => patchGoal(goal, patch));
 		cache.patchDetails(id, (goal) => patchGoal(goal, patch));
+	}, [cache]);
+
+	const applyFunding = useCallback((id: string, amount: string): void => {
+		cache.patchPaged(id, (goal) => fundGoal(goal, amount));
+		cache.patchDetails(id, (goal) => fundGoal(goal, amount));
 	}, [cache]);
 
 	const applyCreate = useCallback((goal: Goal): void => {
@@ -43,10 +49,11 @@ const useOptimisticGoals = (): UseOptimisticGoalsReturn => {
 		capture: cache.capture,
 		restore: cache.restore,
 		applyPatch,
+		applyFunding,
 		applyCreate,
 		applyRemove,
 		applySettled,
-	}), [cache.capture, cache.restore, applyPatch, applyCreate, applyRemove, applySettled]);
+	}), [cache.capture, cache.restore, applyPatch, applyFunding, applyCreate, applyRemove, applySettled]);
 };
 
 export { useOptimisticGoals };

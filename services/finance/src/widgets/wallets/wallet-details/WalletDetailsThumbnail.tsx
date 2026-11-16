@@ -1,6 +1,6 @@
 import { walletGradient } from "@entity/wallets";
 import { FinanceButton } from "@internal/ui-library";
-import { Caption, DisplayText } from "@shared/pure-components/typography";
+import { Caption, DisplayText } from "@internal/shared";
 import { SlideOverTrigger } from "@shared/overlays";
 import { WalletSwatch, walletTypeLabel } from "@entity/wallets";
 import { ShowWhenUpdated } from "@feature/wallets";

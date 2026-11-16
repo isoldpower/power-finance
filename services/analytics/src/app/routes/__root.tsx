@@ -1,13 +1,22 @@
 import { createRootRoute } from '@tanstack/react-router';
-import { RootComponent } from '../RootComponent.tsx';
+import { lazy } from "react";
+import { AppError, AppLoader } from "@internal/ui-library";
 import { SettingsProvider } from "@internal/shared";
+
+import { useRouteDocumentTitle } from "../document-title";
 
 
 export const Route = createRootRoute({
-  	component: RootLayout,
-})
+	pendingComponent: AppLoader,
+	errorComponent: AppError,
+	component: RootLayout,
+});
+
+const RootComponent = lazy(() => import('../RootComponent.tsx'));
 
 function RootLayout() {
+	useRouteDocumentTitle();
+
 	return (
 		<SettingsProvider>
 			<RootComponent />

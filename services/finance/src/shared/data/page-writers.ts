@@ -1,4 +1,4 @@
-import type { Page } from "@shared/api";
+import type { Page } from "@internal/shared";
 
 
 interface Identified {

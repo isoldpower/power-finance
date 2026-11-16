@@ -1,13 +1,13 @@
 import { SlideOver, SlideOverTrigger, Tooltip } from "@shared/overlays";
-import { RevealMotion } from "@shared/motion";
 import {
 	CenteredList,
 	PageContainer,
+	PageTitle,
+	RevealMotion,
 	SidebarColumnsContainer,
 	SpaceOccupant,
-	StackedList
-} from "@shared/pure-components/layout";
-import { PageTitle } from "@shared/pure-components/typography";
+	StackedList,
+} from "@internal/shared";
 import { CheckIcon } from "@shared/pure-components/icons";
 import { FinanceButton, FinanceCard } from "@internal/ui-library";
 import { PlanningAiAssistant, NeedsActionPanel, ToggleableAutomationRow } from "@process/assistance";

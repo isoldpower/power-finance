@@ -1,4 +1,4 @@
-import { SkeletonText } from "@shared/pure-components/feedback";
+import { SkeletonText } from "@internal/shared";
 
 import type { FC } from "react";
 

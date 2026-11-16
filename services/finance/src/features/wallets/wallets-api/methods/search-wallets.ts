@@ -1,7 +1,7 @@
-import { pageFromMeta } from "@shared/api";
+import { pageFromMeta } from "@internal/shared";
+import type { Page, PageParams } from "@internal/shared";
 import { walletFromApi, walletQueryToApi } from "../mutators";
 
-import type { Page, PageParams } from "@shared/api";
 import type { Wallet, WalletQuery } from "@entity/wallets";
 import type { IWalletsRESTApiClient } from "../rest-client";
 

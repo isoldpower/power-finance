@@ -1,6 +1,6 @@
 import { cn } from "@internal/ui-library";
 
-import { Text } from "@shared/pure-components/typography";
+import { Text } from "@internal/shared";
 
 import type { FC } from "react";
 

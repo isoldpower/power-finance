@@ -1,4 +1,4 @@
-import type { MoneyDto } from "@shared/api";
+import type { MoneyDto } from "@internal/shared";
 
 
 type NetDiffDirectionDto = 'up' | 'down' | 'flat';

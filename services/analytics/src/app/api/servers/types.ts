@@ -1,0 +1,13 @@
+import type { WriteVersionStore } from "@internal/shared";
+import type { ApiMode } from "../config.ts";
+
+
+interface ApiServerOptions {
+	baseUrl: string;
+	mode: ApiMode;
+	sandbox?: string;
+	demoSession?: string;
+	versions: WriteVersionStore;
+}
+
+export type { ApiServerOptions };

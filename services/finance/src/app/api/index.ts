@@ -4,7 +4,6 @@ export { DERIVED_KEYS } from './cache-keys.ts';
 export { createQueryClient } from './query-client.ts';
 export { isRerouteHole, isStaleProjection } from './retry-policy.ts';
 export { resolveApiMode } from './config.ts';
-export { useGuestDemoSessionsApi } from './servers/use-guest-demo-sessions-api.ts';
 
 export type { ApiContextType, ApiProviderProps } from './Context.tsx';
 export { ApiToasts, useApiToasts, describeApiOperation } from './toasts';

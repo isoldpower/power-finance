@@ -1,0 +1,4 @@
+const PAD_ANGLE = 0.014;
+const CORNER_RADIUS = 5;
+
+export { CORNER_RADIUS, PAD_ANGLE };

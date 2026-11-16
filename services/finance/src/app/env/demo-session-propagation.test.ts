@@ -1,41 +1,41 @@
 import { afterEach, describe, expect, test } from 'vitest';
-import { captureDemoSession, forgetDemoSession, getDemoSession } from '@internal/shared';
+import { captureDemoSession, forgetDemoSession, isDemoSessionRequested } from '@internal/shared';
 
 
-describe('demo session propagation through the shell', () => {
+describe('demo session request propagation through the shell', () => {
 	afterEach(() => {
 		forgetDemoSession();
 		window.history.replaceState(null, '', '/');
 	});
 
-	test('the id survives a shell redirect that drops the query string', () => {
-		window.history.replaceState(null, '', '/?demo_session=portfolio-visit-0001');
+	test('the request survives a shell redirect that drops the query string', () => {
+		window.history.replaceState(null, '', '/?demo_session=true');
 		captureDemoSession();
 
 		window.history.replaceState(null, '', '/landing');
 
-		expect(getDemoSession()).toBe('portfolio-visit-0001');
+		expect(isDemoSessionRequested()).toBe(true);
 	});
 
-	test('a remote that captures after the redirect keeps the id the shell captured', () => {
-		window.history.replaceState(null, '', '/?demo_session=portfolio-visit-0001');
+	test('a remote that captures after the redirect keeps the request the shell captured', () => {
+		window.history.replaceState(null, '', '/?demo_session=true');
 		captureDemoSession();
 		window.history.replaceState(null, '', '/finance/dashboard');
 
-		expect(captureDemoSession()).toBe('portfolio-visit-0001');
+		expect(captureDemoSession()).toBe(true);
 	});
 
-	test('a reload with no query string restores the id for the same tab', () => {
-		window.sessionStorage.setItem('power-finance:demo-session', 'portfolio-visit-0002');
+	test('a reload with no query string restores the request for the same tab', () => {
+		window.sessionStorage.setItem('power-finance:demo-session-requested', 'true');
 		window.history.replaceState(null, '', '/finance/dashboard');
 
-		expect(captureDemoSession()).toBe('portfolio-visit-0002');
+		expect(captureDemoSession()).toBe(true);
 	});
 
-	test('a visit without any demo session stays a normal signed-in visit', () => {
+	test('a visit without the flag stays a normal signed-in visit', () => {
 		window.history.replaceState(null, '', '/finance/dashboard');
 
-		expect(captureDemoSession()).toBeUndefined();
-		expect(getDemoSession()).toBeUndefined();
+		expect(captureDemoSession()).toBe(false);
+		expect(isDemoSessionRequested()).toBe(false);
 	});
 });

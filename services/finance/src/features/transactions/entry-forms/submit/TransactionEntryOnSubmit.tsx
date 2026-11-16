@@ -4,18 +4,20 @@ import { submitEntry } from "./submit-entry.ts";
 
 import type { FormEvent, ReactNode } from "react";
 import type { FieldValues, UseFormHandleSubmit } from "react-hook-form";
-import type { CreateTransactionChainResponse, CreateTransactionResponse } from "../../transactions-api";
+import type { Transaction } from "@entity/transactions";
 import type { TransactionEntryValues } from "../types.ts";
+import type { EntrySubmitResponse } from "./submit-entry.ts";
 
 
 interface TransactionEntryOnSubmitProps<T extends TransactionEntryValues & FieldValues> {
 	handleSubmit: UseFormHandleSubmit<T>;
 	fromCurrency: string;
 	toCurrency: string;
+	adjusted?: Transaction | null;
 	children?: ReactNode;
 	className?: string;
 	onBeforeEdit?: () => void;
-	onSuccess?: (result: CreateTransactionResponse | CreateTransactionChainResponse) => void;
+	onSuccess?: (result: EntrySubmitResponse) => void;
 	onError?: (error: unknown) => void;
 }
 
@@ -23,13 +25,14 @@ function TransactionEntryOnSubmit<T extends TransactionEntryValues & FieldValues
 	handleSubmit,
 	fromCurrency,
 	toCurrency,
+	adjusted = null,
 	children,
 	className,
 	onBeforeEdit,
 	onSuccess,
 	onError,
 }: TransactionEntryOnSubmitProps<T>) {
-	const { createTransaction, createTransactionChain } = useTransactionsListMethods();
+	const { createTransaction, createTransactionChain, createAdjustment } = useTransactionsListMethods();
 
 	const wrappedOnSubmit = useCallback(async (data: T) => {
 		if (onBeforeEdit) onBeforeEdit();
@@ -38,14 +41,25 @@ function TransactionEntryOnSubmit<T extends TransactionEntryValues & FieldValues
 			const payload = await submitEntry(
 				data,
 				{ fromCurrency, toCurrency },
-				{ createTransaction, createTransactionChain }
+				{ createTransaction, createTransactionChain, createAdjustment },
+				adjusted,
 			);
 			if (onSuccess) onSuccess(payload);
 		} catch (error: unknown) {
 			console.error(error);
 			if (onError) onError(error);
 		}
-	}, [createTransaction, createTransactionChain, fromCurrency, toCurrency, onBeforeEdit, onSuccess, onError]);
+	}, [
+		createTransaction,
+		createTransactionChain,
+		createAdjustment,
+		adjusted,
+		fromCurrency,
+		toCurrency,
+		onBeforeEdit,
+		onSuccess,
+		onError,
+	]);
 
 	const handleSubmitForm = useCallback((
 		event: FormEvent<HTMLFormElement>

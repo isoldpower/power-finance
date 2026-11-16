@@ -1,6 +1,6 @@
 import { GoalDialog } from "@entity/wallets";
 import { DangerIconBadge } from "@shared/pure-components/badges";
-import { Heading } from "@shared/pure-components/typography";
+import { Heading } from "@internal/shared";
 
 import type { FC, ReactNode } from "react";
 

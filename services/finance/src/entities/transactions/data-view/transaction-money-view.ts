@@ -1,8 +1,8 @@
-import { absoluteAmount, negateAmount } from "@shared/api";
+import { absoluteAmount, negateAmount } from "@internal/shared";
+import type { FormatMoney } from "@internal/shared";
 
 import type { Transaction } from "../types.ts";
 import type { ConvertMoney, TransactionMoneyView } from "./types.ts";
-import type { FormatMoney } from "@shared/formatting";
 
 
 const toTransactionMoneyView = (

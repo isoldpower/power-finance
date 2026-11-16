@@ -15,7 +15,7 @@ const buildTransaction = (overrides: Partial<Transaction> = {}): Transaction => 
 	type: 'expense',
 	origin: 'manual',
 	wallet: { id: 'w1', name: 'Everyday' },
-	category: 'Groceries',
+	category: { id: 'builtin-transaction-groceries', name: 'Groceries', isGlobal: true },
 	chain: null,
 	...overrides,
 });
@@ -31,13 +31,13 @@ describe('matchesTransactionQuery', () => {
 		expect(matchesTransactionQuery(transaction, { walletIds: ['w1', 'w2'] })).toBe(true);
 		expect(matchesTransactionQuery(transaction, { walletIds: ['w2'] })).toBe(false);
 		expect(matchesTransactionQuery(transaction, { currencies: ['USD'] })).toBe(true);
-		expect(matchesTransactionQuery(transaction, { categories: ['Rent'] })).toBe(false);
+		expect(matchesTransactionQuery(transaction, { categoryIds: ['builtin-transaction-housing'] })).toBe(false);
 	});
 
 	test('excludes an uncategorised transaction from a category filter', () => {
 		const transaction = buildTransaction({ category: null });
 
-		expect(matchesTransactionQuery(transaction, { categories: ['Groceries'] })).toBe(false);
+		expect(matchesTransactionQuery(transaction, { categoryIds: ['builtin-transaction-groceries'] })).toBe(false);
 		expect(matchesTransactionQuery(transaction, {})).toBe(true);
 	});
 

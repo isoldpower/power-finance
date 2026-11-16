@@ -1,4 +1,5 @@
 import type { Money } from "@entity/localization";
+import type { CategoryRef } from "@entity/categories";
 import type { Pending } from "@shared/data";
 
 
@@ -8,7 +9,7 @@ interface Wallet extends Pending {
 	createdAt: string;
 	updatedAt: string | null;
 	deletedAt: string | null;
-	category: string;
+	category: CategoryRef | null;
 	currency: string;
 	balance: Money;
 	zeroBalance: Money;
@@ -46,13 +47,13 @@ interface WalletDraft {
 	openingBalance: string;
 	zeroBalance: string;
 	currency: string;
-	category: string;
+	category: CategoryRef | null;
 }
 
 interface WalletPatch {
 	name?: string;
 	favorite?: boolean;
-	category?: string;
+	category?: CategoryRef | null;
 	zeroBalance?: string;
 	color?: string;
 }
@@ -96,7 +97,7 @@ interface WalletQuery {
 interface PanelWallet {
 	id: string;
 	name: string;
-	category: string;
+	category: CategoryRef | null;
 	currency: string;
 	color: string;
 	balance: Money;

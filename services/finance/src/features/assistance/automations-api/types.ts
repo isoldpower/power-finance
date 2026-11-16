@@ -1,4 +1,4 @@
-import type { FilterNode, PageParams, ResourceTimestamps, SearchPayload } from "@shared/api";
+import type { FilterNode, PageParams, ResourceTimestamps, SearchPayload } from "@internal/shared";
 
 
 type AutomationTriggerTypeDto = 'event' | 'schedule';

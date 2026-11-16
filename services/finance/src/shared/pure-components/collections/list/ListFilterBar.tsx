@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { cn } from "@internal/ui-library";
-import { textClass } from "@shared/pure-components/typography";
+import { textClass } from "@internal/shared";
 import { SearchIcon } from "@shared/pure-components/icons";
 
 import type { ChangeEvent, FC } from "react";

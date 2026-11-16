@@ -15,18 +15,48 @@ function PopoverTrigger({
   return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />
 }
 
+type InteractOutsideEvent = Parameters<
+  NonNullable<React.ComponentProps<typeof PopoverPrimitive.Content>["onInteractOutside"]>
+>[0]
+
+const isOwnTriggerEvent = (event: InteractOutsideEvent, contentId: string | undefined): boolean => {
+  if (!contentId) return false
+
+  return event.detail.originalEvent.composedPath().some((node) => (
+    node instanceof Element && node.getAttribute("aria-controls") === contentId
+  ))
+}
+
 function PopoverContent({
   className,
   align = "center",
   sideOffset = 4,
+  ref,
+  onInteractOutside,
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Content>) {
   const portalContainer = usePortalContainer()
+  const contentRef = React.useRef<HTMLDivElement | null>(null)
+
+  const setContentRef = React.useCallback((node: HTMLDivElement | null) => {
+    contentRef.current = node
+    if (typeof ref === "function") ref(node)
+    else if (ref) ref.current = node
+  }, [ref])
+
+  const handleInteractOutside = React.useCallback((event: InteractOutsideEvent) => {
+    onInteractOutside?.(event)
+    if (!event.defaultPrevented && isOwnTriggerEvent(event, contentRef.current?.id)) {
+      event.preventDefault()
+    }
+  }, [onInteractOutside])
 
   return (
     <PopoverPrimitive.Portal container={portalContainer}>
       <PopoverPrimitive.Content
+        ref={setContentRef}
         data-slot="popover-content"
+        onInteractOutside={handleInteractOutside}
         align={align}
         sideOffset={sideOffset}
         className={cn(

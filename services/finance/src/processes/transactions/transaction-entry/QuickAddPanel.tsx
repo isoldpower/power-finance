@@ -4,10 +4,11 @@ import {
 	quickAddSchema,
 	TransactionEntryOnSubmit,
 	useQuickAddInitials,
-	useTransactionCategories,
 	useTransactionEntryForm,
 } from "@feature/transactions";
 import { useWalletsList } from "@feature/wallets";
+import { useCategories } from "@feature/categories";
+import { ManageCategoriesLink } from "@feature/navigation";
 import {
 	EntryAmountControl,
 	EntryCategoryControl,
@@ -16,7 +17,7 @@ import {
 } from "@widget/transactions";
 import { HideOnFormValue, ShowOnFormValue } from "@shared/forms";
 import { FromIcon, ToIcon } from "@shared/pure-components/icons";
-import { MetaText, Text } from "@shared/pure-components/typography";
+import { MetaText, Text } from "@internal/shared";
 
 import type { FC } from "react";
 
@@ -32,7 +33,7 @@ const QuickAddPanel: FC<QuickAddPanelProps> = ({ className }) => {
 		refetchOnWindowFocus: false,
 	});
 	const defaultValues = useQuickAddInitials(wallets);
-	const { categoryLabels } = useTransactionCategories();
+	const { categories } = useCategories('transaction');
 	const {
 		form,
 		type,
@@ -135,10 +136,13 @@ const QuickAddPanel: FC<QuickAddPanelProps> = ({ className }) => {
 						<EntryCategoryControl
 							control={form.control}
 							name="category"
-							options={categoryLabels}
+							options={categories}
 							className="mt-3.5"
 							disabled={loading}
 						/>
+						<div className="mt-2 flex justify-end">
+							<ManageCategoriesLink />
+						</div>
 					</HideOnFormValue>
 					<FinanceButton
 						type="submit"

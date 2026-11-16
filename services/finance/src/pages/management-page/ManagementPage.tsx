@@ -15,11 +15,17 @@ import { BrowseAccountsContextProvider } from "@feature/accounts";
 import { TransactionsSelectionProvider } from "@feature/transactions";
 import { WalletsSelectionProvider } from "@feature/wallets";
 import { ReadOnlyNotice } from "@entity/accounts";
-import { RevealMotion } from "@shared/motion";
+import {
+	CenteredList,
+	Overline,
+	PageContainer,
+	PageTitle,
+	RevealMotion,
+	SidebarColumnsContainer,
+	SpaceBetween,
+} from "@internal/shared";
 import { SlideOver, SlideOverTrigger } from "@shared/overlays";
 import { AiBadge } from "@shared/pure-components/badges";
-import { Overline, PageTitle } from "@shared/pure-components/typography";
-import { CenteredList, PageContainer, SidebarColumnsContainer, SpaceBetween } from "@shared/pure-components/layout";
 import { ScanReceiptIcon } from "@shared/pure-components/icons";
 import { FinanceButton, FinanceCard } from "@internal/ui-library";
 import { SITE_TOUR_ANCHORS } from "@feature/navigation";
@@ -89,7 +95,11 @@ const ManagementPage: FC = () => {
 								<TransactionsTableColumns />
 								<BrowseTransactionEntries>
 									{(entry) => (
-										<LedgerBasedTransaction key={entry.item.id} entry={entry} />
+										<LedgerBasedTransaction
+											key={entry.item.id}
+											entry={entry}
+											adjustPanelId={managementSlides.adjustTransaction}
+										/>
 									)}
 								</BrowseTransactionEntries>
 								<TransactionsBrowserPagination />

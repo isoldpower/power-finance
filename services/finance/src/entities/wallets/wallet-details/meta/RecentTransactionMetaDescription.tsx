@@ -1,4 +1,4 @@
-import { RowTitle } from "@shared/pure-components/typography";
+import { RowTitle } from "@internal/shared";
 
 import type { FC, PropsWithChildren } from "react";
 

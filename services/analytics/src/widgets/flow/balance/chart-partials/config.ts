@@ -1,0 +1,4 @@
+const LINE_WIDTH = 2.2;
+const FADE_OPACITY = 0.28;
+
+export { FADE_OPACITY, LINE_WIDTH };

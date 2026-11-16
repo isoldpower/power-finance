@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider, useMutation, useQuery } from '@tanstack/react-query';
 
-import { ApiError } from '@shared/api';
+import { ApiError } from '@internal/shared';
 import { MAX_STALE_REFETCHES } from '../stale-refetch.ts';
 import { useApiToasts } from './use-api-toasts.ts';
 

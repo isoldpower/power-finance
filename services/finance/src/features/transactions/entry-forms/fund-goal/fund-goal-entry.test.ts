@@ -36,7 +36,7 @@ const submitFunding = async (entry: FundGoalSchema, toCurrency = 'USD') => {
 	await submitEntry(
 		entry,
 		{ fromCurrency: 'USD', toCurrency },
-		{ createTransaction, createTransactionChain },
+		{ createTransaction, createTransactionChain, createAdjustment: vi.fn() },
 	);
 
 	const entries: TransactionChainEntryDraft[] = chains[0]?.entries ?? [];

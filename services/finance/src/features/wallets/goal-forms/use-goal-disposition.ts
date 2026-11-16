@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { selectedWalletOption, toWalletSelectOptions } from "@entity/wallets";
-import { compareAmounts, ZERO_AMOUNT } from "@shared/api";
-import { useLocaleCurrency } from "@shared/formatting";
+import { compareAmounts, useLocaleCurrency, ZERO_AMOUNT } from "@internal/shared";
 import { useWalletsList } from "../data-presenters";
 
 import type { Goal, GoalDisposition, GoalDispositionMode, WalletSelectItem } from "@entity/wallets";

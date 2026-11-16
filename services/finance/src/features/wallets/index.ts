@@ -1,6 +1,7 @@
 export * from './data-presenters';
 export * from './fetch-experience';
 export * from './filtration';
+export * from './follow-created-wallet';
 export * from './goal-forms';
 export * from './goals-api';
 export * from './search-and-filtering';

@@ -1,22 +1,22 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { LocalStorageMock } from "@internal/shared";
 import {
 	ApiError,
 	createMatcher,
 	delay,
 	IdempotencyStore,
+	LocalStorageMock,
 	paginate,
 	parseAmount,
 	serializeAmount,
 	stringifySortedQuery,
 	validateFilter,
 	ZERO_AMOUNT,
-} from "@shared/api";
+} from "@internal/shared";
+import type { FieldPolicy, IStorage, MoneyDto } from "@internal/shared";
 import { storedTransactionToDto, TRANSACTIONS_STORAGE_KEY, walletDelta } from "@feature/transactions/transactions-api";
+import { CategoryCatalogMock } from "@feature/categories/categories-api";
 import { WALLETS_STORAGE_KEY } from "./mock-seed.ts";
-import type { IStorage } from "@internal/shared";
-import type { FieldPolicy, MoneyDto } from "@shared/api";
 import type { StoredTransaction, TransactionDto } from "@feature/transactions/transactions-api";
 import type { StoredWallet } from "./mock-seed.ts";
 import type { WalletDetailDto, WalletDto, WalletPeriodDto, WalletSearchField } from "../types.ts";
@@ -39,7 +39,6 @@ const ROLLING_WINDOW_DAYS: Record<Exclude<WalletPeriodDto, 'all_time'>, number> 
 	last_year: 365,
 };
 const DEFAULT_COLOR = '';
-const DEFAULT_CATEGORY = '';
 
 const HEX_COLOR_PATTERN = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
 
@@ -65,12 +64,16 @@ const SEARCH_FIELDS: FieldPolicy<WalletSearchField> = {
 	name: ['eq', 'neq', 'in', 'contains', 'icontains'],
 	currency: ['eq', 'neq', 'in'],
 	balance: ['eq', 'gt', 'gte', 'lt', 'lte'],
+	category: ['eq', 'neq', 'in', 'contains', 'icontains'],
+	category_id: ['eq', 'neq', 'in'],
 	created_at: ['gt', 'gte', 'lt', 'lte'],
 };
 
 interface WalletRecord {
 	wallet: StoredWallet;
 	balance: string;
+	categoryId: string | null;
+	categoryName: string | null;
 }
 
 const compareDesc = (left: string, right: string): number => (left < right ? 1 : left > right ? -1 : 0);
@@ -93,6 +96,10 @@ const leafValue = (record: WalletRecord, field: WalletSearchField): string | nul
 			return record.wallet.currency;
 		case 'balance':
 			return record.balance;
+		case 'category':
+			return record.categoryName;
+		case 'category_id':
+			return record.categoryId;
 		case 'created_at':
 			return record.wallet.created_at;
 	}
@@ -108,10 +115,18 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 	private readonly storage: IStorage<StoredWallet>;
 	private readonly transactions: IStorage<StoredTransaction>;
 	private readonly idempotency = new IdempotencyStore<WalletDto>();
+	private readonly categories: CategoryCatalogMock;
 
-	constructor(storageKey: string = WALLETS_STORAGE_KEY) {
+	constructor(storageKey: string = WALLETS_STORAGE_KEY, categories = new CategoryCatalogMock()) {
 		this.storage = new LocalStorageMock<StoredWallet>(storageKey);
 		this.transactions = new LocalStorageMock<StoredTransaction>(TRANSACTIONS_STORAGE_KEY);
+		this.categories = categories;
+	}
+
+	private categoryId(wallet: StoredWallet): string | null {
+		return wallet.category_id === undefined
+			? this.categories.builtInIdByName('wallet', wallet.category)
+			: wallet.category_id;
 	}
 
 	private ledger(walletId: string): StoredTransaction[] {
@@ -126,7 +141,14 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 	}
 
 	private record(wallet: StoredWallet): WalletRecord {
-		return { wallet, balance: this.balance(wallet) };
+		const categoryId = this.categoryId(wallet);
+
+		return {
+			wallet,
+			balance: this.balance(wallet),
+			categoryId,
+			categoryName: this.categories.refOf(categoryId)?.name ?? null,
+		};
 	}
 
 	private money(record: WalletRecord): MoneyDto {
@@ -142,7 +164,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 			created_at: wallet.created_at,
 			updated_at: wallet.updated_at,
 			deleted_at: wallet.deleted_at,
-			category: wallet.category,
+			category: this.categories.refOf(record.categoryId),
 			currency: wallet.currency,
 			money: this.money(record),
 			zero_balance: { amount: wallet.zero_balance, currency: wallet.currency },
@@ -170,7 +192,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 	private recent(walletId: string): TransactionDto[] {
 		return this.ledger(walletId)
 			.sort((left, right) => compareDesc(left.created_at, right.created_at))
-			.map(storedTransactionToDto);
+			.map((item) => storedTransactionToDto(item, this.categories));
 	}
 
 	private require(id: string): StoredWallet {
@@ -234,13 +256,14 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 
 		await delay();
 
+		const categoryId = this.categories.assign(payload.data.category_id, 'wallet');
 		const wallet: StoredWallet = {
 			id: uuidv4(),
 			name: payload.data.name,
 			created_at: new Date().toISOString(),
 			updated_at: null,
 			deleted_at: null,
-			category: payload.data.category ?? DEFAULT_CATEGORY,
+			category_id: categoryId,
 			currency: payload.data.currency,
 			opening_balance: payload.data.opening_balance ?? payload.data.zero_balance ?? ZERO_AMOUNT,
 			zero_balance: payload.data.zero_balance ?? ZERO_AMOUNT,
@@ -275,7 +298,7 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 		const replaced: StoredWallet = {
 			...wallet,
 			name: payload.data.name,
-			category: payload.data.category ?? DEFAULT_CATEGORY,
+			category_id: this.categories.assign(payload.data.category_id, 'wallet'),
 			color: payload.data.color ?? DEFAULT_COLOR,
 			favorite: payload.data.favorite ?? false,
 			zero_balance: payload.data.zero_balance ?? ZERO_AMOUNT,
@@ -297,7 +320,9 @@ class WalletsMockRESTApiClient implements IWalletsRESTApiClient {
 			...wallet,
 			name: payload.data.name ?? wallet.name,
 			favorite: payload.data.favorite ?? wallet.favorite,
-			category: payload.data.category ?? wallet.category,
+			category_id: payload.data.category_id === undefined
+				? this.categoryId(wallet)
+				: this.categories.assign(payload.data.category_id, 'wallet'),
 			zero_balance: payload.data.zero_balance ?? wallet.zero_balance,
 			color: payload.data.color ?? wallet.color,
 			updated_at: new Date().toISOString(),

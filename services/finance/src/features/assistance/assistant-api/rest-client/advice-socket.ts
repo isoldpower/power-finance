@@ -1,7 +1,7 @@
-import { ApiError, apiErrorFromEnvelope, openSocket } from "@shared/api";
+import { ApiError, apiErrorFromEnvelope, openSocket } from "@internal/shared";
+import type { SocketConnection, SocketFrame, TokenSource } from "@internal/shared";
 
 import { readQuota } from "./read-quota.ts";
-import type { SocketConnection, SocketFrame, TokenSource } from "@shared/api";
 import type { AssistantAcceptedDto, AssistantDeltaDto } from "../types.ts";
 import type { AssistantSendResponse } from "./types.ts";
 

@@ -1,8 +1,5 @@
 import { useMemo } from "react";
-import { useDebounce } from "@internal/shared";
-import { compareAmounts } from "@shared/api";
-
-import { walletTypeLabel } from "@entity/wallets";
+import { compareAmounts, useDebounce } from "@internal/shared";
 
 import { useWalletSearch } from "../../data-presenters";
 
@@ -11,7 +8,7 @@ import type { WalletsBrowseSetup } from "../types.ts";
 
 
 function matchesType(wallet: Wallet, typeFilter: string): boolean {
-	return typeFilter === 'all' || walletTypeLabel(wallet) === typeFilter;
+	return typeFilter === 'all' || wallet.category?.id === typeFilter;
 }
 
 function compareBy(field: string, first: Wallet, second: Wallet): number {

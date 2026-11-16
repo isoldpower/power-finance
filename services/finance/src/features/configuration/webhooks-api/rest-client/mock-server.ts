@@ -1,16 +1,17 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { LocalStorageMock } from "@internal/shared";
 import {
 	ApiError,
 	createMatcher,
 	delay,
 	IdempotencyStore,
+	LocalStorageMock,
 	paginate,
 	stringifySortedQuery,
 	unpaginated,
 	validateFilter,
-} from "@shared/api";
+} from "@internal/shared";
+import type { FieldPolicy, IStorage } from "@internal/shared";
 import {
 	DELIVERIES_STORAGE_KEY,
 	EVENT_TYPES,
@@ -18,8 +19,6 @@ import {
 	SUBSCRIPTIONS_STORAGE_KEY,
 	WEBHOOKS_STORAGE_KEY,
 } from "./mock-seed.ts";
-import type { IStorage } from "@internal/shared";
-import type { FieldPolicy } from "@shared/api";
 import type { StoredDelivery, StoredSubscription, StoredWebhook } from "./mock-seed.ts";
 import type { WebhookDto, WebhookSearchField, WebhookSecretDto, WebhookSubscriptionDto } from "../types.ts";
 import type {

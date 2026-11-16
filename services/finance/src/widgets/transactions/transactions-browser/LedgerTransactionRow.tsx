@@ -9,8 +9,7 @@ import {
 	toTransactionRowView,
 } from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
-import { useLocaleCurrency } from "@shared/formatting";
-import { Caption, RowTitle, Text } from "@shared/pure-components/typography";
+import { Caption, RowTitle, Text, useLocaleCurrency } from "@internal/shared";
 
 import type { FC, MouseEventHandler } from "react";
 import type { Transaction } from "@entity/transactions";

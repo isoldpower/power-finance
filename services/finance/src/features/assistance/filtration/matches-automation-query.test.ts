@@ -14,7 +14,7 @@ const buildAutomation = (overrides: Partial<Automation> = {}): Automation => ({
 	icon: 'basket',
 	enabled: true,
 	trigger: { type: 'event', event: 'transaction.created', schedule: null, condition: null },
-	effects: [{ type: 'set_category', category: 'Groceries' }],
+	effects: [{ type: 'set_category', categoryId: 'builtin-transaction-groceries' }],
 	lastRunAt: null,
 	runs: 0,
 	...overrides,

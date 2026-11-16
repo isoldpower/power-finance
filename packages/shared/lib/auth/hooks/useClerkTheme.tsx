@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
-import {useSettingsContext} from "../../main.ts";
+import { useSettingsContext } from "../../settings/index.ts";
 
 import type { Theme } from "@clerk/types";
-import type { ThemeType } from "../../main.ts";
+import type { ThemeType } from "../../settings/index.ts";
 import type { UseClerkSpecificThemeReturn } from "../types.ts";
 
 type UseClerkThemeOptions = Record<ThemeType, UseClerkSpecificThemeReturn>
@@ -15,8 +15,6 @@ const useClerkTheme = (dictionary: UseClerkThemeOptions): UseClerkThemeReturn =>
 	const { theme } = useSettingsContext();
 
 	useEffect(() => {
-		// We send the setClerkTheme routine to the MicroTaskQueue
-		// to ensure that we compute properties after the DOM has updated its style
 		Promise.resolve()
 			.then(() => dictionary[theme])
 			.then((theme) => theme.computeTheme())

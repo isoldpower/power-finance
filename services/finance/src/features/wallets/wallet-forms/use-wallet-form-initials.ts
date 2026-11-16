@@ -13,7 +13,7 @@ const useWalletFormInitials = (wallet?: PanelWallet): WalletFormSchema => {
 		if (!wallet) {
 			return {
 				name: '',
-				category: '',
+				category: null,
 				currency: mainCurrency,
 				balance: '',
 				color: DEFAULT_WALLET_COLOR,

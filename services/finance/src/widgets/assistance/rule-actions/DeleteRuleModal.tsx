@@ -2,7 +2,7 @@ import { cn, FinanceButton } from "@internal/ui-library";
 import { RuleDialogActions, RuleDialogDescription } from "@entity/assistance";
 import { ConfirmModal } from "@shared/overlays";
 import { DangerIconBadge } from "@shared/pure-components/badges";
-import { Heading } from "@shared/pure-components/typography";
+import { Heading } from "@internal/shared";
 
 import type { FC, ReactNode } from "react";
 

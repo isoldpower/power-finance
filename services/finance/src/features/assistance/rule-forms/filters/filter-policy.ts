@@ -7,7 +7,7 @@ import {
 	MULTI_SEPARATOR,
 } from "./constants.ts";
 
-import type { FilterOperator } from "@shared/api";
+import type { FilterOperator } from "@internal/shared";
 import type { AutomationEvent, AutomationTriggerType } from "@entity/assistance";
 import type { FilterPolicyInput, FilterPolicySource } from "./types.ts";
 

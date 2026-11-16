@@ -31,6 +31,11 @@ const OPERATION_VERBS: Record<string, OperationVerb> = {
 		past: 'adjusted', 
 		base: 'adjust',
 	},
+	rename: { 
+		gerund: 'Renaming', 
+		past: 'renamed', 
+		base: 'rename',
+	},
 	delete: { 
 		gerund: 'Deleting', 
 		past: 'deleted', 

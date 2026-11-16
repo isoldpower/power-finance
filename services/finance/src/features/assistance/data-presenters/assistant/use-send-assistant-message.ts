@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useApiContext, DERIVED_KEYS } from "@app/api";
-import { isQuotaExhausted } from "@shared/api";
+import { isQuotaExhausted } from "@internal/shared";
 import { sendAssistantMessage } from "../../assistant-api";
 import { ASSISTANT_CACHE_KEYS } from "../cache-config.ts";
 import { messageFromText, optimisticMessageId, useOptimisticMessages } from "./optimistic";

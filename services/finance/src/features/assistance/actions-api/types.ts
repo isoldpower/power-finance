@@ -1,4 +1,4 @@
-import type { MoneyDto, PageParams, ResourceTimestamps } from "@shared/api";
+import type { MoneyDto, PageParams, ResourceTimestamps } from "@internal/shared";
 
 
 type ActionSourceDto = 'assistant' | 'scheduler';

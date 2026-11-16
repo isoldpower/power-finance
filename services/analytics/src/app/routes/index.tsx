@@ -2,9 +2,11 @@ import { createFileRoute, Navigate } from '@tanstack/react-router';
 
 
 export const Route = createFileRoute('/')({
-  component: RedirectToDashboard
-})
+	component: RedirectToOverview,
+});
 
-function RedirectToDashboard() {
-  return <Navigate to="/dashboard" replace />
+function RedirectToOverview() {
+	return (
+		<Navigate to="/overview" replace />
+	);
 }

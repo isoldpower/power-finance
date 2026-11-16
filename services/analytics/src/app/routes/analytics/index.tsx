@@ -2,9 +2,9 @@ import { createFileRoute, Navigate } from '@tanstack/react-router';
 
 
 export const Route = createFileRoute('/analytics/')({
-  component: RedirectToDashboard
-})
+	component: RedirectToOverview,
+});
 
-function RedirectToDashboard() {
-  return <Navigate to="/analytics/dashboard" replace />
+function RedirectToOverview() {
+	return <Navigate to="/analytics/overview" replace />;
 }

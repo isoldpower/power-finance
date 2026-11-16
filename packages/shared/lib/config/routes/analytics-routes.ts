@@ -3,24 +3,27 @@ import { getShellAnalyticsRoute } from "./shell-routes";
 
 interface AnalyticsRoutes {
 	root: string;
-	dashboard: string;
+	overview: string;
+	spending: string;
+	flow: string;
 }
 
-// Routes are set excluding the base that can be applied in the Shell application
 const analyticsRoutes: AnalyticsRoutes = {
 	root: '/',
-	dashboard: '/dashboard'
-}
+	overview: '/overview',
+	spending: '/spending',
+	flow: '/flow',
+};
 
 const getAnalyticsRouteInternal = (route: keyof AnalyticsRoutes): string => {
 	return analyticsRoutes[route];
-}
+};
 
 const getAnalyticsRoute = (route: keyof AnalyticsRoutes): string => {
-	return getIsEmbedded() 
-		? getShellAnalyticsRoute(route) 
+	return getIsEmbedded()
+		? getShellAnalyticsRoute(route)
 		: getAnalyticsRouteInternal(route);
-}
+};
 
 export { getAnalyticsRoute, getAnalyticsRouteInternal };
 export type { AnalyticsRoutes };

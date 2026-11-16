@@ -1,5 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { Text, textClass } from "@shared/pure-components/typography";
+import { Text, textClass } from "@internal/shared";
 import { AnimatedMoney } from "@entity/localization";
 import { useConvertedCashFlow } from "@feature/metrics";
 import { useMemo } from "react";

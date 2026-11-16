@@ -26,6 +26,7 @@ const QUERY_KEYS = {
 	assistantMessages: 'assistant-messages',
 	session: 'auth-session',
 	metrics: 'metrics',
+	categories: 'categories',
 } as const;
 
 export { QUERY_KEYS };

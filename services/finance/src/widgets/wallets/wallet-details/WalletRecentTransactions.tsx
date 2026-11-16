@@ -13,8 +13,7 @@ import {
 } from "@entity/wallets";
 import { useConvertMoney } from "@feature/localization";
 import { FulfillWithPlaceholder } from "@feature/wallets";
-import { useLocaleCurrency } from "@shared/formatting";
-import { Caption } from "@shared/pure-components/typography";
+import { Caption, useLocaleCurrency } from "@internal/shared";
 
 import type { FC } from "react";
 import type { Transaction } from "@entity/transactions";

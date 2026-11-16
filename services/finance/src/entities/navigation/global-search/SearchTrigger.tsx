@@ -1,6 +1,6 @@
 import { cn } from "@internal/ui-library";
 import { SearchIcon } from "@shared/pure-components/icons";
-import { textClass } from "@shared/pure-components/typography";
+import { textClass } from "@internal/shared";
 import { SearchTriggerLabel } from "./trigger/SearchTriggerLabel.tsx";
 import { SearchTriggerShortcut } from "./trigger/SearchTriggerShortcut.tsx";
 

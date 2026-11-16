@@ -1,5 +1,4 @@
-import { compareAmounts, ZERO_AMOUNT } from "@shared/api";
-import { parseAmountDecimal } from "@shared/formatting";
+import { compareAmounts, parseAmountDecimal, ZERO_AMOUNT } from "@internal/shared";
 
 import { CURRENCY_CODE_PATTERN } from "../constants.ts";
 import { requiredText } from "./required-text.ts";
@@ -46,7 +45,7 @@ const setCategoryEffect: RuleFormValidator = {
 			});
 		}
 
-		return [...issues, ...requiredText(values, 'category', 'Enter a category')];
+		return [...issues, ...requiredText(values, 'categoryId', 'Pick a category')];
 	},
 };
 

@@ -11,10 +11,12 @@ import {
 	CalendarClock,
 	Car,
 	ChartColumn,
+	Check,
 	ChevronLeft,
 	ChevronRight,
 	CircleOff,
 	Copy,
+	Dot,
 	Ellipsis,
 	Gem,
 	Gift,
@@ -44,6 +46,7 @@ import {
 	Target,
 	Trash2,
 	TrendingUp,
+	X,
 	Zap,
 } from 'lucide-react';
 
@@ -63,10 +66,12 @@ const Icons = {
 	CalendarClock,
 	Car,
 	ChartColumn,
+	Check,
 	ChevronLeft,
 	ChevronRight,
 	CircleOff,
 	Copy,
+	Dot,
 	Ellipsis,
 	Gem,
 	Gift,
@@ -96,6 +101,7 @@ const Icons = {
 	Target,
 	Trash2,
 	TrendingUp,
+	X,
 	Zap,
 };
 

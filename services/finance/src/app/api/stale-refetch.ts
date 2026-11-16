@@ -1,4 +1,4 @@
-import { isApiError } from "@shared/api";
+import { isApiError } from "@internal/shared";
 
 import { isRerouteHole, isStaleProjection } from "./retry-policy.ts";
 

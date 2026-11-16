@@ -1,24 +1,23 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { LocalStorageMock } from "@internal/shared";
 import {
 	ApiError,
 	createMatcher,
 	delay,
 	IdempotencyStore,
+	LocalStorageMock,
 	paginate,
 	parseAmount,
 	serializeAmount,
 	stringifySortedQuery,
 	validateFilter,
-} from "@shared/api";
+} from "@internal/shared";
+import type { FieldPolicy, IStorage } from "@internal/shared";
 import { storedTransactionToDto, TRANSACTIONS_STORAGE_KEY, walletDelta } from "@feature/transactions/transactions-api";
 import { GOALS_STORAGE_KEY } from "./mock-seed.ts";
-import type { IStorage } from "@internal/shared";
 import type { LedgerEntryDto } from "@feature/accounts/accounts-api";
 import type { StoredTransaction } from "@feature/transactions/transactions-api";
 import type { StoredGoal } from "./mock-seed.ts";
-import type { FieldPolicy } from "@shared/api";
 import type { GoalDto, GoalSearchField } from "../types.ts";
 import type {
 	IGoalsRESTApiClient,

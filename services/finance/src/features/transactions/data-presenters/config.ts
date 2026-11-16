@@ -8,7 +8,7 @@ export const CACHE_KEYS = {
 	adjust: 'adjustTransaction',
 	create: 'createTransaction',
 	chain: 'createTransactionChain',
-	categories: 'transactionCategories',
+	adjustment: 'createTransactionAdjustment',
 	scan: 'transactionReceiptScan',
 } as const;
 

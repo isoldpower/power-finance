@@ -1,4 +1,4 @@
-import { absoluteAmount, isNegativeAmount, subtractAmounts, ZERO_AMOUNT } from "@shared/api";
+import { absoluteAmount, isNegativeAmount, subtractAmounts, ZERO_AMOUNT } from "@internal/shared";
 
 import type { NetDiffSign, NetWorth } from "@entity/metrics";
 

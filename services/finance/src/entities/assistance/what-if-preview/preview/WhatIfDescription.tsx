@@ -1,4 +1,4 @@
-import { BodyText } from "@shared/pure-components/typography";
+import { BodyText } from "@internal/shared";
 
 import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 

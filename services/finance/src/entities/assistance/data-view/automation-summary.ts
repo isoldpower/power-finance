@@ -46,10 +46,12 @@ const triggerText = (trigger: AutomationTrigger): string => {
 		: `${occasion} matching ${conditionText(trigger.condition)}`;
 };
 
-const effectText = (effect: AutomationEffect): string => {
+const UNNAMED_CATEGORY = 'a category';
+
+const effectText = (effect: AutomationEffect, categoryNames: ReadonlyMap<string, string>): string => {
 	switch (effect.type) {
 		case 'set_category':
-			return `set category ${effect.category}`;
+			return `set category ${categoryNames.get(effect.categoryId) ?? UNNAMED_CATEGORY}`;
 		case 'notify':
 			return `notify "${effect.title}"`;
 		case 'raise_action':
@@ -67,9 +69,12 @@ const frequencyText = (trigger: AutomationTrigger): string => {
 		: trigger.schedule ?? 'scheduled';
 };
 
-const automationSummary = (automation: Automation): AutomationSummary => ({
+const automationSummary = (
+	automation: Automation,
+	categoryNames: ReadonlyMap<string, string> = new Map(),
+): AutomationSummary => ({
 	when: triggerText(automation.trigger),
-	then: automation.effects.map(effectText).join(', '),
+	then: automation.effects.map((effect) => effectText(effect, categoryNames)).join(', '),
 	frequency: frequencyText(automation.trigger),
 });
 

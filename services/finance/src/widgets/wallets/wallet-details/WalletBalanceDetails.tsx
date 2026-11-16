@@ -1,10 +1,8 @@
-import { isNegativeAmount } from "@shared/api";
+import { Caption, isNegativeAmount, Overline, useLocaleCurrency } from "@internal/shared";
 import { FinanceMoney } from "@internal/ui-library";
 import { MoneyInOriginal } from "@entity/localization";
 import { WalletDetailsSkeleton, walletHasCreditLine, walletOwnedMoney, walletPeriodLabel } from "@entity/wallets";
 import { useConvertMoney } from "@feature/localization";
-import { useLocaleCurrency } from "@shared/formatting";
-import { Caption, Overline } from "@shared/pure-components/typography";
 
 import {FC, useMemo} from "react";
 import type { WalletDetails, WalletFlows, WalletPeriod } from "@entity/wallets";

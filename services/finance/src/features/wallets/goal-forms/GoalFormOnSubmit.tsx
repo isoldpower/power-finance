@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 import { useCreateGoal } from "../data-presenters";
-import { parseAmountDecimal } from "@shared/formatting";
+import { parseAmountDecimal } from "@internal/shared";
 
 import type { FC, FormEvent, ReactNode } from "react";
 import type { UseFormHandleSubmit } from "react-hook-form";

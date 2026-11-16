@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { FinanceNotification } from "@internal/ui-library";
 import { NotificationSeenToggle } from "@entity/assistance";
 import { useAckNotification } from "@feature/assistance";
-import { relativeAgo } from "@shared/formatting";
+import { relativeAgo } from "@internal/shared";
 import { NOTIFICATION_LEVEL } from "./config.ts";
 
 import type { FC } from "react";

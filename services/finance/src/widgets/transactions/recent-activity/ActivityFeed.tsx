@@ -1,10 +1,8 @@
-import { isNegativeAmount } from "@shared/api";
+import { isNegativeAmount, Overline, useLocaleCurrency } from "@internal/shared";
 import { useMemo, Fragment } from "react";
 import { ActivityGroupHeader, toChainBound, toTransactionDayView } from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
 import { ProtectActivityEmpty } from "@feature/transactions";
-import { useLocaleCurrency } from "@shared/formatting";
-import { Overline } from "@shared/pure-components/typography";
 
 import type { ChainBound, TransactionRowView } from "@entity/transactions";
 import type { FC, ReactNode } from "react";

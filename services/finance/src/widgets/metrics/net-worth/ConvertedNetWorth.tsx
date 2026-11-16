@@ -1,7 +1,7 @@
 import { FinanceMoney } from "@internal/ui-library";
 import { AnimatedMoney } from "@entity/localization";
 import { MetricCardDescriptor, netDiffBadgeLabel, NetWorthPanel } from "@entity/metrics";
-import { BodyText, textClass } from "@shared/pure-components/typography";
+import { BodyText, textClass } from "@internal/shared";
 import { useConvertedNetWorth, useConvertedNetDiff } from "@feature/metrics";
 
 import type { FC } from "react";

@@ -1,5 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { pendingClass } from "@shared/pure-components/feedback";
+import { pendingClass } from "@internal/shared";
 import { GoalIcon } from "./row/GoalIcon.tsx";
 import { GoalProgressBar } from "./row/GoalProgressBar.tsx";
 import { GoalProgressFill } from "./row/GoalProgressFill.tsx";
