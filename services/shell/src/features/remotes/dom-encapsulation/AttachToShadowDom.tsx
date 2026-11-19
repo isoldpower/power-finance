@@ -35,11 +35,10 @@ const AttachToShadowDom: FC<AttachToShadowDomProps> = ({
 	}, []);
 
 	const injectHostStyles = useCallback((shadowRoot: ShadowRoot) => {
-		const styleElements = document.head.querySelectorAll('style');
+		const styleElements = document.head.querySelectorAll('style, link[rel="stylesheet"]');
 
 		for (const styleElement of styleElements) {
-			const clonedStyle = styleElement.cloneNode(true) as HTMLStyleElement;
-        	shadowRoot.appendChild(clonedStyle);
+			shadowRoot.appendChild(styleElement.cloneNode(true));
 		}
 
 		const previousLoadStyles = savedStyles[id] ?? [];
