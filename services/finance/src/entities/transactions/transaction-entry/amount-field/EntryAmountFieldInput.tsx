@@ -1,6 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { sanitizeAmountInput } from "@shared/formatting";
-import { textClass } from "@shared/pure-components/typography";
+import { sanitizeAmountInput, textClass } from "@internal/shared";
 
 import type { FC } from "react";
 import type { TransactionEntryType } from "../../types";

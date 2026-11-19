@@ -1,6 +1,6 @@
 import { transactionDetailsFromApi, transactionPostingFromApi } from "../mutators";
 
-import type { PageParams } from "@shared/api";
+import type { PageParams } from "@internal/shared";
 import type { TransactionDetails, TransactionPosting } from "@entity/transactions";
 import type { ITransactionsRESTApiClient } from "../rest-client";
 

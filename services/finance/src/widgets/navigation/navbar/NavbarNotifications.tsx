@@ -14,7 +14,7 @@ import {
 	NotificationsEmptyGuard,
 } from "@feature/assistance";
 import { NotificationBell, NotificationEmpty, NotificationList } from "@entity/assistance";
-import { CardTitle, textClass } from "@shared/pure-components/typography";
+import { CardTitle, textClass } from "@internal/shared";
 import { NOTIFICATIONS_PAGE_SIZE, TRIGGER_DISMISS_WINDOW } from "./config.ts";
 
 import type { MouseEvent, ReactNode, FC } from "react";

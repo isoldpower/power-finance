@@ -1,6 +1,7 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 
-import { isApiError } from '@shared/api';
+import { isApiError } from '@internal/shared';
+import { builtInCategoryId } from '@feature/categories/categories-api';
 import { AutomationsMockRESTApiClient } from './mock-server.ts';
 
 import type { AutomationCreateBody, AutomationSearchField } from '../types.ts';
@@ -16,7 +17,7 @@ const draft = (
 	icon: 'basket',
 	enabled: true,
 	trigger: { type: 'event', event: 'transaction.created' },
-	effects: [{ type: 'set_category', params: { category: 'Groceries' } }],
+	effects: [{ type: 'set_category', params: { category_id: builtInCategoryId('transaction', 'Groceries') } }],
 	...overrides,
 });
 

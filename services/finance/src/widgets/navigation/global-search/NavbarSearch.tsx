@@ -12,7 +12,7 @@ import {
 	UiDialogTitle,
 } from "@internal/ui-library";
 import { SearchIcon } from "@shared/pure-components/icons";
-import { ShowOnDesktop, ShowOnMobile } from "@shared/visibility";
+import { ShowOnDesktop, ShowOnMobile } from "@internal/shared";
 import { SearchTrigger, SearchResult } from "@entity/navigation";
 import { useGlobalSearch, useSearchResults } from "@feature/navigation";
 import { PAGES } from "./config.ts";

@@ -1,5 +1,5 @@
 import type { TransactionType } from "../types.ts";
-import type { Types } from "@shared/formatting";
+import type { Types } from "@internal/shared";
 
 
 const toneByType: Record<TransactionType, Types> = {

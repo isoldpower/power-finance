@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
-import { LocalStorageMock } from "@internal/shared";
-import { ApiError, delay, paginate, stringifySortedQuery } from "@shared/api";
+import { ApiError, delay, LocalStorageMock, paginate, stringifySortedQuery } from "@internal/shared";
+import type { IStorage } from "@internal/shared";
 import {
 	ASSISTANT_MESSAGES_STORAGE_KEY,
 	MOCK_REPLY,
@@ -8,7 +8,6 @@ import {
 	SEED_OVERVIEW,
 } from "./mock-seed.ts";
 
-import type { IStorage } from "@internal/shared";
 import type { AssistantQuotaDto } from "../types.ts";
 import type { StoredMessage } from "./mock-seed.ts";
 import type {

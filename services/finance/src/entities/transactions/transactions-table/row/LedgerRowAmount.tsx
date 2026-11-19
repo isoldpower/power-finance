@@ -1,8 +1,8 @@
 import { cn } from "@internal/ui-library";
-import { MetaText } from "@shared/pure-components/typography";
+import { MetaText } from "@internal/shared";
+import type { Types } from "@internal/shared";
 
 import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
-import type { Types } from "@shared/formatting";
 
 
 type LedgerRowAmountProps = PropsWithChildren<Omit<BaseHTMLAttributes<HTMLDivElement>, 'className'> & {

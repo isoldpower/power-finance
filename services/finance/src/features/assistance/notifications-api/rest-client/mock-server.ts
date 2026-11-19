@@ -1,10 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
-import { LocalStorageMock } from "@internal/shared";
-import { ApiError, delay, paginate, stringifySortedQuery } from "@shared/api";
+import { ApiError, delay, LocalStorageMock, paginate, stringifySortedQuery } from "@internal/shared";
+import type { IStorage, Unsubscribe } from "@internal/shared";
 import { NOTIFICATIONS_STORAGE_KEY, SEED_NOTIFICATIONS } from "./mock-seed.ts";
 
-import type { IStorage } from "@internal/shared";
-import type { Unsubscribe } from "@shared/api";
 import type { StoredNotification } from "./mock-seed.ts";
 import type {
 	INotificationsRESTApiClient,

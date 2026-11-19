@@ -1,6 +1,6 @@
 import { cn } from "@internal/ui-library";
 import { AlertIcon } from "@shared/pure-components/icons";
-import { BodyText, Text } from "@shared/pure-components/typography";
+import { BodyText, Text } from "@internal/shared";
 
 import type { FC } from "react";
 

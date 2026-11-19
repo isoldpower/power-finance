@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useApiContext } from "@app/api";
-import { getSession } from "../auth-api";
+import { getSession } from "@internal/shared";
 import { CACHE_KEYS } from "./cache-config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import type { UserProfile } from "@entity/configuration";
-import type { GetSessionResponse } from "../auth-api";
+import type { GetSessionResponse } from "@internal/shared";
 
 
 type UseCurrentUserOptions = Omit<UseQueryOptions<GetSessionResponse>, 'queryKey' | 'queryFn'>;

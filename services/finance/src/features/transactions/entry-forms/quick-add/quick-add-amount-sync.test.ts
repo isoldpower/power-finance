@@ -3,7 +3,7 @@ import { renderHook, act } from "@testing-library/react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { sanitizeAmountInput } from "@shared/formatting";
+import { sanitizeAmountInput } from "@internal/shared";
 import { quickAddSchema } from "./quick-add-schema.ts";
 import type { QuickAddSchema } from "./quick-add-schema.ts";
 

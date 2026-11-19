@@ -1,5 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { ErrorText } from "@shared/pure-components/typography";
+import { ErrorText } from "@internal/shared";
 
 import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 

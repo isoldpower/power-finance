@@ -4,7 +4,7 @@ import { useApiContext } from "@app/api";
 import { searchWallets as searchWalletsApi } from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
 
-import type { PageParams } from "@shared/api";
+import type { PageParams } from "@internal/shared";
 import type { WalletQuery } from "@entity/wallets";
 
 

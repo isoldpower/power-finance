@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useOptimisticCache } from './use-optimistic-cache.ts';
 
 import type { FC, ReactNode } from 'react';
-import type { Page } from '@shared/api';
+import type { Page } from '@internal/shared';
 import type { CachesSnapshot, OptimisticResource, PagedResponse } from './types.ts';
 
 

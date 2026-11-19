@@ -2,7 +2,7 @@ import type { FC, ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { usePortalTarget } from "@internal/ui-library";
 
-import { Heading } from "@shared/pure-components/typography";
+import { Heading } from "@internal/shared";
 
 import { DisclosureTrigger } from "../disclosure/DisclosureTrigger.tsx";
 import { useDisclosure } from "../disclosure/use-disclosure.ts";

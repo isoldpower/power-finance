@@ -1,7 +1,6 @@
 import { createContext, useMemo } from 'react';
-import { WriteVersionStore } from "@shared/api";
+import { useDemoSession, WriteVersionStore } from "@internal/shared";
 
-import { getDemoSession } from "../env/demo-session.ts";
 import { resolveApiMode } from "./config.ts";
 import { ApiQueryReactions } from "./query-reactions";
 import { ApiToasts } from "./toasts";
@@ -9,6 +8,7 @@ import { useWalletsApi } from "./servers/use-wallets-api.ts";
 import { useGoalsApi } from "./servers/use-goals-api.ts";
 import { useTransactionsApi } from "./servers/use-transactions-api.ts";
 import { useWebhooksApi } from "./servers/use-webhooks-api.ts";
+import { useCategoriesApi } from "./servers/use-categories-api.ts";
 import { useMetricsApi } from "./servers/use-metrics-api.ts";
 import { useActionsApi } from "./servers/use-actions-api.ts";
 import { useAutomationsApi } from "./servers/use-automations-api.ts";
@@ -17,13 +17,14 @@ import { useAssistantApi } from "./servers/use-assistant-api.ts";
 import { useCurrenciesApi } from "./servers/use-currencies-api.ts";
 import { useAccountsApi } from "./servers/use-accounts-api.ts";
 import { useAuthApi } from "./servers/use-auth-api.ts";
-import { useGuestDemoReadinessApi } from "./servers/use-guest-demo-readiness-api.ts";
 
 import type { FC } from 'react';
 import type { IGoalsRESTApiClient, IWalletsRESTApiClient } from "@feature/wallets";
 import type { ITransactionsRESTApiClient } from "@feature/transactions";
-import type { IAccountsRESTApiClient, IGuestDemoReadinessRESTApiClient } from "@feature/accounts";
-import type { IAuthRESTApiClient, IWebhooksRESTApiClient } from "@feature/configuration";
+import type { IAccountsRESTApiClient } from "@feature/accounts";
+import type { IAuthRESTApiClient } from "@internal/shared";
+import type { IWebhooksRESTApiClient } from "@feature/configuration";
+import type { ICategoriesRESTApiClient } from "@feature/categories";
 import type { IMetricsRESTApiClient } from "@feature/metrics";
 import type { INotificationsRESTApiClient } from "@feature/assistance";
 import type { ICurrenciesRESTApiClient } from "@feature/localization";
@@ -47,6 +48,9 @@ interface ApiContextType {
 	webhookServers: {
 		readonly rest: IWebhooksRESTApiClient
 	},
+	categoryServers: {
+		readonly rest: ICategoriesRESTApiClient
+	},
 	authServers: {
 		readonly rest: IAuthRESTApiClient
 		readonly revision: string
@@ -68,9 +72,6 @@ interface ApiContextType {
 	},
 	currencyServers: {
 		readonly rest: ICurrenciesRESTApiClient
-	},
-	guestDemoServers: {
-		readonly rest: IGuestDemoReadinessRESTApiClient
 	}
 }
 
@@ -85,16 +86,18 @@ const ApiProvider: FC<ApiProviderProps> = ({
 	children,
 	envVariables
 }) => {
+	const demoSession = useDemoSession();
 	const serverOptions = useMemo<ApiServerOptions>(() => ({
 		baseUrl: envVariables.CLIENT_API_BASE_URL,
 		mode: resolveApiMode(envVariables.CLIENT_API_MODE),
 		sandbox: envVariables.CLIENT_API_SANDBOX,
-		demoSession: getDemoSession(),
+		demoSession,
 		versions: new WriteVersionStore(),
 	}), [
 		envVariables.CLIENT_API_BASE_URL,
 		envVariables.CLIENT_API_MODE,
 		envVariables.CLIENT_API_SANDBOX,
+		demoSession,
 	]);
 
 	const walletServers = useWalletsApi(serverOptions);
@@ -102,6 +105,7 @@ const ApiProvider: FC<ApiProviderProps> = ({
 	const transactionServers = useTransactionsApi(serverOptions);
 	const accountServers = useAccountsApi(serverOptions);
 	const webhookServers = useWebhooksApi(serverOptions);
+	const categoryServers = useCategoriesApi(serverOptions);
 	const metricsServers = useMetricsApi(serverOptions);
 	const actionServers = useActionsApi(serverOptions);
 	const automationServers = useAutomationsApi(serverOptions);
@@ -109,7 +113,6 @@ const ApiProvider: FC<ApiProviderProps> = ({
 	const assistantServers = useAssistantApi(serverOptions);
 	const currencyServers = useCurrenciesApi(serverOptions);
 	const authServers = useAuthApi();
-	const guestDemoServers = useGuestDemoReadinessApi(serverOptions);
 
 	const contextValue = useMemo<ApiContextType>(() => ({
 		walletServers,
@@ -117,6 +120,7 @@ const ApiProvider: FC<ApiProviderProps> = ({
 		transactionServers,
 		accountServers,
 		webhookServers,
+		categoryServers,
 		metricsServers,
 		actionServers,
 		assistantServers,
@@ -124,13 +128,13 @@ const ApiProvider: FC<ApiProviderProps> = ({
 		notificationServers,
 		currencyServers,
 		authServers,
-		guestDemoServers
 	}), [
 		transactionServers,
 		walletServers,
 		goalServers,
 		accountServers,
 		webhookServers,
+		categoryServers,
 		metricsServers,
 		actionServers,
 		automationServers,
@@ -138,7 +142,6 @@ const ApiProvider: FC<ApiProviderProps> = ({
 		assistantServers,
 		currencyServers,
 		authServers,
-		guestDemoServers
 	]);
 
 	return (

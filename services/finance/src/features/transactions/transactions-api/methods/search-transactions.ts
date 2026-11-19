@@ -1,7 +1,7 @@
-import { pageFromMeta } from "@shared/api";
+import { pageFromMeta } from "@internal/shared";
+import type { Page, PageParams, SearchOrder } from "@internal/shared";
 import { transactionFromApi, transactionQueryToApi } from "../mutators";
 
-import type { Page, PageParams, SearchOrder } from "@shared/api";
 import type { Transaction, TransactionQuery } from "@entity/transactions";
 import type { ITransactionsRESTApiClient } from "../rest-client";
 

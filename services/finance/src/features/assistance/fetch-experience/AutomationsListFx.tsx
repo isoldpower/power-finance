@@ -3,7 +3,7 @@ import { AutomationSkeletonRow } from "@entity/assistance";
 import { useAutomations } from "../data-presenters";
 
 import type { FC, ReactNode } from "react";
-import { Caption } from "@shared/pure-components/typography";
+import { Caption } from "@internal/shared";
 
 
 const PLACEHOLDER_KEYS = ['p1', 'p2', 'p3', 'p4', 'p5'];

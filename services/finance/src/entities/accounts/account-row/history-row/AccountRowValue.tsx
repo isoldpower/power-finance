@@ -1,7 +1,7 @@
 import { FinanceMoney } from "@internal/ui-library";
 
 import type { FC } from "react";
-import type { Types } from "@shared/formatting";
+import type { Types } from "@internal/shared";
 
 
 interface AccountRowValueProps {

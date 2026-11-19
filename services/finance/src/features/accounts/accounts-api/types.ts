@@ -1,4 +1,4 @@
-import type { MoneyDto, PageParams } from "@shared/api";
+import type { MoneyDto, PageParams } from "@internal/shared";
 
 type AccountGroupDto = 'assets' | 'liabilities' | 'equity' | '';
 

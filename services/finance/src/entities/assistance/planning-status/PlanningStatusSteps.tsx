@@ -1,4 +1,4 @@
-import { Overline } from "@shared/pure-components/typography";
+import { Overline } from "@internal/shared";
 
 import type { BaseHTMLAttributes, FC, PropsWithChildren } from "react";
 

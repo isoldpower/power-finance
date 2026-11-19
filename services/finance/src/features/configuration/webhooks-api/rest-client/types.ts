@@ -1,4 +1,4 @@
-import type { CollectionResponse, MutationResponse, ResourceResponse } from "@shared/api";
+import type { CollectionResponse, MutationResponse, ResourceResponse } from "@internal/shared";
 import type {
 	DeliveryListParams,
 	SubscriptionCreateBody,

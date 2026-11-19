@@ -1,5 +1,5 @@
 import { cn, FinanceMenuTrigger } from "@internal/ui-library";
-import { textClass } from "@shared/pure-components/typography";
+import { textClass } from "@internal/shared";
 
 import type { FC, PropsWithChildren } from "react";
 

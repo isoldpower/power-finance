@@ -1,6 +1,5 @@
-import type { FilterOperator, FilterValue } from "@shared/api";
+import type { FilterOperator, FilterValue, Types } from "@internal/shared";
 import type { Money } from "@entity/localization";
-import type { Types } from "@shared/formatting";
 import type { Pending } from "@shared/data";
 
 
@@ -103,7 +102,7 @@ interface AutomationTrigger {
 
 interface SetCategoryEffect {
 	type: 'set_category';
-	category: string;
+	categoryId: string;
 }
 
 interface NotifyEffect {

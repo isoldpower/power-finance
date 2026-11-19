@@ -8,7 +8,7 @@ import type { Control } from "react-hook-form";
 import type { RuleFormSchema } from "@feature/assistance";
 
 
-type RuleTextName = 'category' | 'title' | 'body' | 'fromWalletId' | 'toWalletId' | 'amount' | 'currency';
+type RuleTextName = 'title' | 'body' | 'fromWalletId' | 'toWalletId' | 'amount' | 'currency';
 
 interface RuleTextControlProps {
 	control: Control<RuleFormSchema>;

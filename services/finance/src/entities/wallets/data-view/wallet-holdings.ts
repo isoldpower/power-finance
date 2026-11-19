@@ -1,4 +1,4 @@
-import { compareAmounts, isZeroAmount, subtractAmounts, ZERO_AMOUNT } from "@shared/api";
+import { compareAmounts, isZeroAmount, subtractAmounts, ZERO_AMOUNT } from "@internal/shared";
 
 import type { Money } from "@entity/localization";
 import type { Wallet } from "../types.ts";

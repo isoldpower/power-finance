@@ -1,6 +1,4 @@
-import { captureDemoSession, getDemoSession } from "@internal/shared";
+import { captureDemoSession } from "@internal/shared";
 
 
 captureDemoSession();
-
-export { getDemoSession };

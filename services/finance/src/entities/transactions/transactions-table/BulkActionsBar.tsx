@@ -1,5 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { Text } from "@shared/pure-components/typography";
+import { Text } from "@internal/shared";
 import { BulkActionsAction } from "./bulk-actions/BulkActionsAction.tsx";
 import { BulkActionsClear } from "./bulk-actions/BulkActionsClear.tsx";
 import { BulkActionsCount } from "./bulk-actions/BulkActionsCount.tsx";

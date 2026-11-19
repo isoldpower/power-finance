@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 
-import { isApiError } from '@shared/api';
+import { isApiError } from '@internal/shared';
 import { CurrenciesMockRESTApiClient } from './mock-server.ts';
 
 const client = new CurrenciesMockRESTApiClient();

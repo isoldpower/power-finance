@@ -1,8 +1,8 @@
 import { cn } from "@internal/ui-library";
-import { Caption, DisplayText } from "@shared/pure-components/typography";
+import { Caption, DisplayText } from "@internal/shared";
+import type { Types } from "@internal/shared";
 
 import type { FC } from "react";
-import type { Types } from "@shared/formatting";
 import type { AssistantSignal } from "../../types.ts";
 
 

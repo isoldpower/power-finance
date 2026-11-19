@@ -1,1 +1,1 @@
-export { conversionFromApi, currencyFromApi, moneyFromApi, ratesFromApi } from './api-to-domain.ts';
+export { conversionFromApi, moneyFromApi, ratesFromApi } from './api-to-domain.ts';

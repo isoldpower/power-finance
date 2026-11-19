@@ -1,6 +1,6 @@
-import { DATE_OPERATORS, REFERENCE_OPERATORS, TEXT_OPERATORS } from "@shared/api";
+import { DATE_OPERATORS, REFERENCE_OPERATORS, TEXT_OPERATORS } from "@internal/shared";
+import type { FilterFieldOption } from "@internal/shared";
 
-import type { FilterFieldOption } from "@shared/api";
 
 
 const AUTOMATION_FILTER_FIELDS: FilterFieldOption[] = [

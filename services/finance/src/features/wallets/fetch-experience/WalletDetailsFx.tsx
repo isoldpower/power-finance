@@ -1,6 +1,6 @@
 import { FinanceCard, cn } from "@internal/ui-library";
 import { WalletDetailsSkeleton } from "@entity/wallets";
-import { textClass } from "@shared/pure-components/typography";
+import { textClass } from "@internal/shared";
 
 import type { WalletDetails } from "@entity/wallets";
 import type { FC, ReactNode } from "react";

@@ -1,4 +1,4 @@
-import type { FilterOperator } from "@shared/api";
+import type { FilterOperator } from "@internal/shared";
 import type { AutomationEvent } from "@entity/assistance";
 import type { FilterInputKind, FilterPolicySource } from "./types.ts";
 

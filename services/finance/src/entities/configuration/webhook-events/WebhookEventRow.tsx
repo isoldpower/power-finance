@@ -1,5 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { pendingClass } from "@shared/pure-components/feedback";
+import { pendingClass } from "@internal/shared";
 import { WebhookEventControl } from "./row/WebhookEventControl.tsx";
 import { WebhookEventDescription } from "./row/WebhookEventDescription.tsx";
 import { WebhookEventInfo } from "./row/WebhookEventInfo.tsx";

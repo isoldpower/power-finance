@@ -1,0 +1,6 @@
+const INNER_RATIO = 0.64;
+const PADDING = 12;
+const ACTIVE_OFFSET = 7;
+const FULL_TURN = Math.PI * 2;
+
+export { ACTIVE_OFFSET, FULL_TURN, INNER_RATIO, PADDING };

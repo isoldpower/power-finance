@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import { cn, usePortalTarget } from "@internal/ui-library";
-import { ShowOn } from "@shared/visibility";
+import { ShowOn } from "@internal/shared";
 
 import type { FC, ReactNode } from "react";
 

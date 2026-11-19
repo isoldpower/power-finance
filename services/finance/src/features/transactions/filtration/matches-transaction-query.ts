@@ -1,4 +1,4 @@
-import { compareAmounts, toAmountString } from "@shared/api";
+import { compareAmounts, toAmountString } from "@internal/shared";
 
 import type { Transaction, TransactionQuery, TransactionType } from "@entity/transactions";
 
@@ -51,7 +51,7 @@ const matchesText = (
 	const caseSensitive = query.caseSensitive ?? false;
 
 	return containsNeedle(transaction.name, query.search, caseSensitive)
-		|| containsNeedle(transaction.category, query.search, caseSensitive);
+		|| containsNeedle(transaction.category?.name ?? null, query.search, caseSensitive);
 };
 
 const matchesAmount = (
@@ -85,7 +85,7 @@ const matchesTransactionQuery = (
 	matchesMembership(transaction.wallet.id, query.walletIds) &&
 	matchesChain(transaction, query.chainId) &&
 	matchesMembership(transaction.money.currency, query.currencies) &&
-	matchesMembership(transaction.category, query.categories) &&
+	matchesMembership(transaction.category?.id ?? null, query.categoryIds) &&
 	matchesTypes(transaction, query.types) &&
 	matchesText(transaction, query) &&
 	matchesAmount(transaction, query.minAmount, query.maxAmount) &&

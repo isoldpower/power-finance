@@ -1,3 +1,5 @@
+import { CategoryCatalogMock } from "@feature/categories/categories-api";
+
 import type { TransactionDto, TransactionOriginDto, TransactionTypeDto } from "../types.ts";
 
 
@@ -15,7 +17,8 @@ interface StoredTransaction {
 	origin: TransactionOriginDto;
 	wallet_id: string;
 	wallet_name: string;
-	category: string | null;
+	category_id?: string | null;
+	category?: string | null;
 	chain_id: string | null;
 	chain_size?: number;
 	evidence: { url: string } | null;
@@ -30,7 +33,16 @@ const walletDelta = (transaction: StoredTransaction): number => {
 	return transaction.type === 'income' ? value : -value;
 };
 
-const storedTransactionToDto = (transaction: StoredTransaction): TransactionDto => ({
+const storedCategoryId = (transaction: StoredTransaction, catalog: CategoryCatalogMock): string | null => (
+	transaction.category_id === undefined
+		? catalog.builtInIdByName('transaction', transaction.category)
+		: transaction.category_id
+);
+
+const storedTransactionToDto = (
+	transaction: StoredTransaction,
+	catalog: CategoryCatalogMock = new CategoryCatalogMock(),
+): TransactionDto => ({
 	id: transaction.id,
 	name: transaction.name,
 	created_at: transaction.created_at,
@@ -40,11 +52,11 @@ const storedTransactionToDto = (transaction: StoredTransaction): TransactionDto 
 	type: transaction.type,
 	origin: transaction.origin,
 	wallet: { id: transaction.wallet_id, name: transaction.wallet_name },
-	category: transaction.category,
+	category: catalog.refOf(storedCategoryId(transaction, catalog)),
 	chain: transaction.chain_id
 		? { id: transaction.chain_id, size: transaction.chain_size ?? 1 }
 		: null,
 });
 
-export { TRANSACTIONS_STORAGE_KEY, isSettled, storedTransactionToDto, walletDelta };
+export { TRANSACTIONS_STORAGE_KEY, isSettled, storedCategoryId, storedTransactionToDto, walletDelta };
 export type { StoredTransaction };

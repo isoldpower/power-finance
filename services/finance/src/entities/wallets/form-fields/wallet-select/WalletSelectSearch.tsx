@@ -1,7 +1,7 @@
 import { cn } from "@internal/ui-library";
 import { useCallback } from "react";
 import { SearchIcon } from "@shared/pure-components/icons";
-import { textClass } from "@shared/pure-components/typography";
+import { textClass } from "@internal/shared";
 
 import type { ChangeEvent, FC, KeyboardEventHandler, RefObject } from "react";
 

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import { useApiContext, DERIVED_KEYS } from "@app/api";
-import { createIdempotencyKey } from "@shared/api";
+import { createIdempotencyKey } from "@internal/shared";
 import {
 	adjustTransaction as adjustTransactionApi,
 	deleteTransaction as deleteTransactionApi,

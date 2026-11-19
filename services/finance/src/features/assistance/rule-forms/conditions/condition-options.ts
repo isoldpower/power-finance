@@ -1,6 +1,6 @@
 import { FALLBACK_FIELD } from "./constants.ts";
 
-import type { FilterFieldOption } from "@shared/api";
+import type { FilterFieldOption } from "@internal/shared";
 import type { SelectOption } from "@shared/forms";
 import type { ConditionKey } from "./types.ts";
 

@@ -2,6 +2,7 @@ import type {FC} from "react";
 
 import {Suspense, useMemo} from "react";
 import {ErrorBoundary} from "react-error-boundary";
+import { RemoteLoadingScreen } from "@entity/remotes";
 
 interface RemoteLoadingFxProps {
 	children: React.ReactNode;
@@ -11,7 +12,7 @@ interface RemoteLoadingFxProps {
 
 const RemoteLoadingFx: FC<RemoteLoadingFxProps> = ({ children, suspenseFallback, errorFallback }) => {
 	const suspenseFallbackProtected = useMemo(() => {
-		return suspenseFallback ?? <div>Loading remote page...</div>
+		return suspenseFallback ?? <RemoteLoadingScreen title="page" />
 	}, [suspenseFallback]);
 	const errorFallbackProtected = useMemo(() => {
 		return errorFallback ?? <div>Something went wrong loading remote page</div>

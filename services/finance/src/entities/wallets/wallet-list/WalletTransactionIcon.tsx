@@ -1,7 +1,7 @@
 import { cn } from "@internal/ui-library";
 
 import type { FC, PropsWithChildren } from "react";
-import type { Types } from "@shared/formatting";
+import type { Types } from "@internal/shared";
 
 
 type WalletTransactionIconProps = PropsWithChildren<{

@@ -1,6 +1,5 @@
-import { isNegativeAmount } from "@shared/api";
+import { isNegativeAmount, textClass } from "@internal/shared";
 import { useMemo } from "react";
-import { textClass } from "@shared/pure-components/typography";
 import { AnimatedMoney } from "@entity/localization";
 import { CashFlowPeriod } from "@entity/metrics";
 import { useConvertMoney } from "@feature/localization";

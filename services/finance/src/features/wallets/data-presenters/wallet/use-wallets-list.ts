@@ -5,7 +5,7 @@ import { listWallets } from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import type { PageParams } from "@shared/api";
+import type { PageParams } from "@internal/shared";
 import type { Wallet } from "@entity/wallets";
 import type { ListWalletsResponse } from "../../wallets-api";
 

@@ -1,14 +1,13 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { LocalStorageMock } from "@internal/shared";
-import { ApiError, delay, IdempotencyStore, paginate, stringifySortedQuery } from "@shared/api";
+import { ApiError, delay, IdempotencyStore, LocalStorageMock, paginate, stringifySortedQuery } from "@internal/shared";
+import type { IStorage } from "@internal/shared";
 import {
 	ACTIONS_STORAGE_KEY,
 	DISMISS_RESOLUTION,
 	SEED_ACTIONS,
 	SEVERITY_RANK,
 } from "./storage.ts";
-import type { IStorage } from "@internal/shared";
 import type { StoredAction } from "./storage.ts";
 import type { ActionDto } from "../types.ts";
 import type {

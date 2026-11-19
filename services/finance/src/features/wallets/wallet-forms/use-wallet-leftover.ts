@@ -1,8 +1,13 @@
 import { useCallback, useMemo, useState } from "react";
 import { selectedWalletOption, toWalletSelectOptions } from "@entity/wallets";
 import { useCurrencyPairRate } from "@feature/localization";
-import { compareAmounts, multiplyAmount, ZERO_AMOUNT } from "@shared/api";
-import { currencyFractionDigits, useLocaleCurrency } from "@shared/formatting";
+import {
+	compareAmounts,
+	currencyFractionDigits,
+	multiplyAmount,
+	useLocaleCurrency,
+	ZERO_AMOUNT,
+} from "@internal/shared";
 import { isOptimisticWalletId, useWalletsList } from "../data-presenters";
 
 import type { Wallet, WalletLeftoverTransfer, WalletSelectItem } from "@entity/wallets";

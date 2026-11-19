@@ -1,7 +1,7 @@
 import type { ITransactionsRESTApiClient } from "./types.ts";
 
 
-type UnservedTransactionMethods = Pick<ITransactionsRESTApiClient, 'listCategories' | 'scanReceipt'>;
+type UnservedTransactionMethods = Pick<ITransactionsRESTApiClient, 'scanReceipt'>;
 
 const reported = new Set<string>();
 

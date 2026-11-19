@@ -5,18 +5,16 @@ import {
 	SortDirectionButton,
 	TransactionSearchInput,
 } from "@entity/transactions";
-import { 
-	useTransactionCategories,
-	useTransactionsFiltersContext,
-} from "@feature/transactions";
+import { useTransactionsFiltersContext } from "@feature/transactions";
 import { useWalletsList } from "@feature/wallets";
+import { useCategories } from "@feature/categories";
 
 import { TRANSACTION_TYPE_FILTER_OPTIONS } from "./config.ts";
 
 
 const TransactionBrowserFilters = () => {
 	const { wallets } = useWalletsList();
-	const { categories } = useTransactionCategories();
+	const { categories } = useCategories('transaction');
 	const {
 		search, setSearch,
 		walletFilter, setWalletFilter,
@@ -35,8 +33,8 @@ const TransactionBrowserFilters = () => {
 	const categoryOptions = useMemo(() => ([
 		{ value: 'all', label: 'All categories' },
 		...categories.map((category) => ({ 
-			value: category.label,
-			label: category.label,
+			value: category.id,
+			label: category.name,
 		})),
 	]), [categories]);
 

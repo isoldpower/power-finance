@@ -1,7 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { useSettingsContext } from "@internal/shared";
-import { divideAmount } from "@shared/api";
-import { currencyFractionDigits, useLocaleCurrency } from "@shared/formatting";
+import { currencyFractionDigits, divideAmount, useLocaleCurrency, useSettingsContext } from "@internal/shared";
 import { useCurrencyRates } from "./use-currency-rates.ts";
 
 import type { ConvertedMoney, Money } from "@entity/localization";

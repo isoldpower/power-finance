@@ -1,4 +1,4 @@
-import { parseAmount } from "@shared/api";
+import { parseAmount } from "@internal/shared";
 
 import { SHADE_FADE_LIMIT, SHADE_STEP } from "./config.ts";
 

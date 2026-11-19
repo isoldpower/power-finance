@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 
-import { isApiError } from '@shared/api';
+import { isApiError } from '@internal/shared';
 import { NotificationsMockRESTApiClient } from './mock-server.ts';
 import type { NotificationAcknowledgedDto } from '../types.ts';
 

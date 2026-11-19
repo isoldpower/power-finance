@@ -1,4 +1,4 @@
-import { parseAmountDecimal } from "@shared/formatting";
+import { parseAmountDecimal } from "@internal/shared";
 import { useCallback } from "react";
 import { buildWalletDraft, buildWalletPatch } from "./wallet-fields.ts";
 import { useWalletsListMethods, useWalletMethods } from "../data-presenters";

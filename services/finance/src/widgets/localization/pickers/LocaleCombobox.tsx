@@ -8,14 +8,18 @@ import {
 	FinanceComboboxList,
 	FinanceComboboxTrigger,
 } from "@internal/ui-library";
-import { useSettingsContext } from "@internal/shared";
-import { LocalePickerLabel, LocalePickerOptionSelected } from "@entity/localization";
-import { MetaText, Text } from "@shared/pure-components/typography";
-import { useLocales } from "@feature/localization";
+import {
+	LocalePickerLabel,
+	LocalePickerOptionSelected,
+	MetaText,
+	Text,
+	useLocales,
+	useSettingsContext,
+} from "@internal/shared";
 import { useSelectLocale } from "@feature/configuration";
 
 import type { FinanceComboboxPivot } from "@internal/ui-library";
-import type { LocalePickerVariant } from "@entity/localization";
+import type { LocalePickerVariant } from "@internal/shared";
 import type { FC, ReactNode } from "react";
 
 

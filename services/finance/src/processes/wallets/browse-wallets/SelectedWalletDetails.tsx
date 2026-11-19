@@ -1,5 +1,5 @@
 import { cn, FinanceButton, FinanceCard } from "@internal/ui-library";
-import { pendingClass } from "@shared/pure-components/feedback";
+import { pendingClass } from "@internal/shared";
 import { WalletsRecentTitle } from "@entity/wallets";
 import {
 	DeleteWalletDialog,

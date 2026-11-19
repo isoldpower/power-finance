@@ -1,4 +1,4 @@
-import { ApiError, delay, paginate, parseAmount, stringifySortedQuery } from "@shared/api";
+import { ApiError, delay, paginate, parseAmount, stringifySortedQuery } from "@internal/shared";
 import { ACCOUNT_SEED, LEDGER_ENTRY_SEED } from "./mock-seed.ts";
 
 import type {

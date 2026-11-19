@@ -5,7 +5,7 @@ const patchWallet = <TWallet extends Wallet>(wallet: TWallet, patch: WalletPatch
 	...wallet,
 	name: patch.name ?? wallet.name,
 	favorite: patch.favorite ?? wallet.favorite,
-	category: patch.category ?? wallet.category,
+	category: patch.category === undefined ? wallet.category : patch.category,
 	color: patch.color ?? wallet.color,
 	zeroBalance: patch.zeroBalance === undefined
 		? wallet.zeroBalance

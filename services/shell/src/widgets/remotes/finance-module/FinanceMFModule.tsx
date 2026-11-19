@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { lazy, useState } from "react";
 
 import { AttachToShadowDom, RemoteLoadingFx, TransferColorSchemeToShadowDom } from "@feature/remotes";
+import { RemoteLoadingScreen } from "@entity/remotes";
 
 
 type FinanceMFModuleProps = object & {};
@@ -15,7 +16,7 @@ const FinanceMFModule: FC<FinanceMFModuleProps> = () => {
 		<AttachToShadowDom id="finance" onMountPointChange={setShadowMountPoint}>
 			{shadowMountPoint && (
 				<TransferColorSchemeToShadowDom mountPoint={shadowMountPoint}>
-					<RemoteLoadingFx>
+					<RemoteLoadingFx suspenseFallback={<RemoteLoadingScreen title="Finance" />}>
 						<FinanceRemoteApp />
 					</RemoteLoadingFx>
 				</TransferColorSchemeToShadowDom>

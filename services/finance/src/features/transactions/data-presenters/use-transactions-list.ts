@@ -5,7 +5,7 @@ import { listTransactions } from "../transactions-api";
 import { CACHE_KEYS } from "./config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import type { PageParams } from "@shared/api";
+import type { PageParams } from "@internal/shared";
 import type { Transaction } from "@entity/transactions";
 import type { ListTransactionsResponse } from "../transactions-api";
 

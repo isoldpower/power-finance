@@ -1,6 +1,6 @@
-import { ZERO_AMOUNT } from "@shared/api";
+import { ZERO_AMOUNT } from "@internal/shared";
+import type { FilterNode, MoneyDto } from "@internal/shared";
 
-import type { FilterNode, MoneyDto } from "@shared/api";
 import type {
 	Automation,
 	AutomationEffect,
@@ -55,7 +55,7 @@ const conditionFromApi = (node: FilterNode): RuleNode => {
 const effectFromApi = (dto: AutomationEffectDto): AutomationEffect => {
 	switch (dto.type) {
 		case 'set_category':
-			return { type: 'set_category', category: readString(dto.params, 'category') };
+			return { type: 'set_category', categoryId: readString(dto.params, 'category_id') };
 		case 'notify':
 			return {
 				type: 'notify',

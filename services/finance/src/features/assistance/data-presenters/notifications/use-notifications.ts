@@ -5,7 +5,7 @@ import { listNotifications } from "../../notifications-api";
 import { NOTIFICATIONS_CACHE_KEYS } from "../cache-config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import type { PageParams } from "@shared/api";
+import type { PageParams } from "@internal/shared";
 import type { Notification, NotificationQuery } from "@entity/assistance";
 import type { ListNotificationsResponse } from "../../notifications-api";
 

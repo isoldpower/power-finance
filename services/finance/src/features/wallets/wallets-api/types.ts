@@ -1,11 +1,12 @@
 import type { TransactionDto } from "@feature/transactions";
-import type { MoneyDto, PageParams, ResourceTimestamps, SearchPayload } from "@shared/api";
+import type { CategoryRefDto } from "@feature/categories/categories-api";
+import type { MoneyDto, PageParams, ResourceTimestamps, SearchPayload } from "@internal/shared";
 
 
 interface WalletDto extends ResourceTimestamps {
 	id: string;
 	name: string;
-	category: string;
+	category: CategoryRefDto | null;
 	currency: string;
 	money: MoneyDto;
 	zero_balance: MoneyDto;
@@ -32,7 +33,7 @@ interface WalletDetailParams extends PageParams {
 interface WalletCreateBody {
 	name: string;
 	currency: string;
-	category?: string;
+	category_id?: string | null;
 	color?: string;
 	zero_balance?: string;
 	opening_balance?: string;
@@ -41,7 +42,7 @@ interface WalletCreateBody {
 interface WalletReplaceBody {
 	name: string;
 	currency: string;
-	category?: string;
+	category_id?: string | null;
 	color?: string;
 	favorite?: boolean;
 	zero_balance?: string;
@@ -50,12 +51,12 @@ interface WalletReplaceBody {
 interface WalletPatchBody {
 	name?: string;
 	favorite?: boolean;
-	category?: string;
+	category_id?: string | null;
 	zero_balance?: string;
 	color?: string;
 }
 
-type WalletSearchField = 'name' | 'currency' | 'balance' | 'created_at';
+type WalletSearchField = 'name' | 'currency' | 'balance' | 'category' | 'category_id' | 'created_at';
 
 type WalletSearchBody = SearchPayload<WalletSearchField>;
 

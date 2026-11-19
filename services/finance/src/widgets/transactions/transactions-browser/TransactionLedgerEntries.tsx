@@ -13,9 +13,7 @@ import {
 } from "@entity/transactions";
 import { useConvertMoney } from "@feature/localization";
 import { useTransactionLedger, TransactionLedgerFx } from "@feature/transactions";
-import { useLocaleCurrency } from "@shared/formatting";
-import { SpaceOccupant } from "@shared/pure-components/layout";
-import { MetaText, RowTitle } from "@shared/pure-components/typography";
+import { MetaText, RowTitle, SpaceOccupant, useLocaleCurrency } from "@internal/shared";
 
 import type { FC } from "react";
 import type { Transaction } from "@entity/transactions";

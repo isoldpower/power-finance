@@ -1,7 +1,6 @@
 import { useMemo } from "react";
-import { Caption, DisplayText, RowTitle } from "@shared/pure-components/typography";
+import { Caption, DisplayText, RowTitle, useLocaleCurrency } from "@internal/shared";
 import { RowAddButton, RowDeleteButton } from "@shared/pure-components/collections";
-import { useLocaleCurrency } from "@shared/formatting";
 import { GoalRow, toGoalView } from "@entity/wallets";
 import { DeleteGoalDialog } from "@feature/wallets";
 import { DeleteGoalModal, FundGoalPanel, fundGoalTitle } from "@widget/wallets";

@@ -1,4 +1,4 @@
-import { Caption } from "@shared/pure-components/typography";
+import { Caption } from "@internal/shared";
 
 import type { Wallet } from "@entity/wallets";
 import type { FC, ReactNode } from "react";

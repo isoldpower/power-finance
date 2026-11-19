@@ -58,7 +58,7 @@ const LandingPage: FC = () => {
 				</div>
 				<div className="flex justify-center">
 					<UiButton size="lg" variant="default" asChild>
-						<Link to={getAnalyticsRoute('dashboard')}>
+						<Link to={getAnalyticsRoute('overview')}>
 							Get Started Today
 						</Link>
 					</UiButton>

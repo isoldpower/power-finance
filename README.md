@@ -6,7 +6,7 @@
 
 ## Project Inspiration & Idea
 
-Power Finance is a personal finance app: wallets, transactions, budgets, goals and planning in one place.
+Power Finance is a personal finance app: wallets, transactions, budgets, goals, planning and spending analytics in one place.
 The project is also an experiment in **microfrontends**. It is split into independent applications that are built and deployed separately, then combined in the browser at runtime with [Module Federation](https://module-federation.io/). The goal is to find the real costs of this architecture on a project of meaningful size, and to solve the integration problems it brings (shared state, auth, styling, routing).
 
 ## Directory Structure & Architecture
@@ -31,7 +31,7 @@ power-finance/
 |-------------|--------------------|--------------------------------------------------------------------------------------------------------------------------------------|
 | `shell`     | `@power/shell`     | Host application. Owns the landing page, authentication, the sidebar and top-level routing, and loads the other services as remotes. |
 | `finance`   | `@power/finance`   | Main product: dashboard, management, planning and settings. Runs on its own or embedded in the shell.                                |
-| `analytics` | `@power/analytics` | Analytics remote. Not deployed yet; the shell shows a placeholder when it is unavailable.                                            |
+| `analytics` | `@power/analytics` | Analytics product: overview, spending and money-flow pages with interactive charts. Runs on its own or embedded in the shell.        |
 
 Each service is a React + Vite app structured with **Feature-Sliced Design** (`app` → `pages` → `widgets` → `features` → `entities` → `shared`).
 
@@ -45,22 +45,25 @@ Each service is a React + Vite app structured with **Feature-Sliced Design** (`a
 
 ### Main Tools
 
-React 19, TypeScript, Vite, Module Federation, TanStack Router and Query, Tailwind CSS, Clerk, Vitest, Storybook, Nx, pnpm.
+React 19, TypeScript, Vite, Module Federation, TanStack Router and Query, Tailwind CSS, visx (analytics charts), Clerk, Vitest, Storybook, Nx, pnpm.
 
 ## Deployment Infrastructure
 
 The frontend is hosted on **Cloudflare Pages** and deployed by GitHub Actions (`.github/workflows/deploy_pages.yaml`) on every push to `main`:
 
 1. Install dependencies with pnpm.
-2. Build the `finance` remote, then the `shell` host, with Nx.
+2. Build the `finance` and `analytics` remotes, then the `shell` host, with Nx.
 3. Publish each build to its own Cloudflare Pages project with Wrangler.
 
-| App              | URL                                                          |
-|------------------|--------------------------------------------------------------|
-| Shell (host)     | [powerfinance.site](https://powerfinance.site)               |
-| Finance (remote) | [manage.powerfinance.site](https://manage.powerfinance.site) |
+| App                | URL                                                                |
+|--------------------|--------------------------------------------------------------------|
+| Shell (host)       | [powerfinance.site](https://powerfinance.site)                     |
+| Finance (remote)   | [manage.powerfinance.site](https://manage.powerfinance.site)       |
+| Analytics (remote) | [analytics.powerfinance.site](https://analytics.powerfinance.site) |
 
-The shell fetches finance's `remoteEntry.js` from its own domain at runtime, so the two are deployed independently. Finance's `_headers` file allows cross-origin requests from the shell. Build-time configuration (API URL, Clerk key, remote URLs) comes from GitHub repository variables.
+The shell fetches each remote's `remoteEntry.js` from that remote's own domain at runtime, so host and remotes are deployed independently. Each remote's `_headers` file allows cross-origin requests from the shell. Build-time configuration (API URL, Clerk key, remote URLs) comes from GitHub repository variables.
+
+A remote whose URL variable (`CLIENT_FINANCE_APP_URL`, `CLIENT_ANALYTICS_APP_URL`) is not set is left out of the shell build, and the shell shows a placeholder in its place.
 
 The backend API lives in a separate service at `manage-api.powerfinance.site`.
 

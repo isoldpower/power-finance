@@ -1,5 +1,5 @@
 import { CashFlowSkeleton } from "@entity/metrics";
-import { Caption } from "@shared/pure-components/typography";
+import { Caption } from "@internal/shared";
 
 import type { FC, ReactNode } from "react";
 import type { CashFlow } from "@entity/metrics";

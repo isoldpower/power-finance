@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { AiAssistantFab, AiAssistantPanel, AiAssistantSheet } from "@widget/assistance";
 import { chatHistory } from "@entity/assistance";
-import { ShowOnDesktop, ShowOnMobile } from "@shared/visibility";
+import { ShowOnDesktop, ShowOnMobile } from "@internal/shared";
 import { useDisclosure } from "@shared/overlays";
 import { useAssistantMessages, useAssistantOverview, useSendAssistantMessage } from "@feature/assistance";
 

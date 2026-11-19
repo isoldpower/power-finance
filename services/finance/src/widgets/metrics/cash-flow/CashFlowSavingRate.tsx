@@ -1,6 +1,6 @@
 import { ShowSavingRateTooltip } from "@feature/metrics";
 import { MetricCardDescriptor, formatSavingsRate } from "@entity/metrics";
-import { BodyText } from "@shared/pure-components/typography";
+import { BodyText } from "@internal/shared";
 
 import type { FC } from "react";
 import type { CashFlow } from "@entity/metrics";

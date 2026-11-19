@@ -1,0 +1,19 @@
+const HISTORY_MARGIN = { top: 12, right: 12, bottom: 28, left: 64 } as const;
+const TICK_SPACING = 90;
+const TOTAL_LINE_KEY = '__total__';
+const LINE_FIELDS = ['values'] as const;
+const TOTAL_STROKE_WIDTH = 2.6;
+const WALLET_STROKE_WIDTH = 1.8;
+const TOP_HEADROOM = 1.05;
+const BRUSH_VERTICAL_PADDING = 4;
+
+export {
+	BRUSH_VERTICAL_PADDING,
+	HISTORY_MARGIN,
+	LINE_FIELDS,
+	TICK_SPACING,
+	TOP_HEADROOM,
+	TOTAL_LINE_KEY,
+	TOTAL_STROKE_WIDTH,
+	WALLET_STROKE_WIDTH,
+};

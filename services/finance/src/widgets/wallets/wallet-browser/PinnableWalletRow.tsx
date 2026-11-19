@@ -1,13 +1,10 @@
 import { walletGradient } from "@entity/wallets";
-import { isNegativeAmount } from "@shared/api";
+import { Caption, isNegativeAmount, pendingClass, RowTitle, textClass, useLocaleCurrency } from "@internal/shared";
 import { cn, FinanceMoney } from "@internal/ui-library";
 import {useCallback, useMemo} from "react";
 import { WalletPinButton, WalletSwatch, walletTypeLabel } from "@entity/wallets";
 import { isOptimisticWalletId, useWalletFavorite, useWalletsSelection } from "@feature/wallets";
 import { useShallow } from "zustand/react/shallow";
-import { useLocaleCurrency } from "@shared/formatting";
-import { pendingClass } from "@shared/pure-components/feedback";
-import { Caption, RowTitle, textClass } from "@shared/pure-components/typography";
 
 import type { FC, MouseEvent } from "react";
 import type { Wallet } from "@entity/wallets";

@@ -1,24 +1,24 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { LocalStorageMock } from "@internal/shared";
 import {
 	ApiError,
 	createMatcher,
 	delay,
 	IdempotencyStore,
+	LocalStorageMock,
 	paginate,
 	stringifySortedQuery,
 	validateFilter,
-} from "@shared/api";
-import { storedTransactionToDto, TRANSACTIONS_STORAGE_KEY } from "./mock-seed.ts";
+} from "@internal/shared";
+import type { FieldPolicy, IStorage, SearchOrder } from "@internal/shared";
+import { CategoryCatalogMock } from "@feature/categories/categories-api";
+import { storedCategoryId, storedTransactionToDto, TRANSACTIONS_STORAGE_KEY } from "./mock-seed.ts";
 import { TRANSACTION_CHAIN_LIMIT } from "../types.ts";
-import type { IStorage } from "@internal/shared";
-import type { FieldPolicy, SearchOrder } from "@shared/api";
 import type { StoredTransaction } from "./mock-seed.ts";
 import type {
-	CategoryDto,
 	ReceiptScanDto,
 	TransactionChainEntryBody,
+	TransactionChainExistingEntryBody,
 	TransactionCreateBody,
 	TransactionDetailDto,
 	TransactionPostingDto,
@@ -27,9 +27,9 @@ import type {
 } from "../types.ts";
 import type {
 	ITransactionsRESTApiClient,
-	TransactionCategoriesRequest, TransactionCategoriesResponse,
 	TransactionAdjustRequest,
 	TransactionAdjustResponse,
+	TransactionChainAppendRequest,
 	TransactionChainDeleteRequest, TransactionChainDeleteResponse,
 	TransactionChainRequest, TransactionChainResponse,
 	TransactionDeleteRequest, TransactionDeleteResponse,
@@ -42,8 +42,6 @@ import type {
 } from "./types.ts";
 
 const WALLET_STORAGE_KEYS = ['wallets-v1', 'goals-v1'];
-
-const SEED_CATEGORIES = ['Groceries', 'Dining', 'Transport', 'Bills', 'Shopping', 'Income'];
 
 const SEED_SCAN: ReceiptScanDto = {
 	amount: '86.40',
@@ -64,6 +62,7 @@ const SEARCH_FIELDS: FieldPolicy<TransactionSearchField> = {
 	currency: ['eq', 'neq', 'in'],
 	name: ['eq', 'neq', 'in', 'contains', 'icontains'],
 	category: ['eq', 'neq', 'in', 'contains', 'icontains'],
+	category_id: ['eq', 'neq', 'in'],
 	type: ['eq', 'neq', 'in'],
 	origin: ['eq', 'neq', 'in'],
 	created_at: ['gt', 'gte', 'lt', 'lte'],
@@ -79,7 +78,9 @@ interface StoredWalletRef {
 	deleted_at: string | null;
 }
 
-const toCategoryId = (label: string): string => label.toLowerCase().replace(/\s+/g, '-');
+const isExistingEntry = (entry: TransactionChainEntryBody): entry is TransactionChainExistingEntryBody => (
+	'transaction_id' in entry
+);
 
 const compareDesc = (left: string, right: string): number => (left < right ? 1 : left > right ? -1 : 0);
 
@@ -106,7 +107,15 @@ const orderTransactions = (
 	});
 };
 
-const leafValue = (transaction: StoredTransaction, field: TransactionSearchField): string | null => {
+interface SearchableTransaction {
+	transaction: StoredTransaction;
+	categoryId: string | null;
+	categoryName: string | null;
+}
+
+const leafValue = (record: SearchableTransaction, field: TransactionSearchField): string | null => {
+	const { transaction } = record;
+
 	switch (field) {
 		case 'wallet_id':
 			return transaction.wallet_id;
@@ -119,7 +128,9 @@ const leafValue = (transaction: StoredTransaction, field: TransactionSearchField
 		case 'name':
 			return transaction.name;
 		case 'category':
-			return transaction.category;
+			return record.categoryName;
+		case 'category_id':
+			return record.categoryId;
 		case 'type':
 			return transaction.type;
 		case 'origin':
@@ -129,9 +140,9 @@ const leafValue = (transaction: StoredTransaction, field: TransactionSearchField
 	}
 };
 
-const matchesNode = createMatcher<StoredTransaction, TransactionSearchField>(
+const matchesNode = createMatcher<SearchableTransaction, TransactionSearchField>(
 	SEARCH_FIELDS,
-	(transaction, field) => leafValue(transaction, field),
+	(record, field) => leafValue(record, field),
 	{ numericFields: ['amount'] },
 );
 
@@ -139,9 +150,21 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 	private readonly storage: IStorage<StoredTransaction>;
 	private readonly postKeys = new IdempotencyStore<TransactionDto>();
 	private readonly chainKeys = new IdempotencyStore<TransactionDto[]>();
+	private readonly categories: CategoryCatalogMock;
 
-	constructor(storageKey: string = TRANSACTIONS_STORAGE_KEY) {
+	constructor(storageKey: string = TRANSACTIONS_STORAGE_KEY, categories = new CategoryCatalogMock()) {
 		this.storage = new LocalStorageMock<StoredTransaction>(storageKey);
+		this.categories = categories;
+	}
+
+	private searchable(transaction: StoredTransaction): SearchableTransaction {
+		const categoryId = storedCategoryId(transaction, this.categories);
+
+		return {
+			transaction,
+			categoryId,
+			categoryName: this.categories.refOf(categoryId)?.name ?? null,
+		};
 	}
 
 	private wallets(): StoredWalletRef[] {
@@ -183,13 +206,13 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 	}
 
 	private toDto(transaction: StoredTransaction): TransactionDto {
-		return storedTransactionToDto(transaction);
+		return storedTransactionToDto(transaction, this.categories);
 	}
 
 	private postings(transaction: StoredTransaction): TransactionPostingDto[] {
 		const money = { amount: transaction.amount, currency: transaction.currency };
 		const counterpart = transaction.type === 'expense'
-			? { title: transaction.category ?? transaction.name, icon: EXPENSE_ICON }
+			? { title: this.searchable(transaction).categoryName ?? transaction.name, icon: EXPENSE_ICON }
 			: { title: transaction.name, icon: INCOME_ICON };
 
 		return [
@@ -236,6 +259,7 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 		createdAt: string,
 	): StoredTransaction {
 		const wallet = this.requireWallet(body.wallet_id);
+		const categoryId = this.categories.assign(body.category_id, 'transaction');
 
 		return {
 			id: uuidv4(),
@@ -249,11 +273,23 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 			origin: body.origin,
 			wallet_id: wallet.id,
 			wallet_name: wallet.name,
-			category: body.category,
+			category_id: categoryId,
 			chain_id: chainId,
 			chain_size: chainSize,
 			evidence: body.evidence,
 		};
+	}
+
+	private requireChainable(id: string): StoredTransaction {
+		const transaction = this.require(id);
+		if (transaction.deleted_at !== null) {
+			throw new ApiError('conflict', `Transaction ${id} is cancelled`);
+		}
+		if (transaction.chain_id !== null) {
+			throw new ApiError('conflict', `Transaction ${id} already belongs to chain ${transaction.chain_id}`);
+		}
+
+		return transaction;
 	}
 
 	private orderChainEntries(entries: TransactionChainEntryBody[]): TransactionChainEntryBody[] {
@@ -313,7 +349,8 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 		await delay();
 
 		const order = payload.params?.order ?? DEFAULT_ORDER;
-		const matching = this.settled(order).filter((item) => matchesNode(item, payload.data.filter_body));
+		const matching = this.settled(order)
+			.filter((item) => matchesNode(this.searchable(item), payload.data.filter_body));
 		const page = paginate(
 			matching,
 			payload.params,
@@ -347,10 +384,13 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 		await delay();
 
 		const transaction = this.require(payload.id);
+		const categoryId = payload.data.category_id === undefined
+			? storedCategoryId(transaction, this.categories)
+			: this.categories.assign(payload.data.category_id, 'transaction');
 		const updated: StoredTransaction = {
 			...transaction,
 			name: payload.data.name ?? transaction.name,
-			category: payload.data.category === undefined ? transaction.category : payload.data.category,
+			category_id: categoryId,
 			evidence: payload.data.evidence === undefined ? transaction.evidence : payload.data.evidence,
 			updated_at: new Date().toISOString(),
 		};
@@ -419,15 +459,75 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 		const chainId = uuidv4();
 		const createdAt = new Date().toISOString();
 		const ordered = this.orderChainEntries(payload.data.transactions);
-		const created = ordered.map((entry) => this.build(entry, chainId, ordered.length, createdAt));
+		const existing = ordered.filter(isExistingEntry).map((entry) => this.requireChainable(entry.transaction_id));
+		const members = ordered.map((entry) => {
+			if (isExistingEntry(entry)) {
+				const transaction = existing.find((item) => item.id === entry.transaction_id);
 
-		created.forEach((transaction) => { this.storage.add(transaction); });
+				if (!transaction) {
+					throw new ApiError('not_found', `Transaction ${entry.transaction_id} does not exist`);
+				}
 
-		const dtos = created.map((transaction) => this.toDto(transaction));
+				return { ...transaction, chain_id: chainId, chain_size: ordered.length };
+			}
+
+			return this.build(entry, chainId, ordered.length, createdAt);
+		});
+
+		existing.forEach((transaction) => { this.storage.remove(transaction); });
+		members.forEach((transaction) => { this.storage.add(transaction); });
+
+		const dtos = members.map((transaction) => this.toDto(transaction));
 		this.chainKeys.remember(payload.idempotencyKey, payload.data, dtos);
 
 		return {
 			data: { chain_id: chainId, transactions: dtos },
+			meta: {
+				idempotent_replay: false,
+				transactions: { limit: dtos.length, total: dtos.length, next_cursor: null, prev_cursor: null },
+			},
+		};
+	}
+
+	public async appendChain(payload: TransactionChainAppendRequest): Promise<TransactionChainResponse> {
+		this.chainKeys.require(payload.idempotencyKey);
+
+		const replay = this.chainKeys.replay(payload.idempotencyKey, payload.data);
+		if (replay) {
+			return {
+				data: { chain_id: payload.chainId, transactions: replay },
+				meta: {
+					idempotent_replay: true,
+					transactions: { limit: replay.length, total: replay.length, next_cursor: null, prev_cursor: null },
+				},
+			};
+		}
+
+		await delay();
+
+		const current = this.storage.list()
+			.filter((item) => item.chain_id === payload.chainId && item.deleted_at === null);
+
+		if (current.length === 0) {
+			throw new ApiError('not_found', `Chain ${payload.chainId} does not exist`);
+		}
+
+		if (current.length >= TRANSACTION_CHAIN_LIMIT) {
+			throw new ApiError('chain_too_long', `A chain carries at most ${String(TRANSACTION_CHAIN_LIMIT)} entries`);
+		}
+
+		const size = current.length + 1;
+		const resized = current.map((item) => ({ ...item, chain_size: size }));
+		const appended = this.build(payload.data, payload.chainId, size, new Date().toISOString());
+
+		current.forEach((item) => { this.storage.remove(item); });
+		[...resized, appended].forEach((item) => { this.storage.add(item); });
+
+		const dtos = [...resized, appended].map((item) => this.toDto(item));
+		this.chainKeys.remember(payload.idempotencyKey, payload.data, dtos);
+
+		return {
+			data: { chain_id: payload.chainId, transactions: dtos },
 			meta: {
 				idempotent_replay: false,
 				transactions: { limit: dtos.length, total: dtos.length, next_cursor: null, prev_cursor: null },
@@ -459,18 +559,6 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 				cached: false,
 			},
 		};
-	}
-
-	public async listCategories(_payload: TransactionCategoriesRequest): Promise<TransactionCategoriesResponse> {
-		await delay();
-
-		const stored = this.storage.list()
-			.map((item) => item.category)
-			.filter((category): category is string => category !== null);
-		const labels = [...new Set([...SEED_CATEGORIES, ...stored])];
-		const data: CategoryDto[] = labels.map((label) => ({ id: toCategoryId(label), label }));
-
-		return { data };
 	}
 
 	public async scanReceipt(_payload: TransactionScanRequest): Promise<TransactionScanResponse> {

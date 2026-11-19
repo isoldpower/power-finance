@@ -1,19 +1,17 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import { useApiContext, DERIVED_KEYS } from "@app/api";
 import {
 	deleteWallet as deleteWalletApi,
-	fetchWallet as fetchWalletApi,
 	updateWallet as updateWalletApi,
 } from "../../wallets-api";
 import { WALLETS_CACHE_KEYS } from "../cache-config.ts";
 import { useOptimisticWallets } from "./optimistic";
 
-import type { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
+import type { UseMutationResult } from "@tanstack/react-query";
 import type { WalletPatch } from "@entity/wallets";
 import type {
 	DeleteWalletResponse,
-	FetchWalletResponse,
 	UpdateWalletResponse,
 } from "../../wallets-api";
 import type { WalletCachesSnapshot } from "./optimistic";
@@ -23,11 +21,9 @@ interface UseWalletMethodsReturn {
 	meta: {
 		updateMutation: UseMutationResult<UpdateWalletResponse, Error, WalletPatch, WalletCachesSnapshot>;
 		deleteMutation: UseMutationResult<DeleteWalletResponse, Error, string, WalletCachesSnapshot>;
-		query: UseQueryResult<FetchWalletResponse>;
 	}
 	updateWallet: (patch: WalletPatch) => Promise<UpdateWalletResponse>;
 	deleteWallet: () => Promise<DeleteWalletResponse>;
-	fetchWallet: () => void;
 }
 
 const useWalletMethods = (
@@ -42,18 +38,6 @@ const useWalletMethods = (
 			void client.invalidateQueries({ queryKey: [key] });
 		}
 	}, [client]);
-
-	const singleQuery = useQuery({
-		queryKey: [WALLETS_CACHE_KEYS.fetch, id],
-		enabled: id !== '',
-		refetchOnMount: false,
-		refetchOnReconnect: false,
-		refetchOnWindowFocus: false,
-		queryFn: () => fetchWalletApi({
-			id,
-			handler: apiContext.walletServers.rest
-		})
-	});
 
 	const updateMutation = useMutation<UpdateWalletResponse, Error, WalletPatch, WalletCachesSnapshot>({
 		mutationFn: (patch: WalletPatch) => updateWalletApi({
@@ -95,10 +79,6 @@ const useWalletMethods = (
 		onSettled: invalidateWallets
 	});
 
-	const fetchWallet = useCallback(() => {
-		return singleQuery.refetch();
-	}, [singleQuery]);
-
 	const updateWallet = useCallback((patch: WalletPatch) => {
 		return updateMutation.mutateAsync(patch);
 	}, [updateMutation]);
@@ -110,15 +90,13 @@ const useWalletMethods = (
 	const meta = useMemo(() => ({
 		updateMutation,
 		deleteMutation,
-		query: singleQuery
-	}), [singleQuery, updateMutation, deleteMutation]);
+	}), [updateMutation, deleteMutation]);
 
 	return useMemo(() => ({
 		meta,
 		updateWallet,
 		deleteWallet,
-		fetchWallet,
-	}), [meta, fetchWallet, updateWallet, deleteWallet]);
+	}), [meta, updateWallet, deleteWallet]);
 };
 
 export { useWalletMethods };

@@ -1,25 +1,39 @@
 import { Suspense } from "react";
 import { AppLoader } from '@internal/ui-library';
 import { createRouter, RouterProvider } from "@tanstack/react-router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { OverlayRoot } from "@shared/overlays";
 
-import './styles/_index.css'
-import '@internal/ui-library/css';
+import uiLibraryStyles from '@internal/ui-library/css?inline';
+import analyticsStyles from './styles/_index.css?inline';
 
+import { createQueryClient } from "./api/query-client.ts";
+import { injectStylesIntoDocumentHead } from "./styles/injectStylesIntoDocumentHead.ts";
 import { routeTree } from "./routeTree.gen.ts";
 
 
-const queryClient = new QueryClient();
+injectStylesIntoDocumentHead('analytics-ui-library-styles', uiLibraryStyles);
+injectStylesIntoDocumentHead('analytics-styles', analyticsStyles);
+
+const queryClient = createQueryClient();
 const router = createRouter({ routeTree });
+
+declare module '@tanstack/react-router' {
+	interface Register {
+		router: typeof router
+	}
+}
 
 function App() {
 	return (
 		<Suspense fallback={<AppLoader />}>
-			<QueryClientProvider client={queryClient}>
-				<RouterProvider router={router} />
-			</QueryClientProvider>
+			<OverlayRoot>
+				<QueryClientProvider client={queryClient}>
+					<RouterProvider router={router} />
+				</QueryClientProvider>
+			</OverlayRoot>
 		</Suspense>
-	)
+	);
 }
 
-export default App
+export default App;

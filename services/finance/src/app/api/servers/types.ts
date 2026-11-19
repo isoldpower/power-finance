@@ -1,4 +1,4 @@
-import type { WriteVersionStore } from "@shared/api";
+import type { WriteVersionStore } from "@internal/shared";
 import type { ApiMode } from "../config.ts";
 
 

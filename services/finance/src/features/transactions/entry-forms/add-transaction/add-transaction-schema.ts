@@ -1,13 +1,14 @@
 import { z } from "zod";
+import { categoryRefSchema } from "@feature/categories/category-forms/schemas.ts";
 
-import { isCompleteEntry } from "../entry-fields.ts";
-import { entryFieldsShape } from "../entry-fields.ts";
+import { entryFieldsShape, isCompleteEntry, isValidAdjustment } from "../entry-fields.ts";
 
 
 const addTransactionSchema = z.object({
 	...entryFieldsShape,
-	category: z.string(),
-}).refine(isCompleteEntry);
+	category: categoryRefSchema,
+	adjusts: z.string(),
+}).refine((entry) => isCompleteEntry(entry) && isValidAdjustment(entry));
 
 type AddTransactionSchema = z.infer<typeof addTransactionSchema>;
 

@@ -1,4 +1,5 @@
-import type { MoneyDto, PageParams, SearchOrder, ResourceTimestamps, SearchPayload } from "@shared/api";
+import type { CategoryRefDto } from "@feature/categories/categories-api";
+import type { MoneyDto, PageParams, ResourceTimestamps, SearchOrder, SearchPayload } from "@internal/shared";
 
 
 type TransactionTypeDto = 'expense' | 'income';
@@ -28,7 +29,7 @@ interface TransactionDto extends ResourceTimestamps {
 	type: TransactionTypeDto;
 	origin: TransactionOriginDto;
 	wallet: TransactionWalletDto;
-	category: string | null;
+	category: CategoryRefDto | null;
 	chain?: TransactionChainRefDto | null;
 }
 
@@ -60,7 +61,7 @@ interface TransactionCreateBody {
 	wallet_id: string;
 	origin: TransactionOriginBodyDto;
 	type: TransactionTypeDto;
-	category: string | null;
+	category_id: string | null;
 	evidence: TransactionEvidenceDto | null;
 }
 
@@ -70,14 +71,22 @@ interface TransactionAdjustBody {
 
 interface TransactionPatchBody {
 	name?: string;
-	category?: string | null;
+	category_id?: string | null;
 	evidence?: TransactionEvidenceDto | null;
 }
 
-interface TransactionChainEntryBody extends TransactionCreateBody {
+interface TransactionChainNewEntryBody extends TransactionCreateBody {
 	temporary_id: string;
 	after: string | null;
 }
+
+interface TransactionChainExistingEntryBody {
+	temporary_id: string;
+	after: string | null;
+	transaction_id: string;
+}
+
+type TransactionChainEntryBody = TransactionChainNewEntryBody | TransactionChainExistingEntryBody;
 
 interface TransactionChainBody {
 	transactions: TransactionChainEntryBody[];
@@ -95,6 +104,7 @@ type TransactionSearchField =
 	| 'currency'
 	| 'name'
 	| 'category'
+	| 'category_id'
 	| 'type'
 	| 'origin'
 	| 'created_at';
@@ -115,6 +125,8 @@ export type {
 	TransactionChainDto,
 	TransactionChainRefDto,
 	TransactionChainEntryBody,
+	TransactionChainExistingEntryBody,
+	TransactionChainNewEntryBody,
 	TransactionCreateBody,
 	TransactionDetailDto,
 	TransactionDto,
@@ -130,11 +142,6 @@ export type {
 	TransactionWalletDto,
 };
 
-interface CategoryDto {
-	id: string;
-	label: string;
-}
-
 interface ReceiptScanFieldDto {
 	label: string;
 	value: string;
@@ -148,4 +155,4 @@ interface ReceiptScanDto {
 	fields: ReceiptScanFieldDto[];
 }
 
-export type { CategoryDto, ReceiptScanFieldDto, ReceiptScanDto };
+export type { ReceiptScanFieldDto, ReceiptScanDto };

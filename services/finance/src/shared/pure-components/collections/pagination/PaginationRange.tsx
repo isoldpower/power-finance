@@ -1,4 +1,4 @@
-import { MetaText } from "@shared/pure-components/typography";
+import { MetaText } from "@internal/shared";
 
 import type { FC } from "react";
 

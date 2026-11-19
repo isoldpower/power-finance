@@ -19,7 +19,7 @@ const ruleFormFields = z.object({
 	combinator: z.enum(['and', 'or']),
 	conditions: z.array(ruleConditionSchema),
 	effectType: z.enum(['set_category', 'notify', 'raise_action', 'transfer']),
-	category: z.string(),
+	categoryId: z.string(),
 	severity: z.enum(['info', 'warning', 'critical']),
 	title: z.string(),
 	body: z.string(),

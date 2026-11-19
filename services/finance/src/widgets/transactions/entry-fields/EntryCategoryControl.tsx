@@ -3,12 +3,13 @@ import { EntryCategoryField } from "@entity/transactions";
 
 import type { FC } from "react";
 import type { Control, FieldValues, Path } from "react-hook-form";
+import type { CategoryRef } from "@entity/categories";
 
 
 interface EntryCategoryControlProps<TValues extends FieldValues> {
 	control: Control<TValues>;
 	name: Path<TValues>;
-	options: string[];
+	options: CategoryRef[];
 	className?: string;
 	disabled?: boolean;
 }

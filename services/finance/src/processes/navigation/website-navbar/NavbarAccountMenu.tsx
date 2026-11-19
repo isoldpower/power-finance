@@ -10,9 +10,8 @@ import {
 import { CurrencySelector, LocaleCombobox } from "@widget/localization";
 import { NavigateToSettings } from "@feature/navigation";
 import { UserAvatar } from "@entity/navigation";
-import { PopoverBottom, PopoverSettings } from "@entity/configuration";
 import { useCurrentUser } from "@feature/configuration";
-import { Caption, CardTitle } from "@shared/pure-components/typography";
+import { Caption, CardTitle, PopoverBottom, PopoverSettings } from "@internal/shared";
 import { useDisclosure } from "@shared/overlays";
 import { useRoutePathname } from "@shared/routing";
 

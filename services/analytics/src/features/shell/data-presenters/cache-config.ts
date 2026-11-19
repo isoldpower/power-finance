@@ -1,0 +1,7 @@
+const LOCALIZATION_CACHE_KEYS = {
+	currencies: 'currencies',
+} as const;
+
+const CURRENCY_CATALOG_STALE_TIME = 24 * 60 * 60 * 1000;
+
+export { CURRENCY_CATALOG_STALE_TIME, LOCALIZATION_CACHE_KEYS };

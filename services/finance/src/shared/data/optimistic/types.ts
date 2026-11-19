@@ -1,5 +1,5 @@
 import type { QueryClient, QueryKey } from "@tanstack/react-query";
-import type { Page } from "@shared/api";
+import type { Page } from "@internal/shared";
 import type { Identified } from "../page-writers.ts";
 
 

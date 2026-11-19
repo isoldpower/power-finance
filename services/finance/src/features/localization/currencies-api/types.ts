@@ -1,12 +1,5 @@
-import type { MoneyDto } from "@shared/api";
+import type { CurrencyDto, MoneyDto } from "@internal/shared";
 
-
-interface CurrencyDto {
-	code: string;
-	symbol: string;
-	name: string;
-	decimals: number;
-}
 
 interface CurrencyConversionDto {
 	from: MoneyDto;

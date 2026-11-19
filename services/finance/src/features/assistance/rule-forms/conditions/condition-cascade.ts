@@ -1,7 +1,7 @@
 import { CONDITION_LEVELS, FALLBACK_OPERATOR } from "./constants.ts";
 import { firstFieldValue } from "./condition-options.ts";
 
-import type { FilterFieldOption } from "@shared/api";
+import type { FilterFieldOption } from "@internal/shared";
 import type { RuleConditionSchema } from "../schema";
 import type { ConditionLevel } from "./types.ts";
 

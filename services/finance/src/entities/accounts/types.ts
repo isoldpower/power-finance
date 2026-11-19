@@ -30,10 +30,4 @@ interface AccountGroupCounts {
 	equity: number;
 }
 
-interface GuestDemoSession {
-	token: string;
-	expiresAt: string;
-	writeVersion: string | null;
-}
-
-export type { Account, AccountGroup, AccountGroupCounts, AccountGroupFilter, GuestDemoSession, LedgerEntry };
+export type { Account, AccountGroup, AccountGroupCounts, AccountGroupFilter, LedgerEntry };

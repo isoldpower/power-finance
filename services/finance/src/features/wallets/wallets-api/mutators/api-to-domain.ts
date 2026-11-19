@@ -1,4 +1,5 @@
 import { moneyFromApi } from "@feature/localization/currencies-api";
+import { optionalCategoryRefFromApi } from "@feature/categories/categories-api";
 
 import type { Wallet, WalletDetails, WalletFlows } from "@entity/wallets";
 import type { WalletDetailDto, WalletDto, WalletFlowsDto } from "../types.ts";
@@ -10,7 +11,7 @@ const walletFromApi = (dto: WalletDto): Wallet => ({
 	createdAt: dto.created_at,
 	updatedAt: dto.updated_at,
 	deletedAt: dto.deleted_at,
-	category: dto.category,
+	category: optionalCategoryRefFromApi(dto.category),
 	currency: dto.currency,
 	balance: moneyFromApi(dto.money),
 	zeroBalance: moneyFromApi(dto.zero_balance),

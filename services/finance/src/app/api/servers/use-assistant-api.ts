@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { toSocketUrl } from "@shared/api";
+import { toSocketUrl } from "@internal/shared";
 
 import { AssistantHttpRESTApiClient, AssistantMockRESTApiClient } from "@feature/assistance";
 import { API_BASE_PATH } from "../config.ts";

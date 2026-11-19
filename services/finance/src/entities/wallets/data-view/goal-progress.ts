@@ -1,4 +1,4 @@
-import { compareAmounts, parseAmount, subtractAmounts, ZERO_AMOUNT } from "@shared/api";
+import { compareAmounts, parseAmount, subtractAmounts, ZERO_AMOUNT } from "@internal/shared";
 
 import type { Goal } from "../types.ts";
 

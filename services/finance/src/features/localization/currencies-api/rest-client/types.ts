@@ -1,4 +1,4 @@
-import type { ApiEnvelope, CacheMeta, CollectionResponse } from "@shared/api";
+import type { ApiEnvelope, CacheMeta, CollectionResponse } from "@internal/shared";
 import type {
 	CurrencyConversionDto,
 	CurrencyConvertParams,

@@ -1,4 +1,4 @@
-import { idempotencyHeaders, request, WriteVersionStore } from "@shared/api";
+import { idempotencyHeaders, request, WriteVersionStore } from "@internal/shared";
 
 import { reportUnservedMethods } from "./unserved-methods.ts";
 import { TransactionsMockRESTApiClient } from "./mock-server.ts";
@@ -8,7 +8,7 @@ import type { UnservedTransactionMethods } from "./unserved-methods.ts";
 import type {
 	ITransactionsRESTApiClient,
 	TransactionAdjustRequest, TransactionAdjustResponse,
-	TransactionCategoriesRequest, TransactionCategoriesResponse,
+	TransactionChainAppendRequest,
 	TransactionChainDeleteRequest, TransactionChainDeleteResponse,
 	TransactionChainRequest, TransactionChainResponse,
 	TransactionDeleteRequest, TransactionDeleteResponse,
@@ -21,7 +21,7 @@ import type {
 } from "./types.ts";
 
 
-const UNSERVED_METHODS = ['listCategories', 'scanReceipt'];
+const UNSERVED_METHODS = ['scanReceipt'];
 
 class TransactionsHttpRESTApiClient implements ITransactionsRESTApiClient {
 	private readonly axiosInstance: AxiosInstance;
@@ -109,15 +109,20 @@ class TransactionsHttpRESTApiClient implements ITransactionsRESTApiClient {
 		}, this.versions);
 	}
 
+	public appendChain(payload: TransactionChainAppendRequest): Promise<TransactionChainResponse> {
+		return request<TransactionChainResponse>(this.axiosInstance, {
+			method: 'POST',
+			url: `/chains/${payload.chainId}`,
+			data: payload.data,
+			headers: idempotencyHeaders(payload.idempotencyKey),
+		}, this.versions);
+	}
+
 	public deleteChain(payload: TransactionChainDeleteRequest): Promise<TransactionChainDeleteResponse> {
 		return request<TransactionChainDeleteResponse>(this.axiosInstance, {
 			method: 'DELETE',
 			url: `/chains/${payload.chainId}`,
 		}, this.versions);
-	}
-
-	public listCategories(payload: TransactionCategoriesRequest): Promise<TransactionCategoriesResponse> {
-		return this.unserved.listCategories(payload);
 	}
 
 	public scanReceipt(payload: TransactionScanRequest): Promise<TransactionScanResponse> {

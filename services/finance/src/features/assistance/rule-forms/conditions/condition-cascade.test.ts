@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 
 import { blankCondition, defaultOperator, levelsBelow, resetBelow } from './condition-cascade.ts';
 
-import type { FilterFieldOption } from '@shared/api';
+import type { FilterFieldOption } from '@internal/shared';
 import type { RuleConditionSchema } from '../schema';
 
 

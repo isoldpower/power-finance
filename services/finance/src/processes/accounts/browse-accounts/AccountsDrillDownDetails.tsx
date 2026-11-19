@@ -1,7 +1,7 @@
 import { DrillDownHeader } from "@entity/accounts";
 import { useAccountHistory, useAccountsBrowser } from "@feature/accounts";
 import { AccountsDrillDown } from "@widget/accounts";
-import { Caption, Overline } from "@shared/pure-components/typography";
+import { Caption, Overline } from "@internal/shared";
 
 import type { FC } from "react";
 

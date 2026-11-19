@@ -11,7 +11,7 @@ const wallet = (id: string, currency: string): Wallet => ({
 	createdAt: '2026-01-01T00:00:00Z',
 	updatedAt: null,
 	deletedAt: null,
-	category: 'Cash',
+	category: { id: 'builtin-wallet-cash', name: 'Cash', isGlobal: true },
 	currency,
 	balance: { amount: '0.00', currency },
 	zeroBalance: { amount: '0.00', currency },

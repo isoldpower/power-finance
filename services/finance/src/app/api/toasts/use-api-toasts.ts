@@ -1,6 +1,5 @@
 import { useCallback, useEffect } from "react";
 import { isCancelledError, useQueryClient } from "@tanstack/react-query";
-
 import { hasStaleRecovery } from "../stale-refetch.ts";
 import { API_MUTATION_TOAST_POLICY, API_QUERY_TOAST_POLICY, isSilentMutation } from "./config.ts";
 import { readCacheKey } from "./read-cache-key.ts";

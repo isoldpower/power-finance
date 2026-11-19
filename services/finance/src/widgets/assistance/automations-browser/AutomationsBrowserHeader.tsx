@@ -1,7 +1,6 @@
 import { AutomationsToolbar } from "@entity/assistance";
 import { AiBadge } from "@shared/pure-components/badges";
-import { CardTitle } from "@shared/pure-components/typography";
-import { SpaceOccupant } from "@shared/pure-components/layout";
+import { CardTitle, SpaceOccupant } from "@internal/shared";
 
 import type { FC, ReactNode } from "react";
 

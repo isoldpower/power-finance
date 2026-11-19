@@ -10,7 +10,7 @@ import {
 import { TRANSACTION_RESOURCE } from "./resource.ts";
 import { readWalletRef } from "./wallet-ref.ts";
 
-import type { Transaction, TransactionDraft, TransactionPatch } from "@entity/transactions";
+import type { Transaction, TransactionChainRef, TransactionDraft, TransactionPatch } from "@entity/transactions";
 import type { TransactionCachesSnapshot } from "./types.ts";
 
 
@@ -30,6 +30,7 @@ interface UseOptimisticTransactionsReturn {
 	project: (input: OptimisticDraftInput) => OptimisticDraftResult;
 	applyPatch: (id: string, patch: TransactionPatch) => void;
 	applyAdjust: (id: string, amount: string) => void;
+	applyChain: (ids: string[], chain: TransactionChainRef) => void;
 	applyCreate: (transactions: Transaction[]) => void;
 	applyRemove: (id: string, cancelledAt: string) => void;
 	applyRemoveBatch: (ids: string[], cancelledAt: string) => void;
@@ -65,6 +66,13 @@ const useOptimisticTransactions = (): UseOptimisticTransactionsReturn => {
 	const applyAdjust = useCallback((id: string, amount: string): void => {
 		cache.patchPaged(id, (transaction) => adjustTransactionAmount(transaction, amount));
 		cache.patchDetails(id, (transaction) => adjustTransactionAmount(transaction, amount));
+	}, [cache]);
+
+	const applyChain = useCallback((ids: string[], chain: TransactionChainRef): void => {
+		for (const id of ids) {
+			cache.patchPaged(id, (transaction) => ({ ...transaction, chain }));
+			cache.patchDetails(id, (transaction) => ({ ...transaction, chain }));
+		}
 	}, [cache]);
 
 	const applyCreate = useCallback((transactions: Transaction[]): void => {
@@ -103,6 +111,7 @@ const useOptimisticTransactions = (): UseOptimisticTransactionsReturn => {
 		project,
 		applyPatch,
 		applyAdjust,
+		applyChain,
 		applyCreate,
 		applyRemove,
 		applyRemoveBatch,
@@ -114,6 +123,7 @@ const useOptimisticTransactions = (): UseOptimisticTransactionsReturn => {
 		project,
 		applyPatch,
 		applyAdjust,
+		applyChain,
 		applyCreate,
 		applyRemove,
 		applyRemoveBatch,

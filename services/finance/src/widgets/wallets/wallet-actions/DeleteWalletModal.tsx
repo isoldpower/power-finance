@@ -4,9 +4,8 @@ import { GoalDialog } from "@entity/wallets";
 import { useWalletLeftover } from "@feature/wallets";
 import { WalletCombobox } from "@widget/wallets/wallet-select";
 import { ConfirmModal } from "@shared/overlays";
-import { ShowOn } from "@shared/visibility";
+import { Caption, Heading, ShowOn, Text } from "@internal/shared";
 import { DangerIconBadge } from "@shared/pure-components/badges";
-import { Caption, Heading, Text } from "@shared/pure-components/typography";
 
 import type { FC, ReactNode } from "react";
 import type { Wallet, WalletLeftoverTransfer } from "@entity/wallets";

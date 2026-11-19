@@ -1,6 +1,8 @@
+import { useCallback } from "react";
 import { UiForm } from "@internal/ui-library";
+import { absoluteAmount, parseAmountDecimal } from "@internal/shared";
 import { TransactionEntryOnSubmit, useFundGoalForm } from "@feature/transactions";
-import { useWalletsList } from "@feature/wallets";
+import { useGoalFunding, useWalletsList } from "@feature/wallets";
 import { EntryAmountControl, EntryWalletControl } from "@widget/transactions";
 import { FieldLabel, PanelFooter } from "@shared/forms";
 import { FromIcon } from "@shared/pure-components/icons";
@@ -27,6 +29,23 @@ const FundGoalForm: FC<FundGoalFormProps> = ({ goal, onClose }) => {
 		handleReceivedChange,
 		state: { loading, canSubmit, methods },
 	} = useFundGoalForm({ goal, wallets });
+	const funding = useGoalFunding(goal.id);
+
+	const handleBeforeSubmit = useCallback(() => {
+		methods.handleLoading();
+		const received = form.getValues(convertsCurrency ? 'receiveAmount' : 'amount');
+		void funding.begin(absoluteAmount(parseAmountDecimal(received)));
+	}, [methods, form, convertsCurrency, funding]);
+
+	const handleSuccess = useCallback(() => {
+		methods.handleDoneLoading();
+		onClose();
+	}, [methods, onClose]);
+
+	const handleError = useCallback(() => {
+		funding.rollback();
+		methods.handleFailedLoading();
+	}, [funding, methods]);
 
 	return (
 		<UiForm {...form}>
@@ -35,9 +54,9 @@ const FundGoalForm: FC<FundGoalFormProps> = ({ goal, onClose }) => {
 				handleSubmit={form.handleSubmit}
 				fromCurrency={fromCurrency}
 				toCurrency={toCurrency}
-				onBeforeEdit={methods.handleLoading}
-				onSuccess={() => { methods.handleDoneLoading(); onClose(); }}
-				onError={methods.handleFailedLoading}
+				onBeforeEdit={handleBeforeSubmit}
+				onSuccess={handleSuccess}
+				onError={handleError}
 			>
 				<div className="flex-1 overflow-auto p-5">
 					<FieldLabel>

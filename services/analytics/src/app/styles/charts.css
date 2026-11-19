@@ -1,0 +1,83 @@
+.finance-theme {
+	--series-1: #4f46e5;
+	--series-2: #eb6834;
+	--series-3: #1baf7a;
+	--series-4: #eda100;
+	--series-5: #e87ba4;
+	--series-6: #008300;
+	--series-7: #2a78d6;
+	--series-other: #8a90a1;
+	--chart-grid: rgba(26, 34, 64, 0.07);
+	--chart-heat-0: #eef1f8;
+}
+
+.dark .finance-theme,
+.finance-theme.dark {
+	--series-1: #7479f5;
+	--series-2: #d95926;
+	--series-3: #199e70;
+	--series-4: #c98500;
+	--series-5: #d55181;
+	--series-6: #008300;
+	--series-7: #3987e5;
+	--series-other: #6d7585;
+	--chart-grid: rgba(255, 255, 255, 0.06);
+	--chart-heat-0: #1b1f28;
+}
+
+@keyframes chartGrowY {
+	from { transform: scaleY(0); }
+	to { transform: scaleY(1); }
+}
+
+@keyframes chartDraw {
+	from { stroke-dashoffset: 1; }
+	to { stroke-dashoffset: 0; }
+}
+
+@keyframes chartRevealX {
+	from { clip-path: inset(-4px 100% -4px -4px); }
+	to { clip-path: inset(-4px -4px -4px -4px); }
+}
+
+@keyframes chartPop {
+	from { opacity: 0; transform: scale(0.6); }
+	to { opacity: 1; transform: scale(1); }
+}
+
+.fx-grow-y {
+	transform-box: fill-box;
+	transform-origin: bottom;
+	animation: chartGrowY 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.fx-draw {
+	stroke-dasharray: 1;
+	animation: chartDraw 1.2s cubic-bezier(0.45, 0.05, 0.2, 1) both;
+}
+
+.fx-reveal-x {
+	animation: chartRevealX 1.2s cubic-bezier(0.45, 0.05, 0.2, 1) both;
+}
+
+.fx-pop {
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: chartPop 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.fx-grow-y, .fx-draw, .fx-pop, .fx-reveal-x {
+		animation: none !important;
+	}
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+	cursor: pointer;
+	opacity: 0.55;
+	transition: opacity 0.15s ease;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator:hover {
+	opacity: 1;
+}

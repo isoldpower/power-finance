@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useApiContext } from "@app/api";
 import { fetchWallet } from "../../wallets-api";
 import { DEFAULT_WALLET_PERIOD, WALLET_RECENT_LIMIT, WALLETS_CACHE_KEYS } from "../cache-config.ts";
+import { isOptimisticWalletId } from "./optimistic";
 import { walletDetailsPlaceholder } from "./wallet-placeholder.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
@@ -39,13 +40,14 @@ const useWallet = (
 			page: { limit: WALLET_RECENT_LIMIT },
 		}),
 		placeholderData,
-		...options ?? {}
+		...options ?? {},
+		enabled: (options?.enabled ?? true) && !isOptimisticWalletId(id),
 	});
 
 	return useMemo(() => ({
 		...query,
 		wallet: query.data?.wallet,
-		recent: query.data?.recent.items ?? EMPTY_RECENT,
+		recent: query.data?.recent.items.slice(0, WALLET_RECENT_LIMIT) ?? EMPTY_RECENT,
 		period: query.data?.period ?? DEFAULT_WALLET_PERIOD,
 	}), [query]);
 };

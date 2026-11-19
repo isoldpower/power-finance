@@ -1,6 +1,6 @@
-import { openEventStream, request, WriteVersionStore } from "@shared/api";
+import { openEventStream, request, WriteVersionStore } from "@internal/shared";
+import type { TokenSource, Unsubscribe } from "@internal/shared";
 import type { AxiosInstance } from "axios";
-import type { TokenSource, Unsubscribe } from "@shared/api";
 import type { NotificationAcknowledgedDto, NotificationDto } from "../types.ts";
 import type {
 	INotificationsRESTApiClient,
@@ -19,15 +19,18 @@ class NotificationsHttpRESTApiClient implements INotificationsRESTApiClient {
 	private readonly axiosInstance: AxiosInstance;
 	private readonly versions: WriteVersionStore;
 	private readonly authorize: TokenSource | undefined;
+	private readonly streamHeaders: Record<string, string>;
 
 	constructor(
 		axiosInstance: AxiosInstance,
 		versions = new WriteVersionStore(),
 		authorize?: TokenSource,
+		streamHeaders: Record<string, string> = {},
 	) {
 		this.axiosInstance = axiosInstance;
 		this.versions = versions;
 		this.authorize = authorize;
+		this.streamHeaders = streamHeaders;
 	}
 
 	public list(payload: NotificationListRequest): Promise<NotificationListResponse> {
@@ -73,6 +76,7 @@ class NotificationsHttpRESTApiClient implements INotificationsRESTApiClient {
 		return openEventStream({
 			url: `${this.axiosInstance.defaults.baseURL ?? ''}/stream`,
 			authorize: this.authorize,
+			headers: this.streamHeaders,
 		}, {
 			onMessage: (message) => {
 				if (message.event === CREATED_EVENT) {

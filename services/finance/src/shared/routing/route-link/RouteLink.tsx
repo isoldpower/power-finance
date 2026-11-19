@@ -7,12 +7,13 @@ import type { FinanceRouteKey } from "../types.ts";
 
 interface RouteLinkProps {
 	to: FinanceRouteKey;
+	search?: Record<string, string>;
 	className?: string;
 	children: ReactNode;
 }
 
-const RouteLink: FC<RouteLinkProps> = ({ to, className, children }) => (
-	<Link to={getFinanceRoute(to)} className={className}>
+const RouteLink: FC<RouteLinkProps> = ({ to, search, className, children }) => (
+	<Link to={getFinanceRoute(to)} search={search} className={className}>
 		{children}
 	</Link>
 );

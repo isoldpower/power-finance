@@ -1,5 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { Text } from "@shared/pure-components/typography";
+import { Text } from "@internal/shared";
 
 import type { BaseHTMLAttributes, FC } from "react";
 import type { NetDiffSign } from "../../types.ts";

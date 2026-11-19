@@ -1,17 +1,22 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import { useApiContext, DERIVED_KEYS } from "@app/api";
-import { createIdempotencyKey } from "@shared/api";
+import { createIdempotencyKey } from "@internal/shared";
 import {
 	createTransaction as createTransactionApi,
+	createTransactionAdjustment as createTransactionAdjustmentApi,
 	createTransactionChain as createTransactionChainApi,
 } from "../transactions-api";
 import { CACHE_KEYS } from "./config.ts";
-import { useOptimisticTransactions } from "./optimistic";
+import { optimisticTransactionId, useOptimisticTransactions } from "./optimistic";
 
 import type { UseMutationResult } from "@tanstack/react-query";
-import type { TransactionChainDraft, TransactionDraft } from "@entity/transactions";
-import type { CreateTransactionChainResponse, CreateTransactionResponse } from "../transactions-api";
+import type { Transaction, TransactionChainDraft, TransactionDraft } from "@entity/transactions";
+import type {
+	CreateTransactionAdjustmentResponse,
+	CreateTransactionChainResponse,
+	CreateTransactionResponse,
+} from "../transactions-api";
 import type { TransactionCachesSnapshot } from "./optimistic";
 
 
@@ -22,6 +27,12 @@ interface CreateTransactionVariables {
 
 interface CreateTransactionChainVariables {
 	draft: TransactionChainDraft;
+	idempotencyKey: string;
+}
+
+interface CreateAdjustmentVariables {
+	adjusted: Transaction;
+	draft: TransactionDraft;
 	idempotencyKey: string;
 }
 
@@ -44,9 +55,16 @@ interface UseTransactionsReturn {
 			CreateTransactionChainVariables,
 			CreateTransactionContext
 		>;
+		adjustmentMutation: UseMutationResult<
+			CreateTransactionAdjustmentResponse,
+			Error,
+			CreateAdjustmentVariables,
+			CreateTransactionContext
+		>;
 	}
 	createTransaction: (draft: TransactionDraft) => Promise<CreateTransactionResponse>;
 	createTransactionChain: (draft: TransactionChainDraft) => Promise<CreateTransactionChainResponse>;
+	createAdjustment: (adjusted: Transaction, draft: TransactionDraft) => Promise<CreateTransactionAdjustmentResponse>;
 }
 
 const useTransactionsListMethods = (): UseTransactionsReturn => {
@@ -117,6 +135,46 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 		onSettled: settleLedger
 	});
 
+	const adjustmentMutation = useMutation<
+		CreateTransactionAdjustmentResponse,
+		Error,
+		CreateAdjustmentVariables,
+		CreateTransactionContext
+	>({
+		mutationFn: (variables: CreateAdjustmentVariables) => createTransactionAdjustmentApi({
+			adjusted: variables.adjusted,
+			draft: variables.draft,
+			idempotencyKey: variables.idempotencyKey,
+			handler: apiContext.transactionServers.rest
+		}),
+		mutationKey: [CACHE_KEYS.adjustment],
+		onMutate: async ({ adjusted, draft }: CreateAdjustmentVariables) => {
+			const snapshot = await optimistic.capture();
+			const chain = {
+				id: adjusted.chain?.id ?? optimisticTransactionId(),
+				size: (adjusted.chain?.size ?? 1) + 1,
+			};
+			const projection = optimistic.project({ drafts: [draft], chained: false });
+			optimistic.applyChain([adjusted.id], chain);
+			optimistic.applyCreate(projection.transactions.map((transaction) => ({ ...transaction, chain })));
+
+			return { snapshot, temporaryIds: projection.temporaryIds };
+		},
+		onError: (_error, _variables, context) => {
+			optimistic.restore(context?.snapshot);
+		},
+		onSuccess: (response, _variables, context) => {
+			const members = response.chain.transactions;
+			const created = members.at(-1);
+
+			for (const member of members.slice(0, -1)) {
+				optimistic.applySettled(member.id, member);
+			}
+			optimistic.applySettledBatch(context.temporaryIds, created ? [created] : []);
+		},
+		onSettled: settleLedger
+	});
+
 	const createTransaction = useCallback((
 		draft: TransactionDraft
 	): Promise<CreateTransactionResponse> => {
@@ -129,20 +187,30 @@ const useTransactionsListMethods = (): UseTransactionsReturn => {
 		return chainMutation.mutateAsync({ draft, idempotencyKey: createIdempotencyKey() });
 	}, [chainMutation]);
 
+	const createAdjustment = useCallback((
+		adjusted: Transaction,
+		draft: TransactionDraft
+	): Promise<CreateTransactionAdjustmentResponse> => {
+		return adjustmentMutation.mutateAsync({ adjusted, draft, idempotencyKey: createIdempotencyKey() });
+	}, [adjustmentMutation]);
+
 	const meta = useMemo(() => ({
 		createMutation,
 		chainMutation,
-	}), [createMutation, chainMutation]);
+		adjustmentMutation,
+	}), [createMutation, chainMutation, adjustmentMutation]);
 
 	return useMemo(() => ({
 		createTransaction,
 		createTransactionChain,
+		createAdjustment,
 		meta
-	}), [meta, createTransaction, createTransactionChain]);
+	}), [meta, createTransaction, createTransactionChain, createAdjustment]);
 };
 
 export { useTransactionsListMethods };
 export type {
+	CreateAdjustmentVariables,
 	CreateTransactionChainVariables,
 	CreateTransactionContext,
 	CreateTransactionVariables,

@@ -2,7 +2,7 @@ import type { FC, ReactNode } from "react";
 import type { NetWorth } from "@entity/metrics";
 
 import { NetWorthSkeleton } from "@entity/metrics";
-import { Caption } from "@shared/pure-components/typography";
+import { Caption } from "@internal/shared";
 
 
 interface NetWorthHeroFxProps {

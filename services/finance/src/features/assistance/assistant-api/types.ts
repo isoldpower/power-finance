@@ -1,4 +1,4 @@
-import type { PageParams } from "@shared/api";
+import type { PageParams } from "@internal/shared";
 import type { ActionResourceRefDto } from "@feature/assistance/actions-api";
 
 

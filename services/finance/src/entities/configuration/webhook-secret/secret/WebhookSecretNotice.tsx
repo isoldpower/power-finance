@@ -1,6 +1,6 @@
 import { cn } from "@internal/ui-library";
 import { AlertIcon } from "@shared/pure-components/icons";
-import { BodyText } from "@shared/pure-components/typography";
+import { BodyText } from "@internal/shared";
 
 import type { FC, ReactNode } from "react";
 

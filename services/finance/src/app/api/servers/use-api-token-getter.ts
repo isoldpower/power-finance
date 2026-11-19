@@ -1,7 +1,5 @@
 import { useMemo } from "react";
-import { clerk } from "@internal/shared";
-
-import { useGuestDemoTokenGetter } from "@feature/accounts";
+import { clerk, useGuestDemoTokenGetter } from "@internal/shared";
 
 
 type ApiTokenGetter = () => Promise<string | null>;

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useConvertMoney } from "@feature/localization";
-import { absoluteAmount } from "@shared/api";
+import { absoluteAmount } from "@internal/shared";
 
 import type { ChartPoint } from "./build-sparkline.ts";
 import type { Money } from "@entity/localization";

@@ -1,5 +1,8 @@
-import {ComponentProps, useMemo} from "react";
+import { useMemo } from "react";
 import { FinanceAvatar } from "@internal/ui-library";
+import { userInitials } from "@internal/shared";
+
+import type { ComponentProps } from "react";
 
 import type { FC } from "react";
 
@@ -15,12 +18,7 @@ const UserAvatar: FC<UserAvatarProps> = ({
 	lastName,
 	size,
 }) => {
-	const initials = useMemo(() => {
-		const firstNameProtected = firstName ?? 'N';
-		const lastNameProtected = lastName ?? 'A';
-		
-		return (firstNameProtected[0] + lastNameProtected[0]).toUpperCase();
-	}, [firstName, lastName]);
+	const initials = useMemo(() => userInitials(firstName, lastName), [firstName, lastName]);
 	
 	return (
 		<FinanceAvatar initials={initials} size={size} />

@@ -1,4 +1,4 @@
-import { compareAmounts, ZERO_AMOUNT } from "@shared/api";
+import { compareAmounts, ZERO_AMOUNT } from "@internal/shared";
 import { useCallback } from "react";
 import { useTransactionsListMethods } from "@feature/transactions";
 

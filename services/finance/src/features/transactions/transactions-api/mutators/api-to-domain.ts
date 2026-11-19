@@ -1,16 +1,15 @@
-import { parseAmount } from "@shared/api";
+import { parseAmount } from "@internal/shared";
 import { moneyFromApi } from "@feature/localization/currencies-api";
+import { optionalCategoryRefFromApi } from "@feature/categories/categories-api";
 
 import type {
 	ReceiptScan,
 	Transaction,
-	TransactionCategory,
 	TransactionChain,
 	TransactionDetails,
 	TransactionPosting,
 } from "@entity/transactions";
 import type {
-	CategoryDto,
 	ReceiptScanDto,
 	TransactionChainDto,
 	TransactionDetailDto,
@@ -29,7 +28,7 @@ const transactionFromApi = (dto: TransactionDto): Transaction => ({
 	type: dto.type,
 	origin: dto.origin,
 	wallet: { id: dto.wallet.id, name: dto.wallet.name },
-	category: dto.category,
+	category: optionalCategoryRefFromApi(dto.category),
 	chain: dto.chain ?? null,
 });
 
@@ -57,11 +56,6 @@ const transactionChainFromApi = (dto: TransactionChainDto): TransactionChain => 
 	transactions: dto.transactions.map(transactionFromApi),
 });
 
-const categoryFromApi = (dto: CategoryDto): TransactionCategory => ({
-	id: dto.id,
-	label: dto.label,
-});
-
 const receiptScanFromApi = (dto: ReceiptScanDto): ReceiptScan => ({
 	amount: parseAmount(dto.amount),
 	currency: dto.currency,
@@ -70,7 +64,6 @@ const receiptScanFromApi = (dto: ReceiptScanDto): ReceiptScan => ({
 });
 
 export {
-	categoryFromApi,
 	moneyFromApi,
 	receiptScanFromApi,
 	transactionChainFromApi,

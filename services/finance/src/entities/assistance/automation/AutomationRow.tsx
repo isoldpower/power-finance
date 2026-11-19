@@ -1,5 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { pendingClass } from "@shared/pure-components/feedback";
+import { pendingClass } from "@internal/shared";
 import { AutomationConditionLine } from "./row/AutomationConditionLine.tsx";
 import { AutomationFrequencyBadge } from "./row/AutomationFrequencyBadge.tsx";
 import { AutomationIcon } from "./row/AutomationIcon.tsx";

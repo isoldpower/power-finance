@@ -1,8 +1,7 @@
 import { SettingsLayout, SettingsSectionTitle } from "@entity/configuration";
 import { SITE_TOUR_ANCHORS } from "@feature/navigation";
 import { useWebhooksList, WebhooksListFx } from "@feature/configuration";
-import { Caption } from "@shared/pure-components/typography";
-import { ShowOn } from "@shared/visibility";
+import { Caption, ShowOn } from "@internal/shared";
 
 import { CreateWebhook } from "./endpoints/CreateWebhook.tsx";
 import { WebhookEndpointEntry } from "./endpoints/WebhookEndpointEntry.tsx";

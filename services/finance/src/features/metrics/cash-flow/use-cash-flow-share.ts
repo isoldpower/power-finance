@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { addAmounts, isZeroAmount, parseAmount } from "@shared/api";
+import { addAmounts, isZeroAmount, parseAmount } from "@internal/shared";
 
 import type { CashFlow } from "@entity/metrics";
 

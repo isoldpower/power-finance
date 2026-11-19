@@ -1,7 +1,7 @@
-import { pageFromMeta } from "@shared/api";
+import { pageFromMeta } from "@internal/shared";
+import type { Page, PageParams } from "@internal/shared";
 import { notificationFromApi, notificationQueryToApi } from "../mutators";
 
-import type { Page, PageParams } from "@shared/api";
 import type { Notification, NotificationQuery } from "@entity/assistance";
 import type { INotificationsRESTApiClient } from "../rest-client";
 

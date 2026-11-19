@@ -1,4 +1,4 @@
-import type { PageParams, ResourceTimestamps } from "@shared/api";
+import type { PageParams, ResourceTimestamps } from "@internal/shared";
 
 
 interface NotificationResourceRefDto {

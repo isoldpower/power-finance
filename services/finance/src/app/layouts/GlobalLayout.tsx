@@ -4,7 +4,6 @@ import { NavbarAccountMenu } from "@process/navigation";
 import { SiteTour } from "@process/navigation";
 import { SiteTourProvider } from "@feature/navigation";
 import {
-	FinanceBackground, 
 	NavbarDropdownTabs,
 	NavbarGroupTabs,
 	NavbarNotifications,
@@ -12,9 +11,9 @@ import {
 	NavbarNotificationItem
 } from "@widget/navigation";
 import { RouteLink } from "@shared/routing";
-import { ShowOnStandalone } from "@shared/visibility";
+import { FinanceBackground, GuestDemoModeBar, ShowOnStandalone } from "@internal/shared";
+import { FinanceButton } from "@internal/ui-library";
 import { BrandIcon, HeaderNavbar } from "@entity/navigation";
-import { DemoModeBar } from "@widget/accounts";
 
 
 interface GlobalLayoutProps {
@@ -67,7 +66,13 @@ const GlobalLayout: FC<GlobalLayoutProps> = ({ children }) => {
 									</div>
 								</div>
 							</HeaderNavbar>
-							<DemoModeBar />
+							<GuestDemoModeBar
+								renderReload={(reload) => (
+									<FinanceButton type="button" size="sm" variant="outline" onClick={reload}>
+										Reload
+									</FinanceButton>
+								)}
+							/>
 						</div>
 						<main className="flex-1">
 							{children}

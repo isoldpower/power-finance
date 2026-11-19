@@ -1,12 +1,10 @@
-import { LocalStorageMock } from "@internal/shared";
-import { delay, parseAmount, serializeAmount } from "@shared/api";
+import { delay, LocalStorageMock, parseAmount, serializeAmount } from "@internal/shared";
+import type { IStorage, MoneyDto } from "@internal/shared";
 import { CURRENCY_CATALOG } from "@feature/localization/currencies-api";
 import { TRANSACTIONS_STORAGE_KEY, walletDelta } from "@feature/transactions/transactions-api";
 import { WALLETS_STORAGE_KEY } from "@feature/wallets/wallets-api";
 import { GOALS_STORAGE_KEY } from "@feature/wallets/goals-api";
 import { POINTS_MAX, POINTS_MIN } from "../types.ts";
-import type { IStorage } from "@internal/shared";
-import type { MoneyDto } from "@shared/api";
 import type { StoredTransaction } from "@feature/transactions/transactions-api";
 import type { StoredWallet } from "@feature/wallets/wallets-api";
 import type { StoredGoal } from "@feature/wallets/goals-api";

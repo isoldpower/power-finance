@@ -1,4 +1,4 @@
-import type { FilterNode } from "@shared/api";
+import type { FilterNode } from "@internal/shared";
 import type {
 	AutomationDraft,
 	AutomationEffect,
@@ -39,7 +39,7 @@ const effectToApi = (effect: AutomationEffect): AutomationEffectDto => {
 			return { 
 				type: effect.type,
 				params: { 
-					category: effect.category,
+					category_id: effect.categoryId,
 				},
 			};
 		case 'notify':

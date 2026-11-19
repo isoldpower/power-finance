@@ -1,5 +1,5 @@
 import { cn } from "@internal/ui-library";
-import { pendingClass } from "@shared/pure-components/feedback";
+import { pendingClass } from "@internal/shared";
 import { TransactionChainRail } from "../transactions-table/chain/TransactionChainRail.tsx";
 import { ActivityRowBody } from "./row/ActivityRowBody.tsx";
 import { ActivityRowIcon } from "./row/ActivityRowIcon.tsx";

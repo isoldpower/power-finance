@@ -1,8 +1,5 @@
-import { toAmountString } from "@shared/api";
+import { BodyText, ShowOn, Text, toAmountString, useLocaleCurrency } from "@internal/shared";
 import { PanelFooter } from "@shared/forms";
-import { BodyText, Text } from "@shared/pure-components/typography";
-import { ShowOn } from "@shared/visibility";
-import { useLocaleCurrency } from "@shared/formatting";
 import { ScanReceiptForm as ScanReceiptFormAction, useReceiptScan } from "@feature/transactions";
 import { ExtractedBadge, ReceiptPaper, ScanAmountCard, ScanFieldRow } from "@entity/transactions";
 import { RECEIPT_BRANCH, RECEIPT_BRAND, RECEIPT_LINES, RECEIPT_TOTAL } from "./receipt-preview-config.ts";

@@ -11,22 +11,38 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
+import { Route as SpendingIndexImport } from './routes/spending/index'
+import { Route as OverviewIndexImport } from './routes/overview/index'
+import { Route as FlowIndexImport } from './routes/flow/index'
 import { Route as AnalyticsIndexImport } from './routes/analytics/index'
-import { Route as AnalyticsDashboardImport } from './routes/analytics/dashboard'
+import { Route as AnalyticsSpendingIndexImport } from './routes/analytics/spending/index'
+import { Route as AnalyticsOverviewIndexImport } from './routes/analytics/overview/index'
+import { Route as AnalyticsFlowIndexImport } from './routes/analytics/flow/index'
 
 // Create/Update Routes
-
-const DashboardRoute = DashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SpendingIndexRoute = SpendingIndexImport.update({
+  id: '/spending/',
+  path: '/spending/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const OverviewIndexRoute = OverviewIndexImport.update({
+  id: '/overview/',
+  path: '/overview/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const FlowIndexRoute = FlowIndexImport.update({
+  id: '/flow/',
+  path: '/flow/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -36,9 +52,21 @@ const AnalyticsIndexRoute = AnalyticsIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AnalyticsDashboardRoute = AnalyticsDashboardImport.update({
-  id: '/analytics/dashboard',
-  path: '/analytics/dashboard',
+const AnalyticsSpendingIndexRoute = AnalyticsSpendingIndexImport.update({
+  id: '/analytics/spending/',
+  path: '/analytics/spending/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AnalyticsOverviewIndexRoute = AnalyticsOverviewIndexImport.update({
+  id: '/analytics/overview/',
+  path: '/analytics/overview/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AnalyticsFlowIndexRoute = AnalyticsFlowIndexImport.update({
+  id: '/analytics/flow/',
+  path: '/analytics/flow/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,25 +81,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardImport
-      parentRoute: typeof rootRoute
-    }
-    '/analytics/dashboard': {
-      id: '/analytics/dashboard'
-      path: '/analytics/dashboard'
-      fullPath: '/analytics/dashboard'
-      preLoaderRoute: typeof AnalyticsDashboardImport
-      parentRoute: typeof rootRoute
-    }
     '/analytics/': {
       id: '/analytics/'
       path: '/analytics'
       fullPath: '/analytics'
       preLoaderRoute: typeof AnalyticsIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/flow/': {
+      id: '/flow/'
+      path: '/flow'
+      fullPath: '/flow'
+      preLoaderRoute: typeof FlowIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/overview/': {
+      id: '/overview/'
+      path: '/overview'
+      fullPath: '/overview'
+      preLoaderRoute: typeof OverviewIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/spending/': {
+      id: '/spending/'
+      path: '/spending'
+      fullPath: '/spending'
+      preLoaderRoute: typeof SpendingIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/analytics/flow/': {
+      id: '/analytics/flow/'
+      path: '/analytics/flow'
+      fullPath: '/analytics/flow'
+      preLoaderRoute: typeof AnalyticsFlowIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/analytics/overview/': {
+      id: '/analytics/overview/'
+      path: '/analytics/overview'
+      fullPath: '/analytics/overview'
+      preLoaderRoute: typeof AnalyticsOverviewIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/analytics/spending/': {
+      id: '/analytics/spending/'
+      path: '/analytics/spending'
+      fullPath: '/analytics/spending'
+      preLoaderRoute: typeof AnalyticsSpendingIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -81,47 +137,92 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/analytics/dashboard': typeof AnalyticsDashboardRoute
   '/analytics': typeof AnalyticsIndexRoute
+  '/flow': typeof FlowIndexRoute
+  '/overview': typeof OverviewIndexRoute
+  '/spending': typeof SpendingIndexRoute
+  '/analytics/flow': typeof AnalyticsFlowIndexRoute
+  '/analytics/overview': typeof AnalyticsOverviewIndexRoute
+  '/analytics/spending': typeof AnalyticsSpendingIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/analytics/dashboard': typeof AnalyticsDashboardRoute
   '/analytics': typeof AnalyticsIndexRoute
+  '/flow': typeof FlowIndexRoute
+  '/overview': typeof OverviewIndexRoute
+  '/spending': typeof SpendingIndexRoute
+  '/analytics/flow': typeof AnalyticsFlowIndexRoute
+  '/analytics/overview': typeof AnalyticsOverviewIndexRoute
+  '/analytics/spending': typeof AnalyticsSpendingIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
-  '/analytics/dashboard': typeof AnalyticsDashboardRoute
   '/analytics/': typeof AnalyticsIndexRoute
+  '/flow/': typeof FlowIndexRoute
+  '/overview/': typeof OverviewIndexRoute
+  '/spending/': typeof SpendingIndexRoute
+  '/analytics/flow/': typeof AnalyticsFlowIndexRoute
+  '/analytics/overview/': typeof AnalyticsOverviewIndexRoute
+  '/analytics/spending/': typeof AnalyticsSpendingIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/analytics/dashboard' | '/analytics'
+  fullPaths:
+    | '/'
+    | '/analytics'
+    | '/flow'
+    | '/overview'
+    | '/spending'
+    | '/analytics/flow'
+    | '/analytics/overview'
+    | '/analytics/spending'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/analytics/dashboard' | '/analytics'
-  id: '__root__' | '/' | '/dashboard' | '/analytics/dashboard' | '/analytics/'
+  to:
+    | '/'
+    | '/analytics'
+    | '/flow'
+    | '/overview'
+    | '/spending'
+    | '/analytics/flow'
+    | '/analytics/overview'
+    | '/analytics/spending'
+  id:
+    | '__root__'
+    | '/'
+    | '/analytics/'
+    | '/flow/'
+    | '/overview/'
+    | '/spending/'
+    | '/analytics/flow/'
+    | '/analytics/overview/'
+    | '/analytics/spending/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
-  AnalyticsDashboardRoute: typeof AnalyticsDashboardRoute
   AnalyticsIndexRoute: typeof AnalyticsIndexRoute
+  FlowIndexRoute: typeof FlowIndexRoute
+  OverviewIndexRoute: typeof OverviewIndexRoute
+  SpendingIndexRoute: typeof SpendingIndexRoute
+  AnalyticsFlowIndexRoute: typeof AnalyticsFlowIndexRoute
+  AnalyticsOverviewIndexRoute: typeof AnalyticsOverviewIndexRoute
+  AnalyticsSpendingIndexRoute: typeof AnalyticsSpendingIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
-  AnalyticsDashboardRoute: AnalyticsDashboardRoute,
   AnalyticsIndexRoute: AnalyticsIndexRoute,
+  FlowIndexRoute: FlowIndexRoute,
+  OverviewIndexRoute: OverviewIndexRoute,
+  SpendingIndexRoute: SpendingIndexRoute,
+  AnalyticsFlowIndexRoute: AnalyticsFlowIndexRoute,
+  AnalyticsOverviewIndexRoute: AnalyticsOverviewIndexRoute,
+  AnalyticsSpendingIndexRoute: AnalyticsSpendingIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -135,22 +236,38 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/dashboard",
-        "/analytics/dashboard",
-        "/analytics/"
+        "/analytics/",
+        "/flow/",
+        "/overview/",
+        "/spending/",
+        "/analytics/flow/",
+        "/analytics/overview/",
+        "/analytics/spending/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/dashboard": {
-      "filePath": "dashboard.tsx"
-    },
-    "/analytics/dashboard": {
-      "filePath": "analytics/dashboard.tsx"
-    },
     "/analytics/": {
       "filePath": "analytics/index.tsx"
+    },
+    "/flow/": {
+      "filePath": "flow/index.tsx"
+    },
+    "/overview/": {
+      "filePath": "overview/index.tsx"
+    },
+    "/spending/": {
+      "filePath": "spending/index.tsx"
+    },
+    "/analytics/flow/": {
+      "filePath": "analytics/flow/index.tsx"
+    },
+    "/analytics/overview/": {
+      "filePath": "analytics/overview/index.tsx"
+    },
+    "/analytics/spending/": {
+      "filePath": "analytics/spending/index.tsx"
     }
   }
 }

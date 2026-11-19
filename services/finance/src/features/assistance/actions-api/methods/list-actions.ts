@@ -1,7 +1,7 @@
-import { pageFromMeta } from "@shared/api";
+import { pageFromMeta } from "@internal/shared";
+import type { Page, PageParams } from "@internal/shared";
 import { actionFromApi, actionQueryToApi } from "../mutators";
 
-import type { Page, PageParams } from "@shared/api";
 import type { Action, ActionQuery } from "@entity/assistance";
 import type { IActionsRESTApiClient } from "../rest-client";
 

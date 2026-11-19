@@ -6,7 +6,7 @@ import { useOptimisticGoals } from './use-optimistic-goals.ts';
 import { goalFromDraft } from './draft-goal.ts';
 
 import type { FC, ReactNode } from 'react';
-import type { Page } from '@shared/api';
+import type { Page } from '@internal/shared';
 import type { PagedResponse } from '@shared/data';
 import type { LedgerEntry } from '@entity/accounts';
 import type { Goal } from '@entity/wallets';

@@ -10,7 +10,8 @@ import {
 	toFieldOptions,
 	toOperatorOptions,
 } from "@feature/assistance";
-import { OPERATOR_LABELS } from "@shared/api";
+import { OPERATOR_LABELS } from "@internal/shared";
+import type { FilterFieldOption } from "@internal/shared";
 import { RowDeleteButton } from "@shared/pure-components/collections";
 import { RULE_FIELD_WIDTH, RULE_OPERATOR_WIDTH } from "./config.ts";
 import { RuleConditionValueField } from "./RuleConditionValueField.tsx";
@@ -18,7 +19,6 @@ import { RuleSelectField } from "./RuleSelectField.tsx";
 
 import type { FC } from "react";
 import type { Control } from "react-hook-form";
-import type { FilterFieldOption } from "@shared/api";
 import type {
 	ConditionLevel,
 	FilterPolicySource,

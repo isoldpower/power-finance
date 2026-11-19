@@ -1,15 +1,18 @@
-import {useCallback, useMemo} from "react";
+import { useCallback, useMemo } from "react";
 import { UiForm } from "@internal/ui-library";
 
 import {
 	addTransactionSchema,
 	TransactionEntryOnSubmit,
 	useAddTransactionInitials,
-	useTransactionCategories,
+	useEntryAdjustment,
 	useTransactionEntryForm,
 } from "@feature/transactions";
 import { useWalletsList, useWalletsSelection } from "@feature/wallets";
+import { useCategories } from "@feature/categories";
+import { ManageCategoriesLink } from "@feature/navigation";
 import {
+	AdjustedTransactionCombobox,
 	EntryAmountControl,
 	EntryCategoryControl,
 	EntryTypeControl,
@@ -17,23 +20,35 @@ import {
 	ScanReceiptButton,
 } from "@widget/transactions";
 import { SlideOver, useSlideOverContext } from "@shared/overlays";
-import { FieldLabel, HideOnFormValue, PanelFooter, ShowOnFormValue } from "@shared/forms";
+import { FieldLabel, FieldLabelRow, HideOnFormValue, PanelFooter, ShowOnFormValue } from "@shared/forms";
 import { FromIcon, ToIcon } from "@shared/pure-components/icons";
+import { ShowOn } from "@internal/shared";
 
 import type { FC } from "react";
+import type { CategoryRef } from "@entity/categories";
 
 
 interface CreateTransactionProps {
 	scanPanelId: string;
+	title?: string;
+	adjusts?: string;
+	adjustedWalletId?: string;
+	adjustedCategory?: CategoryRef | null;
 }
 
-const CreateTransaction: FC<CreateTransactionProps> = ({ scanPanelId }) => {
+const CreateTransaction: FC<CreateTransactionProps> = ({
+	scanPanelId,
+	title = 'New transaction',
+	adjusts,
+	adjustedWalletId,
+	adjustedCategory,
+}) => {
 	const { onClose, onSwitch } = useSlideOverContext();
-	const { categoryLabels } = useTransactionCategories();
+	const { categories } = useCategories('transaction');
 	const { wallets } = useWalletsList();
 	const selectedWalletId = useWalletsSelection((state) => state.selectedWalletId);
-	const preferredWalletId = selectedWalletId ?? undefined;
-	const defaultValues = useAddTransactionInitials(wallets, preferredWalletId);
+	const preferredWalletId = adjustedWalletId ?? selectedWalletId ?? undefined;
+	const defaultValues = useAddTransactionInitials(wallets, preferredWalletId, adjusts, adjustedCategory ?? null);
 	const {
 		form,
 		type,
@@ -51,24 +66,29 @@ const CreateTransaction: FC<CreateTransactionProps> = ({ scanPanelId }) => {
 		wallets,
 		preferredWalletId,
 	});
+	const { adjusted, adjusting, pick } = useEntryAdjustment(form);
 
 	const handleScanReceipt = useCallback(() => {
 		onSwitch(scanPanelId);
 	}, [onSwitch, scanPanelId]);
 
 	const submitLabel = useMemo(() => {
-		return loading 
-			? 'Saving…' 
-			: type === 'transfer' 
-				? 'Send transfer' 
-				: 'Save transaction';
-	}, [loading, type]);
+		if (loading) {
+			return 'Saving…';
+		}
+
+		if (adjusting) {
+			return 'Save adjustment';
+		}
+
+		return type === 'transfer' ? 'Send transfer' : 'Save transaction';
+	}, [loading, adjusting, type]);
 
 	return (
 		<>
 			<SlideOver.Heading>
 				<SlideOver.Title>
-					New transaction
+					{title}
 				</SlideOver.Title>
 				<SlideOver.Collapse>
 					✕
@@ -80,20 +100,24 @@ const CreateTransaction: FC<CreateTransactionProps> = ({ scanPanelId }) => {
 					handleSubmit={form.handleSubmit}
 					fromCurrency={fromCurrency}
 					toCurrency={toCurrency}
+					adjusted={adjusted ?? null}
 					onBeforeEdit={methods.handleLoading}
 					onSuccess={() => { methods.handleDoneLoading(); onClose(); }}
 					onError={methods.handleFailedLoading}
 				>
 					<div className="flex-1 overflow-auto p-5">
-						<ScanReceiptButton
-							title="Scan a receipt instead"
-							description="Let AI fill the details for you"
-							className="mb-[18px] w-full"
-							onClick={handleScanReceipt}
-						/>
+						<ShowOn condition={adjusts === undefined}>
+							<ScanReceiptButton
+								title="Scan a receipt instead"
+								description="Let AI fill the details for you"
+								className="mb-[18px] w-full"
+								onClick={handleScanReceipt}
+							/>
+						</ShowOn>
 						<EntryTypeControl
 							control={form.control}
 							name="type"
+							allowTransfer={!adjusting}
 							className="mb-4"
 							disabled={loading}
 						/>
@@ -166,14 +190,27 @@ const CreateTransaction: FC<CreateTransactionProps> = ({ scanPanelId }) => {
 							/>
 						</HideOnFormValue>
 						<ShowOnFormValue valueKey="type" showOn={['expense', 'income']} control={form.control}>
-							<FieldLabel>Category</FieldLabel>
+							<FieldLabelRow action={<ManageCategoriesLink />}>
+								Category
+							</FieldLabelRow>
 							<EntryCategoryControl
 								control={form.control}
 								name="category"
-								options={categoryLabels}
+								options={categories}
 								disabled={loading}
 							/>
 						</ShowOnFormValue>
+						<div className="mt-4">
+							<FieldLabel>
+								Adjusts
+							</FieldLabel>
+							<AdjustedTransactionCombobox
+								selected={adjusted}
+								placeholder={adjusting ? 'Loading transaction…' : 'Not an adjustment'}
+								disabled={loading}
+								onSelect={pick}
+							/>
+						</div>
 					</div>
 					<PanelFooter
 						submitType="submit"

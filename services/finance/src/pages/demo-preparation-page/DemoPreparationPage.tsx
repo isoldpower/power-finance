@@ -1,5 +1,5 @@
-import { DemoPreparation } from "@process/accounts";
-import { FinanceBackground } from "@widget/navigation";
+import { FinanceBackground, GuestDemoPreparation } from "@internal/shared";
+import { FinanceButton } from "@internal/ui-library";
 
 import type { FC } from "react";
 
@@ -7,7 +7,13 @@ import type { FC } from "react";
 const DemoPreparationPage: FC = () => (
 	<div className="finance-theme relative min-h-screen bg-background text-foreground">
 		<FinanceBackground />
-		<DemoPreparation />
+		<GuestDemoPreparation
+			renderContinue={(enter) => (
+				<FinanceButton type="button" variant="danger" onClick={enter}>
+					Continue to dashboard
+				</FinanceButton>
+			)}
+		/>
 	</div>
 );
 

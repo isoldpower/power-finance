@@ -1,4 +1,4 @@
-import { toAmountString } from "@shared/api";
+import { toAmountString } from "@internal/shared";
 import { conversionFromApi } from "../mutators";
 
 import type { MoneyConversion } from "@entity/localization";

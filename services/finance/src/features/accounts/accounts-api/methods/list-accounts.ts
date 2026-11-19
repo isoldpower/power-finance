@@ -1,7 +1,7 @@
-import { pageFromMeta } from "@shared/api";
+import { pageFromMeta } from "@internal/shared";
+import type { Page, PageParams } from "@internal/shared";
 import { accountFromApi, groupCountsFromApi, moneyFromApi } from "../mutators";
 
-import type { Page, PageParams } from "@shared/api";
 import type { Account, AccountGroupCounts, AccountGroupFilter } from "@entity/accounts";
 import type { Money } from "@entity/localization";
 import type { IAccountsRESTApiClient } from "../rest-client";

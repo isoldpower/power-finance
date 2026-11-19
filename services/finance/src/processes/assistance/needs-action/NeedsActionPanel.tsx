@@ -1,5 +1,5 @@
 import { AlertIcon, CheckIcon } from "@shared/pure-components/icons";
-import { RowTitle } from "@shared/pure-components/typography";
+import { RowTitle } from "@internal/shared";
 import { cn, FinanceCard } from "@internal/ui-library";
 import { ActionsList } from "@widget/assistance";
 import { useActions, NeedsActionBadgeFx } from "@feature/assistance";

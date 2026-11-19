@@ -1,5 +1,5 @@
 import { GoalSkeletonRow } from "@entity/wallets";
-import { Caption } from "@shared/pure-components/typography";
+import { Caption } from "@internal/shared";
 import { useGoals } from "../data-presenters";
 
 import type { FC, ReactNode } from "react";

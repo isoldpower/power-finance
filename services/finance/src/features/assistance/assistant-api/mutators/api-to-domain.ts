@@ -1,7 +1,7 @@
 import { resourceRefFromApi } from "@feature/assistance/actions-api";
 
 import type { AssistantMessage, AssistantOverview, AssistantQuota, AssistantSignal } from "@entity/assistance";
-import type { Types } from "@shared/formatting";
+import type { Types } from "@internal/shared";
 import type {
 	AssistantMessageDto, AssistantOverviewDto, AssistantQuotaDto, AssistantSignalDto, SignalToneDto,
 } from "../types.ts";

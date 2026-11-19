@@ -1,4 +1,4 @@
-import { compareAmounts, toAmountString } from "@shared/api";
+import { compareAmounts, toAmountString } from "@internal/shared";
 
 import type { Wallet, WalletQuery } from "@entity/wallets";
 

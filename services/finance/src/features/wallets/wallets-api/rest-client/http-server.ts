@@ -1,4 +1,4 @@
-import { idempotencyHeaders, request, WriteVersionStore } from "@shared/api";
+import { idempotencyHeaders, request, WriteVersionStore } from "@internal/shared";
 
 import type { AxiosInstance } from "axios";
 import type {

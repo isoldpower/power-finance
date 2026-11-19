@@ -1,5 +1,5 @@
 import { useWalletsPaginationContext } from "@feature/wallets";
-import { CardTitle, MetaText } from "@shared/pure-components/typography";
+import { CardTitle, MetaText } from "@internal/shared";
 
 import type { FC } from "react";
 

@@ -1,11 +1,9 @@
 import { FinanceMoney } from "@internal/ui-library";
 
-import { parseAmount, toAmountString } from "@shared/api";
-import { useLocaleCurrency } from "@shared/formatting";
-import { useCountUp } from "@shared/motion";
+import { parseAmount, toAmountString, useCountUp, useLocaleCurrency } from "@internal/shared";
+import type { CountUpOptions } from "@internal/shared";
 
 import type { ComponentProps, FC } from "react";
-import type { CountUpOptions } from "@shared/motion";
 
 
 type FinanceMoneyProps = ComponentProps<typeof FinanceMoney>;

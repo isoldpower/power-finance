@@ -7,9 +7,7 @@ import { NeedsActionPanel } from "@process/assistance";
 import { CurrencySelector } from "@widget/localization";
 import { PeriodSelector, LongCurrentDateLabel } from "@widget/metrics";
 import { MetricsPreferencesProvider } from "@feature/metrics";
-import { RevealMotion } from "@shared/motion";
-import { PageContainer, SidebarColumnsContainer, TwoColumnsContainer } from "@shared/pure-components/layout";
-import { PageTitle } from "@shared/pure-components/typography";
+import { PageContainer, PageTitle, RevealMotion, SidebarColumnsContainer, TwoColumnsContainer } from "@internal/shared";
 
 import { SITE_TOUR_ANCHORS } from "@feature/navigation";
 

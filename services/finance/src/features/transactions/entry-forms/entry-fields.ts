@@ -32,4 +32,8 @@ const isCompleteEntry = (entry: TransactionEntryFields): boolean => {
 	return typeBasedChecks[entry.type]();
 };
 
-export { entryFieldsShape, isPositiveAmount, isCompleteEntry };
+const isValidAdjustment = (entry: TransactionEntryFields & { adjusts: string }): boolean => (
+	entry.adjusts === '' || entry.type !== 'transfer'
+);
+
+export { entryFieldsShape, isPositiveAmount, isCompleteEntry, isValidAdjustment };

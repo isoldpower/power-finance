@@ -1,4 +1,4 @@
-import type { CollectionResponse, ResourceResponse } from "@shared/api";
+import type { CollectionResponse, ResourceResponse } from "@internal/shared";
 import type {
 	AssistantAcceptedDto,
 	AssistantClearedDto,

@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { lazy, useState } from "react";
 
 import { AttachToShadowDom, RemoteLoadingFx, TransferColorSchemeToShadowDom } from "@feature/remotes";
+import { RemoteLoadingScreen } from "@entity/remotes";
 
 
 type AnalyticsMFModuleProps = object & {};
@@ -15,7 +16,7 @@ const AnalyticsMFModule: FC<AnalyticsMFModuleProps> = () => {
 		<AttachToShadowDom id="analytics" onMountPointChange={setShadowMountPoint}>
 			{shadowMountPoint && (
 				<TransferColorSchemeToShadowDom mountPoint={shadowMountPoint}>
-					<RemoteLoadingFx>
+					<RemoteLoadingFx suspenseFallback={<RemoteLoadingScreen title="Analytics" />}>
 						<AnalyticsRemoteApp />
 					</RemoteLoadingFx>
 				</TransferColorSchemeToShadowDom>

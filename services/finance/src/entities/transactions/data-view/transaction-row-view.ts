@@ -1,4 +1,5 @@
-import { negateAmount } from "@shared/api";
+import { negateAmount } from "@internal/shared";
+import type { FormatMoney } from "@internal/shared";
 
 import {
 	ledgerSideLabel,
@@ -9,7 +10,6 @@ import {
 
 import type { Transaction, TransactionPosting } from "../types.ts";
 import type { LedgerEntryView, TransactionRowView } from "./types.ts";
-import type { FormatMoney } from "@shared/formatting";
 
 
 const toLedgerEntryView = (
@@ -55,7 +55,7 @@ const toTransactionRowView = (
 			hour: '2-digit',
 			minute: '2-digit',
 		}),
-		category: transaction.category ?? UNCATEGORIZED_LABEL,
+		category: transaction.category?.name ?? UNCATEGORIZED_LABEL,
 		description: transaction.name || transactionKindLabel(transaction.type),
 		scanned: transaction.origin === 'scanned',
 		kind: transactionKindLabel(transaction.type),

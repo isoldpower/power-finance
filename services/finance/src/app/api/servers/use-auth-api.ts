@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { clerk } from "@internal/shared";
 
-import { AuthClerkRESTApiClient } from "@feature/configuration";
-import type { IAuthRESTApiClient } from "@feature/configuration";
+import { AuthClerkRESTApiClient } from "@internal/shared";
+import type { IAuthRESTApiClient } from "@internal/shared";
 
 
 const LOADING_REVISION = 'loading';

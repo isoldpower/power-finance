@@ -5,7 +5,7 @@ import { GoalForm } from "@entity/wallets";
 import { useCurrencies } from "@feature/localization";
 import { GoalFormOnSubmit, goalFormSchema, useGoalFormInitials, useGoalFormState } from "@feature/wallets";
 import { PanelFooter } from "@shared/forms";
-import { currencySymbol } from "@shared/formatting";
+import { currencySymbol } from "@internal/shared";
 import { GoalCurrencyField } from "../goal-fields/GoalCurrencyField.tsx";
 import { GoalTargetField } from "../goal-fields/GoalTargetField.tsx";
 import { GoalTextField } from "../goal-fields/GoalTextField.tsx";

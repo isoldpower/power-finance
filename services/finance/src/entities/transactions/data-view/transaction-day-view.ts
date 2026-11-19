@@ -1,5 +1,4 @@
-import { addAmounts, ZERO_AMOUNT } from "@shared/api";
-import { roundToCurrency } from "@shared/formatting";
+import { addAmounts, roundToCurrency, ZERO_AMOUNT } from "@internal/shared";
 import { toTransactionRowViews } from "./transaction-row-view.ts";
 
 import type { Transaction } from "../types.ts";

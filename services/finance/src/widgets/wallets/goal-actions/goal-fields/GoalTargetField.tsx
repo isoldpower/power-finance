@@ -2,7 +2,7 @@ import { Controller } from "react-hook-form";
 import { FinanceInput } from "@internal/ui-library";
 import { GoalForm } from "@entity/wallets";
 import { FieldLabel } from "@shared/forms";
-import { formatAmountInput } from "@shared/formatting";
+import { formatAmountInput } from "@internal/shared";
 
 import type { FC } from "react";
 import type { Control } from "react-hook-form";

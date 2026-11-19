@@ -1,4 +1,4 @@
-import { isNegativeAmount } from "@shared/api";
+import { isNegativeAmount, useLocaleCurrency } from "@internal/shared";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FinanceInput, UiForm, UiFormField } from "@internal/ui-library";
@@ -10,8 +10,9 @@ import {
 	walletGradient,
 } from "@entity/wallets";
 import { WalletFormOnSubmit, useWalletFormInitials, useWalletFormState, walletFormSchema } from "@feature/wallets";
-import { FieldLabel, PanelFooter } from "@shared/forms";
-import { useLocaleCurrency } from "@shared/formatting";
+import { FieldLabel, FieldLabelRow, PanelFooter } from "@shared/forms";
+import { ManageCategoriesLink } from "@feature/navigation";
+import { WalletCategorySelect } from "./form-partials/WalletCategorySelect.tsx";
 
 import type { FC } from "react";
 import type { WalletFormSchema } from "@feature/wallets";
@@ -49,7 +50,7 @@ const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, onClose }) => {
 					<WalletPreviewCard gradient={walletGradient(color ?? DEFAULT_WALLET_COLOR)}>
 						<WalletPreviewCard.Header>
 							<WalletPreviewCard.Type>
-								{category ?? ''}
+								{category?.name ?? ''}
 							</WalletPreviewCard.Type>
 							<WalletPreviewCard.Currency>
 								{wallet.currency}
@@ -80,13 +81,20 @@ const EditWalletForm: FC<EditWalletFormProps> = ({ wallet, onClose }) => {
 								className="mb-4"
 							/>
 						)} />
-					<FieldLabel>Category</FieldLabel>
+					<FieldLabelRow action={<ManageCategoriesLink />}>
+						Category
+					</FieldLabelRow>
 					<UiFormField
 						disabled={loading}
 						control={form.control}
 						name="category"
 						render={({ field }) => (
-							<FinanceInput placeholder="e.g. Savings" className="mb-4" {...field} />
+							<WalletCategorySelect
+								value={field.value}
+								onChange={field.onChange}
+								disabled={loading}
+								className="mb-4 w-full"
+							/>
 						)} />
 					<div className="mb-4">
 						<FieldLabel>Currency</FieldLabel>

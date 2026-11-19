@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { useConvertMoney } from "@feature/localization";
-import { absoluteAmount, isNegativeAmount, sumAmounts } from "@shared/api";
-import { useLocaleCurrency } from "@shared/formatting";
+import { absoluteAmount, isNegativeAmount, sumAmounts, useLocaleCurrency } from "@internal/shared";
 
 import type { Money } from "@entity/localization";
 

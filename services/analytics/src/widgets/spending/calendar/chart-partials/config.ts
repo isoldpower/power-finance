@@ -1,0 +1,4 @@
+const MONTH_LABEL_Y = -10;
+const WEEKDAY_LABEL_X = -8;
+
+export { MONTH_LABEL_Y, WEEKDAY_LABEL_X };

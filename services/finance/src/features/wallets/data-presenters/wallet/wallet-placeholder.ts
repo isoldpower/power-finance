@@ -2,7 +2,7 @@ import { QUERY_KEYS } from "@shared/api";
 import { DEFAULT_WALLET_PERIOD } from "../cache-config.ts";
 
 import type { QueryClient } from "@tanstack/react-query";
-import type { Page } from "@shared/api";
+import type { Page } from "@internal/shared";
 import type { Transaction } from "@entity/transactions";
 import type { Wallet } from "@entity/wallets";
 import type { FetchWalletResponse } from "../../wallets-api";

@@ -1,4 +1,4 @@
-import type { ApiEnvelope, CollectionResponse, EmbeddedMeta, PageParams } from "@shared/api";
+import type { ApiEnvelope, CollectionResponse, EmbeddedMeta, PageParams } from "@internal/shared";
 import type { AccountDetailDto, AccountDto, AccountListMeta, AccountListParams } from "../types.ts";
 
 

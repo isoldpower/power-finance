@@ -2,12 +2,11 @@ import { RuleCombinatorField } from "./fields/RuleCombinatorField.tsx";
 import { RuleConditionRow } from "./fields/RuleConditionRow.tsx";
 import { RuleField } from "./fields/RuleField.tsx";
 import { List, RowAddButton } from "@shared/pure-components/collections";
-import { StackedList } from "@shared/pure-components/layout";
-import { Caption } from "@shared/pure-components/typography";
+import { Caption, StackedList } from "@internal/shared";
+import type { FilterFieldOption } from "@internal/shared";
 
 import type { FC } from "react";
 import type { Control } from "react-hook-form";
-import type { FilterFieldOption } from "@shared/api";
 import type { FilterPolicySource, RuleFormSchema } from "@feature/assistance";
 import type { SelectOption } from "@shared/forms";
 

@@ -1,4 +1,4 @@
-import { DisplayText } from "@shared/pure-components/typography";
+import { DisplayText } from "@internal/shared";
 
 import type { FC, PropsWithChildren } from "react";
 

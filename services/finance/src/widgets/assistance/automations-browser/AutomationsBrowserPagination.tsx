@@ -1,9 +1,8 @@
 import { Icons } from "@internal/ui-library";
 
 import { useAutomationsPaginationContext } from "@feature/assistance";
-import { MetaText } from "@shared/pure-components/typography";
+import { MetaText, SpaceOccupant } from "@internal/shared";
 import { PagerButton, PaginationRange } from "@shared/pure-components/collections";
-import { SpaceOccupant } from "@shared/pure-components/layout";
 
 
 const AutomationsBrowserPagination = () => {

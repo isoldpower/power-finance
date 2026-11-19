@@ -5,7 +5,7 @@ import { listActions } from "../../actions-api";
 import { ACTIONS_CACHE_KEYS } from "../cache-config.ts";
 
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import type { PageParams } from "@shared/api";
+import type { PageParams } from "@internal/shared";
 import type { Action, ActionQuery } from "@entity/assistance";
 import type { ListActionsResponse } from "../../actions-api";
 

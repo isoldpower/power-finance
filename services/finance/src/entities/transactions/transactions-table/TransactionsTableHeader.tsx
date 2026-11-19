@@ -1,4 +1,4 @@
-import { Overline } from "@shared/pure-components/typography";
+import { Overline } from "@internal/shared";
 import { TableHeaderSelectCell } from "./table-header/TableHeaderSelectCell.tsx";
 import { TableHeaderDateCell } from "./table-header/TableHeaderDateCell.tsx";
 import { TableHeaderDescription } from "./table-header/TableHeaderDescription.tsx";

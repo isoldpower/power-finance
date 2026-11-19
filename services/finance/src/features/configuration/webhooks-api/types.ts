@@ -1,4 +1,4 @@
-import type { PageParams, SearchPayload } from "@shared/api";
+import type { PageParams, SearchPayload } from "@internal/shared";
 
 
 type DeliveryStatusDto = 'pending' | 'in_progress' | 'retry_scheduled' | 'success' | 'failed';

@@ -1,10 +1,4 @@
-import type {
-	ApiEnvelope,
-	CollectionResponse,
-	EmbeddedMeta,
-	MutationResponse,
-	PageParams
-} from "@shared/api";
+import type { ApiEnvelope, CollectionResponse, EmbeddedMeta, MutationResponse, PageParams } from "@internal/shared";
 import type {
 	WalletCreateBody,
 	WalletDetailDto,
