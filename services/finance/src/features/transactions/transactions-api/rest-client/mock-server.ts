@@ -505,10 +505,8 @@ class TransactionsMockRESTApiClient implements ITransactionsRESTApiClient {
 
 		await delay();
 
-		const current = orderTransactions(
-			this.storage.list().filter((item) => item.chain_id === payload.chainId && item.deleted_at === null),
-			'ASC',
-		);
+		const current = this.storage.list()
+			.filter((item) => item.chain_id === payload.chainId && item.deleted_at === null);
 
 		if (current.length === 0) {
 			throw new ApiError('not_found', `Chain ${payload.chainId} does not exist`);
